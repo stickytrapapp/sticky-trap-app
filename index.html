@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Sticky Trap Hub</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a12">
+<meta name="description" content="All The Sticky Trap & Flower Room links, plus the daily cannabis + psychedelics brief.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ST Hub">
+<style>
+  :root{
+    --bg:#0a0a12; --bg2:#0f1020; --panel:#15162a; --panel2:#1c1e38;
+    --ink:#f3f0ff; --soft:#c9c6e6; --muted:#8a86b5; --line:#2a2c50;
+    --mag:#ff2e88; --pur:#8a4dff; --cy:#22d3ee; --gold:#f5c451;
+    --grad:linear-gradient(100deg,var(--mag),var(--pur),var(--cy));
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;background:var(--bg);color:var(--ink);overflow-x:hidden;
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.45;
+    background-image:radial-gradient(120% 60% at 50% -10%,rgba(138,77,255,.18),transparent 60%),radial-gradient(80% 50% at 100% 0%,rgba(34,211,238,.10),transparent 60%);
+    background-attachment:fixed}
+  .mono{font-family:ui-monospace,Menlo,Consolas,monospace}
+  .app{max-width:520px;margin:0 auto;padding:0 16px 44px}
+  .topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;
+    padding:12px 4px;margin:0 -4px 4px;backdrop-filter:blur(12px);
+    background:linear-gradient(180deg,rgba(10,10,18,.92),rgba(10,10,18,.62));border-bottom:1px solid var(--line)}
+  .tb-name{font-weight:800;letter-spacing:.02em;font-size:15px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .live{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;color:var(--cy);text-transform:uppercase;letter-spacing:.1em}
+  .live::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--cy);box-shadow:0 0 8px var(--cy);animation:pulse 1.8s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+  @media(prefers-reduced-motion:reduce){.live::before{animation:none}}
+  .hero{text-align:center;padding:22px 8px 10px}
+  .wm{font-size:34px;font-weight:900;letter-spacing:-.02em;line-height:1;margin:0;
+    background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero .amp{color:var(--muted);font-weight:600;font-size:15px;margin:8px 0 2px}
+  .hero .fr{font-weight:800;font-size:17px;color:var(--gold)}
+  .tag{color:var(--soft);font-size:13.5px;margin-top:10px}
+  .sec{margin-top:22px}
+  .sh{display:flex;align-items:center;gap:8px;margin:0 4px 10px;font-size:12px;font-weight:700;
+    text-transform:uppercase;letter-spacing:.14em;color:var(--muted)}
+  .sh .bar{height:1px;flex:1;background:var(--line)}
+  .sh .r{letter-spacing:0;text-transform:none;color:var(--muted);font-size:11px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 8px 30px rgba(0,0,0,.35)}
+  .brief .date{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;color:var(--cy);text-transform:uppercase;letter-spacing:.08em}
+  .brief h2{font-size:17px;margin:6px 0 8px;font-weight:800;line-height:1.25}
+  .brief .top{font-size:13.5px;color:var(--soft)}
+  details.full{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
+  details.full>summary{cursor:pointer;list-style:none;font-size:12.5px;font-weight:700;color:var(--mag);display:flex;align-items:center;gap:6px}
+  details.full>summary::-webkit-details-marker{display:none}
+  details.full[open]>summary .chev{transform:rotate(90deg)}
+  .chev{transition:transform .2s;display:inline-block}
+  .fb{font-size:13px;color:var(--soft);margin-top:10px}
+  .fb h3{font-size:13.5px;margin:14px 0 6px;color:var(--ink)}
+  .fb ul{margin:0;padding-left:18px}
+  .fb li{margin:5px 0}
+  .fb a{color:var(--cy);text-decoration:none}
+  .fb .angle{color:var(--gold);font-style:italic;margin:6px 0 0}
+  .fb .why{margin-top:14px;padding-top:10px;border-top:1px solid var(--line);color:var(--ink)}
+  .skl{height:14px;border-radius:7px;background:linear-gradient(90deg,var(--panel2),#242647,var(--panel2));background-size:200% 100%;animation:sh 1.3s infinite}
+  @keyframes sh{0%{background-position:200% 0}100%{background-position:-200% 0}}
+  .signup{margin-top:14px;display:flex;gap:8px}
+  .signup input{flex:1;min-width:0;background:var(--bg2);border:1px solid var(--line);border-radius:11px;padding:11px 12px;color:var(--ink);font-size:14px;font-family:inherit}
+  .signup input::placeholder{color:var(--muted)}
+  .signup input:focus{outline:none;border-color:var(--pur);box-shadow:0 0 0 3px rgba(138,77,255,.25)}
+  .btn{border:0;border-radius:11px;padding:11px 15px;font-weight:800;font-size:14px;color:#fff;background:var(--grad);text-decoration:none;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;cursor:pointer}
+  .btn:active{transform:translateY(1px)}
+  .sub-note{font-size:11px;color:var(--muted);margin:8px 2px 0}
+  .arch details{border:1px solid var(--line);border-radius:12px;margin-bottom:8px;background:var(--panel);overflow:hidden}
+  .arch details>summary{cursor:pointer;list-style:none;padding:12px 14px;font-size:13px;font-weight:600;display:flex;gap:8px;align-items:center}
+  .arch details>summary::-webkit-details-marker{display:none}
+  .arch details .fb{padding:0 14px 14px}
+  .arch .adate{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;color:var(--cy)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .link{display:flex;align-items:center;gap:11px;min-width:0;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;text-decoration:none;color:var(--ink);transition:border-color .15s,transform .1s}
+  .link:active{transform:scale(.98)}
+  .link.wide{grid-column:1/-1}
+  .ico{width:38px;height:38px;border-radius:11px;flex:none;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;color:#fff}
+  .l-meta{min-width:0}
+  .l-name{font-size:13.5px;font-weight:700;line-height:1.15}
+  .l-sub{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .l-arr{margin-left:auto;color:var(--muted);font-size:16px}
+  .ig{background:linear-gradient(45deg,#f9ce34,#ee2a7b,#6228d7)}
+  .tt{background:#111;border:1px solid #333}
+  .yt{background:#ff0033}
+  .fbk{background:#1877f2}
+  .lt{background:linear-gradient(160deg,#43e660,#2bb673)}
+  .sp{background:#1db954}
+  .mn{background:var(--grad)}
+  .em{background:linear-gradient(160deg,#8a4dff,#22d3ee)}
+  .ph{background:linear-gradient(160deg,#ff2e88,#8a4dff)}
+  footer{text-align:center;margin-top:26px;color:var(--muted);font-size:11px}
+  .install{margin:16px 4px 0;padding:11px 13px;border:1px dashed var(--line);border-radius:12px;font-size:11.5px;color:var(--muted);text-align:center}
+  .install b{color:var(--soft)}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar"><span class="tb-name">STICKY&nbsp;TRAP&nbsp;HUB</span><span class="live" id="live">Live</span></div>
+
+  <div class="hero">
+    <h1 class="wm">THE STICKY TRAP</h1>
+    <div class="amp">the design house &nbsp;×&nbsp; <span class="fr">THE FLOWER ROOM</span></div>
+    <p class="tag">We want to brand you. 🌿 &nbsp;One home for everything — socials, the pod, and your daily industry brief.</p>
+  </div>
+
+  <!-- NEWSLETTER / BRIEF (live) -->
+  <div class="sec">
+    <div class="sh">☀️ Morning Brief <span class="bar"></span> <span class="r" id="brief-updated">loading…</span></div>
+    <div class="card brief" id="brief-latest">
+      <div class="skl" style="width:40%"></div>
+      <div class="skl" style="width:85%;margin-top:12px;height:20px"></div>
+      <div class="skl" style="width:100%;margin-top:12px"></div>
+      <div class="skl" style="width:70%;margin-top:8px"></div>
+    </div>
+    <div class="card" style="margin-top:10px;padding:14px 16px">
+      <div class="signup">
+        <input type="email" placeholder="you@email.com" aria-label="Email" id="nl-email">
+        <a class="btn" id="nl-btn" href="mailto:thestickytrap@gmail.com?subject=Subscribe%20to%20the%20Morning%20Brief">Get it daily</a>
+      </div>
+      <p class="sub-note">Free daily brief to your inbox. (Real one-tap signup wires in with the newsletter service.)</p>
+    </div>
+  </div>
+
+  <!-- ARCHIVE -->
+  <div class="sec arch" id="arch-sec" hidden>
+    <div class="sh">🗂️ Past Briefs <span class="bar"></span></div>
+    <div id="archive"></div>
+  </div>
+
+  <!-- CONNECT -->
+  <div class="sec">
+    <div class="sh">🔗 Connect <span class="bar"></span></div>
+    <div class="grid">
+      <a class="link" href="https://www.instagram.com/the_stickytrap/" target="_blank" rel="noopener"><div class="ico ig">◎</div><div class="l-meta"><div class="l-name">Instagram</div><div class="l-sub">@the_stickytrap</div></div></a>
+      <a class="link" href="https://www.instagram.com/theflowerroompodcast/" target="_blank" rel="noopener"><div class="ico ig">◎</div><div class="l-meta"><div class="l-name">Instagram</div><div class="l-sub">@theflowerroompodcast</div></div></a>
+      <a class="link" href="https://www.tiktok.com/@theflowerroompodcast" target="_blank" rel="noopener"><div class="ico tt">♪</div><div class="l-meta"><div class="l-name">TikTok</div><div class="l-sub">@theflowerroompodcast</div></div></a>
+      <a class="link" href="https://www.youtube.com/@theflowerroompodcast" target="_blank" rel="noopener"><div class="ico yt">▶</div><div class="l-meta"><div class="l-name">YouTube</div><div class="l-sub">The Flower Room</div></div></a>
+      <a class="link" href="https://linktr.ee/thestickytrap" target="_blank" rel="noopener"><div class="ico lt">🌳</div><div class="l-meta"><div class="l-name">Linktree</div><div class="l-sub">Sticky Trap</div></div></a>
+      <a class="link" href="https://linktr.ee/theflowerroompodcast" target="_blank" rel="noopener"><div class="ico lt">🌳</div><div class="l-meta"><div class="l-name">Linktree</div><div class="l-sub">Flower Room</div></div></a>
+      <a class="link wide" href="https://www.facebook.com/people/The-Sticky-Trap/61574641650095/" target="_blank" rel="noopener"><div class="ico fbk">f</div><div class="l-meta"><div class="l-name">Facebook</div><div class="l-sub">The Sticky Trap</div></div><span class="l-arr">›</span></a>
+    </div>
+  </div>
+
+  <!-- LISTEN -->
+  <div class="sec">
+    <div class="sh">🎙️ The Flower Room <span class="bar"></span></div>
+    <div class="grid">
+      <a class="link" href="https://www.youtube.com/@theflowerroompodcast" target="_blank" rel="noopener"><div class="ico yt">▶</div><div class="l-meta"><div class="l-name">Watch</div><div class="l-sub">Full episodes</div></div></a>
+      <a class="link" href="https://linktr.ee/theflowerroompodcast" target="_blank" rel="noopener"><div class="ico sp">♫</div><div class="l-meta"><div class="l-name">Listen</div><div class="l-sub">Spotify · Apple →</div></div></a>
+    </div>
+  </div>
+
+  <!-- WORK -->
+  <div class="sec">
+    <div class="sh">🎨 Work With Us <span class="bar"></span></div>
+    <div class="grid">
+      <a class="link wide" href="https://claude.ai/code/artifact/f7624c44-d0fb-42e6-8b10-1c941c3ea5c1" target="_blank" rel="noopener"><div class="ico mn">✦</div><div class="l-meta"><div class="l-name">The Menu</div><div class="l-sub">Stickers · labels · packaging · merch — see pricing</div></div><span class="l-arr">›</span></a>
+      <a class="link" href="tel:+17344603845"><div class="ico ph">✆</div><div class="l-meta"><div class="l-name">Call</div><div class="l-sub">734 460 3845</div></div></a>
+      <a class="link" href="mailto:thestickytrap@gmail.com"><div class="ico em">✉</div><div class="l-meta"><div class="l-name">Email</div><div class="l-sub">thestickytrap@gmail.com</div></div></a>
+    </div>
+  </div>
+
+  <div class="install">📲 <b>Install it:</b> open on your phone → Share → <b>Add to Home Screen</b>. Opens like an app.</div>
+  <footer><div class="wm" style="font-size:16px">THE STICKY TRAP</div><div class="mono" style="margin-top:6px">Printed in Ann Arbor · FM Holdings · © 2026</div></footer>
+</div>
+
+<script>
+  var esc = function(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); };
+
+  function renderBody(b){
+    var h = '';
+    (b.sections||[]).forEach(function(s){
+      h += '<h3>'+esc(s.name)+'</h3><ul>';
+      (s.items||[]).forEach(function(it){
+        h += '<li>'+esc(it.text)+(it.url?' <a href="'+esc(it.url)+'" target="_blank" rel="noopener">'+esc(it.source||'source')+'</a>':'')+'</li>';
+      });
+      h += '</ul>';
+      if(s.angle) h += '<p class="angle">🎙️ '+esc(s.angle)+'</p>';
+    });
+    if(b.why) h += '<p class="why"><b>Why it matters to The Sticky Trap:</b> '+esc(b.why)+'</p>';
+    return h;
+  }
+
+  function renderLatest(b){
+    var el = document.getElementById('brief-latest');
+    el.innerHTML =
+      '<div class="date">'+esc(b.label||'Brief')+' · '+esc(b.date)+'</div>'+
+      '<h2>'+esc(b.title)+'</h2>'+
+      '<p class="top"><b>Top story:</b> '+esc(b.top)+'</p>'+
+      '<details class="full"><summary><span class="chev">▸</span> Read the full brief</summary>'+
+      '<div class="fb">'+renderBody(b)+'</div></details>';
+  }
+
+  function renderArchive(list){
+    if(!list.length) return;
+    document.getElementById('arch-sec').hidden = false;
+    var wrap = document.getElementById('archive');
+    list.forEach(function(b){
+      var d = document.createElement('details');
+      d.innerHTML = '<summary><span class="adate">'+esc(b.date)+'</span> · '+esc(b.title)+'</summary><div class="fb">'+renderBody(b)+'</div>';
+      wrap.appendChild(d);
+    });
+  }
+
+  function load(){
+    fetch('data/briefs.json?t='+Date.now(), {cache:'no-store'})
+      .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function(j){
+        var briefs = j.briefs||[];
+        document.getElementById('brief-updated').textContent = 'updated '+(j.updated||(briefs[0]&&briefs[0].date)||'');
+        if(briefs.length){ renderLatest(briefs[0]); renderArchive(briefs.slice(1)); }
+        else { document.getElementById('brief-latest').innerHTML = '<p class="top">No brief yet — check back at 8am.</p>'; }
+      })
+      .catch(function(){
+        document.getElementById('brief-updated').textContent = 'offline';
+        document.getElementById('brief-latest').innerHTML = '<p class="top">Couldn\'t load the latest brief. It refreshes every morning — try again shortly.</p>';
+      });
+  }
+
+  // newsletter mailto uses the typed email (placeholder until a real ESP is wired)
+  var email = document.getElementById('nl-email');
+  document.getElementById('nl-btn').addEventListener('click', function(){
+    var v = (email.value||'').trim();
+    if(v) this.href = 'mailto:thestickytrap@gmail.com?subject=Subscribe%20to%20the%20Morning%20Brief&body='+encodeURIComponent('Subscribe: '+v);
+  });
+
+  load();
+  if('serviceWorker' in navigator){ window.addEventListener('load', function(){ navigator.serviceWorker.register('sw.js').catch(function(){}); }); }
+</script>
+</body>
+</html>
