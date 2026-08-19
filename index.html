@@ -118,10 +118,10 @@
     </div>
     <div class="card" style="margin-top:10px;padding:14px 16px">
       <div class="signup">
-        <input type="email" placeholder="you@email.com" aria-label="Email" id="nl-email">
-        <a class="btn" id="nl-btn" href="mailto:thestickytrap@gmail.com?subject=Subscribe%20to%20the%20Morning%20Brief">Get it daily</a>
+        <input type="email" placeholder="you@email.com" aria-label="Email" id="nl-email" autocomplete="email">
+        <button class="btn" id="nl-btn" type="button">Get it daily</button>
       </div>
-      <p class="sub-note">Free daily brief to your inbox. (Real one-tap signup wires in with the newsletter service.)</p>
+      <p class="sub-note" id="nl-note">Free daily brief to your inbox — cannabis + psychedelics, every morning.</p>
     </div>
   </div>
 
@@ -169,7 +169,22 @@
 </div>
 
 <script>
+  var API = 'https://script.google.com/macros/s/AKfycbyNQSfrtPhEgLtNt8IPIQ4z0vF265j3AC-udRJOyF7MLcS4MhLTAL4SESs_AGj0JS8RdQ/exec';
   var esc = function(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); };
+
+  // JSONP — the Apps Script API is cross-origin, so we load it via a <script> tag (no CORS).
+  var _jc = 0;
+  function jsonp(url, cb, onerr){
+    var name = 'stcb_' + (++_jc) + '_' + (Date.now() % 1e6);
+    var s = document.createElement('script');
+    var done = false;
+    var timer = setTimeout(function(){ if(!done){ done = true; cleanup(); onerr && onerr('timeout'); } }, 12000);
+    function cleanup(){ clearTimeout(timer); delete window[name]; if(s.parentNode) s.parentNode.removeChild(s); }
+    window[name] = function(data){ if(done) return; done = true; cleanup(); cb(data); };
+    s.onerror = function(){ if(!done){ done = true; cleanup(); onerr && onerr('neterr'); } };
+    s.src = url + (url.indexOf('?') > -1 ? '&' : '?') + 'callback=' + name;
+    document.head.appendChild(s);
+  }
 
   function renderBody(b){
     var h = '';
@@ -206,26 +221,38 @@
     });
   }
 
-  function load(){
+  function paint(j){
+    var briefs = (j && j.briefs) || [];
+    if(!briefs.length) return false;
+    document.getElementById('brief-updated').textContent = 'updated ' + (j.updated || briefs[0].date || '');
+    renderLatest(briefs[0]); renderArchive(briefs.slice(1));
+    return true;
+  }
+  function loadLocal(){
     fetch('data/briefs.json?t='+Date.now(), {cache:'no-store'})
-      .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
-      .then(function(j){
-        var briefs = j.briefs||[];
-        document.getElementById('brief-updated').textContent = 'updated '+(j.updated||(briefs[0]&&briefs[0].date)||'');
-        if(briefs.length){ renderLatest(briefs[0]); renderArchive(briefs.slice(1)); }
-        else { document.getElementById('brief-latest').innerHTML = '<p class="top">No brief yet — check back at 8am.</p>'; }
-      })
-      .catch(function(){
-        document.getElementById('brief-updated').textContent = 'offline';
-        document.getElementById('brief-latest').innerHTML = '<p class="top">Couldn\'t load the latest brief. It refreshes every morning — try again shortly.</p>';
-      });
+      .then(function(r){ return r.json(); })
+      .then(function(j){ if(!paint(j)){ empty(); } })
+      .catch(function(){ offline(); });
+  }
+  function empty(){ document.getElementById('brief-updated').textContent=''; document.getElementById('brief-latest').innerHTML='<p class="top">No brief yet — check back at 8am.</p>'; }
+  function offline(){ document.getElementById('brief-updated').textContent='offline'; document.getElementById('brief-latest').innerHTML='<p class="top">Couldn’t load the latest brief — it refreshes every morning.</p>'; }
+  function load(){
+    // Live brief from the Apps Script API; if it has none yet (or errors), fall back to the bundled copy.
+    jsonp(API+'?action=brief', function(j){ if(!paint(j)){ loadLocal(); } }, function(){ loadLocal(); });
   }
 
-  // newsletter mailto uses the typed email (placeholder until a real ESP is wired)
+  // real one-tap subscribe → Apps Script (JSONP)
   var email = document.getElementById('nl-email');
-  document.getElementById('nl-btn').addEventListener('click', function(){
+  var nlBtn = document.getElementById('nl-btn');
+  var nlNote = document.getElementById('nl-note');
+  nlBtn.addEventListener('click', function(){
     var v = (email.value||'').trim();
-    if(v) this.href = 'mailto:thestickytrap@gmail.com?subject=Subscribe%20to%20the%20Morning%20Brief&body='+encodeURIComponent('Subscribe: '+v);
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){ nlNote.textContent = 'Enter a valid email to subscribe.'; email.focus(); return; }
+    nlBtn.disabled = true; nlBtn.textContent = '…';
+    jsonp(API+'?action=subscribe&email='+encodeURIComponent(v), function(res){
+      if(res && res.ok){ nlNote.textContent = "You’re in — the brief hits your inbox each morning. 🌿"; email.value=''; nlBtn.textContent='Subscribed ✓'; }
+      else { nlNote.textContent = 'Hiccup — try again in a sec.'; nlBtn.disabled=false; nlBtn.textContent='Get it daily'; }
+    }, function(){ nlNote.textContent='Network hiccup — try again.'; nlBtn.disabled=false; nlBtn.textContent='Get it daily'; });
   });
 
   load();
