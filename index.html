@@ -77,6 +77,10 @@
   .opt.win .oh .nm{color:var(--pur)}
   .poll.voted .opt{cursor:default} .opt.picked .oh .nm::after{content:" ✓";color:var(--cy);font-weight:800}
   .pollfoot{display:flex;align-items:center;justify-content:space-between;margin-top:14px}
+  .crew{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:13px}
+  .cm{display:flex;flex-direction:column;align-items:center;gap:7px}
+  .cav{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:18px;background:linear-gradient(140deg,var(--a),var(--b));box-shadow:0 5px 14px rgba(122,60,240,.32)}
+  .cn{font-size:11.5px;font-weight:700;color:var(--ink)}
 
   /* event */
   .ev{display:flex;gap:12px;align-items:center;background:rgba(255,255,255,.64);border:1px solid rgba(26,19,66,.09);border-radius:14px;padding:11px}
@@ -190,15 +194,15 @@
       </div>
 
       <div class="card hl">
-        <div style="display:flex;align-items:center;gap:6px"><span class="livepulse"></span><span class="kicker">Trending · The Panel</span></div>
-        <div class="h2">The 24% Tax — who's right?</div>
-        <div class="poll" id="poll">
-          <div class="opt win" data-k="kahr"><div class="oh"><span class="nm">Sean Kahr <span>· Margin</span></span><span class="pc">41%</span></div><div class="bar"><i data-w="41"></i></div></div>
-          <div class="opt" data-k="whiteford"><div class="oh"><span class="nm">Bob Whiteford <span>· Rules</span></span><span class="pc">31%</span></div><div class="bar"><i data-w="31"></i></div></div>
-          <div class="opt" data-k="bogdan"><div class="oh"><span class="nm">Bogdan <span>· Truth</span></span><span class="pc">16%</span></div><div class="bar"><i data-w="16"></i></div></div>
-          <div class="opt" data-k="lanza"><div class="oh"><span class="nm">Randy Lanza <span>· Clout</span></span><span class="pc">12%</span></div><div class="bar"><i data-w="12"></i></div></div>
+        <span class="kicker">Meet the team</span>
+        <div class="h2" style="margin:6px 0 2px">The Sticky Crew</div>
+        <div class="crew">
+          <div class="cm"><span class="cav" style="--a:#ff2e88;--b:#8a4dff">T</span><span class="cn">Tanda</span></div>
+          <div class="cm"><span class="cav" style="--a:#8a4dff;--b:#22d3ee">E</span><span class="cn">Erin</span></div>
+          <div class="cm"><span class="cav" style="--a:#22d3ee;--b:#ff8a3c">K</span><span class="cn">Kyle</span></div>
+          <div class="cm"><span class="cav" style="--a:#c98a0a;--b:#ef1f78">P</span><span class="cn">Payton</span></div>
         </div>
-        <div class="pollfoot"><span class="p" style="font-weight:700" id="votes">1,204 votes</span><button class="btn" id="voteBtn">Cast your vote →</button></div>
+        <a class="btn" style="display:flex;margin-top:14px" href="https://www.instagram.com/the_stickytrap/" target="_blank" rel="noopener">Meet the crew →</a>
       </div>
 
       <div class="lbl cult"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M4 6h16v14H4z"/><path d="M4 10h16M8 3v4M16 3v4"/></svg> Next event</div>
@@ -223,14 +227,6 @@
     <!-- CULTURE -->
     <section class="view" data-view="culture">
       <h2 class="vtitle">Culture</h2>
-      <div class="lbl cult"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg> The Panel · This Week in Weed</div>
-      <div class="card hl">
-        <div class="h2" style="margin-top:0">The 24% Tax — who's right?</div>
-        <div class="opt win"><div class="oh"><span class="nm">Sean Kahr <span>· Margin</span></span><span class="pc">41%</span></div><div class="bar"><i data-w="41"></i></div></div>
-        <div class="opt"><div class="oh"><span class="nm">Bob Whiteford <span>· Rules</span></span><span class="pc">31%</span></div><div class="bar"><i data-w="31"></i></div></div>
-        <div class="opt"><div class="oh"><span class="nm">Bogdan <span>· Truth</span></span><span class="pc">16%</span></div><div class="bar"><i data-w="16"></i></div></div>
-        <div class="pollfoot"><span class="p" style="font-weight:700">1,204 votes</span><button class="btn" onclick="go('today')">Vote on Today →</button></div>
-      </div>
       <div class="lbl">Latest episodes</div>
       <div class="eplist" id="ep-list"><div class="skel" style="height:44px"></div><div class="skel" style="height:44px;width:88%"></div></div>
       <a class="morebtn" href="https://www.youtube.com/@theflowerroompodcast" target="_blank" rel="noopener">See all episodes on YouTube →</a>
@@ -308,26 +304,6 @@
     var d=new Date(), days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     document.getElementById('today-date').textContent=days[d.getDay()]+', '+mo[d.getMonth()]+' '+d.getDate();
   })();
-  (function(){
-    var poll=document.getElementById('poll'), btn=document.getElementById('voteBtn'), votesEl=document.getElementById('votes');
-    var stored=null; try{stored=localStorage.getItem('panelVote');}catch(e){}
-    function markVoted(k){
-      poll.classList.add('voted');
-      poll.querySelectorAll('.opt').forEach(function(o){o.classList.toggle('picked',o.dataset.k===k);});
-      btn.textContent='You voted ✓'; btn.disabled=true;
-      votesEl.textContent='1,205 votes';
-    }
-    if(stored) markVoted(stored);
-    poll.querySelectorAll('.opt').forEach(function(o){
-      o.addEventListener('click',function(){
-        if(poll.classList.contains('voted'))return;
-        var k=o.dataset.k; try{localStorage.setItem('panelVote',k);}catch(e){}
-        markVoted(k); toast('Vote counted — thanks!');
-      });
-    });
-    btn.addEventListener('click',function(){ if(!poll.classList.contains('voted')) toast('Tap the panelist you back.'); });
-  })();
-
   /* ---- Industry: live brief from backend ---- */
   var industryLoaded=false;
   function renderIndustry(b){
