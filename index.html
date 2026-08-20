@@ -31,8 +31,7 @@
     box-shadow:0 0 60px rgba(20,10,50,.4)}
   a{color:inherit;text-decoration:none}
 
-  .topbar{flex:none;display:flex;align-items:center;justify-content:space-between;padding:calc(12px + var(--safe-t)) 18px 10px;
-    border-bottom:1px solid var(--line)}
+  .topbar{flex:none;display:flex;align-items:center;justify-content:space-between;padding:calc(12px + var(--safe-t)) 18px 8px}
   .wm{font-weight:900;font-size:14px;letter-spacing:.03em;background:var(--grad);background-size:230% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shift 6s ease-in-out infinite}
   @keyframes shift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
   .cur{animation:blink 1.1s step-end infinite}
@@ -102,7 +101,8 @@
   .herofoot .count{margin-top:0}
   .evprev{font-size:12px;font-weight:800;color:var(--mag);white-space:nowrap}
   .recapc{display:flex;align-items:center;gap:11px;background:rgba(255,255,255,.55);border:1px solid rgba(26,19,66,.09);border-radius:13px;padding:9px 11px}
-  .recapc .rc-t{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.2} .recapc .rc-s{font-size:10.5px;color:var(--muted);margin-top:2px}
+  .recapc>div{min-width:0}
+  .recapc .rc-t{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden} .recapc .rc-s{font-size:10.5px;color:var(--muted);margin-top:2px}
   .recapc .rc-go{margin-left:auto;font-size:11px;font-weight:800;color:var(--mag);white-space:nowrap}
   .recapc .thumb{width:52px;height:38px}
 
@@ -152,12 +152,12 @@
   .softbar .st{font-size:12.5px;font-weight:800;color:var(--ink)} .softbar .ss{font-size:11px;color:var(--soft)} .softbar .go{font-size:18px;color:var(--mag)}
 
   /* tab bar */
-  .tabbar{flex:none;display:flex;justify-content:space-around;align-items:center;padding:8px 4px calc(9px + var(--safe-b));border-top:1px solid var(--line);
-    background:linear-gradient(180deg,rgba(255,255,255,.35),rgba(255,255,255,.7))}
+  .tabbar{flex:none;display:flex;justify-content:space-around;align-items:center;padding:4px 4px 9px;border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,.2))}
   .tabbar button{background:none;border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;color:#8078ac;font-size:9.5px;font-weight:700;font-family:inherit;padding:2px 6px}
   .tabbar button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
   .tabbar button.on{color:var(--mag)}
-  .toast{position:fixed;left:50%;bottom:calc(78px + var(--safe-b));transform:translateX(-50%) translateY(20px);z-index:5;background:#14102e;color:#fff;font-size:12.5px;font-weight:600;padding:10px 16px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.4);opacity:0;transition:.25s;pointer-events:none}
+  .toast{position:fixed;left:50%;bottom:calc(28px + var(--safe-b));transform:translateX(-50%) translateY(20px);z-index:5;background:#14102e;color:#fff;font-size:12.5px;font-weight:600;padding:10px 16px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.4);opacity:0;transition:.25s;pointer-events:none}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
@@ -171,6 +171,14 @@
       <span class="avatar">SB</span>
     </div>
   </header>
+
+  <nav class="tabbar" id="tabs">
+    <button class="on" data-tab="today"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Today</button>
+    <button data-tab="industry"><svg viewBox="0 0 24 24"><path d="M5 4h11v16H5z"/><path d="M8 8h5M8 11h5M8 14h4"/></svg>Industry</button>
+    <button data-tab="culture"><svg viewBox="0 0 24 24"><polygon points="6 4 20 12 6 20"/></svg>Culture</button>
+    <button data-tab="events"><svg viewBox="0 0 24 24"><path d="M4 6h16v14H4z"/><path d="M4 10h16M8 3v4M16 3v4"/></svg>Events</button>
+    <button data-tab="connect"><svg viewBox="0 0 24 24"><path d="M9 15l6-6M8 12l-2 2a3.5 3.5 0 005 5l2-2M16 12l2-2a3.5 3.5 0 00-5-5l-2 2"/></svg>Connect</button>
+  </nav>
 
   <main class="views">
 
@@ -261,14 +269,6 @@
     </section>
 
   </main>
-
-  <nav class="tabbar" id="tabs">
-    <button class="on" data-tab="today"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Today</button>
-    <button data-tab="industry"><svg viewBox="0 0 24 24"><path d="M5 4h11v16H5z"/><path d="M8 8h5M8 11h5M8 14h4"/></svg>Industry</button>
-    <button data-tab="culture"><svg viewBox="0 0 24 24"><polygon points="6 4 20 12 6 20"/></svg>Culture</button>
-    <button data-tab="events"><svg viewBox="0 0 24 24"><path d="M4 6h16v14H4z"/><path d="M4 10h16M8 3v4M16 3v4"/></svg>Events</button>
-    <button data-tab="connect"><svg viewBox="0 0 24 24"><path d="M9 15l6-6M8 12l-2 2a3.5 3.5 0 005 5l2-2M16 12l2-2a3.5 3.5 0 00-5-5l-2 2"/></svg>Connect</button>
-  </nav>
 </div>
 <div class="toast" id="toast"></div>
 
