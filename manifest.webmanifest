@@ -1,7 +1,7 @@
 {
-  "name": "The Sticky Trap Hub",
-  "short_name": "ST Hub",
-  "description": "All The Sticky Trap & Flower Room links, plus the daily cannabis + psychedelics brief.",
+  "name": "TheStickyTr_ APP",
+  "short_name": "ST App",
+  "description": "Two portals, one home — reputable cannabis + psychedelics news, the podcast, the Panel, and what's happening in the scene.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
