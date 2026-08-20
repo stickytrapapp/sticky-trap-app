@@ -3,6 +3,7 @@
  * ---------------------------------------------------------------------------
  * Endpoints
  *   GET  ?action=brief[&callback=fn]                    -> latest briefs JSON (JSONP if callback)
+ *   GET  ?action=episodes[&callback=fn]                 -> latest Flower Room episodes from YouTube RSS (cached 3h)
  *   GET  ?action=subscribe&email=..[&callback=fn]       -> add a subscriber
  *   GET  ?action=unsubscribe&email=..                   -> remove a subscriber (email footer link)
  *   POST {secret, brief:{...}, send:true}               -> store brief + email subscribers (the cloud routine calls this)
@@ -17,6 +18,7 @@
 
 var PROP = PropertiesService.getScriptProperties();
 var MAX_BRIEFS = 30;
+var YT_CHANNEL_ID = 'UCbapblj0hpQMPyeUXt2NyiA'; // The Flower Room
 
 function setup() {
   var id = PROP.getProperty('SHEET_ID');
@@ -64,6 +66,7 @@ function doGet(e) {
   var cb = p.callback;
   try {
     if (p.action === 'brief')       return out_(getBriefs_(), cb);
+    if (p.action === 'episodes')    return out_(getEpisodes_(), cb);
     if (p.action === 'subscribe')   return out_(subscribe_(p.email), cb);
     if (p.action === 'unsubscribe') return unsubHtml_(unsubscribe_(p.email));
     return out_({ ok: true, service: 'sticky-trap-hub' }, cb);
@@ -80,6 +83,46 @@ function getBriefs_() {
     for (var i = 0; i < rows.length; i++) { try { briefs.push(JSON.parse(rows[i][1])); } catch (e) {} }
   }
   return { updated: briefs[0] ? briefs[0].date : '', briefs: briefs.slice(0, MAX_BRIEFS) };
+}
+
+/* ---------- YouTube episodes (live from the channel RSS, cached 3h) ---------- */
+function getEpisodes_() {
+  var cache = CacheService.getScriptCache();
+  var hit = cache.get('episodes');
+  if (hit) return JSON.parse(hit);
+
+  var out = { ok: true, updated: new Date().toISOString(), episodes: [] };
+  try {
+    var url = 'https://www.youtube.com/feeds/videos.xml?channel_id=' + YT_CHANNEL_ID;
+    var xml = UrlFetchApp.fetch(url, { muteHttpExceptions: true }).getContentText();
+    var atom = XmlService.getNamespace('http://www.w3.org/2005/Atom');
+    var yt   = XmlService.getNamespace('http://www.youtube.com/xml/schemas/2015');
+    var med  = XmlService.getNamespace('http://search.yahoo.com/mrss/');
+    var entries = XmlService.parse(xml).getRootElement().getChildren('entry', atom);
+    for (var i = 0; i < entries.length; i++) {
+      var en = entries[i];
+      var vid = en.getChild('videoId', yt);
+      var title = en.getChild('title', atom);
+      var pub = en.getChild('published', atom);
+      var views = '';
+      var group = en.getChild('group', med);
+      if (group) {
+        var stats = group.getChild('community', med) && group.getChild('community', med).getChild('statistics', med);
+        if (stats && stats.getAttribute('views')) views = stats.getAttribute('views').getValue();
+      }
+      out.episodes.push({
+        id: vid ? vid.getText() : '',
+        title: title ? title.getText() : '',
+        published: pub ? pub.getText() : '',
+        views: views
+      });
+    }
+    if (out.episodes.length) cache.put('episodes', JSON.stringify(out), 10800); // 3 hours
+  } catch (err) {
+    out.ok = false;
+    out.error = String(err);
+  }
+  return out;
 }
 
 function subscribe_(email) {
