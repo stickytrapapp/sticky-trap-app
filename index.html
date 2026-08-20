@@ -173,30 +173,15 @@
   </header>
 
   <nav class="tabbar" id="tabs">
-    <button class="on" data-tab="today"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Today</button>
-    <button data-tab="industry"><svg viewBox="0 0 24 24"><path d="M5 4h11v16H5z"/><path d="M8 8h5M8 11h5M8 14h4"/></svg>Industry</button>
-    <button data-tab="culture"><svg viewBox="0 0 24 24"><polygon points="6 4 20 12 6 20"/></svg>Culture</button>
-    <button data-tab="events"><svg viewBox="0 0 24 24"><path d="M4 6h16v14H4z"/><path d="M4 10h16M8 3v4M16 3v4"/></svg>Events</button>
+    <button class="on" data-tab="industry"><svg viewBox="0 0 24 24"><path d="M5 4h11v16H5z"/><path d="M8 8h5M8 11h5M8 14h4"/></svg>Industry</button>
+    <button data-tab="social"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.6M8.2 13.2l7.6 4.6"/></svg>Social</button>
     <button data-tab="connect"><svg viewBox="0 0 24 24"><path d="M9 15l6-6M8 12l-2 2a3.5 3.5 0 005 5l2-2M16 12l2-2a3.5 3.5 0 00-5-5l-2 2"/></svg>Connect</button>
   </nav>
 
   <main class="views">
 
-    <!-- TODAY -->
-    <section class="view active" data-view="today">
-      <div class="vhead">
-        <div><div class="greet">Good morning, Shane</div><div class="hi" id="today-date">—</div></div>
-        <span class="streak"><svg viewBox="0 0 24 24" fill="#e8621a" stroke="none"><path d="M12 2c1 3-1 4-1 6 0 1 1 2 2 2 2 0 3-2 3-2 2 2 3 4 3 7a7 7 0 11-14 0c0-3 2-5 3-6 1 2 2 3 3 3 0-3-2-4-2-6 0-2 1-3 0-4z"/></svg> 4-day streak</span>
-      </div>
-
-      <div class="lbl cult"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M4 6h16v14H4z"/><path d="M4 10h16M8 3v4M16 3v4"/></svg> Next event</div>
-      <div class="ev"><div class="date"><span class="m">Aug</span><span class="d">23</span></div><div><div class="et">Blaze'N BBQ Weekend</div><div class="el">Michigan · we'll be there</div></div></div>
-
-      <a class="softbar" href="https://claude.ai/code/artifact/f7624c44-d0fb-42e6-8b10-1c941c3ea5c1" target="_blank" rel="noopener"><div><div class="st">Need branding?</div><div class="ss">We brand you — see the menu</div></div><div class="go">›</div></a>
-    </section>
-
     <!-- INDUSTRY (live) -->
-    <section class="view industry" data-view="industry">
+    <section class="view industry active" data-view="industry">
       <div class="masthead"><span class="mt">Industry</span><span class="md">Cannabis · Psychedelics</span></div>
       <div id="ind-content">
         <div class="skel" style="width:35%"></div>
@@ -208,29 +193,11 @@
       <div class="note" id="ind-note">Get the brief in your inbox — free, every morning.</div>
     </section>
 
-    <!-- CULTURE -->
-    <section class="view" data-view="culture">
-      <h2 class="vtitle">Culture</h2>
-      <div class="lbl">Latest episodes</div>
-      <div class="eplist" id="ep-list"><div class="skel" style="height:44px"></div><div class="skel" style="height:44px;width:88%"></div></div>
-      <a class="morebtn" href="https://www.youtube.com/@theflowerroompodcast" target="_blank" rel="noopener">See all episodes on YouTube →</a>
-    </section>
-
-    <!-- EVENTS -->
-    <section class="view" data-view="events">
-      <h2 class="vtitle">Events</h2>
-      <div class="p" style="margin-top:-4px">Where to find us — and what you missed.</div>
-      <div class="chips" id="ev-chips"><span class="chip on" data-cat="All">All</span><span class="chip" data-cat="Michigan">Michigan</span><span class="chip" data-cat="Online">Online</span><span class="chip" data-cat="Drops">Drops</span></div>
-      <div class="sec">Upcoming</div>
-      <div id="ev-up"></div>
-      <div class="sec recap">Recaps</div>
-      <div id="ev-recap"></div>
-      <div class="softbar"><div><div class="st">Never miss a drop</div><div class="ss">Turn on event alerts</div></div><div class="go">🔔</div></div>
-    </section>
-
-    <!-- CONNECT -->
-    <section class="view" data-view="connect">
-      <h2 class="vtitle">Connect</h2>
+    <!-- SOCIAL -->
+    <section class="view" data-view="social">
+      <h2 class="vtitle">Social</h2>
+      <div class="p" style="margin-top:-4px">Follow along and watch the latest.</div>
+      <div class="lbl">Follow us</div>
       <div class="grid">
         <a class="tile" href="https://www.instagram.com/the_stickytrap/" target="_blank" rel="noopener"><div class="ic ig">◎</div><div><div class="tn">Instagram</div><div class="ts">@the_stickytrap</div></div></a>
         <a class="tile" href="https://www.instagram.com/theflowerroompodcast/" target="_blank" rel="noopener"><div class="ic ig">◎</div><div><div class="tn">Instagram</div><div class="ts">@theflowerroom</div></div></a>
@@ -238,7 +205,15 @@
         <a class="tile" href="https://www.youtube.com/@theflowerroompodcast" target="_blank" rel="noopener"><div class="ic yt">▶</div><div><div class="tn">YouTube</div><div class="ts">Flower Room</div></div></a>
         <a class="tile wide" href="https://www.facebook.com/people/The-Sticky-Trap/61574641650095/" target="_blank" rel="noopener"><div class="ic fb">f</div><div><div class="tn">Facebook</div><div class="ts">The Sticky Trap</div></div></a>
       </div>
-      <div class="lbl" style="margin-top:4px">Work with us</div>
+      <div class="lbl" style="margin-top:4px">Latest episodes</div>
+      <div class="eplist" id="ep-list"><div class="skel" style="height:44px"></div><div class="skel" style="height:44px;width:88%"></div></div>
+      <a class="morebtn" href="https://www.youtube.com/@theflowerroompodcast" target="_blank" rel="noopener">See all episodes on YouTube →</a>
+    </section>
+
+    <!-- CONNECT -->
+    <section class="view" data-view="connect">
+      <h2 class="vtitle">Connect</h2>
+      <div class="lbl">Work with us</div>
       <div class="card hl"><div class="row"><div class="ic mn" style="width:38px;height:38px">✦</div><div><div class="tn" style="font-size:13px">The Sticky Trap — we brand you</div><div class="ts">Stickers · labels · packaging · merch</div></div></div>
         <a class="btn" style="display:flex;margin-top:12px" href="https://claude.ai/code/artifact/f7624c44-d0fb-42e6-8b10-1c941c3ea5c1" target="_blank" rel="noopener">Start a project →</a>
       </div>
@@ -276,18 +251,13 @@
     document.querySelector('.views').scrollTop=0;
     animateBars(document.querySelector('.view.active'));
     if(name==='industry'&&!industryLoaded) loadIndustry();
-    if(name==='culture'&&!epLoaded) loadEpisodes();
+    if(name==='social'&&!epLoaded) loadEpisodes();
     if(location.hash!=='#'+name) history.replaceState(null,'','#'+name);
   };
   tabs.forEach(function(b){b.addEventListener('click',function(){go(b.dataset.tab);});});
 
   function animateBars(scope){ (scope||document).querySelectorAll('.bar i').forEach(function(i){ i.style.width=(i.dataset.w||0)+'%'; }); }
 
-  /* ---- Today date + poll ---- */
-  (function(){
-    var d=new Date(), days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    document.getElementById('today-date').textContent=days[d.getDay()]+', '+mo[d.getMonth()]+' '+d.getDate();
-  })();
   /* ---- Industry: live brief from backend ---- */
   var industryLoaded=false;
   function renderIndustry(b){
@@ -356,53 +326,9 @@
       .then(function(j){ renderEpisodes(j.episodes||[]); }).catch(function(){ renderEpisodes([]); });
   }
 
-  /* ---- Events: upcoming (hero + countdown) vs recaps, date-driven + filterable ---- */
-  (function(){
-    var EVENTS=[
-      {date:'2026-08-23',title:"Blaze'N BBQ Weekend",loc:'Michigan',tag:"We're there",cat:'Michigan',preview:'https://youtu.be/Ftbrn8e5cI4'},
-      {date:'2026-09-06',title:'Michigan Cannabis Cup',loc:'Detroit, MI',cat:'Michigan'},
-      {date:'2026-09-12',title:'Sticky Trap × Grateful Headz drop',loc:'Online',tag:'Drop',cat:'Drops'},
-      {date:'2026-09-20',title:'The Flower Room — LIVE taping',loc:'Ann Arbor, MI',cat:'Michigan'},
-      {date:'2026-07-23',title:'Beyond the Shelf: How Gans Knows Dope Is Educating Budtenders',sub:'The Flower Room · 1 hr',recap:'https://youtu.be/ea4YF6OxjX0',cat:'Michigan'},
-      {date:'2026-07-20',title:'Terp Tantrums with Hash Huntington — Single Source',sub:'The Flower Room · 60 min',recap:'https://youtu.be/RNN3xmmy4jg',cat:'Michigan'}
-    ];
-    var MO=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-    var upWrap=document.getElementById('ev-up'), rcWrap=document.getElementById('ev-recap'), filter='All';
-    function parse(s){var p=s.split('-');return new Date(+p[0],+p[1]-1,+p[2]);}
-    function today(){var d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate());}
-    function daysTo(d){return Math.round((d-today())/86400000);}
-    function chip(d){return '<div class="date"><span class="m">'+MO[d.getMonth()]+'</span><span class="d">'+d.getDate()+'</span></div>';}
-    function match(e){return filter==='All'||e.cat===filter;}
-    function render(){
-      var t=today();
-      var up=EVENTS.filter(function(e){return parse(e.date)>=t&&match(e);}).sort(function(a,b){return parse(a.date)-parse(b.date);});
-      var past=EVENTS.filter(function(e){return parse(e.date)<t&&match(e);}).sort(function(a,b){return parse(b.date)-parse(a.date);});
-      var h='';
-      if(up.length){
-        var e=up[0], d=parse(e.date), n=daysTo(d), cd=n<=0?'Today':n===1?'Tomorrow':'In '+n+' days';
-        h+='<div class="evhero"><div class="top">'+chip(d)+'<div><div class="et">'+esc(e.title)+'</div><div class="el">'+esc(e.loc)+'</div>'+(e.tag?'<span class="tag">'+esc(e.tag)+'</span>':'')+'</div></div><div class="herofoot"><span class="count"><span class="dot"></span>'+cd+'</span>'+(e.preview?'<a class="evprev" href="'+esc(e.preview)+'" target="_blank" rel="noopener">▶ Watch the preview</a>':'')+'</div></div>';
-        for(var i=1;i<up.length;i++){var x=up[i],dx=parse(x.date);
-          h+='<div class="ev">'+chip(dx)+'<div><div class="et">'+esc(x.title)+'</div><div class="el">'+esc(x.loc)+'</div>'+(x.tag?'<span class="tag">'+esc(x.tag)+'</span>':'')+'</div></div>';}
-      } else h='<div class="p">Nothing on the calendar in this filter — check back.</div>';
-      upWrap.innerHTML=h;
-      var r='';
-      if(past.length){past.forEach(function(e,i){var d=parse(e.date);
-        var sub=e.sub||(MO[d.getMonth()]+' '+d.getDate()+(e.loc?' · '+e.loc:''));
-        r+='<a class="recapc" '+(e.recap?'href="'+esc(e.recap)+'" target="_blank" rel="noopener"':'')+'><div class="thumb'+(i%2?' g2':'')+'"></div><div><div class="rc-t">'+esc(e.title)+'</div><div class="rc-s">'+esc(sub)+'</div></div>'+(e.recap?'<span class="rc-go">Watch →</span>':'')+'</a>';});
-      } else r='<div class="p">No recaps in this filter yet.</div>';
-      rcWrap.innerHTML=r;
-    }
-    document.getElementById('ev-chips').addEventListener('click',function(ev){
-      var c=ev.target.closest('.chip'); if(!c)return;
-      this.querySelectorAll('.chip').forEach(function(x){x.classList.remove('on');}); c.classList.add('on');
-      filter=c.dataset.cat||'All'; render();
-    });
-    render();
-  })();
-
-  /* ---- init: open tab from hash, animate ---- */
+  /* ---- init: open tab from hash ---- */
   var initial=(location.hash||'').replace('#','');
-  if(['today','industry','culture','events','connect'].indexOf(initial)>-1) go(initial); else animateBars(document.querySelector('.view.active'));
+  if(['industry','social','connect'].indexOf(initial)>-1) go(initial);
   loadIndustry(); // warm the brief immediately
   loadEpisodes(); // warm the episode list
 
