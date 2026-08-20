@@ -1,34 +1,27 @@
 {
-  "updated": "2026-08-18",
+  "updated": "2026-08-20",
   "briefs": [
     {
-      "date": "2026-08-18",
-      "label": "Cannabis + Psychedelics",
-      "title": "Hemp THC ban standoff hits Nov. 12 — as psychedelics get real",
-      "top": "The federal hemp-THC ban's Nov. 12 deadline is a Senate-vs-House standoff threatening ~95% of hemp-THC products — while Colorado's ibogaine pilot took effect and Compass Pathways' psilocybin NDA tracks to Q4.",
-      "sections": [
-        {
-          "name": "🌿 Cannabis",
-          "items": [
-            { "text": "DEA rescheduling — post-hearing briefs filed Aug. 17; ALJ recommendation next.", "source": "Cannabis Business Times", "url": "https://www.cannabisbusinesstimes.com/" },
-            { "text": "Hemp THC ban — Nov. 12 deadline stands; THCA / D8-9 / vape brands on the clock.", "source": "Hemp Law Group", "url": "https://www.hemplawgroup.com/" },
-            { "text": "Michigan — 24% wholesale-tax lawsuit at Court of Appeals w/ expedited review; ruling ~Sept. Prices nation's-lowest (~$8.49), demand steady.", "source": "Headset", "url": "https://www.headset.io/markets/michigan" },
-            { "text": "Packaging — Village Farms' clear easy-pour pouches; premium glass/violet + QR/NFC labels trending.", "source": "Marijuana Herald", "url": "https://themarijuanaherald.com/" }
-          ],
-          "angle": "If MI's 24% tax dies in September — do prices drop, or do operators pocket it?"
-        },
-        {
-          "name": "🍄 Psychedelics",
-          "items": [
-            { "text": "Colorado HB26-1325 (effective Aug. 12) adds a state ibogaine research pilot.", "source": "Unlimited Sciences", "url": "https://unlimitedsciences.org/psychedelic-policy-2026/" },
-            { "text": "FDA finalized psychedelic guidance + Sept. 14 hearing; Compass COMP360 NDA on track for Q4.", "source": "Endpoints News", "url": "https://endpoints.news/" },
-            { "text": "DEA raised 2026 quotas: DMT 20k→25k g, 5-MeO-DMT 11k→30k g.", "source": "Marijuana Moment", "url": "https://www.marijuanamoment.net/" },
-            { "text": "Reality check — a third of Oregon's licensed psilocybin centers have closed.", "source": "OPB", "url": "https://www.opb.org/" }
-          ],
-          "angle": "Psychedelics are getting federal traction faster than cannabis ever did — will weed get lapped?"
-        }
+      "date": "2026-08-20",
+      "label": "Morning Brief",
+      "title": "Michigan's tax squeeze meets a national psychedelic breakthrough",
+      "top": "The state's new 24% wholesale tax is already forcing closures across metro Detroit — even as the first FDA-approved psilocybin therapy moves within reach nationally. Here's what matters, close to home and coast to coast.",
+      "local": [
+        { "text": "Michigan's 24% wholesale tax is biting: the Senate Fiscal Agency projects a 14.4% sales drop — $400–450M wiped from the market this year.", "source": "Crain's Detroit", "url": "https://www.crainsdetroit.com/cannabis/michigans-weed-industry-braces-its-toughest-year-yet" },
+        { "text": "Ann Arbor's C3 Industries is closing its 35,000 sq ft Webberville grow and cutting 62 jobs — the CEO says the model isn't sustainable under the new tax.", "source": "MITechNews", "url": "https://mitechnews.com/news/michigan-cannabis-licenses-decline-as-industry-shakeout-forces-growers-and-dispensaries-to-exit/" },
+        { "text": "The Michigan Cannabis Industry Association (400+ businesses) is fighting to strike the 24% tax as unconstitutional — a Court of Claims judge is letting the suit proceed.", "source": "MICIA", "url": "https://micia.org/2026/01/21/michigans-cannabis-market-heads-into-a-year-of-upheaval/" },
+        { "text": "Five metro cities — Ann Arbor, Detroit, Ferndale, Hazel Park & Ypsilanti — now deprioritize psychedelic enforcement. Note: that's not legalization.", "source": "The Hill", "url": "https://thehill.com/homenews/state-watch/517581-ann-arbor-lawmakers-vote-to-decriminalize-psychedelic-mushrooms/" },
+        { "text": "Statewide, SB 631 — the Michigan Psychedelics & Mental Health Act — is still pending; psilocybin remains Schedule I under state law.", "source": "Mind Medicine Law", "url": "https://mindmedicinelaw.com/tools/legal-status-by-state/michigan" },
+        { "text": "Bright spot: Michigan drinkers are trading beer for THC — cannabis beverages are the fastest-shifting category heading into the tax era.", "source": "MITechNews", "url": "https://mitechnews.com/news/michigan-consumers-may-be-changing-how-they-socialize-could-cannabis-drinks-be-replacing-alcohol/" }
       ],
-      "why": "The hemp-ban reformulation wave and emerging state-compliant mushroom packaging are both label & branding work landing in your lane — and it's ready-made Flower Room content."
+      "national": [
+        { "text": "Cannabis rescheduling is at the one-yard line: final post-hearing briefs were filed Aug 17, with a Schedule III move on an expedited track since April.", "source": "Marijuana Moment", "url": "https://www.marijuanamoment.net/final-briefs-filed-in-cannabis-rescheduling-hearing-newsletter-august-19-2026" },
+        { "text": "The federal hemp-THC ban got a reprieve — a stopgap pushed the effective date from Nov 12 to Dec 11; without a fix, ~95% of hemp-derived products go unlawful.", "source": "Vicente LLP", "url": "https://vicentellp.com/insights/2026-federal-hemp-ban-what-it-means-for-the-future-of-consumable-hemp-products/" },
+        { "text": "Psilocybin is close to history: Compass Pathways' COMP360 filing is on track for Q4, teeing up the first FDA-approved psychedelic therapy by late 2026 or early 2027.", "source": "Medical Daily", "url": "https://www.medicaldaily.com/psilocybin-fda-approval-2026-compass-pathways-comp360-treatment-resistant-depression-475822" },
+        { "text": "Washington is pushing: a Trump executive order plus FDA 'priority vouchers' to Compass, Usona & Transcend can compress review from ~12 months to 1–2.", "source": "CNN", "url": "https://www.cnn.com/2026/04/24/health/fda-psychedelic-drugs-priority-vouchers" },
+        { "text": "The FDA finalized its psychedelic clinical-trial guidance — the clearest regulatory roadmap this class has ever had, fixing the trial 'unblinding' problem.", "source": "Clinical Trials Arena", "url": "https://www.clinicaltrialsarena.com/news/fda-finalises-psychedelic-clinical-trial-guidance/" },
+        { "text": "Mark your calendar: the FDA holds a public hearing on the therapeutic use of psychedelics on Sept 14.", "source": "Federal Register", "url": "https://www.federalregister.gov/documents/2026/07/14/2026-14155/considerations-for-potential-future-therapeutic-use-of-psychedelic-drugs-public-hearing-request-for" }
+      ]
     }
   ]
 }

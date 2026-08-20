@@ -142,6 +142,11 @@
   .wire{border-top:1px solid rgba(20,40,50,.12);padding:11px 0;display:block}
   .wire .wh{font-family:"Newsreader",Georgia,serif;font-weight:600;font-size:15px;line-height:1.28;color:#18272f}
   .wire .ws{font-size:11px;color:#7a8a92;margin-top:2px}
+  .scopehead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:18px;padding-bottom:5px;border-bottom:2px solid #1c2b33}
+  .scopehead .sh-t{font-family:"Newsreader",Georgia,serif;font-weight:700;font-size:20px;color:#16232b}
+  .scopehead .sh-b{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#fff;padding:4px 10px;border-radius:999px;white-space:nowrap}
+  .sh-b.local{background:linear-gradient(90deg,#ff2e88,#c98a0a)}
+  .sh-b.natl{background:linear-gradient(90deg,#0fa8c8,#7a3cf0)}
   .indbtn{display:block;text-align:center;border:1px solid #12525f;color:#0e5566;background:rgba(15,168,200,.08);border-radius:12px;padding:12px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit}
   .skel{height:16px;border-radius:8px;background:linear-gradient(90deg,#e7e2f4,#f2eefb,#e7e2f4);background-size:200% 100%;animation:sh 1.3s infinite}
   @keyframes sh{0%{background-position:200% 0}100%{background-position:-200% 0}}
@@ -273,17 +278,23 @@
 
   /* ---- Industry: live brief from backend ---- */
   var industryLoaded=false;
-  function renderIndustry(b){
-    industryLoaded=true;
-    var items=[]; (b.sections||[]).forEach(function(s){(s.items||[]).forEach(function(it){items.push(it);});});
-    var srcs=[]; items.forEach(function(it){ if(it.source&&srcs.indexOf(it.source)<0)srcs.push(it.source); });
-    var h='<div class="lede"><div class="k">Morning Brief · '+esc(b.date||'')+'</div>'+
-          '<h3>'+esc(b.title||'')+'</h3><p>'+esc(b.top||'')+'</p>'+
-          (srcs.length?'<div class="by">Sources: '+esc(srcs.slice(0,4).join(' · '))+'</div>':'')+'</div>';
-    items.slice(0,4).forEach(function(it){
+  function wires_(items){
+    var h=''; (items||[]).forEach(function(it){
       h+='<a class="wire" '+(it.url?'href="'+esc(it.url)+'" target="_blank" rel="noopener"':'')+'>'+
          '<div class="wh">'+esc(it.text)+'</div>'+(it.source?'<div class="ws">'+esc(it.source)+'</div>':'')+'</a>';
-    });
+    }); return h;
+  }
+  function renderIndustry(b){
+    industryLoaded=true;
+    var local=b.local, natl=b.national;
+    if((!local||!natl) && b.sections){ // backward-compat with the old flat brief
+      var flat=[]; b.sections.forEach(function(s){(s.items||[]).forEach(function(it){flat.push(it);});});
+      var mid=Math.ceil(flat.length/2); local=flat.slice(0,mid); natl=flat.slice(mid);
+    }
+    var h='<div class="lede"><div class="k">'+esc(b.label||'Morning Brief')+' · '+esc(b.date||'')+'</div>'+
+          '<h3>'+esc(b.title||'')+'</h3><p>'+esc(b.top||'')+'</p></div>';
+    if(local&&local.length) h+='<div class="scopehead"><span class="sh-t">Local</span><span class="sh-b local">Detroit · Ann Arbor</span></div>'+wires_(local);
+    if(natl&&natl.length)  h+='<div class="scopehead"><span class="sh-t">National</span><span class="sh-b natl">U.S.</span></div>'+wires_(natl);
     document.getElementById('ind-content').innerHTML=h;
   }
   function loadIndustry(){
