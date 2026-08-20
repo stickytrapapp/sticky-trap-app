@@ -88,6 +88,20 @@
   .chips{display:flex;gap:7px;flex-wrap:wrap}
   .chip{font-size:11px;font-weight:700;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.6);border:1px solid rgba(26,19,66,.12);color:var(--soft);cursor:pointer}
   .chip.on{background:var(--grad);color:#fff;border-color:transparent}
+  .sec{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:#6a5f9a;margin-top:4px}
+  .sec.recap{color:var(--pur)}
+  #ev-up,#ev-recap{display:flex;flex-direction:column;gap:9px}
+  .evhero{background:linear-gradient(150deg,rgba(255,46,136,.16),rgba(34,211,238,.12)),rgba(255,255,255,.72);border:1px solid rgba(138,77,255,.32);border-radius:18px;padding:15px;box-shadow:0 10px 26px rgba(20,10,50,.1)}
+  .evhero .top{display:flex;gap:13px;align-items:center}
+  .evhero .date{width:60px;height:60px} .evhero .date .d{font-size:25px}
+  .evhero .et{font-size:18px;font-weight:800;color:var(--ink);line-height:1.15}
+  .evhero .el{font-size:12px;color:var(--soft);margin-top:3px}
+  .count{display:inline-flex;align-items:center;gap:5px;margin-top:13px;background:rgba(122,60,240,.12);color:var(--pur);border:1px solid rgba(122,60,240,.3);border-radius:999px;padding:5px 13px;font-size:11.5px;font-weight:800}
+  .count .dot{width:6px;height:6px;border-radius:50%;background:var(--pur);animation:pulse2 1.8s infinite}
+  .recapc{display:flex;align-items:center;gap:11px;background:rgba(255,255,255,.55);border:1px solid rgba(26,19,66,.09);border-radius:13px;padding:9px 11px}
+  .recapc .rc-t{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.2} .recapc .rc-s{font-size:10.5px;color:var(--muted);margin-top:2px}
+  .recapc .rc-go{margin-left:auto;font-size:11px;font-weight:800;color:var(--mag);white-space:nowrap}
+  .recapc .thumb{width:52px;height:38px}
 
   /* media rows */
   .row{display:flex;align-items:center;gap:11px}
@@ -208,12 +222,12 @@
     <!-- EVENTS -->
     <section class="view" data-view="events">
       <h2 class="vtitle">Events</h2>
-      <div class="p" style="margin-top:-4px">What's happening in the scene — and where to find us.</div>
-      <div class="chips" id="ev-chips"><span class="chip on">All</span><span class="chip">Michigan</span><span class="chip">Online</span><span class="chip">Drops</span></div>
-      <div class="ev"><div class="date"><span class="m">Aug</span><span class="d">23</span></div><div><div class="et">Blaze'N BBQ Weekend</div><div class="el">Michigan</div><span class="tag">We're there</span></div></div>
-      <div class="ev"><div class="date"><span class="m">Sep</span><span class="d">06</span></div><div><div class="et">Michigan Cannabis Cup</div><div class="el">Detroit, MI</div></div></div>
-      <div class="ev"><div class="date"><span class="m">Sep</span><span class="d">12</span></div><div><div class="et">Sticky Trap × Grateful Headz drop</div><div class="el">Online</div><span class="tag">Drop</span></div></div>
-      <div class="ev"><div class="date"><span class="m">Sep</span><span class="d">20</span></div><div><div class="et">The Flower Room — LIVE taping</div><div class="el">Ann Arbor</div></div></div>
+      <div class="p" style="margin-top:-4px">Where to find us — and what you missed.</div>
+      <div class="chips" id="ev-chips"><span class="chip on" data-cat="All">All</span><span class="chip" data-cat="Michigan">Michigan</span><span class="chip" data-cat="Online">Online</span><span class="chip" data-cat="Drops">Drops</span></div>
+      <div class="sec">Upcoming</div>
+      <div id="ev-up"></div>
+      <div class="sec recap">Recaps</div>
+      <div id="ev-recap"></div>
       <div class="softbar"><div><div class="st">Never miss a drop</div><div class="ss">Turn on event alerts</div></div><div class="go">🔔</div></div>
     </section>
 
@@ -346,11 +360,48 @@
     });
   })();
 
-  /* ---- Events filter chips (visual) ---- */
-  document.getElementById('ev-chips').addEventListener('click',function(e){
-    var c=e.target.closest('.chip'); if(!c)return;
-    this.querySelectorAll('.chip').forEach(function(x){x.classList.remove('on');}); c.classList.add('on');
-  });
+  /* ---- Events: upcoming (hero + countdown) vs recaps, date-driven + filterable ---- */
+  (function(){
+    var EVENTS=[
+      {date:'2026-08-23',title:"Blaze'N BBQ Weekend",loc:'Michigan',tag:"We're there",cat:'Michigan'},
+      {date:'2026-09-06',title:'Michigan Cannabis Cup',loc:'Detroit, MI',cat:'Michigan'},
+      {date:'2026-09-12',title:'Sticky Trap × Grateful Headz drop',loc:'Online',tag:'Drop',cat:'Drops'},
+      {date:'2026-09-20',title:'The Flower Room — LIVE taping',loc:'Ann Arbor, MI',cat:'Michigan'},
+      {date:'2026-08-09',title:'Summer Smoke Sesh',loc:'Ypsilanti, MI',recap:'https://www.youtube.com/@theflowerroompodcast',cat:'Michigan'},
+      {date:'2026-07-26',title:'Terp Tantrums — live taping',loc:'Ann Arbor, MI',recap:'https://www.youtube.com/@theflowerroompodcast',cat:'Michigan'}
+    ];
+    var MO=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+    var upWrap=document.getElementById('ev-up'), rcWrap=document.getElementById('ev-recap'), filter='All';
+    function parse(s){var p=s.split('-');return new Date(+p[0],+p[1]-1,+p[2]);}
+    function today(){var d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate());}
+    function daysTo(d){return Math.round((d-today())/86400000);}
+    function chip(d){return '<div class="date"><span class="m">'+MO[d.getMonth()]+'</span><span class="d">'+d.getDate()+'</span></div>';}
+    function match(e){return filter==='All'||e.cat===filter;}
+    function render(){
+      var t=today();
+      var up=EVENTS.filter(function(e){return parse(e.date)>=t&&match(e);}).sort(function(a,b){return parse(a.date)-parse(b.date);});
+      var past=EVENTS.filter(function(e){return parse(e.date)<t&&match(e);}).sort(function(a,b){return parse(b.date)-parse(a.date);});
+      var h='';
+      if(up.length){
+        var e=up[0], d=parse(e.date), n=daysTo(d), cd=n<=0?'Today':n===1?'Tomorrow':'In '+n+' days';
+        h+='<div class="evhero"><div class="top">'+chip(d)+'<div><div class="et">'+esc(e.title)+'</div><div class="el">'+esc(e.loc)+'</div>'+(e.tag?'<span class="tag">'+esc(e.tag)+'</span>':'')+'</div></div><span class="count"><span class="dot"></span>'+cd+'</span></div>';
+        for(var i=1;i<up.length;i++){var x=up[i],dx=parse(x.date);
+          h+='<div class="ev">'+chip(dx)+'<div><div class="et">'+esc(x.title)+'</div><div class="el">'+esc(x.loc)+'</div>'+(x.tag?'<span class="tag">'+esc(x.tag)+'</span>':'')+'</div></div>';}
+      } else h='<div class="p">Nothing on the calendar in this filter — check back.</div>';
+      upWrap.innerHTML=h;
+      var r='';
+      if(past.length){past.forEach(function(e,i){var d=parse(e.date);
+        r+='<a class="recapc" '+(e.recap?'href="'+esc(e.recap)+'" target="_blank" rel="noopener"':'')+'><div class="thumb'+(i%2?' g2':'')+'"></div><div><div class="rc-t">'+esc(e.title)+'</div><div class="rc-s">'+MO[d.getMonth()]+' '+d.getDate()+' · '+esc(e.loc)+'</div></div>'+(e.recap?'<span class="rc-go">Watch →</span>':'')+'</a>';});
+      } else r='<div class="p">No recaps in this filter yet.</div>';
+      rcWrap.innerHTML=r;
+    }
+    document.getElementById('ev-chips').addEventListener('click',function(ev){
+      var c=ev.target.closest('.chip'); if(!c)return;
+      this.querySelectorAll('.chip').forEach(function(x){x.classList.remove('on');}); c.classList.add('on');
+      filter=c.dataset.cat||'All'; render();
+    });
+    render();
+  })();
 
   /* ---- init: open tab from hash, animate ---- */
   var initial=(location.hash||'').replace('#','');
