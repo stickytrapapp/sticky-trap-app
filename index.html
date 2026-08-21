@@ -135,6 +135,11 @@
   .promo .pt{font-size:14.5px;font-weight:800;color:var(--ink);line-height:1.2}
   .promo .pd{font-size:12px;color:var(--soft);margin-top:4px;line-height:1.42}
   .promo .ptag{display:inline-block;margin-top:9px;font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:linear-gradient(90deg,#ff2e88,#8a4dff);border-radius:6px;padding:3px 9px}
+  .qcard{background:linear-gradient(150deg,rgba(255,46,136,.15),rgba(34,211,238,.1)),rgba(255,255,255,.72);border:1px solid rgba(138,77,255,.32);border-radius:16px;padding:15px}
+  .qcard .qt{font-size:16px;font-weight:800;color:var(--ink)}
+  .qcard .qc{font-size:12.5px;color:var(--soft);line-height:1.5;margin-top:6px}
+  .qcard .qc b{color:var(--ink)}
+  .qcard .qnote{font-size:11px;color:var(--muted);text-align:center;margin-top:9px}
   .view.menuview{padding:0}
   .view.menuview.active{display:block}
   .menu-specials{padding:16px 16px 10px}
@@ -301,6 +306,14 @@
         <div class="p" style="margin-top:-4px">Live pricing — build your basket, then send your order.</div>
         <div class="lbl" style="margin-top:9px">Specials &amp; promos</div>
         <div id="specials"></div>
+
+        <div class="lbl" style="margin-top:13px">Order &amp; get a quote</div>
+        <div class="qcard">
+          <div class="qt">Send your art, get a real price</div>
+          <div class="qc">Every job's different, so we <b>review your files before we price it</b> — you get an accurate quote, not a ballpark. Build your basket below, then send it with your art files. <b>Nothing's charged until you approve.</b></div>
+          <a class="btn" id="quotebtn" style="display:flex;margin-top:13px" href="mailto:thestickytrap@gmail.com">📎 Email your files for a quote →</a>
+          <div class="qnote">Files reviewed before payment — no surprises.</div>
+        </div>
       </div>
       <style>
 #stmenu{
@@ -1196,6 +1209,32 @@
     el.innerHTML=SPECIALS.map(function(s){
       return '<div class="promo"><div class="pt">'+esc(s.title)+'</div>'+(s.desc?'<div class="pd">'+esc(s.desc)+'</div>':'')+(s.tag?'<span class="ptag">'+esc(s.tag)+'</span>':'')+'</div>';
     }).join('');
+  })();
+
+  /* ---- Quote request: pre-fill an email with the basket, customer attaches files ---- */
+  (function(){
+    var b=document.getElementById('quotebtn'); if(!b) return;
+    b.addEventListener('click',function(e){
+      e.preventDefault();
+      var items='';
+      try{ var c=JSON.parse(localStorage.getItem('st_cart')||'[]');
+        if(c.length) items=c.map(function(i){return '• '+(i.qty||'')+'x '+(i.p||'')+' — '+(i.m||'')+' / '+(i.f||'')+' ($'+i.pr+' ea)';}).join('\n');
+      }catch(err){}
+      var body=[
+        "Hi Sticky Trap, I'd like a quote:",
+        "",
+        "WHAT I'M ORDERING:",
+        items || "(building my basket — see notes)",
+        "",
+        "Name:",
+        "Phone:",
+        "Deadline:",
+        "Notes:",
+        "",
+        "📎 I'm attaching my art files to this email so you can review them for an accurate quote."
+      ].join("\n");
+      window.location.href='mailto:thestickytrap@gmail.com?subject='+encodeURIComponent('Quote request - The Sticky Trap')+'&body='+encodeURIComponent(body);
+    });
   })();
 
   /* ---- init: open tab from hash ---- */
