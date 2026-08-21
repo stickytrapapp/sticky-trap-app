@@ -355,15 +355,16 @@
     document.getElementById('ind-content').innerHTML=h;
   }
   function loadIndustry(){
-    jsonp(API+'?action=brief',function(j){
-      var b=(j&&j.briefs&&j.briefs[0]);
-      if(b){renderIndustry(b);} else loadLocalBrief();
-    }, loadLocalBrief);
+    // local-first: paint the bundled brief instantly, then refresh from the backend in the background
+    loadLocalBrief(function(){
+      jsonp(API+'?action=brief',function(j){ var b=j&&j.briefs&&j.briefs[0]; if(b) renderIndustry(b); }, function(){});
+    });
   }
-  function loadLocalBrief(){
+  function loadLocalBrief(then){
     fetch('data/briefs.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json();})
       .then(function(j){var b=j.briefs&&j.briefs[0]; if(b)renderIndustry(b); else industryFail();})
-      .catch(industryFail);
+      .catch(industryFail)
+      .finally(function(){ if(then) then(); });
   }
   function industryFail(){ industryLoaded=false; document.getElementById('ind-content').innerHTML='<p class="p">Couldn\'t load today\'s brief — it refreshes every morning. Pull down or retry shortly.</p>'; }
 
@@ -398,13 +399,15 @@
     el.innerHTML=h;
   }
   function loadEpisodes(){
-    jsonp(API+'?action=episodes',function(j){
-      if(j&&j.episodes&&j.episodes.length) renderEpisodes(j.episodes); else loadLocalEpisodes();
-    }, loadLocalEpisodes);
+    // local-first: show bundled episodes instantly, then refresh from YouTube (via backend) in the background
+    loadLocalEpisodes(function(){
+      jsonp(API+'?action=episodes',function(j){ if(j&&j.episodes&&j.episodes.length) renderEpisodes(j.episodes); }, function(){});
+    });
   }
-  function loadLocalEpisodes(){
+  function loadLocalEpisodes(then){
     fetch('data/episodes.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json();})
-      .then(function(j){ renderEpisodes(j.episodes||[]); }).catch(function(){ renderEpisodes([]); });
+      .then(function(j){ renderEpisodes(j.episodes||[]); }).catch(function(){ renderEpisodes([]); })
+      .finally(function(){ if(then) then(); });
   }
 
   /* ---- event countdown + auto-hide after it passes ---- */
