@@ -53,7 +53,7 @@
   .np-empty{padding:16px 14px;font-size:12.5px;color:var(--muted);text-align:center}
   .avatar{width:32px;height:32px;border-radius:50%;background:var(--grad);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;box-shadow:0 2px 8px rgba(138,77,255,.4)}
 
-  .views{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;position:relative}
+  .views{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;position:relative}
   .view{display:none;flex-direction:column;gap:13px;padding:16px 16px calc(20px + var(--safe-b))}
   .view.active{display:flex;animation:fade .28s ease}
   @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
@@ -138,6 +138,7 @@
   .view.menuview{padding:0}
   .view.menuview.active{display:block}
   .menu-specials{padding:16px 16px 10px}
+  .view.menuview #stmenu{overflow-x:clip;overflow-y:visible}
   #stmenu .navbar{top:0}
   #stmenu .viewmenu{display:none}
   /* event hero (image-driven, main focus) */
