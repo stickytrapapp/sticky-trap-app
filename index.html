@@ -118,12 +118,18 @@
   .epc .et2{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.22;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   .epc .es2{font-size:10.5px;color:var(--muted);margin-top:3px}
   .morebtn{display:block;text-align:center;color:var(--pur);font-weight:800;font-size:12.5px;padding:8px 6px 2px}
-  .tkt{display:block;border-radius:18px;padding:16px;color:#fff;background:linear-gradient(120deg,#ff2e88,#8a4dff 55%,#22d3ee);box-shadow:0 12px 28px rgba(138,77,255,.4)}
-  .tkt-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
-  .tkt-badge,.tkt-date{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;background:rgba(255,255,255,.22);padding:4px 11px;border-radius:999px;white-space:nowrap}
-  .tkt-title{font-size:21px;font-weight:800;margin:12px 0 5px;letter-spacing:-.01em;line-height:1.15}
-  .tkt-meta{font-size:12px;opacity:.94;line-height:1.45}
-  .tkt-btn{display:inline-flex;align-items:center;margin-top:14px;background:#fff;color:#7a3cf0;font-weight:800;font-size:13px;padding:10px 17px;border-radius:11px}
+  /* event hero (image-driven, main focus) */
+  .tkt-hero{display:block;border-radius:18px;overflow:hidden;background:#08060f;border:1px solid rgba(138,77,255,.4);box-shadow:0 16px 38px rgba(138,77,255,.34)}
+  .tkt-media{position:relative;line-height:0}
+  .tkt-media img{width:100%;display:block}
+  .tkt-count{position:absolute;top:12px;right:12px;font-size:11.5px;font-weight:800;letter-spacing:.02em;color:#fff;background:linear-gradient(90deg,#ff2e88,#8a4dff);padding:7px 13px;border-radius:999px;box-shadow:0 4px 16px rgba(0,0,0,.45);line-height:1}
+  .tkt-foot{padding:13px 15px 16px;background:#08060f}
+  .tkt-when{font-size:12px;font-weight:700;color:#cfc6ee;margin-bottom:11px;text-align:center}
+  .tkt-cta{display:flex;align-items:center;justify-content:center;gap:7px;font-size:15px;font-weight:800;letter-spacing:.04em;color:#fff;background:linear-gradient(90deg,#ff2e88,#8a4dff,#22d3ee);padding:15px;border-radius:12px;animation:tktpulse 2.2s infinite}
+  @keyframes tktpulse{0%,100%{box-shadow:0 0 0 0 rgba(239,31,120,.5)}50%{box-shadow:0 0 0 13px rgba(239,31,120,0)}}
+  .evribbon{display:flex;align-items:center;justify-content:center;gap:8px;font-size:12px;font-weight:800;color:#fff;background:linear-gradient(90deg,#ff2e88,#8a4dff,#22d3ee);border-radius:12px;padding:11px 14px;box-shadow:0 8px 20px rgba(138,77,255,.35);text-align:center;line-height:1.3}
+  .evribbon b{text-decoration:underline;text-underline-offset:2px}
+  @media (prefers-reduced-motion: reduce){.tkt-cta{animation:none}}
   .field{display:flex;gap:8px}
   .field input{flex:1;min-width:0;background:rgba(255,255,255,.75);border:1px solid rgba(26,19,66,.14);border-radius:12px;padding:11px 12px;font-size:13px;color:var(--ink);font-family:inherit}
   .field input::placeholder{color:var(--muted)}
@@ -209,6 +215,7 @@
 
     <!-- INDUSTRY (live) -->
     <section class="view industry active" data-view="industry">
+      <a class="evribbon" id="ev-ribbon" href="https://eventhi.io/events/the-resin-reception-14961?utm_source=stickytrap_app&utm_medium=app&utm_content=ribbon" target="_blank" rel="noopener">🎟 The Resin Reception · Sep 26 &nbsp;<b>Get Tickets →</b></a>
       <div class="masthead"><span class="mt">Industry</span><span class="md">Cannabis · Psychedelics</span></div>
       <div id="ind-content">
         <div class="skel" style="width:35%"></div>
@@ -224,12 +231,16 @@
     <section class="view" data-view="social">
       <h2 class="vtitle">Social</h2>
       <div class="p" style="margin-top:-4px">Follow along and watch the latest.</div>
-      <div class="lbl">Upcoming event</div>
-      <a class="tkt" href="https://eventhi.io/events/the-resin-reception-14961?utm_source=stickytrap_app&utm_medium=app&utm_content=get_tickets" target="_blank" rel="noopener">
-        <div class="tkt-top"><span class="tkt-badge">🎟 Tickets</span><span class="tkt-date">Sep 26 · 7:10 PM</span></div>
-        <div class="tkt-title">The Resin Reception</div>
-        <div class="tkt-meta">Hosted by Hash Huntington · Ypsilanti, MI<br>Single-Source phenohunt — food, music &amp; tastings</div>
-        <span class="tkt-btn">Get Tickets →</span>
+      <div class="lbl">Don't miss</div>
+      <a class="tkt-hero" id="tkt-hero" href="https://eventhi.io/events/the-resin-reception-14961?utm_source=stickytrap_app&utm_medium=app&utm_content=get_tickets" target="_blank" rel="noopener">
+        <div class="tkt-media">
+          <img src="img/resin-reception.jpg" alt="The Resin Reception — Wild Style strain release party" loading="lazy">
+          <span class="tkt-count" id="tkt-count">🎟 Tickets</span>
+        </div>
+        <div class="tkt-foot">
+          <div class="tkt-when">Sat Sep 26 · 7PM · Lucid Lounge, Ypsilanti</div>
+          <span class="tkt-cta">GET TICKETS →</span>
+        </div>
       </a>
       <div class="lbl">Follow us</div>
       <div class="grid">
@@ -368,6 +379,15 @@
     fetch('data/episodes.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json();})
       .then(function(j){ renderEpisodes(j.episodes||[]); }).catch(function(){ renderEpisodes([]); });
   }
+
+  /* ---- event countdown + auto-hide after it passes ---- */
+  (function(){
+    var el=document.getElementById('tkt-count'); if(!el) return;
+    var ev=new Date(2026,8,26), now=new Date(), t=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+    var n=Math.round((ev-t)/86400000), hero=document.getElementById('tkt-hero'), rib=document.getElementById('ev-ribbon');
+    if(n<0){ if(hero)hero.style.display='none'; if(rib)rib.style.display='none'; return; }
+    el.textContent = n===0?'🎟 Tonight':n===1?'🎟 Tomorrow':'🎟 In '+n+' days';
+  })();
 
   /* ---- init: open tab from hash ---- */
   var initial=(location.hash||'').replace('#','');
