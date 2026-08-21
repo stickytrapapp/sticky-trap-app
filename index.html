@@ -161,6 +161,9 @@
   .view.menuview #stmenu{overflow-x:clip;overflow-y:visible}
   /* keep the off-screen basket drawer/overlay from peeking on some phone widths — only show when open (.on) */
   #stmenu .drawer:not(.on),#stmenu .overlay:not(.on){visibility:hidden}
+  /* one order funnel: hide the basket's own email/text/copy; the drawer routes to the uploader */
+  #stmenu #emailbtn,#stmenu #smsbtn,#stmenu #copybtn{display:none}
+  #funnel-upload{display:flex;width:100%;margin-top:6px}
   .view.menuview .brandhead header,.view.menuview .brandhead .contactbar,.view.menuview .brandhead .viewmenu{display:none}
   .view.menuview .brandhead{margin-top:6px}
   #stmenu .navbar{top:0}
@@ -330,25 +333,6 @@
         <div class="lbl" style="margin-top:9px">Specials &amp; promos</div>
         <div id="specials"></div>
 
-        <div class="lbl" style="margin-top:13px">Order &amp; get a quote</div>
-        <div class="qcard">
-          <div class="qt">Send your art, get a real price</div>
-          <div class="qc">Every job's different, so we <b>review your files before we price it</b> — you get an accurate quote, not a ballpark. Build your basket below, then upload your art here. <b>Nothing's charged until you approve.</b></div>
-          <form id="quoteform" class="qform">
-            <input class="qin" type="text" id="qf-name" placeholder="Your name" autocomplete="name">
-            <input class="qin" type="email" id="qf-email" placeholder="Email" autocomplete="email">
-            <input class="qin" type="tel" id="qf-phone" placeholder="Phone (optional)" autocomplete="tel">
-            <textarea class="qin" id="qf-details" rows="2" placeholder="What are you ordering? (size, qty, finish, deadline)"></textarea>
-            <div class="qdrop" id="qf-drop" tabindex="0" role="button" aria-label="Add your art files">
-              <div class="qdrop-in">📎 <b>Drag your art files here</b><br><span>or tap to choose · PDF · AI · EPS · PNG · JPG · SVG</span></div>
-            </div>
-            <input type="file" id="qf-files" multiple hidden>
-            <div id="qf-list" class="qf-list"></div>
-            <button type="submit" class="btn" id="qf-submit" style="display:flex;margin-top:2px">Send my request →</button>
-            <div class="qnote" id="qf-note">Files reviewed before payment — no surprises.</div>
-            <div id="qf-status" class="qf-status"></div>
-          </form>
-        </div>
       </div>
       <style>
 #stmenu{
@@ -960,6 +944,26 @@
       </div><div class="holonote rh orphan-ctr"><span class="holotag">Rainbow Holographic</span><p><b>6&nbsp;mil rainbow holographic (not bubble-free)</b> &#8212; our <b style="font-size:1.32em">solution</b> for <b>tip bands, tamper tabs</b>, and similar small applications &#8212; it ensures small sizes stick better.</p></div>
     </div>
 </div>
+      <!-- order & upload: after browsing the menu + building the basket -->
+        <div class="lbl" style="margin-top:13px">Order &amp; get a quote</div>
+        <div class="qcard">
+          <div class="qt">Send your art, get a real price</div>
+          <div class="qc">Built your basket above? Add your art files here and we'll send an accurate quote — we <b>review your files before we price it</b>, so it's a real number, not a ballpark. <b>Nothing's charged until you approve.</b></div>
+          <form id="quoteform" class="qform">
+            <input class="qin" type="text" id="qf-name" placeholder="Your name" autocomplete="name">
+            <input class="qin" type="email" id="qf-email" placeholder="Email" autocomplete="email">
+            <input class="qin" type="tel" id="qf-phone" placeholder="Phone (optional)" autocomplete="tel">
+            <textarea class="qin" id="qf-details" rows="2" placeholder="What are you ordering? (size, qty, finish, deadline)"></textarea>
+            <div class="qdrop" id="qf-drop" tabindex="0" role="button" aria-label="Add your art files">
+              <div class="qdrop-in">📎 <b>Drag your art files here</b><br><span>or tap to choose · PDF · AI · EPS · PNG · JPG · SVG</span></div>
+            </div>
+            <input type="file" id="qf-files" multiple hidden>
+            <div id="qf-list" class="qf-list"></div>
+            <button type="submit" class="btn" id="qf-submit" style="display:flex;margin-top:2px">Send my request →</button>
+            <div class="qnote" id="qf-note">Files reviewed before payment — no surprises.</div>
+            <div id="qf-status" class="qf-status"></div>
+          </form>
+        </div>
     </section>
 
     <!-- FAQ (how it works + common questions) -->
@@ -1289,6 +1293,23 @@
         setStatus('Upload hiccup — try again, or email files to thestickytrap@.','err');
         submit.disabled=false; submit.textContent='Send my request →';
       });
+    });
+  })();
+
+  /* ---- one order funnel: basket drawer -> the uploader ---- */
+  (function(){
+    var df=document.querySelector('#stmenu .dfoot'); if(!df) return;
+    var b=document.createElement('button');
+    b.type='button'; b.id='funnel-upload'; b.className='cta';
+    b.textContent='📎 Upload art & get your quote →';
+    df.appendChild(b);
+    b.addEventListener('click',function(){
+      var dc=document.getElementById('stm-dclose')||document.querySelector('#stmenu .dclose'); if(dc) dc.click();
+      setTimeout(function(){
+        var q=document.getElementById('quoteform'), v=document.querySelector('.views');
+        if(q&&v){ var qr=q.getBoundingClientRect(), vr=v.getBoundingClientRect(); v.scrollTop = v.scrollTop + (qr.top - vr.top) - 66;
+          var nm=document.getElementById('qf-name'); if(nm){ try{nm.focus({preventScroll:true});}catch(e){} } }
+      },280);
     });
   })();
 
