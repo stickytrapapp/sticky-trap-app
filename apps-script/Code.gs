@@ -152,10 +152,63 @@ function unsubHtml_(email) {
     '<h2>Unsubscribed</h2><p>' + esc_(email) + ' has been removed from the Morning Brief.</p></div>');
 }
 
+/* ---------- Quote requests (drag-and-drop uploads from the app) ---------- */
+var QUOTE_TO = 'thestickytrap@gmail.com';
+
+function quoteFolder_() {
+  var id = PROP.getProperty('QUOTE_FOLDER_ID');
+  if (id) { try { return DriveApp.getFolderById(id); } catch (e) {} }
+  var f = DriveApp.createFolder('Sticky Trap — Quote Uploads');
+  PROP.setProperty('QUOTE_FOLDER_ID', f.getId());
+  return f;
+}
+
+function handleQuote_(body) {
+  var folder = quoteFolder_();
+  var links = [], attachments = [], total = 0;
+  (body.files || []).forEach(function (f) {
+    try {
+      var blob = Utilities.newBlob(Utilities.base64Decode(f.b64), f.mime || 'application/octet-stream', f.name || 'file');
+      var file = folder.createFile(blob);
+      links.push({ name: f.name || 'file', url: file.getUrl() });
+      total += blob.getBytes().length;
+      if (total < 20 * 1024 * 1024) attachments.push(blob); // attach if cumulative under ~20MB
+    } catch (err) {}
+  });
+  var name = (body.name || 'New customer').toString().slice(0, 80);
+  MailApp.sendEmail({
+    to: QUOTE_TO,
+    replyTo: (body.email || '').toString().slice(0, 120) || undefined,
+    subject: '🎨 Quote request — ' + name,
+    htmlBody: renderQuoteEmail_(body, links, folder.getUrl()),
+    name: 'Sticky Trap App',
+    attachments: attachments
+  });
+  return out_({ ok: true, files: links.length });
+}
+
+function renderQuoteEmail_(b, links, folderUrl) {
+  function nl(s){ return esc_(s == null ? '' : String(s)).replace(/\n/g, '<br>'); }
+  var h = '<div style="font-family:system-ui,Arial,sans-serif;max-width:620px;color:#15171d;line-height:1.5">';
+  h += '<div style="font-weight:800;font-size:19px;color:#7a3cf0">New quote request</div>';
+  h += '<p><b>Name:</b> ' + nl(b.name) + '<br><b>Email:</b> ' + nl(b.email) + '<br><b>Phone:</b> ' + nl(b.phone) + '</p>';
+  if (b.details) h += '<p><b>What they\'re ordering:</b><br>' + nl(b.details) + '</p>';
+  if (b.basket)  h += '<p><b>Basket built in the app:</b><br>' + nl(b.basket) + '</p>';
+  h += '<p><b>Files (' + links.length + '):</b> attached to this email' + (links.length ? ', and saved here:' : '.') + '</p>';
+  if (links.length) {
+    h += '<ul>';
+    links.forEach(function (l) { h += '<li><a href="' + esc_(l.url) + '">' + esc_(l.name) + '</a></li>'; });
+    h += '</ul><p><a href="' + esc_(folderUrl) + '">Open the uploads folder in Drive →</a></p>';
+  }
+  h += '<p style="font-size:12px;color:#888;border-top:1px solid #eee;padding-top:10px">Sent from the Sticky Trap app · reply to quote them back.</p></div>';
+  return h;
+}
+
 /* ---------- POST (cloud routine) ---------- */
 function doPost(e) {
   try {
     var body = JSON.parse(e.postData.contents);
+    if (body.action === 'quote') return handleQuote_(body);   // public quote/upload — no secret
     if (body.secret !== PROP.getProperty('PUBLISH_SECRET')) return out_({ ok: false, error: 'unauthorized' });
     var brief = body.brief;
     if (!brief || !brief.date) return out_({ ok: false, error: 'missing_brief' });

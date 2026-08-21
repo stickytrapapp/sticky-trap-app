@@ -140,6 +140,21 @@
   .qcard .qc{font-size:12.5px;color:var(--soft);line-height:1.5;margin-top:6px}
   .qcard .qc b{color:var(--ink)}
   .qcard .qnote{font-size:11px;color:var(--muted);text-align:center;margin-top:9px}
+  .qform{display:flex;flex-direction:column;gap:9px;margin-top:13px}
+  .qin{background:rgba(255,255,255,.88);border:1px solid rgba(26,19,66,.14);border-radius:11px;padding:11px 12px;font-size:13px;color:var(--ink);font-family:inherit;width:100%}
+  .qin::placeholder{color:var(--muted)}
+  .qin:focus{outline:none;border-color:var(--pur);box-shadow:0 0 0 3px rgba(122,60,240,.16)}
+  textarea.qin{resize:vertical;min-height:44px}
+  .qdrop{border:1.6px dashed rgba(122,60,240,.5);border-radius:12px;background:rgba(122,60,240,.05);padding:17px 12px;text-align:center;cursor:pointer;transition:.15s}
+  .qdrop.drag{background:rgba(122,60,240,.15);border-color:var(--pur)}
+  .qdrop:focus{outline:none;border-color:var(--pur);box-shadow:0 0 0 3px rgba(122,60,240,.16)}
+  .qdrop-in{font-size:12.5px;color:var(--soft);line-height:1.5} .qdrop-in b{color:var(--ink)} .qdrop-in span{font-size:11px;color:var(--muted)}
+  .qf-list{display:flex;flex-direction:column;gap:5px}
+  .qf-file{display:flex;align-items:center;gap:8px;font-size:12px;background:rgba(255,255,255,.75);border:1px solid rgba(26,19,66,.1);border-radius:9px;padding:7px 10px}
+  .qf-file .fn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink);font-weight:600}
+  .qf-file .fs{color:var(--muted);font-size:11px;white-space:nowrap} .qf-file .fx{color:var(--mag);cursor:pointer;font-weight:800;padding:0 3px}
+  .qf-status{font-size:12.5px;font-weight:700;text-align:center;line-height:1.4} .qf-status:empty{display:none}
+  .qf-status.ok{color:#1a8a4a} .qf-status.err{color:var(--mag)}
   .view.menuview{padding:0}
   .view.menuview.active{display:block}
   .menu-specials{padding:16px 16px 10px}
@@ -310,9 +325,21 @@
         <div class="lbl" style="margin-top:13px">Order &amp; get a quote</div>
         <div class="qcard">
           <div class="qt">Send your art, get a real price</div>
-          <div class="qc">Every job's different, so we <b>review your files before we price it</b> — you get an accurate quote, not a ballpark. Build your basket below, then send it with your art files. <b>Nothing's charged until you approve.</b></div>
-          <a class="btn" id="quotebtn" style="display:flex;margin-top:13px" href="mailto:thestickytrap@gmail.com">📎 Email your files for a quote →</a>
-          <div class="qnote">Files reviewed before payment — no surprises.</div>
+          <div class="qc">Every job's different, so we <b>review your files before we price it</b> — you get an accurate quote, not a ballpark. Build your basket below, then upload your art here. <b>Nothing's charged until you approve.</b></div>
+          <form id="quoteform" class="qform">
+            <input class="qin" type="text" id="qf-name" placeholder="Your name" autocomplete="name">
+            <input class="qin" type="email" id="qf-email" placeholder="Email" autocomplete="email">
+            <input class="qin" type="tel" id="qf-phone" placeholder="Phone (optional)" autocomplete="tel">
+            <textarea class="qin" id="qf-details" rows="2" placeholder="What are you ordering? (size, qty, finish, deadline)"></textarea>
+            <div class="qdrop" id="qf-drop" tabindex="0" role="button" aria-label="Add your art files">
+              <div class="qdrop-in">📎 <b>Drag your art files here</b><br><span>or tap to choose · PDF · AI · EPS · PNG · JPG · SVG</span></div>
+            </div>
+            <input type="file" id="qf-files" multiple hidden>
+            <div id="qf-list" class="qf-list"></div>
+            <button type="submit" class="btn" id="qf-submit" style="display:flex;margin-top:2px">Send my request →</button>
+            <div class="qnote" id="qf-note">Files reviewed before payment — no surprises.</div>
+            <div id="qf-status" class="qf-status"></div>
+          </form>
         </div>
       </div>
       <style>
@@ -1211,29 +1238,51 @@
     }).join('');
   })();
 
-  /* ---- Quote request: pre-fill an email with the basket, customer attaches files ---- */
+  /* ---- Quote request: drag-and-drop upload -> backend (Drive + email) ---- */
   (function(){
-    var b=document.getElementById('quotebtn'); if(!b) return;
-    b.addEventListener('click',function(e){
+    var form=document.getElementById('quoteform'); if(!form) return;
+    var drop=document.getElementById('qf-drop'), input=document.getElementById('qf-files'),
+        listEl=document.getElementById('qf-list'), submit=document.getElementById('qf-submit'),
+        note=document.getElementById('qf-note'), status=document.getElementById('qf-status');
+    var files=[], MAX=22*1024*1024;
+    function fmt(n){ return n>1048576 ? (n/1048576).toFixed(1)+' MB' : Math.max(1,Math.round(n/1024))+' KB'; }
+    function total(){ return files.reduce(function(a,f){return a+f.size;},0); }
+    function render(){
+      listEl.innerHTML=files.map(function(f,i){
+        return '<div class="qf-file"><span class="fn">'+esc(f.name)+'</span><span class="fs">'+fmt(f.size)+'</span><span class="fx" data-i="'+i+'">✕</span></div>';
+      }).join('');
+      note.textContent = total()>MAX ? 'Over ~20MB — remove some, or email large files to thestickytrap@.' : 'Files reviewed before payment — no surprises.';
+    }
+    function add(fl){ for(var i=0;i<fl.length;i++) files.push(fl[i]); render(); }
+    function setStatus(m,c){ status.textContent=m; status.className='qf-status '+(c||''); }
+    drop.addEventListener('click',function(){ input.click(); });
+    drop.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); input.click(); } });
+    input.addEventListener('change',function(){ add(input.files); input.value=''; });
+    ['dragenter','dragover'].forEach(function(ev){ drop.addEventListener(ev,function(e){ e.preventDefault(); drop.classList.add('drag'); }); });
+    ['dragleave','drop'].forEach(function(ev){ drop.addEventListener(ev,function(e){ e.preventDefault(); drop.classList.remove('drag'); }); });
+    drop.addEventListener('drop',function(e){ if(e.dataTransfer&&e.dataTransfer.files) add(e.dataTransfer.files); });
+    listEl.addEventListener('click',function(e){ var x=e.target.closest('.fx'); if(!x)return; files.splice(+x.dataset.i,1); render(); });
+    function readB64(file){ return new Promise(function(res,rej){ var r=new FileReader(); r.onload=function(){ res(String(r.result).split(',')[1]||''); }; r.onerror=rej; r.readAsDataURL(file); }); }
+    form.addEventListener('submit',function(e){
       e.preventDefault();
-      var items='';
-      try{ var c=JSON.parse(localStorage.getItem('st_cart')||'[]');
-        if(c.length) items=c.map(function(i){return '• '+(i.qty||'')+'x '+(i.p||'')+' — '+(i.m||'')+' / '+(i.f||'')+' ($'+i.pr+' ea)';}).join('\n');
-      }catch(err){}
-      var body=[
-        "Hi Sticky Trap, I'd like a quote:",
-        "",
-        "WHAT I'M ORDERING:",
-        items || "(building my basket — see notes)",
-        "",
-        "Name:",
-        "Phone:",
-        "Deadline:",
-        "Notes:",
-        "",
-        "📎 I'm attaching my art files to this email so you can review them for an accurate quote."
-      ].join("\n");
-      window.location.href='mailto:thestickytrap@gmail.com?subject='+encodeURIComponent('Quote request - The Sticky Trap')+'&body='+encodeURIComponent(body);
+      var email=(document.getElementById('qf-email').value||'').trim();
+      if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ setStatus('Add your email so we can send the quote.','err'); return; }
+      if(!files.length){ setStatus('Add at least one art file to upload.','err'); return; }
+      if(total()>MAX){ setStatus('Files over ~20MB — email them to thestickytrap@ instead.','err'); return; }
+      submit.disabled=true; submit.textContent='Uploading…'; setStatus('','');
+      var basket=''; try{ var c=JSON.parse(localStorage.getItem('st_cart')||'[]'); if(c.length) basket=c.map(function(i){return i.qty+'x '+i.p+' — '+i.m+' / '+i.f+' ($'+i.pr+' ea)';}).join('\n'); }catch(err){}
+      Promise.all(files.map(function(f){ return readB64(f).then(function(b64){ return {name:f.name, mime:f.type, b64:b64}; }); })).then(function(pf){
+        var payload={ action:'quote', name:document.getElementById('qf-name').value||'', email:email,
+          phone:document.getElementById('qf-phone').value||'', details:document.getElementById('qf-details').value||'', basket:basket, files:pf };
+        return fetch(API,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+      }).then(function(){
+        form.reset(); files=[]; render();
+        setStatus('✓ Sent! We\'ll review your files and send your quote — no charge until you approve.','ok');
+        submit.disabled=false; submit.textContent='Send my request →';
+      }).catch(function(){
+        setStatus('Upload hiccup — try again, or email files to thestickytrap@.','err');
+        submit.disabled=false; submit.textContent='Send my request →';
+      });
     });
   })();
 
