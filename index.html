@@ -130,6 +130,11 @@
   .epc .et2{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.22;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   .epc .es2{font-size:10.5px;color:var(--muted);margin-top:3px}
   .morebtn{display:block;text-align:center;color:var(--pur);font-weight:800;font-size:12.5px;padding:8px 6px 2px}
+  #specials{display:flex;flex-direction:column;gap:9px}
+  .promo{background:linear-gradient(150deg,rgba(255,46,136,.15),rgba(34,211,238,.1)),rgba(255,255,255,.66);border:1px solid rgba(138,77,255,.32);border-radius:14px;padding:13px 14px}
+  .promo .pt{font-size:14.5px;font-weight:800;color:var(--ink);line-height:1.2}
+  .promo .pd{font-size:12px;color:var(--soft);margin-top:4px;line-height:1.42}
+  .promo .ptag{display:inline-block;margin-top:9px;font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:linear-gradient(90deg,#ff2e88,#8a4dff);border-radius:6px;padding:3px 9px}
   /* event hero (image-driven, main focus) */
   .tkt-hero{display:block;border-radius:18px;overflow:hidden;background:#08060f;border:1px solid rgba(138,77,255,.4);box-shadow:0 16px 38px rgba(138,77,255,.34)}
   .tkt-media{position:relative;line-height:0}
@@ -231,6 +236,7 @@
   <nav class="tabbar" id="tabs">
     <button class="on" data-tab="industry"><svg viewBox="0 0 24 24"><path d="M5 4h11v16H5z"/><path d="M8 8h5M8 11h5M8 14h4"/></svg>Industry</button>
     <button data-tab="social"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.6M8.2 13.2l7.6 4.6"/></svg>Social</button>
+    <button data-tab="order"><svg viewBox="0 0 24 24"><path d="M6 8h12l-1 11a1 1 0 01-1 1H8a1 1 0 01-1-1z"/><path d="M9.5 8V6.5a2.5 2.5 0 015 0V8"/></svg>Order</button>
     <button data-tab="connect"><svg viewBox="0 0 24 24"><path d="M9 15l6-6M8 12l-2 2a3.5 3.5 0 005 5l2-2M16 12l2-2a3.5 3.5 0 00-5-5l-2 2"/></svg>Connect</button>
   </nav>
 
@@ -276,6 +282,23 @@
       <div class="lbl" style="margin-top:4px">Latest episodes</div>
       <div class="eplist" id="ep-list"><div class="skel" style="height:44px"></div><div class="skel" style="height:44px;width:88%"></div></div>
       <a class="morebtn" href="https://www.youtube.com/@theflowerroompodcast" target="_blank" rel="noopener">See all episodes on YouTube →</a>
+    </section>
+
+    <!-- ORDER -->
+    <section class="view" data-view="order">
+      <h2 class="vtitle">Order</h2>
+      <div class="p" style="margin-top:-4px">Deals, the full menu, and start your order.</div>
+
+      <div class="lbl">Specials &amp; promos</div>
+      <div id="specials"></div>
+
+      <div class="lbl" style="margin-top:4px">Menu &amp; ordering</div>
+      <a class="card hl" id="menu-link" href="https://claude.ai/code/artifact/f7624c44-d0fb-42e6-8b10-1c941c3ea5c1" target="_blank" rel="noopener">
+        <div class="row"><div class="ic mn" style="width:40px;height:40px">📋</div><div><div class="tn" style="font-size:13.5px">Full price menu</div><div class="ts">Stickers · labels · packaging · merch</div></div></div>
+        <span class="btn" style="display:flex;margin-top:12px">View the menu →</span>
+      </a>
+      <a class="btn" style="display:flex;margin-top:2px" href="mailto:thestickytrap@gmail.com?subject=New%20Order%20-%20The%20Sticky%20Trap&body=Hi%2C%20I%27d%20like%20to%20place%20an%20order%3A%0A%0AProduct%3A%0AQuantity%3A%0ADetails%3A%0A">Start an order →</a>
+      <div class="note" style="text-align:center;margin-top:2px">Or call/text <a href="tel:+17344603845" style="color:var(--pur);font-weight:800">734 460 3845</a></div>
     </section>
 
     <!-- CONNECT (brand banner) -->
@@ -496,9 +519,21 @@
     window.addEventListener('appinstalled', function(){ close(true); });
   })();
 
+  /* ---- Order: specials/promos (fill SPECIALS to run a deal) ---- */
+  (function(){
+    var SPECIALS=[
+      // e.g. { title:'20% off first sticker run', desc:'New customers — mention the app.', tag:'This week' }
+    ];
+    var el=document.getElementById('specials'); if(!el) return;
+    if(!SPECIALS.length){ el.innerHTML='<div class="card"><div class="p" style="text-align:center;padding:5px 0">No active deals right now — check back soon 👀</div></div>'; return; }
+    el.innerHTML=SPECIALS.map(function(s){
+      return '<div class="promo"><div class="pt">'+esc(s.title)+'</div>'+(s.desc?'<div class="pd">'+esc(s.desc)+'</div>':'')+(s.tag?'<span class="ptag">'+esc(s.tag)+'</span>':'')+'</div>';
+    }).join('');
+  })();
+
   /* ---- init: open tab from hash ---- */
   var initial=(location.hash||'').replace('#','');
-  if(['industry','social','connect'].indexOf(initial)>-1) go(initial);
+  if(['industry','social','order','connect'].indexOf(initial)>-1) go(initial);
   loadIndustry(); // warm the brief immediately
   loadEpisodes(); // warm the episode list
 
