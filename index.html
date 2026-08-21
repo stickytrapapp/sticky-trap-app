@@ -193,6 +193,12 @@
   .tabbar button{background:none;border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;color:#8078ac;font-size:9.5px;font-weight:700;font-family:inherit;padding:2px 6px}
   .tabbar button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
   .tabbar button.on{color:var(--mag)}
+  .installbar{position:fixed;left:12px;right:12px;bottom:calc(14px + var(--safe-b));max-width:476px;margin:0 auto;z-index:6;display:flex;align-items:center;gap:10px;background:rgba(20,16,46,.97);color:#fff;border:1px solid rgba(138,77,255,.45);border-radius:15px;padding:11px 12px;box-shadow:0 14px 34px rgba(0,0,0,.45)}
+  .installbar[hidden]{display:none}
+  .ib-ic{width:36px;height:36px;border-radius:9px;flex:none}
+  .ib-t{flex:1;font-size:12px;line-height:1.32;color:#d7d1f2} .ib-t b{font-weight:800;color:#fff}
+  .ib-add{background:var(--grad);color:#fff;border:0;border-radius:10px;font-weight:800;font-size:12.5px;padding:9px 15px;cursor:pointer;font-family:inherit;white-space:nowrap}
+  .ib-x{background:none;border:0;color:#8f88bd;font-size:17px;line-height:1;cursor:pointer;padding:2px 4px;font-family:inherit}
   .toast{position:fixed;left:50%;bottom:calc(28px + var(--safe-b));transform:translateX(-50%) translateY(20px);z-index:5;background:#14102e;color:#fff;font-size:12.5px;font-weight:600;padding:10px 16px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.4);opacity:0;transition:.25s;pointer-events:none}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
@@ -276,6 +282,12 @@
     </section>
 
   </main>
+</div>
+<div class="installbar" id="installbar" hidden>
+  <img class="ib-ic" src="icons/icon-192.png" alt="">
+  <div class="ib-t" id="ib-text"><b>Add to Home Screen</b><br>Keep the app one tap away — like any other app.</div>
+  <button class="ib-add" id="ib-add">Add</button>
+  <button class="ib-x" id="ib-x" aria-label="Dismiss">✕</button>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -402,6 +414,33 @@
     var n=Math.round((ev-t)/86400000), hero=document.getElementById('tkt-hero'), rib=document.getElementById('ev-ribbon');
     if(n<0){ if(hero)hero.style.display='none'; if(rib)rib.style.display='none'; return; }
     el.textContent = n===0?'🎟 Tonight':n===1?'🎟 Tomorrow':'🎟 In '+n+' days';
+  })();
+
+  /* ---- Add to Home Screen prompt (install like a native app) ---- */
+  (function(){
+    var bar=document.getElementById('installbar'), addb=document.getElementById('ib-add'),
+        xb=document.getElementById('ib-x'), txt=document.getElementById('ib-text');
+    if(!bar) return;
+    var standalone = (window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone===true;
+    var dismissed=false; try{dismissed=localStorage.getItem('a2hs')==='1';}catch(e){}
+    if(standalone||dismissed) return;
+    var dp=null, isIOS=/iP(hone|ad|od)/.test(navigator.userAgent)&&!window.MSStream;
+    function close(remember){ bar.hidden=true; if(remember){try{localStorage.setItem('a2hs','1');}catch(e){}} }
+    window.addEventListener('beforeinstallprompt', function(e){
+      e.preventDefault(); dp=e;
+      txt.innerHTML='<b>Add to Home Screen</b><br>Install it — one tap, no app store.';
+      addb.textContent='Add'; bar.hidden=false;
+    });
+    if(isIOS){
+      txt.innerHTML='<b>Add to Home Screen</b><br>Tap <b>Share</b>, then <b>“Add to Home Screen.”</b>';
+      addb.textContent='Got it'; setTimeout(function(){ bar.hidden=false; },900);
+    }
+    addb.addEventListener('click', function(){
+      if(dp){ dp.prompt(); dp.userChoice.finally(function(){ dp=null; close(true); }); }
+      else { close(true); }
+    });
+    xb.addEventListener('click', function(){ close(true); });
+    window.addEventListener('appinstalled', function(){ close(true); });
   })();
 
   /* ---- init: open tab from hash ---- */
