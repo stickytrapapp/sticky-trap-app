@@ -1,7 +1,7 @@
 // TheStickyTr_ APP — service worker (installable PWA)
 // Network-first for the app shell + data so updates always show; cache is only
 // an offline fallback. Bump CACHE to force old caches out on activate.
-const CACHE = 'st-app-v2';
+const CACHE = 'st-app-v3';
 const STATIC = ['./manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', (e) => {
