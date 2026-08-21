@@ -162,6 +162,22 @@
   .softbar{background:linear-gradient(100deg,rgba(255,46,136,.16),rgba(138,77,255,.12)),rgba(255,255,255,.55);border:1px solid rgba(138,77,255,.28);border-radius:13px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between}
   .softbar .st{font-size:12.5px;font-weight:800;color:var(--ink)} .softbar .ss{font-size:11px;color:var(--soft)} .softbar .go{font-size:18px;color:var(--mag)}
 
+  /* connect — brand banner (dark, mirrors the header art) */
+  .view.connectbanner{background:#08060f;color:#fff;min-height:100%;gap:20px;align-items:center;text-align:center;padding:24px 18px calc(34px + var(--safe-b))}
+  .cb-contacts{display:flex;flex-direction:column;gap:15px;width:100%;max-width:340px}
+  .cb-item{display:flex;flex-direction:column;gap:4px;border-top:1px solid rgba(255,255,255,.16);padding-top:9px;text-align:left}
+  .cb-lbl{font-size:12px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:#ef1f78}
+  .cb-val{font-size:18px;font-weight:800;color:#fff}
+  .cb-row{display:flex;align-items:center;justify-content:center;gap:22px;flex-wrap:wrap;margin-top:2px}
+  .cb-linktree{display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;letter-spacing:.14em;color:#fff;background:linear-gradient(90deg,#ef1f78,#7a3cf0,#0fa8c8);padding:14px 30px;border-radius:999px;box-shadow:0 8px 24px rgba(138,77,255,.5)}
+  .cb-qr{display:flex;flex-direction:column;align-items:center;gap:7px}
+  .cb-qr img{width:112px;height:112px;border-radius:13px;background:#fff;padding:7px;box-sizing:border-box}
+  .cb-scan{font-size:10.5px;font-weight:800;letter-spacing:.13em;color:#ef1f78} .cb-scan b{color:#0fa8c8}
+  .cb-logo{width:100%;max-width:360px;margin-top:8px}
+  .cb-house{font-weight:800;font-style:italic;font-size:26px;letter-spacing:.03em;color:#9a4dff}
+  .cb-tag{font-size:11px;font-weight:800;letter-spacing:.05em;line-height:1.9;width:100%;border-top:1px solid rgba(255,255,255,.16);padding-top:16px}
+  .cb-tag .m{color:#ef1f78} .cb-tag .c{color:#0fa8c8}
+
   /* tab bar */
   .tabbar{flex:none;display:flex;justify-content:space-around;align-items:center;padding:4px 4px 9px;border-bottom:1px solid var(--line);
     background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,.2))}
@@ -228,17 +244,20 @@
       <a class="morebtn" href="https://www.youtube.com/@theflowerroompodcast" target="_blank" rel="noopener">See all episodes on YouTube →</a>
     </section>
 
-    <!-- CONNECT -->
-    <section class="view" data-view="connect">
-      <h2 class="vtitle">Connect</h2>
-      <div class="lbl">Work with us</div>
-      <div class="card hl"><div class="row"><div class="ic mn" style="width:38px;height:38px">✦</div><div><div class="tn" style="font-size:13px">The Sticky Trap — we brand you</div><div class="ts">Stickers · labels · packaging · merch</div></div></div>
-        <a class="btn" style="display:flex;margin-top:12px" href="https://claude.ai/code/artifact/f7624c44-d0fb-42e6-8b10-1c941c3ea5c1" target="_blank" rel="noopener">Start a project →</a>
+    <!-- CONNECT (brand banner) -->
+    <section class="view connectbanner" data-view="connect">
+      <div class="cb-contacts">
+        <a class="cb-item" href="tel:+17344603845"><span class="cb-lbl">Call</span><span class="cb-val">734 460 3845</span></a>
+        <a class="cb-item" href="mailto:thestickytrap@gmail.com"><span class="cb-lbl">Email</span><span class="cb-val">thestickytrap@gmail.com</span></a>
+        <a class="cb-item" href="https://www.instagram.com/the_stickytrap/" target="_blank" rel="noopener"><span class="cb-lbl">Instagram</span><span class="cb-val">@the_stickytrap</span></a>
       </div>
-      <div class="grid">
-        <a class="tile" href="tel:+17344603845"><div class="ic ph"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"><path d="M5 4h4l2 5-3 2a11 11 0 005 5l2-3 5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg></div><div><div class="tn">Call</div><div class="ts">734 460 3845</div></div></a>
-        <a class="tile" href="mailto:thestickytrap@gmail.com"><div class="ic em"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"><path d="M3 6h18v12H3z"/><path d="M3 7l9 6 9-6"/></svg></div><div><div class="tn">Email</div><div class="ts">thestickytrap</div></div></a>
+      <div class="cb-row">
+        <a class="cb-linktree" href="https://linktr.ee/thestickytrap" target="_blank" rel="noopener">LINKTREE</a>
+        <a class="cb-qr" href="https://linktr.ee/thestickytrap" target="_blank" rel="noopener"><img src="icons/links-qr.png" alt="Scan for links"><span class="cb-scan">SCAN FOR <b>LINKS</b></span></a>
       </div>
+      <img class="cb-logo" src="img/logo.png" alt="The Sticky Trap — Let's stick together">
+      <div class="cb-house">DESIGN HOUSE</div>
+      <div class="cb-tag"><span class="m">BRANDING SPECIALISTS</span> · <span class="c">CUSTOM ART</span> · <span class="m">STICKERS</span> · <span class="c">PROMOTIONALS</span> · <span class="c">MERCH</span></div>
     </section>
 
   </main>
