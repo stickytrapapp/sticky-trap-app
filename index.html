@@ -142,6 +142,8 @@
   .qcard .qc{font-size:12.5px;color:var(--soft);line-height:1.5;margin-top:6px}
   .qcard .qc b{color:var(--ink)}
   .qcard .qnote{font-size:11px;color:var(--muted);text-align:center;margin-top:9px}
+  .qcard .qtip{font-size:11.5px;line-height:1.5;color:var(--soft);background:rgba(18,196,255,.10);border:1px solid rgba(18,196,255,.28);border-radius:10px;padding:9px 11px;margin-top:9px}
+  .qcard .qtip b{color:var(--ink)}
   .pricematch{text-align:center;padding:4px 0 2px}
   .pm-h{font-size:16px;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
   .pm-btn{display:inline-flex;align-items:center;gap:7px;margin-top:12px;background:var(--grad);color:#fff;font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;padding:12px 22px;border-radius:999px;box-shadow:0 8px 20px rgba(138,77,255,.42)}
@@ -874,6 +876,7 @@
             <div class="qdrop" id="qf-drop" tabindex="0" role="button" aria-label="Add your art files">
               <div class="qdrop-in">📎 <b>Drag your art files here</b><br><span>or tap to choose · PDF · AI · EPS · PNG · JPG · SVG</span></div>
             </div>
+            <div class="qtip">⚡ <b>Print-ready files are fastest.</b> A production-ready file &#8212; right resolution and color, cut paths and bleeds set &#8212; usually means little or no pre-press, so we quote and print quicker. Not there yet? Send what you have and we'll build it, with any prep priced up front.</div>
             <input type="file" id="qf-files" multiple hidden>
             <div id="qf-list" class="qf-list"></div>
             <button type="submit" class="btn" id="qf-submit" style="display:flex;margin-top:2px">Send my request →</button>
