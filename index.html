@@ -874,7 +874,7 @@
             <input type="file" id="qf-files" multiple hidden>
             <div id="qf-list" class="qf-list"></div>
             <button type="submit" class="btn" id="qf-submit" style="display:flex;margin-top:2px">Send my request →</button>
-            <div class="qnote" id="qf-note">Files reviewed before payment — no surprises.</div>
+            <div class="qnote" id="qf-note"></div>
             <div id="qf-status" class="qf-status"></div>
           </form>
         </div>
@@ -1273,7 +1273,7 @@
       listEl.innerHTML=files.map(function(f,i){
         return '<div class="qf-file"><span class="fn">'+esc(f.name)+'</span><span class="fs">'+fmt(f.size)+'</span><span class="fx" data-i="'+i+'">✕</span></div>';
       }).join('');
-      note.textContent = total()>MAX ? 'Over ~20MB — remove some, or email large files to thestickytrap@.' : 'Files reviewed before payment — no surprises.';
+      note.textContent = total()>MAX ? 'Over ~20MB — remove some, or email large files to thestickytrap@.' : '';
     }
     function add(fl){ for(var i=0;i<fl.length;i++) files.push(fl[i]); render(); }
     function setStatus(m,c){ status.textContent=m; status.className='qf-status '+(c||''); }
