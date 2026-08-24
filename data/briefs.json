@@ -5,21 +5,61 @@
     {
       "date": "2026-08-24",
       "label": "Morning Brief",
-      "title": "Cheapest weed Michigan's ever seen — and the tax is now a campaign issue",
-      "top": "Michigan prices hit a record low as the 24% wholesale tax squeezes an oversupplied market, and the tax is now front-and-center in the governor's race. Nationally, rescheduling grinds forward and psilocybin keeps racking up FDA momentum.",
+      "title": "Tax Fallout, Ballot Politics, and a DEA Judge's Pen: Cannabis at a Crossroads",
+      "top": "Michigan's 24% wholesale tax keeps bleeding storefronts and jobs even as it becomes a 2026 governor's-race wedge issue, while federally the DEA rescheduling fight has moved to closing arguments with a judge's recommendation looming. On the psychedelics side, Compass Pathways is deepening its federal footprint via a VA trial as Lykos regroups under a new name after last year's MDMA rejection.",
       "local": [
-        { "text": "Rock-bottom prices: the average recreational ounce sold for $58 in June (down from $63 a year ago) — the cheapest weed has ever been in Michigan as the 24% tax squeezes an oversupplied market.", "source": "The Gander", "url": "https://gandernewsroom.com/local/6-quick-hits-of-cannabis-news-from-across-michigan-24/" },
-        { "text": "The tax is now political: Gov. Whitmer's road-funding plan leans on that 24% cannabis revenue — while the industry's lawsuit calls the tax unconstitutional and blames it for closures and layoffs.", "source": "The Gander", "url": "https://gandernewsroom.com/local/6-quick-hits-of-cannabis-news-from-across-michigan-24/" },
-        { "text": "GOP gov candidate John James is campaigning to eliminate or scale back the wholesale tax and crack down on hemp THC — putting cannabis squarely in the 2026 race.", "source": "The Gander", "url": "https://gandernewsroom.com/local/6-quick-hits-of-cannabis-news-from-across-michigan-24/" },
-        { "text": "The shakeout continues: 550+ dispensaries and growers have closed since 2019, 2025 posted the first-ever annual sales decline, and Ann Arbor's C3 Industries is cutting its Webberville grow + 62 jobs.", "source": "Detroit Metro Times", "url": "https://www.metrotimes.com/weed-2/michigans-cannabis-market-shrinks-as-new-tax-threatens-more-closures-layoffs/" },
-        { "text": "Enforcement watch: regulators fined Mint Cannabis in Coldwater $8,000 after its surveillance system was found offline for 34 days.", "source": "The Gander", "url": "https://gandernewsroom.com/local/6-quick-hits-of-cannabis-news-from-across-michigan-24/" }
+        {
+          "text": "GOP gubernatorial nominee John James unveiled a platform pledging to repeal or sharply cut the 24% wholesale cannabis tax while cracking down on unregulated delta-8/THCA products sold outside licensed dispensaries, arguing the tax \"drives up prices, gives illegal operators a competitive edge, and has already fallen far short of revenue projections.\"",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/michigan-gop-governor-candidate-pledges-huge-tax-cut-for-marijuana-industry-along-with-crackdown-on-hemp-products"
+        },
+        {
+          "text": "Upper Peninsula chain Higher Love shut five of its nine dispensaries (Crystal Falls, Escanaba, Houghton, Munising, Ontonagon) as of Aug. 9, with the company citing the mounting wholesale tax burden as the primary driver of the closures.",
+          "source": "The Mining Gazette",
+          "url": "https://www.mininggazette.com/news/local-news/2026/08/cannabis-store-closing/"
+        },
+        {
+          "text": "The 24% wholesale tax collected only about $34 million in its first months against a projected $420 million annual pace, and now faces two unresolved MiCIA lawsuits — one over the Legislature's supermajority requirement, another alleging unconstitutional \"tax pyramiding\" — keeping the industry's finances under active pressure heading into fall.",
+          "source": "Cann.dev",
+          "url": "https://www.cann.dev/cannabis-august-2026-state-updates-five-markets/"
+        },
+        {
+          "text": "In back-to-back rulings, the Michigan Supreme Court held that a marijuana civil infraction alone can't justify a warrantless vehicle search (People v. Wilkins, 5-2) and that courts can't bar MRTMA-compliant use as a probation condition just because it violates federal law (People v. Hess, unanimous) — raising the evidentiary bar for cannabis-related traffic stops statewide.",
+          "source": "Cann.dev",
+          "url": "https://www.cann.dev/cannabis-august-2026-state-updates-five-markets/"
+        },
+        {
+          "text": "Michigan remains the nation's cheapest legal market, with the lowest advertised ounce at $6.99 versus $112 in neighboring Ohio, a price gap analysts say keeps driving Ohio consumers across the border despite Ohio's new ban on out-of-state purchases.",
+          "source": "Ohio Capital Journal",
+          "url": "https://ohiocapitaljournal.com/2026/08/13/ohios-recreational-marijuana-prices-are-higher-than-what-michigan-customers-pay/"
+        }
       ],
       "national": [
-        { "text": "Rescheduling grinds on: a DEA judge ordered transcript corrections (final due this week) to the 2,470-page hearing record — the Schedule III process is moving, if slowly.", "source": "Marijuana Moment", "url": "https://www.marijuanamoment.net/dea-judge-orders-cannabis-rescheduling-transcript-corrections-newsletter-august-24-2026" },
-        { "text": "Already partly done: the DEA earlier downscheduled FDA-approved marijuana drugs and state-licensed medical marijuana to Schedule III, with the broader rescheduling still in an expedited hearing.", "source": "Gibson Dunn", "url": "https://www.gibsondunn.com/dea-downschedules-state-medical-marijuana-to-schedule-iii-expedited-hearing-set-to-consider-broader-rescheduling/" },
-        { "text": "The hemp-THC ban still hits Nov 12 absent new law (~95% of hemp products go unlawful) — and the fight over regulating vs. banning THC drinks is heating up.", "source": "Vicente LLP", "url": "https://vicentellp.com/insights/2026-federal-hemp-ban-what-it-means-for-the-future-of-consumable-hemp-products/" },
-        { "text": "Psilocybin momentum: the FDA awarded national priority-review vouchers to psilocybin developers, and Compass' COMP360 hit two Phase 3 endpoints — pointing to a possible first approval by late 2026 or early 2027.", "source": "BioPharma Dive", "url": "https://www.biopharmadive.com/news/compass-trial-data-fda-application-psilocybin-psychedelics/812332/" },
-        { "text": "On the calendar: the FDA holds a public hearing on the therapeutic use of psychedelics on Sept 14.", "source": "McGuireWoods", "url": "https://www.mcguirewoods.com/client-resources/alerts/2026/5/executive-and-doj-orders-accelerate-support-for-psychedelic-therapies-and-medical-marijuana/" }
+        {
+          "text": "DEA formally urged its own administrative law judge to recommend moving marijuana from Schedule I to Schedule III in an Aug. 17 post-hearing brief, while opposition groups including SAM and the states of Idaho, Indiana and Nebraska filed competing briefs asking the judge to reject rescheduling — setting up Judge Derek Julius's recommendation.",
+          "source": "The Marijuana Herald",
+          "url": "https://themarijuanaherald.com/2026/08/dea-urges-judge-to-move-marijuana-to-schedule-iii-as-final-rescheduling-briefs-set-stage-for-decision/"
+        },
+        {
+          "text": "Judge Julius ordered a lengthy round of corrections to the official rescheduling-hearing transcript — reportedly at least 2,470 pages — with a finalized version due to be publicly posted by Aug. 26.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/dea-judge-orders-cannabis-rescheduling-transcript-corrections-newsletter-august-24-2026"
+        },
+        {
+          "text": "The Senate's Aug. 8 continuing resolution pushed the federal hemp-THC ban (originally effective Nov. 12) to Dec. 11, but the House hasn't acted yet, returns Aug. 31, and must fund the government by Sept. 30 — leaving the fate of the roughly $30 billion hemp industry unresolved.",
+          "source": "Hemp Law Group",
+          "url": "https://www.hemplawgroup.com/news/federal-hemp-ban-2026-where-things-stand"
+        },
+        {
+          "text": "Compass Pathways is partnering with the U.S. Department of Veterans Affairs on PIVOT, a multi-site randomized controlled trial testing its COMP360 psilocybin in veterans with treatment-resistant depression, including those with co-occurring PTSD, deepening federal engagement with psychedelic-assisted therapy.",
+          "source": "Compass Pathways / Business Wire",
+          "url": "https://ir.compasspathways.com/News--Events-/news/news-details/2026/Compass-Pathways-Working-with-U-S--Department-of-Veterans-Affairs-for-Investigational-Study-of-Psilocybin/default.aspx"
+        },
+        {
+          "text": "MDMA drug developer Lykos Therapeutics has quietly rebranded as Resilient Pharmaceuticals following a $50 million recapitalization and new executive team, an effort to shed the stigma of last year's FDA rejection of its PTSD therapy.",
+          "source": "Psychedelic Alpha",
+          "url": "https://psychedelicalpha.com/news/p%CE%B1-psychedelic-bulletin-207-lykos-rebrands-to-resilient-pharma-pushes-back-on-norways-ketamine-reimbursement-decision-abbvie-gilgamesh-deal-viewed-as-validation/"
+        }
       ]
     }
   ]
