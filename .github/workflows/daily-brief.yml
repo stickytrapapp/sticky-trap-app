@@ -1,0 +1,46 @@
+name: Daily Brief
+
+# Refreshes data/briefs.json every morning so the app's Industry tab
+# stays current with zero manual work — runs on GitHub's servers, so it
+# does not need Shane's computer or the Claude app to be open.
+
+on:
+  schedule:
+    - cron: '6 12 * * *'   # 12:06 UTC ~= 8:06am ET
+  workflow_dispatch: {}     # lets us run it on demand from the Actions tab
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-brief
+  cancel-in-progress: false
+
+jobs:
+  brief:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Generate brief
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/generate-brief.mjs
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "Sticky Trap Bot"
+          git config user.email "fmholdings.office@gmail.com"
+          git add data/briefs.json
+          if git diff --staged --quiet; then
+            echo "No brief change to commit."
+          else
+            git commit -m "Daily brief: $(date -u +%Y-%m-%d)"
+            git push
+          fi
