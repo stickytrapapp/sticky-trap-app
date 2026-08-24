@@ -146,6 +146,8 @@
   .qcard .qtip b{color:var(--ink)}
   .qcard .qtrust{text-align:center;font-size:11px;line-height:1.7;color:var(--muted);margin:12px 4px 4px}
   .qcard .qtrust b{color:#4ade80;font-weight:900}
+  .qcard .pplink{display:inline-block;margin-top:8px;background:rgba(18,196,255,.12);border:1px solid rgba(18,196,255,.38);color:var(--cy);font-weight:800;font-size:12px;letter-spacing:.02em;padding:7px 15px;border-radius:20px;cursor:pointer;font-family:inherit;transition:.15s}
+  .qcard .pplink:hover{background:rgba(18,196,255,.2)} .qcard .pplink:active{transform:translateY(1px)}
   .pricematch{text-align:center;padding:4px 0 2px}
   .pm-h{font-size:16px;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
   .pm-btn{display:inline-flex;align-items:center;gap:7px;margin-top:12px;background:var(--grad);color:#fff;font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;padding:12px 22px;border-radius:999px;box-shadow:0 8px 20px rgba(138,77,255,.42)}
@@ -865,7 +867,7 @@
         <div class="lbl" style="margin:34px 0 20px;justify-content:center;text-align:center;font-size:17px;letter-spacing:.15em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent">Send art files to complete your order</div>
         <div class="qcard">
           <div class="qlead" style="text-align:center;font-size:17px;font-weight:800;color:var(--ink);margin-bottom:8px">Menu prices cover the product.</div>
-          <div class="qc" style="text-align:center">Pre-press makes your art print-ready &#8212; resolution, color, cut paths, bleeds, proofing. Print-ready files often need little or none; if yours need work, we quote it up front.</div>
+          <div class="qc" style="text-align:center">This quote covers pre-press &amp; design. <button type="button" id="prepress-link" class="pplink">What's pre-press? →</button></div>
           <form id="quoteform" class="qform">
             <input class="qin" type="text" id="qf-name" placeholder="Your name" autocomplete="name">
             <input class="qin" type="email" id="qf-email" placeholder="Email" autocomplete="email">
@@ -1028,7 +1030,7 @@
       <p class="fine" style="font-size:14px">We proof <b>every file</b> with you before we print your order &#8212; shared with you as <b>photos and video</b> by text or email, whichever you prefer &#8212; so you sign off on exactly what prints, no surprises.</p>
 <div class="diamond-band" aria-hidden="true"></div>
       <h3 class="sec-head">Common Questions</h3>
-      <div class="faq"><div class="qa"><p class="q">Do you price match?</p><p class="a">Found a better price? <a href="mailto:thestickytrap@gmail.com?subject=Price%20match%20-%20The%20Sticky%20Trap&body=Hi%2C%20I%20found%20this%20price%20elsewhere%20%E2%80%94%20can%20you%20match%20it%3F%0A%0A(paste%20or%20attach%20the%20quote%20below)%0A%0AProduct%3A%0AQuantity%3A%0A" style="color:var(--cy);font-weight:800;text-decoration:none">Send us the quote</a> and we'll see what we can do.</p></div><div class="qa"><p class="q">Do I need to bring artwork?</p><p class="a">No. We're a design house &#8212; bring a finished file or just an idea, and we'll design it, dial in the materials, and print it in-house.</p></div><div class="qa"><p class="q">Will you help me find the best options for my art?</p><p class="a">Yes &#8212; we don't just run your file. Send whatever you've got and, if you want, we add the finishing that makes it land, plus the right material call. Curated per project, quoted with your order.</p></div><div class="qa"><p class="q">Can I get a custom shape?</p><p class="a">Yes &#8212; <b>Custom Dielines</b>. We build a bespoke cut path to any outline you want, not just a square or circle. Quoted per project.</p></div><div class="qa orphan-ctr"><p class="q">What are pre-press / set-up charges?</p><p class="a">Pre-press makes your art print-ready &#8212; resolution, color, cut paths, bleeds, proofing. Real hands-on work, so shops charge for it. <a href="mailto:thestickytrap@gmail.com?subject=Print-Ready%20Files" style="color:var(--cy);font-weight:800;text-decoration:none">Send print-ready files</a> and there's often little or none; if not, we quote it up front.</p></div></div>
+      <div class="faq"><div class="qa"><p class="q">Do you price match?</p><p class="a">Found a better price? <a href="mailto:thestickytrap@gmail.com?subject=Price%20match%20-%20The%20Sticky%20Trap&body=Hi%2C%20I%20found%20this%20price%20elsewhere%20%E2%80%94%20can%20you%20match%20it%3F%0A%0A(paste%20or%20attach%20the%20quote%20below)%0A%0AProduct%3A%0AQuantity%3A%0A" style="color:var(--cy);font-weight:800;text-decoration:none">Send us the quote</a> and we'll see what we can do.</p></div><div class="qa"><p class="q">Do I need to bring artwork?</p><p class="a">No. We're a design house &#8212; bring a finished file or just an idea, and we'll design it, dial in the materials, and print it in-house.</p></div><div class="qa"><p class="q">Will you help me find the best options for my art?</p><p class="a">Yes &#8212; we don't just run your file. Send whatever you've got and, if you want, we add the finishing that makes it land, plus the right material call. Curated per project, quoted with your order.</p></div><div class="qa"><p class="q">Can I get a custom shape?</p><p class="a">Yes &#8212; <b>Custom Dielines</b>. We build a bespoke cut path to any outline you want, not just a square or circle. Quoted per project.</p></div><div class="qa orphan-ctr" id="faq-prepress"><p class="q">What are pre-press / set-up charges?</p><p class="a">Pre-press makes your art print-ready &#8212; resolution, color, cut paths, bleeds, proofing. Real hands-on work, so shops charge for it. <a href="mailto:thestickytrap@gmail.com?subject=Print-Ready%20Files" style="color:var(--cy);font-weight:800;text-decoration:none">Send print-ready files</a> and there's often little or none; if not, we quote it up front.</p></div></div>
 </section>
     </section>
 
@@ -1336,6 +1338,21 @@
         if(q&&v){ var qr=q.getBoundingClientRect(), vr=v.getBoundingClientRect(); v.scrollTop = v.scrollTop + (qr.top - vr.top) - 66;
           var nm=document.getElementById('qf-name'); if(nm){ try{nm.focus({preventScroll:true});}catch(e){} } }
       },280);
+    });
+  })();
+
+  /* ---- pre-press link: jump to the FAQ in Specs ---- */
+  (function(){
+    var b=document.getElementById('prepress-link'); if(!b) return;
+    b.addEventListener('click',function(){
+      go('specs');
+      setTimeout(function(){
+        var el=document.getElementById('faq-prepress'), v=document.querySelector('.views'); if(!el||!v) return;
+        var er=el.getBoundingClientRect(), vr=v.getBoundingClientRect();
+        v.scrollTop = v.scrollTop + (er.top - vr.top) - 24;
+        el.style.transition='background .3s,border-radius .3s'; el.style.borderRadius='8px'; el.style.background='rgba(18,196,255,.13)';
+        setTimeout(function(){ el.style.background='transparent'; },1500);
+      },170);
     });
   })();
 
