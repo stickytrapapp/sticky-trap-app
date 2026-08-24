@@ -148,6 +148,9 @@
   .qcard .qtrust b{color:#4ade80;font-weight:900}
   .qcard .pplink{display:inline-block;margin-top:8px;background:rgba(18,196,255,.12);border:1px solid rgba(18,196,255,.38);color:var(--cy);font-weight:800;font-size:12px;letter-spacing:.02em;padding:7px 15px;border-radius:20px;cursor:pointer;font-family:inherit;transition:.15s}
   .qcard .pplink:hover{background:rgba(18,196,255,.2)} .qcard .pplink:active{transform:translateY(1px)}
+  .qcard .noart-row{text-align:center;margin:9px 0 2px}
+  .qcard .noart-btn{background:none;border:0;color:var(--muted);font-size:11.5px;font-weight:700;cursor:pointer;font-family:inherit;text-decoration:underline;text-underline-offset:2px;padding:4px}
+  .qcard .noart-btn.on{color:#4ade80;text-decoration:none;font-weight:800}
   .pricematch{text-align:center;padding:4px 0 2px}
   .pm-h{font-size:16px;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
   .pm-btn{display:inline-flex;align-items:center;gap:7px;margin-top:12px;background:var(--grad);color:#fff;font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;padding:12px 22px;border-radius:999px;box-shadow:0 8px 20px rgba(138,77,255,.42)}
@@ -879,6 +882,7 @@
             </div>
             <input type="file" id="qf-files" multiple hidden>
             <div id="qf-list" class="qf-list"></div>
+            <div class="noart-row"><button type="button" id="noart-btn" class="noart-btn">No art files? Place a sticker order without art →</button></div>
             <div class="qtrust"><b>✓</b> Ann&nbsp;Arbor design house · <b>✓</b> you approve a proof before we print · <a href="https://www.google.com/maps/search/?api=1&amp;query=The+Sticky+Trap+Ann+Arbor+MI" target="_blank" rel="noopener" style="color:var(--cy);font-weight:800;text-decoration:none"><span style="color:#EAB84B">★</span> 4.7 on Google (26 reviews) →</a></div>
             <button type="submit" class="btn" id="qf-submit" style="display:flex;margin-top:2px">Send my request →</button>
             <div class="qnote" id="qf-note"></div>
@@ -1283,6 +1287,12 @@
         listEl=document.getElementById('qf-list'), submit=document.getElementById('qf-submit'),
         note=document.getElementById('qf-note'), status=document.getElementById('qf-status');
     var files=[], MAX=22*1024*1024;
+    var noArt=false, noartBtn=document.getElementById('noart-btn');
+    if(noartBtn) noartBtn.addEventListener('click',function(){
+      noArt=!noArt; this.classList.toggle('on',noArt);
+      this.textContent = noArt ? '✓ No-art order enabled — art not required' : 'No art files? Place a sticker order without art →';
+      setStatus('','');
+    });
     function fmt(n){ return n>1048576 ? (n/1048576).toFixed(1)+' MB' : Math.max(1,Math.round(n/1024))+' KB'; }
     function total(){ return files.reduce(function(a,f){return a+f.size;},0); }
     function render(){
@@ -1307,7 +1317,8 @@
       if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ setStatus('Add your email so we can send the quote.','err'); return; }
       var basket='', basketCount=0; try{ var c=JSON.parse(localStorage.getItem('st_cart')||'[]'); basketCount=c.length; if(c.length) basket=c.map(function(i){return i.qty+'x '+i.p+' — '+i.m+' / '+i.f+' ($'+i.pr+' ea)';}).join('\n'); }catch(err){}
       var details=(document.getElementById('qf-details').value||'').trim();
-      if(!files.length && !basketCount && !details){ setStatus('Tell us what you need — add your art, your order details, or items to your basket.','err'); return; }
+      if(!files.length && !noArt){ setStatus('Art files are required for a pre-press quote — or tap “Place a sticker order without art” to order without them.','err'); return; }
+      if(!files.length && noArt && !basketCount && !details){ setStatus('Add items to your basket or describe your order so we know what to make.','err'); return; }
       if(total()>MAX){ setStatus('Files over ~20MB — email them to thestickytrap@ instead.','err'); return; }
       submit.disabled=true; submit.textContent='Sending…'; setStatus('','');
       Promise.all(files.map(function(f){ return readB64(f).then(function(b64){ return {name:f.name, mime:f.type, b64:b64}; }); })).then(function(pf){
