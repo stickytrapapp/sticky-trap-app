@@ -160,6 +160,7 @@
   .qcard .qfo-q{color:var(--ink);font-weight:800;flex:none}
   .qcard .qfo-p{flex:1;min-width:0}
   .qcard .qfo-pr{color:var(--ink);font-weight:700;flex:none}
+  .qcard .qdrop.dropdim{opacity:.35;filter:grayscale(.4)}
   .pricematch{text-align:center;padding:4px 0 2px}
   .pm-h{font-size:16px;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
   .pm-btn{display:inline-flex;align-items:center;gap:7px;margin-top:12px;background:var(--grad);color:#fff;font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;padding:12px 22px;border-radius:999px;box-shadow:0 8px 20px rgba(138,77,255,.42)}
@@ -1298,7 +1299,7 @@
         note=document.getElementById('qf-note'), status=document.getElementById('qf-status');
     var files=[], MAX=22*1024*1024;
     var noArt=false, noartBox=document.getElementById('noart-box');
-    if(noartBox) noartBox.addEventListener('change',function(){ noArt=this.checked; setStatus('',''); });
+    if(noartBox) noartBox.addEventListener('change',function(){ noArt=this.checked; if(drop) drop.classList.toggle('dropdim',noArt); setStatus('',''); });
 
     // #1 show the basket order summary in the form; #2 adapt the details placeholder to context
     var detEl=document.getElementById('qf-details');
