@@ -340,7 +340,7 @@
       <div class="menu-specials">
         <h2 class="vtitle">Menu</h2>
         <div class="p" style="margin-top:-4px">This is just a partial menu — live pricing on our most-ordered items. Don't see what you need? Just ask.</div>
-        <div class="lbl" style="margin-top:9px">Specials &amp; promos</div>
+        <div class="lbl" id="specials-lbl" style="margin-top:9px">Specials &amp; promos</div>
         <div id="specials"></div>
 
       </div>
@@ -558,6 +558,8 @@
 #stmenu .cartbtn .ct{font-variant-numeric:tabular-nums}
 #stmenu .cartbtn.empty{background:linear-gradient(180deg,var(--panel-2),var(--panel));color:var(--paper);border:1px solid var(--line);box-shadow:none}
 #stmenu .cartbtn.pulse{animation:cartpulse .55s ease 2}
+#stmenu .cartbtn{transition:opacity .22s ease,transform .22s ease}
+#stmenu .cartbtn.fabhide{opacity:0;pointer-events:none;transform:translateY(14px)}
 @keyframes cartpulse{0%{transform:scale(1)}45%{transform:scale(1.12)}100%{transform:scale(1)}}
 #stmenu .overlay{position:fixed;inset:0;background:rgba(5,3,10,.6);backdrop-filter:blur(2px);z-index:50;opacity:0;pointer-events:none;transition:opacity .2s}
 #stmenu .overlay.on{opacity:1;pointer-events:auto}
@@ -1254,10 +1256,21 @@
       // e.g. { title:'20% off first sticker run', desc:'New customers — mention the app.', tag:'This week' }
     ];
     var el=document.getElementById('specials'); if(!el) return;
-    if(!SPECIALS.length){ el.innerHTML='<div class="card"><div class="p" style="text-align:center;padding:5px 0">No active deals right now — check back soon 👀</div></div>'; return; }
+    var lbl=document.getElementById('specials-lbl');
+    if(!SPECIALS.length){ el.style.display='none'; if(lbl) lbl.style.display='none'; return; }
+    el.style.display=''; if(lbl) lbl.style.display='';
     el.innerHTML=SPECIALS.map(function(s){
       return '<div class="promo"><div class="pt">'+esc(s.title)+'</div>'+(s.desc?'<div class="pd">'+esc(s.desc)+'</div>':'')+(s.tag?'<span class="ptag">'+esc(s.tag)+'</span>':'')+'</div>';
     }).join('');
+  })();
+
+  /* ---- Hide the floating basket while the order form's submit is in view (avoid overlap) ---- */
+  (function(){
+    var cart=document.getElementById('cartbtn'), sub=document.getElementById('qf-submit');
+    if(!cart||!sub||!('IntersectionObserver' in window)) return;
+    new IntersectionObserver(function(es){
+      cart.classList.toggle('fabhide', es[0].isIntersecting);
+    }, {rootMargin:'0px 0px -30px 0px'}).observe(sub);
   })();
 
   /* ---- Quote request: drag-and-drop upload -> backend (Drive + email) ---- */
