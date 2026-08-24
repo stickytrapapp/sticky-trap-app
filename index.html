@@ -153,6 +153,13 @@
   .qcard .noart-check input:checked{background:#22c55e;border-color:#22c55e}
   .qcard .noart-check input:checked::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:16px}
   .qcard .noart-check input:checked ~ span{color:#4ade80}
+  .qcard .qf-order{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:12px;padding:11px 14px;margin:0 0 12px}
+  .qcard .qfo-head{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:8px}
+  .qcard .qfo-sum{font-size:12px;font-weight:800;color:var(--cy);text-transform:none;letter-spacing:0}
+  .qcard .qfo-row{display:flex;gap:9px;align-items:baseline;font-size:12.5px;color:var(--soft);padding:3px 0;line-height:1.4}
+  .qcard .qfo-q{color:var(--ink);font-weight:800;flex:none}
+  .qcard .qfo-p{flex:1;min-width:0}
+  .qcard .qfo-pr{color:var(--ink);font-weight:700;flex:none}
   .pricematch{text-align:center;padding:4px 0 2px}
   .pm-h{font-size:16px;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
   .pm-btn{display:inline-flex;align-items:center;gap:7px;margin-top:12px;background:var(--grad);color:#fff;font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;padding:12px 22px;border-radius:999px;box-shadow:0 8px 20px rgba(138,77,255,.42)}
@@ -874,6 +881,7 @@
         <div class="lbl" style="margin:34px 0 20px;justify-content:center;text-align:center;font-size:17px;letter-spacing:.15em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent">Send art files to complete your order</div>
         <div class="qcard">
           <div class="qc" style="text-align:center;font-size:15.5px;color:var(--ink)">Fill out the form for your pre-press quote. <button type="button" id="prepress-link" class="pplink">What's pre-press? →</button></div>
+          <div id="qf-order" class="qf-order" hidden><div class="qfo-head">Your order <span class="qfo-sum" id="qfo-sum"></span></div><div class="qfo-items" id="qfo-items"></div></div>
           <form id="quoteform" class="qform">
             <input class="qin" type="text" id="qf-name" placeholder="Your name" autocomplete="name">
             <input class="qin" type="email" id="qf-email" placeholder="Email" autocomplete="email">
@@ -1291,6 +1299,23 @@
     var files=[], MAX=22*1024*1024;
     var noArt=false, noartBox=document.getElementById('noart-box');
     if(noartBox) noartBox.addEventListener('change',function(){ noArt=this.checked; setStatus('',''); });
+
+    // #1 show the basket order summary in the form; #2 adapt the details placeholder to context
+    var detEl=document.getElementById('qf-details');
+    function renderOrder(){
+      var box=document.getElementById('qf-order'), items=document.getElementById('qfo-items'), sum=document.getElementById('qfo-sum');
+      var cart=[]; try{ cart=JSON.parse(localStorage.getItem('st_cart')||'[]'); }catch(e){}
+      if(!cart.length){ if(box) box.hidden=true; if(detEl) detEl.placeholder='What are you ordering? (size, qty, finish, deadline)'; return; }
+      var total=0;
+      items.innerHTML=cart.map(function(i){ var line=(+i.qty||0)*(parseFloat(i.pr)||0); total+=line;
+        return '<div class="qfo-row"><span class="qfo-q">'+esc(i.qty)+'×</span><span class="qfo-p">'+esc(i.p)+' — '+esc(i.m)+' / '+esc(i.f)+'</span><span class="qfo-pr">$'+line.toFixed(2)+'</span></div>'; }).join('');
+      sum.textContent=cart.length+' item'+(cart.length>1?'s':'')+' · $'+total.toFixed(2);
+      box.hidden=false;
+      if(detEl) detEl.placeholder='Deadline + any notes (optional)';
+    }
+    renderOrder();
+    var cartEl=document.getElementById('cartbtn');
+    if(cartEl && window.MutationObserver){ new MutationObserver(renderOrder).observe(cartEl,{childList:true,subtree:true,characterData:true}); }
     function fmt(n){ return n>1048576 ? (n/1048576).toFixed(1)+' MB' : Math.max(1,Math.round(n/1024))+' KB'; }
     function total(){ return files.reduce(function(a,f){return a+f.size;},0); }
     function render(){
