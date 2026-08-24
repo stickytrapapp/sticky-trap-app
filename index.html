@@ -261,6 +261,7 @@
   .tabbar button{background:none;border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;color:#9a92c8;font-size:9.5px;font-weight:700;font-family:inherit;padding:2px 6px}
   .tabbar button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
   .tabbar button.on{color:var(--mag)}
+  .tabbar button.on svg{stroke:url(#navgrad);stroke-width:2.2;filter:drop-shadow(0 0 4px rgba(138,43,226,.6)) drop-shadow(0 0 7px rgba(255,31,162,.35))}
   .installbar{position:fixed;left:12px;right:12px;bottom:calc(14px + var(--safe-b));max-width:476px;margin:0 auto;z-index:6;display:flex;align-items:center;gap:10px;background:rgba(20,16,46,.97);color:#fff;border:1px solid rgba(138,77,255,.45);border-radius:15px;padding:11px 12px;box-shadow:0 14px 34px rgba(0,0,0,.45)}
   .installbar[hidden]{display:none}
   .ib-ic{width:36px;height:36px;border-radius:9px;flex:none}
@@ -288,9 +289,10 @@
   </div>
 
   <nav class="tabbar" id="tabs">
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="navgrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#12C4FF"/><stop offset=".5" stop-color="#8A2BE2"/><stop offset="1" stop-color="#FF1FA2"/></linearGradient></defs></svg>
     <button class="on" data-tab="industry"><svg viewBox="0 0 24 24"><path d="M5 4h11v16H5z"/><path d="M8 8h5M8 11h5M8 14h4"/></svg>Industry</button>
     <button data-tab="social"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.6M8.2 13.2l7.6 4.6"/></svg>Social</button>
-    <button data-tab="menu"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>Menu</button>
+    <button data-tab="menu"><svg viewBox="0 0 24 24"><path d="M5 6a2 2 0 012-2h8l4 4v10a2 2 0 01-2 2H7a2 2 0 01-2-2z"/><path d="M15 4v3a2 2 0 002 2h3"/><path d="M8 12.5h6M8 16h4"/></svg>Menu</button>
     <button data-tab="specs"><svg viewBox="0 0 24 24"><path d="M12 3l8 4.5-8 4.5-8-4.5z"/><path d="M4 12l8 4.5 8-4.5M4 16l8 4.5 8-4.5"/></svg>Specs</button>
     <button data-tab="connect"><svg viewBox="0 0 24 24"><path d="M9 15l6-6M8 12l-2 2a3.5 3.5 0 005 5l2-2M16 12l2-2a3.5 3.5 0 00-5-5l-2 2"/></svg>Connect</button>
   </nav>
