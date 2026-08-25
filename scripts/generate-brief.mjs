@@ -56,25 +56,38 @@ After researching, output the brief as a single JSON object between the exact ma
 Both "local" and "national" must have exactly 5 items.`;
 
 async function callAnthropic() {
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'x-api-key': API_KEY,
-      'anthropic-version': '2023-06-01',
-      'content-type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: MODEL,
-      max_tokens: 8000,
-      tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: 10 }],
-      messages: [{ role: 'user', content: PROMPT }],
-    }),
-  });
-  if (!res.ok) {
-    const body = await res.text();
-    throw new Error(`Anthropic API ${res.status}: ${body.slice(0, 1000)}`);
+  // The web_search tool can return stop_reason "pause_turn" when a search runs long;
+  // feed the partial turn back and continue until the model finishes (end_turn).
+  const messages = [{ role: 'user', content: PROMPT }];
+  let last = null;
+  for (let turn = 0; turn < 8; turn++) {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'x-api-key': API_KEY,
+        'anthropic-version': '2023-06-01',
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: MODEL,
+        max_tokens: 12000,
+        tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: 8 }],
+        messages,
+      }),
+    });
+    if (!res.ok) {
+      const body = await res.text();
+      throw new Error(`Anthropic API ${res.status}: ${body.slice(0, 1000)}`);
+    }
+    last = await res.json();
+    console.log(`turn ${turn}: stop_reason=${last.stop_reason} blocks=${(last.content || []).map((b) => b.type).join(',')}`);
+    if (last.stop_reason === 'pause_turn') {
+      messages.push({ role: 'assistant', content: last.content });
+      continue;
+    }
+    return last;
   }
-  return res.json();
+  return last;
 }
 
 function extractText(msg) {
@@ -91,12 +104,16 @@ function parseBrief(text) {
   if (start !== -1 && end !== -1 && end > start) {
     json = text.slice(start + '===BRIEF_START==='.length, end).trim();
   } else {
-    // Fallback: grab the outermost JSON object that mentions "local".
-    const m = text.match(/\{[\s\S]*"local"[\s\S]*\}/);
-    if (!m) throw new Error('No brief JSON found in model output:\n' + text.slice(0, 2000));
-    json = m[0];
+    // Fallbacks: a ```json fence, then the outermost object mentioning "local".
+    let m = text.match(/```(?:json)?\s*([\s\S]*?)```/);
+    if (m && /"local"/.test(m[1])) json = m[1].trim();
+    else {
+      m = text.match(/\{[\s\S]*"local"[\s\S]*\}/);
+      if (!m) throw new Error('No brief JSON found. text[0..1500]=\n' + text.slice(0, 1500));
+      json = m[0];
+    }
   }
-  return JSON.parse(json);
+  return JSON.parse(json.replace(/^```(?:json)?/, '').replace(/```$/, '').trim());
 }
 
 function validate(brief) {
@@ -117,23 +134,28 @@ function validate(brief) {
   if (problems.length) throw new Error('Brief validation failed: ' + problems.join('; '));
 }
 
-(async () => {
+async function generate() {
   const msg = await callAnthropic();
   const text = extractText(msg);
+  if (!text.trim()) {
+    throw new Error(`Empty model text. stop_reason=${msg && msg.stop_reason} blocks=${(msg && msg.content || []).map((b) => b.type).join(',')}`);
+  }
   const brief = parseBrief(text);
-
-  // Force the authoritative date and required fixed fields.
   brief.date = today;
   brief.label = 'Morning Brief';
   validate(brief);
+  return brief;
+}
 
-  const file = {
-    updated: today,
-    channel: CHANNEL,
-    briefs: [brief],
-  };
+(async () => {
+  let brief = null, lastErr = null;
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try { brief = await generate(); break; }
+    catch (e) { lastErr = e; console.error(`Attempt ${attempt} failed: ${e.message}`); }
+  }
+  if (!brief) { console.error(lastErr && (lastErr.stack || String(lastErr))); process.exit(1); }
 
-  // Only rewrite if content actually changed (keeps history clean).
+  const file = { updated: today, channel: CHANNEL, briefs: [brief] };
   let prev = '';
   try { prev = readFileSync(OUT, 'utf8'); } catch {}
   const next = JSON.stringify(file, null, 2) + '\n';
@@ -143,7 +165,4 @@ function validate(brief) {
   }
   writeFileSync(OUT, next);
   console.log(`Wrote ${OUT} for ${today}: ${brief.title}`);
-})().catch((err) => {
-  console.error(err.stack || String(err));
-  process.exit(1);
-});
+})();
