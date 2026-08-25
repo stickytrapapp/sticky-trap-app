@@ -189,6 +189,20 @@
   .view.menuview{padding:0}
   .view.menuview.active{display:block}
   .menu-specials{padding:16px 16px 10px}
+  .savedbar{margin-top:12px;display:flex;flex-direction:column;gap:10px}
+  .saved-row{display:flex;gap:8px;flex-wrap:wrap}
+  .saved-btn{flex:1;min-width:150px;border:0;cursor:pointer;font-family:inherit;font-weight:800;font-size:13px;padding:12px 14px;border-radius:12px;transition:.15s}
+  .saved-btn.reorder{background:var(--grad);color:#0A0A0F;box-shadow:0 6px 18px rgba(138,77,255,.35)}
+  .saved-btn.savefav{background:rgba(255,255,255,.07);border:1px solid var(--line);color:var(--soft)}
+  .saved-btn.savefav:hover{border-color:rgba(234,184,75,.5);color:var(--gold)}
+  .saved-btn:active{transform:translateY(1px)}
+  .saved-lbl{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:2px 0 7px}
+  .favlist{display:flex;flex-wrap:wrap;gap:8px}
+  .favchip{display:inline-flex;align-items:stretch;border:1px solid var(--line);border-radius:11px;overflow:hidden;background:rgba(255,255,255,.05)}
+  .favload{background:none;border:0;cursor:pointer;font-family:inherit;font-weight:700;font-size:12.5px;color:var(--ink);padding:8px 11px}
+  .favmeta{color:var(--muted);font-weight:600;font-size:11px}
+  .favdel{background:none;border:0;border-left:1px solid var(--line);cursor:pointer;color:var(--muted);font-weight:800;padding:0 11px;font-size:12px}
+  .favdel:hover{color:var(--mag)}
   .view.menuview #stmenu{overflow-x:clip;overflow-y:visible}
   /* keep the off-screen basket drawer/overlay from peeking on some phone widths — only show when open (.on) */
   #stmenu .drawer:not(.on),#stmenu .overlay:not(.on){visibility:hidden}
@@ -368,7 +382,13 @@
         <div class="p" style="margin-top:-4px">This is just a partial menu — live pricing on our most-ordered items. Don't see what you need? Just ask.</div>
         <div class="lbl" id="specials-lbl" style="margin-top:9px">Specials &amp; promos</div>
         <div id="specials"></div>
-
+        <div id="savedbar" class="savedbar" hidden>
+          <div class="saved-row">
+            <button type="button" id="reorder-btn" class="saved-btn reorder" hidden></button>
+            <button type="button" id="savefav-btn" class="saved-btn savefav" hidden>★ Save this basket</button>
+          </div>
+          <div id="favwrap" hidden><div class="saved-lbl">Favorites</div><div id="favlist" class="favlist"></div></div>
+        </div>
       </div>
       <style>
 #stmenu{
@@ -880,6 +900,17 @@
   renderRecent();
   // restored-basket note
   if(CART.length){setTimeout(function(){toast('Basket restored - '+CART.length+' item'+(CART.length>1?'s':''));},600);}
+
+  // ---- public API for app-shell Reorder / Favorites (load a saved basket) ----
+  function loadBasket(items){
+    if(!items||!items.length) return false;
+    CART=items.map(function(i){return {k:i.k||key(i.p,i.m,i.f),p:i.p,m:i.m,f:i.f,pr:i.pr,qty:clampQ(i.qty)};});
+    save(); renderCart();
+    var cb=$('cartbtn'); if(cb){cb.classList.remove('pulse');void cb.offsetWidth;cb.classList.add('pulse');}
+    toast('Basket loaded - '+CART.length+' item'+(CART.length>1?'s':''));
+    return true;
+  }
+  window.STM={ load:loadBasket, get:function(){return CART.map(function(i){return {k:i.k,p:i.p,m:i.m,f:i.f,pr:i.pr,qty:i.qty};});} };
 })();
 
 </script>
@@ -1355,7 +1386,7 @@
       e.preventDefault();
       var email=(document.getElementById('qf-email').value||'').trim();
       if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ setStatus('Add your email so we can send the quote.','err'); return; }
-      var basket='', basketCount=0; try{ var c=JSON.parse(localStorage.getItem('st_cart')||'[]'); basketCount=c.length; if(c.length) basket=c.map(function(i){return i.qty+'x '+i.p+' — '+i.m+' / '+i.f+' ($'+i.pr+' ea)';}).join('\n'); }catch(err){}
+      var basket='', basketCount=0; try{ var c=JSON.parse(localStorage.getItem('st_cart')||'[]'); basketCount=c.length; if(c.length){ basket=c.map(function(i){return i.qty+'x '+i.p+' — '+i.m+' / '+i.f+' ($'+i.pr+' ea)';}).join('\n'); localStorage.setItem('st_lastorder', JSON.stringify(c)); } }catch(err){}
       var details='';
       if(!files.length && !noArt){ setStatus('Art files are required for a pre-press quote — or tap “Place a sticker order without art” to order without them.','err'); return; }
       if(!files.length && noArt && !basketCount){ setStatus('Add items to your basket so we know what to make.','err'); return; }
@@ -1420,6 +1451,40 @@
         var nm=document.getElementById('qf-name'); if(nm){ try{nm.focus({preventScroll:true});}catch(e){} }
       },170);
     });
+  })();
+
+  /* ---- Saved bar: device-local Reorder + Favorites (no login) ---- */
+  (function(){
+    var LKEY='st_lastorder', FKEY='st_favs';
+    var bar=document.getElementById('savedbar'); if(!bar) return;
+    var reBtn=document.getElementById('reorder-btn'), saveBtn=document.getElementById('savefav-btn'),
+        favWrap=document.getElementById('favwrap'), favList=document.getElementById('favlist');
+    function rj(k){ try{return JSON.parse(localStorage.getItem(k)||'[]')||[];}catch(e){return [];} }
+    function wj(k,v){ try{localStorage.setItem(k,JSON.stringify(v));}catch(e){} }
+    function sum(items){ return items.reduce(function(s,i){return s+(+i.qty||0)*(parseFloat(i.pr)||0);},0); }
+    function render(){
+      var cart=rj('st_cart'), last=rj(LKEY), favs=rj(FKEY), any=false;
+      if(last.length){ reBtn.hidden=false; reBtn.textContent='↻ Reorder last order · '+last.length+' item'+(last.length>1?'s':''); any=true; } else reBtn.hidden=true;
+      if(cart.length){ saveBtn.hidden=false; any=true; } else saveBtn.hidden=true;
+      if(favs.length){ favWrap.hidden=false; any=true;
+        favList.innerHTML=favs.map(function(f,i){ return '<div class="favchip"><button type="button" class="favload" data-i="'+i+'">★ '+esc(f.name)+' <span class="favmeta">'+f.items.length+' · $'+sum(f.items).toFixed(2)+'</span></button><button type="button" class="favdel" data-i="'+i+'" aria-label="Remove favorite">✕</button></div>'; }).join('');
+      } else favWrap.hidden=true;
+      bar.hidden=!any;
+    }
+    reBtn.addEventListener('click',function(){ var last=rj(LKEY); if(window.STM&&last.length){ window.STM.load(last); } });
+    saveBtn.addEventListener('click',function(){
+      var cart=(window.STM&&window.STM.get())||rj('st_cart'); if(!cart.length) return;
+      var name=(window.prompt('Name this favorite (e.g. "My usual")','My usual')||'').trim(); if(!name) return;
+      var favs=rj(FKEY); favs.unshift({name:name.slice(0,32), items:cart}); wj(FKEY,favs.slice(0,8)); render();
+    });
+    favList.addEventListener('click',function(e){
+      var l=e.target.closest('.favload'), d=e.target.closest('.favdel'), favs=rj(FKEY);
+      if(l){ var f=favs[+l.getAttribute('data-i')]; if(f&&window.STM) window.STM.load(f.items); }
+      else if(d){ favs.splice(+d.getAttribute('data-i'),1); wj(FKEY,favs); render(); }
+    });
+    render();
+    var cartEl=document.getElementById('cartbtn');
+    if(cartEl && window.MutationObserver){ new MutationObserver(render).observe(cartEl,{childList:true,subtree:true,characterData:true}); }
   })();
 
   /* ---- init: open tab from hash ---- */
