@@ -740,8 +740,7 @@
     b.addEventListener('click',function(){var a=b.parentNode,o=a.classList.toggle('open');b.setAttribute('aria-expanded',o?'true':'false');});
   });
   // open the first product by default so the layout reads at a glance
-  var firstAcc=ROOT.querySelector('.acc');
-  if(firstAcc){firstAcc.classList.add('open');var fb=firstAcc.querySelector('.accbtn');if(fb)fb.setAttribute('aria-expanded','true');}
+  /* products start collapsed for a cleaner overview */
   // per-product quantity + tap-a-material-to-select + Add-per-row
   function fmtVol(base,v){return money(Math.floor(base*cmult(v)*100+0.5)/100);}
   function discLabel(v){var m=cmult(v);return m>=1?'base price':('-'+Math.round((1-m)*100)+'% off');}
@@ -894,7 +893,6 @@
             <input class="qin" type="email" id="qf-email" placeholder="Email" autocomplete="email">
             <input class="qin" type="tel" id="qf-phone" placeholder="Phone (optional)" autocomplete="tel">
             <div class="qdeadline"><span class="qd-lbl">When do you need it?</span><div class="qd-chips"><button type="button" class="qd-chip" data-v="Rush (ASAP)">Rush</button><button type="button" class="qd-chip" data-v="Within ~1 week">~1 week</button><button type="button" class="qd-chip" data-v="Flexible">Flexible</button></div></div>
-            <textarea class="qin" id="qf-details" rows="2" placeholder="What are you ordering? (size, qty, finish)"></textarea>
             <div class="qdrop" id="qf-drop" tabindex="0" role="button" aria-label="Add your art files">
               <div class="qdrop-in">📎 <b>Drag your art files here</b><br><span>or tap to choose · PDF · AI · EPS · PNG · JPG · SVG</span></div>
             </div>
@@ -1358,9 +1356,9 @@
       var email=(document.getElementById('qf-email').value||'').trim();
       if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ setStatus('Add your email so we can send the quote.','err'); return; }
       var basket='', basketCount=0; try{ var c=JSON.parse(localStorage.getItem('st_cart')||'[]'); basketCount=c.length; if(c.length) basket=c.map(function(i){return i.qty+'x '+i.p+' — '+i.m+' / '+i.f+' ($'+i.pr+' ea)';}).join('\n'); }catch(err){}
-      var details=(document.getElementById('qf-details').value||'').trim();
+      var details='';
       if(!files.length && !noArt){ setStatus('Art files are required for a pre-press quote — or tap “Place a sticker order without art” to order without them.','err'); return; }
-      if(!files.length && noArt && !basketCount && !details){ setStatus('Add items to your basket or describe your order so we know what to make.','err'); return; }
+      if(!files.length && noArt && !basketCount){ setStatus('Add items to your basket so we know what to make.','err'); return; }
       if(total()>MAX){ setStatus('Files over ~20MB — email them to thestickytrap@ instead.','err'); return; }
       submit.disabled=true; submit.textContent='Sending…'; setStatus('','');
       Promise.all(files.map(function(f){ return readB64(f).then(function(b64){ return {name:f.name, mime:f.type, b64:b64}; }); })).then(function(pf){
