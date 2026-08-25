@@ -161,6 +161,11 @@
   .qcard .qfo-p{flex:1;min-width:0}
   .qcard .qfo-pr{color:var(--ink);font-weight:700;flex:none}
   .qcard .qdrop.dropdim{opacity:.35;filter:grayscale(.4)}
+  .qcard .qd-lbl{display:block;font-size:12px;color:var(--soft);font-weight:700;margin:2px 2px 7px}
+  .qcard .qd-chips{display:flex;gap:8px;flex-wrap:wrap}
+  .qcard .qd-chip{flex:1;min-width:80px;background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--soft);font-weight:800;font-size:13px;padding:10px 8px;border-radius:11px;cursor:pointer;font-family:inherit;transition:.12s}
+  .qcard .qd-chip:hover{border-color:rgba(18,196,255,.4)}
+  .qcard .qd-chip.on{background:var(--grad);color:#0A0A0F;border-color:transparent}
   .pricematch{text-align:center;padding:4px 0 2px}
   .pm-h{font-size:16px;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
   .pm-btn{display:inline-flex;align-items:center;gap:7px;margin-top:12px;background:var(--grad);color:#fff;font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;padding:12px 22px;border-radius:999px;box-shadow:0 8px 20px rgba(138,77,255,.42)}
@@ -888,7 +893,8 @@
             <input class="qin" type="text" id="qf-name" placeholder="Your name" autocomplete="name">
             <input class="qin" type="email" id="qf-email" placeholder="Email" autocomplete="email">
             <input class="qin" type="tel" id="qf-phone" placeholder="Phone (optional)" autocomplete="tel">
-            <textarea class="qin" id="qf-details" rows="2" placeholder="What are you ordering? (size, qty, finish, deadline)"></textarea>
+            <div class="qdeadline"><span class="qd-lbl">When do you need it?</span><div class="qd-chips"><button type="button" class="qd-chip" data-v="Rush (ASAP)">Rush</button><button type="button" class="qd-chip" data-v="Within ~1 week">~1 week</button><button type="button" class="qd-chip" data-v="Flexible">Flexible</button></div></div>
+            <textarea class="qin" id="qf-details" rows="2" placeholder="What are you ordering? (size, qty, finish)"></textarea>
             <div class="qdrop" id="qf-drop" tabindex="0" role="button" aria-label="Add your art files">
               <div class="qdrop-in">📎 <b>Drag your art files here</b><br><span>or tap to choose · PDF · AI · EPS · PNG · JPG · SVG</span></div>
             </div>
@@ -1172,7 +1178,7 @@
       var flat=[]; b.sections.forEach(function(s){(s.items||[]).forEach(function(it){flat.push(it);});});
       var mid=Math.ceil(flat.length/2); local=flat.slice(0,mid); natl=flat.slice(mid);
     }
-    var h='<div class="lede"><div class="k">'+esc(b.label||'Morning Brief')+' · '+esc(b.date||'')+'</div>'+
+    var h='<div class="lede"><div class="k">'+esc(b.label||'Morning Brief')+' · '+esc(b.date||'')+' · Updated daily</div>'+
           '<h3>'+esc(b.title||'')+'</h3><p>'+esc(b.top||'')+'</p></div>';
     if(local&&local.length) h+='<div class="scopehead"><span class="sh-t">Local</span><span class="sh-b local">Detroit · Ann Arbor</span></div>'+wires_(local);
     if(natl&&natl.length)  h+='<div class="scopehead"><span class="sh-t">National</span><span class="sh-b natl">U.S.</span></div>'+wires_(natl);
@@ -1310,17 +1316,25 @@
     function renderOrder(){
       var box=document.getElementById('qf-order'), items=document.getElementById('qfo-items'), sum=document.getElementById('qfo-sum');
       var cart=[]; try{ cart=JSON.parse(localStorage.getItem('st_cart')||'[]'); }catch(e){}
-      if(!cart.length){ if(box) box.hidden=true; if(detEl) detEl.placeholder='What are you ordering? (size, qty, finish, deadline)'; return; }
+      if(!cart.length){ if(box) box.hidden=true; if(detEl) detEl.placeholder='What are you ordering? (size, qty, finish)'; return; }
       var total=0;
       items.innerHTML=cart.map(function(i){ var line=(+i.qty||0)*(parseFloat(i.pr)||0); total+=line;
         return '<div class="qfo-row"><span class="qfo-q">'+esc(i.qty)+'×</span><span class="qfo-p">'+esc(i.p)+' — '+esc(i.m)+' / '+esc(i.f)+'</span><span class="qfo-pr">$'+line.toFixed(2)+'</span></div>'; }).join('');
       sum.textContent=cart.length+' item'+(cart.length>1?'s':'')+' · $'+total.toFixed(2);
       box.hidden=false;
-      if(detEl) detEl.placeholder='Deadline + any notes (optional)';
+      if(detEl) detEl.placeholder='Anything else? (optional)';
     }
     renderOrder();
     var cartEl=document.getElementById('cartbtn');
     if(cartEl && window.MutationObserver){ new MutationObserver(renderOrder).observe(cartEl,{childList:true,subtree:true,characterData:true}); }
+
+    // deadline quick-pick (single-select; included in the submission)
+    var deadline='', dchips=document.querySelectorAll('.qd-chip');
+    dchips.forEach(function(c){ c.addEventListener('click',function(){
+      var on=c.classList.contains('on');
+      dchips.forEach(function(x){x.classList.remove('on');});
+      if(!on){ c.classList.add('on'); deadline=c.getAttribute('data-v'); } else { deadline=''; }
+    }); });
     function fmt(n){ return n>1048576 ? (n/1048576).toFixed(1)+' MB' : Math.max(1,Math.round(n/1024))+' KB'; }
     function total(){ return files.reduce(function(a,f){return a+f.size;},0); }
     function render(){
@@ -1351,7 +1365,7 @@
       submit.disabled=true; submit.textContent='Sending…'; setStatus('','');
       Promise.all(files.map(function(f){ return readB64(f).then(function(b64){ return {name:f.name, mime:f.type, b64:b64}; }); })).then(function(pf){
         var payload={ action:'quote', name:document.getElementById('qf-name').value||'', email:email,
-          phone:document.getElementById('qf-phone').value||'', details:details, basket:basket, files:pf };
+          phone:document.getElementById('qf-phone').value||'', details:(deadline?('Deadline: '+deadline+(details?' — ':'')):'')+details, deadline:deadline, basket:basket, files:pf };
         return fetch(API,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
       }).then(function(){
         form.reset(); files=[]; render();
