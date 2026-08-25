@@ -5,60 +5,60 @@
     {
       "date": "2026-08-25",
       "label": "Morning Brief",
-      "title": "Michigan's 24% Squeeze Deepens as Washington Fast-Tracks Schedule III and Curaleaf Goes Hostile on Aurora",
-      "top": "Michigan's wholesale tax fight is now a full-blown election issue as closures pile up in the U.P. and Lansing, while in D.C. the DEA's rescheduling machine keeps grinding forward and Curaleaf turns up the heat on its Aurora takeover bid. Psychedelics are having a parallel moment, with Compass Pathways' psilocybin program picking up FDA fast-track status.",
+      "title": "Transcript Drops, Tax Fight Turns Political: Momentum Builds on Both Fronts",
+      "top": "The DEA just made the full 2,533-page rescheduling hearing transcript public, moving marijuana a step closer to a judge's recommendation on Schedule III/II status, while psychedelics notch fresh regulatory wins for psilocybin and MDMA therapy. In Michigan, the 24% wholesale tax fight is now a genuine campaign issue and a legislative target for repeal, even as C3 Industries keeps opening new stores and state cash keeps flowing to local governments.",
       "local": [
         {
-          "text": "MiCIA's second lawsuit—joined by grower Mitten Distro X LLC and retailer Refine Michigan Co.—argues the 24% wholesale tax operates like a sales tax and creates unconstitutional \"tax pyramiding,\" while a separate constitutional challenge over the same law is already headed toward trial.",
-          "source": "Law Commentary",
-          "url": "https://www.lawcommentary.com/articles/michigan-cannabis-industry-files-second-lawsuit-challenging-24-marijuana-wholesale-tax"
+          "text": "Ann Arbor-based C3 Industries opened a new High Profile Cannabis dispensary in Luna Pier, right on the Michigan-Ohio border, betting on cross-border traffic from Toledo as part of its continued retail expansion strategy.",
+          "source": "Cannabis Business Times",
+          "url": "https://www.cannabisbusinesstimes.com/dispensary/news/15818419/high-profile-cannabis-opens-michigan-dispensary-minutes-from-toledo-ohio"
         },
         {
-          "text": "Michigan's 2025 cannabis revenue fell roughly $113 million to $3.17 billion even as growers produced nearly 260,000 more pounds of flower, a margin collapse MiCIA director Robin Schneider has called devastating for operators.",
-          "source": "Your Trimmers",
-          "url": "https://yourtrimmers.com/the-2026-reckoning-why-michigans-cannabis-industry-is-at-a-breaking-point/"
-        },
-        {
-          "text": "Upper Peninsula chain Higher Love shut its Crystal Falls, Escanaba, Houghton, Munising and Ontonagon dispensaries this month, pointing to \"the mounting tax burden on Michigan's adult-use cannabis industry\" as it consolidates to four remaining stores.",
-          "source": "The Mining Gazette",
-          "url": "https://www.mininggazette.com/news/local-news/2026/08/cannabis-store-closing/"
-        },
-        {
-          "text": "The Michigan Supreme Court reset enforcement ground rules this summer, ruling in People v. Hess that MRTMA-compliant marijuana use can't be barred as a probation condition just because it violates federal law, a companion decision to its ruling curbing vehicle searches based on marijuana odor alone.",
-          "source": "cann.dev",
-          "url": "https://www.cann.dev/michigan-cannabis-supreme-court-rulings/"
-        },
-        {
-          "text": "With Whitmer term-limited, GOP gubernatorial nominee John James used his \"Freedom Agenda\" rollout to vow repealing or rolling back the wholesale tax, saying it \"drives up prices, gives illegal operators a competitive edge, and has already fallen far short of revenue projections,\" while also pledging a crackdown on unregulated hemp THC products.",
+          "text": "GOP gubernatorial nominee John James unveiled a cannabis platform pledging to repeal or sharply reduce the 24% wholesale tax if elected, arguing it 'drives up prices, gives illegal operators a competitive edge, and has already fallen far short of revenue projections' — putting real relief on the November ballot.",
           "source": "Marijuana Moment",
           "url": "https://www.marijuanamoment.net/michigan-gop-governor-candidate-pledges-huge-tax-cut-for-marijuana-industry-along-with-crackdown-on-hemp-products"
+        },
+        {
+          "text": "State Rep. James DeSana filed House Bill 6224, a one-line measure to repeal the wholesale tax outright, telling reporters 'it's time to repeal this failed tax and stop forcing taxpayers and businesses to pay for a policy that simply isn't working' — a bipartisan repeal push now has legs in Lansing.",
+          "source": "MMJ Daily",
+          "url": "https://www.mmjdaily.com/article/9862442/michigan-rep-desana-bills-to-repeal-24-wholesale-cannabis-tax-amid-business-closures/"
+        },
+        {
+          "text": "Even amid the tax fight, the Cannabis Regulatory Agency is distributing nearly $100 million in marijuana tax revenue to more than 300 local governments and tribes, direct proof the industry keeps funding real community infrastructure and services.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/michigan-gop-governor-candidate-pledges-huge-tax-cut-for-marijuana-industry-along-with-crackdown-on-hemp-products"
+        },
+        {
+          "text": "Higher Love Cannabis Co. is consolidating to four Upper Peninsula stores, citing the wholesale tax's 'mounting tax burden,' but the chain says those remaining locations are 'the foundation for the company going forward' as it joins other operators pushing lawmakers for balanced policy fixes.",
+          "source": "Detroit Metro Times",
+          "url": "https://www.metrotimes.com/weed-2/dispensary-chain-blames-michigans-24-cannabis-tax-as-it-closes-five-weed-stores/"
         }
       ],
       "national": [
         {
-          "text": "The DEA's marijuana-to-Schedule-III rulemaking cleared \"a critical procedural checkpoint on August 18, 2026,\" a step that would eliminate 280E tax penalties—cutting effective operator tax rates from roughly 60% to the mid-20s—while leaving federal prohibition and interstate commerce largely intact.",
-          "source": "CannIntel",
-          "url": "https://cannintel.com/laws/dea-cannabis-rescheduling-hits-key-milestone-august-2026"
+          "text": "The DEA released the full, corrected 2,533-page transcript of its marijuana rescheduling hearing today, clearing the way for Chief Administrative Law Judge Derek Julius to draft his recommendation on moving cannabis to Schedule II or III — the next concrete step toward federal reform.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/dea-releases-full-marijuana-rescheduling-hearing-transcript-as-judge-prepares-to-issue-his-recommendation"
         },
         {
-          "text": "Final briefs are now in from the DEA's cannabis rescheduling hearing, with the agency arguing opponents' case against Schedule III has \"no merit\" and pointing to an HHS report finding marijuana has a currently accepted medical use.",
-          "source": "GreenState",
-          "url": "https://www.greenstate.com/news/full-cannabis-rescheduling-hits-key-milestone/"
+          "text": "Compass Pathways landed an FDA rolling NDA review and a Commissioner's National Priority Voucher for COMP360 psilocybin in treatment-resistant depression, a designation that could shorten the review of COMP360 to one to two months after filing and puts the first potential FDA-approved psilocybin medicine on track for a first-half-2027 launch.",
+          "source": "PharmExec",
+          "url": "https://www.pharmexec.com/view/fda-priority-voucher-compass-psychedelic-treatment-resistant-depression"
         },
         {
-          "text": "The federal intoxicating-hemp ban is still on track for Nov. 12 despite industry pressure: the Senate passed a 30-day delay via stopgap funding on Aug. 8, but the House doesn't return until Aug. 31, and until it acts, the original deadline stands.",
-          "source": "Hemp Law Group",
-          "url": "https://www.hemplawgroup.com/news/federal-hemp-ban-2026-where-things-stand"
+          "text": "MDMA therapy for PTSD is back on the table: Resilient Pharmaceuticals (formerly Lykos/MAPS PBC) has resubmitted its NDA to the FDA without running a new Phase 3 trial, a notable comeback two years after the agency's rejection.",
+          "source": "MAPS",
+          "url": "https://maps.org/2026/08/10/maps-responds-to-report-of-progress-for-mdma-assisted-therapy-for-ptsd-with-fda/"
         },
         {
-          "text": "Curaleaf escalated its $272 million hostile takeover bid for Aurora Cannabis this week, accusing the company of \"hollow protests and completely misleading statistics\" after Aurora pushed back on Curaleaf's account of stalled merger talks.",
-          "source": "The Marijuana Herald",
-          "url": "https://themarijuanaherald.com/2026/08/curaleaf-fires-back-at-aurora-cannabis-as-hostile-takeover-battle-escalates/"
+          "text": "Trulieve Cannabis became the first plant-touching MSO to list on the NYSE (ticker TRLV), a milestone the company achieved via corporate restructuring following federal Schedule III reclassification — a signal that Wall Street's door is opening wider for cannabis operators.",
+          "source": "mg Magazine",
+          "url": "https://mgmagazine.com/business-strategy/finance-acquisitions-business-strategy/"
         },
         {
-          "text": "Compass Pathways' psilocybin candidate COMP360 landed an FDA National Priority Voucher promising a 1-2 month NDA review, part of a rolling-submission push toward a possible first-half-2027 launch that also hinges on a White House-directed DEA review of psychedelic rescheduling.",
-          "source": "Compass Pathways (IR)",
-          "url": "https://ir.compasspathways.com/News--Events-/news/news-details/2026/Compass-Pathways-Announces-Second-Quarter-and-First-Half-2026-Financial-Results-and-Business-Highlights/default.aspx"
+          "text": "Post-rescheduling deal flow is accelerating: acquisition fund Verdant is targeting single-state operators with at least $20 million in revenue and multiple locations, part of a wave of consolidation following the executive order directing cannabis to be reclassified as Schedule 3 — good news for strong regional brands looking for an exit or capital partner.",
+          "source": "MJBizDaily",
+          "url": "https://mjbizdaily.com/colorado-cannabis-retail-chain-purchase-signals-ma-shift/614866/"
         }
       ]
     }
