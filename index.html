@@ -678,7 +678,7 @@
 
 (function(){
   var ROOT=document.getElementById('stmenu')||document;
-  var MINQ=50, MAXQ=1000, STEP=50, SHOPVOL=100;
+  var MINQ=50, MAXQ=1000, STEP=5, SHOPVOL=100;
   // qty bands by upper bound: 50-250 = base (recipe-builder locked), then acquisition curve; >1000 = custom quote (relationship funnel)
   var BANDS=[[250,1.00],[500,0.94],[1000,0.90]];
   function cmult(q){for(var i=0;i<BANDS.length;i++){if(q<=BANDS[i][0])return BANDS[i][1];}return BANDS[BANDS.length-1][1];}
