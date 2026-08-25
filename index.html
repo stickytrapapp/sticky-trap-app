@@ -246,6 +246,8 @@
 
   /* connect — brand banner (dark, mirrors the header art) */
   .view.connectbanner{background:#08060f;color:#fff;min-height:100%;gap:20px;align-items:center;text-align:center;padding:24px 18px calc(34px + var(--safe-b))}
+  .cb-cta{display:block;width:100%;max-width:340px;background:var(--grad);color:#0A0A0F;font-weight:800;font-size:15px;letter-spacing:.02em;padding:15px 20px;border:0;border-radius:26px;cursor:pointer;font-family:inherit;box-shadow:0 8px 24px rgba(138,77,255,.42);transition:.15s}
+  .cb-cta:active{transform:translateY(1px)}
   .cb-contacts{display:flex;flex-direction:column;gap:15px;width:100%;max-width:340px}
   .cb-item{display:flex;flex-direction:column;gap:4px;border-top:1px solid rgba(255,255,255,.16);padding-top:9px;text-align:left}
   .cb-lbl{font-size:12px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:#ef1f78}
@@ -330,7 +332,7 @@
     <section class="view" data-view="social">
       <h2 class="vtitle">Social</h2>
       <div class="p" style="margin-top:-4px">Follow along and watch the latest.</div>
-      <div class="lbl">Don't miss</div>
+      <div class="lbl" id="dontmiss-lbl">Don't miss</div>
       <a class="tkt-hero" id="tkt-hero" href="https://eventhi.io/events/the-resin-reception-14961?utm_source=stickytrap_app&utm_medium=app&utm_content=get_tickets" target="_blank" rel="noopener">
         <div class="tkt-media">
           <img src="img/resin-reception.jpg" alt="The Resin Reception — Wild Style strain release party" loading="lazy">
@@ -1051,9 +1053,12 @@
 
     <!-- CONNECT (brand banner) -->
     <section class="view connectbanner" data-view="connect">
+      <button type="button" class="cb-cta" id="connect-quote">✦ Start a project — get a quote &rarr;</button>
       <div class="cb-contacts">
         <a class="cb-item" href="tel:+17344603845"><span class="cb-lbl">Call</span><span class="cb-val">734 460 3845</span></a>
         <a class="cb-item" href="mailto:thestickytrap@gmail.com"><span class="cb-lbl">Email</span><span class="cb-val">thestickytrap@gmail.com</span></a>
+        <a class="cb-item" href="https://www.google.com/maps/search/?api=1&amp;query=The+Sticky+Trap+Ann+Arbor+MI" target="_blank" rel="noopener"><span class="cb-lbl">Visit</span><span class="cb-val">4750 Venture Dr, Ste 101 · Ann Arbor, MI</span></a>
+        <a class="cb-item" href="https://www.google.com/maps/search/?api=1&amp;query=The+Sticky+Trap+Ann+Arbor+MI" target="_blank" rel="noopener"><span class="cb-lbl">Reviews</span><span class="cb-val"><span style="color:#EAB84B">★</span> 4.7 on Google · 26 reviews</span></a>
         <a class="cb-item" href="https://www.instagram.com/the_stickytrap/" target="_blank" rel="noopener"><span class="cb-lbl">Instagram</span><span class="cb-val">@the_stickytrap</span></a>
       </div>
       <div class="cb-row">
@@ -1236,7 +1241,7 @@
     var el=document.getElementById('tkt-count'); if(!el) return;
     var ev=new Date(2026,8,26), now=new Date(), t=new Date(now.getFullYear(),now.getMonth(),now.getDate());
     var n=Math.round((ev-t)/86400000), hero=document.getElementById('tkt-hero'), rib=document.getElementById('ev-ribbon');
-    if(n<0){ if(hero)hero.style.display='none'; if(rib)rib.style.display='none'; return; }
+    if(n<0){ if(hero)hero.style.display='none'; if(rib)rib.style.display='none'; var dm=document.getElementById('dontmiss-lbl'); if(dm)dm.style.display='none'; return; }
     el.textContent = n===0?'🎟 Tonight':n===1?'🎟 Tomorrow':'🎟 In '+n+' days';
   })();
 
@@ -1387,6 +1392,20 @@
         v.scrollTop = v.scrollTop + (er.top - vr.top) - 24;
         el.style.transition='background .3s,border-radius .3s'; el.style.borderRadius='8px'; el.style.background='rgba(18,196,255,.13)';
         setTimeout(function(){ el.style.background='transparent'; },1500);
+      },170);
+    });
+  })();
+
+  /* ---- Connect: "get a quote" jumps to the Menu order form ---- */
+  (function(){
+    var b=document.getElementById('connect-quote'); if(!b) return;
+    b.addEventListener('click',function(){
+      go('menu');
+      setTimeout(function(){
+        var q=document.getElementById('quoteform'), v=document.querySelector('.views'); if(!q||!v) return;
+        var qr=q.getBoundingClientRect(), vr=v.getBoundingClientRect();
+        v.scrollTop = v.scrollTop + (qr.top - vr.top) - 24;
+        var nm=document.getElementById('qf-name'); if(nm){ try{nm.focus({preventScroll:true});}catch(e){} }
       },170);
     });
   })();
