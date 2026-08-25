@@ -454,6 +454,10 @@
 #stmenu .qi2{width:62px;height:32px;background:var(--panel-2);border:1px solid var(--line-2);border-radius:8px;color:var(--paper);font:inherit;font-size:15px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;outline:none;-moz-appearance:textfield}
 #stmenu .qi2:focus{border-color:var(--cy)}
 #stmenu .qi2::-webkit-outer-spin-button, #stmenu .qi2::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+#stmenu .volnudge{display:block;width:100%;margin:9px 0 0;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.4);color:#4ade80;font-weight:800;font-size:12.5px;padding:9px 12px;border-radius:10px;cursor:pointer;font-family:inherit;text-align:center;transition:.15s}
+#stmenu .volnudge:hover{background:rgba(34,197,94,.2)}
+#stmenu .volnudge:active{transform:translateY(1px)}
+#stmenu .volnudge b{color:#4ade80}
 #stmenu .qdisc{font-size:12.5px;font-weight:800;margin-left:auto;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 #stmenu .hbtog{display:inline-flex;align-items:center;gap:5px;margin-left:12px;font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--cy);cursor:pointer;white-space:nowrap}
 #stmenu .hbtog input{accent-color:var(--cy);width:15px;height:15px;cursor:pointer;margin:0}
@@ -710,6 +714,12 @@
   // qty bands by upper bound: 50-250 = base (recipe-builder locked), then acquisition curve; >1000 = custom quote (relationship funnel)
   var BANDS=[[250,1.00],[500,0.94],[1000,0.90]];
   function cmult(q){for(var i=0;i<BANDS.length;i++){if(q<=BANDS[i][0])return BANDS[i][1];}return BANDS[BANDS.length-1][1];}
+  // next volume break just above q: bump 5 past a band edge to unlock the better rate on the whole order
+  function nextBreak(q){
+    if(q<=250) return {add:255-q, pct:6, target:255};
+    if(q<=500) return {add:505-q, pct:10, target:505};
+    return null;
+  }
   function unit(it){return Math.floor(it.pr*cmult(it.qty)*100+0.5)/100;}
   var CART=[]; try{CART=JSON.parse(localStorage.getItem('st_cart')||'[]')||[];}catch(e){CART=[];}
   var $=function(id){return ROOT.querySelector('#'+id);};
@@ -780,6 +790,18 @@
       if(document.activeElement!==qi) qi.value=q;
       if(qd) qd.textContent=discLabel(q);
       panel.querySelectorAll('.pbuy').forEach(function(b){var pr=b.querySelector('.pmpr'); if(pr) pr.textContent=fmtVol(actPr(b),q);});
+      // volume-break nudge: only when a few more pcs unlock the next discount
+      var nb=nextBreak(q), nudge=panel.querySelector('.volnudge');
+      if(nb && nb.add<=55){
+        if(!nudge){ nudge=document.createElement('button'); nudge.type='button'; nudge.className='volnudge';
+          var qbar=panel.querySelector('.qbar');
+          if(qbar&&qbar.parentNode) qbar.parentNode.insertBefore(nudge,qbar.nextSibling); else panel.insertBefore(nudge,panel.firstChild);
+          nudge.addEventListener('click',function(){ qi.value=parseInt(nudge.getAttribute('data-t'),10)||q; refresh(); });
+        }
+        nudge.setAttribute('data-t',nb.target);
+        nudge.innerHTML='↑ Add <b>'+nb.add+'</b> for <b>'+nb.pct+'% off</b> the whole order →';
+        nudge.hidden=false;
+      } else if(nudge){ nudge.hidden=true; }
     }
     if(qi){
       qi.addEventListener('focus',function(){qi.select();});
