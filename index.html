@@ -715,13 +715,13 @@
 (function(){
   var ROOT=document.getElementById('stmenu')||document;
   var MINQ=50, MAXQ=1000, STEP=5, SHOPVOL=100;
-  // qty bands by upper bound: 50-250 = base (recipe-builder locked), then acquisition curve; >1000 = custom quote (relationship funnel)
-  var BANDS=[[250,1.00],[500,0.94],[1000,0.90]];
+  // qty bands by upper bound: menu price up to 499, 6% off at 500, 10% off at 1000; >1000 = custom quote
+  var BANDS=[[499,1.00],[999,0.94],[1000,0.90]];
   function cmult(q){for(var i=0;i<BANDS.length;i++){if(q<=BANDS[i][0])return BANDS[i][1];}return BANDS[BANDS.length-1][1];}
-  // next volume break just above q: bump 5 past a band edge to unlock the better rate on the whole order
+  // next volume break: reach 500 for 6% off, 1000 for 10% off (applies to the whole order)
   function nextBreak(q){
-    if(q<=250) return {add:255-q, pct:6, target:255};
-    if(q<=500) return {add:505-q, pct:10, target:505};
+    if(q<500) return {add:500-q, pct:6, target:500};
+    if(q<1000) return {add:1000-q, pct:10, target:1000};
     return null;
   }
   function unit(it){return Math.floor(it.pr*cmult(it.qty)*100+0.5)/100;}
