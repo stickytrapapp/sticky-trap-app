@@ -1,3 +1,4 @@
+<meta charset="utf-8">
 <title>Square Send Checklist</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -60,6 +61,9 @@ input:checked ~ .txt{color:var(--ink-faint);text-decoration:line-through}
 .result .rlbl{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
 .result #out{font-family:"Archivo",sans-serif;font-weight:800;font-size:26px;color:var(--accent);font-variant-numeric:tabular-nums}
 .formula .ex{font-family:"JetBrains Mono",monospace;font-size:12.5px;color:var(--ink-soft);margin:12px 0 0}
+.formula .unit{font-family:"JetBrains Mono",monospace;font-size:14px;font-weight:700;color:var(--ink-soft)}
+.calc-row.hours-row{margin-bottom:12px}
+.calc-in input#hours,.calc-in input#rate{width:4ch}
 .note{margin:16px 2px 0;font-size:13.5px;color:var(--ink-soft);line-height:1.45}
 .note b{color:var(--ink);font-weight:600}
 .note.send{margin-top:16px;padding-top:14px;border-top:1px solid var(--hair);color:var(--ink)}
@@ -83,16 +87,22 @@ footer{margin-top:26px;font-family:"JetBrains Mono",monospace;font-size:11px;let
 
   <ul id="list"></ul>
 
-  <p class="note">These are usually <b>design-time</b> invoices — the price is <b>hours × $75</b>. Work that out, then drop the total in the box below.</p>
+  <p class="note">These are usually <b>design-time</b> invoices — <b>hours × $75/hr</b>. Enter your hours below and it works out the price and the amount to charge (or type a flat price straight in).</p>
 
   <div class="formula">
-    <span class="lbl">Amount to charge in Square</span>
+    <span class="lbl">Work out the charge</span>
+    <div class="calc-row hours-row">
+      <label class="calc-in"><input id="hours" type="number" inputmode="decimal" step="0.25" min="0" placeholder="0" aria-label="Design hours"></label>
+      <span class="unit">hrs&nbsp;×</span>
+      <label class="calc-in">$<input id="rate" type="number" inputmode="decimal" step="5" min="0" value="75" aria-label="Rate per hour"></label>
+      <span class="unit">/hr</span>
+    </div>
     <div class="calc-row">
-      <label class="calc-in">$<input id="price" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0.00" aria-label="Invoice total"></label>
+      <label class="calc-in">$<input id="price" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0.00" aria-label="Price (or type a flat amount)"></label>
       <span class="arrow" aria-hidden="true">→</span>
       <div class="result"><span class="rlbl">Charge in Square</span><span id="out">$0.00</span></div>
     </div>
-    <p class="ex">( price + $0.30 ) ÷ 0.968 — covers Square's fee so you net the full price.</p>
+    <p class="ex">Hours × rate = your price. Charge = ( price + $0.30 ) ÷ 0.968 — covers Square's fee so you net the full price.</p>
   </div>
 
   <p class="note">Tax-exempt customer? They need a signed <b>Michigan&nbsp;3372</b> on file — the blank is in the Team Files folder.</p>
@@ -140,13 +150,17 @@ list.addEventListener("change", e=>{
 document.getElementById("reset").addEventListener("click", ()=>{
   saved={}; try{localStorage.removeItem(KEY);}catch(e){}
   list.querySelectorAll('input[type=checkbox]').forEach(b=>b.checked=false);
-  price.value=""; calc();       // clear the calculator too
+  hours.value=""; rate.value="75"; price.value=""; calc();   // clear the calculator too
   refresh();
 });
 refresh();
 
-// fee calculator: price -> (price + 0.30) / 0.968
-const price=document.getElementById("price"), out=document.getElementById("out");
+// calculator: hours × rate -> price -> (price + 0.30) / 0.968 (covers Square's fee)
+const hours=document.getElementById("hours"), rate=document.getElementById("rate"),
+      price=document.getElementById("price"), out=document.getElementById("out");
 function calc(){ const v=parseFloat(price.value); out.textContent = (v>0) ? "$"+((v+0.30)/0.968).toFixed(2) : "$0.00"; }
+function calcHours(){ const h=parseFloat(hours.value), r=parseFloat(rate.value); if(h>0 && r>0) price.value=(h*r).toFixed(2); calc(); }
+hours.addEventListener("input", calcHours);
+rate.addEventListener("input", calcHours);
 price.addEventListener("input", calc);
 </script>
