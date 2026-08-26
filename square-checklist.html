@@ -1,0 +1,152 @@
+<title>Square Send Checklist</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@600;700&display=swap">
+
+<style>
+:root{
+  --paper:#F5F7F4;--surface:#FFFFFF;--ink:#161A17;--ink-soft:#59615B;--ink-faint:#8A928C;
+  --hair:#E2E6E0;--hair-strong:#CDD3CC;--accent:#12805A;--accent-soft:#E3F1EA;
+  --shadow:0 1px 2px rgba(20,26,20,.04),0 10px 26px rgba(20,26,20,.06);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#121513;--surface:#1A1E1B;--ink:#EAEDE9;--ink-soft:#9AA29B;--ink-faint:#6E766F;
+  --hair:#2A2F2B;--hair-strong:#3A403B;--accent:#40C08A;--accent-soft:#16281F;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 30px rgba(0,0,0,.4);
+}}
+:root[data-theme="dark"]{
+  --paper:#121513;--surface:#1A1E1B;--ink:#EAEDE9;--ink-soft:#9AA29B;--ink-faint:#6E766F;
+  --hair:#2A2F2B;--hair-strong:#3A403B;--accent:#40C08A;--accent-soft:#16281F;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 30px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:560px;margin:0 auto;padding:clamp(28px,6vw,56px) clamp(18px,5vw,28px) 90px}
+.eyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:"Archivo",sans-serif;font-weight:800;font-size:clamp(28px,7vw,40px);letter-spacing:-.02em;margin:12px 0 0;line-height:1.05}
+.sub{color:var(--ink-soft);font-size:15px;margin:10px 0 0}
+
+.prog-row{display:flex;align-items:center;gap:12px;margin:24px 0 18px}
+.bar{flex:1;height:8px;background:var(--hair);border-radius:99px;overflow:hidden}
+.bar span{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;transition:width .3s ease}
+.pct{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:13px;color:var(--accent);min-width:44px;text-align:right}
+.reset{font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:600;color:var(--ink-soft);background:none;border:1px solid var(--hair-strong);border-radius:8px;padding:6px 11px;cursor:pointer}
+.reset:hover{color:var(--accent);border-color:var(--accent)}
+.reset:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+ul{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--hair);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+li{border-top:1px solid var(--hair)}
+li:first-child{border-top:none}
+label{display:flex;gap:14px;align-items:center;padding:16px 18px;cursor:pointer;transition:background .12s}
+label:hover{background:var(--accent-soft)}
+input{appearance:none;-webkit-appearance:none;width:23px;height:23px;border:2px solid var(--hair-strong);border-radius:6px;flex:0 0 auto;margin:0;cursor:pointer;position:relative;transition:.15s;background:var(--surface)}
+input:hover{border-color:var(--accent)}
+input:checked{background:var(--accent);border-color:var(--accent)}
+input:checked::after{content:"";position:absolute;left:7px;top:3px;width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.txt{flex:1;font-size:16px;font-weight:500}
+input:checked ~ .txt{color:var(--ink-faint);text-decoration:line-through}
+
+.formula{margin-top:18px;background:var(--accent-soft);border-radius:12px;padding:16px 20px}
+.formula .lbl{font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:12px}
+.calc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.calc-in{display:flex;align-items:center;gap:6px;font-family:"Archivo",sans-serif;font-weight:800;font-size:22px;color:var(--ink);background:var(--surface);border:1.5px solid var(--hair-strong);border-radius:10px;padding:8px 14px}
+.calc-in input{width:6.5ch;border:none;background:none;font:inherit;color:var(--ink);padding:0;outline:none}
+.calc-in input::placeholder{color:var(--ink-faint)}
+.calc-in:focus-within{border-color:var(--accent)}
+.arrow{font-family:"JetBrains Mono",monospace;font-size:20px;font-weight:700;color:var(--accent)}
+.result{display:flex;flex-direction:column;line-height:1.1}
+.result .rlbl{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+.result #out{font-family:"Archivo",sans-serif;font-weight:800;font-size:26px;color:var(--accent);font-variant-numeric:tabular-nums}
+.formula .ex{font-family:"JetBrains Mono",monospace;font-size:12.5px;color:var(--ink-soft);margin:12px 0 0}
+.note{margin:16px 2px 0;font-size:13.5px;color:var(--ink-soft);line-height:1.45}
+.note b{color:var(--ink);font-weight:600}
+.note.send{margin-top:16px;padding-top:14px;border-top:1px solid var(--hair);color:var(--ink)}
+.done{margin-top:18px;background:var(--accent);color:#fff;border-radius:12px;padding:15px 20px;font-family:"Archivo",sans-serif;font-weight:800;font-size:16px;display:none}
+.done.show{display:block}
+footer{margin-top:26px;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.03em;color:var(--ink-faint)}
+@media print{.reset{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <span class="eyebrow">Invoicing · The Sticky Trap</span>
+  <h1>Send a Square Invoice</h1>
+  <p class="sub">To send an invoice in Square, you'll need the following info. Gather it first, then send.</p>
+
+  <div class="prog-row">
+    <div class="bar"><span id="fill"></span></div>
+    <div class="pct" id="pct">0/7</div>
+    <button class="reset" id="reset" type="button">Reset ↻</button>
+  </div>
+
+  <ul id="list"></ul>
+
+  <p class="note">These are usually <b>design-time</b> invoices — the price is <b>hours × $75</b>. Work that out, then drop the total in the box below.</p>
+
+  <div class="formula">
+    <span class="lbl">Amount to charge in Square</span>
+    <div class="calc-row">
+      <label class="calc-in">$<input id="price" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0.00" aria-label="Invoice total"></label>
+      <span class="arrow" aria-hidden="true">→</span>
+      <div class="result"><span class="rlbl">Charge in Square</span><span id="out">$0.00</span></div>
+    </div>
+    <p class="ex">( price + $0.30 ) ÷ 0.968 — covers Square's fee so you net the full price.</p>
+  </div>
+
+  <p class="note">Tax-exempt customer? They need a signed <b>Michigan&nbsp;3372</b> on file — the blank is in the Team Files folder.</p>
+  <p class="note">Square auto-adding tax to an exempt sale? Click the item you're selling, scroll to the bottom of the window, and <b>uncheck the tax</b>.</p>
+
+  <p class="note send"><b>Before you hit send:</b> reread the email and the amount.</p>
+
+  <div class="done" id="done">✓ Got everything — ready to send.</div>
+
+  <footer>Square Send Checklist · v3</footer>
+</div>
+
+<script>
+const ITEMS = [
+  "Customer name",
+  "Customer email",
+  "Tax-exempt? — Square adds tax automatically; turn it off if they're exempt",
+  "Invoice title",
+  "Invoice ID",
+  "Date",
+  "A note explaining the goods / services",
+];
+const KEY = "st-square-checklist-v2";
+let saved = {}; try { saved = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch(e){}
+
+const list = document.getElementById("list");
+ITEMS.forEach((t,i) => {
+  const on = saved["i"+i] ? "checked" : "";
+  list.insertAdjacentHTML("beforeend",
+    `<li><label><input type="checkbox" data-i="${i}" ${on}><span class="txt">${t}</span></label></li>`);
+});
+
+const fill=document.getElementById("fill"), pct=document.getElementById("pct"), done=document.getElementById("done");
+function refresh(){
+  const boxes=list.querySelectorAll("input"); let n=0; boxes.forEach(b=>b.checked&&n++);
+  fill.style.width=Math.round(n/ITEMS.length*100)+"%";
+  pct.textContent=n+"/"+ITEMS.length;
+  done.classList.toggle("show", n===ITEMS.length);
+}
+list.addEventListener("change", e=>{
+  saved["i"+e.target.dataset.i]=e.target.checked;
+  try{localStorage.setItem(KEY,JSON.stringify(saved));}catch(err){}
+  refresh();
+});
+document.getElementById("reset").addEventListener("click", ()=>{
+  saved={}; try{localStorage.removeItem(KEY);}catch(e){}
+  list.querySelectorAll('input[type=checkbox]').forEach(b=>b.checked=false);
+  price.value=""; calc();       // clear the calculator too
+  refresh();
+});
+refresh();
+
+// fee calculator: price -> (price + 0.30) / 0.968
+const price=document.getElementById("price"), out=document.getElementById("out");
+function calc(){ const v=parseFloat(price.value); out.textContent = (v>0) ? "$"+((v+0.30)/0.968).toFixed(2) : "$0.00"; }
+price.addEventListener("input", calc);
+</script>
