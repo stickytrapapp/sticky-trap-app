@@ -293,12 +293,14 @@
   .tabbar{flex:none;display:flex;justify-content:space-around;align-items:center;padding:4px 4px 9px;border-bottom:1px solid var(--line);
     background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))}
   .tabbar button{background:none;border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;color:#9a92c8;font-size:9.5px;font-weight:700;font-family:inherit;padding:2px 6px}
-  .tabbar button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+  .tabbar button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+  .tabbar button svg .gslash{stroke:#12C4FF;stroke-width:2.4;stroke-linecap:butt;opacity:.5}
   .tabbar button.on{color:var(--mag)}
   .tabbar button{position:relative}
   .tabbar .tabdot{position:absolute;top:0;left:calc(50% + 6px);width:8px;height:8px;border-radius:50%;background:var(--mag);box-shadow:0 0 7px rgba(255,31,162,.85);animation:tabdotpulse 1.8s ease-in-out infinite}
   @keyframes tabdotpulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.7);opacity:.7}}
-  .tabbar button.on svg{stroke:url(#navgrad);stroke-width:2.2;filter:drop-shadow(0 0 4px rgba(138,43,226,.6)) drop-shadow(0 0 7px rgba(255,31,162,.35))}
+  .tabbar button.on svg{stroke:#FF2EA6;stroke-width:2.9;filter:drop-shadow(0 0 4px rgba(255,46,166,.65)) drop-shadow(0 0 8px rgba(18,196,255,.4))}
+  .tabbar button.on svg .gslash{opacity:1;filter:drop-shadow(0 0 3px rgba(18,196,255,.8))}
   .installbar{position:fixed;left:12px;right:12px;bottom:calc(14px + var(--safe-b));max-width:476px;margin:0 auto;z-index:6;display:flex;align-items:center;gap:10px;background:rgba(20,16,46,.97);color:#fff;border:1px solid rgba(138,77,255,.45);border-radius:15px;padding:11px 12px;box-shadow:0 14px 34px rgba(0,0,0,.45)}
   .installbar[hidden]{display:none}
   .ib-ic{width:36px;height:36px;border-radius:9px;flex:none}
@@ -327,11 +329,11 @@
 
   <nav class="tabbar" id="tabs">
     <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="navgrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#12C4FF"/><stop offset=".5" stop-color="#8A2BE2"/><stop offset="1" stop-color="#FF1FA2"/></linearGradient></defs></svg>
-    <button class="on" data-tab="industry"><svg viewBox="0 0 24 24"><path d="M4 4h10l4 4v12H4z"/><path d="M14 4v4h4"/><path d="M7.5 11.5h6M7.5 15h4"/></svg>Industry</button>
-    <button data-tab="social"><svg viewBox="0 0 24 24"><path d="M6 3.5l14 8.5-14 8.5z"/></svg>Social</button>
-    <button data-tab="menu"><span class="tabdot" id="menu-dot" hidden></span><svg viewBox="0 0 24 24"><path d="M12 2H2v10l10 10 10-10z"/><circle cx="6.6" cy="6.6" r="1.5"/></svg>Menu</button>
-    <button data-tab="specs"><svg viewBox="0 0 24 24"><path d="M12 2l9 5-9 5-9-5z"/><path d="M3 12l9 5 9-5M3 16.5l9 5 9-5"/></svg>Specs</button>
-    <button data-tab="connect"><svg viewBox="0 0 24 24"><path d="M8 2l5 6-5 6-5-6z"/><path d="M16 10l5 6-5 6-5-6z"/><path d="M10.5 10l3 4"/></svg>Connect</button>
+    <button class="on" data-tab="industry"><svg viewBox="0 0 24 24"><path d="M4 4h10l4 4v12H4z"/><path d="M14 4v4h4"/><path d="M7.5 11.5h6M7.5 15h4"/><path class="gslash" d="M1.5 22L14.5 9"/></svg>Industry</button>
+    <button data-tab="social"><svg viewBox="0 0 24 24"><path d="M6 3.5l14 8.5-14 8.5z"/><path class="gslash" d="M1.5 22L14.5 9"/></svg>Social</button>
+    <button data-tab="menu"><span class="tabdot" id="menu-dot" hidden></span><svg viewBox="0 0 24 24"><path d="M12 2H2v10l10 10 10-10z"/><circle cx="6.6" cy="6.6" r="1.5"/><path class="gslash" d="M1.5 22L14.5 9"/></svg>Menu</button>
+    <button data-tab="specs"><svg viewBox="0 0 24 24"><path d="M12 2l9 5-9 5-9-5z"/><path d="M3 12l9 5 9-5M3 16.5l9 5 9-5"/><path class="gslash" d="M1.5 22L14.5 9"/></svg>Specs</button>
+    <button data-tab="connect"><svg viewBox="0 0 24 24"><path d="M8 2l5 6-5 6-5-6z"/><path d="M16 10l5 6-5 6-5-6z"/><path d="M10.5 10l3 4"/><path class="gslash" d="M1.5 22L14.5 9"/></svg>Connect</button>
   </nav>
 
   <main class="views">
