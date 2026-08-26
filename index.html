@@ -68,8 +68,8 @@
   .vtitle{font-size:26px;font-weight:800;letter-spacing:-.02em;color:var(--ink);margin:0}
   .menu-emblem{height:48px;width:auto;cursor:pointer;filter:drop-shadow(0 0 9px rgba(138,77,255,.5));transition:filter .25s ease,transform .25s ease}
   .menu-emblem:hover{filter:drop-shadow(0 0 15px rgba(18,196,255,.8)) drop-shadow(0 0 7px rgba(255,31,162,.55))}
-  .menu-emblem.spin{animation:emblemSpin .8s cubic-bezier(.34,.6,.28,1)}
-  @keyframes emblemSpin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+  .menu-emblem.spin{animation:emblemSpin 1.5s cubic-bezier(.15,.85,.25,1)}
+  @keyframes emblemSpin{from{transform:rotate(0)}to{transform:rotate(1080deg)}}
   @media (prefers-reduced-motion:reduce){.menu-emblem.spin{animation:none}}
 
   .lbl{display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#9a92c8}
