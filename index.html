@@ -803,7 +803,7 @@
           nudge.addEventListener('click',function(){ qi.value=parseInt(nudge.getAttribute('data-t'),10)||q; refresh(); });
         }
         nudge.setAttribute('data-t',nb.target);
-        nudge.innerHTML='↑ Add <b>'+nb.add+'</b> for <b>'+nb.pct+'% off</b> the whole order →';
+        nudge.innerHTML='↑ Add <b>'+nb.add+'</b> for <b>'+nb.pct+'% off</b>';
         nudge.hidden=false;
       } else if(nudge){ nudge.hidden=true; }
     }
