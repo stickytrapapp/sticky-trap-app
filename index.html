@@ -36,7 +36,6 @@
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0;height:100%}
-  html{overflow-x:clip}  /* clip off-canvas fixed drawer / full-bleed bands so mobile can't scroll into empty space (clip, not hidden, keeps the sticky menu nav working) */
   body{background:#2b2060;color:var(--ink);overflow:hidden;
     font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
   #bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}
@@ -73,7 +72,7 @@
   .views{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;position:relative}
   .view{display:none;flex-direction:column;gap:13px;padding:16px 16px calc(20px + var(--safe-b))}
   .view.active{display:flex;animation:fade .28s ease}
-  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  @keyframes fade{from{opacity:0}to{opacity:1}}  /* opacity-only: a transform here would make position:fixed children (basket FAB / drawer) anchor to the view instead of the screen */
 
   .greet{font-size:22px;font-weight:800;color:var(--ink);letter-spacing:-.01em}
   .hi{font-size:12.5px;color:var(--soft)} .hi b{color:var(--ink);font-weight:800}
@@ -646,8 +645,9 @@
 #stmenu .overlay{position:fixed;inset:0;background:rgba(5,3,10,.6);backdrop-filter:blur(2px);z-index:50;opacity:0;pointer-events:none;transition:opacity .2s}
 #stmenu .overlay.on{opacity:1;pointer-events:auto}
 #stmenu .drawer{position:fixed;top:0;right:0;bottom:0;width:min(400px,100%);z-index:60;background:linear-gradient(180deg,var(--panel-2),var(--ink));
-  border-left:1px solid var(--line);transform:translateX(100%);transition:transform .24s ease;display:flex;flex-direction:column}
-#stmenu .drawer.on{transform:none}
+  border-left:1px solid var(--line);flex-direction:column;display:none}
+@keyframes stdrawerin{from{transform:translateX(100%)}to{transform:translateX(0)}}
+#stmenu .drawer.on{display:flex;animation:stdrawerin .24s ease}
 #stmenu .dhead{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 14px;border-bottom:1px solid var(--line)}
 #stmenu .dhead h3{margin:0;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.03em;font-size:19px;
   background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
