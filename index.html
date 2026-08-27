@@ -1142,8 +1142,15 @@
     </section>
 
     <!-- CONNECT (brand banner) -->
-    <section class="view connectbanner" data-view="connect">
+    <section class="view connectbanner" data-view="connect"><style>
+.connectbanner .cb-head{display:flex;flex-direction:column;gap:4px;max-width:340px}
+.connectbanner .cb-title{font-size:28px;font-weight:900;letter-spacing:-.01em;color:#fff;margin:0}
+.connectbanner .cb-intro{color:#b7b1c9;font-size:14px;line-height:1.5;margin:0}
+.connectbanner .cb-zone{width:100%;max-width:340px;text-align:left;font-size:17px;font-weight:900;color:#fff;letter-spacing:.01em;margin:2px 0 -6px}
+</style>
+      <div class="cb-head"><h2 class="cb-title">Connect</h2><p class="cb-intro">Let&#8217;s make something together.</p></div>
       <button type="button" class="cb-cta" id="connect-quote">✦ Start a project — get a quote &rarr;</button>
+      <div class="cb-zone">Reach Us</div>
       <div class="cb-contacts">
         <a class="cb-item" href="tel:+17344603845"><span class="cb-lbl">Call</span><span class="cb-val">734 460 3845</span></a>
         <a class="cb-item" href="mailto:thestickytrap@gmail.com"><span class="cb-lbl">Email</span><span class="cb-val">thestickytrap@gmail.com</span></a>
