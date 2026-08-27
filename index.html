@@ -1178,7 +1178,7 @@
   /* ---- share the app (native share sheet, or copy link) ---- */
   (function(){
     var b=document.getElementById('shareb'); if(!b) return;
-    var data={title:'TheStickyTr_ APP', text:'The Sticky Trap — industry news, events & tickets, all our links.', url:'https://stickytrapapp.github.io/sticky-trap-app/'};
+    var data={title:'TheStickyTr_ APP', text:'The Sticky Trap — industry news, events & tickets, all our links.', url:'https://thestickytrap.app'};
     b.addEventListener('click',function(){
       if(navigator.share){ navigator.share(data).catch(function(){}); }
       else if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(data.url).then(function(){toast('Link copied — paste it anywhere');},function(){toast(data.url);}); }
