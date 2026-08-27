@@ -1,64 +1,64 @@
 {
-  "updated": "2026-08-26",
+  "updated": "2026-08-27",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-08-26",
+      "date": "2026-08-27",
       "label": "Morning Brief",
-      "title": "Relief in Sight: Michigan's Tax Fight Turns a Corner as National Rescheduling and M&A Surge",
-      "top": "Michigan's cannabis tax fight is shifting from defense to offense — a bipartisan repeal push, a September trial date, and a new Ann Arbor storefront show operators finding daylight after a brutal first half. Nationally, DEA's rescheduling hearing transcript, a $272M MSO takeover bid, and fast-moving psilocybin science signal the industry's next chapter is about growth, not contraction.",
+      "title": "Rescheduling Momentum Builds Nationally While Michigan Operators Eye Tax Relief and New Storefronts",
+      "top": "Federal rescheduling cleared another milestone this week as DEA released its full hearing transcript and final briefs, while in Michigan, GOP gubernatorial nominee John James and state lawmakers are pushing hard to unwind the 24% wholesale tax even as new stores keep opening across metro Detroit and Ann Arbor.",
       "local": [
         {
-          "text": "Lume Cannabis Co. opened its new Ann Arbor location at 2247 W. Liberty Street with a three-day grand-opening celebration — fresh proof operators are still betting on Washtenaw County even as the statewide market tightens.",
+          "text": "Lume Cannabis Co. opened a new Ann Arbor storefront at 2247 W. Liberty Street, with a three-day grand opening event running 9 a.m. to 9 p.m.",
           "source": "ClickOnDetroit",
           "url": "https://www.clickondetroit.com/topic/Marijuana_Dispensary/"
         },
         {
-          "text": "GOP gubernatorial nominee John James unveiled a 'Freedom Agenda' pledging to repeal or sharply roll back the 24% wholesale tax while cracking down on unlicensed hemp and illegal grow operations — a plank Democratic primary rival Chris Swanson has also embraced, meaning tax relief now has bipartisan momentum heading into November regardless of who wins the governor's mansion.",
+          "text": "Common Citizen is set to open a new dispensary in Eastpointe after reaching a court-approved deal giving it until Dec. 1 to renovate and start selling, adding a second shop to a town that currently has only one.",
+          "source": "The 'Gander",
+          "url": "https://gandernewsroom.com/news/cannabis/6-quick-hits-of-cannabis-news-from-across-michigan-26/"
+        },
+        {
+          "text": "Michigan GOP gubernatorial nominee John James pledged to repeal or sharply reduce the 24% wholesale marijuana tax as part of his campaign platform, arguing the levy \"drives up prices, gives illegal operators a competitive edge, and has already fallen far short of revenue projections.\"",
           "source": "Marijuana Moment",
           "url": "https://www.marijuanamoment.net/michigan-gop-governor-candidate-pledges-huge-tax-cut-for-marijuana-industry-along-with-crackdown-on-hemp-products"
         },
         {
-          "text": "A bipartisan coalition of eight state senators is backing Senate Bill 810 to repeal Whitmer's Comprehensive Road Funding Tax Act outright, and at least one Democrat who originally voted for the tax, Sen. Rosemary Bayer, has flipped to co-sponsor the repeal — a sign support for relief is growing, not shrinking.",
-          "source": "Cannabis Business Times",
-          "url": "https://www.cannabisbusinesstimes.com/us-states/michigan/news/15818403/8-michigan-senators-plan-to-repeal-states-24-cannabis-tax"
+          "text": "State Rep. James DeSana filed HB 6224 to repeal the 24% wholesale tax outright, following an earlier Senate repeal bill from Sen. Jonathan Lindsey that already drew seven cosponsors including three Democrats — signs of building bipartisan appetite for relief.",
+          "source": "The Marijuana Herald",
+          "url": "https://themarijuanaherald.com/2026/08/michigan-lawmaker-files-bill-to-repeal-24-wholesale-marijuana-tax/"
         },
         {
-          "text": "The Michigan Cannabis Industry Association's constitutional challenge to the wholesale tax is heading to trial in September, giving operators a concrete near-term shot at rolling back the levy through the courts after a judge kept the case alive.",
-          "source": "WWMT",
-          "url": "https://wwmt.com/news/state/michigan-marijuana-industry-lawsuit-stop-wholesale-tax-legal-court-pot-weed-economy-business-wwmt"
-        },
-        {
-          "text": "Even after a rough first half, Michigan remains the nation's second-largest legal cannabis market — a resilience operators and lawmakers are now citing as the case for why the tax should come down rather than push the industry further underground.",
-          "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/michigan-governor-candidate-vows-to-repeal-cannabis-tax-as-new-lawsuit-filed/615195/"
+          "text": "The wholesale tax has pushed average flower prices to a record-low $58 an ounce and continues to squeeze margins, but the Michigan Cannabis Industry Association's constitutional challenge is still alive on appeal, keeping a legal path to relief open for operators.",
+          "source": "MMJ Daily / The 'Gander",
+          "url": "https://www.mmjdaily.com/article/9862442/michigan-rep-desana-bills-to-repeal-24-wholesale-cannabis-tax-amid-business-closures/"
         }
       ],
       "national": [
         {
-          "text": "The DEA released the full transcript of its cannabis rescheduling hearing, showing government lawyers arguing plainly that 'marijuana can no longer remain in Schedule I' — the clearest public evidence yet that the federal case for moving cannabis to Schedule III is advancing.",
+          "text": "The DEA submitted its final briefs supporting cannabis rescheduling, with the agency citing HHS and FDA research showing accepted medical uses for treating anorexia, pain, and nausea as the core reason marijuana can't remain Schedule I.",
+          "source": "Shanken News Daily",
+          "url": "https://www.shankennewsdaily.com/2026/08/25/40731/final-briefs-filed-in-cannabis-rescheduling-hearing/"
+        },
+        {
+          "text": "The DEA released the full official transcript of its rescheduling hearing, with government lawyers arguing marijuana \"can no longer remain in Schedule I,\" while NIDA Director Nora Volkow said rescheduling will reduce barriers to research.",
           "source": "Marijuana Moment",
           "url": "https://www.marijuanamoment.net/dea-releases-cannabis-rescheduling-hearing-transcript-newsletter-august-26-2026"
         },
         {
-          "text": "The rescheduling docket cleared another procedural checkpoint on August 18, with a formal proposed rule now expected before year-end 2026 and a final rule possible in 2027 — a change that would gut the 280E tax penalty that currently pushes effective rates on operators as high as 60%.",
-          "source": "CannIntel",
-          "url": "https://cannintel.com/laws/dea-cannabis-rescheduling-hits-key-milestone-august-2026"
-        },
-        {
-          "text": "Curaleaf formally launched its $272 million hostile takeover bid for Aurora Cannabis, offering a 45% premium that would hand the U.S. MSO more than 50 tons of additional EU-GMP medical cultivation capacity — the boldest sign yet that consolidation, not contraction, defines the industry's next phase.",
-          "source": "The Motley Fool",
-          "url": "https://www.fool.com/investing/2026/08/21/curaleafs-hostile-takeover-bid-for-aurora-is-just/"
-        },
-        {
-          "text": "Tilray Brands is expanding medical cannabis cultivation across Quebec and Portugal, lifting global annual production capacity to roughly 275 metric tons from 210 to keep pace with rising international demand.",
-          "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/latest-news/"
-        },
-        {
-          "text": "Compass Pathways' psilocybin program keeps clearing hurdles: with the FDA finalizing its psychedelic trial guidance and scheduling a September 14 public hearing on psychedelic therapeutics, Compass is targeting an NDA submission for COMP360 in treatment-resistant depression and commercial launch-readiness by the end of 2026.",
-          "source": "Tech Times / Compass Pathways",
+          "text": "The FDA finalized its clinical-trial guidance for psilocybin, LSD and MDMA and will hold a September 14 public hearing on therapeutic psychedelic use, building the regulatory infrastructure for what could become a live approval pathway.",
+          "source": "Tech Times",
           "url": "https://www.techtimes.com/articles/320454/20260714/fda-finalizes-psychedelic-trial-rules-unblinding-problem-gets-official-answer.htm"
+        },
+        {
+          "text": "Curaleaf is pressing a hostile takeover bid for Aurora Cannabis directly to shareholders after the two sides traded public accusations, with Aurora touting 17% year-over-year growth in its international medical cannabis business as it fends off the offer.",
+          "source": "Shanken News Daily",
+          "url": "https://www.shankennewsdaily.com/2026/08/25/40733/aurora-curaleaf-trade-barbs-in-takeover-battle/"
+        },
+        {
+          "text": "Illinois expanded its medical cannabis program, adding sickle cell disease and polyendocrine metabolic ovarian syndrome with chronic pain as new qualifying conditions.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/dea-releases-cannabis-rescheduling-hearing-transcript-newsletter-august-26-2026"
         }
       ]
     }
