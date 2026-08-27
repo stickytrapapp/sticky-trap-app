@@ -1380,21 +1380,22 @@
     }).join('');
   })();
 
-  /* ---- Hide the floating basket while the order form is in view (avoid overlap w/ "Send my order") ---- */
+  /* ---- Floating basket: hide while actively scrolling (stay out of the viewer's way) and while
+          the order form is in view; fade back in shortly after scrolling stops. ---- */
   (function(){
     var cart=document.getElementById('cartbtn'), form=document.getElementById('quoteform');
     var scroller=document.querySelector('.views');
-    if(!cart||!form||!scroller) return;
-    // Plain scroll check (IntersectionObserver was unreliable here): hide the FAB whenever the
-    // order form is on screen, so it never overlaps the inputs or the "Send my order" button.
-    function check(){
-      var r=form.getBoundingClientRect();
-      var inView = r.top < (window.innerHeight - 40) && r.bottom > 40;
-      cart.classList.toggle('fabhide', inView);
-    }
-    scroller.addEventListener('scroll', check, {passive:true});
-    window.addEventListener('resize', check);
-    check();
+    if(!cart||!scroller) return;
+    var scrolling=false, tmr=null;
+    function formInView(){ if(!form) return false; var r=form.getBoundingClientRect(); return r.top < (window.innerHeight - 40) && r.bottom > 40; }
+    function apply(){ cart.classList.toggle('fabhide', scrolling || formInView()); }
+    scroller.addEventListener('scroll', function(){
+      scrolling=true; apply();
+      clearTimeout(tmr);
+      tmr=setTimeout(function(){ scrolling=false; apply(); }, 280);
+    }, {passive:true});
+    window.addEventListener('resize', apply);
+    apply();
   })();
 
   /* ---- Quote request: drag-and-drop upload -> backend (Drive + email) ---- */
