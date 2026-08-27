@@ -36,6 +36,7 @@
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0;height:100%}
+  html{overflow-x:clip}  /* clip off-canvas fixed drawer / full-bleed bands so mobile can't scroll into empty space (clip, not hidden, keeps the sticky menu nav working) */
   body{background:#2b2060;color:var(--ink);overflow:hidden;
     font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
   #bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}
