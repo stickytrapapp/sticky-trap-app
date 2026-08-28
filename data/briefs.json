@@ -1,62 +1,62 @@
 {
-  "updated": "2026-08-27",
+  "updated": "2026-08-28",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-08-27",
+      "date": "2026-08-28",
       "label": "Morning Brief",
-      "title": "Rescheduling Momentum Builds Nationally While Michigan Operators Eye Tax Relief and New Storefronts",
-      "top": "Federal rescheduling cleared another milestone this week as DEA released its full hearing transcript and final briefs, while in Michigan, GOP gubernatorial nominee John James and state lawmakers are pushing hard to unwind the 24% wholesale tax even as new stores keep opening across metro Detroit and Ann Arbor.",
+      "title": "Tax Relief on the Ballot, Rescheduling Nears the Finish Line: Momentum Builds for Operators Coast to Coast",
+      "top": "In Michigan, political pressure to kill the 24% wholesale tax is building from both parties even as new stores keep opening in Detroit and along the Ohio border. Nationally, DEA lawyers just told a federal judge marijuana can no longer stay in Schedule I, while Compass Pathways' psilocybin therapy edges toward a historic FDA approval.",
       "local": [
         {
-          "text": "Lume Cannabis Co. opened a new Ann Arbor storefront at 2247 W. Liberty Street, with a three-day grand opening event running 9 a.m. to 9 p.m.",
-          "source": "ClickOnDetroit",
-          "url": "https://www.clickondetroit.com/topic/Marijuana_Dispensary/"
-        },
-        {
-          "text": "Common Citizen is set to open a new dispensary in Eastpointe after reaching a court-approved deal giving it until Dec. 1 to renovate and start selling, adding a second shop to a town that currently has only one.",
-          "source": "The 'Gander",
-          "url": "https://gandernewsroom.com/news/cannabis/6-quick-hits-of-cannabis-news-from-across-michigan-26/"
-        },
-        {
-          "text": "Michigan GOP gubernatorial nominee John James pledged to repeal or sharply reduce the 24% wholesale marijuana tax as part of his campaign platform, arguing the levy \"drives up prices, gives illegal operators a competitive edge, and has already fallen far short of revenue projections.\"",
+          "text": "GOP gubernatorial nominee John James made repealing or sharply reducing the 24% wholesale tax a centerpiece of his campaign platform, arguing it 'drives up prices, gives illegal operators a competitive edge, and has already fallen far short of revenue projections' — a signal that tax relief is now a mainstream, bipartisan campaign issue heading into November.",
           "source": "Marijuana Moment",
           "url": "https://www.marijuanamoment.net/michigan-gop-governor-candidate-pledges-huge-tax-cut-for-marijuana-industry-along-with-crackdown-on-hemp-products"
         },
         {
-          "text": "State Rep. James DeSana filed HB 6224 to repeal the 24% wholesale tax outright, following an earlier Senate repeal bill from Sen. Jonathan Lindsey that already drew seven cosponsors including three Democrats — signs of building bipartisan appetite for relief.",
-          "source": "The Marijuana Herald",
-          "url": "https://themarijuanaherald.com/2026/08/michigan-lawmaker-files-bill-to-repeal-24-wholesale-marijuana-tax/"
+          "text": "Black-owned High Profile Cannabis Shop celebrated its grand opening on Detroit's eastside, backed by City Council leadership, as social equity licensee Najanava Harvey-Quinn became the operator's first Detroit location under Ann Arbor-based C3 Industries.",
+          "source": "City of Detroit",
+          "url": "https://detroitmi.gov/news/detroit-legacy-adult-use-recreational-dispensary-high-profile-cannabis-celebrates-grand-opening"
         },
         {
-          "text": "The wholesale tax has pushed average flower prices to a record-low $58 an ounce and continues to squeeze margins, but the Michigan Cannabis Industry Association's constitutional challenge is still alive on appeal, keeping a legal path to relief open for operators.",
-          "source": "MMJ Daily / The 'Gander",
+          "text": "C3 Industries opened a new High Profile Cannabis dispensary in Luna Pier, just minutes from Toledo, giving the brand a fresh cross-border retail play with a loyalty program built to capture Ohio traffic and border-town demand.",
+          "source": "Cannabis Business Times",
+          "url": "https://www.cannabisbusinesstimes.com/dispensary/news/15818419/high-profile-cannabis-opens-michigan-dispensary-minutes-from-toledo-ohio"
+        },
+        {
+          "text": "Michigan's Supreme Court issued rulings this month resetting constitutional guardrails around police searches tied to marijuana, part of a broader August wave of state-level cannabis reforms tracked alongside record sales in Florida and structural shifts in Illinois and Ohio.",
+          "source": "CannIntel/cann.dev",
+          "url": "https://www.cann.dev/cannabis-august-2026-state-updates-five-markets/"
+        },
+        {
+          "text": "A Michigan judge has allowed the cannabis industry's second lawsuit against the 24% wholesale tax to move toward trial, while Rep. James DeSana's one-sentence repeal bill and the tax's own revenue shortfall — roughly $70 million behind projections in the first four months — give operators multiple live paths to relief this year.",
+          "source": "MMJDaily",
           "url": "https://www.mmjdaily.com/article/9862442/michigan-rep-desana-bills-to-repeal-24-wholesale-cannabis-tax-amid-business-closures/"
         }
       ],
       "national": [
         {
-          "text": "The DEA submitted its final briefs supporting cannabis rescheduling, with the agency citing HHS and FDA research showing accepted medical uses for treating anorexia, pain, and nausea as the core reason marijuana can't remain Schedule I.",
+          "text": "The DEA has submitted its final briefs backing marijuana rescheduling, arguing cannabis has three federally accepted medical uses — treating anorexia, pain, and nausea — capping off formal hearings and pushing the Schedule III shift closer to a judge's recommendation.",
           "source": "Shanken News Daily",
           "url": "https://www.shankennewsdaily.com/2026/08/25/40731/final-briefs-filed-in-cannabis-rescheduling-hearing/"
         },
         {
-          "text": "The DEA released the full official transcript of its rescheduling hearing, with government lawyers arguing marijuana \"can no longer remain in Schedule I,\" while NIDA Director Nora Volkow said rescheduling will reduce barriers to research.",
-          "source": "Marijuana Moment",
-          "url": "https://www.marijuanamoment.net/dea-releases-cannabis-rescheduling-hearing-transcript-newsletter-august-26-2026"
+          "text": "Compass Pathways' psilocybin therapy COMP360 is riding a 3-for-3 Phase 3 record and an FDA priority review voucher that could compress its review to just 1-2 months, with analysts eyeing year-end 2026 approval as the first classic psychedelic ever cleared by the FDA.",
+          "source": "Inteliview",
+          "url": "https://www.inteliview.kr/en/topics/us-stocks/compass-pathways-psilocybin-fda-trd-approval-2026"
         },
         {
-          "text": "The FDA finalized its clinical-trial guidance for psilocybin, LSD and MDMA and will hold a September 14 public hearing on therapeutic psychedelic use, building the regulatory infrastructure for what could become a live approval pathway.",
-          "source": "Tech Times",
-          "url": "https://www.techtimes.com/articles/320454/20260714/fda-finalizes-psychedelic-trial-rules-unblinding-problem-gets-official-answer.htm"
+          "text": "MDMA-assisted therapy is back in play: Resilient Pharmaceuticals (formerly Lykos) resubmitted its NDA under the brand name Rysanso in August, backed by a third-party audit and new cardiac-safety data, putting the once-rejected treatment back on a roughly six-month FDA review clock.",
+          "source": "Resolv Social",
+          "url": "https://www.resolv.social/topics/psychedelic-therapy-fda-status"
         },
         {
-          "text": "Curaleaf is pressing a hostile takeover bid for Aurora Cannabis directly to shareholders after the two sides traded public accusations, with Aurora touting 17% year-over-year growth in its international medical cannabis business as it fends off the offer.",
+          "text": "Curaleaf is pressing its hostile takeover bid for Aurora Cannabis directly to shareholders, touting the deal as a chance to plug into 'a larger, more diversified global cannabis platform' as consolidation among major MSOs accelerates.",
           "source": "Shanken News Daily",
           "url": "https://www.shankennewsdaily.com/2026/08/25/40733/aurora-curaleaf-trade-barbs-in-takeover-battle/"
         },
         {
-          "text": "Illinois expanded its medical cannabis program, adding sickle cell disease and polyendocrine metabolic ovarian syndrome with chronic pain as new qualifying conditions.",
+          "text": "Fresh FBI data shows more than 200,000 marijuana arrests nationwide last year, with 92% tied to simple possession — a stark reminder of why advocates say the ongoing federal rescheduling push and state reforms, like Illinois adding sickle cell disease as a qualifying condition, can't move fast enough.",
           "source": "Marijuana Moment",
           "url": "https://www.marijuanamoment.net/dea-releases-cannabis-rescheduling-hearing-transcript-newsletter-august-26-2026"
         }
