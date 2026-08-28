@@ -961,7 +961,7 @@
     toast('Basket loaded - '+CART.length+' item'+(CART.length>1?'s':''));
     return true;
   }
-  window.STM={ load:loadBasket, get:function(){return CART.map(function(i){return {k:i.k,p:i.p,m:i.m,f:i.f,pr:i.pr,qty:i.qty};});} };
+  window.STM={ load:loadBasket, unit:unit, get:function(){return CART.map(function(i){return {k:i.k,p:i.p,m:i.m,f:i.f,pr:i.pr,qty:i.qty};});} };
 })();
 
 </script>
@@ -1429,7 +1429,7 @@
       var cart=[]; try{ cart=JSON.parse(localStorage.getItem('st_cart')||'[]'); }catch(e){}
       if(!cart.length){ if(box) box.hidden=true; if(detEl) detEl.placeholder='What are you ordering? (size, qty, finish)'; return; }
       var total=0;
-      items.innerHTML=cart.map(function(i){ var line=(+i.qty||0)*(parseFloat(i.pr)||0); total+=line;
+      items.innerHTML=cart.map(function(i){ var u=(window.STM&&window.STM.unit)?window.STM.unit(i):(parseFloat(i.pr)||0); var line=(+i.qty||0)*u; total+=line;
         return '<div class="qfo-row"><span class="qfo-q">'+esc(i.qty)+'×</span><span class="qfo-p">'+esc(i.p)+' — '+esc(i.m)+' / '+esc(i.f)+'</span><span class="qfo-pr">$'+line.toFixed(2)+'</span></div>'; }).join('');
       sum.textContent=cart.length+' item'+(cart.length>1?'s':'')+' · $'+total.toFixed(2);
       box.hidden=false;
