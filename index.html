@@ -39,7 +39,7 @@
   body{background:#2b2060;color:var(--ink);overflow:hidden;
     font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
   #bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}
-  .app{position:relative;z-index:1;max-width:500px;margin:0 auto;height:100dvh;height:100vh;display:flex;flex-direction:column;
+  .app{position:relative;z-index:1;max-width:500px;margin:0 auto;height:100dvh;height:100vh;display:flex;flex-direction:column;overflow-x:clip;
     background:linear-gradient(180deg,rgba(17,13,40,.88),rgba(9,6,24,.94));
     -webkit-backdrop-filter:blur(18px) saturate(1.25);backdrop-filter:blur(18px) saturate(1.25);
     box-shadow:0 0 60px rgba(20,10,50,.4)}
@@ -646,14 +646,13 @@
 @keyframes cartpulse{0%{transform:scale(1)}45%{transform:scale(1.12)}100%{transform:scale(1)}}
 #stmenu .overlay{position:fixed;inset:0;background:rgba(5,3,10,.6);backdrop-filter:blur(2px);z-index:50;opacity:0;pointer-events:none;transition:opacity .2s}
 #stmenu .overlay.on{opacity:1;pointer-events:auto}
-#stmenu .drawer{position:fixed;top:0;right:0;bottom:0;width:min(400px,100%);z-index:60;background:linear-gradient(180deg,var(--panel-2),var(--ink));
-  border-left:1px solid var(--line);flex-direction:column;display:none}
-@keyframes stdrawerin{from{transform:translateX(100%)}to{transform:translateX(0)}}
-#stmenu .drawer.on{display:flex;animation:stdrawerin .24s ease}
-#stmenu .dhead{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 14px;border-bottom:1px solid var(--line)}
+#stmenu .drawer{position:fixed;top:0;right:0;bottom:0;width:min(360px,86vw);z-index:60;background:linear-gradient(180deg,var(--panel-2),var(--ink));
+  border-left:1px solid var(--line);box-shadow:-16px 0 40px rgba(0,0,0,.5);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .24s ease}
+#stmenu .drawer.on{transform:translateX(0)}
+#stmenu .dhead{display:flex;align-items:center;justify-content:flex-start;gap:14px;padding:18px 18px 14px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--panel-2);z-index:2}
 #stmenu .dhead h3{margin:0;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.03em;font-size:19px;
   background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-#stmenu .dclose{background:none;border:0;color:var(--muted);font-size:22px;cursor:pointer;line-height:1;padding:4px 6px}
+#stmenu .dclose{background:rgba(255,255,255,.08);border:1px solid var(--line);border-radius:10px;color:var(--paper);font-size:14px;font-weight:800;cursor:pointer;line-height:1;padding:10px 14px;font-family:inherit;display:inline-flex;align-items:center;gap:6px}
 #stmenu .dclose:hover{color:var(--paper)}
 #stmenu .ditems{flex:1;overflow-y:auto;padding:8px 16px}
 #stmenu .empty-msg{color:var(--muted);text-align:center;padding:50px 20px;font-style:italic}
@@ -724,7 +723,7 @@
 <button class="cartbtn empty" id="cartbtn" aria-label="Open basket"><span class="cl">Basket</span> <span class="ct" id="ctlabel">empty</span></button>
 <div class="overlay" id="overlay"></div>
 <aside class="drawer" id="drawer" aria-label="Your basket" aria-hidden="true">
-  <div class="dhead"><h3>Your Basket</h3><button class="dclose" id="dclose" aria-label="Close">&times;</button></div>
+  <div class="dhead"><button class="dclose" id="dclose" aria-label="Close basket">&larr; Back</button><h3>Your Basket</h3></div>
   <div class="ditems" id="ditems"></div>
   <div class="dfoot">
     <div class="sub-row"><span class="sl">Subtotal</span><span class="sv" id="subtotal">$0.00</span></div>
