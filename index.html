@@ -39,7 +39,7 @@
   body{background:#2b2060;color:var(--ink);overflow:hidden;
     font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
   #bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}
-  .app{position:relative;z-index:1;max-width:500px;margin:0 auto;height:100dvh;height:100vh;display:flex;flex-direction:column;overflow-x:clip;
+  .app{position:relative;z-index:1;max-width:500px;margin:0 auto;height:100vh;height:100dvh;display:flex;flex-direction:column;overflow-x:clip;
     background:linear-gradient(180deg,rgba(17,13,40,.88),rgba(9,6,24,.94));
     -webkit-backdrop-filter:blur(18px) saturate(1.25);backdrop-filter:blur(18px) saturate(1.25);
     box-shadow:0 0 60px rgba(20,10,50,.4)}
@@ -70,7 +70,7 @@
   .avatar{width:32px;height:32px;border-radius:50%;background:var(--grad);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;box-shadow:0 2px 8px rgba(138,77,255,.4)}
 
   .views{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;position:relative}
-  .view{display:none;flex-direction:column;gap:13px;padding:16px 16px calc(20px + var(--safe-b))}
+  .view{display:none;flex-direction:column;gap:13px;padding:16px 16px calc(36px + var(--safe-b))}
   .view.active{display:flex;animation:fade .28s ease}
   @keyframes fade{from{opacity:0}to{opacity:1}}  /* opacity-only: a transform here would make position:fixed children (basket FAB / drawer) anchor to the view instead of the screen */
 
@@ -532,7 +532,7 @@
 #stmenu a.ph-tier.ph-custom:hover{border-color:var(--cy);background:rgba(18,196,255,.08)}
 #stmenu .ph-tier::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--grad)}
 #stmenu .ph-q{font-size:13.5px;font-weight:900;color:var(--paper);white-space:nowrap}
-#stmenu .ph-d{font-size:12px;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;text-align:center;line-height:1.2}
+#stmenu .ph-d{font-size:13px;font-weight:900;color:#4ade80;text-align:center;line-height:1.2}
 #stmenu .ph-tier.ph-custom{background:transparent}
 #stmenu .ph-tier.ph-custom::before{background:var(--cy)}
 #stmenu .ph-tier.ph-custom .ph-d{background:none;-webkit-text-fill-color:var(--cy);color:var(--cy)}
