@@ -1196,9 +1196,10 @@
 
 <script>
   var API='https://script.google.com/macros/s/AKfycbyNQSfrtPhEgLtNt8IPIQ4z0vF265j3AC-udRJOyF7MLcS4MhLTAL4SESs_AGj0JS8RdQ/exec';
-  /* ---- anonymous usage tracking (no PII): fire-and-forget pixel to the backend "usage" sheet ---- */
+  /* ---- anonymous usage tracking (no PII): fire-and-forget pixel to the standalone usage tracker ("Sticky Trap — App Usage" sheet) ---- */
+  var TRACK_URL='https://script.google.com/macros/s/AKfycbwVUSDnQ46hApEe1k4LWlUmyOGnLMuMoVLTlD5_501K0U5AcA7Nl_jXcn05DNOJRKNlMg/exec';
   var ST_UID=(function(){try{var u=localStorage.getItem('st_uid'); if(!u){u=Date.now().toString(36)+Math.random().toString(36).slice(2,8); localStorage.setItem('st_uid',u);} return u;}catch(e){return 'anon';}})();
-  window.track=function(ev,detail){ try{ new Image().src=API+'?action=track&e='+encodeURIComponent(ev)+'&uid='+encodeURIComponent(ST_UID)+'&d='+encodeURIComponent((detail||'').toString().slice(0,120))+'&t='+Date.now(); }catch(e){} };
+  window.track=function(ev,detail){ try{ new Image().src=TRACK_URL+'?e='+encodeURIComponent(ev)+'&uid='+encodeURIComponent(ST_UID)+'&d='+encodeURIComponent((detail||'').toString().slice(0,120))+'&t='+Date.now(); }catch(e){} };
   var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
 
   /* ---- JSONP (backend is cross-origin) ---- */
