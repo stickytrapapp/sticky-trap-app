@@ -805,7 +805,7 @@
 
   // accordion
   ROOT.querySelectorAll('.accbtn').forEach(function(b){
-    b.addEventListener('click',function(){var a=b.parentNode,o=a.classList.toggle('open');b.setAttribute('aria-expanded',o?'true':'false');});
+    b.addEventListener('click',function(){var a=b.parentNode,o=a.classList.toggle('open');b.setAttribute('aria-expanded',o?'true':'false');if(o&&window.track){var an=b.querySelector('.an');window.track('product_open',an?an.textContent:'');}});
   });
   // open the first product by default so the layout reads at a glance
   /* products start collapsed for a cleaner overview */
@@ -864,6 +864,7 @@
       b.addEventListener('click',function(){
         var box=b.closest('.matbox'), chk=box?box.querySelector('.hbchk'):null, useHb=(chk&&chk.checked&&b.getAttribute('data-hb'));
         add(b.getAttribute('data-p'),b.getAttribute('data-m'),b.getAttribute('data-f')+(useHb?' + HoloBrite':''),actPr(b),pq());
+        if(window.track){try{window.track('add_basket',b.getAttribute('data-p')+' · '+b.getAttribute('data-m')+' · '+b.getAttribute('data-f'));}catch(e){}}
         b.classList.remove('added');void b.offsetWidth;b.classList.add('added');
       });
     });
@@ -1195,6 +1196,9 @@
 
 <script>
   var API='https://script.google.com/macros/s/AKfycbyNQSfrtPhEgLtNt8IPIQ4z0vF265j3AC-udRJOyF7MLcS4MhLTAL4SESs_AGj0JS8RdQ/exec';
+  /* ---- anonymous usage tracking (no PII): fire-and-forget pixel to the backend "usage" sheet ---- */
+  var ST_UID=(function(){try{var u=localStorage.getItem('st_uid'); if(!u){u=Date.now().toString(36)+Math.random().toString(36).slice(2,8); localStorage.setItem('st_uid',u);} return u;}catch(e){return 'anon';}})();
+  window.track=function(ev,detail){ try{ new Image().src=API+'?action=track&e='+encodeURIComponent(ev)+'&uid='+encodeURIComponent(ST_UID)+'&d='+encodeURIComponent((detail||'').toString().slice(0,120))+'&t='+Date.now(); }catch(e){} };
   var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
 
   /* ---- JSONP (backend is cross-origin) ---- */
@@ -1258,6 +1262,7 @@
   /* ---- tabs ---- */
   var views=document.querySelectorAll('.view'), tabs=document.querySelectorAll('#tabs button');
   window.go=function(name){
+    try{window.track&&window.track('pageview',name);}catch(e){}
     views.forEach(function(v){v.classList.toggle('active',v.dataset.view===name);});
     tabs.forEach(function(b){b.classList.toggle('on',b.dataset.tab===name);});
     document.querySelector('.views').scrollTop=0;
@@ -1492,6 +1497,7 @@
       }).then(function(){
         form.reset(); files=[]; render();
         setStatus('✓ Sent! We\'ll get back to you with your quote — no charge until you approve.','ok');
+        if(window.track){try{window.track('order_send',(basket&&basket.length?basket.length+' items':'no-basket')+(files.length?(' +'+files.length+' files'):''));}catch(e){}}
         submit.disabled=false; submit.textContent='Send my request →';
       }).catch(function(){
         setStatus('Upload hiccup — try again, or email files to thestickytrap@.','err');
