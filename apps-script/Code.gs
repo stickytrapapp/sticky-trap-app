@@ -44,6 +44,16 @@ function getConfig() {
              '\nWEBAPP: ' + (url || '(deploy first, then re-run getConfig)'));
 }
 
+// Anonymous usage logging -> "usage" sheet. No PII: event name, random device id, short detail.
+function track_(p) {
+  try {
+    var sh = sheet_('usage');
+    if (!sh) { sh = ss_().insertSheet('usage'); sh.appendRow(['ts', 'event', 'device_id', 'detail']); }
+    sh.appendRow([new Date(), String(p.e || '').slice(0, 40), String(p.uid || '').slice(0, 24), String(p.d || '').slice(0, 120)]);
+    return { ok: true };
+  } catch (err) { return { ok: false, error: String(err) }; }
+}
+
 function ss_() { return SpreadsheetApp.openById(PROP.getProperty('SHEET_ID')); }
 function sheet_(name) { return ss_().getSheetByName(name); }
 
@@ -69,6 +79,7 @@ function doGet(e) {
     if (p.action === 'episodes')    return out_(getEpisodes_(), cb);
     if (p.action === 'subscribe')   return out_(subscribe_(p.email), cb);
     if (p.action === 'unsubscribe') return unsubHtml_(unsubscribe_(p.email));
+    if (p.action === 'track')       return out_(track_(p), cb);
     return out_({ ok: true, service: 'sticky-trap-hub' }, cb);
   } catch (err) {
     return out_({ ok: false, error: String(err) }, cb);
