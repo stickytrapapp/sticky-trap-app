@@ -1289,6 +1289,7 @@
     views.forEach(function(v){v.classList.toggle('active',v.dataset.view===name);});
     tabs.forEach(function(b){b.classList.toggle('on',b.dataset.tab===name);});
     document.querySelector('.views').scrollTop=0;
+    if(name==='menu'){var _em=document.getElementById('menu-emblem'); if(_em){_em.classList.remove('spin'); void _em.offsetWidth; _em.classList.add('spin');}}
     animateBars(document.querySelector('.view.active'));
     if(name==='industry'&&!industryLoaded) loadIndustry();
     if(name==='social'&&!epLoaded) loadEpisodes();
@@ -1582,6 +1583,7 @@
     e.addEventListener('mouseenter',spin);
     e.addEventListener('click',spin);
     e.addEventListener('animationend',function(){ e.classList.remove('spin'); });
+    window.spinEmblem=spin;
   })();
 
   /* ---- Saved bar: device-local Reorder + Favorites (no login) ---- */
