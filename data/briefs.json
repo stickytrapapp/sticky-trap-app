@@ -1,64 +1,64 @@
 {
-  "updated": "2026-08-31",
+  "updated": "2026-09-01",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-08-31",
+      "date": "2026-09-01",
       "label": "Morning Brief",
-      "title": "Tax Relief Gains Bipartisan Ground in Michigan as Rescheduling and Psychedelics Momentum Builds Nationally",
-      "top": "Michigan's 24% wholesale tax is still squeezing margins, but political momentum for repeal just went bipartisan and the state Supreme Court handed operators a real civil-liberties win. Nationally, DEA's own rescheduling case is now public record, psychedelics are racing toward FDA approval, and Curaleaf's bid for Aurora shows real capital chasing cannabis growth again.",
+      "title": "Momentum Building: MI Courts & Campaigns Turn on the Tax, DEA Clears Another Rescheduling Hurdle",
+      "top": "In Michigan, both major gubernatorial campaigns are now on record against the 24% wholesale tax while the state Supreme Court hands operators a real enforcement win on vehicle searches. Nationally, DEA's rescheduling process cleared another procedural checkpoint and MSOs are back on the M&A trail, with psychedelics posting a parallel breakthrough as Compass Pathways' psilocybin program races toward a potential first-in-class FDA approval.",
       "local": [
         {
-          "text": "A Michigan cannabis company confirmed it's shuttering five of its nine dispensaries, citing the state's 24% wholesale tax; <cite index=\"1-3\">Higher Love Cannabis Co.'s Upper Peninsula stores in Crystal Falls, Escanaba, Houghton, Munising, and Ontonagon closed for good on August 9.</cite> The pullback thins out an oversaturated UP market, opening real runway for surviving retailers to absorb the freed-up customer base.",
-          "source": "Ganjapreneur",
-          "url": "https://ganjapreneur.com/topic/michigan/"
+          "text": "GOP gubernatorial nominee John James pledged to repeal or sharply roll back the 24% wholesale cannabis tax as part of his 'Freedom Agenda,' arguing it 'drives up prices, gives illegal operators a competitive edge, and has already fallen far short of revenue projections' — and the Michigan Cannabis Industry Association is now touting the pledge to build momentum for relief.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/michigan-gop-governor-candidate-pledges-huge-tax-cut-for-marijuana-industry-along-with-crackdown-on-hemp-products"
         },
         {
-          "text": "<cite index=\"46-1\">GOP gubernatorial nominee John James is pledging to repeal or sharply cut the 24% wholesale tax as part of a cannabis policy platform he unveiled August 19.</cite> With Democratic contenders also on record opposing the levy, operators now have bipartisan momentum heading into a governor's race that could finally deliver tax relief.",
-          "source": "The Marijuana Herald",
-          "url": "https://themarijuanaherald.com/2026/08/michigan-gop-governor-nominee-john-james-pledges-to-repeal-or-reduce-24-marijuana-wholesale-tax"
+          "text": "The Michigan Supreme Court ruled 5-2 that police can't conduct a warrantless vehicle search based on marijuana odor alone, a decision one House of Dank sales manager called 'really nice and relieving' for finally lifting stigma off legal consumers and, by extension, the retailers who serve them.",
+          "source": "WNEM",
+          "url": "https://www.wnem.com/2026/07/25/michigan-supreme-court-rules-marijuana-smell-alone-not-enough-vehicle-search/"
         },
         {
-          "text": "<cite index=\"4-1\">Michigan's Supreme Court just rewrote the rules governing marijuana-related searches</cite>, tightening the constitutional bar police must clear before treating legal product as probable cause. It's a meaningful win for licensed operators and customers tired of being treated like suspects for buying something legal.",
+          "text": "Despite tax headwinds, Michigan's market stayed the country's third-largest by monthly volume, with July 2026 sales hitting $260.6 million; over 30 million units moved at an average item price of just $8.65 — the lowest of any major U.S. market and a sign consumer demand remains sticky.",
+          "source": "Headset",
+          "url": "https://www.headset.io/markets/michigan"
+        },
+        {
+          "text": "Industry trackers note July 2026 delivered back-to-back Supreme Court wins reshaping enforcement, even as two tax lawsuits and a widening gap between wholesale-tax projections and actual collections remain live — a sign the legal battlefield is shifting in operators' favor on multiple fronts at once.",
           "source": "Cann.dev",
-          "url": "https://www.cann.dev/cannabis-august-2026-state-updates-five-markets/"
+          "url": "https://www.cann.dev/michigan-cannabis-supreme-court-rulings/"
         },
         {
-          "text": "The industry's legal fight for relief is still very much alive: <cite index=\"54-2,54-3\">the Michigan Cannabis Industry Association filed a second constitutional lawsuit arguing the 24% wholesale tax creates an unconstitutional tax-on-tax spiral that pushes the effective rate above the 6% ceiling voters set in 2018.</cite> A win would retroactively unwind one of the industry's biggest cost burdens.",
-          "source": "Michigan Public",
-          "url": "https://www.michiganpublic.org/politics-government/2026-04-03/another-lawsuit-challenges-michigans-new-marijuana-wholesale-tax"
-        },
-        {
-          "text": "Even amid the tax squeeze, demand keeps climbing: <cite index=\"42-8,42-9\">Michigan dispensaries moved nearly 104,000 pounds of adult-use flower in January 2026, the highest volume for that month in the program's six-year history, with average prices near an all-time low of $59.07 an ounce.</cite> Volume like that is the clearest signal yet the market can outgrow its pricing pain.",
-          "source": "Cannabis Business Times",
-          "url": "https://www.cannabisbusinesstimes.com/us-states/michigan/news/15818403/8-michigan-senators-plan-to-repeal-states-24-cannabis-tax"
+          "text": "Cannabis operators pressed their constitutional challenge to the wholesale tax, arguing the layered levy creates unlawful 'tax pyramiding' on consumers — a case MiCIA calls 'exceptionally strong,' keeping the door open for a court-ordered rollback that would ease margins across the supply chain.",
+          "source": "MJBizDaily",
+          "url": "https://mjbizdaily.com/michigan-governor-candidate-vows-to-repeal-cannabis-tax-as-new-lawsuit-filed/615195/"
         }
       ],
       "national": [
         {
-          "text": "<cite index=\"18-6\">The DEA released the full official transcript of its cannabis rescheduling hearing, showing government lawyers arguing marijuana \"can no longer remain in Schedule I.\"</cite> The public record now backs what operators have argued for years — and puts fresh pressure on regulators to finish the job.",
-          "source": "Marijuana Moment",
-          "url": "https://www.marijuanamoment.net/dea-releases-cannabis-rescheduling-hearing-transcript-newsletter-august-26-2026"
+          "text": "DEA's cannabis rescheduling process cleared another critical procedural checkpoint in mid-August, keeping Schedule III movement on track — a shift that would eliminate 280E tax penalties and cut effective operator tax rates from roughly 60% to the mid-20s.",
+          "source": "CannIntel",
+          "url": "https://cannintel.com/laws/dea-cannabis-rescheduling-hits-key-milestone-august-2026"
         },
         {
-          "text": "<cite index=\"26-3\">Lykos, now rebranded Resilient Pharmaceuticals, resubmitted its MDMA therapy NDA in August 2026 under the proposed brand name Rysanso</cite>, <cite index=\"26-4\">adding a third-party audit of the original trials, a new cardiac-safety study, and VA follow-up data to address the FDA's prior rejection.</cite> It's a real second shot at the first approved MDMA-assisted therapy.",
-          "source": "Resolv Social",
-          "url": "https://www.resolv.social/topics/psychedelic-therapy-fda-status"
+          "text": "FDA granted Compass Pathways a rolling NDA review plus a Commissioner's National Priority Voucher for COMP360, its psilocybin treatment for treatment-resistant depression — a designation that could shrink final review to just one to two months, putting the first-ever approved psilocybin drug within reach.",
+          "source": "PharmExec",
+          "url": "https://www.pharmexec.com/view/fda-priority-voucher-compass-psychedelic-treatment-resistant-depression"
         },
         {
-          "text": "<cite index=\"24-4\">The FDA announced a September 14, 2026 public hearing to gather feedback on the future therapeutic use of psychedelic drugs</cite>, right after finalizing formal clinical-trial guidance for the category. <cite index=\"22-7\">Compass Pathways is targeting a Q4 2026 NDA filing for its COMP360 psilocybin treatment</cite>, putting a classic psychedelic within sight of the U.S. market.",
-          "source": "Foley Hoag",
-          "url": "https://foleyhoag.com/news-and-insights/publications/alerts-and-updates/2026/august/psychedelic-therapeutics-take-center-stage-fda-announces-public-hearing-and-finalizes-clinical/"
+          "text": "M&A is heating up fast: Vireo Growth closed a $49 million buy of PharmaCann's Colorado retail assets in early August and separately struck a deal to acquire Cannabist Company operations across five states, signaling renewed consolidation confidence across the MSO sector.",
+          "source": "SEC/Vireo Growth 8-K",
+          "url": "https://www.sec.gov/Archives/edgar/data/0001771706/000110465926095427/tm2622759d4_ex99-2.htm"
         },
         {
-          "text": "<cite index=\"22-5,22-6\">The VA launched PIVOT, a five-site clinical trial testing Compass Pathways' COMP360 psilocybin for veterans with treatment-resistant depression, starting August 5.</cite> Federal buy-in from the VA is a major credibility signal for psychedelic medicine heading into next year's approval decisions.",
-          "source": "Lucid News",
-          "url": "https://www.lucid.news/weekly-psychedelic-policy-briefing-august-14-2026/"
+          "text": "Capital access is loosening ahead of rescheduling — Cresco Labs secured a $50 million revolving credit facility from Needham Bank, with CEO Charlie Bachtell calling it a 'powerful, non-dilutive tool' to fund acquisitions and position for a future uplisting to a senior U.S. exchange.",
+          "source": "Yahoo Finance",
+          "url": "https://finance.yahoo.com/markets/stocks/articles/msos-hits-2026-high-cannabis-040610250.html"
         },
         {
-          "text": "<cite index=\"58-4\">Curaleaf confirmed plans to acquire all of Aurora Cannabis in a stock-and-cash deal</cite>, though <cite index=\"61-5\">Aurora has urged shareholders to take no action on the offer</cite> as the fight plays out. Contested or not, it's the clearest sign yet that rescheduling optimism is fueling a real cannabis M&A wave.",
-          "source": "StratCann / Yahoo Finance",
-          "url": "https://stratcann.com/news/"
+          "text": "Compass Pathways is now partnering with the U.S. Department of Veterans Affairs, donating its COMP360 psilocybin formulation for a multi-site VA study on treatment-resistant depression and PTSD in veterans — broadening institutional and government buy-in for psychedelic medicine.",
+          "source": "Compass Pathways (Investor Relations)",
+          "url": "https://ir.compasspathways.com/News--Events-/news/news-details/2026/Compass-Pathways-Working-with-U-S--Department-of-Veterans-Affairs-for-Investigational-Study-of-Psilocybin/default.aspx"
         }
       ]
     }
