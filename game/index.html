@@ -50,6 +50,9 @@
   .homebtn{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;cursor:pointer;border-radius:12px;padding:2px 6px 2px 2px;margin:-2px 0;-webkit-tap-highlight-color:transparent;transition:background .15s}
   .homebtn:hover{background:rgba(255,255,255,.06)} .homebtn:active{opacity:.75}
   .homechev{width:19px;height:19px;flex:none;color:#c9c4d8}
+  /* legibility: solid key wording instead of hard-to-read gradient text */
+  .brand b,.res-handle,.st-rank,.ne-title,.dh-clock,.hv,.brk-r.tot b{background:none!important;-webkit-background-clip:border-box!important;background-clip:border-box!important;-webkit-text-fill-color:var(--fg)!important;color:var(--fg)!important}
+  .n,.res-score,.rc-num{background:none!important;-webkit-background-clip:border-box!important;background-clip:border-box!important;-webkit-text-fill-color:#43d9ff!important;color:#43d9ff!important}
   .brand{line-height:1}
   .brand b{font-family:var(--fdisp);font-weight:700;font-size:14px;letter-spacing:.14em;
     text-transform:uppercase;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
