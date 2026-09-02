@@ -1240,7 +1240,7 @@
   <button class="ib-add" id="ib-add">Add</button>
   <button class="ib-x" id="ib-x" aria-label="Dismiss">✕</button>
 </div>
-<div class="toast" id="toast"></div>
+<div class="toast" id="apptoast"></div>
 
 <script>
   var API='https://script.google.com/macros/s/AKfycbyNQSfrtPhEgLtNt8IPIQ4z0vF265j3AC-udRJOyF7MLcS4MhLTAL4SESs_AGj0JS8RdQ/exec';
@@ -1260,7 +1260,7 @@
     s.onerror=function(){if(!done){done=true;clean();onerr&&onerr();}};
     s.src=url+(url.indexOf('?')>-1?'&':'?')+'callback='+name;document.head.appendChild(s);
   }
-  function toast(m){var el=document.getElementById('toast');el.textContent=m;el.classList.add('show');setTimeout(function(){el.classList.remove('show');},2600);}
+  function toast(m){var el=document.getElementById('apptoast');el.textContent=m;el.classList.add('show');setTimeout(function(){el.classList.remove('show');},2600);}
 
   /* ---- share the app (native share sheet, or copy link) ---- */
   (function(){
