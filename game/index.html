@@ -310,6 +310,7 @@
   .tag{display:inline-block;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;border-radius:999px;
     padding:2px 7px;margin-left:6px;vertical-align:middle}
   .tag.hd{color:#0a0a0f;background:var(--grad);font-weight:700}
+  .tag.bonus{color:#0a0a0f;background:var(--gold);font-weight:800}
   .rw .tx small{line-height:1.7}
 
   /* ---- redeem bottom sheet ---- */
@@ -564,12 +565,12 @@
         <div class="n" id="balBig">320</div>
         <div class="tierline"><span>Status · <b id="tierName">PLAYER</b></span><span id="tierNext">Scan to verify your brand</span></div>
         <div class="bar"><i id="tierBar" style="width:18%"></i></div>
-        <div class="sub">Play to bank points, then cash them in for a run of <b>your own branded goods</b> — shirts, lighters, drops.</div>
+        <div class="sub">Play to bank points, then cash them in for a run of <b>your own branded goods</b> — slaps, lighters, embroidered hoodies.</div>
         <button class="scanbtn" id="scanOpen2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h5v5H4zM15 4h5v5h-5zM4 15h5v5H4zM15 15h2v2M20 20v.01M20 15h.01M15 20h.01"/></svg> Scan an order — verify your brand</button>
       </div>
 
       <div class="sec-h"><h3>Prizes</h3><span>your brand, made by us</span></div>
-      <div class="brandhero"><div class="bh-i">◈</div><div class="bh-txt"><b>Win your own brand.</b><span>Every prize is <b style="color:var(--fg)">YOUR</b> logo on real goods — lighters, tees, hoodies — hand-made by us.</span></div></div>
+      <div class="brandhero"><div class="bh-i">◈</div><div class="bh-txt"><b>Win your own brand.</b><span>Every prize is <b style="color:var(--fg)">YOUR</b> logo on real goods — slaps, lighters, embroidered hoodies — hand-made by us.</span></div></div>
       <div id="shop"></div>
       <div class="sub" style="text-align:center;margin-top:14px">The big runs sit above the +15/day cap on purpose — they take real play to win, so it’s never a giveaway.</div>
     </section>
@@ -947,9 +948,9 @@
     Sticker:'<svg viewBox="0 0 24 24" fill="none" stroke="#25E0A6" stroke-width="1.6"><path d="M5 4h9l5 5v11H5z"/><path d="M14 4v5h5"/></svg>'
   };
   var CAT=[
-    {n:'12 branded wrapped lighters', d:'Hand-wrapped · YOUR logo', c:1200, t:'Lighters', f:1},
-    {n:'10 branded T-shirts', d:'Screen-printed · YOUR brand', c:3500, t:'Apparel', f:1, tier:1},
-    {n:'2 branded hoodies', d:'Heavyweight · YOUR brand', c:7000, t:'Apparel', f:1, tier:1}
+    {n:'12 slaps', d:'Contour-cut · YOUR logo', c:600, t:'Sticker', f:1},
+    {n:'2 lighters', d:'Hand-wrapped · YOUR logo', c:1500, t:'Lighters', f:1},
+    {n:'1 embroidered hoodie', d:'Embroidered · YOUR brand', c:7000, t:'Apparel', f:1, tier:1, bonus:'1-in-2 shot at a 2nd', bchance:0.5}
   ];
   var shopEl=document.getElementById('shop');
   function renderShop(){
@@ -958,7 +959,7 @@
     CAT.forEach(function(it,idx){
       var tierok=!it.tier||verified, afford=balance>=it.c;
       var row=document.createElement('div'); row.className='rw';
-      var tags=(it.f?'<span class="tag hd">Your brand</span>':'')+(it.tier&&!tierok?'<span class="pill">Verified brands</span>':'');
+      var tags=(it.f?'<span class="tag hd">Your brand</span>':'')+(it.tier&&!tierok?'<span class="pill">Verified brands</span>':'')+(it.bonus?'<span class="tag bonus">+ '+it.bonus+'</span>':'');
       row.innerHTML='<div class="ic">'+(ICONS[it.t]||ICONS.Merch)+'</div>'+
         '<div class="tx"><b>'+it.n+'</b><small>'+it.d+' · <span class="cost-chip">◈ '+fmt(it.c)+'</span>'+tags+'</small></div>';
       var btn=document.createElement('button');
@@ -977,13 +978,14 @@
       '<b class="sheet-t">Redeem '+it.n+'</b>'+
       '<p class="sheet-d">We print a run of <b>your</b> branded goods in-house and ship it to your shop. Points come off the account.</p>'+
       '<div class="sheet-row"><span>Cost</span><b>◈ '+fmt(it.c)+'</b></div>'+
-      '<div class="sheet-row"><span>Balance after</span><b>◈ '+fmt(after)+'</b></div>'+
+      '<div class="sheet-row"><span>Balance after</span><b>◈ '+fmt(after)+'</b></div>'+(it.bonus?'<div class="sheet-row"><span>Bonus</span><b style="color:var(--gold)">'+it.bonus+'</b></div>':'')+
       '<button class="sf-primary" id="confirmRedeem">Confirm redeem</button>'+
       '<button class="sf-link" id="cancelRedeem">Cancel</button>';
     sheet.classList.add('open');
     document.getElementById('confirmRedeem').addEventListener('click',function(){
       setBalance(balance-it.c); sheet.classList.remove('open');
-      toast('Claimed <b>'+it.n+'</b> — we’ll print your brand &amp; ship it.');
+      if(it.bchance && Math.random()<it.bchance){ toast('🎁 Bonus hit! <b>'+it.n+'</b> <b>+ a 2nd</b> — we’ll print both &amp; ship.'); }
+      else { toast('Claimed <b>'+it.n+'</b> — we’ll print your brand &amp; ship it.'); }
     });
     document.getElementById('cancelRedeem').addEventListener('click',function(){sheet.classList.remove('open');});
   }
