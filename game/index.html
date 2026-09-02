@@ -835,7 +835,7 @@
   function showGate(){
     var g=document.getElementById('startGate'); if(!g)return; g.classList.remove('hide');
     var btn=document.getElementById('startBtn'), sub=document.getElementById('sgSub');
-    if(dayDone){ if(btn){btn.textContent='✓ Played today'; btn.disabled=true; btn.classList.add('done'); } if(sub)sub.textContent='Your score '+fmt(bestScore)+' · new board tomorrow (Trap #'+(trapNum+1)+')'; return; }
+    if(dayDone){ if(btn){btn.textContent='✓ Played today'; btn.disabled=true; btn.classList.add('done'); } if(sub)sub.textContent=(bestScore>0?('Your score '+fmt(bestScore)+' · '):'')+'New board tomorrow (Trap #'+(trapNum+1)+')'; return; }
     if(btn){btn.disabled=false; btn.classList.remove('done');}
     if(btn)btn.textContent=(attempt===1?'▶ Start · 35s':'▶ Play again · 35s');
     if(sub)sub.textContent=(attempt===1?'3 tries — your best score counts.':('Best so far '+fmt(bestScore)+' · try '+attempt+' of 3'));
@@ -858,10 +858,10 @@
     setTimeout(function(){ g.forEach(function(q){grid[q[0]][q[1]]=null;}); collapse(); dayScore+=gained; setStat(); draw(); },140); }
   function collapse(){ for(var c=0;c<COLS;c++){ var col=[]; for(var r=ROWS-1;r>=0;r--) if(grid[r][c]!==null)col.push(grid[r][c]);
     for(var r2=ROWS-1,i=0;r2>=0;r2--,i++) grid[r2][c]= i<col.length?col[i]:rcolor(); } }
-  function startAttempt(){ if(playing||dayDone)return; dayScore=0; combo=0; timeLeft=TIME; playing=true; rebuildBoard(); setStat();
+  function startAttempt(){ if(playing||dayDone)return; dayScore=0; combo=0; timeLeft=TIME; playing=true; try{localStorage.setItem('tp_daily', JSON.stringify({day:dayNum, best:bestScore}));}catch(e){} rebuildBoard(); setStat();
     var g=document.getElementById('startGate'); if(g)g.classList.add('hide');
     clearInterval(timerId); timerId=setInterval(function(){ timeLeft--; if(timeLeft<0)timeLeft=0; setStat(); if(timeLeft<=0) endAttempt(); },1000); }
-  function endAttempt(){ playing=false; clearInterval(timerId); if(dayScore>bestScore)bestScore=dayScore;
+  function endAttempt(){ playing=false; clearInterval(timerId); if(dayScore>bestScore)bestScore=dayScore; try{localStorage.setItem('tp_daily', JSON.stringify({day:dayNum, best:bestScore}));}catch(e){}
     if(attempt<ATTEMPTS){ attempt++; dayScore=0; setStat(); showGate(); } else { finishDaily(); } }
   function finishDaily(){ dayDone=true;
     var stars= bestScore>=PAR*2?3 : bestScore>=Math.round(PAR*1.4)?2 : bestScore>=PAR?1 : 0;
