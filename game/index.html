@@ -445,6 +445,7 @@
     background:rgba(10,10,15,.62);backdrop-filter:blur(2px);border-radius:8px;padding:16px;text-align:center}
   .startgate.hide{display:none}
   .startgate .sf-primary{max-width:210px;margin:0}
+  .startgate .sf-primary.done,.startgate .sf-primary:disabled{opacity:1;background:rgba(255,255,255,.10);color:#c9c4d8;box-shadow:none;filter:none;cursor:default}
   .sg-sub{font-size:12.5px;color:var(--fg);line-height:1.4;max-width:24ch}
   .ne{z-index:66}
   .ne-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center}
@@ -819,6 +820,8 @@
     attempt=1; bestScore=0; dayScore=0; dayDone=false; timeLeft=TIME; playing=false; combo=0;
     var pn=document.getElementById('pnum'); if(pn)pn.textContent='#'+trapNum;
     var pv=document.getElementById('parval'); if(pv)pv.textContent=fmt(PAR);
+    var _d=null; try{_d=JSON.parse(localStorage.getItem('tp_daily')||'null');}catch(e){}
+    if(_d && _d.day===dayNum){ dayDone=true; bestScore=_d.best||0; }
     rebuildBoard(); setStat(); showGate();
   }
   function setStat(){
@@ -832,6 +835,8 @@
   function showGate(){
     var g=document.getElementById('startGate'); if(!g)return; g.classList.remove('hide');
     var btn=document.getElementById('startBtn'), sub=document.getElementById('sgSub');
+    if(dayDone){ if(btn){btn.textContent='✓ Played today'; btn.disabled=true; btn.classList.add('done'); } if(sub)sub.textContent='Your score '+fmt(bestScore)+' · new board tomorrow (Trap #'+(trapNum+1)+')'; return; }
+    if(btn){btn.disabled=false; btn.classList.remove('done');}
     if(btn)btn.textContent=(attempt===1?'▶ Start · 35s':'▶ Play again · 35s');
     if(sub)sub.textContent=(attempt===1?'3 tries — your best score counts.':('Best so far '+fmt(bestScore)+' · try '+attempt+' of 3'));
   }
@@ -853,7 +858,7 @@
     setTimeout(function(){ g.forEach(function(q){grid[q[0]][q[1]]=null;}); collapse(); dayScore+=gained; setStat(); draw(); },140); }
   function collapse(){ for(var c=0;c<COLS;c++){ var col=[]; for(var r=ROWS-1;r>=0;r--) if(grid[r][c]!==null)col.push(grid[r][c]);
     for(var r2=ROWS-1,i=0;r2>=0;r2--,i++) grid[r2][c]= i<col.length?col[i]:rcolor(); } }
-  function startAttempt(){ if(playing)return; dayScore=0; combo=0; timeLeft=TIME; playing=true; rebuildBoard(); setStat();
+  function startAttempt(){ if(playing||dayDone)return; dayScore=0; combo=0; timeLeft=TIME; playing=true; rebuildBoard(); setStat();
     var g=document.getElementById('startGate'); if(g)g.classList.add('hide');
     clearInterval(timerId); timerId=setInterval(function(){ timeLeft--; if(timeLeft<0)timeLeft=0; setStat(); if(timeLeft<=0) endAttempt(); },1000); }
   function endAttempt(){ playing=false; clearInterval(timerId); if(dayScore>bestScore)bestScore=dayScore;
@@ -870,6 +875,7 @@
     document.getElementById('rstreak').textContent='🔥 '+(stars>=1?7:0);
     document.getElementById('rpts').textContent='+'+earned;
     document.getElementById('rrank').textContent='#'+(bestScore>=Math.round(PAR*1.4)?3:5);
+    try{localStorage.setItem('tp_daily', JSON.stringify({day:dayNum, best:bestScore, stars:stars, earned:earned}));}catch(e){}
     document.getElementById('result').classList.add('show');
   }
   var _startBtn=document.getElementById('startBtn'); if(_startBtn)_startBtn.addEventListener('click',startAttempt);
