@@ -1,64 +1,64 @@
 {
-  "updated": "2026-09-02",
+  "updated": "2026-09-03",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-09-02",
+      "date": "2026-09-03",
       "label": "Morning Brief",
-      "title": "Rescheduling Momentum Builds Nationally While Michigan Operators Find Openings Despite the 24% Tax",
-      "top": "Nationally, the DEA's marijuana rescheduling hearing has wrapped with a judge now drafting a recommendation, while Compass Pathways' psilocybin therapy clears another durability milestone toward a 2027 launch. Locally, Michigan operators are pushing through the wholesale tax fight with new hospitality concepts, a resolved surveillance dispute for a major chain, and growing political momentum — from both parties — to roll the levy back.",
+      "title": "Relief on Two Fronts: Michigan's Tax Fight Goes Bipartisan While Psychedelics and M&A Power National Momentum",
+      "top": "In Michigan, both major governor candidates are now on record against the 24% wholesale tax and Muskegon just broke ground on a $4M cannabis hospitality concept, even as Q2 tax revenue data shows the market slowly stabilizing. Nationally, Compass Pathways' psilocybin program is racing toward what could be the first-ever FDA-approved classic psychedelic, while a fresh wave of M&A signals capital is finally moving again.",
       "local": [
         {
-          "text": "Jars Cannabis, the 54-store chain spanning Michigan, Arizona and Colorado, struck a deal with Madison Heights to remove a Flock surveillance camera trained on its parking lot, closing out a years-long dispute stemming from the city's 2022 license denial and clearing the way for smoother operations at the location.",
-          "source": "Cann.dev",
-          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
+          "text": "Fields Cannary, a $4M dispensary-and-restaurant concept in Muskegon, is targeting a fall opening as a fully integrated cannabis hospitality model combining retail, on-site consumption, dining and event licensing — a bet that a winery-style elevated experience can support higher price points even under the new tax regime.",
+          "source": "MLive",
+          "url": "https://www.mlive.com/news/muskegon/2026/08/4m-dispensary-restaurant-set-to-open-this-fall-in-muskegon.html"
         },
         {
-          "text": "Fields Cannary's Muskegon dispensary-restaurant buildout is still moving forward toward a fall opening, proof that ambitious hospitality-driven cannabis retail concepts can still get built in Michigan even as the wholesale tax squeezes margins elsewhere.",
-          "source": "Cann.dev",
-          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
-        },
-        {
-          "text": "GOP gubernatorial candidate John James made repealing or sharply cutting the 24% wholesale tax a plank of his 'Freedom Agenda,' arguing it \"drives up prices, gives illegal operators a competitive edge\" — momentum the Michigan Cannabis Industry Association is actively promoting as a state Rep. James DeSana-backed repeal bill also works its way through Lansing.",
+          "text": "GOP gubernatorial nominee John James pledged to repeal or sharply reduce the 24% wholesale tax, calling it a levy that \"drives up prices, gives illegal operators a competitive edge, and has already fallen far short of revenue projections\" — putting both major-party candidates on record against the tax heading into November.",
           "source": "Marijuana Moment",
           "url": "https://www.marijuanamoment.net/michigan-gop-governor-candidate-pledges-huge-tax-cut-for-marijuana-industry-along-with-crackdown-on-hemp-products"
         },
         {
-          "text": "The Michigan Supreme Court rewrote the rules governing marijuana-related searches this summer, part of a wave of state-level moves that also included Ohio pushing retailers toward manufacturing as a new growth lever — a reminder that regulatory shifts aren't all downside for operators.",
-          "source": "Cann.dev",
-          "url": "https://www.cann.dev/cannabis-august-2026-state-updates-five-markets/"
+          "text": "Michigan's wholesale tax generated $37.38 million in Q2 2026, up from $34 million in Q1 — still a fraction of the $105 million quarterly projection, but the upward trend is giving repeal advocates in Lansing fresh ammunition.",
+          "source": "WJR-AM",
+          "url": "https://www.wjr.com/2026/09/02/michigans-marijuana-tax-coughs-up-only-37-38-million-in-second-quarter-falling-short-of-projection/"
         },
         {
-          "text": "The fight over the tax continues on two legal fronts — MiCIA has now filed a second lawsuit alleging unconstitutional 'tax pyramiding' — while enforcement actions like Zaza Recreational's license surrender and Ground Control Michigan's forfeited processor license signal a market shakeout that's clearing weaker players and creating room for better-capitalized operators.",
-          "source": "Cann.dev",
-          "url": "https://www.cann.dev/cannabis-august-2026-state-updates-five-markets/"
+          "text": "While Higher Love closed five of its nine Upper Michigan stores citing the tax hike directly, fellow U.P. operator Rize has kept growing by negotiating cost-sharing arrangements with suppliers instead of absorbing the tax alone — a survival playbook other multi-store operators are now watching closely.",
+          "source": "cann.dev",
+          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
+        },
+        {
+          "text": "A Republican state representative introduced House Bill 6224 to repeal the 24% wholesale tax outright, as CRA data shows active retail licenses statewide slipped from 845 to 836 over the past year — giving the repeal push real numbers to point to.",
+          "source": "cann.dev",
+          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
         }
       ],
       "national": [
         {
-          "text": "The DEA's marijuana rescheduling hearing has concluded, with presiding judge Derek Julius now drafting a recommendation on moving cannabis to Schedule III; the final call rests with DEA Administrator Terrance Cole, putting the industry closer than ever to a federal scheduling shift.",
-          "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/news/marijuana-rescheduling-decision-nears-as-dea-publishes-hearing-transcript/617621/"
+          "text": "Compass Pathways' COMP360 psilocybin program hit positive 26-week durability results in July, and the company's rolling NDA is now targeting final submission in Q4 2026 with a potential approval by late 2026 or early 2027 — putting it on track to become the first classic psychedelic ever approved by the FDA.",
+          "source": "Psychedelic Beacon",
+          "url": "https://psychedelicbeacon.com/blog/psilocybin-fda-approval-tracker"
         },
         {
-          "text": "Compass Pathways just posted six-month durability data for its psilocybin therapy COMP360 in treatment-resistant depression, with its NDA review underway and full submission on track for Q4 2026 — the company is targeting a first-half-2027 launch pending FDA approval and DEA rescheduling.",
-          "source": "Clinical Trials Arena",
-          "url": "https://www.clinicaltrialsarena.com/news/fda-finalises-psychedelic-clinical-trial-guidance/"
+          "text": "Cannabis M&A hit a new gear in August: Curaleaf floated a $4/share cross-border bid for Aurora Cannabis while Grown Rogue struck a deal to acquire PharmaCann's New York license and four Verilife dispensaries for roughly $4.5 million — proof that rescheduling momentum and an improving capital backdrop are unlocking deals again.",
+          "source": "cann.dev",
+          "url": "https://www.cann.dev/cannabis-ma-august-2026-curaleaf-vireo-consolidation/"
         },
         {
-          "text": "M&A hit a new gear in August: Curaleaf launched a $4-per-share takeover bid for Aurora Cannabis, while Vireo Growth's merger with Planet 13 will push Vireo to roughly 265 dispensaries across 15 states once pending deals close — a signal that consolidation is accelerating around scale players.",
-          "source": "Cann.dev",
-          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
+          "text": "DEA has begun sending detailed questionnaires to Colorado's state-licensed medical cannabis businesses that applied for federal protections under the April Schedule III order — the first concrete sign the rescheduling framework is moving from paper to practice for operators.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/deas-list-of-cannabis-questions-for-businesses-seeking-rescheduling-protections-newsletter-september-1-2026"
         },
         {
-          "text": "The FDA has scheduled a hybrid public hearing for September 14 on the future therapeutic use of psychedelic drugs, directly implementing President Trump's Executive Order 14401, which directs federal agencies to accelerate research and drug approvals for psychedelic treatments of serious mental illness.",
-          "source": "Federal Register / FDA",
-          "url": "https://www.federalregister.gov/documents/2026/07/14/2026-14155/considerations-for-potential-future-therapeutic-use-of-psychedelic-drugs-public-hearing-request-for"
+          "text": "The House is expected to take up Senate-passed legislation this week to delay the scheduled federal recriminalization of hemp THC products, buying lawmakers more time to craft regulation as an alternative to an outright ban.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/deas-list-of-cannabis-questions-for-businesses-seeking-rescheduling-protections-newsletter-september-1-2026"
         },
         {
-          "text": "Consumer demand keeps climbing: Florida set a monthly medical cannabis sales record at $198.2 million and Minnesota's legal market hit $136 million in the first half of 2026, underscoring that legal markets keep expanding even amid regulatory turbulence.",
-          "source": "Cann.dev / The Marijuana Herald",
-          "url": "https://www.cann.dev/cannabis-august-2026-state-updates-five-markets/"
+          "text": "DEA's formal hearing on rescheduling marijuana to Schedule III wrapped in mid-July after weeks of testimony at DEA headquarters, and the industry is now waiting on the administrator's ruling — the single biggest swing factor left for U.S. cannabis markets.",
+          "source": "DEA.gov",
+          "url": "https://www.dea.gov/press-releases/2026/06/25/dea-hearing-proposed-marijuana-rescheduling-begins-june-29"
         }
       ]
     }
