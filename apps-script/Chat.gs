@@ -1,5 +1,5 @@
 /**
- * The Sticky Trap — app chat backend (STANDALONE Google Apps Script web app)
+ * The Sticky Trap - app chat backend (STANDALONE Google Apps Script web app)
  * ---------------------------------------------------------------------------
  * Powers the "Ask us" chat panel in the app. The browser POSTs the conversation (plus the
  * customer's current tab and basket) here; this script grounds Claude in the knowledge base the
@@ -8,31 +8,31 @@
  * jump to a tab, open the quote form), and returns the reply plus the actions for the app to run.
  * The Anthropic key never leaves this script.
  *
- * Keep this its OWN Apps Script project (like the usage tracker) — do not merge it into the main
+ * Keep this its OWN Apps Script project (like the usage tracker) - do not merge it into the main
  * backend, whose deployments are tangled.
  *
  * ONE-TIME SETUP (~2 min)
- *   1) script.google.com → New project → rename it "Sticky Trap — Chat" → paste this file over Code.gs.
- *   2) Project Settings (gear) → Script Properties → Add:  ANTHROPIC_API_KEY = sk-ant-…
- *      (optional overrides: MODEL, KB_URL, MAX_PER_HOUR — see DEFAULTS below)
- *   3) Ctrl+S — save BEFORE deploying; a deployment snapshots the last SAVED code.
- *   4) Deploy → New deployment → type Web app → Execute as: Me · Who has access: Anyone → Deploy.
- *      Authorize when prompted. Copy the …/exec URL.
+ *   1) script.google.com -> New project -> rename it "Sticky Trap - Chat" -> paste this file over Code.gs.
+ *   2) Project Settings (gear) -> Script Properties -> Add:  ANTHROPIC_API_KEY = sk-ant-...
+ *      (optional overrides: MODEL, KB_URL, MAX_PER_HOUR - see DEFAULTS below)
+ *   3) Ctrl+S - save BEFORE deploying; a deployment snapshots the last SAVED code.
+ *   4) Deploy -> New deployment -> type Web app -> Execute as: Me . Who has access: Anyone -> Deploy.
+ *      Authorize when prompted. Copy the .../exec URL.
  *   5) In index.html set  var CHAT_URL='<that /exec URL>';  commit + push (push = deploy).
- *   UPDATING LATER: paste the new code, Ctrl+S, Deploy → Manage deployments → pencil → Version: New → Deploy
+ *   UPDATING LATER: paste the new code, Ctrl+S, Deploy -> Manage deployments -> pencil -> Version: New -> Deploy
  *   (the /exec URL stays the same).
  *
  * CHECKS
- *   • Open  <exec URL>?ping=1  in a browser → {"ok":true,"key":true,"kb":<chars>,"prices":160,…}
- *   • In the editor run  selfTest()  → View › Logs shows a real answer + the action it produced.
- *   • Chats are logged anonymously to a self-created Sheet "Sticky Trap — App Chats"; run getConfig() for its URL.
+ *   • Open  <exec URL>?ping=1  in a browser -> {"ok":true,"key":true,"kb":<chars>,"prices":160,...}
+ *   • In the editor run  selfTest()  -> View › Logs shows a real answer + the action it produced.
+ *   • Chats are logged anonymously to a self-created Sheet "Sticky Trap - App Chats"; run getConfig() for its URL.
  *
  * PROTOCOL
  *   POST body (sent as text/plain so the browser skips the CORS preflight):
- *     {"uid":"…","tab":"menu","basket":[{"p":"3\" Slap","m":"Holographic BF","f":"Pro","pr":"1.35","qty":100}],
- *      "messages":[{"role":"user"|"assistant","content":"…"}, …]}
- *   Response: {"ok":true,"reply":"…","actions":[{"type":"add_to_basket","p":…,"m":…,"f":…,"pr":1.35,"qty":100}, …]}
- *          or {"ok":false,"error":"…","reply":"<friendly fallback>"}
+ *     {"uid":"...","tab":"menu","basket":[{"p":"3\" Slap","m":"Holographic BF","f":"Pro","pr":"1.35","qty":100}],
+ *      "messages":[{"role":"user"|"assistant","content":"..."}, ...]}
+ *   Response: {"ok":true,"reply":"...","actions":[{"type":"add_to_basket","p":...,"m":...,"f":...,"pr":1.35,"qty":100}, ...]}
+ *          or {"ok":false,"error":"...","reply":"<friendly fallback>"}
  */
 
 var PROP = PropertiesService.getScriptProperties();
@@ -51,7 +51,7 @@ var DEFAULTS = {
 function cfg_(k) { return PROP.getProperty(k) || DEFAULTS[k]; }
 
 var FALLBACK = "I'm having trouble answering right now. Call or text 734 460 3845, email thestickytrap@gmail.com, or tap Start a project in the Connect tab and we'll help you directly.";
-var BUSY = "Lots of questions coming in — give me a minute and try again, or call/text 734 460 3845.";
+var BUSY = "Lots of questions coming in - give me a minute and try again, or call/text 734 460 3845.";
 
 // Mirrors the app's volume bands (menu price to 249, 3% off at 250, 6% at 500, 10% at 1000).
 var BANDS = [[249, 1.00], [499, 0.97], [999, 0.94], [1000, 0.90]];
@@ -61,20 +61,20 @@ var TABS = ['industry', 'social', 'menu', 'specs', 'connect', 'play'];
 var SYSTEM = [
   "You are the in-app assistant for The Sticky Trap, a design house and sticker/label print shop in Ann Arbor, Michigan.",
   "You're chatting with customers inside the Sticky Trap phone app (tabs: Industry, Social, Menu, Specs, Connect, Play).",
-  "Answer from the knowledge base below. Be warm, direct and brief — this is a small chat panel: usually one to four short sentences, plain text.",
+  "Answer from the knowledge base below. Be warm, direct and brief - this is a small chat panel: usually one to four short sentences, plain text.",
   "No markdown headers, tables or bold; a short list with one item per line and a leading dash is fine.",
   "Quote prices exactly as listed (per piece, USD) and name the material and finish tier you're quoting. Apply the volume breaks only as the rules state and show the math when you total an order.",
-  "If something isn't in the knowledge base — turnaround, rush, shipping, hours, items or materials not on the menu, design or pre-press cost, orders over 1,000 — don't guess: say it's quoted per project and point them to call/text 734 460 3845, email thestickytrap@gmail.com, or the basket / Start a project quote flow in the app.",
+  "If something isn't in the knowledge base - turnaround, rush, shipping, hours, items or materials not on the menu, design or pre-press cost, orders over 1,000 - don't guess: say it's quoted per project and point them to call/text 734 460 3845, email thestickytrap@gmail.com, or the basket / Start a project quote flow in the app.",
   "Never invent prices, discounts or promises. Don't ask for personal details; when they're ready to order, steer them to the basket or the quote form.",
   "Reply in the customer's language. If asked what you are: a Sticky Trap assistant powered by Claude.",
   "",
-  "ACTING IN THE APP — you have tools that the app executes for the customer:",
-  "- add_to_basket: only when they clearly ask to add or order something AND you have product, material, finish and quantity. If any piece is missing, ask for it in one short question instead of assuming (never assume a finish). Quantities: minimum 50, steps of 5, maximum 1,000 (over 1,000 is a call-us quote). The tool result carries the exact unit price and line total — confirm those in one line, and if they're within 55 pieces of a volume break, mention it.",
+  "ACTING IN THE APP - you have tools that the app executes for the customer:",
+  "- add_to_basket: only when they clearly ask to add or order something AND you have product, material, finish and quantity. If any piece is missing, ask for it in one short question instead of assuming (never assume a finish). Quantities: minimum 50, steps of 5, maximum 1,000 (over 1,000 is a call-us quote). The tool result carries the exact unit price and line total - confirm those in one line, and if they're within 55 pieces of a volume break, mention it.",
   "- open_product: when they want to see or browse a product's prices; it expands that product in the Menu tab.",
   "- show_basket: when they ask to see, review or check out their basket.",
   "- open_quote_form: when they're ready to send the order, get a quote, or upload art.",
   "- go_to: when they ask for another part of the app (materials/specs, contact, episodes, the daily brief, the game).",
-  "You may call several tools in one turn (e.g. two add_to_basket lines). Their current tab and basket are given below — use them (e.g. 'your basket already has…').",
+  "You may call several tools in one turn (e.g. two add_to_basket lines). Their current tab and basket are given below - use them (e.g. 'your basket already has...').",
   "", "KNOWLEDGE BASE:", ""
 ].join("\n");
 
@@ -138,7 +138,7 @@ function out_(obj) {
 
 /* ---------- request hygiene ---------- */
 // Keep only well-formed user/assistant text, cap length + count, and force strict alternation
-// starting (and ending) with a user turn — the Messages API rejects anything else.
+// starting (and ending) with a user turn - the Messages API rejects anything else.
 function clean_(list) {
   if (!Array.isArray(list)) return [];
   var maxTurns = +cfg_('MAX_TURNS'), maxChars = +cfg_('MAX_CHARS');
@@ -260,11 +260,11 @@ function runTool_(use, prices, ctx) {
       if (!f) return { error: true, result: { error: "Unknown finish '" + inp.finish + "' for " + p + " " + m + ". Options: " + uniq_(prices.filter(function (r) { return r.p === p && r.m === m; }), 'f').join(', ') } };
       var q = Math.round(+inp.qty || 0);
       if (q < MINQ) return { error: true, result: { error: 'Minimum order is ' + MINQ + ' pieces per item.' } };
-      if (q > MAXQ) return { error: true, result: { error: 'Over ' + MAXQ + ' pieces is a custom quote — ask them to call or text 734 460 3845.' } };
+      if (q > MAXQ) return { error: true, result: { error: 'Over ' + MAXQ + ' pieces is a custom quote - ask them to call or text 734 460 3845.' } };
       if (q % STEP) { q = Math.round(q / STEP) * STEP; }
       var row = prices.filter(function (r) { return r.p === p && r.m === m && r.f === f; })[0];
       var hb = !!inp.holobrite;
-      if (hb && row.hb == null) return { error: true, result: { error: 'HoloBrite (white underbase) is not offered on ' + m + ' — only on Holographic BF and Gold BF.' } };
+      if (hb && row.hb == null) return { error: true, result: { error: 'HoloBrite (white underbase) is not offered on ' + m + ' - only on Holographic BF and Gold BF.' } };
       var pr = hb ? row.hb : row.pr, fname = f + (hb ? ' + HoloBrite' : ''), u = unit_(pr, q), tot = u * q;
       ctx.basket.push({ p: p, m: m, f: fname, pr: pr, qty: q });
       var sub = basketLines_(ctx.basket).reduce(function (a, l) { return a + l.total; }, 0);
@@ -317,7 +317,7 @@ function ask_(msgs, ctx) {
     convo.push({ role: 'user', content: results });
   }
   // ran out of rounds: keep whatever actions succeeded and say so plainly
-  return { reply: actions.length ? 'Done — check your basket for the update.' : FALLBACK, actions: actions, usage: usage, model: model };
+  return { reply: actions.length ? 'Done - check your basket for the update.' : FALLBACK, actions: actions, usage: usage, model: model };
 }
 
 function callClaude_(convo, kb, ctx) {
@@ -356,7 +356,7 @@ function callClaude_(convo, kb, ctx) {
 function ss_() {
   var id = PROP.getProperty('CHAT_SHEET_ID');
   if (!id) {
-    var ss = SpreadsheetApp.create('Sticky Trap — App Chats');
+    var ss = SpreadsheetApp.create('Sticky Trap - App Chats');
     id = ss.getId(); PROP.setProperty('CHAT_SHEET_ID', id);
     var sh = ss.getActiveSheet(); sh.setName('chats');
     sh.appendRow(['ts', 'device_id', 'question', 'answer', 'actions', 'in_tokens', 'out_tokens', 'cache_read', 'model']);
