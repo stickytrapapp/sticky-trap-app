@@ -23,9 +23,9 @@
  *   (the /exec URL stays the same).
  *
  * CHECKS
- *   • Open  <exec URL>?ping=1  in a browser -> {"ok":true,"key":true,"kb":<chars>,"prices":160,...}
- *   • In the editor run  selfTest()  -> View › Logs shows a real answer + the action it produced.
- *   • Chats are logged anonymously to a self-created Sheet "Sticky Trap - App Chats"; run getConfig() for its URL.
+ *   - Open  <exec URL>?ping=1  in a browser -> {"ok":true,"key":true,"kb":<chars>,"prices":160,...}
+ *   - In the editor run  selfTest()  -> View > Logs shows a real answer + the action it produced.
+ *   - Chats are logged anonymously to a self-created Sheet "Sticky Trap - App Chats"; run getConfig() for its URL.
  *
  * PROTOCOL
  *   POST body (sent as text/plain so the browser skips the CORS preflight):
@@ -216,7 +216,7 @@ function basketSummary_(basket) {
 }
 
 /* ---------- fuzzy name matching against the KB ---------- */
-function norm_(s) { return String(s || '').toLowerCase().replace(/["”″]/g, ' inch').replace(/[^a-z0-9]+/g, ''); }
+function norm_(s) { return String(s || '').toLowerCase().replace(/["\u201d\u2033]/g, ' inch').replace(/[^a-z0-9]+/g, ''); }
 function matchProduct_(q, prices) {
   var names = []; prices.forEach(function (r) { if (names.indexOf(r.p) < 0) names.push(r.p); });
   var nq = norm_(q).replace(/inches|inch|in\b/g, 'inch');
