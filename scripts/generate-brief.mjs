@@ -98,6 +98,31 @@ function extractText(msg) {
     .join('\n');
 }
 
+// The model cites its web-search sources inline as <cite index="...">...</cite>.
+// The app escapes item text when it renders (index.html: esc(it.text)), so any
+// markup that survives shows up literally in the Industry tab -- strip it here.
+const CITE_TAG = /<\/?cite\b[^>]*>/gi;
+
+function clean(s) {
+  return typeof s === 'string'
+    ? s.replace(CITE_TAG, '').replace(/[ \t]{2,}/g, ' ').trim()
+    : s;
+}
+
+function stripMarkup(brief) {
+  brief.title = clean(brief.title);
+  brief.top = clean(brief.top);
+  for (const sec of ['local', 'national']) {
+    if (!Array.isArray(brief[sec])) continue;
+    for (const it of brief[sec]) {
+      if (!it) continue;
+      it.text = clean(it.text);
+      it.source = clean(it.source);
+    }
+  }
+  return brief;
+}
+
 function parseBrief(text) {
   const start = text.indexOf('===BRIEF_START===');
   const end = text.indexOf('===BRIEF_END===');
@@ -141,7 +166,7 @@ async function generate() {
   if (!text.trim()) {
     throw new Error(`Empty model text. stop_reason=${msg && msg.stop_reason} blocks=${(msg && msg.content || []).map((b) => b.type).join(',')}`);
   }
-  const brief = parseBrief(text);
+  const brief = stripMarkup(parseBrief(text));
   brief.date = today;
   brief.label = 'Morning Brief';
   validate(brief);
