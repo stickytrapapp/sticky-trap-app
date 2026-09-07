@@ -56,12 +56,13 @@
   .iconb{background:none;border:0;cursor:pointer;display:flex;align-items:center;color:#9a92c8;padding:0;font-family:inherit}
   .iconb svg{width:21px;height:21px}
   .iconb:active{transform:scale(.92)}
-  .promostrip{flex:none;display:flex;align-items:center;gap:10px;margin:8px 12px 0;padding:9px 12px;border-radius:12px;border:1px solid rgba(224,165,42,.45);background:linear-gradient(100deg,rgba(224,165,42,.16),rgba(255,47,128,.10))}
+  .promostrip{flex:none;display:flex;align-items:center;gap:8px;margin:6px 12px 0;padding:6px 8px 6px 12px;border-radius:12px;border:1px solid rgba(224,165,42,.45);background:linear-gradient(100deg,rgba(224,165,42,.16),rgba(255,47,128,.10))}
   .promostrip[hidden]{display:none}
   .promostrip .ps-k{font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
-  .promostrip .ps-t{flex:1;min-width:0;font-size:12.5px;line-height:1.3;color:var(--ink)}
-  .promostrip .ps-t b{display:block;font-size:13px}
-  .promostrip .ps-cta{flex:none;font-size:11.5px;font-weight:800;padding:7px 11px;border-radius:999px;border:1px solid rgba(224,165,42,.5);color:var(--gold);background:rgba(10,7,28,.6);cursor:pointer;font-family:inherit}
+  .promostrip .ps-t{flex:1;min-width:0;font-size:12.5px;line-height:1.25;color:var(--ink);display:flex;align-items:baseline;gap:7px;white-space:nowrap;overflow:hidden}
+  .promostrip .ps-t b{font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+  .promostrip .ps-t #psD{display:none}
+  .promostrip .ps-cta{flex:none;font-size:11px;font-weight:800;padding:6px 10px;border-radius:999px;border:1px solid rgba(224,165,42,.5);color:var(--gold);background:rgba(10,7,28,.6);cursor:pointer;font-family:inherit}
   .promostrip .ps-x{flex:none;background:none;border:0;color:var(--muted);font-size:18px;line-height:1;padding:2px 4px;cursor:pointer}
   #musicb{position:relative}
   #musicb.on{color:var(--cy)}
@@ -253,14 +254,14 @@
   #stmenu .viewmenu{display:none}
   /* event hero (image-driven, main focus) */
   .tkt-hero{display:block;border-radius:18px;overflow:hidden;background:#08060f;border:1px solid rgba(138,77,255,.4);box-shadow:0 16px 38px rgba(138,77,255,.34)}
-  .tkt-media{position:relative;line-height:0}
-  .tkt-media img{width:100%;display:block;max-height:400px;object-fit:cover;object-position:top}
+  .tkt-media{position:relative;line-height:0;aspect-ratio:16/9;min-height:120px;background:#120c26}
+  .tkt-media img{width:100%;height:100%;display:block;max-height:400px;object-fit:cover;object-position:top}
   .tkt-count{position:absolute;top:12px;right:12px;font-size:11.5px;font-weight:800;letter-spacing:.02em;color:#fff;background:linear-gradient(90deg,#ff2e88,#8a4dff);padding:7px 13px;border-radius:999px;box-shadow:0 4px 16px rgba(0,0,0,.45);line-height:1}
   .tkt-foot{padding:13px 15px 16px;background:#08060f}
-  .tkt-when{font-size:12px;font-weight:700;color:#cfc6ee;margin-bottom:11px;text-align:center}
+  .tkt-when{font-size:12px;font-weight:700;color:#cfc6ee;margin-bottom:11px;text-align:center;white-space:normal;line-height:1.4;overflow-wrap:anywhere}
   .tkt-cta{display:flex;align-items:center;justify-content:center;gap:7px;font-size:15px;font-weight:800;letter-spacing:.04em;color:#fff;background:linear-gradient(90deg,#ff2e88,#8a4dff,#22d3ee);padding:15px;border-radius:12px;animation:tktpulse 2.2s infinite}
   @keyframes tktpulse{0%,100%{box-shadow:0 0 0 0 rgba(239,31,120,.5)}50%{box-shadow:0 0 0 13px rgba(239,31,120,0)}}
-  .evribbon{display:flex;align-items:center;justify-content:center;gap:8px;font-size:12px;font-weight:800;color:#fff;background:linear-gradient(90deg,#ff2e88,#8a4dff,#22d3ee);border-radius:12px;padding:11px 14px;box-shadow:0 8px 20px rgba(138,77,255,.35);text-align:center;line-height:1.3}
+  .evribbon{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px 8px;font-size:12px;font-weight:800;color:#fff;background:linear-gradient(90deg,#ff2e88,#8a4dff,#22d3ee);border-radius:12px;padding:11px 14px;box-shadow:0 8px 20px rgba(138,77,255,.35);text-align:center;line-height:1.3}
   .evribbon b{text-decoration:underline;text-underline-offset:2px}
   @media (prefers-reduced-motion: reduce){.tkt-cta{animation:none}}
   .field{display:flex;gap:8px}
@@ -358,9 +359,10 @@
   #chatfab .dot{position:absolute;top:-2px;right:-2px;width:9px;height:9px;border-radius:50%;background:var(--mag);border:1.5px solid #fff;box-shadow:0 0 0 0 rgba(239,31,120,.55);animation:pulse2 2s infinite}
   #chatfab:active{transform:scale(.96)}
   #chatfab.fabhide{opacity:0;pointer-events:none;transform:translateY(14px)}
+  #chatfab.up{bottom:calc(84px + var(--safe-b))}
   #chatov{position:fixed;inset:0;background:rgba(5,3,10,.62);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);z-index:65;opacity:0;pointer-events:none;transition:opacity .2s}
   #chatov.on{opacity:1;pointer-events:auto}
-  #chatpanel{position:fixed;left:0;right:0;bottom:0;z-index:70;height:min(80dvh,640px);max-height:calc(100% - 40px);display:flex;flex-direction:column;
+  #chatpanel{position:fixed;left:0;right:0;bottom:0;z-index:70;height:min(80vh,640px);height:min(80dvh,640px);max-height:calc(100% - 40px);display:flex;flex-direction:column;
     background:linear-gradient(180deg,#1a1240,#0b0722);border-top:1px solid var(--line);border-radius:18px 18px 0 0;box-shadow:0 -16px 40px rgba(0,0,0,.5);
     transform:translateY(105%);transition:transform .26s ease}
   #chatpanel.on{transform:translateY(0)}
@@ -1475,13 +1477,29 @@
       .finally(function(){ if(then) then(); });
   }
 
-  /* ---- event countdown + auto-hide after it passes ---- */
+  /* ---- Event hero (Social) + Industry ribbon: filled from data/promos.json (first event with a 'hero' block whose
+          date hasn't passed); the markup's Resin Reception values are the fallback. Countdown + auto-hide after the date. ---- */
   (function(){
-    var el=document.getElementById('tkt-count'); if(!el) return;
-    var ev=new Date(2026,8,26), now=new Date(), t=new Date(now.getFullYear(),now.getMonth(),now.getDate());
-    var n=Math.round((ev-t)/86400000), hero=document.getElementById('tkt-hero'), rib=document.getElementById('ev-ribbon');
-    if(n<0){ if(hero)hero.style.display='none'; if(rib)rib.style.display='none'; var dm=document.getElementById('dontmiss-lbl'); if(dm)dm.style.display='none'; return; }
-    el.textContent = n===0?'🎟 Tonight':n===1?'🎟 Tomorrow':'🎟 In '+n+' days';
+    var hero=document.getElementById('tkt-hero'), rib=document.getElementById('ev-ribbon'), cnt=document.getElementById('tkt-count'), dm=document.getElementById('dontmiss-lbl');
+    if(!hero) return;
+    function apply(h){
+      var parts=(h.date||'').split('-'), ev=parts.length===3?new Date(+parts[0],+parts[1]-1,+parts[2]):null;
+      var now=new Date(), t=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+      var n=ev?Math.round((ev-t)/86400000):-1;
+      if(n<0){ hero.style.display='none'; if(rib)rib.style.display='none'; if(dm)dm.style.display='none'; return; }
+      hero.style.display=''; if(rib)rib.style.display=''; if(dm)dm.style.display='';
+      if(h.tickets) hero.href=h.tickets;
+      var img=hero.querySelector('img'); if(img&&h.image){ img.src=h.image; img.alt=h.alt||''; }
+      var when=hero.querySelector('.tkt-when'); if(when) when.textContent=[h.when,h.venue].filter(Boolean).join(' · ');
+      if(rib&&h.ribbon){ rib.innerHTML=''; rib.appendChild(document.createTextNode(h.ribbon+' ')); var b=document.createElement('b'); b.textContent='See event →'; rib.appendChild(b); }
+      if(cnt) cnt.textContent = n===0?'🎟 Tonight':n===1?'🎟 Tomorrow':'🎟 In '+n+' days';
+    }
+    apply({date:'2026-09-26'});   // markup defaults until the file answers
+    fetch('data/promos.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json();}).then(function(Pj){
+      var t=new Date(), today=t.getFullYear()+'-'+('0'+(t.getMonth()+1)).slice(-2)+'-'+('0'+t.getDate()).slice(-2);
+      var h=null; (Pj.events||[]).forEach(function(e){ if(!h && e.hero && e.hero.date && e.hero.date>=today) h=e.hero; });
+      if(h) apply(h); else apply({date:''});
+    }).catch(function(){});
   })();
 
   /* ---- Add to Home Screen prompt (install like a native app) ---- */
@@ -1511,18 +1529,27 @@
     window.addEventListener('appinstalled', function(){ close(true); });
   })();
 
-  /* ---- Order: specials/promos (fill SPECIALS to run a deal) ---- */
+  /* ---- Menu "Specials & promos": every active promo from data/promos.json (featured of the week, double points,
+          dated events for the app). Same file drives the top strip, the game and the chatbot. ---- */
   (function(){
-    var SPECIALS=[
-      // e.g. { title:'20% off first sticker run', desc:'New customers — mention the app.', tag:'This week' }
-    ];
     var el=document.getElementById('specials'); if(!el) return;
     var lbl=document.getElementById('specials-lbl');
-    if(!SPECIALS.length){ el.style.display='none'; if(lbl) lbl.style.display='none'; return; }
-    el.style.display=''; if(lbl) lbl.style.display='';
-    el.innerHTML=SPECIALS.map(function(s){
-      return '<div class="promo"><div class="pt">'+esc(s.title)+'</div>'+(s.desc?'<div class="pd">'+esc(s.desc)+'</div>':'')+(s.tag?'<span class="ptag">'+esc(s.tag)+'</span>':'')+'</div>';
-    }).join('');
+    function ymd(d){ return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
+    function isFirstWeekend(d){ var dow=d.getDay(), dm=d.getDate(); return (dow===6&&dm<=7)||(dow===0&&dm>=2&&dm<=8); }
+    function active(P){ var d=new Date(), t=ymd(d), out=[];
+      (P.events||[]).forEach(function(e){ if(e.surfaces&&e.surfaces.indexOf('app')<0) return; if(e.from&&t<e.from) return; if(e.to&&t>e.to) return; out.push({title:e.title,desc:e.text,tag:'Happening'}); });
+      if(P.double_points){ var r=P.double_points, on=r.rule==='first_weekend'?isFirstWeekend(d):(r.rule==='weekend'?(d.getDay()===0||d.getDay()===6):false); if(on) out.push({title:r.label||'Double points',desc:r.text||'',tag:'Game · today'}); }
+      if(P.featured&&P.featured.items&&P.featured.items.length){ var wk=Math.floor(Date.now()/864e5/7), it=P.featured.items[wk%P.featured.items.length]; out.push({title:it.product,desc:it.pitch,tag:'This week'}); }
+      return out; }
+    function render(list){
+      if(!list.length){ el.style.display='none'; if(lbl) lbl.style.display='none'; return; }
+      el.style.display=''; if(lbl) lbl.style.display='';
+      el.innerHTML=list.map(function(s){
+        return '<div class="promo"><div class="pt">'+esc(s.title)+'</div>'+(s.desc?'<div class="pd">'+esc(s.desc)+'</div>':'')+(s.tag?'<span class="ptag">'+esc(s.tag)+'</span>':'')+'</div>';
+      }).join('');
+    }
+    el.style.display='none'; if(lbl) lbl.style.display='none';
+    fetch('data/promos.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json();}).then(function(P){ render(active(P)); }).catch(function(){});
   })();
 
   /* ---- Floating basket: hide while actively scrolling (stay out of the viewer's way) and while
@@ -1808,7 +1835,7 @@
     try{window.track&&window.track('chat_open',(window.location.hash||'').replace('#','')||'industry');}catch(e){}
     setTimeout(function(){ scrollEnd(); try{ if(window.innerWidth>700) input.focus({preventScroll:true}); }catch(e){} },280);
   }
-  function close(){ panel.classList.remove('on'); ov.classList.remove('on'); panel.setAttribute('aria-hidden','true'); fab.classList.remove('fabhide'); }
+  function close(){ panel.classList.remove('on'); ov.classList.remove('on'); panel.setAttribute('aria-hidden','true'); fab.classList.remove('fabhide'); setTimeout(settle,0); }
   function uid(){ try{ return window.ST_UID || localStorage.getItem('st_uid') || 'anon'; }catch(e){ return 'anon'; } }
   function curTab(){ var v=document.querySelector('.view.active'); return (v&&v.dataset.view)||(location.hash||'').replace('#','')||'industry'; }
   function basket(){ try{ var c=(window.STM&&window.STM.get&&window.STM.get())||JSON.parse(localStorage.getItem('st_cart')||'[]'); return c.map(function(i){return {p:i.p,m:i.m,f:i.f,pr:i.pr,qty:i.qty};}); }catch(e){ return []; } }
@@ -1854,11 +1881,19 @@
   document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.classList.contains('on')) close(); });
   form.addEventListener('submit',function(e){ e.preventDefault(); ask(input.value); });
   // hide the bubble while the page scrolls (same manners as the basket button), bring it back when scrolling stops
-  var views=document.querySelector('.views');
+  var views=document.querySelector('.views'), qform=document.getElementById('quoteform');
+  function formInView(){ if(!qform) return false; var r=qform.getBoundingClientRect(); return r.top < (window.innerHeight - 40) && r.bottom > 40; }
+  function settle(){ if(panel.classList.contains('on')) return; fab.classList.toggle('fabhide', formInView()); }
   if(views) views.addEventListener('scroll',function(){
     if(panel.classList.contains('on')) return;
-    fab.classList.add('fabhide'); clearTimeout(hideT); hideT=setTimeout(function(){ fab.classList.remove('fabhide'); },450);
+    fab.classList.add('fabhide'); clearTimeout(hideT); hideT=setTimeout(settle,450);
   },{passive:true});
+  var tabsEl=document.getElementById('tabs'); if(tabsEl) tabsEl.addEventListener('click',function(){ setTimeout(settle,60); });
+  var ib=document.getElementById('installbar');
+  function bump(){ fab.classList.toggle('up', !!ib && !ib.hidden); }
+  if(ib && window.MutationObserver){ new MutationObserver(bump).observe(ib,{attributes:true,attributeFilter:['hidden']}); }
+  bump();
+  window.addEventListener('resize',settle);
   renderAll();
 })();
 </script>
@@ -1868,23 +1903,31 @@
         pauses when the app is hidden. Browsers block sound before a tap, so a remembered ON waits for the first tap. ---- */
 (function(){
   var b=document.getElementById('musicb'); if(!b) return;
-  var SRC='audio/beat.mp3', VOL=0.35, a=null, want=false, armed=false, fadeT=null;
+  var SRC='audio/beat.mp3', VOL=0.35, a=null, want=false, armed=false, fadeT=null, actx=null, gain=null;
   try{ want=localStorage.getItem('st_music')==='1'; }catch(e){}
-  function el(){ if(!a){ a=new Audio(SRC); a.loop=true; a.preload='none'; a.volume=0; } return a; }
+  function el(){ if(!a){ a=new Audio(SRC); a.loop=true; a.preload='none';
+      // iOS ignores element.volume, so route through a GainNode when Web Audio is available
+      try{ var AC=window.AudioContext||window.webkitAudioContext; if(AC){ actx=new AC(); var srcN=actx.createMediaElementSource(a); gain=actx.createGain(); gain.gain.value=0; srcN.connect(gain); gain.connect(actx.destination); } }catch(e){ actx=null; gain=null; }
+      if(!gain) a.volume=0; }
+    return a; }
+  function getVol(){ return gain? gain.gain.value : a.volume; }
+  function setVol(v){ if(gain) gain.gain.value=v; else a.volume=v; }
   function ui(on){ b.classList.toggle('on',on); b.setAttribute('aria-pressed',on?'true':'false'); b.setAttribute('aria-label',on?'Music on':'Music off'); }
-  function fade(to,ms){ var x=el(); clearInterval(fadeT); var from=x.volume, t0=Date.now();
-    fadeT=setInterval(function(){ var k=Math.min(1,(Date.now()-t0)/ms); x.volume=from+(to-from)*k; if(k>=1){ clearInterval(fadeT); if(to===0) x.pause(); } },50); }
-  function start(){ var x=el(), p=x.play();
+  function fade(to,ms){ var x=el(); clearInterval(fadeT); var from=getVol(), t0=Date.now();
+    fadeT=setInterval(function(){ var k=Math.min(1,(Date.now()-t0)/ms); setVol(from+(to-from)*k); if(k>=1){ clearInterval(fadeT); if(to===0) x.pause(); } },50); }
+  function start(){ var x=el(); if(actx&&actx.state==='suspended'){ try{actx.resume();}catch(e){} } var p=x.play();
     if(p&&p.then){ p.then(function(){ fade(VOL,900); ui(true); }).catch(function(){ ui(false); arm(); }); }
     else { fade(VOL,900); ui(true); } }
   function stop(){ if(a&&!a.paused) fade(0,400); else if(a){ a.pause(); } ui(false); }
   function arm(){ if(armed) return; armed=true;
-    var once=function(){ document.removeEventListener('pointerdown',once,true); document.removeEventListener('keydown',once,true); armed=false; if(want) start(); };
+    var once=function(e){ document.removeEventListener('pointerdown',once,true); document.removeEventListener('keydown',once,true); armed=false;
+      if(e && e.target && b.contains(e.target)) return;   // the tap IS the music button: let its click handler decide
+      if(want) start(); };
     document.addEventListener('pointerdown',once,true); document.addEventListener('keydown',once,true); }
-  b.addEventListener('click',function(){ want=!want; try{localStorage.setItem('st_music',want?'1':'0');}catch(e){}
+  b.addEventListener('click',function(){ var playing=!!(a&&!a.paused); want=!playing; try{localStorage.setItem('st_music',want?'1':'0');}catch(e){}
     if(want) start(); else stop(); try{window.track&&window.track('music',want?'on':'off');}catch(e){} });
   document.addEventListener('visibilitychange',function(){ if(!a) return; if(document.hidden){ if(!a.paused) a.pause(); } else if(want){ a.play().catch(function(){}); } });
-  ui(false); if(want) arm();
+  ui(want); if(want) arm();   // show the remembered state; playback itself waits for the first tap
 })();
 </script>
 <script>

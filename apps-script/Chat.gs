@@ -350,7 +350,10 @@ function activePromosText_() {
   var P = promos_(), d = new Date(), tz = Session.getScriptTimeZone();
   var t = Utilities.formatDate(d, tz, 'yyyy-MM-dd'), dow = +Utilities.formatDate(d, tz, 'u') % 7, dm = +Utilities.formatDate(d, tz, 'd');
   var lines = [];
-  (P.events || []).forEach(function (e) { if (e.from && t < e.from) return; if (e.to && t > e.to) return; lines.push('- ' + e.title + ': ' + (e.text || '')); });
+  // upcoming events with a 'hero' block (the Social tab's ticket card): the bot can answer "when / where / tickets?" any time before the date
+  (P.events || []).forEach(function (e) { var h = e.hero; if (!h || !h.date || h.date < t) return;
+    lines.push('- UPCOMING EVENT: ' + (e.title || '') + ' - ' + [h.when, h.venue].filter(Boolean).join(' at ') + (h.tickets ? '. Tickets: ' + h.tickets : '') + '. The ticket card is on the Social tab (go_to social).'); });
+  (P.events || []).forEach(function (e) { if (e.surfaces && e.surfaces.indexOf('app') < 0) return; if (e.from && t < e.from) return; if (e.to && t > e.to) return; lines.push('- ' + e.title + ': ' + (e.text || '')); });
   if (P.double_points) {
     var r = P.double_points, on = r.rule === 'first_weekend' ? ((dow === 6 && dm <= 7) || (dow === 0 && dm >= 2 && dm <= 8)) : (r.rule === 'weekend' ? (dow === 0 || dow === 6) : false);
     if (on) lines.push('- ' + (r.label || 'Double points') + ' (Trap Points game): ' + (r.text || 'every daily earns 2x points today'));
@@ -418,6 +421,7 @@ var SCORE_MAX = 60000;
 function scoresSheet_() {
   var ss = ss_(), sh = ss.getSheetByName('scores');
   if (!sh) { sh = ss.insertSheet('scores'); sh.appendRow(['ts', 'uid', 'handle', 'day', 'month', 'best', 'stars']); }
+  try { sh.getRange('C:C').setNumberFormat('@'); sh.getRange('E:E').setNumberFormat('@'); } catch (e) {}   // keep handles like 007 and months like 2026-09 as text
   return sh;
 }
 function monthOfDay_(day) { var d = new Date(day * 864e5); return d.getUTCFullYear() + '-' + ('0' + (d.getUTCMonth() + 1)).slice(-2); }
@@ -449,7 +453,7 @@ function leaderboard_(p) {
   else {
     var sh = scoresSheet_(), rows = sh.getDataRange().getValues(), agg = {};
     for (var i = 1; i < rows.length; i++) {
-      if (String(rows[i][4]) !== month) continue;
+      if (monthOfDay_(+rows[i][3]) !== month) continue;   // derive from the numeric day column (Sheets may coerce col E)
       var u = String(rows[i][1]);
       if (u.indexOf('test-') === 0) continue;                          // test traffic never shows
       var a = agg[u] || (agg[u] = { uid: u, handle: '', total: 0, days: 0, ts: 0 });

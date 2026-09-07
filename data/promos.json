@@ -1,6 +1,6 @@
 {
   "updated": "2026-09-07",
-  "_how": "Promo cadence for the app, the game and the chatbot. 'featured' rotates one item per week (week index since epoch, so every surface agrees). 'double_points' fires on the rule below and doubles the game's daily earn. 'events' are one-offs with from/to dates (inclusive, local date) and an optional 'surfaces' list: app, game (default both). Edit, push, done - nothing to redeploy.",
+  "_how": "Promo cadence for the app, the game and the chatbot. 'featured' rotates one item per week (week index since epoch, so every surface agrees). 'double_points' fires on the rule below and doubles the game's daily earn. 'events' are one-offs with from/to dates (inclusive, local date) and an optional 'surfaces' list: app, game (default both). Edit, push, done - nothing to redeploy. An event with a 'hero' block {image, alt, when, venue, date (YYYY-MM-DD), tickets, ribbon} becomes the Social tab's ticket card + the Industry ribbon from now until its date passes (independent of from/to).",
   "featured": {
     "weekly": true,
     "items": [
@@ -27,7 +27,16 @@
       "title": "The Resin Reception - Sat Sep 26",
       "text": "7PM at Lucid Lounge. Come say hi.",
       "cta": { "label": "See event", "tab": "social" },
-      "surfaces": ["game"]
+      "surfaces": ["game"],
+      "hero": {
+        "image": "img/resin-reception.jpg",
+        "alt": "The Resin Reception - Wild Style strain release party",
+        "when": "Sat Sep 26 · 7PM",
+        "venue": "Lucid Lounge, Ypsilanti",
+        "date": "2026-09-26",
+        "tickets": "https://eventhi.io/events/the-resin-reception-14961?utm_source=stickytrap_app&utm_medium=app&utm_content=get_tickets",
+        "ribbon": "🎟 The Resin Reception · Sep 26"
+      }
     },
     {
       "id": "ladder-live-2026-09",
