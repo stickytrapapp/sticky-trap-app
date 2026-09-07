@@ -56,7 +56,7 @@ var BUSY = "Lots of questions coming in - give me a minute and try again, or cal
 
 // Mirrors the app's volume bands (menu price to 249, 3% off at 250, 6% at 500, 10% at 1000).
 var BANDS = [[249, 1.00], [499, 0.97], [999, 0.94], [1000, 0.90]];
-var MINQ = 50, MAXQ = 1000, STEP = 5;
+var MINQ = 5, MAXQ = 1000, STEP = 5, MIN_ORDER = 50;   // qty floor 5 (steps of 5); the real minimum is $50 per ORDER
 var TABS = ['industry', 'social', 'menu', 'specs', 'connect', 'play'];
 
 var SYSTEM = [
@@ -70,7 +70,7 @@ var SYSTEM = [
   "Reply in the customer's language. If asked what you are: a Sticky Trap assistant powered by Claude.",
   "",
   "ACTING IN THE APP - you have tools that the app executes for the customer:",
-  "- add_to_basket: only when they clearly ask to add or order something AND you have product, material, finish and quantity. If any piece is missing, ask for it in one short question instead of assuming (never assume a finish). Quantities: minimum 50, steps of 5, maximum 1,000 (over 1,000 is a call-us quote). The tool result carries the exact unit price and line total - confirm those in one line, and if they're within 55 pieces of a volume break, mention it.",
+  "- add_to_basket: only when they clearly ask to add or order something AND you have product, material, finish and quantity. If any piece is missing, ask for it in one short question instead of assuming (never assume a finish). Quantities: steps of 5 from 5 up to 1,000 (over 1,000 is a call-us quote). The minimum ORDER is $50 total across the basket - the tool result says whether the basket meets it; if not, tell them how much more is needed in one line. The tool result carries the exact unit price and line total - confirm those in one line, and if they're within 55 pieces of a volume break, mention it.",
   "- open_product: when they want to see or browse a product's prices; it expands that product in the Menu tab.",
   "- show_basket: when they ask to see, review or check out their basket.",
   "- open_quote_form: when they're ready to send the order, get a quote, or upload art.",
@@ -87,7 +87,7 @@ var TOOLS = [
         product: { type: 'string', description: 'Menu product name' },
         material: { type: 'string', description: 'Material' },
         finish: { type: 'string', description: 'Finish tier' },
-        qty: { type: 'integer', description: 'Pieces: 50-1000 in steps of 5' },
+        qty: { type: 'integer', description: 'Pieces: 5-1000 in steps of 5' },
         holobrite: { type: 'boolean', description: 'White-ink underbase option (Holographic BF / Gold BF only); false if not requested' }
       }, required: ['product', 'material', 'finish', 'qty', 'holobrite'] } },
   { name: 'open_product', strict: true,
@@ -261,7 +261,7 @@ function runTool_(use, prices, ctx) {
       var f = matchFinish_(inp.finish, p, m, prices);
       if (!f) return { error: true, result: { error: "Unknown finish '" + inp.finish + "' for " + p + " " + m + ". Options: " + uniq_(prices.filter(function (r) { return r.p === p && r.m === m; }), 'f').join(', ') } };
       var q = Math.round(+inp.qty || 0);
-      if (q < MINQ) return { error: true, result: { error: 'Minimum order is ' + MINQ + ' pieces per item.' } };
+      if (q < MINQ) return { error: true, result: { error: 'Quantities start at ' + MINQ + ' pieces (steps of ' + STEP + '). The order minimum is $' + MIN_ORDER + ' total.' } };
       if (q > MAXQ) return { error: true, result: { error: 'Over ' + MAXQ + ' pieces is a custom quote - ask them to call or text 734 460 3845.' } };
       if (q % STEP) { q = Math.round(q / STEP) * STEP; }
       var row = prices.filter(function (r) { return r.p === p && r.m === m && r.f === f; })[0];
@@ -274,7 +274,8 @@ function runTool_(use, prices, ctx) {
       var nb = q < 250 ? (250 - q) : (q < 500 ? (500 - q) : (q < 1000 ? (1000 - q) : 0));
       var res = { ok: true, added: q + ' x ' + p + ' - ' + m + ' / ' + fname, unit_price: money_(u), line_total: money_(tot), menu_price: money_(pr),
                   discount: cmult_(q) < 1 ? Math.round((1 - cmult_(q)) * 100) + '% volume break applied' : 'menu price (no volume break under 250)',
-                  basket: 'had ' + before + ' line(s) before this add; now ' + ctx.basket.length + ' line(s), subtotal ' + money_(sub) };
+                  basket: 'had ' + before + ' line(s) before this add; now ' + ctx.basket.length + ' line(s), subtotal ' + money_(sub),
+                  minimum_order: sub >= MIN_ORDER ? 'meets the $' + MIN_ORDER + ' minimum order' : 'basket is ' + money_(MIN_ORDER - sub) + ' short of the $' + MIN_ORDER + ' minimum order' };
       if (nb && nb <= 55) res.tip = 'Adding ' + nb + ' more pieces reaches the next volume break.';
       return { result: res, action: { type: 'add_to_basket', p: p, m: m, f: fname, pr: pr, qty: q } };
     }
