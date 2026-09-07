@@ -335,8 +335,35 @@ function ask_(msgs, ctx) {
   return { reply: actions.length ? 'Done - check your basket for the update.' : FALLBACK, actions: actions, usage: usage, model: model };
 }
 
+/* ---------- promos (data/promos.json on the site): featured of the week, double-points rule, dated events ---------- */
+function promos_() {
+  var hit = CACHE.get('promos'); if (hit) return JSON.parse(hit);
+  var out = { events: [], featured: null, double_points: null };
+  try {
+    var r = UrlFetchApp.fetch('https://thestickytrap.app/data/promos.json?t=' + Date.now(), { muteHttpExceptions: true, followRedirects: true });
+    if (r.getResponseCode() === 200) out = JSON.parse(r.getContentText());
+  } catch (e) {}
+  try { CACHE.put('promos', JSON.stringify(out), 1200); } catch (e) {}
+  return out;
+}
+function activePromosText_() {
+  var P = promos_(), d = new Date(), tz = Session.getScriptTimeZone();
+  var t = Utilities.formatDate(d, tz, 'yyyy-MM-dd'), dow = +Utilities.formatDate(d, tz, 'u') % 7, dm = +Utilities.formatDate(d, tz, 'd');
+  var lines = [];
+  (P.events || []).forEach(function (e) { if (e.from && t < e.from) return; if (e.to && t > e.to) return; lines.push('- ' + e.title + ': ' + (e.text || '')); });
+  if (P.double_points) {
+    var r = P.double_points, on = r.rule === 'first_weekend' ? ((dow === 6 && dm <= 7) || (dow === 0 && dm >= 2 && dm <= 8)) : (r.rule === 'weekend' ? (dow === 0 || dow === 6) : false);
+    if (on) lines.push('- ' + (r.label || 'Double points') + ' (Trap Points game): ' + (r.text || 'every daily earns 2x points today'));
+  }
+  if (P.featured && P.featured.items && P.featured.items.length) {
+    var wk = Math.floor(Date.now() / 864e5 / 7), it = P.featured.items[wk % P.featured.items.length];
+    lines.push('- Featured this week: ' + it.product + ' - ' + (it.pitch || ''));
+  }
+  return lines.length ? ('CURRENT PROMOS (mention when relevant; never invent others):\n' + lines.join('\n')) : 'CURRENT PROMOS: none.';
+}
+
 function callClaude_(convo, kb, ctx) {
-  var context = 'CUSTOMER CONTEXT (this request): on the ' + ctx.tab.charAt(0).toUpperCase() + ctx.tab.slice(1) + ' tab. ' + basketSummary_(ctx.basket);
+  var context = 'CUSTOMER CONTEXT (this request): on the ' + ctx.tab.charAt(0).toUpperCase() + ctx.tab.slice(1) + ' tab. ' + basketSummary_(ctx.basket) + '\n' + activePromosText_();
   var payload = {
     model: cfg_('MODEL'),
     max_tokens: +cfg_('MAX_TOKENS'),

@@ -486,6 +486,16 @@
   .claim .st{color:var(--gold);font-family:var(--fmono);font-size:11px;white-space:nowrap}
   .expnote{color:var(--gold);font-size:12px;margin-top:8px;font-weight:600}
   .pill.soon{color:var(--mut);border-color:var(--line-2)}
+  .modeseg{display:flex;gap:6px;margin:0 0 10px;padding:4px;border-radius:12px;background:var(--panel-2);border:1px solid var(--line)}
+  .modeseg button{flex:1;border:0;border-radius:9px;padding:8px 6px;background:transparent;color:var(--mut);font-family:var(--fdisp);font-weight:700;font-size:12px;letter-spacing:.04em;cursor:pointer}
+  .modeseg button.on{background:var(--grad);color:#0a0a0f}
+  .modeseg button small{display:block;font-family:var(--fbody);font-weight:500;font-size:10px;letter-spacing:0;opacity:.85}
+  .promo-card{margin:12px 0 0;padding:12px 14px;border-radius:14px;border:1px solid rgba(234,184,75,.45);background:linear-gradient(100deg,rgba(234,184,75,.14),rgba(255,31,162,.08));display:flex;gap:10px;align-items:center}
+  .promo-card .pc-k{font-family:var(--fmono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+  .promo-card b{display:block;font-size:14px;margin:2px 0}
+  .promo-card small{display:block;color:var(--mut);font-size:12px;line-height:1.35}
+  .promo-card a,.promo-card button{flex:none;border:0;border-radius:999px;padding:9px 12px;background:var(--panel);color:var(--gold);font-family:var(--fdisp);font-weight:700;font-size:11.5px;letter-spacing:.04em;text-decoration:none;cursor:pointer;border:1px solid rgba(234,184,75,.45)}
+  .x2{display:inline-block;margin-left:6px;padding:2px 7px;border-radius:999px;background:var(--gold);color:#0a0a0f;font-family:var(--fmono);font-size:10px;font-weight:700;vertical-align:middle}
   .res-handle{font-family:var(--fmono);font-weight:700;font-size:15px;letter-spacing:.14em;
     background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:3px}
 </style>
@@ -514,9 +524,10 @@
 
     <!-- ============ PLAY ============ -->
     <section class="screen on" id="play">
+      <div class="modeseg" id="modeSeg"><button type="button" class="on" data-mode="daily">Daily Trap<small>ranked · 3 tries</small></button><button type="button" data-mode="free">Free Play<small>unlimited · practice</small></button></div>
       <div class="daily">
         <span class="dot"></span>
-        <div><b>Daily Trap · <span id="pnum">#142</span></b><small>Attempt <span id="attN">1</span> of 3 · one board</small></div>
+        <div><b id="modeTitle">Daily Trap · <span id="pnum">#142</span><span class="x2" id="x2" hidden>2× PTS</span></b><small id="modeSub">Attempt <span id="attN">1</span> of 3 · one board</small></div>
         <span class="rst" id="newin">—</span>
       </div>
 
@@ -543,6 +554,7 @@
           <li><b>35 seconds</b> a try, <b>3 tries</b> — best score counts.</li>
         </ol>
       </div>
+      <div class="promo-card" id="promoCard" hidden></div>
 
       <div class="result" id="result">
         <div class="res-card">
@@ -850,8 +862,11 @@
   var dseed=1, attempt=1, bestScore=0, dayScore=0, timeLeft=TIME, timerId=null, playing=false, dayDone=false, combo=0;
   function drnd(){dseed=(dseed*1103515245+12345)&0x7fffffff; return dseed/0x7fffffff;}
   function rcolor(){return Math.floor(drnd()*COLORS);}
+  var MODE='daily', FREE={day:0,bonus:0,seed:1}, FREE_CAP=5;
+  try{ var _f=JSON.parse(localStorage.getItem('tp_free')||'null'); if(_f&&_f.day===Math.floor(Date.now()/864e5)) FREE=_f; }catch(e){}
+  function saveFree(){ try{ localStorage.setItem('tp_free',JSON.stringify({day:Math.floor(Date.now()/864e5),bonus:FREE.bonus,seed:FREE.seed})); }catch(e){} }
   function rebuildBoard(){
-    dseed=(dayNum*2654435761)>>>0 || 12345;
+    dseed= MODE==='free' ? (FREE.seed>>>0||12345) : ((dayNum*2654435761)>>>0 || 12345);
     grid=[]; for(var r=0;r<ROWS;r++){grid.push([]); for(var c=0;c<COLS;c++)grid[r][c]=rcolor();}
     draw();
   }
@@ -867,13 +882,15 @@
     document.getElementById('score').textContent=fmt(dayScore);
     document.getElementById('time').textContent=timeLeft+'s';
     var a=document.getElementById('attN'); if(a)a.textContent=attempt;
-    var best=Math.max(bestScore,dayScore);
+    var best= MODE==='free' ? dayScore : Math.max(bestScore,dayScore);
     document.getElementById('gcur').textContent=fmt(best);
     document.getElementById('goalbar').style.width=Math.min(100,best/PAR*100)+'%';
   }
   function showGate(){
     var g=document.getElementById('startGate'); if(!g)return; g.classList.remove('hide');
     var btn=document.getElementById('startBtn'), sub=document.getElementById('sgSub');
+    if(MODE==='free'){ if(btn){btn.disabled=false; btn.classList.remove('done'); btn.textContent='\u25B6 Free play \u00b7 35s';}
+      if(sub) sub.textContent='Unlimited boards \u00b7 beat par for +1 point ('+FREE.bonus+'/'+FREE_CAP+' today) \u00b7 not ranked'; return; }
     if(dayDone){ if(btn){btn.textContent='✓ Played today'; btn.disabled=true; btn.classList.add('done'); } if(sub)sub.textContent=(bestScore>0?('Your score '+fmt(bestScore)+' · '):'')+'New board tomorrow (Trap #'+(trapNum+1)+')'; return; }
     if(btn){btn.disabled=false; btn.classList.remove('done');}
     if(btn)btn.textContent=(attempt===1?'▶ Start · 35s':'▶ Play again · 35s');
@@ -897,16 +914,31 @@
     setTimeout(function(){ g.forEach(function(q){grid[q[0]][q[1]]=null;}); collapse(); dayScore+=gained; setStat(); draw(); },140); }
   function collapse(){ for(var c=0;c<COLS;c++){ var col=[]; for(var r=ROWS-1;r>=0;r--) if(grid[r][c]!==null)col.push(grid[r][c]);
     for(var r2=ROWS-1,i=0;r2>=0;r2--,i++) grid[r2][c]= i<col.length?col[i]:rcolor(); } }
-  function startAttempt(){ if(playing||dayDone)return; dayScore=0; combo=0; timeLeft=TIME; playing=true; try{localStorage.setItem('tp_daily', JSON.stringify({day:dayNum, best:bestScore}));}catch(e){} rebuildBoard(); setStat();
+  function startAttempt(){ if(playing||(MODE==='daily'&&dayDone))return; dayScore=0; combo=0; timeLeft=TIME; playing=true;
+    if(MODE==='daily'){ try{localStorage.setItem('tp_daily', JSON.stringify({day:dayNum, best:bestScore}));}catch(e){} }
+    else { FREE.seed=(Math.random()*4294967295)>>>0; saveFree(); }
+    rebuildBoard(); setStat();
     var g=document.getElementById('startGate'); if(g)g.classList.add('hide');
     clearInterval(timerId); timerId=setInterval(function(){ timeLeft--; if(timeLeft<0)timeLeft=0; setStat(); if(timeLeft<=0) endAttempt(); },1000); }
-  function endAttempt(){ playing=false; clearInterval(timerId); if(dayScore>bestScore)bestScore=dayScore; try{localStorage.setItem('tp_daily', JSON.stringify({day:dayNum, best:bestScore}));}catch(e){}
+  function endFree(){ playing=false; clearInterval(timerId);
+    var beat=dayScore>=PAR, gave=false;
+    if(beat && FREE.bonus<FREE_CAP){ FREE.bonus++; saveFree(); earn(1,'Free play'); gave=true; }
+    toast(beat ? ('Beat par: '+fmt(dayScore)+(gave?' \u00b7 <b>+1 point</b>':' \u00b7 daily free-play bonus maxed')) : ('Free play: '+fmt(dayScore)+' \u00b7 par is '+fmt(PAR)));
+    setStat(); showGate(); }
+  function setMode(m){ if(playing) return; MODE=(m==='free')?'free':'daily';
+    document.querySelectorAll('#modeSeg button').forEach(function(b){ b.classList.toggle('on', b.dataset.mode===MODE); });
+    var t=document.getElementById('modeTitle'), su=document.getElementById('modeSub');
+    if(MODE==='free'){ if(t) t.innerHTML='Free Play'; if(su) su.textContent='Unlimited boards \u00b7 practice \u00b7 not ranked'; }
+    else { if(t) t.innerHTML='Daily Trap \u00b7 <span id="pnum">#'+trapNum+'</span><span class="x2" id="x2" hidden>2\u00d7 PTS</span>'; if(su) su.innerHTML='Attempt <span id="attN">'+attempt+'</span> of 3 \u00b7 one board'; applyPromoBadge(); }
+    dayScore=0; combo=0; timeLeft=TIME; rebuildBoard(); setStat(); showGate(); }
+  document.querySelectorAll('#modeSeg button').forEach(function(b){ b.addEventListener('click',function(){ setMode(b.dataset.mode); }); });
+  function endAttempt(){ if(MODE==='free'){ endFree(); return; } playing=false; clearInterval(timerId); if(dayScore>bestScore)bestScore=dayScore; try{localStorage.setItem('tp_daily', JSON.stringify({day:dayNum, best:bestScore}));}catch(e){}
     if(attempt<ATTEMPTS){ attempt++; dayScore=0; setStat(); showGate(); } else { finishDaily(); } }
   function finishDaily(){ dayDone=true;
     var stars= bestScore>=PAR*2?3 : bestScore>=Math.round(PAR*1.4)?2 : bestScore>=PAR?1 : 0;
     var today=dayNum; if(STREAK.last===today-1){ STREAK.n=(STREAK.n||0)+1; } else if(STREAK.last!==today){ STREAK.n=1; } STREAK.last=today;
     var streakBonus=STREAK.n>=2?5:0;
-    var earned=(stars>=3?15:stars>=2?12:stars>=1?8:3)+streakBonus;
+    var earned=((stars>=3?15:stars>=2?12:stars>=1?8:3)+streakBonus)*promoMult();
     if(!HIST.some(function(h){return h.day===today;})) HIST.push({day:today,best:bestScore,stars:stars,pts:earned});
     earn(earned,'Trap #'+trapNum+' '+stars+'\u2605');
     postScore();
@@ -954,6 +986,24 @@
     function ord(n){ var s=['th','st','nd','rd'], v=n%100; return n+(s[(v-20)%10]||s[v]||s[0]); }
   }
   var _rt=document.querySelector('.tab[data-t="ranks"]'); if(_rt)_rt.addEventListener('click',function(){ loadRanks(); });
+  // ---- promos (data/promos.json): featured product of the week, double-points rule, dated events ----
+  var PROMOS=null, ACTIVE=[];
+  function ymd(d){ return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
+  function isFirstWeekend(d){ var dow=d.getDay(), dm=d.getDate(); return (dow===6&&dm<=7)||(dow===0&&dm>=2&&dm<=8); }
+  function activePromos(P,surface){ var d=new Date(), out=[], t=ymd(d);
+    (P.events||[]).forEach(function(e){ if(e.surfaces&&e.surfaces.indexOf(surface)<0) return; if(e.from&&t<e.from) return; if(e.to&&t>e.to) return; out.push({type:'event',id:e.id,title:e.title,text:e.text,cta:e.cta,pri:3}); });
+    if(P.double_points){ var r=P.double_points, on=r.rule==='first_weekend'?isFirstWeekend(d):(r.rule==='weekend'?(d.getDay()===0||d.getDay()===6):false);
+      if(on) out.push({type:'double',id:'double-'+t.slice(0,7),title:r.label||'Double points',text:r.text||'Every daily earns 2x points today.',mult:2,pri:2}); }
+    if(P.featured&&P.featured.items&&P.featured.items.length){ var wk=Math.floor(Date.now()/864e5/7), it=P.featured.items[wk%P.featured.items.length];
+      out.push({type:'featured',id:'feat-'+wk,title:'This week: '+it.product,text:it.pitch,cta:it.cta||{label:'See the menu',tab:'menu'},pri:1}); }
+    return out.sort(function(a,b){return b.pri-a.pri;}); }
+  function promoMult(){ var m=1; ACTIVE.forEach(function(a){ if(a.mult) m=Math.max(m,a.mult); }); return m; }
+  function applyPromoBadge(){ var x=document.getElementById('x2'); if(x) x.hidden=promoMult()<2; }
+  function renderPromo(){ var el=document.getElementById('promoCard'); if(!el) return; var top=ACTIVE.filter(function(a){return a.type!=='double';})[0], dbl=ACTIVE.filter(function(a){return a.type==='double';})[0];
+    var show=top||dbl; if(!show){ el.hidden=true; return; }
+    var cta=show.cta? (show.cta.url? '<a href="'+show.cta.url+'">'+show.cta.label+'</a>' : '<a href="https://thestickytrap.app/#'+(show.cta.tab||'menu')+'">'+show.cta.label+'</a>') : '';
+    el.innerHTML='<div style="flex:1"><div class="pc-k">'+(show.type==='event'?'Happening':(show.type==='double'?'Today':'Featured'))+(dbl&&show!==dbl?' · 2× points today':'')+'</div><b>'+show.title+'</b><small>'+show.text+'</small></div>'+cta; el.hidden=false; }
+  fetch('../data/promos.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json();}).then(function(P){ PROMOS=P; ACTIVE=activePromos(P,'game'); applyPromoBadge(); renderPromo(); }).catch(function(){});
   var _startBtn=document.getElementById('startBtn'); if(_startBtn)_startBtn.addEventListener('click',startAttempt);
   var _sb=document.getElementById('shareBtn');
   if(_sb)_sb.addEventListener('click',function(){

@@ -1,0 +1,42 @@
+{
+  "updated": "2026-09-07",
+  "_how": "Promo cadence for the app, the game and the chatbot. 'featured' rotates one item per week (week index since epoch, so every surface agrees). 'double_points' fires on the rule below and doubles the game's daily earn. 'events' are one-offs with from/to dates (inclusive, local date) and an optional 'surfaces' list: app, game (default both). Edit, push, done - nothing to redeploy.",
+  "featured": {
+    "weekly": true,
+    "items": [
+      { "product": "3\" Slap", "pitch": "Square or contour cut, same price. From $0.45 in white vinyl, holographic from $0.75.", "cta": { "label": "See slaps", "tab": "menu" } },
+      { "product": "Miron 250 ml", "pitch": "Jar labels that actually stay put. White from $1.90, holographic from $2.90, HoloBrite available.", "cta": { "label": "See jar labels", "tab": "menu" } },
+      { "product": "Tip Band", "pitch": "Pre-roll tip bands and tamper tabs from $0.25. Holographic from $0.30.", "cta": { "label": "See tip bands", "tab": "menu" } },
+      { "product": "4\" Slap", "pitch": "The big one. From $0.75 white, $1.30 holographic, Pro emboss $1.60 / $2.00.", "cta": { "label": "See slaps", "tab": "menu" } },
+      { "product": "Pop Top", "pitch": "Pop-top wraps from $0.70. Add Pro emboss for a label you can feel.", "cta": { "label": "See wraps", "tab": "menu" } },
+      { "product": "o2 Standard", "pitch": "Cart wraps from $0.35 - the cheapest way onto a shelf. Holographic from $0.50.", "cta": { "label": "See wraps", "tab": "menu" } },
+      { "product": "Tube 95 mm", "pitch": "Pre-roll tube wraps from $1.00, holographic from $1.50.", "cta": { "label": "See wraps", "tab": "menu" } },
+      { "product": "4x5 Deli", "pitch": "Deli labels from $1.15. Pro emboss at $4.40 is the showpiece.", "cta": { "label": "See deli labels", "tab": "menu" } }
+    ]
+  },
+  "double_points": {
+    "rule": "first_weekend",
+    "label": "Double points weekend",
+    "text": "First weekend of the month: every daily earns 2x points."
+  },
+  "events": [
+    {
+      "id": "resin-reception-2026",
+      "from": "2026-09-20",
+      "to": "2026-09-26",
+      "title": "The Resin Reception - Sat Sep 26",
+      "text": "7PM at Lucid Lounge. Come say hi.",
+      "cta": { "label": "See event", "tab": "social" },
+      "surfaces": ["game"]
+    },
+    {
+      "id": "ladder-live-2026-09",
+      "from": "2026-09-07",
+      "to": "2026-09-14",
+      "title": "The ladder is live",
+      "text": "Top of the Trap Points ladder at month-end wins 2 branded hoodies. Play the daily to get on the board.",
+      "cta": { "label": "Play now", "url": "https://thestickytrap.app/game/" },
+      "surfaces": ["app"]
+    }
+  ]
+}
