@@ -970,7 +970,7 @@
     if(!list) return;
     if(!force && lbCache && Date.now()-lbAt<60000){ render(lbCache); return; }
     fetch(LB_API+'?action=lb&month='+monthKey(dayNum)+'&uid='+encodeURIComponent(UID)+'&t='+Date.now()).then(function(r){return r.json();}).then(function(j){ if(j&&j.ok&&j.top){ lbCache=j; lbAt=Date.now(); render(j); } else fail(); }).catch(fail);
-    function fail(){ list.innerHTML='<div class="lb-empty">Couldn\u2019t reach the ladder \u2014 try again in a moment.</div>'; }
+    function fail(){ if(!loadRanks._retried){ loadRanks._retried=true; setTimeout(function(){ loadRanks(true); },2500); return; } loadRanks._retried=false; list.innerHTML='<div class="lb-empty">Couldn\u2019t reach the ladder \u2014 try again in a moment.</div>'; }
     function render(j){
       if(!j.top.length){ list.innerHTML='<div class="lb-empty">No scores yet this month.<br>Finish today\u2019s Trap to open the board.</div>'; }
       else{
