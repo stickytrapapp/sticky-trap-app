@@ -24,6 +24,7 @@
  *
  * CHECKS
  *   - Open  <exec URL>?ping=1  in a browser -> {"ok":true,"key":true,"kb":<chars>,"prices":160,...}
+ *     Add &refresh=1 after pushing a new chat-kb.txt so the script re-reads it immediately (else ~20 min cache).
  *   - In the editor run  selfTest()  -> View > Logs shows a real answer + the action it produced.
  *   - Chats are logged anonymously to a self-created Sheet "Sticky Trap - App Chats"; run getConfig() for its URL.
  *
@@ -64,7 +65,7 @@ var SYSTEM = [
   "Answer from the knowledge base below. Be warm, direct and brief - this is a small chat panel: usually one to four short sentences, plain text.",
   "No markdown headers, tables or bold; a short list with one item per line and a leading dash is fine.",
   "Quote prices exactly as listed (per piece, USD) and name the material and finish tier you're quoting. Apply the volume breaks only as the rules state and show the math when you total an order.",
-  "If something isn't in the knowledge base - turnaround, rush, shipping, hours, items or materials not on the menu, design or pre-press cost, orders over 1,000 - don't guess: say it's quoted per project and point them to call/text 734 460 3845, email thestickytrap@gmail.com, or the basket / Start a project quote flow in the app.",
+  "The House facts section (turnaround, hours, and whatever else the shop adds there) is authoritative - answer those directly. If something isn't in the knowledge base - rush jobs, shipping, items or materials not on the menu, design or pre-press cost, orders over 1,000 - don't guess: say it's quoted per project and point them to call/text 734 460 3845, email thestickytrap@gmail.com, or the basket / Start a project quote flow in the app.",
   "Never invent prices, discounts or promises. Don't ask for personal details; when they're ready to order, steer them to the basket or the quote form.",
   "Reply in the customer's language. If asked what you are: a Sticky Trap assistant powered by Claude.",
   "",
@@ -103,6 +104,7 @@ var TOOLS = [
 /* ---------- HTTP ---------- */
 function doGet(e) {
   var p = (e && e.parameter) || {};
+  if (p.refresh) CACHE.remove('kb');   // <exec>?ping=1&refresh=1 -> re-fetch the KB now instead of waiting out the 20-min cache
   if (p.ping) {
     var kb = '', n = 0; try { kb = kb_(); n = kbPrices_(kb).length; } catch (err) { kb = ''; }
     return out_({ ok: true, key: !!PROP.getProperty('ANTHROPIC_API_KEY'), model: cfg_('MODEL'), kb: kb.length, prices: n, kb_url: cfg_('KB_URL') });
