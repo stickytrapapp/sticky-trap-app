@@ -9,7 +9,7 @@ Rush jobs and shipping are not published here: quoted per project, tell the cust
 == Ordering in the app ==
 Menu tab: open a product, set the quantity, tap a price to add it to the basket. The basket can Email my order, Text order, Copy text, or "Upload art & get your quote" (name, email, phone, art files up to ~20 MB, deadline). Bigger files: email them.
 Nothing is charged in the app: we proof and quote first, and nothing is charged until the customer approves. The "Start a project -- get a quote" button on the Connect tab goes to the same quote form.
-Minimum order: 50 pieces per item. Quantities step by 5 in the app, up to 1,000; more than 1,000 is a custom quote (call us).
+Minimum order: $50 per order (any mix of items) -- there is no per-item piece minimum. Quantities step by 5 in the app, from 5 up to 1,000; more than 1,000 is a custom quote (call us).
 Volume price breaks on the per-piece menu price: 250+ pcs 3% off, 500+ pcs 6% off, 1,000 pcs 10% off. Under 250 pcs pays the menu price. Setup / pre-press is quoted separately.
 Example: 3" Slap, White Vinyl, Base is $0.45 each -> 100 pcs = $45.00; 500 pcs = 500 x $0.45 x 0.94 = $211.50.
 
@@ -66,7 +66,7 @@ What are pre-press / set-up charges?
 Pre-press makes your art print-ready — resolution, color, cut paths, bleeds, proofing. Real hands-on work, so shops charge for it. Send print-ready files and there's often little or none; if not, we quote it up front.
 <section class="view connectbanner"
 
-== Price list: per piece, USD, at the menu quantity (50-249 pcs); apply the volume breaks above for 250+ ==
+== Price list: per piece, USD, at the menu quantity (5-249 pcs); apply the volume breaks above for 250+ ==
 Format: material: finish $price (HoloBrite $price where offered).
 
 [Slaps] Die-cut stickers. Pick either cut for the same price: Square Backer (on a square sheet) or Contour Cut (trimmed to the art's outline).
