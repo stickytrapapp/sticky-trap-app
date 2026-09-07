@@ -56,6 +56,13 @@
   .iconb{background:none;border:0;cursor:pointer;display:flex;align-items:center;color:#9a92c8;padding:0;font-family:inherit}
   .iconb svg{width:21px;height:21px}
   .iconb:active{transform:scale(.92)}
+  .promostrip{flex:none;display:flex;align-items:center;gap:10px;margin:8px 12px 0;padding:9px 12px;border-radius:12px;border:1px solid rgba(224,165,42,.45);background:linear-gradient(100deg,rgba(224,165,42,.16),rgba(255,47,128,.10))}
+  .promostrip[hidden]{display:none}
+  .promostrip .ps-k{font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+  .promostrip .ps-t{flex:1;min-width:0;font-size:12.5px;line-height:1.3;color:var(--ink)}
+  .promostrip .ps-t b{display:block;font-size:13px}
+  .promostrip .ps-cta{flex:none;font-size:11.5px;font-weight:800;padding:7px 11px;border-radius:999px;border:1px solid rgba(224,165,42,.5);color:var(--gold);background:rgba(10,7,28,.6);cursor:pointer;font-family:inherit}
+  .promostrip .ps-x{flex:none;background:none;border:0;color:var(--muted);font-size:18px;line-height:1;padding:2px 4px;cursor:pointer}
   #musicb{position:relative}
   #musicb.on{color:var(--cy)}
   #musicb.on::after{content:"";position:absolute;top:-2px;right:-3px;width:7px;height:7px;border-radius:50%;background:var(--cy);border:1.5px solid #fff;animation:pulse2 2s infinite}
@@ -409,6 +416,8 @@
     <button data-tab="connect"><svg viewBox="0 0 24 24"><path d="M8 2l5 6-5 6-5-6z"/><path d="M16 10l5 6-5 6-5-6z"/><path d="M10.5 10l3 4"/></svg>Connect</button>
     <button data-tab="play"><svg viewBox="0 0 24 24"><path d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/></svg>Play</button>
   </nav>
+
+  <div class="promostrip" id="promostrip" hidden><div class="ps-t"><span class="ps-k" id="psK"></span><b id="psT"></b><span id="psD"></span></div><button class="ps-cta" id="psCta" type="button"></button><button class="ps-x" id="psX" type="button" aria-label="Dismiss">&times;</button></div>
 
   <main class="views">
 
@@ -1876,6 +1885,32 @@
     if(want) start(); else stop(); try{window.track&&window.track('music',want?'on':'off');}catch(e){} });
   document.addEventListener('visibilitychange',function(){ if(!a) return; if(document.hidden){ if(!a.paused) a.pause(); } else if(want){ a.play().catch(function(){}); } });
   ui(false); if(want) arm();
+})();
+</script>
+<script>
+/* ---- Promo strip: data/promos.json -> one promo at a time (event > double points > featured of the week). Dismiss per promo. ---- */
+(function(){
+  var strip=document.getElementById('promostrip'); if(!strip) return;
+  var K=document.getElementById('psK'), T=document.getElementById('psT'), D=document.getElementById('psD'), C=document.getElementById('psCta'), X=document.getElementById('psX');
+  var gone={}; try{ gone=JSON.parse(localStorage.getItem('st_promo_x')||'{}')||{}; }catch(e){}
+  function ymd(d){ return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
+  function isFirstWeekend(d){ var dow=d.getDay(), dm=d.getDate(); return (dow===6&&dm<=7)||(dow===0&&dm>=2&&dm<=8); }
+  function activePromos(P){ var d=new Date(), out=[], t=ymd(d);
+    (P.events||[]).forEach(function(e){ if(e.surfaces&&e.surfaces.indexOf('app')<0) return; if(e.from&&t<e.from) return; if(e.to&&t>e.to) return; out.push({type:'event',id:e.id,k:'Happening',title:e.title,text:e.text,cta:e.cta,pri:3}); });
+    if(P.double_points){ var r=P.double_points, on=r.rule==='first_weekend'?isFirstWeekend(d):(r.rule==='weekend'?(d.getDay()===0||d.getDay()===6):false);
+      if(on) out.push({type:'double',id:'double-'+t.slice(0,7),k:'In the game today',title:r.label||'Double points',text:r.text||'',cta:{label:'Play',tab:'play'},pri:2}); }
+    if(P.featured&&P.featured.items&&P.featured.items.length){ var wk=Math.floor(Date.now()/864e5/7), it=P.featured.items[wk%P.featured.items.length];
+      out.push({type:'featured',id:'feat-'+wk,k:'This week',title:it.product,text:it.pitch,cta:it.cta||{label:'See the menu',tab:'menu'},pri:1}); }
+    return out.sort(function(a,b){return b.pri-a.pri;}); }
+  var cur=null;
+  function show(list){ cur=null; for(var i=0;i<list.length;i++){ if(!gone[list[i].id]){ cur=list[i]; break; } }
+    if(!cur){ strip.hidden=true; return; }
+    K.textContent=cur.k; T.textContent=cur.title; D.textContent=cur.text||''; C.textContent=(cur.cta&&cur.cta.label)||'See more'; strip.hidden=false;
+    try{window.track&&window.track('promo_view',cur.id);}catch(e){} }
+  C.addEventListener('click',function(){ if(!cur) return; try{window.track&&window.track('promo_cta',cur.id);}catch(e){}
+    if(cur.cta&&cur.cta.url){ window.open(cur.cta.url,'_blank','noopener'); } else if(cur.cta&&cur.cta.tab&&window.go){ go(cur.cta.tab); } });
+  X.addEventListener('click',function(){ if(!cur) return; gone[cur.id]=1; try{localStorage.setItem('st_promo_x',JSON.stringify(gone));}catch(e){} strip.hidden=true; });
+  fetch('data/promos.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json();}).then(function(P){ show(activePromos(P)); }).catch(function(){});
 })();
 </script>
 </body>
