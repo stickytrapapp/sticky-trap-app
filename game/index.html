@@ -916,11 +916,12 @@
   function collapse(){ for(var c=0;c<COLS;c++){ var col=[]; for(var r=ROWS-1;r>=0;r--) if(grid[r][c]!==null)col.push(grid[r][c]);
     for(var r2=ROWS-1,i=0;r2>=0;r2--,i++) grid[r2][c]= i<col.length?col[i]:rcolor(); } }
   function startAttempt(){ if(playing||(MODE==='daily'&&dayDone))return; dayScore=0; combo=0; timeLeft=TIME; playing=true;
+    try{ if(window.TPM){ TPM.mode('play'); TPM.sfx('go'); } }catch(e){}
     if(MODE==='daily'){ try{localStorage.setItem('tp_daily', JSON.stringify({day:dayNum, best:bestScore}));}catch(e){} }
     else { FREE.seed=(Math.random()*4294967295)>>>0; saveFree(); }
     rebuildBoard(); setStat();
     var g=document.getElementById('startGate'); if(g)g.classList.add('hide');
-    clearInterval(timerId); timerId=setInterval(function(){ timeLeft--; if(timeLeft<0)timeLeft=0; setStat(); if(timeLeft<=0) endAttempt(); },1000); }
+    clearInterval(timerId); timerId=setInterval(function(){ timeLeft--; if(timeLeft<0)timeLeft=0; setStat(); if(timeLeft>0&&timeLeft<=3){ try{ window.TPM&&TPM.sfx('tick'); }catch(e){} } if(timeLeft<=0) endAttempt(); },1000); }
   function endFree(){ playing=false; clearInterval(timerId);
     var beat=dayScore>=PAR, gave=false;
     if(beat && FREE.bonus<FREE_CAP){ FREE.bonus++; saveFree(); earn(1,'Free play'); gave=true; }
@@ -933,7 +934,8 @@
     else { if(t) t.innerHTML='Daily Trap \u00b7 <span id="pnum">#'+trapNum+'</span><span class="x2" id="x2" hidden>2\u00d7 PTS</span>'; if(su) su.innerHTML='Attempt <span id="attN">'+attempt+'</span> of 3 \u00b7 one board'; applyPromoBadge(); }
     dayScore=0; combo=0; timeLeft=TIME; rebuildBoard(); setStat(); showGate(); }
   document.querySelectorAll('#modeSeg button').forEach(function(b){ b.addEventListener('click',function(){ setMode(b.dataset.mode); }); });
-  function endAttempt(){ if(MODE==='free'){ endFree(); return; } playing=false; clearInterval(timerId); if(dayScore>bestScore)bestScore=dayScore; try{localStorage.setItem('tp_daily', JSON.stringify({day:dayNum, best:bestScore}));}catch(e){}
+  function endAttempt(){ try{ if(window.TPM){ TPM.sfx('over'); TPM.mode('rest'); } }catch(e){}   // time's up: sting, beat drops to the rest groove
+    if(MODE==='free'){ endFree(); return; } playing=false; clearInterval(timerId); if(dayScore>bestScore)bestScore=dayScore; try{localStorage.setItem('tp_daily', JSON.stringify({day:dayNum, best:bestScore}));}catch(e){}
     if(attempt<ATTEMPTS){ attempt++; dayScore=0; setStat(); showGate(); } else { finishDaily(); } }
   function finishDaily(){ dayDone=true;
     var stars= bestScore>=PAR*2?3 : bestScore>=Math.round(PAR*1.4)?2 : bestScore>=PAR?1 : 0;
@@ -1274,7 +1276,7 @@
   var b=document.getElementById('musicb'); if(!b) return;
   var AC=window.AudioContext||window.webkitAudioContext; if(!AC){ b.style.display='none'; return; }
   var BPM=132, STEP=60/BPM/4, LOOK=0.12, TICK=25;
-  var ctx=null, master=null, lp=null, timer=null, step=0, nextT=0, want=false;
+  var ctx=null, master=null, lp=null, timer=null, step=0, nextT=0, want=false, mode='play', sfxG=null;
   try{ want=localStorage.getItem('tp_music')==='1'; }catch(e){}
   // 4 bars x 16 steps. Chords Am | F | C | G (root MIDI), arpeggio pattern over each.
   var ROOTS=[45,41,48,43];
@@ -1292,6 +1294,10 @@
     g.gain.setValueAtTime(0.9,t0); g.gain.exponentialRampToValueAtTime(0.0001,t0+0.22); o.connect(g); g.connect(master); o.start(t0); o.stop(t0+0.25); }
   function play(i,t){
     var bar=Math.floor(i/16)%4, s16=i%16, root=ROOTS[bar];
+    if(mode==='rest'){   // after time's up: half tempo, no drums, soft pad + bass until the next attempt starts
+      if(s16%2===0) osc('triangle', f(root-12+BASS[s16]), t, STEP*3.2, 0.3);
+      if(s16%4===0) osc('square', f(root+12+ARP[s16]), t, STEP*3.4, 0.05);
+      return; }
     if(s16%4===0) kick(t);                                   // four on the floor
     if(s16===4||s16===12) noise(t,0.12,0.35,1800);           // snare-ish on 2 and 4
     if(s16%2===1) noise(t,0.04,0.12,7000);                   // off-beat hats
@@ -1299,9 +1305,21 @@
     if(s16%2===0) osc('triangle', f(root-12+BASS[s16]), t, STEP*1.6, 0.35);   // bass
     if(s16===0||s16===8) osc('sawtooth', f(root+24), t, STEP*3.5, 0.045);     // sparkle
   }
-  function sched(){ while(nextT<ctx.currentTime+LOOK){ play(step,nextT); step=(step+1)%64; nextT+=STEP; } }
+  function sched(){ while(nextT<ctx.currentTime+LOOK){ play(step,nextT); step=(step+1)%64; nextT+=STEP*(mode==='rest'?2:1); } }
   function boot(){ if(ctx) return; ctx=new AC(); lp=ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=5200;
-    master=ctx.createGain(); master.gain.value=0.0001; master.connect(lp); lp.connect(ctx.destination); }
+    master=ctx.createGain(); master.gain.value=0.0001; master.connect(lp); lp.connect(ctx.destination);
+    sfxG=ctx.createGain(); sfxG.gain.value=0.5; sfxG.connect(ctx.destination); }
+  function setMode(m){ mode=(m==='rest')?'rest':'play'; if(!lp) return; var now=ctx.currentTime;
+    lp.frequency.cancelScheduledValues(now); lp.frequency.setValueAtTime(lp.frequency.value,now); lp.frequency.linearRampToValueAtTime(mode==='rest'?1400:5200, now+0.6); }
+  /* one-shot sound effects (play even with music off): 'go' at the start, 'tick' at 3-2-1, 'over' when time's up */
+  function sfx(kind){ boot(); var run=function(){ var t=ctx.currentTime+0.02;
+      if(kind==='tick'){ osc('square',880,t,0.07,0.25,sfxG); }
+      else if(kind==='go'){ osc('square',f(69),t,0.08,0.25,sfxG); osc('square',f(76),t+0.09,0.16,0.3,sfxG); }
+      else if(kind==='over'){ [f(76),f(72),f(69),f(64)].forEach(function(fr,i){ osc('sawtooth',fr,t+i*0.16,0.2,0.3,sfxG); });
+        var o=ctx.createOscillator(), g=ctx.createGain(); o.type='square'; o.frequency.setValueAtTime(110,t+0.64); o.frequency.exponentialRampToValueAtTime(55,t+1.1);
+        g.gain.setValueAtTime(0.35,t+0.64); g.gain.exponentialRampToValueAtTime(0.0001,t+1.15); o.connect(g); g.connect(sfxG); o.start(t+0.64); o.stop(t+1.2); } };
+    if(ctx.state==='suspended'){ ctx.resume().then(run).catch(function(){}); } else run(); }
+  window.TPM={ sfx:sfx, mode:setMode };
   function ui(on){ b.classList.toggle('on',on); b.setAttribute('aria-pressed',on?'true':'false'); b.setAttribute('aria-label',on?'Music on':'Music off'); }
   function start(){ boot(); var go=function(){ step=0; nextT=ctx.currentTime+0.05; clearInterval(timer); timer=setInterval(sched,TICK);
       master.gain.cancelScheduledValues(ctx.currentTime); master.gain.setValueAtTime(0.0001,ctx.currentTime); master.gain.exponentialRampToValueAtTime(0.22,ctx.currentTime+0.8); ui(true); };
@@ -1309,9 +1327,9 @@
   function stop(){ if(!ctx) { ui(false); return; } clearInterval(timer); timer=null;
     master.gain.cancelScheduledValues(ctx.currentTime); master.gain.setValueAtTime(master.gain.value,ctx.currentTime); master.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+0.35);
     setTimeout(function(){ if(!timer&&ctx&&ctx.state==='running') ctx.suspend(); },450); ui(false); }
-  b.addEventListener('click',function(){ want=!want; try{localStorage.setItem('tp_music',want?'1':'0');}catch(e){} if(want) start(); else stop(); });
+  b.addEventListener('click',function(){ want=!timer; try{localStorage.setItem('tp_music',want?'1':'0');}catch(e){} if(want) start(); else stop(); });   // toggle the REAL state (loop running or not)
   document.addEventListener('visibilitychange',function(){ if(!ctx) return; if(document.hidden){ if(timer){ clearInterval(timer); timer=null; ctx.suspend(); } } else if(want){ start(); } });
-  ui(false);
-  if(want){ var once=function(){ document.removeEventListener('pointerdown',once,true); if(want) start(); }; document.addEventListener('pointerdown',once,true); }
+  ui(want);   // show the remembered state; the loop itself waits for the first tap
+  if(want){ var once=function(e){ document.removeEventListener('pointerdown',once,true); if(e&&e.target&&b.contains(e.target)) return; if(want) start(); }; document.addEventListener('pointerdown',once,true); }
 })();
 </script>
