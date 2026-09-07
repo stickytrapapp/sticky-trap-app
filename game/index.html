@@ -475,6 +475,15 @@
   .musicb svg{width:17px;height:17px}
   .musicb.on{color:var(--cyan);border-color:rgba(18,196,255,.55);animation:mpulse 2s infinite}
   @keyframes mpulse{0%{box-shadow:0 0 0 0 rgba(18,196,255,.45)}70%{box-shadow:0 0 0 8px rgba(18,196,255,0)}100%{box-shadow:0 0 0 0 rgba(18,196,255,0)}}
+  .claim-in{width:100%;margin-top:8px;padding:11px 12px;border-radius:12px;border:1px solid var(--line-2);background:var(--panel-2);color:var(--fg);font-family:var(--fbody);font-size:14px}
+  .claim-in:focus{outline:2px solid var(--cyan);border-color:var(--cyan)}
+  .claim-err{color:#FF6B8A;font-size:12px;margin-top:8px;min-height:14px}
+  .claims{margin-top:14px}
+  .claim{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 2px;border-top:1px solid var(--line);font-size:13px}
+  .claim small{display:block;color:var(--mut);font-size:11.5px}
+  .claim .st{color:var(--gold);font-family:var(--fmono);font-size:11px;white-space:nowrap}
+  .expnote{color:var(--gold);font-size:12px;margin-top:8px;font-weight:600}
+  .pill.soon{color:var(--mut);border-color:var(--line-2)}
   .res-handle{font-family:var(--fmono);font-weight:700;font-size:15px;letter-spacing:.14em;
     background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:3px}
 </style>
@@ -494,7 +503,7 @@
     <div class="brand"><b>Trap Points</b><span>‹ Back to app</span></div></a>
     <div class="top-right">
       <button class="musicb" id="musicb" type="button" aria-label="Music off" aria-pressed="false" title="Music"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></button>
-      <div class="streak">🔥 6</div>
+      <div class="streak" id="hdrStreak">🔥 0</div>
       <div class="pts" id="ptsPill"><span class="shard"></span><span id="ptsVal">320</span></div>
     </div>
   </div>
@@ -543,7 +552,7 @@
           <div class="res-stats">
             <div><span>Streak</span><b id="rstreak">🔥 7</b></div>
             <div><span>Earned</span><b id="rpts">+0</b></div>
-            <div><span>Today</span><b id="rrank">#5</b></div>
+            <div><span>Days</span><b id="rrank">1</b></div>
           </div>
           <button class="sf-primary" id="shareBtn">Share result</button>
           <div class="res-new">New board in <b id="rnewin">—</b></div>
@@ -560,9 +569,9 @@
         <div class="mc-badge">◆ PLUG</div>
       </div>
       <div class="status">
-        <div class="stat"><div class="sv cy">#5</div><div class="sk">Trap Ladder</div></div>
-        <div class="stat"><div class="sv mg">4 mo</div><div class="sk">Play streak</div></div>
-        <div class="stat"><div class="sv">3</div><div class="sk">Badges</div></div>
+        <div class="stat"><div class="sv cy" id="stDays">0</div><div class="sk">Days played</div></div>
+        <div class="stat"><div class="sv mg" id="stStreak">0</div><div class="sk">Play streak</div></div>
+        <div class="stat"><div class="sv" id="stBest">0</div><div class="sk">Best score</div></div>
       </div>
       <p class="mine-note"><b>Anonymous</b> — just your handle. Points, rank &amp; streak are all yours.</p>
       <div class="balance">
@@ -570,13 +579,15 @@
         <div class="n" id="balBig">320</div>
         <div class="tierline"><span>Status · <b id="tierName">PLAYER</b></span><span id="tierNext">Scan to verify your brand</span></div>
         <div class="bar"><i id="tierBar" style="width:18%"></i></div>
-        <div class="sub">Play to bank points, then cash them in for a run of <b>your own branded goods</b> — slaps, lighters, embroidered hoodies.</div>
+        <div class="sub">Play to bank points, then cash them in for a run of <b>your own branded goods</b> — slaps, lighters, embroidered hoodies. Points expire 60 days after you earn them.</div>
+        <div class="expnote" id="expNote" hidden></div>
         <button class="scanbtn" id="scanOpen2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h5v5H4zM15 4h5v5h-5zM4 15h5v5H4zM15 15h2v2M20 20v.01M20 15h.01M15 20h.01"/></svg> Scan an order — verify your brand</button>
       </div>
 
       <div class="sec-h"><h3>Prizes</h3><span>your brand, made by us</span></div>
       <div class="brandhero"><div class="bh-i">◈</div><div class="bh-txt"><b>Win your own brand.</b><span>Every prize is <b style="color:var(--fg)">YOUR</b> logo on real goods — slaps, lighters, embroidered hoodies — hand-made by us.</span></div></div>
       <div id="shop"></div>
+      <div class="claims" id="claims"></div>
       <div class="sub" style="text-align:center;margin-top:14px">The big runs sit above the +15/day cap on purpose — they take real play to win, so it’s never a giveaway.</div>
     </section>
 
@@ -596,17 +607,17 @@
         </div>
         <div class="rw">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#12C4FF" stroke-width="1.7"><path d="M12 3c1 3-1 4-1 6a3 3 0 006 0c0 4-2 6-5 6a5 5 0 01-5-5c0-4 4-4 5-7z"/></svg></div>
-          <div class="tx"><b>Play streak bonus</b><small>Every day running</small></div>
+          <div class="tx"><b>Play streak bonus</b><small>From day 2 of a run</small></div>
           <div class="earn-amt mid">+5</div>
         </div>
         <div class="rw">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#12C4FF" stroke-width="1.7"><path d="M6 20V9M12 20V4M18 20v-7"/></svg></div>
-          <div class="tx"><b>Top the weekly ladder</b><small>Resets Sunday</small></div>
+          <div class="tx"><b>Top the weekly ladder</b><small>Resets Sunday <span class="pill soon">soon</span></small></div>
           <div class="earn-amt mid">bonus</div>
         </div>
         <div class="rw">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#12C4FF" stroke-width="1.7"><path d="M16 11a4 4 0 10-8 0M4 20a6 6 0 0116 0"/></svg></div>
-          <div class="tx"><b>Refer a friend who plays</b><small>When they join &amp; play</small></div>
+          <div class="tx"><b>Refer a friend who plays</b><small>When they join &amp; play <span class="pill soon">soon</span></small></div>
           <div class="earn-amt mid">+500</div>
         </div>
       </div>
@@ -804,12 +815,33 @@
   })});
 
   // ---- points ----
-  var balance=320, verified=false;
+  // Points = a persisted LEDGER. Earns expire 60 days after they're earned (rolling); spends consume the
+  // oldest live points first. Balance survives reloads and starts at 0 for a new player.
+  var EXPIRE_DAYS=60, LEDGER=[], CLAIMS=[], STREAK={last:0,n:0}, HIST=[], verified=false;
+  try{ LEDGER=JSON.parse(localStorage.getItem('tp_ledger')||'[]')||[]; }catch(e){ LEDGER=[]; }
+  try{ CLAIMS=JSON.parse(localStorage.getItem('tp_claims')||'[]')||[]; }catch(e){ CLAIMS=[]; }
+  try{ STREAK=JSON.parse(localStorage.getItem('tp_streak')||'null')||{last:0,n:0}; }catch(e){}
+  try{ HIST=JSON.parse(localStorage.getItem('tp_hist')||'[]')||[]; }catch(e){ HIST=[]; }
+  try{ verified=localStorage.getItem('tp_verified')==='1'; }catch(e){}
+  function saveState(){ try{ localStorage.setItem('tp_ledger',JSON.stringify(LEDGER)); localStorage.setItem('tp_claims',JSON.stringify(CLAIMS)); localStorage.setItem('tp_streak',JSON.stringify(STREAK)); localStorage.setItem('tp_hist',JSON.stringify(HIST.slice(-400))); localStorage.setItem('tp_verified',verified?'1':'0'); }catch(e){} }
+  function liveEarns(){ var cut=Date.now()-EXPIRE_DAYS*864e5; return LEDGER.filter(function(e){return e.pts>0&&e.ts>=cut;}); }
+  function calcBalance(){ return liveEarns().reduce(function(s,e){return s+(e.pts-(e.used||0));},0); }
+  function expiringSoon(){ var soon=Date.now()-(EXPIRE_DAYS-7)*864e5; return liveEarns().filter(function(e){return e.ts<soon;}).reduce(function(s,e){return s+(e.pts-(e.used||0));},0); }
+  function earn(pts,why){ if(!(pts>0))return; LEDGER.push({ts:Date.now(),pts:pts,used:0,why:why||''}); prune(); saveState(); setBalance(calcBalance()); }
+  function spend(pts,why){ var need=pts; liveEarns().forEach(function(e){ if(need<=0)return; var avail=e.pts-(e.used||0); var take=Math.min(avail,need); e.used=(e.used||0)+take; need-=take; }); LEDGER.push({ts:Date.now(),pts:-pts,why:why||''}); saveState(); setBalance(calcBalance()); }
+  function prune(){ var cut=Date.now()-EXPIRE_DAYS*864e5, old=Date.now()-120*864e5; LEDGER=LEDGER.filter(function(e){ return e.pts>0 ? e.ts>=cut : e.ts>=old; }); }
+  var balance=calcBalance();
   var ptsVal=document.getElementById('ptsVal'), ptsPill=document.getElementById('ptsPill');
   function fmt(n){return n.toLocaleString('en-US');}
   function setBalance(v){balance=v; ptsVal.textContent=fmt(v); document.getElementById('balBig').textContent=fmt(v);
-    updateTier(); if(window.__renderShop)window.__renderShop();
+    updateTier(); if(window.__renderShop)window.__renderShop(); renderStats();
+    var ex=document.getElementById('expNote'), exp=expiringSoon(); if(ex){ ex.hidden=!(exp>0); ex.textContent='\u25C8 '+fmt(exp)+' of your points expire within 7 days \u2014 use them.'; }
     ptsPill.classList.remove('bump'); void ptsPill.offsetWidth; ptsPill.classList.add('bump');}
+  // ---- streak + stats (real) ----
+  function streakNow(){ var d=Math.floor(Date.now()/864e5); return (STREAK.last===d||STREAK.last===d-1)?(STREAK.n||0):0; }
+  function renderStats(){ var n=streakNow(), days=HIST.length, best=HIST.reduce(function(m,h){return Math.max(m,h.best||0);},0);
+    var m=[['hdrStreak','\uD83D\uDD25 '+n],['stStreak',n],['stDays',days],['stBest',fmt(best)],['dstreak','\uD83D\uDD25 '+n]];
+    m.forEach(function(x){var el=document.getElementById(x[0]); if(el)el.textContent=x[1];}); }
   function updateTier(){
     var el=document.getElementById('tierName'), nx=document.getElementById('tierNext'), bar=document.getElementById('tierBar');
     if(el)el.textContent=verified?'VERIFIED BRAND':'PLAYER';
@@ -878,16 +910,20 @@
     if(attempt<ATTEMPTS){ attempt++; dayScore=0; setStat(); showGate(); } else { finishDaily(); } }
   function finishDaily(){ dayDone=true;
     var stars= bestScore>=PAR*2?3 : bestScore>=Math.round(PAR*1.4)?2 : bestScore>=PAR?1 : 0;
-    var earned=(stars>=3?15:stars>=2?12:stars>=1?8:3)+5; setBalance(balance+earned);
+    var today=dayNum; if(STREAK.last===today-1){ STREAK.n=(STREAK.n||0)+1; } else if(STREAK.last!==today){ STREAK.n=1; } STREAK.last=today;
+    var streakBonus=STREAK.n>=2?5:0;
+    var earned=(stars>=3?15:stars>=2?12:stars>=1?8:3)+streakBonus;
+    if(!HIST.some(function(h){return h.day===today;})) HIST.push({day:today,best:bestScore,stars:stars,pts:earned});
+    earn(earned,'Trap #'+trapNum+' '+stars+'\u2605');
     var starStr=''; for(var i=0;i<3;i++) starStr+=(i<stars?'★':'☆');
     document.getElementById('rnum').textContent='Trap #'+trapNum;
     document.getElementById('rstars').textContent=starStr;
     document.getElementById('rscore').textContent=fmt(bestScore);
     var diff=bestScore-PAR;
     document.getElementById('rpar').textContent= diff>=0?('Beat par by '+fmt(diff)):('Missed par by '+fmt(-diff));
-    document.getElementById('rstreak').textContent='🔥 '+(stars>=1?7:0);
+    document.getElementById('rstreak').textContent='\uD83D\uDD25 '+STREAK.n;
     document.getElementById('rpts').textContent='+'+earned;
-    document.getElementById('rrank').textContent='#'+(bestScore>=Math.round(PAR*1.4)?3:5);
+    document.getElementById('rrank').textContent=HIST.length;
     try{localStorage.setItem('tp_daily', JSON.stringify({day:dayNum, best:bestScore, stars:stars, earned:earned}));}catch(e){}
     document.getElementById('result').classList.add('show');
   }
@@ -926,8 +962,8 @@
   function armAuto(){clearTimeout(scanT); scanT=setTimeout(detect,2200);}
   function detect(){clearTimeout(scanT); step('verify'); scanT=setTimeout(finish,1500);}
   function finish(){
-    verified=true;
-    var boost=500; setBalance(balance+boost);
+    verified=true; saveState();
+    var boost=500; earn(boost,'Verified brand');
     document.getElementById('dTot').textContent='+'+fmt(boost);
     document.getElementById('dBal').textContent=fmt(balance);
     step('done');
@@ -962,35 +998,57 @@
     if(!shopEl)return;
     var card=document.createElement('div'); card.className='card'; card.style.padding='4px 14px';
     CAT.forEach(function(it,idx){
-      var tierok=!it.tier||verified, afford=balance>=it.c;
+      var tierok=!it.tier||verified, afford=balance>=it.c, pending=CLAIMS.some(function(c){return c.n===it.n&&c.status==='pending';});
       var row=document.createElement('div'); row.className='rw';
       var tags=(it.f?'<span class="tag hd">Your brand</span>':'')+(it.tier&&!tierok?'<span class="pill">Verified brands</span>':'')+(it.bonus?'<span class="tag bonus">+ '+it.bonus+'</span>':'');
       row.innerHTML='<div class="ic">'+(ICONS[it.t]||ICONS.Merch)+'</div>'+
         '<div class="tx"><b>'+it.n+'</b><small>'+it.d+' · <span class="cost-chip">◈ '+fmt(it.c)+'</span>'+tags+'</small></div>';
       var btn=document.createElement('button');
-      if(!tierok){btn.className='btn lock';btn.disabled=true;btn.textContent='Verify';}
+      if(pending){btn.className='btn lock';btn.disabled=true;btn.textContent='Pending';}
+      else if(!tierok){btn.className='btn lock';btn.disabled=true;btn.textContent='Verify';}
       else if(!afford){btn.className='btn lock';btn.disabled=true;btn.textContent='Redeem';}
       else{btn.className='btn go';btn.textContent='Redeem';btn.addEventListener('click',(function(i){return function(){openSheet(i);};})(idx));}
       row.appendChild(btn); card.appendChild(row);
     });
-    shopEl.innerHTML=''; shopEl.appendChild(card);
+    shopEl.innerHTML=''; shopEl.appendChild(card); renderClaims();
   }
+  function renderClaims(){ var el=document.getElementById('claims'); if(!el)return; if(!CLAIMS.length){ el.innerHTML=''; return; }
+    el.innerHTML='<div class="sec-h"><h3>Your claims</h3><span>we make it &amp; reach out</span></div>'+CLAIMS.slice().reverse().map(function(c){ var d=new Date(c.ts); return '<div class="claim"><div><b>'+c.n+'</b><small>'+c.brand+' \u00b7 '+d.toLocaleDateString()+' \u00b7 \u25C8 '+fmt(c.c)+'</small></div><span class="st">'+(c.status==='pending'?'IN THE QUEUE':c.status.toUpperCase())+'</span></div>'; }).join(''); }
   window.__renderShop=renderShop;
   var sheet=document.getElementById('redeemSheet'), sheetCard=document.getElementById('sheetCard');
+  // Redeem = a real CLAIM: we capture the brand + contact, email it to the shop (main backend, same path as
+  // quote requests), take the points off the ledger and show it as pending until the shop reaches out.
+  var CLAIM_API='https://script.google.com/macros/s/AKfycbyNQSfrtPhEgLtNt8IPIQ4z0vF265j3AC-udRJOyF7MLcS4MhLTAL4SESs_AGj0JS8RdQ/exec';
+  try{ CLAIM_API=localStorage.getItem('tp_api')||CLAIM_API; }catch(e){}   // local-dev override only
+  var LASTC={}; try{ LASTC=JSON.parse(localStorage.getItem('tp_claim_contact')||'{}')||{}; }catch(e){}
   function openSheet(idx){
     var it=CAT[idx], after=balance-it.c;
     sheetCard.innerHTML='<div class="sheet-grab"></div>'+
       '<b class="sheet-t">Redeem '+it.n+'</b>'+
-      '<p class="sheet-d">We print a run of <b>your</b> branded goods in-house and ship it to your shop. Points come off the account.</p>'+
+      '<p class="sheet-d">We print a run of <b>your</b> branded goods in-house and reach out to set it up. Tell us who it\'s for.</p>'+
+      '<input class="claim-in" id="cBrand" maxlength="60" placeholder="Brand / shop name" value="'+(LASTC.brand||'').replace(/"/g,'&quot;')+'">'+
+      '<input class="claim-in" id="cEmail" type="email" maxlength="120" placeholder="Email" value="'+(LASTC.email||'').replace(/"/g,'&quot;')+'">'+
+      '<input class="claim-in" id="cPhone" type="tel" maxlength="30" placeholder="Phone (optional)" value="'+(LASTC.phone||'').replace(/"/g,'&quot;')+'">'+
+      '<div class="claim-err" id="cErr"></div>'+
       '<div class="sheet-row"><span>Cost</span><b>◈ '+fmt(it.c)+'</b></div>'+
       '<div class="sheet-row"><span>Balance after</span><b>◈ '+fmt(after)+'</b></div>'+(it.bonus?'<div class="sheet-row"><span>Bonus</span><b style="color:var(--gold)">'+it.bonus+'</b></div>':'')+
       '<button class="sf-primary" id="confirmRedeem">Confirm redeem</button>'+
       '<button class="sf-link" id="cancelRedeem">Cancel</button>';
     sheet.classList.add('open');
     document.getElementById('confirmRedeem').addEventListener('click',function(){
-      setBalance(balance-it.c); sheet.classList.remove('open');
-      if(it.bchance && Math.random()<it.bchance){ toast('🎁 Bonus hit! <b>'+it.n+'</b> <b>+ a 2nd</b> — we’ll print both &amp; ship.'); }
-      else { toast('Claimed <b>'+it.n+'</b> — we’ll print your brand &amp; ship it.'); }
+      var brand=(document.getElementById('cBrand').value||'').trim(), email=(document.getElementById('cEmail').value||'').trim(), phone=(document.getElementById('cPhone').value||'').trim(), err=document.getElementById('cErr');
+      if(!brand){ err.textContent='Add the brand or shop name the run is for.'; return; }
+      if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ err.textContent='Add an email so we can reach you about the run.'; return; }
+      if(balance<it.c){ err.textContent='Not enough points.'; return; }
+      var bonus=!!(it.bchance && Math.random()<it.bchance);
+      LASTC={brand:brand,email:email,phone:phone}; try{localStorage.setItem('tp_claim_contact',JSON.stringify(LASTC));}catch(e){}
+      var claim={ts:Date.now(),n:it.n,c:it.c,brand:brand,email:email,status:'pending',bonus:bonus,handle:handle};
+      CLAIMS.push(claim); spend(it.c,'Claim: '+it.n);
+      var details='PRIZE CLAIM from Trap Points (the game)\nHandle: '+handle+'\nPrize: '+it.n+' ('+it.d+') — '+fmt(it.c)+' pts'+(bonus?'\nBONUS HIT: '+it.bonus:'')+'\nBalance after: '+fmt(balance)+'\nVerified brand: '+(verified?'yes':'no')+'\nDays played: '+HIST.length+' · streak '+streakNow();
+      try{ fetch(CLAIM_API,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'quote',name:'PRIZE CLAIM: '+brand+' ('+handle+')',email:email,phone:phone,details:details,basket:'',files:[]})}).catch(function(){}); }catch(e){}
+      sheet.classList.remove('open'); renderShop();
+      if(bonus){ toast('🎁 Bonus hit! <b>'+it.n+'</b> <b>+ a 2nd</b> — claimed. We\'ll reach out to '+email+'.'); }
+      else { toast('Claimed <b>'+it.n+'</b> — we\'ll reach out to '+email+' to set up your run.'); }
     });
     document.getElementById('cancelRedeem').addEventListener('click',function(){sheet.classList.remove('open');});
   }
@@ -1078,7 +1136,7 @@
   function dReveal(){
     ddone=true; document.getElementById('duelPlay').classList.remove('open');
     var them=curOpp.them, youWin=dscore>=them, dr=youWin?(12+Math.floor(Math.random()*9)):-(10+Math.floor(Math.random()*8));
-    rating+=dr; if(youWin){wins++; wstreak++; setBalance(balance+10);} else {losses++; wstreak=0;}
+    rating+=dr; if(youWin){wins++; wstreak++; earn(10,'Duel win');} else {losses++; wstreak=0;}
     var entry={opp:curOpp.opp,ab:curOpp.ab,state:youWin?'won':'lost',you:dscore,them:them,dr:dr};
     if(curIdx>=0) duels[curIdx]=entry; else duels.unshift(entry);
     var ov=document.getElementById('duelReveal'); ov.classList.add('open');
@@ -1121,6 +1179,7 @@
 
   initDaily();
   updateTier();
+  setBalance(calcBalance());
 })();
 </script>
 
