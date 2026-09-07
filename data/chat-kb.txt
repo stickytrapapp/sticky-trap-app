@@ -4,13 +4,13 @@ THE STICKY TRAP -- CHAT KNOWLEDGE BASE (auto-generated 2026-09-07 from the live 
 The Sticky Trap is a design house and in-house print shop in Ann Arbor, Michigan: branding, custom art, stickers, labels, promotionals and merch. Motto: "Let's Stick Together."
 Contact: call or text 734 460 3845 | email thestickytrap@gmail.com | Instagram @the_stickytrap | 4750 Venture Dr, Ste 101, Ann Arbor, MI | app: https://thestickytrap.app
 Sister podcast/channel: The Flower Room (@theflowerroom on Instagram, TikTok, YouTube) -- episodes are in the app's Social tab.
-Rush jobs and shipping are not published here: quoted per project, tell the customer to call/text or email.
+Shipping is not published here: quoted per project, tell the customer to call/text or email. Rush IS priced -- see the house facts.
 
 == Ordering in the app ==
 Menu tab: open a product, set the quantity, tap a price to add it to the basket. The basket can Email my order, Text order, Copy text, or "Upload art & get your quote" (name, email, phone, art files up to ~20 MB, deadline). Bigger files: email them.
 Nothing is charged in the app: we proof and quote first, and nothing is charged until the customer approves. The "Start a project -- get a quote" button on the Connect tab goes to the same quote form.
 Minimum order: $50 per order (any mix of items) -- there is no per-item piece minimum. Quantities step by 5 in the app, from 5 up to 1,000; more than 1,000 is a custom quote (call us).
-Volume price breaks on the per-piece menu price: 250+ pcs 3% off, 500+ pcs 6% off, 1,000 pcs 10% off. Under 250 pcs pays the menu price. Setup / pre-press is quoted separately.
+Volume price breaks on the per-piece menu price: 250+ pcs 3% off, 500+ pcs 6% off, 1,000 pcs 10% off. Under 250 pcs pays the menu price. Pre-press set-up is $8 per set on top (see the house facts below).
 Example: 3" Slap, White Vinyl, Base is $0.45 each -> 100 pcs = $45.00; 500 pcs = 500 x $0.45 x 0.94 = $211.50.
 
 == Finish tiers (every product, every material) ==
@@ -22,11 +22,16 @@ Flex (Ridge, Summit, Peak, Apex, Zenith) -- 4 to 8 layers, custom quoted above P
 HoloBrite -- a white-ink underbase under the art on Holographic BF or Gold BF for true, razor-sharp color while the metal still frames it. Listed as its own per-piece price where offered.
 
 == Not on the menu (always "quoted per project" -- never invent a number) ==
-Clear stock, custom dielines / custom shapes, Flex tiers, design work, pre-press / set-up, orders over 1,000 pcs, other materials, rush, shipping, and anything not listed below.
+Clear stock, custom dielines / custom shapes, Flex tiers, design work beyond the $75/hr rate, orders over 1,000 pcs, other materials, shipping, and anything not listed below. (Pre-press, vector service, spot gloss layer and rush ARE priced -- see the house facts.)
 
 == House facts (from the shop; answer these directly) ==
 Standard turnaround is 5-7 business days.
 Shop hours: Monday to Friday, 10am to 5pm Eastern (Ann Arbor, MI).
+Pre-press set-up is $8 per set on every order. A set is up to 3 stickers that go together, like lid + wrap + bottom or lid + wrap + collar. Print-ready vector files (.ai, .eps, .svg, or vector PDF) pay only this.
+If your files are not vector, our vector service is a flat $35 per file, charged once. Reprints of a file we have already set up do not pay it again.
+Building a UV spot gloss or emboss layer from your art is $55 per file, charged once.
+Art that needs changes before it prints (new strain name, moved logo, added call-outs, a new size) is design time at $75 per hour, quoted in writing before we start. Any unused quoted time is credited to your print order.
+Rush: same-day is +40% and within 48 hours is +30% on the order, subject to stock on hand. Ask and we will confirm before promising it.
 
 == Materials, effects, how we work, common questions (from the app's Specs tab) ==
 Materials & Finishes
@@ -63,7 +68,7 @@ Yes — we don't just run your file. Send whatever you've got and, if you want, 
 Can I get a custom shape?
 Yes — Custom Dielines . We build a bespoke cut path to any outline you want, not just a square or circle. Quoted per project.
 What are pre-press / set-up charges?
-Pre-press makes your art print-ready — resolution, color, cut paths, bleeds, proofing. Real hands-on work, so shops charge for it. Send print-ready files and there's often little or none; if not, we quote it up front.
+Pre-press makes your art print-ready — set-up, color, cut paths, bleeds, proofing. It's $8 per set on every order (a set is up to 3 stickers that go together, like lid + wrap + bottom). Send print-ready vector files and that's all you pay. Not vector? Our vector service is a flat $35 per file, charged once. Anything beyond that we quote up front, before we start.
 <section class="view connectbanner"
 
 == Price list: per piece, USD, at the menu quantity (5-249 pcs); apply the volume breaks above for 250+ ==
