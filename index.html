@@ -56,6 +56,9 @@
   .iconb{background:none;border:0;cursor:pointer;display:flex;align-items:center;color:#9a92c8;padding:0;font-family:inherit}
   .iconb svg{width:21px;height:21px}
   .iconb:active{transform:scale(.92)}
+  #musicb{position:relative}
+  #musicb.on{color:var(--cy)}
+  #musicb.on::after{content:"";position:absolute;top:-2px;right:-3px;width:7px;height:7px;border-radius:50%;background:var(--cy);border:1.5px solid #fff;animation:pulse2 2s infinite}
   .bell{position:relative;display:flex;align-items:center;color:#9a92c8;background:none;border:0;cursor:pointer;padding:0}
   .bell .ndot{position:absolute;top:-2px;right:-2px;width:9px;height:9px;border-radius:50%;background:var(--mag);border:1.5px solid #fff;box-shadow:0 0 0 0 rgba(239,31,120,.55);animation:pulse2 2s infinite}
   .bell .ndot[hidden]{display:none}
@@ -386,6 +389,7 @@
   <header class="topbar">
     <div class="brandwrap"><span class="wm">STICKYTR<span class="cur">_</span></span><span class="wtag">Branding · Print · Culture</span></div>
     <div class="tb-right">
+      <button class="iconb" id="musicb" aria-label="Music off" aria-pressed="false" title="Music"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></button>
       <button class="iconb" id="shareb" aria-label="Share the app"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.3 10.7l7.4-4.4M8.3 13.3l7.4 4.4"/></svg></button>
       <button class="bell" id="bell" aria-label="Notifications"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 9a6 6 0 0112 0c0 5 2 6 2 6H4s2-1 2-6z"/><path d="M10 20a2 2 0 004 0"/></svg><i class="ndot" id="bell-dot" hidden></i></button>
     </div>
@@ -1843,6 +1847,31 @@
     fab.classList.add('fabhide'); clearTimeout(hideT); hideT=setTimeout(function(){ fab.classList.remove('fabhide'); },450);
   },{passive:true});
   renderAll();
+})();
+</script>
+
+<script>
+/* ---- Music: audio/beat.mp3 behind the top-bar note button. OFF by default; remembered; fades in/out;
+        pauses when the app is hidden. Browsers block sound before a tap, so a remembered ON waits for the first tap. ---- */
+(function(){
+  var b=document.getElementById('musicb'); if(!b) return;
+  var SRC='audio/beat.mp3', VOL=0.35, a=null, want=false, armed=false, fadeT=null;
+  try{ want=localStorage.getItem('st_music')==='1'; }catch(e){}
+  function el(){ if(!a){ a=new Audio(SRC); a.loop=true; a.preload='none'; a.volume=0; } return a; }
+  function ui(on){ b.classList.toggle('on',on); b.setAttribute('aria-pressed',on?'true':'false'); b.setAttribute('aria-label',on?'Music on':'Music off'); }
+  function fade(to,ms){ var x=el(); clearInterval(fadeT); var from=x.volume, t0=Date.now();
+    fadeT=setInterval(function(){ var k=Math.min(1,(Date.now()-t0)/ms); x.volume=from+(to-from)*k; if(k>=1){ clearInterval(fadeT); if(to===0) x.pause(); } },50); }
+  function start(){ var x=el(), p=x.play();
+    if(p&&p.then){ p.then(function(){ fade(VOL,900); ui(true); }).catch(function(){ ui(false); arm(); }); }
+    else { fade(VOL,900); ui(true); } }
+  function stop(){ if(a&&!a.paused) fade(0,400); else if(a){ a.pause(); } ui(false); }
+  function arm(){ if(armed) return; armed=true;
+    var once=function(){ document.removeEventListener('pointerdown',once,true); document.removeEventListener('keydown',once,true); armed=false; if(want) start(); };
+    document.addEventListener('pointerdown',once,true); document.addEventListener('keydown',once,true); }
+  b.addEventListener('click',function(){ want=!want; try{localStorage.setItem('st_music',want?'1':'0');}catch(e){}
+    if(want) start(); else stop(); try{window.track&&window.track('music',want?'on':'off');}catch(e){} });
+  document.addEventListener('visibilitychange',function(){ if(!a) return; if(document.hidden){ if(!a.paused) a.pause(); } else if(want){ a.play().catch(function(){}); } });
+  ui(false); if(want) arm();
 })();
 </script>
 </body>
