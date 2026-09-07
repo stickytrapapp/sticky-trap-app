@@ -271,7 +271,7 @@ function runTool_(use, prices, ctx) {
       var nb = q < 250 ? (250 - q) : (q < 500 ? (500 - q) : (q < 1000 ? (1000 - q) : 0));
       var res = { ok: true, added: q + ' x ' + p + ' - ' + m + ' / ' + fname, unit_price: money_(u), line_total: money_(tot), menu_price: money_(pr),
                   discount: cmult_(q) < 1 ? Math.round((1 - cmult_(q)) * 100) + '% volume break applied' : 'menu price (no volume break under 250)',
-                  basket_subtotal: money_(sub), basket_lines: ctx.basket.length };
+                  basket_after_this_add: ctx.basket.length + ' line(s), subtotal ' + money_(sub) + ' (this line is already included)' };
       if (nb && nb <= 55) res.tip = 'Adding ' + nb + ' more pieces reaches the next volume break.';
       return { result: res, action: { type: 'add_to_basket', p: p, m: m, f: fname, pr: pr, qty: q } };
     }

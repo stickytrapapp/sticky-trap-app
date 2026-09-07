@@ -1753,7 +1753,7 @@
 <script>
 /* ---- Ask us: chat panel (Claude via the standalone "Sticky Trap — Chat" Apps Script, apps-script/Chat.gs) ---- */
 (function(){
-  var CHAT_URL='';   // <- paste the Chat web-app /exec URL here. Empty = offline mode (panel works, replies point to call/text/email).
+  var CHAT_URL='https://script.google.com/macros/s/AKfycbzgctrnkyWjVnhzioE_B4x8J2pyi4WzRSJG2e00Y_Y5cz0vQx-q5jhvOhMWg2x-K9ciFw/exec';   // "Sticky Trap - Chat" Apps Script (thestickytrap@gmail.com). Empty = offline mode.
   try{ CHAT_URL = localStorage.getItem('st_chat_url') || CHAT_URL; }catch(e){}   // local-dev override only
   var $=function(id){return document.getElementById(id);};
   var fab=$('chatfab'), ov=$('chatov'), panel=$('chatpanel'), log=$('chatlog'), chips=$('chatchips'), form=$('chatform'), input=$('chatin'), send=$('chatsend');
