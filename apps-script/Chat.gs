@@ -74,7 +74,7 @@ var SYSTEM = [
   "- show_basket: when they ask to see, review or check out their basket.",
   "- open_quote_form: when they're ready to send the order, get a quote, or upload art.",
   "- go_to: when they ask for another part of the app (materials/specs, contact, episodes, the daily brief, the game).",
-  "You may call several tools in one turn (e.g. two add_to_basket lines). Their current tab and basket are given below - use them (e.g. 'your basket already has...').",
+  "You may call several tools in one turn (e.g. two add_to_basket lines). Their current tab and basket are given below - use them (e.g. 'your basket already has...'). After add_to_basket, state only what the result says (unit price, line total, basket subtotal); never speculate about merged or duplicate lines - the app handles that.",
   "", "KNOWLEDGE BASE:", ""
 ].join("\n");
 
@@ -266,12 +266,13 @@ function runTool_(use, prices, ctx) {
       var hb = !!inp.holobrite;
       if (hb && row.hb == null) return { error: true, result: { error: 'HoloBrite (white underbase) is not offered on ' + m + ' - only on Holographic BF and Gold BF.' } };
       var pr = hb ? row.hb : row.pr, fname = f + (hb ? ' + HoloBrite' : ''), u = unit_(pr, q), tot = u * q;
+      var before = ctx.basket.length;
       ctx.basket.push({ p: p, m: m, f: fname, pr: pr, qty: q });
       var sub = basketLines_(ctx.basket).reduce(function (a, l) { return a + l.total; }, 0);
       var nb = q < 250 ? (250 - q) : (q < 500 ? (500 - q) : (q < 1000 ? (1000 - q) : 0));
       var res = { ok: true, added: q + ' x ' + p + ' - ' + m + ' / ' + fname, unit_price: money_(u), line_total: money_(tot), menu_price: money_(pr),
                   discount: cmult_(q) < 1 ? Math.round((1 - cmult_(q)) * 100) + '% volume break applied' : 'menu price (no volume break under 250)',
-                  basket_after_this_add: ctx.basket.length + ' line(s), subtotal ' + money_(sub) + ' (this line is already included)' };
+                  basket: 'had ' + before + ' line(s) before this add; now ' + ctx.basket.length + ' line(s), subtotal ' + money_(sub) };
       if (nb && nb <= 55) res.tip = 'Adding ' + nb + ' more pieces reaches the next volume break.';
       return { result: res, action: { type: 'add_to_basket', p: p, m: m, f: fname, pr: pr, qty: q } };
     }
