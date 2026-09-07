@@ -34,6 +34,14 @@
  *      "messages":[{"role":"user"|"assistant","content":"..."}, ...]}
  *   Response: {"ok":true,"reply":"...","actions":[{"type":"add_to_basket","p":...,"m":...,"f":...,"pr":1.35,"qty":100}, ...]}
  *          or {"ok":false,"error":"...","reply":"<friendly fallback>"}
+ *
+ * ARCADE LEADERBOARD (Trap Points game, game/index.html) - rides on this same deployment:
+ *   POST {"action":"score","uid":"...","handle":"TRAPGOD","day":<dayNum>,"best":<score>,"stars":0-3}
+ *        -> upserts the player's best for that day in the 'scores' tab of the chats spreadsheet
+ *   GET  with action=lb (plus optional month=YYYY-MM and uid=...)
+ *        -> {ok, month, count, top:[{rank,handle,total,days,you}], you:{rank,total,days,gap_podium,gap_crown}|null}
+ *   Monthly ladder = sum of each player's daily best scores that month. uids starting with 'test-' are
+ *   accepted but never shown (safe for testing).
  */
 
 var PROP = PropertiesService.getScriptProperties();
@@ -104,6 +112,7 @@ var TOOLS = [
 /* ---------- HTTP ---------- */
 function doGet(e) {
   var p = (e && e.parameter) || {};
+  if (p.action === 'lb') { try { return out_(leaderboard_(p)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
   if (p.refresh) CACHE.remove('kb');   // ping with refresh=1 -> re-fetch the KB now instead of waiting out the 20-min cache
   if (p.ping) {
     var kb = '', n = 0; try { kb = kb_(); n = kbPrices_(kb).length; } catch (err) { kb = ''; }
@@ -116,6 +125,8 @@ function doPost(e) {
   var body;
   try { body = JSON.parse((e && e.postData && e.postData.contents) || '{}'); }
   catch (err) { return out_({ ok: false, error: 'bad_json', reply: FALLBACK }); }
+
+  if (body.action === 'score') { try { return out_(scoreIn_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
 
   var uid = String(body.uid || 'anon').slice(0, 40);
   var msgs = clean_(body.messages);
@@ -359,13 +370,12 @@ function callClaude_(convo, kb, ctx) {
 /* ---------- logging (anonymous: device id, question, answer, actions, tokens) ---------- */
 function ss_() {
   var id = PROP.getProperty('CHAT_SHEET_ID');
-  if (!id) {
-    var ss = SpreadsheetApp.create('Sticky Trap - App Chats');
-    id = ss.getId(); PROP.setProperty('CHAT_SHEET_ID', id);
-    var sh = ss.getActiveSheet(); sh.setName('chats');
-    sh.appendRow(['ts', 'device_id', 'question', 'answer', 'actions', 'in_tokens', 'out_tokens', 'cache_read', 'model']);
-  }
-  return SpreadsheetApp.openById(id);
+  if (id) { try { return SpreadsheetApp.openById(id); } catch (e) { /* deleted / not ours any more -> make a new one */ } }
+  var ss = SpreadsheetApp.create('Sticky Trap - App Chats');
+  PROP.setProperty('CHAT_SHEET_ID', ss.getId());
+  var sh = ss.getActiveSheet(); sh.setName('chats');
+  sh.appendRow(['ts', 'device_id', 'question', 'answer', 'actions', 'in_tokens', 'out_tokens', 'cache_read', 'model']);
+  return ss;
 }
 function log_(uid, q, a, usage, model, actions) {
   try {
@@ -374,6 +384,62 @@ function log_(uid, q, a, usage, model, actions) {
     sh.appendRow([new Date(), uid, String(q).slice(0, 500), String(a).slice(0, 2000), acts.slice(0, 500),
       usage ? usage.input_tokens : '', usage ? usage.output_tokens : '', usage ? (usage.cache_read_input_tokens || 0) : '', model || '']);
   } catch (e) {}
+}
+
+/* ---------- arcade leaderboard (Trap Points game) ---------- */
+var SCORE_MAX = 60000;
+function scoresSheet_() {
+  var ss = ss_(), sh = ss.getSheetByName('scores');
+  if (!sh) { sh = ss.insertSheet('scores'); sh.appendRow(['ts', 'uid', 'handle', 'day', 'month', 'best', 'stars']); }
+  return sh;
+}
+function monthOfDay_(day) { var d = new Date(day * 864e5); return d.getUTCFullYear() + '-' + ('0' + (d.getUTCMonth() + 1)).slice(-2); }
+function scoreIn_(b) {
+  var uid = String(b.uid || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 40);
+  var handle = String(b.handle || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8);
+  var day = Math.round(+b.day || 0), best = Math.max(0, Math.min(SCORE_MAX, Math.round(+b.best || 0))), stars = Math.max(0, Math.min(3, Math.round(+b.stars || 0)));
+  var today = Math.floor(Date.now() / 864e5);
+  if (!uid || !handle || !best || Math.abs(day - today) > 1) return { ok: false, error: 'bad_score' };
+  if (!throttle_('score:' + uid)) return { ok: false, error: 'rate_limited' };
+  var month = monthOfDay_(day), sh = scoresSheet_(), rows = sh.getDataRange().getValues();
+  for (var i = 1; i < rows.length; i++) {
+    if (String(rows[i][1]) === uid && +rows[i][3] === day) {
+      var better = best > +rows[i][5];
+      if (better) sh.getRange(i + 1, 3, 1, 5).setValues([[handle, day, month, best, stars]]);
+      CACHE.remove('lb:' + month);
+      return { ok: true, updated: better };
+    }
+  }
+  sh.appendRow([new Date(), uid, handle, day, month, best, stars]);
+  CACHE.remove('lb:' + month);
+  return { ok: true, updated: true };
+}
+function leaderboard_(p) {
+  var month = /^\d{4}-\d{2}$/.test(p.month || '') ? p.month : monthOfDay_(Math.floor(Date.now() / 864e5));
+  var uid = String(p.uid || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 40);
+  var key = 'lb:' + month, hit = CACHE.get(key), board;
+  if (hit) board = JSON.parse(hit);
+  else {
+    var sh = scoresSheet_(), rows = sh.getDataRange().getValues(), agg = {};
+    for (var i = 1; i < rows.length; i++) {
+      if (String(rows[i][4]) !== month) continue;
+      var u = String(rows[i][1]);
+      if (u.indexOf('test-') === 0) continue;                          // test traffic never shows
+      var a = agg[u] || (agg[u] = { uid: u, handle: '', total: 0, days: 0, ts: 0 });
+      a.total += +rows[i][5]; a.days++;
+      var t = new Date(rows[i][0]).getTime(); if (t >= a.ts) { a.ts = t; a.handle = String(rows[i][2]); }
+    }
+    board = Object.keys(agg).map(function (k) { return agg[k]; }).sort(function (x, y) { return y.total - x.total || y.days - x.days; });
+    try { CACHE.put(key, JSON.stringify(board), 60); } catch (e) {}
+  }
+  var top = board.slice(0, 10).map(function (r, i) { return { rank: i + 1, handle: r.handle, total: r.total, days: r.days, you: !!uid && r.uid === uid }; });
+  var you = null;
+  for (var j = 0; j < board.length; j++) if (uid && board[j].uid === uid) {
+    you = { rank: j + 1, total: board[j].total, days: board[j].days, handle: board[j].handle,
+            gap_podium: j >= 3 ? board[2].total - board[j].total + 1 : 0, gap_crown: j > 0 ? board[0].total - board[j].total + 1 : 0 };
+    break;
+  }
+  return { ok: true, month: month, count: board.length, top: top, you: you };
 }
 
 /* ---------- editor helpers ---------- */

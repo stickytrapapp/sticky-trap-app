@@ -372,6 +372,8 @@
   .lbrow.win{background:linear-gradient(100deg,rgba(234,184,75,.16),transparent);border:1px solid rgba(234,184,75,.4)}
   .lbrow.win .rk{color:var(--gold)}
   .crown{color:var(--gold);font-size:12px;margin-left:3px}
+  .lb-empty{color:var(--mut);font-size:13px;text-align:center;padding:26px 12px;border:1px dashed var(--line-2);border-radius:12px}
+  .lbrow .dy{font-family:var(--fmono);font-size:10.5px;color:var(--mut-2);width:34px;text-align:right;flex:none}
   .result{position:absolute;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:20px;
     background:rgba(8,8,12,.84);backdrop-filter:blur(3px)}
   .result.show{display:flex;animation:fade .3s ease}
@@ -657,21 +659,13 @@
       </div>
 
       <div class="stand">
-        <div class="st-rank">#5</div>
-        <div class="st-txt"><b id="youStand">You’re 5th</b><span>455 to #4 · 1,665 to the crown</span></div>
-        <div class="st-nudge">Win today →</div>
+        <div class="st-rank" id="stRank">–</div>
+        <div class="st-txt"><b id="youStand">Not on the board yet</b><span id="youGap">Finish today’s Trap to get ranked.</span></div>
+        <div class="st-nudge" id="stNudge">Play today →</div>
       </div>
 
-      <div class="lb">
-        <div class="lbrow win"><div class="rk">1</div><div class="av">NI</div><div class="nm">NIGHTSHD <span class="crown">♚</span></div><div class="mv up">▲1</div><div class="sc">4,120</div></div>
-        <div class="lbrow"><div class="rk">2</div><div class="av">GR</div><div class="nm">GR33NGOD</div><div class="mv dn">▼1</div><div class="sc">3,880</div></div>
-        <div class="lbrow"><div class="rk">3</div><div class="av">TR</div><div class="nm">TRAPLORD</div><div class="mv up">▲2</div><div class="sc">3,540</div></div>
-        <div class="lbrow"><div class="rk">4</div><div class="av">SH</div><div class="nm">SHARDKNG</div><div class="mv fl">–</div><div class="sc">2,910</div></div>
-        <div class="lbrow me"><div class="rk">5</div><div class="av" id="youAv">YOU</div><div class="nm" id="youNm">You</div><div class="mv up">▲3</div><div class="sc">2,455</div></div>
-        <div class="lbrow"><div class="rk">6</div><div class="av">PX</div><div class="nm">PIXELPLG</div><div class="mv dn">▼1</div><div class="sc">2,300</div></div>
-        <div class="lbrow"><div class="rk">7</div><div class="av">HZ</div><div class="nm">HAZEKING</div><div class="mv up">▲1</div><div class="sc">1,970</div></div>
-        <div class="lbrow"><div class="rk">8</div><div class="av">NE</div><div class="nm">NEONWOLF</div><div class="mv fl">–</div><div class="sc">1,640</div></div>
-      </div>
+      <div class="lb" id="lbList"><div class="lb-empty">Loading the ladder…</div></div>
+      <div class="sub" style="text-align:center;margin-top:10px" id="lbNote"></div>
     </section>
 
   <section class="screen" id="duels">
@@ -915,6 +909,7 @@
     var earned=(stars>=3?15:stars>=2?12:stars>=1?8:3)+streakBonus;
     if(!HIST.some(function(h){return h.day===today;})) HIST.push({day:today,best:bestScore,stars:stars,pts:earned});
     earn(earned,'Trap #'+trapNum+' '+stars+'\u2605');
+    postScore();
     var starStr=''; for(var i=0;i<3;i++) starStr+=(i<stars?'★':'☆');
     document.getElementById('rnum').textContent='Trap #'+trapNum;
     document.getElementById('rstars').textContent=starStr;
@@ -927,6 +922,38 @@
     try{localStorage.setItem('tp_daily', JSON.stringify({day:dayNum, best:bestScore, stars:stars, earned:earned}));}catch(e){}
     document.getElementById('result').classList.add('show');
   }
+  // ---- real leaderboard: scores go to the chat script's 'score' endpoint, the ladder comes from 'lb' ----
+  var LB_API='https://script.google.com/macros/s/AKfycbzgctrnkyWjVnhzioE_B4x8J2pyi4WzRSJG2e00Y_Y5cz0vQx-q5jhvOhMWg2x-K9ciFw/exec';
+  try{ LB_API=localStorage.getItem('tp_lb_api')||LB_API; }catch(e){}   // local-dev override only
+  var UID=''; try{ UID=localStorage.getItem('tp_uid')||''; if(!UID){ UID='u'+Date.now().toString(36)+Math.random().toString(36).slice(2,8); localStorage.setItem('tp_uid',UID); } }catch(e){ UID='anon'; }
+  function monthKey(d){ var x=new Date(d*864e5); return x.getUTCFullYear()+'-'+('0'+(x.getUTCMonth()+1)).slice(-2); }
+  function postScore(){
+    if(!bestScore) return;
+    var body=JSON.stringify({action:'score',uid:UID,handle:handle,day:dayNum,best:bestScore,stars:(HIST.filter(function(h){return h.day===dayNum;})[0]||{}).stars||0});
+    fetch(LB_API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:body}).then(function(r){return r.json();}).then(function(){ lbCache=null; loadRanks(); }).catch(function(){});
+  }
+  var lbCache=null, lbAt=0;
+  function loadRanks(force){
+    var list=document.getElementById('lbList'), st=document.getElementById('stRank'), ys=document.getElementById('youStand'), yg=document.getElementById('youGap'), nd=document.getElementById('stNudge'), note=document.getElementById('lbNote');
+    if(!list) return;
+    if(!force && lbCache && Date.now()-lbAt<60000){ render(lbCache); return; }
+    fetch(LB_API+'?action=lb&month='+monthKey(dayNum)+'&uid='+encodeURIComponent(UID)+'&t='+Date.now()).then(function(r){return r.json();}).then(function(j){ if(j&&j.ok&&j.top){ lbCache=j; lbAt=Date.now(); render(j); } else fail(); }).catch(fail);
+    function fail(){ list.innerHTML='<div class="lb-empty">Couldn\u2019t reach the ladder \u2014 try again in a moment.</div>'; }
+    function render(j){
+      if(!j.top.length){ list.innerHTML='<div class="lb-empty">No scores yet this month.<br>Finish today\u2019s Trap to open the board.</div>'; }
+      else{
+        list.innerHTML=j.top.map(function(r){ var av=(r.handle||'??').slice(0,2), me=r.you?' me':'', top=r.rank===1?' win':'';
+          return '<div class="lbrow'+top+me+'"><div class="rk">'+r.rank+'</div><div class="av">'+av+'</div><div class="nm">'+r.handle+(r.rank===1?' <span class="crown">\u265A</span>':'')+'</div><div class="dy">'+r.days+'d</div><div class="sc">'+fmt(r.total)+'</div></div>'; }).join('');
+      }
+      if(j.you){ st.textContent='#'+j.you.rank; ys.textContent='You\u2019re '+ord(j.you.rank)+' \u00B7 '+handle;
+        yg.textContent= j.you.rank===1 ? 'Holding the crown \u2014 keep it through month-end.' : (j.you.gap_podium? fmt(j.you.gap_podium)+' to the podium \u00B7 ' : '')+fmt(j.you.gap_crown)+' to the crown';
+        nd.textContent= dayDone ? 'Back tomorrow \u2192' : 'Win today \u2192'; }
+      else { st.textContent='\u2013'; ys.textContent='Not on the board yet'; yg.textContent='Finish today\u2019s Trap to get ranked.'; nd.textContent='Play today \u2192'; }
+      note.textContent= j.count>10 ? (j.count+' brands on the ladder this month \u00B7 top 10 shown') : (j.count? j.count+' brand'+(j.count>1?'s':'')+' on the ladder this month' : '');
+    }
+    function ord(n){ var s=['th','st','nd','rd'], v=n%100; return n+(s[(v-20)%10]||s[v]||s[0]); }
+  }
+  var _rt=document.querySelector('.tab[data-t="ranks"]'); if(_rt)_rt.addEventListener('click',function(){ loadRanks(); });
   var _startBtn=document.getElementById('startBtn'); if(_startBtn)_startBtn.addEventListener('click',startAttempt);
   var _sb=document.getElementById('shareBtn');
   if(_sb)_sb.addEventListener('click',function(){
@@ -1180,6 +1207,7 @@
   initDaily();
   updateTier();
   setBalance(calcBalance());
+  if(dayDone) postScore(); else loadRanks();
 })();
 </script>
 
