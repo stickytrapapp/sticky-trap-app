@@ -1,10 +1,10 @@
-THE STICKY TRAP -- CHAT KNOWLEDGE BASE (auto-generated 2026-09-04 from the live app by Price Engine/make_chat_kb.py; do not hand-edit)
+THE STICKY TRAP -- CHAT KNOWLEDGE BASE (auto-generated 2026-09-07 from the live app by Price Engine/make_chat_kb.py; do not hand-edit -- house facts live in Price Engine/chat-facts.txt)
 
 == About The Sticky Trap ==
 The Sticky Trap is a design house and in-house print shop in Ann Arbor, Michigan: branding, custom art, stickers, labels, promotionals and merch. Motto: "Let's Stick Together."
 Contact: call or text 734 460 3845 | email thestickytrap@gmail.com | Instagram @the_stickytrap | 4750 Venture Dr, Ste 101, Ann Arbor, MI | app: https://thestickytrap.app
 Sister podcast/channel: The Flower Room (@theflowerroom on Instagram, TikTok, YouTube) -- episodes are in the app's Social tab.
-Hours, turnaround, rush and shipping are NOT published here: quoted per project, tell the customer to call/text or email.
+Rush jobs and shipping are not published here: quoted per project, tell the customer to call/text or email.
 
 == Ordering in the app ==
 Menu tab: open a product, set the quantity, tap a price to add it to the basket. The basket can Email my order, Text order, Copy text, or "Upload art & get your quote" (name, email, phone, art files up to ~20 MB, deadline). Bigger files: email them.
@@ -23,6 +23,10 @@ HoloBrite -- a white-ink underbase under the art on Holographic BF or Gold BF fo
 
 == Not on the menu (always "quoted per project" -- never invent a number) ==
 Clear stock, custom dielines / custom shapes, Flex tiers, design work, pre-press / set-up, orders over 1,000 pcs, other materials, rush, shipping, and anything not listed below.
+
+== House facts (from the shop; answer these directly) ==
+Standard turnaround is 5-7 business days.
+Shop hours: Monday to Friday, 10am to 5pm Eastern (Ann Arbor, MI).
 
 == Materials, effects, how we work, common questions (from the app's Specs tab) ==
 Materials & Finishes
