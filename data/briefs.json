@@ -1,64 +1,64 @@
 {
-  "updated": "2026-09-06",
+  "updated": "2026-09-07",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-09-06",
+      "date": "2026-09-07",
       "label": "Morning Brief",
-      "title": "Relief on the Horizon: MI Operators Adapt as Both Governor Candidates Target the 24% Tax — Nationally, DEA and FDA Keep Pushing Forward",
-      "top": "Michigan operators are finding workarounds to the wholesale tax squeeze — from supplier cost-sharing to settled regulatory disputes — while both major-party candidates for governor are now on record vowing to roll it back. Nationally, the DEA's rescheduling review keeps clearing procedural checkpoints and the FDA is barreling toward a landmark September 14 psychedelics hearing, with Compass Pathways and the VA both racing toward real-world psilocybin therapy.",
+      "title": "New Doors Open in A2 While Lansing Weighs Tax Relief; DEA Inches Toward Schedule III as Psychedelics Hit Warp Speed",
+      "top": "Ann Arbor got a brand-new dispensary this weekend and Upper Peninsula operators are proving the 24% wholesale tax can be managed, not just survived, while a repeal bill and a September court trial keep real relief on the table. Nationally, the DEA is now on record arguing cannabis doesn't belong in Schedule I anymore, and the FDA just handed three psychedelic drug developers a fast lane that could put the first-ever approved psilocybin therapy on shelves within months.",
       "local": [
         {
-          "text": "Upper Peninsula chain Rize is proving the tax doesn't have to be fatal to growth: the three-location operator has kept expanding by negotiating cost-sharing deals with suppliers instead of eating the 24% hit alone — a playbook other operators can copy.",
+          "text": "New Standard opened its Ann Arbor location over Labor Day weekend with giveaways and discounts running Sept. 3-6, adding fresh retail energy and foot traffic to one of the state's most competitive dispensary markets.",
+          "source": "ClickOnDetroit",
+          "url": "https://www.clickondetroit.com/topic/Dispensary/"
+        },
+        {
+          "text": "In Muskegon, Fields Cannary is targeting a fall opening for a fully integrated cannabis hospitality concept combining retail, on-site consumption, dining, and event licensing under one roof — the kind of format bet operators statewide are watching closely.",
           "source": "cann.dev",
           "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
         },
         {
-          "text": "Jars Cannabis notched a win in Madison Heights, reaching a deal with the city to remove a Flock surveillance camera aimed at its parking lot after mounting a sign to block its view — the camera came down pending council approval, easing a years-long compliance headache for the 54-store chain.",
-          "source": "Upper Michigan's Source",
-          "url": "https://www.uppermichiganssource.com/2026/08/12/michigan-cannabis-tax-brings-financial-challenges-dispensaries/"
-        },
-        {
-          "text": "Tax-relief momentum is now bipartisan at the top of the ticket: GOP gubernatorial nominee John James pledged August 19 to repeal or sharply cut the 24% wholesale tax, joining Democratic hopeful Chris Swanson, who has already vowed to \"work to roll back the 24 percent wholesale excise tax.\" With both parties' standard-bearers publicly committed, operators have real leverage heading into 2026.",
-          "source": "The Marijuana Herald",
-          "url": "https://themarijuanaherald.com/2026/08/michigan-gop-governor-nominee-john-james-pledges-to-repeal-or-reduce-24-marijuana-wholesale-tax"
-        },
-        {
-          "text": "Demand hasn't collapsed — it's just moved: statewide flower inventory at retail is up 58% year-over-year and processor stock is up 140%, and with prices still near all-time lows, retailers, not wholesalers, are holding the pricing power in this market.",
-          "source": "Cannabis Business Times",
-          "url": "https://www.cannabisbusinesstimes.com/us-states/michigan/news/15819825/michigan-cannabis-prices-remain-down-demand-steady-in-2026-despite-new-tax"
-        },
-        {
-          "text": "The hard number to watch: Higher Love, a U.P. dispensary chain, closed five of its nine locations, with its president attributing the closures entirely to the tax — a reminder of why the bipartisan repeal push above matters so much for the back half of the year.",
+          "text": "While tax pressure has forced closures elsewhere in the U.P., Rize has kept growing across its three locations by negotiating cost-sharing arrangements with suppliers that split the 24% wholesale tax burden instead of absorbing it alone — a playbook other operators are starting to copy.",
           "source": "cann.dev",
           "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
+        },
+        {
+          "text": "A Republican state representative has introduced House Bill 6224 to repeal the 24% wholesale tax outright, and the Michigan Cannabis Industry Association's constitutional challenge is now heading toward a September 2026 trial — the biggest variable that could finally move pricing in operators' favor.",
+          "source": "cann.dev",
+          "url": "https://www.cann.dev/michigan-cannabis-retail-april-2026/"
+        },
+        {
+          "text": "The hard number: the wholesale tax generated just $37.38 million in Q2, badly missing projections, and Higher Love closed five of its nine U.P. stores citing the levy — pressure that's fueling the repeal push and giving MiCIA's lawsuit added political weight heading into its court date.",
+          "source": "WJR-AM",
+          "url": "https://www.wjr.com/2026/09/02/michigans-marijuana-tax-coughs-up-only-37-38-million-in-second-quarter-falling-short-of-projection/"
         }
       ],
       "national": [
         {
-          "text": "The DEA's cannabis rescheduling review cleared a key procedural milestone on August 18, keeping the multi-year push to move cannabis to Schedule III alive and on track — a shift that would preserve federal prohibition while easing the 280E tax burden that currently hammers operators.",
-          "source": "CannIntel",
-          "url": "https://cannintel.com/laws/dea-cannabis-rescheduling-hits-key-milestone-august-2026"
+          "text": "The DEA formally argued in its final post-hearing brief that marijuana no longer meets the statutory criteria for Schedule I and should move to Schedule III — the clearest federal signal yet that rescheduling is advancing, with a judge's recommendation now the next milestone to watch.",
+          "source": "The Cannabis Business Advisors",
+          "url": "https://thecannabisbusinessadvisors.com/cannabis-rescheduling-update-dea-schedule-iii-august-2026/"
         },
         {
-          "text": "The FDA is set to hold its landmark public hearing on the therapeutic future of psychedelics on September 14 in a hybrid format at its White Oak campus, following the agency's release of final clinical trial guidance covering psilocybin, LSD and MDMA — the clearest regulatory roadmap this drug class has ever gotten.",
-          "source": "Foley Hoag",
-          "url": "https://foleyhoag.com/news-and-insights/publications/alerts-and-updates/2026/august/psychedelic-therapeutics-take-center-stage-fda-announces-public-hearing-and-finalizes-clinical/"
+          "text": "The FDA issued Commissioner's National Priority Vouchers to Compass Pathways (psilocybin for treatment-resistant depression), Usona Institute (psilocybin for major depressive disorder), and Transcend Therapeutics (methylone for PTSD) — vouchers that compress FDA review from roughly a year down to one to two months.",
+          "source": "Journey Clinical",
+          "url": "https://www.journeyclinical.com/resources/psilocybin-timeline"
         },
         {
-          "text": "The Department of Veterans Affairs officially launched PIVOT on August 5, a five-site clinical trial evaluating psilocybin for veterans with treatment-resistant depression, running on Compass Pathways' donated COMP360 formulation — a major real-world validation for the leading psilocybin drug candidate.",
-          "source": "Psychedelics Today",
-          "url": "https://psychedelicstoday.com/2026/08/10/psychedelic-policy-briefing-august-9-2026/"
+          "text": "Compass Pathways' COMP360 hit its primary endpoint in a second Phase 3 trial for treatment-resistant depression, making it the first classic psychedelic to consistently post statistically significant, clinically meaningful results — the company is targeting a completed NDA submission and commercial readiness by Q4 2026.",
+          "source": "Psychiatric Times",
+          "url": "https://www.psychiatrictimes.com/view/comp360-psilocybin-for-treatment-resistant-depression-achieves-primary-endpoint-in-phase-3-trial"
         },
         {
-          "text": "Compass Pathways is completing a rolling New Drug Application for COMP360 after the drug showed six-month durability in treatment-resistant depression, with final submission on track for Q4 2026 and a possible U.S. launch in the first half of 2027.",
-          "source": "Clinical Trials Arena",
-          "url": "https://www.clinicaltrialsarena.com/news/fda-finalises-psychedelic-clinical-trial-guidance/"
+          "text": "The FDA finalized new psychedelic trial guidance addressing the functional-unblinding problem that sank Lykos' 2024 MDMA rejection, formally codifying active placebos and blinding controls sponsors must use — clearing a path for MDMA-assisted therapy to come back around, alongside a public FDA hearing on psychedelic therapeutics set for September 14.",
+          "source": "Tech Times",
+          "url": "https://www.techtimes.com/articles/320454/20260714/fda-finalizes-psychedelic-trial-rules-unblinding-problem-gets-official-answer.htm"
         },
         {
-          "text": "Consolidation capital is flowing back in: Holistic Industries picked up Cannabist's Ohio operations for $47M and British American Tobacco announced an investment in Charlotte's Web, a signal that big tobacco capital is circling branded cannabis as rescheduling optimism builds deal activity.",
+          "text": "M&A is consolidating around stronger players even as weaker ones stumble: Vireo Growth completed its acquisition of 17 PharmaCann Colorado dispensaries for roughly $49 million, and Grown Rogue is picking up PharmaCann's New York cultivation and retail assets — expansion moves happening alongside distress at smaller operators like Justice Grown, which is now in loan default.",
           "source": "cann.dev",
-          "url": "https://www.cann.dev/cannabis-ma-april-2026-distressed-exits-consolidation/"
+          "url": "https://www.cann.dev/cannabis-ma-august-2026-curaleaf-vireo-consolidation/"
         }
       ]
     }
