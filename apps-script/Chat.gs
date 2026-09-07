@@ -24,7 +24,7 @@
  *
  * CHECKS
  *   - Open  <exec URL>?ping=1  in a browser -> {"ok":true,"key":true,"kb":<chars>,"prices":160,...}
- *     Add &refresh=1 after pushing a new chat-kb.txt so the script re-reads it immediately (else ~20 min cache).
+ *     Add the refresh=1 parameter to that ping after pushing a new chat-kb.txt so the script re-reads it immediately (else ~20 min cache).
  *   - In the editor run  selfTest()  -> View > Logs shows a real answer + the action it produced.
  *   - Chats are logged anonymously to a self-created Sheet "Sticky Trap - App Chats"; run getConfig() for its URL.
  *
@@ -104,7 +104,7 @@ var TOOLS = [
 /* ---------- HTTP ---------- */
 function doGet(e) {
   var p = (e && e.parameter) || {};
-  if (p.refresh) CACHE.remove('kb');   // <exec>?ping=1&refresh=1 -> re-fetch the KB now instead of waiting out the 20-min cache
+  if (p.refresh) CACHE.remove('kb');   // ping with refresh=1 -> re-fetch the KB now instead of waiting out the 20-min cache
   if (p.ping) {
     var kb = '', n = 0; try { kb = kb_(); n = kbPrices_(kb).length; } catch (err) { kb = ''; }
     return out_({ ok: true, key: !!PROP.getProperty('ANTHROPIC_API_KEY'), model: cfg_('MODEL'), kb: kb.length, prices: n, kb_url: cfg_('KB_URL') });
