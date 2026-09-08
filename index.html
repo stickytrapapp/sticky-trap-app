@@ -1284,6 +1284,7 @@
       <div class="cb-head"><h2 class="cb-title">Connect</h2><p class="cb-intro">Let&#8217;s make something together.</p></div>
       <button type="button" class="cb-cta" id="connect-quote">✦ Start a project — get a quote &rarr;</button>
       <button type="button" class="cb-cta cb-cta-alt" id="connect-nda">✎ Meeting NDA — sign or share by QR</button>
+      <button type="button" class="cb-cta cb-cta-alt" id="connect-track">◎ Track my order</button>
       <div class="cb-zone">Reach Us</div>
       <div class="cb-contacts">
         <a class="cb-item" href="tel:+17344603845"><span class="cb-lbl">Call</span><span class="cb-val">734 460 3845</span></a>
@@ -1655,10 +1656,15 @@
       if(total()>MAX){ setStatus('Files over ~20MB — email them to thestickytrap@ instead.','err'); return; }
       submit.disabled=true; submit.textContent='Sending…'; setStatus('','');
       Promise.all(files.map(function(f){ return readB64(f).then(function(b64){ return {name:f.name, mime:f.type, b64:b64}; }); })).then(function(pf){
+        try{ localStorage.setItem('st_qf_email', email); }catch(e){}
         var payload={ action:'quote', name:document.getElementById('qf-name').value||'', email:email,
           phone:document.getElementById('qf-phone').value||'', details:(deadline?('Deadline: '+deadline+(details?' — ':'')):'')+details, deadline:deadline, basket:basket, files:pf };
         return fetch(API,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
       }).then(function(){
+        // order tracker: create the record on the chat backend and show the client their link
+        try{ var items=String(basket||'').replace(/\s+/g,' ').slice(0,380);   // basket is already the summary text
+          fetch(CHAT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'order_new',name:document.getElementById('qf-name').value||'',email:email,phone:document.getElementById('qf-phone').value||'',items:items,due:deadline||'',source:'app'})})
+            .then(function(r){return r.json();}).then(function(j){ if(j&&j.ok&&j.url){ var st=document.getElementById('qf-status'); if(st) st.innerHTML+=' <a href="'+j.url+'" target="_blank" rel="noopener" style="color:var(--cy);font-weight:800">Track order '+j.code+' →</a>'; } }).catch(function(){}); }catch(e){}
         form.reset(); files=[]; render();
         setStatus('✓ Sent! We\'ll get back to you with your quote — no charge until you approve.','ok');
         if(window.track){try{window.track('order_send',(basket&&basket.length?basket.length+' items':'no-basket')+(files.length?(' +'+files.length+' files'):''));}catch(e){}}
@@ -2009,6 +2015,29 @@
   panel.addEventListener('click',function(e){ if(e.target===panel) panel.classList.remove('on'); });
   document.getElementById('ndaCopy').addEventListener('click',function(){ var u=link(); try{ navigator.clipboard.writeText(u); }catch(e){} var b=this; b.textContent='Copied'; setTimeout(function(){ b.textContent='Copy link'; },1400); });
   window.openNDA=function(){ open.click(); };
+})();
+</script>
+
+<div id="trackpanel" role="dialog" aria-modal="true" aria-label="Track my order" style="position:fixed;inset:0;z-index:80;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.6)">
+  <div class="nda-card" style="position:relative">
+    <button type="button" class="nda-x" id="trackClose" aria-label="Close">&times;</button>
+    <h3>Track my order</h3>
+    <p class="p">Every stage emails you a link. Lost it? Enter your order code and the email on the order.</p>
+    <div class="nda-f"><label>Order code</label><input id="trkCode" placeholder="e.g. ST-K3F9A or 222-YO" autocapitalize="characters"></div>
+    <div class="nda-f"><label>Email on the order</label><input id="trkEmail" type="email" inputmode="email" placeholder="you@company.com"></div>
+    <div class="nda-row"><a class="prim" id="trkGo" href="/track/" target="_blank" rel="noopener">Show my order</a></div>
+  </div>
+</div>
+<script>
+(function(){
+  var panel=document.getElementById('trackpanel'), open=document.getElementById('connect-track'); if(!panel||!open) return;
+  var C=document.getElementById('trkCode'), E=document.getElementById('trkEmail'), G=document.getElementById('trkGo');
+  try{ E.value=localStorage.getItem('st_qf_email')||''; }catch(e){}
+  function upd(){ G.href='/track/?o='+encodeURIComponent(C.value.trim().toUpperCase())+'&e='+encodeURIComponent(E.value.trim()); }
+  [C,E].forEach(function(i){ i.addEventListener('input',upd); }); upd();
+  open.addEventListener('click',function(){ panel.classList.add('on'); panel.style.display='flex'; try{window.track&&window.track('track_open','connect');}catch(e){} });
+  document.getElementById('trackClose').addEventListener('click',function(){ panel.style.display='none'; });
+  panel.addEventListener('click',function(e){ if(e.target===panel) panel.style.display='none'; });
 })();
 </script>
 </body>
