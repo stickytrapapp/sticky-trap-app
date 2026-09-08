@@ -127,6 +127,7 @@ function doPost(e) {
   catch (err) { return out_({ ok: false, error: 'bad_json', reply: FALLBACK }); }
 
   if (body.action === 'score') { try { return out_(scoreIn_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
+  if (body.action === 'ref') { try { return out_(refIn_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
 
   var uid = String(body.uid || 'anon').slice(0, 40);
   var msgs = clean_(body.messages);
@@ -420,7 +421,8 @@ function log_(uid, q, a, usage, model, actions) {
 var SCORE_MAX = 60000;
 function scoresSheet_() {
   var ss = ss_(), sh = ss.getSheetByName('scores');
-  if (!sh) { sh = ss.insertSheet('scores'); sh.appendRow(['ts', 'uid', 'handle', 'day', 'month', 'best', 'stars']); }
+  if (!sh) { sh = ss.insertSheet('scores'); sh.appendRow(['ts', 'uid', 'handle', 'day', 'month', 'best', 'stars', 'slot']); }
+  try { if (sh.getRange(1, 8).getValue() === '') sh.getRange(1, 8).setValue('slot'); } catch (e) {}   // boards per 6-hour slot since 2026-09-08
   try { sh.getRange('C:C').setNumberFormat('@'); sh.getRange('E:E').setNumberFormat('@'); } catch (e) {}   // keep handles like 007 and months like 2026-09 as text
   return sh;
 }
@@ -428,20 +430,20 @@ function monthOfDay_(day) { var d = new Date(day * 864e5); return d.getUTCFullYe
 function scoreIn_(b) {
   var uid = String(b.uid || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 40);
   var handle = String(b.handle || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8);
-  var day = Math.round(+b.day || 0), best = Math.max(0, Math.min(SCORE_MAX, Math.round(+b.best || 0))), stars = Math.max(0, Math.min(3, Math.round(+b.stars || 0)));
+  var day = Math.round(+b.day || 0), slot = Math.round(+b.slot || 0), best = Math.max(0, Math.min(SCORE_MAX, Math.round(+b.best || 0))), stars = Math.max(0, Math.min(3, Math.round(+b.stars || 0)));
   var today = Math.floor(Date.now() / 864e5);
   if (!uid || !handle || !best || Math.abs(day - today) > 1) return { ok: false, error: 'bad_score' };
   if (!throttle_('score:' + uid)) return { ok: false, error: 'rate_limited' };
   var month = monthOfDay_(day), sh = scoresSheet_(), rows = sh.getDataRange().getValues();
   for (var i = 1; i < rows.length; i++) {
-    if (String(rows[i][1]) === uid && +rows[i][3] === day) {
+    if (String(rows[i][1]) === uid && +rows[i][3] === day && (+rows[i][7] || 0) === slot) {   // one row per player per board (slot)
       var better = best > +rows[i][5];
-      if (better) sh.getRange(i + 1, 3, 1, 5).setValues([[handle, day, month, best, stars]]);
+      if (better) sh.getRange(i + 1, 3, 1, 6).setValues([[handle, day, month, best, stars, slot]]);
       CACHE.remove('lb:' + month);
       return { ok: true, updated: better };
     }
   }
-  sh.appendRow([new Date(), uid, handle, day, month, best, stars]);
+  sh.appendRow([new Date(), uid, handle, day, month, best, stars, slot]);
   CACHE.remove('lb:' + month);
   return { ok: true, updated: true };
 }
@@ -470,7 +472,37 @@ function leaderboard_(p) {
             gap_podium: j >= 3 ? board[2].total - board[j].total + 1 : 0, gap_crown: j > 0 ? board[0].total - board[j].total + 1 : 0 };
     break;
   }
-  return { ok: true, month: month, count: board.length, top: top, you: you };
+  var refs = 0; try { refs = refCount_(String(p.handle || '')); } catch (e) {}
+  return { ok: true, month: month, count: board.length, top: top, you: you, refs: refs };
+}
+
+/* ---------- referrals: a new player's first finished board reports the handle that referred them ---------- */
+function refsSheet_() {
+  var ss = ss_(), sh = ss.getSheetByName('referrals');
+  if (!sh) { sh = ss.insertSheet('referrals'); sh.appendRow(['ts', 'referrer', 'new_uid', 'new_handle']); try { sh.getRange('B:B').setNumberFormat('@'); sh.getRange('D:D').setNumberFormat('@'); } catch (e) {} }
+  return sh;
+}
+function refIn_(b) {
+  var uid = String(b.uid || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 40);
+  var handle = String(b.handle || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8);
+  var ref = String(b.ref || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8);
+  if (!uid || !handle || !ref || ref === handle) return { ok: false, error: 'bad_ref' };
+  if (!throttle_('ref:' + uid)) return { ok: false, error: 'rate_limited' };
+  var sh = refsSheet_(), rows = sh.getDataRange().getValues();
+  for (var i = 1; i < rows.length; i++) if (String(rows[i][2]) === uid) return { ok: true, dup: true };   // one referral per new player, ever
+  sh.appendRow([new Date(), ref, uid, handle]);
+  CACHE.remove('refs:' + ref);
+  try { MailApp.sendEmail(Session.getEffectiveUser().getEmail(), 'Trap Points referral: ' + ref + ' brought in ' + handle,
+    ref + ' referred a new player (' + handle + ', uid ' + uid + ') who just finished their first board.\nThey get +500 on their next ladder load.\nSheet: ' + ss_().getUrl()); } catch (e) {}
+  return { ok: true };
+}
+function refCount_(handle) {
+  handle = String(handle || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8); if (!handle) return 0;
+  var key = 'refs:' + handle, hit = CACHE.get(key); if (hit !== null) return +hit;
+  var rows = refsSheet_().getDataRange().getValues(), n = 0;
+  for (var i = 1; i < rows.length; i++) if (String(rows[i][1]) === handle && String(rows[i][2]).indexOf('test-') !== 0) n++;
+  try { CACHE.put(key, String(n), 300); } catch (e) {}
+  return n;
 }
 
 /* ---------- editor helpers ---------- */
