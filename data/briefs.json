@@ -1,64 +1,64 @@
 {
-  "updated": "2026-09-07",
+  "updated": "2026-09-08",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-09-07",
+      "date": "2026-09-08",
       "label": "Morning Brief",
-      "title": "New Doors Open in Ann Arbor While D.C. Fast-Tracks Psilocybin and Congress Buys Hemp More Time",
-      "top": "Michigan operators got real reasons for optimism this week — Lume and New Standard both opened new Ann Arbor doors even as the 24% wholesale tax fight heads for a September court date, and the GOP's gubernatorial nominee is now campaigning on a tax rollback. Nationally, Compass Pathways' psilocybin therapy is racing toward an early 2027 launch on an FDA fast-track, and Congress just bought the hemp industry another month to negotiate a real regulatory framework instead of a ban.",
+      "title": "Michigan Weed Finds Its Footing While D.C. Speeds Toward Schedule III",
+      "top": "Michigan operators are adapting fast to the 24% wholesale tax — cost-sharing deals, hospitality buildouts, and out-of-state expansion are keeping growth alive even as Lansing's revenue math comes up short. Nationally, the DEA rescheduling case has reached closing arguments, Compass Pathways is racing toward a Q4 psilocybin filing, and M&A is accelerating — all pointing toward a friendlier 2027 for plant-touching and psychedelic operators alike.",
       "local": [
         {
-          "text": "Lume Cannabis Co. opened its new Ann Arbor location at 2247 W. Liberty Street with a three-day grand opening, adding another Tree Town storefront even as the market absorbs tax pressure.",
-          "source": "ClickOnDetroit",
-          "url": "https://www.clickondetroit.com/topic/Marijuana_Dispensary/"
+          "text": "A new dispensary called Blue Sky Cannabis Co. is now open in downtown Ann Arbor next to Spores Cafe, a popular mushroom cafe — a fresh sign of retail confidence right in THE STICKY TRAP's backyard.",
+          "source": "The 'Gander / MichiGanja Report",
+          "url": "https://gandernewsroom.com/news/cannabis/8-quick-hits-of-cannabis-news-from-across-michigan-17/"
         },
         {
-          "text": "New Standard opened a new Ann Arbor dispensary this month, running giveaways and discounts for its Sept. 3-6 opening weekend — fresh proof operators are still investing in Michigan's flagship college-town market.",
-          "source": "ClickOnDetroit",
-          "url": "https://www.clickondetroit.com/topic/Dispensary/"
+          "text": "JARS Cannabis, the Michigan-based chain, is buying its way into a much bigger footprint out west, acquiring Sonoran Roots and its eight Ponderosa brand dispensaries, a deal that will make the homegrown operator the largest dispensary chain in Arizona.",
+          "source": "The 'Gander / MichiGanja Report",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-083126/"
         },
         {
-          "text": "Michigan's GOP gubernatorial nominee John James is campaigning on cutting the cannabis excise tax and rolling back the 24% wholesale levy, giving operators a real electoral path to relief in November alongside Democratic primary rival Chris Swanson's earlier repeal pledge.",
-          "source": "Marijuana Moment",
-          "url": "https://www.marijuanamoment.net/michigan-gop-governor-candidate-pledges-huge-tax-cut-for-marijuana-industry-along-with-crackdown-on-hemp-products"
-        },
-        {
-          "text": "Rize, a three-store U.P. operator, is countering the wholesale tax by negotiating cost-sharing splits with suppliers rather than absorbing the hit alone — a playbook other multi-location brands can copy while the second wholesale-tax lawsuit heads toward a September trial.",
+          "text": "Fields Cannary, a Muskegon development, is targeting a fall opening for its retail cannabis dispensary, with a full-service restaurant to follow — a hospitality-forward format that pushes Michigan retail further than most dispensaries have gone.",
           "source": "Cann.dev",
           "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
         },
         {
-          "text": "Michigan's 24% wholesale tax generated $37.38 million in the second quarter — up from Q1's $34 million — while Fields Cannary, a Muskegon dispensary-and-restaurant hospitality buildout, is targeting a fall opening that pushes the format further than most Michigan stores have gone.",
-          "source": "WJR-AM / Cann.dev",
-          "url": "https://www.wjr.com/2026/09/02/michigans-marijuana-tax-coughs-up-only-37-38-million-in-second-quarter-falling-short-of-projection/"
+          "text": "Wholesale-tax pain is easing on two fronts: Michigan weed prices have leveled out after three months of steady increases, with the average ounce down to $59 in April from $62 in March, and Rize, which operates three Upper Michigan locations, has managed to sustain growth by negotiating cost-sharing arrangements with suppliers, splitting the tax burden rather than absorbing it alone.",
+          "source": "The 'Gander / Cann.dev",
+          "url": "https://gandernewsroom.com/news/cannabis/8-quick-hits-of-cannabis-news-from-across-michigan-17/"
+        },
+        {
+          "text": "The 24% tax is underperforming — four months in, Michigan has collected less than $34 million, less than a third of the roughly $105 million the tax would need to generate each quarter to hit its $420 million annual target — and that shortfall is now driving real political traction: GOP gubernatorial nominee John James says the tax 'drives up prices, gives illegal operators a competitive edge, and has already fallen far short of revenue projections,' and pledges to work to repeal or sharply reduce it.",
+          "source": "Detroit Metro Times / Marijuana Moment",
+          "url": "https://www.metrotimes.com/weed-2/michigan-treated-cannabis-like-a-piggy-bank-and-the-revenue-grab-is-backfiring/"
         }
       ],
       "national": [
         {
-          "text": "Compass Pathways confirmed its rolling NDA for COMP360 psilocybin is on track for a Q4 2026 filing after the FDA granted it a Commissioner's National Priority Voucher, shrinking review time to 1-2 months and putting a commercial launch within reach for the first half of 2027.",
-          "source": "Journey Clinical / FDA",
-          "url": "https://www.journeyclinical.com/resources/psilocybin-timeline"
+          "text": "The federal rescheduling fight is entering the home stretch: the week of August 24 saw the federal rescheduling case reach its closing-argument stage, with the DEA trying to discredit nearly all opposing witnesses in its post-hearing brief as legal experts flag testimony on currently accepted medical use as pivotal — a sign the Schedule III decision is finally close.",
+          "source": "Cannabis Business Advisors / Cannabis Business Times",
+          "url": "https://thecannabisbusinessadvisors.com/cannabis-rescheduling-update-dea-schedule-iii-august-2026/"
         },
         {
-          "text": "The FDA's April National Priority Vouchers also went to Usona Institute (psilocybin for major depressive disorder) and Transcend Therapeutics (methylone for PTSD), signaling the agency is fast-tracking a whole class of psychedelic medicines, not just one company's drug.",
-          "source": "CNN",
-          "url": "https://www.cnn.com/2026/04/24/health/fda-psychedelic-drugs-priority-vouchers"
+          "text": "Psychedelics keep clearing hurdles: the FDA granted Compass Pathways' rolling NDA review request and awarded COMP360 a Commissioner's National Priority Voucher for treatment-resistant depression, and the FDA has scheduled a public hearing on the therapeutic use of psychedelic drugs for September 14, 2026, building toward what could be the first-ever approved psilocybin therapy.",
+          "source": "Compass Pathways / Tech Times",
+          "url": "https://www.techtimes.com/articles/320454/20260714/fda-finalizes-psychedelic-trial-rules-unblinding-problem-gets-official-answer.htm"
         },
         {
-          "text": "Congress passed a stopgap funding bill 370-48 that pushes the federal hemp-THC recriminalization deadline from November 12 to December 11, giving brands and retailers more runway to lobby for a regulated three-tier framework instead of an outright ban.",
-          "source": "The Hill",
-          "url": "https://thehill.com/policy/healthcare/6064552-hemp-ban-delayed-house-funding-bill/"
+          "text": "President Trump commuted the sentences of more people with marijuana convictions as his administration continues to consider federal cannabis rescheduling, adding to the momentum toward clemency and reform.",
+          "source": "Marijuana Moment",
+          "url": "https://growcola.com/trump-releases-federal-cannabis-prisoners-newsletter-september-7-2026/"
         },
         {
-          "text": "DEA's marijuana rescheduling hearing wrapped its closing-argument stage in late August, with the administrative record now built out enough that operators should start prepping the compliance paperwork DEA is already requesting from early-mover states like Colorado.",
-          "source": "The Cannabis Business Advisors / Marijuana Moment",
-          "url": "https://www.marijuanamoment.net/deas-list-of-cannabis-questions-for-businesses-seeking-rescheduling-protections-newsletter-september-1-2026"
+          "text": "M&A is heating up again: Minneapolis-based MSO Vireo Growth is acquiring fellow operator Planet 13 Holdings in an all-stock merger, extending one of the cannabis industry's most aggressive buying sprees, and will operate about 265 retail stores and dispensaries across 15 states after the deal closes, positioning it as one of the largest U.S. cannabis operators by store count.",
+          "source": "MJBizDaily",
+          "url": "https://mjbizdaily.com/news/cannabis-mso-vireo-growth-to-acquire-planet-13-in-all-stock-deal/617152/"
         },
         {
-          "text": "FDA finalized its guidance for psychedelic drug clinical trials and scheduled a September 14 public hearing on the future therapeutic use of psychedelics — regulatory scaffolding that one treating physician says could let psilocybin therapy \"wipe out the SSRIs\" if durability holds.",
-          "source": "BioSpace",
-          "url": "https://www.biospace.com/fda/final-psychedelics-guidance-suggests-fda-is-receptive-to-helping-companies-succeed"
+          "text": "Hemp got breathing room, not a reprieve: the chamber voted to back the Senate's plan to delay the federal government's ban on certain hemp-derived cannabinoid products until Dec. 11, and Trump signed off, buying operators time to shape the next round of regulation.",
+          "source": "Cannabis Business Times",
+          "url": "https://www.cannabisbusinesstimes.com/"
         }
       ]
     }
