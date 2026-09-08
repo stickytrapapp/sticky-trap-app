@@ -54,6 +54,8 @@
   html[data-theme=blackout] .card{background:#0b0b0b;border-color:#262626;box-shadow:none}
   /* Blackout: kill every navy/purple tint so the ground reads pure black on OLED (owner: 'appears blue') */
   html[data-theme=blackout] .app{background:#000}
+  /* headings that paint gradient text over several CSS lines (missed by the generated overrides): white, per 'all wording white' */
+  html[data-theme=blackout] #stmenu .sec-head,html[data-theme=blackout] .pv-title,html[data-theme=blackout] .faqview .sec-head,html[data-theme=blackout] .faqview .spec-zone,html[data-theme=blackout] #stmenu .dhead h3,html[data-theme=blackout] #stmenu .dtitle{background:none;-webkit-text-fill-color:#fff;color:#fff}
   html[data-theme=blackout] #notifpanel,html[data-theme=blackout] .notifpanel,html[data-theme=blackout] #chatfab,html[data-theme=blackout] #chatform,html[data-theme=blackout] .ch-foot,html[data-theme=blackout] #installbar,html[data-theme=blackout] #apptoast{background:#0b0b0b}
   html[data-theme=blackout] #chatpanel{background:#050505}
   html[data-theme=blackout] .promostrip{background:#0b0b0b;border-color:rgba(255,31,162,.55)}
