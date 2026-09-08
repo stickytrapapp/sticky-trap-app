@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0A0A0F">
+<title>Mutual NDA · The Sticky Trap</title>
+<link rel="icon" href="/icons/icon-192.png">
+<style>
+  :root{--ink:#0A0A0F;--panel:#131019;--panel-2:#1b1726;--line:#2a2438;--paper:#F5F3FA;--muted:#b3adc6;--mag:#FF1FA2;--pur:#8A2BE2;--cy:#12C4FF;--grad:linear-gradient(100deg,#FF1FA2 0%,#8A2BE2 52%,#12C4FF 100%)}
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--ink);color:var(--paper);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:640px;margin:0 auto;padding:22px 18px 60px}
+  .logo{display:block;max-width:220px;margin:0 auto 18px}
+  h1{font-size:22px;font-weight:900;text-align:center;margin:0;letter-spacing:.01em;text-transform:uppercase}
+  .sub{text-align:center;color:var(--muted);font-size:13px;margin:4px 0 22px}
+  .doc{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 16px}
+  .doc p{font-size:14px;line-height:1.6;margin:0 0 14px;color:var(--paper)}
+  .doc p:last-child{margin-bottom:0}
+  .blank{display:inline-block;min-width:120px;border:0;border-bottom:1.5px solid var(--cy);background:transparent;color:#fff;font:inherit;font-weight:700;padding:2px 4px;outline:none;vertical-align:baseline}
+  .blank.wide{min-width:200px;width:70%}
+  .blank:focus{border-bottom-color:var(--mag)}
+  .blank::placeholder{color:#7f78a3;font-weight:500}
+  .sig-grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:18px}
+  @media(min-width:600px){.sig-grid{grid-template-columns:1fr 1fr}}
+  .sig{background:var(--panel-2);border:1px solid var(--line);border-radius:14px;padding:14px}
+  .sig h3{margin:0 0 10px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--cy);font-weight:800}
+  .sig h3 span{display:block;color:var(--paper);font-size:13px;letter-spacing:0;text-transform:none;font-weight:700;margin-top:2px}
+  .field{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+  .field label{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:800}
+  .field input{background:var(--ink);border:1px solid var(--line);border-radius:9px;color:#fff;font:inherit;font-size:15px;padding:10px 11px;outline:none}
+  .field input:focus{border-color:var(--cy)}
+  .pad{position:relative;background:#fff;border-radius:10px;height:130px;touch-action:none;overflow:hidden}
+  .pad canvas{width:100%;height:100%;display:block}
+  .pad .hint{position:absolute;left:0;right:0;bottom:8px;text-align:center;color:#9a95ad;font-size:12px;pointer-events:none}
+  .pad.signed .hint{display:none}
+  .pad .clr{position:absolute;top:6px;right:8px;background:none;border:0;color:#7a3ecf;font:inherit;font-size:12px;font-weight:800;cursor:pointer}
+  .btn{display:block;width:100%;margin-top:18px;background:var(--grad);color:#0A0A0F;border:0;border-radius:28px;padding:16px 20px;font:inherit;font-size:16px;font-weight:900;letter-spacing:.02em;cursor:pointer}
+  .btn[disabled]{opacity:.55;cursor:default}
+  .err{color:#ff7ab8;font-size:13px;margin-top:10px;min-height:18px;text-align:center}
+  .foot{color:var(--muted);font-size:11.5px;text-align:center;margin-top:26px;line-height:1.5}
+  .done{display:none;text-align:center;padding:30px 10px}
+  .done h2{font-size:24px;margin:0 0 8px}
+  .done p{color:var(--muted);line-height:1.6}
+  body.sent .doc,body.sent .btn,body.sent .err{display:none} body.sent .done{display:block}
+  .small{font-size:12px;color:var(--muted);text-align:center;margin-top:10px;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <img class="logo" src="/img/logo.png" alt="The Sticky Trap">
+  <h1>Mutual Non-Disclosure Agreement</h1>
+  <div class="sub">State of Michigan · one page · sign on your phone</div>
+
+  <div class="doc" id="doc">
+    <p>This Agreement is made on <input class="blank" id="fDate" placeholder="date"> between <b>FM Holdings LLC d/b/a The Sticky Trap</b> and <input class="blank wide" id="fParty" placeholder="your company or name" autocomplete="organization"> (each a “Party”).</p>
+    <p>Purpose of the meeting: <input class="blank wide" id="fPurpose" placeholder="what we're meeting about"></p>
+    <p>In connection with the Parties' discussions, each Party may share confidential information with the other, including designs, artwork, pricing, methods, customers, and business plans. Each Party agrees to keep the other Party's confidential information strictly confidential, to use it only to evaluate or conduct business between the Parties, and not to disclose it to anyone else without the other Party's prior written consent. This applies to information shared before, during, or after the meeting at which this Agreement is signed.</p>
+    <p>This Agreement is governed by the laws of the State of Michigan and remains in effect for three (3) years from the date above. It does not apply to information that is or becomes public through no fault of the receiving Party, or that a Party already lawfully knew.</p>
+    <p>This Agreement may be signed in counterparts, including by electronic or photographed signature, and each Party keeps a signed copy.</p>
+
+    <div class="sig-grid">
+      <div class="sig">
+        <h3>Other party <span id="partyEcho">You</span></h3>
+        <div class="field"><label>Signature</label><div class="pad" id="padOther"><canvas></canvas><span class="hint">Sign here with your finger</span><button type="button" class="clr" data-clear="padOther">Clear</button></div></div>
+        <div class="field"><label>Print name</label><input id="oName" autocomplete="name" placeholder="Full name"></div>
+        <div class="field"><label>Company</label><input id="oCompany" autocomplete="organization" placeholder="Company"></div>
+        <div class="field"><label>Title</label><input id="oTitle" autocomplete="organization-title" placeholder="Title"></div>
+        <div class="field"><label>Email · your signed copy goes here</label><input id="oEmail" type="email" autocomplete="email" inputmode="email" placeholder="you@company.com"></div>
+      </div>
+      <div class="sig">
+        <h3>FM Holdings LLC <span>d/b/a The Sticky Trap</span></h3>
+        <div class="field"><label>Signature</label><div class="pad" id="padFm"><canvas></canvas><span class="hint">Sticky Trap signs here</span><button type="button" class="clr" data-clear="padFm">Clear</button></div></div>
+        <div class="field"><label>Print name</label><input id="fmName" placeholder="Name"></div>
+        <div class="field"><label>Title</label><input id="fmTitle" placeholder="Title"></div>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn" id="send" type="button">Sign &amp; send both copies</button>
+  <div class="err" id="err"></div>
+  <div class="small">Tapping send emails a signed PDF to the address above and to The Sticky Trap. Nothing else is stored.</div>
+
+  <div class="done" id="done">
+    <h2>Signed ✓</h2>
+    <p id="doneMsg">Your copy is on its way.</p>
+    <p><a href="https://thestickytrap.app/" style="color:var(--cy);font-weight:800;text-decoration:none">Open The Sticky Trap app →</a></p>
+  </div>
+
+  <div class="foot">FM Holdings LLC · d/b/a The Sticky Trap · 4750 Venture Dr, Suite 101, Ann Arbor, MI 48108 · (734) 460-3845 · thestickytrap@gmail.com</div>
+</div>
+
+<script>
+(function(){
+  var API='https://script.google.com/macros/s/AKfycbzgctrnkyWjVnhzioE_B4x8J2pyi4WzRSJG2e00Y_Y5cz0vQx-q5jhvOhMWg2x-K9ciFw/exec';   // same web app as the chat + leaderboard
+  var $=function(id){return document.getElementById(id);};
+  var q=function(k){ var m=location.search.match(new RegExp('[?&]'+k+'=([^&]*)')); return m?decodeURIComponent(m[1].replace(/\+/g,' ')):''; };
+  // prefill: date today; ?p= purpose, ?fm= Sticky Trap signer, ?t= their title (the app's QR carries these)
+  var d=new Date(); $('fDate').value=d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+  if(q('p')) $('fPurpose').value=q('p'); if(q('fm')) $('fmName').value=q('fm'); if(q('t')) $('fmTitle').value=q('t');
+  $('fParty').addEventListener('input',function(){ $('partyEcho').textContent=$('fParty').value||'You'; if(!$('oCompany').value) $('oCompany').placeholder=$('fParty').value||'Company'; });
+  $('oCompany').addEventListener('input',function(){ if(!$('fParty').value) $('fParty').value=$('oCompany').value; $('partyEcho').textContent=$('fParty').value||'You'; });
+
+  // signature pads
+  function pad(id){
+    var box=$(id), c=box.querySelector('canvas'), ctx=c.getContext('2d'), drawing=false, dirty=false, last=null;
+    function size(){ var r=box.getBoundingClientRect(), s=window.devicePixelRatio||1; var img=dirty?c.toDataURL():null; c.width=Math.round(r.width*s); c.height=Math.round(r.height*s); ctx.setTransform(s,0,0,s,0,0); ctx.lineWidth=2.4; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.strokeStyle='#111';
+      if(img){ var im=new Image(); im.onload=function(){ ctx.drawImage(im,0,0,r.width,r.height); }; im.src=img; } }
+    size(); window.addEventListener('resize',size);
+    function pos(e){ var r=c.getBoundingClientRect(), p=e.touches?e.touches[0]:e; return {x:p.clientX-r.left,y:p.clientY-r.top}; }
+    function down(e){ drawing=true; last=pos(e); e.preventDefault(); }
+    function move(e){ if(!drawing) return; var p=pos(e); ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.lineTo(p.x,p.y); ctx.stroke(); last=p; dirty=true; box.classList.add('signed'); e.preventDefault(); }
+    function up(){ drawing=false; }
+    c.addEventListener('pointerdown',down); c.addEventListener('pointermove',move); window.addEventListener('pointerup',up);
+    c.addEventListener('touchstart',down,{passive:false}); c.addEventListener('touchmove',move,{passive:false}); c.addEventListener('touchend',up);
+    box.querySelector('.clr').addEventListener('click',function(){ ctx.clearRect(0,0,c.width,c.height); dirty=false; box.classList.remove('signed'); });
+    return { has:function(){return dirty;}, data:function(){ return dirty? c.toDataURL('image/png') : ''; } };
+  }
+  var padOther=pad('padOther'), padFm=pad('padFm');
+
+  $('send').addEventListener('click',function(){
+    var err=$('err'); err.textContent='';
+    var name=$('oName').value.trim(), company=$('oCompany').value.trim(), email=$('oEmail').value.trim(), party=$('fParty').value.trim()||company||name;
+    if(!padOther.has()) return err.textContent='Please sign in the Other Party box.';
+    if(!name) return err.textContent='Add your printed name.';
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return err.textContent='Add a valid email so we can send your copy.';
+    var body={ action:'nda', date:$('fDate').value.trim(), party:party, purpose:$('fPurpose').value.trim(),
+      other:{ name:name, company:company, title:$('oTitle').value.trim(), email:email, sig:padOther.data() },
+      fm:{ name:$('fmName').value.trim(), title:$('fmTitle').value.trim(), sig:padFm.data() },
+      ua:navigator.userAgent.slice(0,120) };
+    var btn=$('send'); btn.disabled=true; btn.textContent='Sending…';
+    fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)})
+      .then(function(r){return r.json();})
+      .then(function(j){ if(j&&j.ok){ document.body.classList.add('sent'); $('doneMsg').textContent='A signed PDF is on its way to '+email+' and to The Sticky Trap. Thanks — let’s talk.'; window.scrollTo(0,0); }
+        else { throw new Error((j&&j.error)||'send_failed'); } })
+      .catch(function(){ btn.disabled=false; btn.textContent='Sign & send both copies'; err.textContent='Couldn’t send just now. Try again, or screenshot this signed page and text it to 734 460 3845.'; });
+  });
+})();
+</script>
+</body>
+</html>
