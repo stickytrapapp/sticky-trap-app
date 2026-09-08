@@ -45,6 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
+var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
 var DEFAULTS = {
@@ -493,7 +494,7 @@ function refIn_(b) {
   for (var i = 1; i < rows.length; i++) if (String(rows[i][2]) === uid) return { ok: true, dup: true };   // one referral per new player, ever
   sh.appendRow([new Date(), ref, uid, handle]);
   CACHE.remove('refs:' + ref);
-  try { MailApp.sendEmail(Session.getEffectiveUser().getEmail(), 'Trap Points referral: ' + ref + ' brought in ' + handle,
+  try { MailApp.sendEmail(SHOP_EMAIL, 'Trap Points referral: ' + ref + ' brought in ' + handle,
     ref + ' referred a new player (' + handle + ', uid ' + uid + ') who just finished their first board.\nThey get +500 on their next ladder load.\nSheet: ' + ss_().getUrl()); } catch (e) {}
   return { ok: true };
 }
@@ -553,7 +554,7 @@ function ndaIn_(b) {
   var pdfHtml = html.replace('cid:sigother', 'data:image/png;base64,' + Utilities.base64Encode(sigO.getBytes()));
   if (sigF) pdfHtml = pdfHtml.replace('cid:sigfm', 'data:image/png;base64,' + Utilities.base64Encode(sigF.getBytes()));
   var pdf = null; try { pdf = Utilities.newBlob('<html><body>' + pdfHtml + '</body></html>', 'text/html', 'nda.html').getAs('application/pdf').setName('Sticky Trap NDA - ' + (company || name).replace(/[^\w .-]/g, '') + '.pdf'); } catch (e) {}
-  var me = Session.getEffectiveUser().getEmail();
+  var me = SHOP_EMAIL;
   var subject = 'Signed NDA - The Sticky Trap & ' + (company || name);
   var opts = { htmlBody: '<p>Here is your signed copy of the mutual NDA with The Sticky Trap' + (purpose ? ' (' + esc_(purpose) + ')' : '') + '. The PDF is attached.</p>' + html, inlineImages: inline, name: 'The Sticky Trap', cc: me };
   if (pdf) opts.attachments = [pdf];
