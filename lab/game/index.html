@@ -1413,4 +1413,4 @@
   if(want){ var once=function(e){ document.removeEventListener('pointerdown',once,true); if(e&&e.target&&b.contains(e.target)) return; if(want) start(); }; document.addEventListener('pointerdown',once,true); }
 })();
 </script>
-<script>try{document.documentElement.setAttribute('data-theme','blackout');}catch(e){}</script>
+<script>try{var _t=(location.search.match(/[?&]theme=([a-z]+)/)||[])[1]||localStorage.getItem('st_theme')||'blackout'; if(_t) document.documentElement.setAttribute('data-theme',_t);}catch(e){}</script>
