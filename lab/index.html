@@ -27,6 +27,7 @@
 <meta name="apple-mobile-web-app-title" content="ST App">
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap">
 <style>
   :root{
     --ink:#efedfc; --soft:#bcb4e6; --muted:#a7a0d0; --line:rgba(255,255,255,.12);
@@ -51,6 +52,23 @@
   html[data-theme=blackout] .tabs button,html[data-theme=blackout] .tabs button svg,html[data-theme=blackout] .iconb,html[data-theme=blackout] .bell{color:#FF1FA2}
   html[data-theme=blackout] .tabs button.on{color:#fff}
   html[data-theme=blackout] .card{background:#0b0b0b;border-color:#262626;box-shadow:none}
+  /* Blackout: kill every navy/purple tint so the ground reads pure black on OLED (owner: 'appears blue') */
+  html[data-theme=blackout] .app{background:#000}
+  html[data-theme=blackout] #notifpanel,html[data-theme=blackout] .notifpanel,html[data-theme=blackout] #chatfab,html[data-theme=blackout] #chatform,html[data-theme=blackout] .ch-foot,html[data-theme=blackout] #installbar,html[data-theme=blackout] #apptoast{background:#0b0b0b}
+  html[data-theme=blackout] #chatpanel{background:#050505}
+  html[data-theme=blackout] .promostrip{background:#0b0b0b;border-color:rgba(255,31,162,.55)}
+  html[data-theme=blackout] .promostrip .ps-cta{background:#000}
+  html[data-theme=blackout] .tkt-media,html[data-theme=blackout] .tkt-hero{background:#000}
+  html[data-theme=blackout] #stmenu .navchip.active,html[data-theme=blackout] #stmenu .mpbtn.on{background:rgba(255,31,162,.16)}
+  html[data-theme=blackout] #stmenu .navchip.active,html[data-theme=blackout] #stmenu .mpbtn.on,html[data-theme=blackout] #stmenu .qqchip.on{border-color:#FF1FA2}
+  /* Blackout: early-2000s arcade feel -- pixel display type on labels, scanlines, crisp pink edges */
+  html[data-theme=blackout] .brand,html[data-theme=blackout] .tagline,html[data-theme=blackout] .lbl,html[data-theme=blackout] .eyebrow,html[data-theme=blackout] .tabs button,html[data-theme=blackout] .ps-k,html[data-theme=blackout] .sh-t,html[data-theme=blackout] #stmenu .sec-head,html[data-theme=blackout] #stmenu .steplbl,html[data-theme=blackout] #stmenu .qlab,html[data-theme=blackout] .tkt-cta,html[data-theme=blackout] .tkt-count{font-family:"Silkscreen","Press Start 2P",monospace;letter-spacing:.02em;font-style:normal;text-transform:uppercase}
+  html[data-theme=blackout] .tabs button{font-size:8.5px}
+  html[data-theme=blackout] .lbl,html[data-theme=blackout] .eyebrow,html[data-theme=blackout] .ps-k,html[data-theme=blackout] #stmenu .steplbl,html[data-theme=blackout] #stmenu .qlab{font-size:9px}
+  html[data-theme=blackout] #stmenu .sec-head{font-size:15px;text-shadow:0 0 10px rgba(255,31,162,.7)}
+  html[data-theme=blackout] .brand{text-shadow:0 0 12px rgba(255,31,162,.75)}
+  html[data-theme=blackout] .card,html[data-theme=blackout] .tkt-hero,html[data-theme=blackout] #stmenu .acc,html[data-theme=blackout] #stmenu .matbox,html[data-theme=blackout] #stmenu .pricehi,html[data-theme=blackout] #stmenu .legend,html[data-theme=blackout] .promostrip{border-radius:6px;border-color:rgba(255,31,162,.45)}
+  html[data-theme=blackout] body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;background:repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 3px)}
   html[data-theme=blackout] .wm{background:none;-webkit-text-fill-color:#fff;color:#fff}
   html[data-theme=blackout] .pm-h{background:none;-webkit-text-fill-color:#fff;color:#fff}
   html[data-theme=blackout] .ch-title{background:none;-webkit-text-fill-color:#fff;color:#fff}
