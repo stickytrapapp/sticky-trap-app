@@ -62,8 +62,8 @@ function cfg_(k) { return PROP.getProperty(k) || DEFAULTS[k]; }
 var FALLBACK = "I'm having trouble answering right now. Call or text 734 460 3845, email thestickytrap@gmail.com, or tap Start a project in the Connect tab and we'll help you directly.";
 var BUSY = "Lots of questions coming in - give me a minute and try again, or call/text 734 460 3845.";
 
-// Mirrors the app's volume bands (menu price to 249, 3% off at 250, 6% at 500, 10% at 1000).
-var BANDS = [[249, 1.00], [499, 0.97], [999, 0.94], [1000, 0.90]];
+// Mirrors the app's volume bands (pricing_master.VOL_BANDS, 2026-09-08): menu price to 499, 5% off at 500, 7% at 750, 10% at 1000.
+var BANDS = [[499, 1.00], [749, 0.95], [999, 0.93], [1000, 0.90]];
 var MINQ = 5, MAXQ = 1000, STEP = 5, MIN_ORDER = 50;   // qty floor 5 (steps of 5); the real minimum is $50 per ORDER
 var TABS = ['industry', 'social', 'menu', 'specs', 'connect', 'play'];
 
@@ -282,9 +282,9 @@ function runTool_(use, prices, ctx) {
       var before = ctx.basket.length;
       ctx.basket.push({ p: p, m: m, f: fname, pr: pr, qty: q });
       var sub = basketLines_(ctx.basket).reduce(function (a, l) { return a + l.total; }, 0);
-      var nb = q < 250 ? (250 - q) : (q < 500 ? (500 - q) : (q < 1000 ? (1000 - q) : 0));
+      var nb = q < 500 ? (500 - q) : (q < 750 ? (750 - q) : (q < 1000 ? (1000 - q) : 0));
       var res = { ok: true, added: q + ' x ' + p + ' - ' + m + ' / ' + fname, unit_price: money_(u), line_total: money_(tot), menu_price: money_(pr),
-                  discount: cmult_(q) < 1 ? Math.round((1 - cmult_(q)) * 100) + '% volume break applied' : 'menu price (no volume break under 250)',
+                  discount: cmult_(q) < 1 ? Math.round((1 - cmult_(q)) * 100) + '% volume break applied' : 'menu price (no volume break under 500)',
                   basket: 'had ' + before + ' line(s) before this add; now ' + ctx.basket.length + ' line(s), subtotal ' + money_(sub),
                   minimum_order: sub >= MIN_ORDER ? 'meets the $' + MIN_ORDER + ' minimum order' : 'basket is ' + money_(MIN_ORDER - sub) + ' short of the $' + MIN_ORDER + ' minimum order' };
       if (nb && nb <= 55) res.tip = 'Adding ' + nb + ' more pieces reaches the next volume break.';
