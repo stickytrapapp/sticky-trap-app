@@ -4,6 +4,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Manrope:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
 <style>
   :root{
@@ -21,6 +22,12 @@
   html[data-theme=blackout]{--ink:#000;--panel:#0b0b0b;--panel-2:#141414;--line:rgba(255,255,255,.14);--line-2:rgba(255,255,255,.22);--mag:#FF1FA2;--pur:#FF1FA2;--cyan:#FF1FA2;--gold:#FF1FA2;--fg:#fff;--mut:#fff;--mut-2:#ddd;--good:#FF1FA2}
   html[data-theme=blackout] .brk-r.tot b{background:none;-webkit-text-fill-color:#fff;color:#fff}
   html[data-theme=blackout] .hist .hv{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-theme=blackout] body,html[data-theme=blackout] .phone{background:#000}
+  html[data-theme=blackout] .phone{box-shadow:0 0 0 1px rgba(255,31,162,.35)}   // the purple glow around the frame was the last non-black
+  html[data-theme=blackout] .balance,html[data-theme=blackout] .rate-card{background:#0b0b0b}
+  html[data-theme=blackout] .streak,html[data-theme=blackout] .mc-badge,html[data-theme=blackout] .pill,html[data-theme=blackout] .pill.cy,html[data-theme=blackout] .pill.soon,html[data-theme=blackout] .vpill{background:rgba(255,31,162,.10);border-color:rgba(255,31,162,.4);color:#fff}
+  html[data-theme=blackout] .eyebrow,html[data-theme=blackout] .tabbar span,html[data-theme=blackout] .k{font-family:"Silkscreen","Space Mono",monospace;letter-spacing:.02em}
+  html[data-theme=blackout] .big{text-shadow:0 0 12px rgba(255,31,162,.6)}
   html[data-theme=acid]{--mag:#FF2FD2;--pur:#7B3BFF;--cyan:#B6FF3B;--gold:#FFD23B}
   :root{
     --radius:16px;
@@ -150,6 +157,13 @@
   .rw .ic{width:40px;height:40px;border-radius:11px;flex:none;display:grid;place-items:center;
     background:var(--panel-2);border:1px solid var(--line)}
   .rw .ic svg{width:20px;height:20px}
+  .rw .thumb{width:58px;height:58px;border-radius:13px;flex:none;display:grid;place-items:center;background:#0d0d14;border:1px solid var(--line-2)}
+  .rw .thumb svg{width:50px;height:50px}
+  .rw .tx small.what{display:block;margin-top:3px;color:var(--fg);opacity:.85;font-size:11.5px;line-height:1.3}
+  .card.gloss{padding:6px 14px}
+  .gl{padding:9px 0;border-bottom:1px solid var(--line);font-size:12px;color:var(--mut);line-height:1.4}
+  .gl:last-child{border-bottom:0}
+  .gl b{color:var(--fg);margin-right:6px}
   .rw .tx{flex:1;min-width:0}
   .rw .tx b{font-size:13.5px;font-weight:600;display:block}
   .rw .tx small{font-size:11px;color:var(--mut)}
@@ -546,12 +560,12 @@
       <div class="board-wrap">
         <div class="board" id="board" aria-label="Daily shard puzzle"></div>
         <div class="combo-flash" id="combo"></div>
-        <div class="startgate" id="startGate"><button class="sf-primary" id="startBtn">▶ Start · 35s</button><div class="sg-sub" id="sgSub"></div></div>
+        <div class="startgate" id="startGate"><button class="sf-primary" id="startBtn">▶ Start · 60s</button><div class="sg-sub" id="sgSub"></div></div>
       </div>
 
       <div class="meters">
         <div class="meter"><div class="k">Score</div><div class="v cy" id="score">0</div></div>
-        <div class="meter"><div class="k">Time</div><div class="v go" id="time">35s</div></div>
+        <div class="meter"><div class="k">Time</div><div class="v go" id="time">60s</div></div>
       </div>
 
       <div class="goalwrap">
@@ -563,7 +577,8 @@
         <ol>
           <li>Tap <b>2+ touching shards</b> of the same color to clear them.</li>
           <li><b>Bigger groups score way more</b> — chain big ones for a combo.</li>
-          <li><b>35 seconds</b> a try, <b>3 tries</b> — best score counts.</li>
+          <li><b>60 seconds</b> a try, <b>3 tries</b> — best score counts.</li>
+          <li>A <b>new board every 6 hours</b> — same board for everyone, so the ladder is fair.</li>
         </ol>
       </div>
       <div class="promo-card" id="promoCard" hidden></div>
@@ -605,15 +620,27 @@
         <div class="n" id="balBig">320</div>
         <div class="tierline"><span>Status · <b id="tierName">PLAYER</b></span><span id="tierNext">Scan to verify your brand</span></div>
         <div class="bar"><i id="tierBar" style="width:18%"></i></div>
-        <div class="sub">Play to bank points, then cash them in for a run of <b>your own branded goods</b> — slaps, lighters, embroidered hoodies. Points expire 60 days after you earn them.</div>
+        <div class="sub">Play to bank points, then cash them in for a run of <b>your own branded goods</b> — slaps, lighters, embroidered hoodies. Points stay banked until you cash them in.</div>
         <div class="expnote" id="expNote" hidden></div>
         <button class="scanbtn" id="scanOpen2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h5v5H4zM15 4h5v5h-5zM4 15h5v5H4zM15 15h2v2M20 20v.01M20 15h.01M15 20h.01"/></svg> Scan an order — verify your brand</button>
       </div>
 
       <div class="sec-h"><h3>Prizes</h3><span>your brand, made by us</span></div>
       <div class="brandhero"><div class="bh-i">◈</div><div class="bh-txt"><b>Win your own brand.</b><span>Every prize is <b style="color:var(--fg)">YOUR</b> logo on real goods — slaps, lighters, embroidered hoodies — hand-made by us.</span></div></div>
+      <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="tpg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF1FA2"/><stop offset=".5" stop-color="#8A2BE2"/><stop offset="1" stop-color="#12C4FF"/></linearGradient></defs></svg>
       <div id="shop"></div>
       <div class="claims" id="claims"></div>
+      <div class="sec-h"><h3>What the goods are</h3><span>made in-house by The Sticky Trap</span></div>
+      <div class="card gloss">
+        <div class="gl"><b>Slaps</b> die-cut vinyl stickers, 3–4 inches, cut to the shape of your logo (contour) or on a square backer. The classic hand-out.</div>
+        <div class="gl"><b>Deli labels</b> 4×5 inch labels for deli-style jars and pouches — the big label that carries strain, weight and your art.</div>
+        <div class="gl"><b>Jar labels</b> lid + wrap sets sized for Miron glass jars, 5 ml pucks up to 500 ml.</div>
+        <div class="gl"><b>Wraps</b> labels for cart tubes, pop-tops and pre-roll tubes.</div>
+        <div class="gl"><b>Tip bands</b> the small band around a pre-roll tip, or tamper tabs.</div>
+        <div class="gl"><b>Lighters</b> hand-wrapped with a printed sleeve of your brand.</div>
+        <div class="gl"><b>Hoodies &amp; tees</b> your logo embroidered or printed on apparel.</div>
+        <div class="gl"><b>Finishes</b> Spot Gloss, Standard and Pro are layers of raised gloss / emboss you can feel; Holographic and Gold are the vinyls.</div>
+      </div>
       <div class="sub" style="text-align:center;margin-top:14px">The big runs sit above the +15/day cap on purpose — they take real play to win, so it’s never a giveaway.</div>
     </section>
 
@@ -628,7 +655,7 @@
       <div class="card" style="padding:4px 14px">
         <div class="rw">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#12C4FF" stroke-width="1.7"><path d="M5 3l14 9-14 9z"/></svg></div>
-          <div class="tx"><b>Daily Trap puzzle</b><small>Hit today’s goal <span class="pill cy">caps +15/day</span></small></div>
+          <div class="tx"><b>Trap puzzle</b><small>New board every 6 hours <span class="pill cy">up to +15 a board</span></small></div>
           <div class="earn-amt mid">+15</div>
         </div>
         <div class="rw">
@@ -641,11 +668,11 @@
           <div class="tx"><b>Top the weekly ladder</b><small>Resets Sunday <span class="pill soon">soon</span></small></div>
           <div class="earn-amt mid">bonus</div>
         </div>
-        <div class="rw">
+        <button class="rw rw-tap" id="refBtn" type="button">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#12C4FF" stroke-width="1.7"><path d="M16 11a4 4 0 10-8 0M4 20a6 6 0 0116 0"/></svg></div>
-          <div class="tx"><b>Refer a friend who plays</b><small>When they join &amp; play <span class="pill soon">soon</span></small></div>
+          <div class="tx"><b>Refer a friend who plays</b><small>Tap to share your link · +500 when they finish their first board<span id="refCount"></span></small></div>
           <div class="earn-amt mid">+500</div>
-        </div>
+        </button>
       </div>
 
       <div class="sec-h"><h3>Being a customer</h3><span>status, not points</span></div>
@@ -835,7 +862,8 @@
   // ---- points ----
   // Points = a persisted LEDGER. Earns expire 60 days after they're earned (rolling); spends consume the
   // oldest live points first. Balance survives reloads and starts at 0 for a new player.
-  var EXPIRE_DAYS=60, LEDGER=[], CLAIMS=[], STREAK={last:0,n:0}, HIST=[], verified=false;
+  // points do NOT expire (Shane 2026-09-08): they leave the ledger only when a prize is claimed
+  var EXPIRE_DAYS=36500, LEDGER=[], CLAIMS=[], STREAK={last:0,n:0}, HIST=[], verified=false;
   try{ LEDGER=JSON.parse(localStorage.getItem('tp_ledger')||'[]')||[]; }catch(e){ LEDGER=[]; }
   try{ CLAIMS=JSON.parse(localStorage.getItem('tp_claims')||'[]')||[]; }catch(e){ CLAIMS=[]; }
   try{ STREAK=JSON.parse(localStorage.getItem('tp_streak')||'null')||{last:0,n:0}; }catch(e){}
@@ -868,9 +896,13 @@
   }
 
   // ---- daily challenge (timed, 3 tries, best counts) ----
-  var COLS=6, ROWS=7, COLORS=3, TIME=35, ATTEMPTS=3, PAR=3500;
+  var COLS=6, ROWS=7, COLORS=3, TIME=60, ATTEMPTS=3, PAR=6000;   // 3 x 60 s = a 3-minute session; par scaled with the clock
   var grid=[], board=document.getElementById('board');
-  var dayNum=Math.floor(Date.now()/864e5), trapNum=dayNum-19845;
+  var dayNum=Math.floor(Date.now()/864e5);
+  // Boards live in 6-hour LOCAL slots (00/06/12/18): everyone gets the same board in a slot; a new one unlocks at the next boundary.
+  var SLOT_HOURS=6, TRAP_BASE=81956;   // TRAP_BASE keeps the Trap # sequence continuous from the daily era (#859 on 2026-09-08)
+  function slotNow(){ var d=new Date(); return Math.floor((d.getTime()-d.getTimezoneOffset()*60000)/(SLOT_HOURS*3600e3)); }
+  var slotNum=slotNow(), trapNum=slotNum-TRAP_BASE;
   var dseed=1, attempt=1, bestScore=0, dayScore=0, timeLeft=TIME, timerId=null, playing=false, dayDone=false, combo=0;
   function drnd(){dseed=(dseed*1103515245+12345)&0x7fffffff; return dseed/0x7fffffff;}
   function rcolor(){return Math.floor(drnd()*COLORS);}
@@ -878,7 +910,7 @@
   try{ var _f=JSON.parse(localStorage.getItem('tp_free')||'null'); if(_f&&_f.day===Math.floor(Date.now()/864e5)) FREE=_f; }catch(e){}
   function saveFree(){ try{ localStorage.setItem('tp_free',JSON.stringify({day:Math.floor(Date.now()/864e5),bonus:FREE.bonus,seed:FREE.seed})); }catch(e){} }
   function rebuildBoard(){
-    dseed= MODE==='free' ? (FREE.seed>>>0||12345) : ((dayNum*2654435761)>>>0 || 12345);
+    dseed= MODE==='free' ? (FREE.seed>>>0||12345) : ((slotNum*2654435761)>>>0 || 12345);
     grid=[]; for(var r=0;r<ROWS;r++){grid.push([]); for(var c=0;c<COLS;c++)grid[r][c]=rcolor();}
     draw();
   }
@@ -887,7 +919,7 @@
     var pn=document.getElementById('pnum'); if(pn)pn.textContent='#'+trapNum;
     var pv=document.getElementById('parval'); if(pv)pv.textContent=fmt(PAR);
     var _d=null; try{_d=JSON.parse(localStorage.getItem('tp_daily')||'null');}catch(e){}
-    if(_d && _d.day===dayNum){ dayDone=true; bestScore=_d.best||0; }
+    if(_d && _d.day===slotNum){ dayDone=true; bestScore=_d.best||0; }
     rebuildBoard(); setStat(); showGate();
   }
   function setStat(){
@@ -901,11 +933,11 @@
   function showGate(){
     var g=document.getElementById('startGate'); if(!g)return; g.classList.remove('hide');
     var btn=document.getElementById('startBtn'), sub=document.getElementById('sgSub');
-    if(MODE==='free'){ if(btn){btn.disabled=false; btn.classList.remove('done'); btn.textContent='\u25B6 Free play \u00b7 35s';}
+    if(MODE==='free'){ if(btn){btn.disabled=false; btn.classList.remove('done'); btn.textContent='\u25B6 Free play \u00b7 '+TIME+'s';}
       if(sub) sub.textContent='Unlimited boards \u00b7 beat par for +1 point ('+FREE.bonus+'/'+FREE_CAP+' today) \u00b7 not ranked'; return; }
-    if(dayDone){ if(btn){btn.textContent='✓ Played today'; btn.disabled=true; btn.classList.add('done'); } if(sub)sub.textContent=(bestScore>0?('Your score '+fmt(bestScore)+' · '):'')+'New board tomorrow (Trap #'+(trapNum+1)+')'; return; }
+    if(dayDone){ if(btn){btn.textContent='✓ Played this board'; btn.disabled=true; btn.classList.add('done'); } if(sub)sub.textContent=(bestScore>0?('Your score '+fmt(bestScore)+' · '):'')+'New board in '+nextIn()+' (Trap #'+(trapNum+1)+')'; return; }
     if(btn){btn.disabled=false; btn.classList.remove('done');}
-    if(btn)btn.textContent=(attempt===1?'▶ Start · 35s':'▶ Play again · 35s');
+    if(btn)btn.textContent=(attempt===1?'▶ Start · '+TIME+'s':'▶ Play again · '+TIME+'s');
     if(sub)sub.textContent=(attempt===1?'3 tries — your best score counts.':('Best so far '+fmt(bestScore)+' · try '+attempt+' of 3'));
   }
   function showCombo(mult,id){ var el=document.getElementById(id||'combo'); if(!el)return;
@@ -928,7 +960,7 @@
     for(var r2=ROWS-1,i=0;r2>=0;r2--,i++) grid[r2][c]= i<col.length?col[i]:rcolor(); } }
   function startAttempt(){ if(playing||(MODE==='daily'&&dayDone))return; dayScore=0; combo=0; timeLeft=TIME; playing=true;
     try{ if(window.TPM){ TPM.mode('play'); TPM.sfx('go'); } }catch(e){}
-    if(MODE==='daily'){ try{localStorage.setItem('tp_daily', JSON.stringify({day:dayNum, best:bestScore}));}catch(e){} }
+    if(MODE==='daily'){ try{localStorage.setItem('tp_daily', JSON.stringify({day:slotNum, best:bestScore}));}catch(e){} }
     else { FREE.seed=(Math.random()*4294967295)>>>0; saveFree(); }
     rebuildBoard(); setStat();
     var g=document.getElementById('startGate'); if(g)g.classList.add('hide');
@@ -946,16 +978,16 @@
     dayScore=0; combo=0; timeLeft=TIME; rebuildBoard(); setStat(); showGate(); }
   document.querySelectorAll('#modeSeg button').forEach(function(b){ b.addEventListener('click',function(){ setMode(b.dataset.mode); }); });
   function endAttempt(){ try{ if(window.TPM){ TPM.sfx('over'); TPM.mode('rest'); } }catch(e){}   // time's up: sting, beat drops to the rest groove
-    if(MODE==='free'){ endFree(); return; } playing=false; clearInterval(timerId); if(dayScore>bestScore)bestScore=dayScore; try{localStorage.setItem('tp_daily', JSON.stringify({day:dayNum, best:bestScore}));}catch(e){}
+    if(MODE==='free'){ endFree(); return; } playing=false; clearInterval(timerId); if(dayScore>bestScore)bestScore=dayScore; try{localStorage.setItem('tp_daily', JSON.stringify({day:slotNum, best:bestScore}));}catch(e){}
     if(attempt<ATTEMPTS){ attempt++; dayScore=0; setStat(); showGate(); } else { finishDaily(); } }
   function finishDaily(){ dayDone=true;
     var stars= bestScore>=PAR*2?3 : bestScore>=Math.round(PAR*1.4)?2 : bestScore>=PAR?1 : 0;
     var today=dayNum; if(STREAK.last===today-1){ STREAK.n=(STREAK.n||0)+1; } else if(STREAK.last!==today){ STREAK.n=1; } STREAK.last=today;
     var streakBonus=STREAK.n>=2?5:0;
     var earned=((stars>=3?15:stars>=2?12:stars>=1?8:3)+streakBonus)*promoMult();
-    if(!HIST.some(function(h){return h.day===today;})) HIST.push({day:today,best:bestScore,stars:stars,pts:earned});
+    if(!HIST.some(function(h){return h.day===slotNum;})) HIST.push({day:slotNum,best:bestScore,stars:stars,pts:earned});
     earn(earned,'Trap #'+trapNum+' '+stars+'\u2605');
-    postScore();
+    postScore(); reportRef();
     var starStr=''; for(var i=0;i<3;i++) starStr+=(i<stars?'★':'☆');
     document.getElementById('rnum').textContent='Trap #'+trapNum;
     document.getElementById('rstars').textContent=starStr;
@@ -965,17 +997,46 @@
     document.getElementById('rstreak').textContent='\uD83D\uDD25 '+STREAK.n;
     document.getElementById('rpts').textContent='+'+earned;
     document.getElementById('rrank').textContent=HIST.length;
-    try{localStorage.setItem('tp_daily', JSON.stringify({day:dayNum, best:bestScore, stars:stars, earned:earned}));}catch(e){}
+    try{localStorage.setItem('tp_daily', JSON.stringify({day:slotNum, best:bestScore, stars:stars, earned:earned}));}catch(e){}
     document.getElementById('result').classList.add('show');
   }
   // ---- real leaderboard: scores go to the chat script's 'score' endpoint, the ladder comes from 'lb' ----
   var LB_API='https://script.google.com/macros/s/AKfycbzgctrnkyWjVnhzioE_B4x8J2pyi4WzRSJG2e00Y_Y5cz0vQx-q5jhvOhMWg2x-K9ciFw/exec';
   try{ LB_API=localStorage.getItem('tp_lb_api')||LB_API; }catch(e){}   // local-dev override only
   var UID=''; try{ UID=localStorage.getItem('tp_uid')||''; if(!UID){ UID='u'+Date.now().toString(36)+Math.random().toString(36).slice(2,8); localStorage.setItem('tp_uid',UID); } }catch(e){ UID='anon'; }
+
+  // ---- referrals: share a ?ref=HANDLE link; the friend's first finished board reports back; you get +500 per friend ----
+  var REF_PTS=500, REFS=0; try{ REFS=+localStorage.getItem('tp_refs')||0; }catch(e){}
+  (function(){ var q=(location.search.match(/[?&]ref=([A-Za-z0-9]{1,8})/)||[])[1]; if(!q) return; q=q.toUpperCase();
+    try{ if(!localStorage.getItem('tp_ref') && q!==(handle||'').toUpperCase()) localStorage.setItem('tp_ref',q); }catch(e){} })();
+  function refLink(){ return 'https://thestickytrap.app/game/?ref='+encodeURIComponent((handle||'').toUpperCase()); }
+  function refText(){ return 'Play Trap Points with me — a 3-minute puzzle where the prizes are a run of YOUR OWN branded goods from The Sticky Trap. '+refLink(); }
+  function shareRef(){ var url=refLink(), txt=refText();
+    try{ window.track&&window.track('ref_share',handle); }catch(e){}
+    if(navigator.share){ navigator.share({title:'Trap Points',text:txt,url:url}).catch(function(){}); return; }
+    var enc=encodeURIComponent;
+    sheetCard.innerHTML='<div class="sheet-grab"></div><b class="sheet-t">Share your link</b>'+
+      '<p class="sheet-d">Friends who join through it and finish a board earn you <b>+'+REF_PTS+'</b> each.</p>'+
+      '<a class="sf-primary" style="display:block;text-align:center;text-decoration:none" href="fb-messenger://share?link='+enc(url)+'">Messenger</a>'+
+      '<a class="sf-primary" style="display:block;text-align:center;text-decoration:none;margin-top:8px" href="sms:?&body='+enc(txt)+'">Text message</a>'+
+      '<a class="sf-primary" style="display:block;text-align:center;text-decoration:none;margin-top:8px" href="https://wa.me/?text='+enc(txt)+'" target="_blank" rel="noopener">WhatsApp</a>'+
+      '<button class="sf-primary" style="margin-top:8px" id="refCopy">Copy link (Instagram, anywhere)</button>'+
+      '<button class="sf-link" id="refClose">Close</button>';
+    sheet.classList.add('open');
+    document.getElementById('refCopy').addEventListener('click',function(){ try{navigator.clipboard.writeText(txt);}catch(e){} toast('Link copied — paste it anywhere.'); });
+    document.getElementById('refClose').addEventListener('click',function(){ sheet.classList.remove('open'); });
+  }
+  var refBtnEl=document.getElementById('refBtn'); if(refBtnEl) refBtnEl.addEventListener('click',shareRef);
+  function refCountUI(){ var el=document.getElementById('refCount'); if(el) el.textContent= REFS? ' · '+REFS+' friend'+(REFS>1?'s':'')+' joined' : ''; }
+  refCountUI();
+  function reportRef(){ var r=null; try{ r=localStorage.getItem('tp_ref'); if(localStorage.getItem('tp_ref_sent')) return; }catch(e){} if(!r||!handle) return;
+    fetch(LB_API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'ref',uid:UID,handle:handle,ref:r})})
+      .then(function(x){return x.json();}).then(function(j){ if(j&&j.ok){ try{localStorage.setItem('tp_ref_sent','1');}catch(e){} } }).catch(function(){}); }
+  function creditRefs(n){ n=+n||0; if(n>REFS){ var add=(n-REFS)*REF_PTS; earn(add,'Referral · '+(n-REFS)+' friend'+(n-REFS>1?'s':'')); REFS=n; try{localStorage.setItem('tp_refs',String(n));}catch(e){} refCountUI(); toast('+'+fmt(add)+' · a friend you referred played!'); } }
   function monthKey(d){ var x=new Date(d*864e5); return x.getUTCFullYear()+'-'+('0'+(x.getUTCMonth()+1)).slice(-2); }
   function postScore(){
     if(!bestScore) return;
-    var body=JSON.stringify({action:'score',uid:UID,handle:handle,day:dayNum,best:bestScore,stars:(HIST.filter(function(h){return h.day===dayNum;})[0]||{}).stars||0});
+    var body=JSON.stringify({action:'score',uid:UID,handle:handle,day:dayNum,best:bestScore,slot:slotNum,stars:(HIST.filter(function(h){return h.day===slotNum;})[0]||{}).stars||0});
     fetch(LB_API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:body}).then(function(r){return r.json();}).then(function(){ lbCache=null; loadRanks(); }).catch(function(){});
   }
   var lbCache=null, lbAt=0;
@@ -983,9 +1044,9 @@
     var list=document.getElementById('lbList'), st=document.getElementById('stRank'), ys=document.getElementById('youStand'), yg=document.getElementById('youGap'), nd=document.getElementById('stNudge'), note=document.getElementById('lbNote');
     if(!list) return;
     if(!force && lbCache && Date.now()-lbAt<60000){ render(lbCache); return; }
-    fetch(LB_API+'?action=lb&month='+monthKey(dayNum)+'&uid='+encodeURIComponent(UID)+'&t='+Date.now()).then(function(r){return r.json();}).then(function(j){ if(j&&j.ok&&j.top){ lbCache=j; lbAt=Date.now(); render(j); } else fail(); }).catch(fail);
+    fetch(LB_API+'?action=lb&month='+monthKey(dayNum)+'&uid='+encodeURIComponent(UID)+'&handle='+encodeURIComponent(handle||'')+'&t='+Date.now()).then(function(r){return r.json();}).then(function(j){ if(j&&j.ok&&j.top){ lbCache=j; lbAt=Date.now(); render(j); } else fail(); }).catch(fail);
     function fail(){ if(!loadRanks._retried){ loadRanks._retried=true; setTimeout(function(){ loadRanks(true); },2500); return; } loadRanks._retried=false; list.innerHTML='<div class="lb-empty">Couldn\u2019t reach the ladder \u2014 try again in a moment.</div>'; }
-    function render(j){ loadRanks._retried=false;
+    function render(j){ loadRanks._retried=false; try{ creditRefs(j.refs); }catch(e){}
       if(!j.top.length){ list.innerHTML='<div class="lb-empty">No scores yet this month.<br>Finish today\u2019s Trap to open the board.</div>'; }
       else{
         list.innerHTML=j.top.map(function(r){ var av=(r.handle||'??').slice(0,2), me=r.you?' me':'', top=r.rank===1?' win':'';
@@ -993,7 +1054,7 @@
       }
       if(j.you){ st.textContent='#'+j.you.rank; ys.textContent='You\u2019re '+ord(j.you.rank)+' \u00B7 '+handle;
         yg.textContent= j.you.rank===1 ? 'Holding the crown \u2014 keep it through month-end.' : (j.you.gap_podium? fmt(j.you.gap_podium)+' to the podium \u00B7 ' : '')+fmt(j.you.gap_crown)+' to the crown';
-        nd.textContent= dayDone ? 'Back tomorrow \u2192' : 'Win today \u2192'; }
+        nd.textContent= dayDone ? 'Next board in '+nextIn()+' \u2192' : 'Play this board \u2192'; }
       else { st.textContent='\u2013'; ys.textContent='Not on the board yet'; yg.textContent='Finish today\u2019s Trap to get ranked.'; nd.textContent='Play today \u2192'; }
       note.textContent= j.count>10 ? (j.count+' brands on the ladder this month \u00B7 top 10 shown') : (j.count? j.count+' brand'+(j.count>1?'s':'')+' on the ladder this month' : '');
     }
@@ -1030,9 +1091,12 @@
     try{if(navigator.clipboard)navigator.clipboard.writeText(txt);}catch(e){}
     toast('Result copied — paste it anywhere.');
   });
-  function tickNew(){ var now=new Date(), end=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1);
-    var d=Math.max(0,end-now), hr=Math.floor(d/36e5), mn=Math.floor(d%36e5/6e4), t=hr+'h '+mn+'m';
-    var a=document.getElementById('newin'); if(a)a.textContent=t; var b2=document.getElementById('rnewin'); if(b2)b2.textContent=t; }
+  function nextIn(){ var d=new Date(), nowL=d.getTime()-d.getTimezoneOffset()*60000, endL=(Math.floor(nowL/(SLOT_HOURS*3600e3))+1)*SLOT_HOURS*3600e3, ms=Math.max(0,endL-nowL);
+    var hr=Math.floor(ms/36e5), mn=Math.floor(ms%36e5/6e4); return (hr?hr+'h ':'')+mn+'m'; }
+  function tickNew(){ var t=nextIn();
+    var a=document.getElementById('newin'); if(a)a.textContent=t; var b2=document.getElementById('rnewin'); if(b2)b2.textContent=t;
+    if(slotNow()!==slotNum && !playing){ slotNum=slotNow(); trapNum=slotNum-TRAP_BASE; if(MODE==='daily') initDaily(); }   // the board rolled over while the page was open
+  }
   tickNew(); setInterval(tickNew,30000);
   // ---- fake QR render ----
   function renderQR(){
@@ -1085,10 +1149,11 @@
     Sticker:'<svg viewBox="0 0 24 24" fill="none" stroke="#25E0A6" stroke-width="1.6"><path d="M5 4h9l5 5v11H5z"/><path d="M14 4v5h5"/></svg>'
   };
   var CAT=[
-    {n:'12 slaps', d:'Contour-cut · YOUR logo', c:600, t:'Sticker', f:1},
-    {n:'2 lighters', d:'Hand-wrapped · YOUR logo', c:1500, t:'Lighters', f:1},
-    {n:'1 embroidered hoodie', d:'Embroidered · YOUR brand', c:7000, t:'Apparel', f:1, tier:1, bonus:'1-in-4 shot at a 2nd', bchance:0.25}
+    {n:'12 slaps', d:'Contour-cut · YOUR logo', c:600, t:'Sticker', f:1, img:'slaps', what:'A dozen 3" die-cut vinyl stickers of your logo.'},
+    {n:'2 lighters', d:'Hand-wrapped · YOUR logo', c:1500, t:'Lighters', f:1, img:'lighters', what:'Two lighters wrapped in a printed sleeve of your brand.'},
+    {n:'1 embroidered hoodie', d:'Embroidered · YOUR brand', c:7000, t:'Apparel', f:1, tier:1, bonus:'1-in-4 shot at a 2nd', bchance:0.25, img:'hoodie', what:'A hoodie with your logo embroidered on the chest.'}
   ];
+  var THUMB={"slaps": "<svg viewBox=\"0 0 64 64\" fill=\"none\"><rect x=\"14\" y=\"16\" width=\"34\" height=\"34\" rx=\"9\" fill=\"#F5F3FA\" stroke=\"#FF1FA2\" stroke-width=\"2\" stroke-dasharray=\"4 3\"/><rect x=\"18\" y=\"12\" width=\"34\" height=\"34\" rx=\"9\" fill=\"#F5F3FA\" stroke=\"#12C4FF\" stroke-width=\"2\"/><path d=\"M35 18l9 9-9 15-9-15z\" fill=\"url(#tpg)\"/><path d=\"M35 18l9 9h-18z\" fill=\"#12C4FF\" opacity=\".9\"/></svg>", "lighters": "<svg viewBox=\"0 0 64 64\" fill=\"none\"><rect x=\"18\" y=\"22\" width=\"12\" height=\"32\" rx=\"3\" fill=\"url(#tpg)\"/><rect x=\"34\" y=\"22\" width=\"12\" height=\"32\" rx=\"3\" fill=\"#F5F3FA\" stroke=\"#8A2BE2\" stroke-width=\"1.5\"/><path d=\"M40 32l3 3-3 6-3-6z\" fill=\"#FF1FA2\"/><rect x=\"19\" y=\"18\" width=\"10\" height=\"5\" rx=\"1.5\" fill=\"#EAB84B\"/><rect x=\"35\" y=\"18\" width=\"10\" height=\"5\" rx=\"1.5\" fill=\"#EAB84B\"/><path d=\"M24 8c2 3-1 4-1 6a2.5 2.5 0 005 0c0-3-2-4-4-6z\" fill=\"#EAB84B\"/><path d=\"M40 8c2 3-1 4-1 6a2.5 2.5 0 005 0c0-3-2-4-4-6z\" fill=\"#EAB84B\"/></svg>", "hoodie": "<svg viewBox=\"0 0 64 64\" fill=\"none\"><path d=\"M22 14c3-6 17-6 20 0l12 6-5 10-5-2v28H20V28l-5 2-5-10z\" fill=\"#1b1726\" stroke=\"#F5F3FA\" stroke-width=\"1.6\"/><path d=\"M26 16c2 5 10 5 12 0\" stroke=\"#F5F3FA\" stroke-width=\"1.6\"/><path d=\"M29 20v10M35 20v10\" stroke=\"#F5F3FA\" stroke-width=\"1.4\" stroke-linecap=\"round\"/><path d=\"M32 34l5 5-5 9-5-9z\" fill=\"url(#tpg)\"/></svg>"};
   var shopEl=document.getElementById('shop');
   function renderShop(){
     if(!shopEl)return;
@@ -1097,8 +1162,8 @@
       var tierok=!it.tier||verified, afford=balance>=it.c, pending=CLAIMS.some(function(c){return c.n===it.n&&c.status==='pending';});
       var row=document.createElement('div'); row.className='rw';
       var tags=(it.f?'<span class="tag hd">Your brand</span>':'')+(it.tier&&!tierok?'<span class="pill">Verified brands</span>':'')+(it.bonus?'<span class="tag bonus">+ '+it.bonus+'</span>':'');
-      row.innerHTML='<div class="ic">'+(ICONS[it.t]||ICONS.Merch)+'</div>'+
-        '<div class="tx"><b>'+it.n+'</b><small>'+it.d+' · <span class="cost-chip">◈ '+fmt(it.c)+'</span>'+tags+'</small></div>';
+      row.innerHTML='<div class="thumb">'+(THUMB[it.img]||ICONS[it.t]||ICONS.Merch)+'</div>'+
+        '<div class="tx"><b>'+it.n+'</b><small>'+it.d+' · <span class="cost-chip">◈ '+fmt(it.c)+'</span>'+tags+'</small>'+(it.what?'<small class="what">'+it.what+'</small>':'')+'</div>';
       var btn=document.createElement('button');
       if(pending){btn.className='btn lock';btn.disabled=true;btn.textContent='Pending';}
       else if(!tierok){btn.className='btn lock';btn.disabled=true;btn.textContent='Verify';}
