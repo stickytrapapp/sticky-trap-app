@@ -19,19 +19,25 @@
   html[data-theme=neon]{--mag:#FF1FA2;--pur:#8A2BE2;--cyan:#12C4FF;--gold:#EAB84B}
   html[data-theme=black]{--mag:#FF1FA2;--pur:#8A2BE2;--cyan:#12C4FF;--gold:#EAB84B}
   html[data-theme=gold]{--mag:#F0B24A;--pur:#B8862B;--cyan:#F6E7C1;--gold:#EAB84B}
-  html[data-theme=blackout]{--ink:#000;--panel:#0b0b0b;--panel-2:#141414;--line:rgba(255,255,255,.14);--line-2:rgba(255,255,255,.22);--mag:#FF1FA2;--pur:#FF1FA2;--cyan:#FF1FA2;--gold:#FF1FA2;--fg:#fff;--mut:#fff;--mut-2:#ddd;--good:#FF1FA2}
-  html[data-theme=blackout] .brk-r.tot b{background:none;-webkit-text-fill-color:#fff;color:#fff}
-  html[data-theme=blackout] .hist .hv{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-theme=blackout]{--acc:#FF1FA2;--acc-rgb:255,31,162}
+  html[data-theme=ice]{--acc:#12C4FF;--acc-rgb:18,196,255}
+  html[data-theme=violet]{--acc:#9D4DFF;--acc-rgb:157,77,255}
+  html[data-theme=ember]{--acc:#FF4D2E;--acc-rgb:255,77,46}
+  html[data-theme=volt]{--acc:#B6FF3B;--acc-rgb:182,255,59}
+  html[data-theme=gold24]{--acc:#EAB84B;--acc-rgb:234,184,75}
+  html[data-mono]{--ink:#000;--panel:#0b0b0b;--panel-2:#141414;--line:rgba(255,255,255,.14);--line-2:rgba(255,255,255,.22);--mag:var(--acc);--pur:var(--acc);--cyan:var(--acc);--gold:var(--acc);--fg:#fff;--mut:#fff;--mut-2:#ddd;--good:var(--acc)}
+  html[data-mono] .brk-r.tot b{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] .hist .hv{background:none;-webkit-text-fill-color:#fff;color:#fff}
   /* Blackout shards: three colours you can tell apart on black -- hot pink, white, slate (the palette vars would make all three pink) */
-  html[data-theme=blackout] .tile.c0{background:radial-gradient(circle at 35% 30%,#ff7ac9,#FF1FA2);box-shadow:0 0 12px rgba(255,31,162,.5),inset 0 0 8px rgba(0,0,0,.25)}
-  html[data-theme=blackout] .tile.c1{background:radial-gradient(circle at 35% 30%,#ffffff,#d9d6e6);box-shadow:0 0 12px rgba(255,255,255,.35),inset 0 0 8px rgba(0,0,0,.12)}
-  html[data-theme=blackout] .tile.c2{background:radial-gradient(circle at 35% 30%,#8a8aa3,#4a4a5e);box-shadow:0 0 10px rgba(255,255,255,.12),inset 0 0 8px rgba(0,0,0,.35)}
-  html[data-theme=blackout] body,html[data-theme=blackout] .phone{background:#000}
-  html[data-theme=blackout] .phone{box-shadow:0 0 0 1px rgba(255,31,162,.35)}   // the purple glow around the frame was the last non-black
-  html[data-theme=blackout] .balance,html[data-theme=blackout] .rate-card{background:#0b0b0b}
-  html[data-theme=blackout] .streak,html[data-theme=blackout] .mc-badge,html[data-theme=blackout] .pill,html[data-theme=blackout] .pill.cy,html[data-theme=blackout] .pill.soon,html[data-theme=blackout] .vpill{background:rgba(255,31,162,.10);border-color:rgba(255,31,162,.4);color:#fff}
-  html[data-theme=blackout] .eyebrow,html[data-theme=blackout] .tabbar span,html[data-theme=blackout] .k{font-family:"Silkscreen","Space Mono",monospace;letter-spacing:.02em}
-  html[data-theme=blackout] .big{text-shadow:0 0 12px rgba(255,31,162,.6)}
+  html[data-mono] .tile.c0{background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.55),var(--acc));box-shadow:0 0 12px rgba(var(--acc-rgb),.5),inset 0 0 8px rgba(0,0,0,.25)}
+  html[data-mono] .tile.c1{background:radial-gradient(circle at 35% 30%,#ffffff,#d9d6e6);box-shadow:0 0 12px rgba(255,255,255,.35),inset 0 0 8px rgba(0,0,0,.12)}
+  html[data-mono] .tile.c2{background:radial-gradient(circle at 35% 30%,#8a8aa3,#4a4a5e);box-shadow:0 0 10px rgba(255,255,255,.12),inset 0 0 8px rgba(0,0,0,.35)}
+  html[data-mono] body,html[data-mono] .phone{background:#000}
+  html[data-mono] .phone{box-shadow:0 0 0 1px rgba(var(--acc-rgb),.35)}   // the purple glow around the frame was the last non-black
+  html[data-mono] .balance,html[data-mono] .rate-card{background:#0b0b0b}
+  html[data-mono] .streak,html[data-mono] .mc-badge,html[data-mono] .pill,html[data-mono] .pill.cy,html[data-mono] .pill.soon,html[data-mono] .vpill{background:rgba(var(--acc-rgb),.10);border-color:rgba(var(--acc-rgb),.4);color:#fff}
+  html[data-mono] .eyebrow,html[data-mono] .tabbar span,html[data-mono] .k{font-family:"Silkscreen","Space Mono",monospace;letter-spacing:.02em}
+  html[data-mono] .big{text-shadow:0 0 12px rgba(var(--acc-rgb),.6)}
   html[data-theme=acid]{--mag:#FF2FD2;--pur:#7B3BFF;--cyan:#B6FF3B;--gold:#FFD23B}
   :root{
     --radius:16px;
@@ -1417,4 +1423,4 @@
   if(want){ var once=function(e){ document.removeEventListener('pointerdown',once,true); if(e&&e.target&&b.contains(e.target)) return; if(want) start(); }; document.addEventListener('pointerdown',once,true); }
 })();
 </script>
-<script>try{var _t=(location.search.match(/[?&]theme=([a-z]+)/)||[])[1]||localStorage.getItem('st_theme')||'blackout'; if(_t) document.documentElement.setAttribute('data-theme',_t);}catch(e){}</script>
+<script>try{var _t=(location.search.match(/[?&]theme=([a-z0-9]+)/)||[])[1]||localStorage.getItem('st_theme')||'blackout'; if(_t){ document.documentElement.setAttribute('data-theme',_t); if({blackout:1,ice:1,violet:1,ember:1,volt:1,gold24:1}[_t]) document.documentElement.setAttribute('data-mono',''); }}catch(e){}</script>
