@@ -2005,6 +2005,7 @@
   #themelab button{font:inherit;font-size:11px;font-weight:800;letter-spacing:.04em;padding:6px 10px;border-radius:999px;border:0;background:transparent;color:#cfc6ee;cursor:pointer;display:flex;align-items:center;gap:6px}
   #themelab button i{width:12px;height:12px;border-radius:50%;display:inline-block;border:1px solid rgba(255,255,255,.35)}
   #themelab button.on{background:rgba(255,255,255,.14);color:#fff}
+  #themelab{display:none!important}
 </style>
 <div id="themelab" role="group" aria-label="Theme lab"><button type="button" data-t="neon"><i style="background:linear-gradient(100deg,#ff2e88,#8a4dff,#22d3ee)"></i>Neon (current)</button><button type="button" data-t="black"><i style="background:linear-gradient(100deg,#FF1FA2 0%,#8A2BE2 52%,#FF1FA2 100%)"></i>Trap Black</button><button type="button" data-t="gold"><i style="background:linear-gradient(100deg,#F5D98A 0%,#D9A441 48%,#A9761F 100%)"></i>Emboss Gold</button><button type="button" data-t="blackout"><i style="background:#000;border-color:#FF1FA2"></i>Blackout</button><button type="button" data-t="acid"><i style="background:linear-gradient(100deg,#FF2FD2 0%,#7B3BFF 50%,#B6FF3B 100%)"></i>Acid Street</button></div>
 <script>
@@ -2015,7 +2016,7 @@
     document.querySelectorAll('#themelab button').forEach(function(b){ b.classList.toggle('on',b.dataset.t===t); });
     try{ localStorage.setItem('st_theme',t); }catch(e){} }
   var q=(location.search.match(/[?&]theme=([a-z]+)/)||[])[1], saved=null; try{ saved=localStorage.getItem('st_theme'); }catch(e){}
-  apply(q||saved||'blackout');   // published lab opens on Blackout
+  apply('blackout');   // owner preview: locked to Blackout, switcher hidden
   document.querySelectorAll('#themelab button').forEach(function(b){ b.addEventListener('click',function(){ apply(b.dataset.t); }); });
 })();
 </script>
