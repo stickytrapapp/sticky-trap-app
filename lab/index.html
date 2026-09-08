@@ -373,6 +373,24 @@
   .view.connectbanner{background:var(--deep);color:#fff;min-height:100%;gap:20px;align-items:center;text-align:center;padding:24px 18px calc(34px + var(--safe-b))}
   .cb-cta{display:block;width:100%;max-width:340px;background:var(--grad);color:#0A0A0F;font-weight:800;font-size:15px;letter-spacing:.02em;padding:15px 20px;border:0;border-radius:26px;cursor:pointer;font-family:inherit;box-shadow:0 8px 24px rgba(var(--pur-rgb),.42);transition:.15s}
   .cb-cta:active{transform:translateY(1px)}
+  .cb-cta-alt{background:rgba(255,255,255,.06);color:var(--ink);border:1px solid rgba(255,255,255,.22);box-shadow:none;margin-top:-6px}
+  /* ---- Meeting NDA panel ---- */
+  #ndapanel{position:fixed;inset:0;z-index:80;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.6)}
+  #ndapanel.on{display:flex}
+  .nda-card{width:100%;max-width:440px;background:var(--deep,#0d0a1f);border:1px solid rgba(255,255,255,.14);border-radius:22px 22px 0 0;padding:16px 18px calc(22px + var(--safe-b));max-height:92vh;overflow-y:auto}
+  .nda-card h3{margin:0 0 4px;font-size:18px;font-weight:900}
+  .nda-card .p{color:var(--soft);font-size:13px;line-height:1.5;margin:0 0 12px}
+  .nda-f{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+  .nda-f label{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:800}
+  .nda-f input{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);border-radius:10px;color:var(--ink);font:inherit;font-size:15px;padding:10px 11px;outline:none}
+  .nda-f input:focus{border-color:var(--cy)}
+  .nda-qr{background:#fff;border-radius:16px;padding:12px;margin:8px auto 6px;width:232px;height:232px;display:grid;place-items:center}
+  .nda-qr img,.nda-qr canvas{width:208px;height:208px;display:block;image-rendering:pixelated}
+  .nda-scan{text-align:center;font-size:12px;color:var(--soft);margin-bottom:12px}
+  .nda-row{display:flex;gap:8px;flex-wrap:wrap}
+  .nda-row button,.nda-row a{flex:1;min-width:120px;font:inherit;font-size:13px;font-weight:800;padding:11px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);color:var(--ink);cursor:pointer;text-align:center;text-decoration:none}
+  .nda-row .prim{background:var(--grad);color:#0A0A0F;border-color:transparent}
+  .nda-x{position:absolute;right:16px;top:12px;background:none;border:0;color:var(--muted);font-size:24px;line-height:1;cursor:pointer}
   .cb-contacts{display:flex;flex-direction:column;gap:15px;width:100%;max-width:340px}
   .cb-item{display:flex;flex-direction:column;gap:4px;border-top:1px solid rgba(255,255,255,.16);padding-top:9px;text-align:left}
   .cb-lbl{font-size:12px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--mag)}
@@ -1332,6 +1350,7 @@
 </style>
       <div class="cb-head"><h2 class="cb-title">Connect</h2><p class="cb-intro">Let&#8217;s make something together.</p></div>
       <button type="button" class="cb-cta" id="connect-quote">✦ Start a project — get a quote &rarr;</button>
+      <button type="button" class="cb-cta cb-cta-alt" id="connect-nda">✎ Meeting NDA — sign or share by QR</button>
       <div class="cb-zone">Reach Us</div>
       <div class="cb-contacts">
         <a class="cb-item" href="tel:+17344603845"><span class="cb-lbl">Call</span><span class="cb-val">734 460 3845</span></a>
@@ -2019,6 +2038,7 @@
 })();
 </script>
 
+<<<<<<< HEAD
 <style>
   /* ---- THEME LAB (branch theme-lab only): palette switcher ---- */
   #themelab{position:fixed;right:12px;top:calc(56px + var(--safe-t));z-index:90;display:none;flex-direction:column;gap:2px;padding:6px;border-radius:12px;min-width:170px;box-shadow:0 14px 34px rgba(0,0,0,.6);background:rgba(0,0,0,.72);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
@@ -2047,6 +2067,46 @@
   if(right){ right.insertBefore(tb, music||right.firstChild); }
   tb.addEventListener('click',function(e){ e.stopPropagation(); lab.classList.toggle('open'); });
   document.addEventListener('click',function(e){ if(!lab.contains(e.target) && e.target!==tb) lab.classList.remove('open'); });
+=======
+<div id="ndapanel" role="dialog" aria-modal="true" aria-label="Meeting NDA">
+  <div class="nda-card" style="position:relative">
+    <button type="button" class="nda-x" id="ndaClose" aria-label="Close">&times;</button>
+    <h3>Meeting NDA</h3>
+    <p class="p">Our one-page mutual NDA. Fill in the meeting, then let the client scan the code to sign on their phone &mdash; both of you get a signed PDF by email.</p>
+    <div class="nda-f"><label>Purpose of the meeting</label><input id="ndaPurpose" placeholder="e.g. label refresh for the fall drop" maxlength="120"></div>
+    <div class="nda-row" style="margin-bottom:10px">
+      <div class="nda-f" style="flex:1;margin:0"><label>Signing for Sticky Trap</label><input id="ndaFm" placeholder="Your name" maxlength="60"></div>
+      <div class="nda-f" style="flex:1;margin:0"><label>Title</label><input id="ndaFmTitle" placeholder="Owner" maxlength="40"></div>
+    </div>
+    <div class="nda-qr" id="ndaQr"><img alt="Scan to open the NDA" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQgAAAEIAQAAAACLjVdSAAABlUlEQVR4nO1a0Q7CQAijF///l2ugsO3NJwkRb8nCbiRiLQUugvZhnU8O9vf4XTxeZpBFWTQQfq/ddXhYpAwKDQtArt0xkZ4+D+ABAGXU7qxIWz1oTgx4xnzxU+bnSy4YE4sQkMV4MExKTIMhvsNZkZ4WD2MxwUF4XvV6HT+YJv3mEgrPG06L9HR5IC+DgSkg/ip2RkXa6AHXUGYXJnx8Z13/AaeCUGBWGJXc7M229acn7vRl0lTPmgBCj8MibeGHBRNw64Yadg0yG/UUVWUQwhF2tSCDIm3rT+lAUKQQZyStS+sLHQ1hEIaekiCjIu3wYMyxNy8YkFTlnRRpkwfVoEO8uE6GUmwnRdqkp6Yhzld0qIkJQ1EGRdo0v6CGObsmXDWpC/uPI2bkBONL8Igj+/LlVV87FyJHUkMW9ut2n39QwqqtsKLqbqwvTFQQJSabkYGRNvWnqPzgs/FIVKZEero9mKO/Uibn/pGR9njAb1F4s9LoGGRgpE3n66jp5UoXJ8ja+mKlqvm4sr7g/3+Hkb/LGeLxBh77veRU7rR8AAAAAElFTkSuQmCC"></div>
+    <div class="nda-scan">Client scans &rarr; signs on their phone</div>
+    <div class="nda-row">
+      <a class="prim" id="ndaOpen" href="/nda/" target="_blank" rel="noopener">Open &amp; sign on this phone</a>
+      <button type="button" id="ndaCopy">Copy link</button>
+      <a id="ndaText" href="sms:?&body=">Text the link</a>
+    </div>
+  </div>
+</div>
+<script>
+/* ---- Meeting NDA: Connect tab button -> panel with a QR to thestickytrap.app/nda/ (purpose + signer carried in the link) ---- */
+(function(){
+  var panel=document.getElementById('ndapanel'), open=document.getElementById('connect-nda'); if(!panel||!open) return;
+  var P=document.getElementById('ndaPurpose'), F=document.getElementById('ndaFm'), T=document.getElementById('ndaFmTitle'), box=document.getElementById('ndaQr'), A=document.getElementById('ndaOpen'), TX=document.getElementById('ndaText');
+  try{ F.value=localStorage.getItem('st_fm_name')||''; T.value=localStorage.getItem('st_fm_title')||''; }catch(e){}
+  function link(){ var u='https://thestickytrap.app/nda/', q=[]; if(P.value.trim()) q.push('p='+encodeURIComponent(P.value.trim())); if(F.value.trim()) q.push('fm='+encodeURIComponent(F.value.trim())); if(T.value.trim()) q.push('t='+encodeURIComponent(T.value.trim())); return u+(q.length?'?'+q.join('&'):''); }
+  var libP=null;
+  function lib(){ if(window.qrcode) return Promise.resolve(); if(libP) return libP; libP=new Promise(function(res,rej){ var sc=document.createElement('script'); sc.src='https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js'; sc.onload=res; sc.onerror=rej; document.head.appendChild(sc); }); return libP; }
+  var t=null;
+  function draw(){ var u=link(); A.href=u; TX.href='sms:?&body='+encodeURIComponent('Our one-page NDA for today\u2019s meeting \u2014 sign on your phone: '+u);
+    lib().then(function(){ var q=window.qrcode(0,'M'); q.addData(u); q.make(); box.innerHTML=q.createImgTag(4,0); var im=box.querySelector('img'); if(im){ im.alt='Scan to open the NDA'; im.style.width='208px'; im.style.height='208px'; } }).catch(function(){ /* static fallback image stays */ }); }
+  function sched(){ clearTimeout(t); t=setTimeout(draw,250); try{ localStorage.setItem('st_fm_name',F.value); localStorage.setItem('st_fm_title',T.value); }catch(e){} }
+  [P,F,T].forEach(function(i){ i.addEventListener('input',sched); });
+  open.addEventListener('click',function(){ panel.classList.add('on'); draw(); try{window.track&&window.track('nda_open','connect');}catch(e){} });
+  document.getElementById('ndaClose').addEventListener('click',function(){ panel.classList.remove('on'); });
+  panel.addEventListener('click',function(e){ if(e.target===panel) panel.classList.remove('on'); });
+  document.getElementById('ndaCopy').addEventListener('click',function(){ var u=link(); try{ navigator.clipboard.writeText(u); }catch(e){} var b=this; b.textContent='Copied'; setTimeout(function(){ b.textContent='Copy link'; },1400); });
+  window.openNDA=function(){ open.click(); };
+>>>>>>> main
 })();
 </script>
 </body>
