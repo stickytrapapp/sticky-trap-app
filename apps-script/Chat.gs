@@ -563,6 +563,12 @@ function ndaIn_(b) {
 }
 
 /* ---------- editor helpers ---------- */
+// Run this ONCE from the editor (pick it in the function dropdown, click Run) to grant the send-mail scope;
+// the web app then inherits the grant and NDA copies / referral alerts start going out.
+function authorizeMail() {
+  MailApp.sendEmail(SHOP_EMAIL, 'Sticky Trap chat web app: mail authorized', 'The chat web app can now send signed NDA copies and referral alerts. Sent by authorizeMail() from the Apps Script editor.');
+  Logger.log('mail sent to ' + SHOP_EMAIL + ' - the web app can send email now');
+}
 function getConfig() {
   var url = ''; try { url = ScriptApp.getService().getUrl(); } catch (e) {}
   Logger.log('KEY set: ' + !!PROP.getProperty('ANTHROPIC_API_KEY') + '\nMODEL: ' + cfg_('MODEL') + '\nKB_URL: ' + cfg_('KB_URL') +
