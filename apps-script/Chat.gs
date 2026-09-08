@@ -591,7 +591,8 @@ function ordersSheet_() {
 }
 function consolePin_() { return String(PROP.getProperty('CONSOLE_PIN') || '4750'); }
 function pinOk_(p) { return String(p || '') === consolePin_(); }
-function rowObj_(r) { var o = {}; ORDER_COLS.forEach(function (k, i) { o[k] = r[i]; }); return o; }
+function fmtDue_(v) { if (v instanceof Date) return Utilities.formatDate(v, Session.getScriptTimeZone(), 'MMM d'); return String(v == null ? '' : v); }   // Sheets coerces 'Sep 19' to a Date
+function rowObj_(r) { var o = {}; ORDER_COLS.forEach(function (k, i) { o[k] = r[i]; }); o.due = fmtDue_(o.due); return o; }
 function orderCode_(sh) {
   var rows = sh.getDataRange().getValues(), have = {}; for (var i = 1; i < rows.length; i++) have[String(rows[i][0]).toUpperCase()] = 1;
   for (var t = 0; t < 20; t++) { var c = 'ST-' + Date.now().toString(36).toUpperCase().slice(-4) + String.fromCharCode(65 + Math.floor(Math.random() * 26)); if (!have[c]) return c; }
