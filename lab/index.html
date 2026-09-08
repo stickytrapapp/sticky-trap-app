@@ -2038,7 +2038,6 @@
 })();
 </script>
 
-<<<<<<< HEAD
 <style>
   /* ---- THEME LAB (branch theme-lab only): palette switcher ---- */
   #themelab{position:fixed;right:12px;top:calc(56px + var(--safe-t));z-index:90;display:none;flex-direction:column;gap:2px;padding:6px;border-radius:12px;min-width:170px;box-shadow:0 14px 34px rgba(0,0,0,.6);background:rgba(0,0,0,.72);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
@@ -2067,7 +2066,8 @@
   if(right){ right.insertBefore(tb, music||right.firstChild); }
   tb.addEventListener('click',function(e){ e.stopPropagation(); lab.classList.toggle('open'); });
   document.addEventListener('click',function(e){ if(!lab.contains(e.target) && e.target!==tb) lab.classList.remove('open'); });
-=======
+})();
+</script>
 <div id="ndapanel" role="dialog" aria-modal="true" aria-label="Meeting NDA">
   <div class="nda-card" style="position:relative">
     <button type="button" class="nda-x" id="ndaClose" aria-label="Close">&times;</button>
@@ -2106,7 +2106,6 @@
   panel.addEventListener('click',function(e){ if(e.target===panel) panel.classList.remove('on'); });
   document.getElementById('ndaCopy').addEventListener('click',function(){ var u=link(); try{ navigator.clipboard.writeText(u); }catch(e){} var b=this; b.textContent='Copied'; setTimeout(function(){ b.textContent='Copy link'; },1400); });
   window.openNDA=function(){ open.click(); };
->>>>>>> main
 })();
 </script>
 </body>
