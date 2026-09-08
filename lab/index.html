@@ -46,59 +46,65 @@
   html[data-theme=acid]{--mag:#FF2FD2;--pur:#7B3BFF;--cy:#B6FF3B;--gold:#FFD23B;--grad:linear-gradient(100deg,#FF2FD2 0%,#7B3BFF 50%,#B6FF3B 100%);--bg:#07090B;--deep:#030405;--mag-rgb:255,47,210;--pur-rgb:123,59,255;--cy-rgb:182,255,59}
   html[data-theme=acid] #stmenu,html[data-theme=acid] .brandhead,html[data-theme=acid] .menufoot{--mag:#FF2FD2;--pur:#7B3BFF;--cy:#B6FF3B;--gold:#FFD23B;--grad:linear-gradient(100deg,var(--mag) 0%,var(--pur) 52%,var(--cy) 100%)}
   /* Blackout: all-black ground, cyan icons/accents, every word white (owner request 2026-09-08) */
-  html[data-theme=blackout]{--bg:#000;--deep:#000;--ink:#fff;--soft:#fff;--muted:#fff;--line:rgba(255,255,255,.16);--mag:#FF1FA2;--pur:#FF1FA2;--cy:#FF1FA2;--gold:#FF1FA2;--grad:linear-gradient(100deg,#FF1FA2,#FF1FA2);--mag-rgb:255,31,162;--pur-rgb:255,31,162;--cy-rgb:255,31,162}
-  html[data-theme=blackout] #stmenu,html[data-theme=blackout] .brandhead,html[data-theme=blackout] .menufoot{--ink:#000;--panel:#0b0b0b;--panel-2:#141414;--line:#262626;--paper:#fff;--muted:#fff;--mag:#FF1FA2;--pur:#FF1FA2;--cy:#FF1FA2;--gold:#FF1FA2;--grad:linear-gradient(100deg,#FF1FA2,#FF1FA2);--goldg:linear-gradient(135deg,#FF1FA2,#FF1FA2)}
-  html[data-theme=blackout] #stmenu{background:#000}
-  html[data-theme=blackout] .tabs button,html[data-theme=blackout] .tabs button svg,html[data-theme=blackout] .iconb,html[data-theme=blackout] .bell{color:#FF1FA2}
-  html[data-theme=blackout] .tabs button.on{color:#fff}
-  html[data-theme=blackout] .card{background:#0b0b0b;border-color:#262626;box-shadow:none}
+  html[data-theme=blackout]{--acc:#FF1FA2;--acc-rgb:255,31,162}
+  html[data-theme=ice]{--acc:#12C4FF;--acc-rgb:18,196,255}
+  html[data-theme=violet]{--acc:#9D4DFF;--acc-rgb:157,77,255}
+  html[data-theme=ember]{--acc:#FF4D2E;--acc-rgb:255,77,46}
+  html[data-theme=volt]{--acc:#B6FF3B;--acc-rgb:182,255,59}
+  html[data-theme=gold24]{--acc:#EAB84B;--acc-rgb:234,184,75}
+  html[data-mono]{--bg:#000;--deep:#000;--ink:#fff;--soft:#fff;--muted:#fff;--line:rgba(255,255,255,.16);--mag:var(--acc);--pur:var(--acc);--cy:var(--acc);--gold:var(--acc);--grad:linear-gradient(100deg,var(--acc),var(--acc));--mag-rgb:var(--acc-rgb);--pur-rgb:var(--acc-rgb);--cy-rgb:var(--acc-rgb)}
+  html[data-mono] #stmenu,html[data-mono] .brandhead,html[data-mono] .menufoot{--ink:#000;--panel:#0b0b0b;--panel-2:#141414;--line:#262626;--paper:#fff;--muted:#fff;--mag:var(--acc);--pur:var(--acc);--cy:var(--acc);--gold:var(--acc);--grad:linear-gradient(100deg,var(--acc),var(--acc));--goldg:linear-gradient(135deg,var(--acc),var(--acc))}
+  html[data-mono] #stmenu{background:#000}
+  html[data-mono] .tabs button,html[data-mono] .tabs button svg,html[data-mono] .iconb,html[data-mono] .bell{color:var(--acc)}
+  html[data-mono] .tabs button.on{color:#fff}
+  html[data-mono] .card{background:#0b0b0b;border-color:#262626;box-shadow:none}
   /* Blackout: kill every navy/purple tint so the ground reads pure black on OLED (owner: 'appears blue') */
-  html[data-theme=blackout] .app{background:#000}
+  html[data-mono] .app{background:#000}
   /* headings that paint gradient text over several CSS lines (missed by the generated overrides): white, per 'all wording white' */
-  html[data-theme=blackout] #stmenu .sec-head,html[data-theme=blackout] .pv-title,html[data-theme=blackout] .faqview .sec-head,html[data-theme=blackout] .faqview .spec-zone,html[data-theme=blackout] #stmenu .dhead h3,html[data-theme=blackout] #stmenu .dtitle{background:none;-webkit-text-fill-color:#fff;color:#fff}
-  html[data-theme=blackout] #notifpanel,html[data-theme=blackout] .notifpanel,html[data-theme=blackout] #chatfab,html[data-theme=blackout] #chatform,html[data-theme=blackout] .ch-foot,html[data-theme=blackout] #installbar,html[data-theme=blackout] #apptoast{background:#0b0b0b}
-  html[data-theme=blackout] #chatpanel{background:#050505}
-  html[data-theme=blackout] .promostrip{background:#0b0b0b;border-color:rgba(255,31,162,.55)}
-  html[data-theme=blackout] .promostrip .ps-cta{background:#000}
-  html[data-theme=blackout] .tkt-media,html[data-theme=blackout] .tkt-hero{background:#000}
-  html[data-theme=blackout] #stmenu .navchip.active,html[data-theme=blackout] #stmenu .mpbtn.on{background:rgba(255,31,162,.16)}
-  html[data-theme=blackout] #stmenu .navchip.active,html[data-theme=blackout] #stmenu .mpbtn.on,html[data-theme=blackout] #stmenu .qqchip.on{border-color:#FF1FA2}
+  html[data-mono] #stmenu .sec-head,html[data-mono] .pv-title,html[data-mono] .faqview .sec-head,html[data-mono] .faqview .spec-zone,html[data-mono] #stmenu .dhead h3,html[data-mono] #stmenu .dtitle{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] #notifpanel,html[data-mono] .notifpanel,html[data-mono] #chatfab,html[data-mono] #chatform,html[data-mono] .ch-foot,html[data-mono] #installbar,html[data-mono] #apptoast{background:#0b0b0b}
+  html[data-mono] #chatpanel{background:#050505}
+  html[data-mono] .promostrip{background:#0b0b0b;border-color:rgba(var(--acc-rgb),.55)}
+  html[data-mono] .promostrip .ps-cta{background:#000}
+  html[data-mono] .tkt-media,html[data-mono] .tkt-hero{background:#000}
+  html[data-mono] #stmenu .navchip.active,html[data-mono] #stmenu .mpbtn.on{background:rgba(var(--acc-rgb),.16)}
+  html[data-mono] #stmenu .navchip.active,html[data-mono] #stmenu .mpbtn.on,html[data-mono] #stmenu .qqchip.on{border-color:var(--acc)}
   /* Blackout: early-2000s arcade feel -- pixel display type on labels, scanlines, crisp pink edges */
-  html[data-theme=blackout] .brand,html[data-theme=blackout] .tagline,html[data-theme=blackout] .lbl,html[data-theme=blackout] .eyebrow,html[data-theme=blackout] .tabs button,html[data-theme=blackout] .ps-k,html[data-theme=blackout] .sh-t,html[data-theme=blackout] #stmenu .sec-head,html[data-theme=blackout] #stmenu .steplbl,html[data-theme=blackout] #stmenu .qlab,html[data-theme=blackout] .tkt-cta,html[data-theme=blackout] .tkt-count{font-family:"Silkscreen","Press Start 2P",monospace;letter-spacing:.02em;font-style:normal;text-transform:uppercase}
-  html[data-theme=blackout] .tabs button{font-size:8.5px}
-  html[data-theme=blackout] .lbl,html[data-theme=blackout] .eyebrow,html[data-theme=blackout] .ps-k,html[data-theme=blackout] #stmenu .steplbl,html[data-theme=blackout] #stmenu .qlab{font-size:9px}
-  html[data-theme=blackout] #stmenu .sec-head{font-size:15px;text-shadow:0 0 10px rgba(255,31,162,.7)}
-  html[data-theme=blackout] .brand{text-shadow:0 0 12px rgba(255,31,162,.75)}
-  html[data-theme=blackout] .card,html[data-theme=blackout] .tkt-hero,html[data-theme=blackout] #stmenu .acc,html[data-theme=blackout] #stmenu .matbox,html[data-theme=blackout] #stmenu .pricehi,html[data-theme=blackout] #stmenu .legend,html[data-theme=blackout] .promostrip{border-radius:6px;border-color:rgba(255,31,162,.45)}
-  html[data-theme=blackout] body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;background:repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 3px)}
-  html[data-theme=blackout] .wm{background:none;-webkit-text-fill-color:#fff;color:#fff}
-  html[data-theme=blackout] .pm-h{background:none;-webkit-text-fill-color:#fff;color:#fff}
-  html[data-theme=blackout] .ch-title{background:none;-webkit-text-fill-color:#fff;color:#fff}
-  html[data-theme=blackout] #stmenu .qty span{background:none;-webkit-text-fill-color:#fff;color:#fff}
-  html[data-theme=blackout] #stmenu .vhead{background:none;-webkit-text-fill-color:#fff;color:#fff}
-  html[data-theme=blackout] #stmenu .vstep.disc .vd{background:none;-webkit-text-fill-color:#fff;color:#fff}
-  html[data-theme=blackout] #stmenu .vstep.cust .vd{background:none;-webkit-text-fill-color:#fff;color:#fff}
-  html[data-theme=blackout] #stmenu .vdisc{background:none;-webkit-text-fill-color:#fff;color:#fff}
-  html[data-theme=blackout] #stmenu .qdisc{background:none;-webkit-text-fill-color:#fff;color:#fff}
-  html[data-theme=blackout] #stmenu .cutnote b{background:none;-webkit-text-fill-color:#fff;color:#fff}
-  html[data-theme=blackout] #stmenu .ph-brk b{background:none;-webkit-text-fill-color:#fff;color:#fff}
-  html[data-theme=blackout] #stmenu .ptable thead th.holo{background:none;-webkit-text-fill-color:#fff;color:#fff}
-  html[data-theme=blackout] #stmenu .ptable thead th.hbrite{background:none;-webkit-text-fill-color:#fff;color:#fff}
-  html[data-theme=blackout] #stmenu .ptable thead th.gold{background:none;-webkit-text-fill-color:#fff;color:#fff}
-  html[data-theme=blackout] #stmenu .qrow .fin{background:none;-webkit-text-fill-color:#fff;color:#fff}
-  html[data-theme=blackout] #stmenu .sub-row .sv{background:none;-webkit-text-fill-color:#fff;color:#fff}
-  html[data-theme=blackout] .brandhead .dh{background:none;-webkit-text-fill-color:#fff;color:#fff}
-  html[data-theme=blackout] .brandhead .stick-tag{background:none;-webkit-text-fill-color:#fff;color:#fff}
-  html[data-theme=blackout] .brandhead .eyebrow{background:none;-webkit-text-fill-color:#fff;color:#fff}
-  html[data-theme=blackout] .brandhead .contactbar .cl{background:none;-webkit-text-fill-color:#fff;color:#fff}
-  html[data-theme=blackout] .brandhead .denote{background:none;-webkit-text-fill-color:#fff;color:#fff}
-  html[data-theme=blackout] .brandhead .denote-ink{background:none;-webkit-text-fill-color:#fff;color:#fff}
-  html[data-theme=blackout] .brandhead .quote-line{background:none;-webkit-text-fill-color:#fff;color:#fff}
-  html[data-theme=blackout] .brandhead .qr span{background:none;-webkit-text-fill-color:#fff;color:#fff}
-  html[data-theme=blackout] .menufoot .contactbar .cl{background:none;-webkit-text-fill-color:#fff;color:#fff}
-  html[data-theme=blackout] .menufoot .quote-line{background:none;-webkit-text-fill-color:#fff;color:#fff}
-  html[data-theme=blackout] .menufoot .foot .biz span{background:none;-webkit-text-fill-color:#fff;color:#fff}
-  html[data-theme=blackout] .menufoot .qr span{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] .brand,html[data-mono] .tagline,html[data-mono] .lbl,html[data-mono] .eyebrow,html[data-mono] .tabs button,html[data-mono] .ps-k,html[data-mono] .sh-t,html[data-mono] #stmenu .sec-head,html[data-mono] #stmenu .steplbl,html[data-mono] #stmenu .qlab,html[data-mono] .tkt-cta,html[data-mono] .tkt-count{font-family:"Silkscreen","Press Start 2P",monospace;letter-spacing:.02em;font-style:normal;text-transform:uppercase}
+  html[data-mono] .tabs button{font-size:8.5px}
+  html[data-mono] .lbl,html[data-mono] .eyebrow,html[data-mono] .ps-k,html[data-mono] #stmenu .steplbl,html[data-mono] #stmenu .qlab{font-size:9px}
+  html[data-mono] #stmenu .sec-head{font-size:15px;text-shadow:0 0 10px rgba(var(--acc-rgb),.7)}
+  html[data-mono] .brand{text-shadow:0 0 12px rgba(var(--acc-rgb),.75)}
+  html[data-mono] .card,html[data-mono] .tkt-hero,html[data-mono] #stmenu .acc,html[data-mono] #stmenu .matbox,html[data-mono] #stmenu .pricehi,html[data-mono] #stmenu .legend,html[data-mono] .promostrip{border-radius:6px;border-color:rgba(var(--acc-rgb),.45)}
+  html[data-mono] body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;background:repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 3px)}
+  html[data-mono] .wm{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] .pm-h{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] .ch-title{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] #stmenu .qty span{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] #stmenu .vhead{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] #stmenu .vstep.disc .vd{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] #stmenu .vstep.cust .vd{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] #stmenu .vdisc{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] #stmenu .qdisc{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] #stmenu .cutnote b{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] #stmenu .ph-brk b{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] #stmenu .ptable thead th.holo{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] #stmenu .ptable thead th.hbrite{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] #stmenu .ptable thead th.gold{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] #stmenu .qrow .fin{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] #stmenu .sub-row .sv{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] .brandhead .dh{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] .brandhead .stick-tag{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] .brandhead .eyebrow{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] .brandhead .contactbar .cl{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] .brandhead .denote{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] .brandhead .denote-ink{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] .brandhead .quote-line{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] .brandhead .qr span{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] .menufoot .contactbar .cl{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] .menufoot .quote-line{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] .menufoot .foot .biz span{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] .menufoot .qr span{background:none;-webkit-text-fill-color:#fff;color:#fff}
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0;height:100%}
   body{background:var(--bg);color:var(--ink);overflow:hidden;
@@ -351,8 +357,8 @@
   .scopehead .sh-t{font-family:"Newsreader",Georgia,serif;font-weight:700;font-size:20px;color:#e9f1f5}
   .scopehead .sh-b{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#fff;padding:4px 10px;border-radius:999px;white-space:nowrap}
   .sh-b.local{background:linear-gradient(90deg,var(--mag),#c98a0a)}
-  html[data-theme=blackout] .sh-b.local{background:var(--mag)}
-  html[data-theme=blackout] #stmenu .pmrow.gold .pmpr,html[data-theme=blackout] #stmenu .pbuy.gold{-webkit-text-fill-color:#fff;color:#fff}
+  html[data-mono] .sh-b.local{background:var(--mag)}
+  html[data-mono] #stmenu .pmrow.gold .pmpr,html[data-mono] #stmenu .pbuy.gold{-webkit-text-fill-color:#fff;color:#fff}
   .sh-b.natl{background:linear-gradient(90deg,var(--cy),#7a3cf0)}
   .indbtn{display:block;text-align:center;border:1px solid #2b6b78;color:#49ccea;background:rgba(15,168,200,.08);border-radius:12px;padding:12px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit}
   .skel{height:16px;border-radius:8px;background:linear-gradient(90deg,#e7e2f4,#f2eefb,#e7e2f4);background-size:200% 100%;animation:sh 1.3s infinite}
@@ -2040,32 +2046,25 @@
 
 <style>
   /* ---- THEME LAB (branch theme-lab only): palette switcher ---- */
-  #themelab{position:fixed;right:12px;top:calc(56px + var(--safe-t));z-index:90;display:none;flex-direction:column;gap:2px;padding:6px;border-radius:12px;min-width:170px;box-shadow:0 14px 34px rgba(0,0,0,.6);background:rgba(0,0,0,.72);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  #themelab{position:fixed;left:8px;right:8px;bottom:calc(74px + var(--safe-b));z-index:90;display:flex;gap:4px;padding:4px;border-radius:999px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;background:rgba(0,0,0,.72);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
   #themelab button{font:inherit;font-size:11px;font-weight:800;letter-spacing:.04em;padding:6px 10px;border-radius:999px;border:0;background:transparent;color:#cfc6ee;cursor:pointer;display:flex;align-items:center;gap:6px}
   #themelab button i{width:12px;height:12px;border-radius:50%;display:inline-block;border:1px solid rgba(255,255,255,.35)}
   #themelab button.on{background:rgba(255,255,255,.14);color:#fff}
-  #themelab.open{display:flex}
-  #themelab button{justify-content:flex-start;width:100%;text-align:left}
-  #themebtn svg{width:22px;height:22px}
+  #themelab::-webkit-scrollbar{display:none}
+  #themelab button{flex:none;white-space:nowrap}
 </style>
-<div id="themelab" role="group" aria-label="Theme lab"><button type="button" data-t="neon"><i style="background:linear-gradient(100deg,#ff2e88,#8a4dff,#22d3ee)"></i>Neon (current)</button><button type="button" data-t="black"><i style="background:linear-gradient(100deg,#FF1FA2 0%,#8A2BE2 52%,#FF1FA2 100%)"></i>Trap Black</button><button type="button" data-t="gold"><i style="background:linear-gradient(100deg,#F5D98A 0%,#D9A441 48%,#A9761F 100%)"></i>Emboss Gold</button><button type="button" data-t="blackout"><i style="background:#000;border-color:#FF1FA2"></i>Blackout</button><button type="button" data-t="acid"><i style="background:linear-gradient(100deg,#FF2FD2 0%,#7B3BFF 50%,#B6FF3B 100%)"></i>Acid Street</button></div>
+<div id="themelab" role="group" aria-label="Theme lab"><button type="button" data-t="neon"><i style="background:linear-gradient(100deg,#ff2e88,#8a4dff,#22d3ee)"></i>Neon (current)</button><button type="button" data-t="black"><i style="background:linear-gradient(100deg,#FF1FA2 0%,#8A2BE2 52%,#12C4FF 100%)"></i>Trap Black</button><button type="button" data-t="gold"><i style="background:linear-gradient(100deg,#F5D98A 0%,#D9A441 48%,#A9761F 100%)"></i>Emboss Gold</button><button type="button" data-t="acid"><i style="background:linear-gradient(100deg,#FF2FD2 0%,#7B3BFF 50%,#B6FF3B 100%)"></i>Acid Street</button><button type="button" data-t="blackout"><i style="background:#000;border-color:#FF1FA2;box-shadow:inset 0 0 0 3px #FF1FA2"></i>Blackout Pink</button><button type="button" data-t="ice"><i style="background:#000;border-color:#12C4FF;box-shadow:inset 0 0 0 3px #12C4FF"></i>Ice Cyan</button><button type="button" data-t="violet"><i style="background:#000;border-color:#9D4DFF;box-shadow:inset 0 0 0 3px #9D4DFF"></i>Violet</button><button type="button" data-t="ember"><i style="background:#000;border-color:#FF4D2E;box-shadow:inset 0 0 0 3px #FF4D2E"></i>Ember</button><button type="button" data-t="volt"><i style="background:#000;border-color:#B6FF3B;box-shadow:inset 0 0 0 3px #B6FF3B"></i>Volt Lime</button><button type="button" data-t="gold24"><i style="background:#000;border-color:#EAB84B;box-shadow:inset 0 0 0 3px #EAB84B"></i>24K Gold</button></div>
 <script>
 (function(){
-  var THEMES={neon:{bg:"#2b2060"},black:{bg:"#0A0A0F"},gold:{bg:"#0B0906"},acid:{bg:"#07090B"},blackout:{bg:"#000000"}};
-  function apply(t){ if(!THEMES[t]) t='neon'; document.documentElement.setAttribute('data-theme',t);
+  var THEMES={neon:{bg:"#2b2060"},black:{bg:"#0A0A0F"},gold:{bg:"#0B0906"},acid:{bg:"#07090B"},blackout:{bg:"#000000",mono:1},ice:{bg:"#000000",mono:1},violet:{bg:"#000000",mono:1},ember:{bg:"#000000",mono:1},volt:{bg:"#000000",mono:1},gold24:{bg:"#000000",mono:1}};
+  function apply(t){ if(!THEMES[t]) t='neon'; document.documentElement.setAttribute('data-theme',t); if(THEMES[t].mono) document.documentElement.setAttribute('data-mono',''); else document.documentElement.removeAttribute('data-mono');
     var m=document.querySelector('meta[name=theme-color]'); if(m) m.setAttribute('content',THEMES[t].bg);
     document.querySelectorAll('#themelab button').forEach(function(b){ b.classList.toggle('on',b.dataset.t===t); });
     try{ localStorage.setItem('st_theme',t); }catch(e){} }
   var q=(location.search.match(/[?&]theme=([a-z]+)/)||[])[1], saved=null; try{ saved=localStorage.getItem('st_theme'); }catch(e){}
   apply(q||saved||'blackout');   // owner preview: opens on Blackout, switcher available
-  document.querySelectorAll('#themelab button').forEach(function(b){ b.addEventListener('click',function(){ apply(b.dataset.t); lab.classList.remove('open'); }); });
-  // palette icon in the top bar (left of the music note) toggles the list
-  var lab=document.getElementById('themelab'), right=document.querySelector('.tb-right'), music=document.getElementById('musicb');
-  var tb=document.createElement('button'); tb.type='button'; tb.id='themebtn'; tb.className='iconb'; tb.title='Colour scheme'; tb.setAttribute('aria-label','Colour scheme');
-  tb.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 100 18c1.4 0 2-.9 2-2 0-.6-.3-1-.6-1.4-.3-.4-.4-.7-.4-1.1 0-1 .9-1.5 2-1.5h1.5A4.5 4.5 0 0021 10.5C21 6.4 17 3 12 3z"/><circle cx="7.5" cy="10.5" r="1.2"/><circle cx="10.5" cy="6.8" r="1.2"/><circle cx="15.5" cy="6.8" r="1.2"/></svg>';
-  if(right){ right.insertBefore(tb, music||right.firstChild); }
-  tb.addEventListener('click',function(e){ e.stopPropagation(); lab.classList.toggle('open'); });
-  document.addEventListener('click',function(e){ if(!lab.contains(e.target) && e.target!==tb) lab.classList.remove('open'); });
+  document.querySelectorAll('#themelab button').forEach(function(b){ b.addEventListener('click',function(){ apply(b.dataset.t); }); });
+  var lab=document.getElementById('themelab');
 })();
 </script>
 <div id="ndapanel" role="dialog" aria-modal="true" aria-label="Meeting NDA">
