@@ -22,6 +22,10 @@
   html[data-theme=blackout]{--ink:#000;--panel:#0b0b0b;--panel-2:#141414;--line:rgba(255,255,255,.14);--line-2:rgba(255,255,255,.22);--mag:#FF1FA2;--pur:#FF1FA2;--cyan:#FF1FA2;--gold:#FF1FA2;--fg:#fff;--mut:#fff;--mut-2:#ddd;--good:#FF1FA2}
   html[data-theme=blackout] .brk-r.tot b{background:none;-webkit-text-fill-color:#fff;color:#fff}
   html[data-theme=blackout] .hist .hv{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  /* Blackout shards: three colours you can tell apart on black -- hot pink, white, slate (the palette vars would make all three pink) */
+  html[data-theme=blackout] .tile.c0{background:radial-gradient(circle at 35% 30%,#ff7ac9,#FF1FA2);box-shadow:0 0 12px rgba(255,31,162,.5),inset 0 0 8px rgba(0,0,0,.25)}
+  html[data-theme=blackout] .tile.c1{background:radial-gradient(circle at 35% 30%,#ffffff,#d9d6e6);box-shadow:0 0 12px rgba(255,255,255,.35),inset 0 0 8px rgba(0,0,0,.12)}
+  html[data-theme=blackout] .tile.c2{background:radial-gradient(circle at 35% 30%,#8a8aa3,#4a4a5e);box-shadow:0 0 10px rgba(255,255,255,.12),inset 0 0 8px rgba(0,0,0,.35)}
   html[data-theme=blackout] body,html[data-theme=blackout] .phone{background:#000}
   html[data-theme=blackout] .phone{box-shadow:0 0 0 1px rgba(255,31,162,.35)}   // the purple glow around the frame was the last non-black
   html[data-theme=blackout] .balance,html[data-theme=blackout] .rate-card{background:#0b0b0b}
