@@ -2021,10 +2021,13 @@
 
 <style>
   /* ---- THEME LAB (branch theme-lab only): palette switcher ---- */
-  #themelab{position:fixed;left:50%;bottom:calc(74px + var(--safe-b));transform:translateX(-50%);z-index:90;display:flex;gap:4px;padding:4px;border-radius:999px;background:rgba(0,0,0,.72);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  #themelab{position:fixed;right:12px;top:calc(56px + var(--safe-t));z-index:90;display:none;flex-direction:column;gap:2px;padding:6px;border-radius:12px;min-width:170px;box-shadow:0 14px 34px rgba(0,0,0,.6);background:rgba(0,0,0,.72);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
   #themelab button{font:inherit;font-size:11px;font-weight:800;letter-spacing:.04em;padding:6px 10px;border-radius:999px;border:0;background:transparent;color:#cfc6ee;cursor:pointer;display:flex;align-items:center;gap:6px}
   #themelab button i{width:12px;height:12px;border-radius:50%;display:inline-block;border:1px solid rgba(255,255,255,.35)}
   #themelab button.on{background:rgba(255,255,255,.14);color:#fff}
+  #themelab.open{display:flex}
+  #themelab button{justify-content:flex-start;width:100%;text-align:left}
+  #themebtn svg{width:22px;height:22px}
 </style>
 <div id="themelab" role="group" aria-label="Theme lab"><button type="button" data-t="neon"><i style="background:linear-gradient(100deg,#ff2e88,#8a4dff,#22d3ee)"></i>Neon (current)</button><button type="button" data-t="black"><i style="background:linear-gradient(100deg,#FF1FA2 0%,#8A2BE2 52%,#FF1FA2 100%)"></i>Trap Black</button><button type="button" data-t="gold"><i style="background:linear-gradient(100deg,#F5D98A 0%,#D9A441 48%,#A9761F 100%)"></i>Emboss Gold</button><button type="button" data-t="blackout"><i style="background:#000;border-color:#FF1FA2"></i>Blackout</button><button type="button" data-t="acid"><i style="background:linear-gradient(100deg,#FF2FD2 0%,#7B3BFF 50%,#B6FF3B 100%)"></i>Acid Street</button></div>
 <script>
@@ -2036,7 +2039,14 @@
     try{ localStorage.setItem('st_theme',t); }catch(e){} }
   var q=(location.search.match(/[?&]theme=([a-z]+)/)||[])[1], saved=null; try{ saved=localStorage.getItem('st_theme'); }catch(e){}
   apply(q||saved||'blackout');   // owner preview: opens on Blackout, switcher available
-  document.querySelectorAll('#themelab button').forEach(function(b){ b.addEventListener('click',function(){ apply(b.dataset.t); }); });
+  document.querySelectorAll('#themelab button').forEach(function(b){ b.addEventListener('click',function(){ apply(b.dataset.t); lab.classList.remove('open'); }); });
+  // palette icon in the top bar (left of the music note) toggles the list
+  var lab=document.getElementById('themelab'), right=document.querySelector('.tb-right'), music=document.getElementById('musicb');
+  var tb=document.createElement('button'); tb.type='button'; tb.id='themebtn'; tb.className='iconb'; tb.title='Colour scheme'; tb.setAttribute('aria-label','Colour scheme');
+  tb.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 100 18c1.4 0 2-.9 2-2 0-.6-.3-1-.6-1.4-.3-.4-.4-.7-.4-1.1 0-1 .9-1.5 2-1.5h1.5A4.5 4.5 0 0021 10.5C21 6.4 17 3 12 3z"/><circle cx="7.5" cy="10.5" r="1.2"/><circle cx="10.5" cy="6.8" r="1.2"/><circle cx="15.5" cy="6.8" r="1.2"/></svg>';
+  if(right){ right.insertBefore(tb, music||right.firstChild); }
+  tb.addEventListener('click',function(e){ e.stopPropagation(); lab.classList.toggle('open'); });
+  document.addEventListener('click',function(e){ if(!lab.contains(e.target) && e.target!==tb) lab.classList.remove('open'); });
 })();
 </script>
 </body>
