@@ -1934,6 +1934,8 @@
   var b=document.getElementById('musicb'); if(!b) return;
   // Playlist (Shane 2026-09-09): the two Suno takes of 'Tap The Screen' play in full, one after the other, then repeat.
   var TRACKS=['audio/tap-a.mp3','audio/tap-b.mp3'], ti=0, VOL=0.35, a=null, A=[null,null], cur=0, want=false, armed=false, fadeT=null, actx=null, gain=null, posT=0;
+  var MENU_SRC='audio/menu.mp3', M=null, mgain=null, menuOn=false, menuT=null, menuOK=null, xT=null;   // Menu-tab 'thinking' track
+  try{ MENU_SRC=localStorage.getItem('st_menu_track')||MENU_SRC; }catch(e){}
   try{ want=localStorage.getItem('st_music')==='1'; }catch(e){}
   function mk(){ var x=new Audio(); x.loop=false; x.preload='none'; x.setAttribute('playsinline','');
     // iOS ignores element.volume, so every element is routed through one shared GainNode when Web Audio is available
@@ -1952,15 +1954,38 @@
       if(saved && saved.t>3){ var t=saved.t; a.addEventListener('loadedmetadata',function once(){ a.removeEventListener('loadedmetadata',once); try{ if(t<a.duration-5) a.currentTime=t; }catch(e){} }); }   // pick up where it left off
       prime(); }
     return a; }
+
+  // ---- Menu 'thinking' music: settle on the Menu tab for 2.5 s -> crossfade to a calmer loop; leave -> crossfade back ----
+  function menuEl(){ if(M) return M; M=new Audio(); M.loop=true; M.preload='auto'; M.setAttribute('playsinline','');
+    try{ if(actx){ mgain=actx.createGain(); mgain.gain.value=0; mgain.connect(actx.destination); actx.createMediaElementSource(M).connect(mgain); } }catch(e){}
+    if(!mgain) M.volume=0;
+    M.addEventListener('error',function(){ menuOK=false; if(menuOn) leaveMenu(); });
+    M.addEventListener('canplay',function(){ if(menuOK===null) menuOK=true; });
+    M.src=MENU_SRC; return M; }
+  function mVol(v){ if(mgain) mgain.gain.value=v; else if(M) M.volume=v; }
+  function xfade(up,ms){ clearInterval(xT); var t0=Date.now(), g0=getVol(), m0=(mgain?mgain.gain.value:(M?M.volume:0));
+    xT=setInterval(function(){ var k=Math.min(1,(Date.now()-t0)/ms);
+      if(up){ setVol(g0*(1-k)); mVol(m0+(VOL-m0)*k); } else { mVol(m0*(1-k)); setVol(g0+(VOL-g0)*k); }
+      if(k>=1){ clearInterval(xT); if(up){ if(a&&!a.paused) a.pause(); } else if(M&&!M.paused){ M.pause(); } } },50); }
+  function enterMenu(){ if(menuOn||menuOK===false||!want||!a||a.paused) return; var m=menuEl(); if(actx&&actx.state!=='running'){ try{actx.resume();}catch(e){} }
+    var p=m.play(); var go=function(){ menuOn=true; xfade(true,2000); try{window.track&&window.track('music','menu');}catch(e){} };
+    if(p&&p.then) p.then(go).catch(function(){ menuOK=false; }); else go(); }
+  function leaveMenu(){ if(!menuOn) return; menuOn=false; clearInterval(fadeT);
+    if(want&&a){ var p=a.play(); if(p&&p.catch) p.catch(function(){}); } xfade(false,1500); }
+  function onTab(name){ clearTimeout(menuT); if(name==='menu'){ menuT=setTimeout(enterMenu,2500); } else if(menuOn){ leaveMenu(); } }
+  var _go=window.go; if(typeof _go==='function'){ window.go=function(n){ _go(n); onTab(n); }; }
+  window.STMusic={ onTab:onTab, menu:function(){ return {on:menuOn, ok:menuOK, src:MENU_SRC}; } };
   function getVol(){ return gain? gain.gain.value : a.volume; }
   function setVol(v){ if(gain) gain.gain.value=v; else a.volume=v; }
   function ui(on){ b.classList.toggle('on',on); b.setAttribute('aria-pressed',on?'true':'false'); b.setAttribute('aria-label',on?'Music on':'Music off'); }
   function fade(to,ms){ var x=el(); clearInterval(fadeT); var from=getVol(), t0=Date.now();
     fadeT=setInterval(function(){ var k=Math.min(1,(Date.now()-t0)/ms); setVol(from+(to-from)*k); if(k>=1){ clearInterval(fadeT); if(to===0) x.pause(); } },50); }
   function start(){ var x=el(); if(actx&&actx.state!=='running'){ try{actx.resume();}catch(e){} } x.preload='auto'; var p=x.play();
+    var cv=document.querySelector('.view.active'); if(cv&&cv.dataset.view==='menu') onTab('menu');
     if(p&&p.then){ p.then(function(){ fade(VOL,900); ui(true); }).catch(function(){ ui(false); arm(); }); }
     else { fade(VOL,900); ui(true); } }
-  function stop(){ if(a&&!a.paused) fade(0,400); else if(a){ a.pause(); } ui(false); }
+  function stop(){ clearTimeout(menuT); if(menuOn){ menuOn=false; clearInterval(xT); mVol(0); if(M) M.pause(); }
+    if(a&&!a.paused) fade(0,400); else if(a){ a.pause(); } ui(false); }
   function arm(){ if(armed) return; armed=true; try{ var x=el(); x.preload='auto'; x.load(); }catch(e){}
     var once=function(e){ document.removeEventListener('pointerdown',once,true); document.removeEventListener('keydown',once,true); armed=false;
       if(e && e.target && b.contains(e.target)) return;   // the tap IS the music button: let its click handler decide
@@ -1972,7 +1997,9 @@
   // The game has its own music: fade the app track out whenever a link into /game/ is tapped (new tab or same tab),
   // and pick it back up when this tab is visible again. The toggle state (want) is untouched.
   document.addEventListener('click',function(e){ var l=e.target&&e.target.closest&&e.target.closest('a[href]'); if(l&&/\/game\//.test(l.getAttribute('href')||'')&&a&&!a.paused) fade(0,300); },true);
-  document.addEventListener('visibilitychange',function(){ if(document.hidden){ if(a&&!a.paused) fade(0,300); } else if(want&&a&&a.paused){ start(); } });
+  document.addEventListener('visibilitychange',function(){
+    if(document.hidden){ if(menuOn&&M&&!M.paused){ M.pause(); } else if(a&&!a.paused) fade(0,300); }
+    else if(want){ if(menuOn&&M&&M.paused){ if(actx&&actx.state!=='running'){ try{actx.resume();}catch(e){} } M.play().catch(function(){}); } else if(a&&a.paused&&!menuOn){ start(); } } });
 })();
 </script>
 <script>
