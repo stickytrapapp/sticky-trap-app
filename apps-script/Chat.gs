@@ -628,7 +628,7 @@ function orderNew_(b) {
   if (findOrder_(sh, code)) return { ok: false, error: 'code_exists' };
   var stage = STAGES[b.stage] ? b.stage : 'received', now = new Date(), token = Utilities.getUuid().replace(/-/g, '').slice(0, 12);
   var o = { code: code, created: now, name: name, company: company, email: email, phone: String(b.phone || '').slice(0, 40), items: String(b.items || '').slice(0, 400), due: String(b.due || '').slice(0, 40),
-            stage: stage, stage_ts: now, history: JSON.stringify([{ stage: stage, ts: now.getTime(), note: '' }]), token: token, monday_item: '', square_inv: '', nudged_ts: '', notes: '', source: String(b.source || '').slice(0, 20) };
+            stage: stage, stage_ts: now, history: JSON.stringify([{ stage: stage, ts: now.getTime(), note: '' }]), token: token, monday_item: '', square_inv: String(b.square_inv || '').slice(0, 60), nudged_ts: '', notes: '', source: String(b.source || '').slice(0, 20) };
   sh.appendRow(ORDER_COLS.map(function (k) { return o[k]; }));
   var emailed = false; try { emailed = stageMail_(o, stage, ''); } catch (e) {}
   return { ok: true, code: code, token: token, url: trackUrl_(o), emailed: emailed };
@@ -638,6 +638,8 @@ function orderStage_(b) {
   var stage = String(b.stage || ''); if (!STAGES[stage]) return { ok: false, error: 'bad_stage' };
   var sh = ordersSheet_(), f = findOrder_(sh, b.code); if (!f) return { ok: false, error: 'not_found' };
   var o = f.o, now = new Date(), note = String(b.note || '').slice(0, 300), hist = []; try { hist = JSON.parse(o.history || '[]'); } catch (e) {}
+  if (b.square_inv && !o.square_inv) { try { sh.getRange(f.i, ORDER_COLS.indexOf('square_inv') + 1).setValue(String(b.square_inv).slice(0, 60)); } catch (e) {} }
+  if (b.only_forward && STAGE_ORDER.indexOf(stage) <= STAGE_ORDER.indexOf(o.stage)) return { ok: true, code: o.code, stage: o.stage, skipped: true };   // automated sources never move an order backwards
   hist.push({ stage: stage, ts: now.getTime(), note: note });
   sh.getRange(f.i, ORDER_COLS.indexOf('stage') + 1, 1, 3).setValues([[stage, now, JSON.stringify(hist)]]);
   sh.getRange(f.i, ORDER_COLS.indexOf('nudged_ts') + 1).setValue('');
