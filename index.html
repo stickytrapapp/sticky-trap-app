@@ -592,15 +592,15 @@
 #stmenu .cutviz{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;max-width:400px;margin:8px auto 4px}
 #stmenu .cutviz svg{width:100%;height:auto;display:block}
 #stmenu .cutnote{text-align:center;margin:11px 0 0;font-size:13px;color:var(--paper);font-weight:600}
-#stmenu .cutnote b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:800}
+#stmenu .cutnote b{color:var(--mag);font-weight:800}
 #stmenu .secfine{margin:12px 2px 0;font-size:14.5px;color:var(--paper);line-height:1.55}
 #stmenu .secfine b{color:var(--paper);font-weight:800}
 #stmenu .pricehi{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:5px 9px;margin:0 0 12px;padding:8px 10px;border-radius:12px;border:1px solid var(--line);background:linear-gradient(180deg,var(--panel-2),var(--panel));font-size:12px;color:var(--muted)}
 #stmenu .ph-min{font-weight:900;color:var(--paper);flex:none;padding-right:9px;border-right:1px solid var(--line)}
 #stmenu .ph-brk{white-space:nowrap;font-weight:700}
-#stmenu .ph-brk b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:800}
-#stmenu a.ph-custom{text-decoration:none;color:var(--cy)}
-#stmenu a.ph-custom b{background:none;-webkit-text-fill-color:var(--cy);color:var(--cy)}
+#stmenu .ph-brk b{color:var(--mag);font-weight:800}
+#stmenu a.ph-custom{text-decoration:none;color:var(--mag)}
+#stmenu a.ph-custom b{background:none;-webkit-text-fill-color:var(--mag);color:var(--mag)}
 #stmenu .howto{max-width:620px;margin:0 auto 16px;font-size:12.5px;line-height:1.55;color:var(--muted);text-align:center}
 #stmenu .howto b{color:var(--paper);font-weight:700}
 #stmenu /* finish-tier legend (collapsible) */
@@ -1439,6 +1439,7 @@
     if(name==='industry'&&!industryLoaded) loadIndustry();
     if(name==='social'&&!epLoaded) loadEpisodes();
     if(location.hash!=='#'+name) history.replaceState(null,'','#'+name);
+    try{ localStorage.setItem('st_last_tab',name); }catch(e){}   // reopen where they left off
   };
   tabs.forEach(function(b){b.addEventListener('click',function(){go(b.dataset.tab);});});
 
@@ -1786,8 +1787,11 @@
   })();
 
   /* ---- init: open tab from hash ---- */
-  var initial=(location.hash||'').replace('#','');
-  if(['industry','social','menu','specs','connect'].indexOf(initial)>-1) go(initial);
+  // Landing (Shane 2026-09-09): a link with a tab wins; else a live basket opens Menu; else the last tab used; first visit = Menu.
+  var TABS_ALL=['industry','social','menu','specs','connect','play'], initial=(location.hash||'').replace('#','');
+  if(TABS_ALL.indexOf(initial)<0){ var _cart=[]; try{ _cart=JSON.parse(localStorage.getItem('st_cart')||'[]')||[]; }catch(e){} var _last=''; try{ _last=localStorage.getItem('st_last_tab')||''; }catch(e){}
+    initial = _cart.length ? 'menu' : (TABS_ALL.indexOf(_last)>-1 ? _last : 'menu'); }
+  go(initial);
   loadIndustry(); // warm the brief immediately
   loadEpisodes(); // warm the episode list
 
