@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 17;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 19;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -77,7 +77,8 @@ var SYSTEM = [
   "Quote prices exactly as listed (per piece, USD) and name the material and finish tier you're quoting. Apply the volume breaks only as the rules state and show the math when you total an order.",
   "The House facts section (turnaround, hours, and whatever else the shop adds there) is authoritative - answer those directly. If something isn't in the knowledge base - rush jobs, shipping, items or materials not on the menu, design or pre-press cost, orders over 1,000 - don't guess: say it's quoted per project and point them to call/text 734 460 3845, email thestickytrap@gmail.com, or the basket / Start a project quote flow in the app.",
   "Never invent prices, discounts or promises. Don't ask for personal details; when they're ready to order, steer them to the basket or the quote form.",
-  "Never quote or estimate set-up, pre-press, vector or gloss-layer charges. If asked, say pre-press is assessed per design once we see the art and offer the quote form (open_quote_form) or call/text. State the $50 minimum per order only if asked; do not elaborate on mixes or per-item minimums.",
+  "Never quote or estimate set-up, pre-press, vector or gloss-layer charges. If asked, FIRST say in one sentence that pre-press is assessed per design once we see the art, THEN offer the quote form (open_quote_form) or call/text - never open the form without that sentence. State the $50 minimum per order only if asked; do not elaborate on mixes or per-item minimums.",
+  "ORDER STATUS: when they ask where an order is / its status / tracking, use order_status. It needs the order code (like 247-XL, on their invoice and tracker emails) AND the email on the order; if either is missing ask for both in one short question. Never describe an order unless order_status returned it. Report the stage, its message and the due date plainly; offer the Track my order panel (go_to connect) for the full timeline.",
   "Reply in the customer's language. If asked what you are: a Sticky Trap assistant powered by Claude.",
   "",
   "ACTING IN THE APP - you have tools that the app executes for the customer:",
@@ -109,7 +110,9 @@ var TOOLS = [
   { name: 'open_quote_form', strict: true, description: 'Scroll the customer to the quote / art-upload form (name, email, phone, files, deadline) so they can send their order.',
     input_schema: { type: 'object', additionalProperties: false, properties: {}, required: [] } },
   { name: 'go_to', strict: true, description: 'Switch the app to a tab.',
-    input_schema: { type: 'object', additionalProperties: false, properties: { tab: { type: 'string', enum: TABS } }, required: ['tab'] } }
+    input_schema: { type: 'object', additionalProperties: false, properties: { tab: { type: 'string', enum: TABS } }, required: ['tab'] } },
+  { name: 'order_status', strict: true, description: 'Look up where a customer order stands in the shop order tracker. Needs the order code (e.g. 247-XL) and the email address on the order.',
+    input_schema: { type: 'object', additionalProperties: false, properties: { code: { type: 'string' }, email: { type: 'string' } }, required: ['code', 'email'] } }
 ];
 
 /* ---------- HTTP ---------- */
@@ -137,6 +140,7 @@ function doPost(e) {
   if (body.action === 'order_new') { try { return out_(orderNew_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
   if (body.action === 'order_stage') { try { return out_(orderStage_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
   if (body.action === 'approve') { try { return out_(approve_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
+  if (body.action === 'order_delete') { try { return out_(orderDelete_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
 
   var uid = String(body.uid || 'anon').slice(0, 40);
   var msgs = clean_(body.messages);
@@ -312,6 +316,13 @@ function runTool_(use, prices, ctx) {
       if (!tab) return { error: true, result: { error: 'Unknown tab. Tabs: ' + TABS.join(', ') } };
       return { result: { ok: true, tab: tab }, action: { type: 'go_to', tab: tab } };
     }
+    if (use.name === 'order_status') {
+      var t = trackGet_({ o: inp.code, e: inp.email });
+      if (!t.ok) return { error: true, result: { error: 'No order found for code ' + String(inp.code || '').toUpperCase() + ' with that email. Ask them to check the code on their invoice or tracker email and the email address they used.' } };
+      var o = t.order, last = o.history.length ? o.history[o.history.length - 1] : null;
+      return { result: { ok: true, code: o.code, stage: o.label, message: o.message, due: o.due || 'not set yet', items: o.items || '', company: o.company || o.name || '',
+                         last_update: last ? new Date(last.ts).toDateString() + (last.note ? ' - ' + last.note : '') : '', awaiting_client_approval: !!o.can_approve } };
+    }
     return { error: true, result: { error: 'unknown tool ' + use.name } };
   } catch (err) { return { error: true, result: { error: String(err) } }; }
 }
@@ -322,6 +333,7 @@ function ask_(msgs, ctx) {
   var kb = kb_(), prices = kbPrices_(kb);
   var convo = msgs.slice(), actions = [], usage = { input_tokens: 0, output_tokens: 0, cache_read_input_tokens: 0 }, model = cfg_('MODEL');
   var rounds = +cfg_('MAX_TOOL_ROUNDS');
+  var pre = [];   // v19: text the model wrote BEFORE a tool call (e.g. 'pre-press is assessed per design...') used to be dropped; keep it
   for (var i = 0; i < rounds; i++) {
     var data = callClaude_(convo, kb, ctx);
     model = data.model || model;
@@ -330,9 +342,11 @@ function ask_(msgs, ctx) {
     var text = (data.content || []).filter(function (b) { return b.type === 'text'; }).map(function (b) { return b.text; }).join('').trim();
     var uses = (data.content || []).filter(function (b) { return b.type === 'tool_use'; });
     if (data.stop_reason !== 'tool_use' || !uses.length) {
+      text = pre.concat(text ? [text] : []).join(' ');
       if (!text) throw new Error('empty_reply');
       return { reply: text, actions: actions, usage: usage, model: model };
     }
+    if (text) pre.push(text);
     convo.push({ role: 'assistant', content: data.content });   // echo the whole turn back (thinking blocks included)
     var results = uses.map(function (u) {
       var r = runTool_(u, prices, ctx);
@@ -342,7 +356,7 @@ function ask_(msgs, ctx) {
     convo.push({ role: 'user', content: results });
   }
   // ran out of rounds: keep whatever actions succeeded and say so plainly
-  return { reply: actions.length ? 'Done - check your basket for the update.' : FALLBACK, actions: actions, usage: usage, model: model };
+  return { reply: pre.length ? pre.join(' ') : (actions.length ? 'Done - check your basket for the update.' : FALLBACK), actions: actions, usage: usage, model: model };
 }
 
 /* ---------- promos (data/promos.json on the site): featured of the week, double-points rule, dated events ---------- */
@@ -683,20 +697,59 @@ function ordersList_(p) {
   out.sort(function (a, b) { return (a.stage_ts || 0) - (b.stage_ts || 0); });
   return { ok: true, orders: out };
 }
+function notifyTo_() { var extra = String(PROP.getProperty('NUDGE_TO') || '').split(',').map(function (x) { return x.trim(); }).filter(Boolean); return [SHOP_EMAIL].concat(extra).join(','); }   // script property NUDGE_TO = extra addresses (Erin, ...)
 function nudgeStale_() {
   var sh = ordersSheet_(), rows = sh.getDataRange().getValues(), now = Date.now(), stale = [];
   for (var i = 1; i < rows.length; i++) { var o = rowObj_(rows[i]), h = NUDGE_HOURS[o.stage]; if (!h || !o.stage_ts) continue;
     var age = (now - new Date(o.stage_ts).getTime()) / 36e5, last = o.nudged_ts ? (now - new Date(o.nudged_ts).getTime()) / 36e5 : 999;
     if (age > h && last > 24) { stale.push(o.code + ' - ' + (o.company || o.name) + ' - ' + STAGES[o.stage].label + ' for ' + Math.round(age) + ' h' + (o.due ? ' (due ' + o.due + ')' : '')); sh.getRange(i + 1, ORDER_COLS.indexOf('nudged_ts') + 1).setValue(new Date()); } }
   if (!stale.length) return 0;
-  MailApp.sendEmail(SHOP_EMAIL, 'Order tracker: ' + stale.length + ' order' + (stale.length > 1 ? 's' : '') + ' need a push', stale.join('\n') + '\n\nLog the next stage: https://thestickytrap.app/console/');
+  MailApp.sendEmail(notifyTo_(), 'Order tracker: ' + stale.length + ' order' + (stale.length > 1 ? 's' : '') + ' need a push', stale.join('\n') + '\n\nLog the next stage: https://thestickytrap.app/console/');
   return stale.length;
 }
-// Run ONCE from the editor: hourly trigger for the stale-order digest (asks for the trigger scope the first time).
+function orderDelete_(b) {
+  if (!pinOk_(b.pin)) return { ok: false, error: 'bad_pin' };
+  var sh = ordersSheet_(), f = findOrder_(sh, b.code); if (!f) return { ok: false, error: 'not_found' };
+  sh.deleteRow(f.i); return { ok: true, deleted: f.o.code };
+}
+/* ---------- Monday-morning digest: what the app did last week ---------- */
+function weeklyDigest_() {
+  var ss = ss_(), since = Date.now() - 7 * 864e5, tz = Session.getScriptTimeZone();
+  function rowsOf(name) { var sh = ss.getSheetByName(name); return sh ? sh.getDataRange().getValues().slice(1) : []; }
+  function ts(v) { return v instanceof Date ? v.getTime() : (new Date(v).getTime() || 0); }
+  var chats = rowsOf('chats').filter(function (r) { return ts(r[0]) >= since && String(r[1]).indexOf('test-') !== 0; });
+  var qs = chats.map(function (r) { return { q: String(r[2]).slice(0, 110), a: String(r[3]).slice(0, 110), acts: String(r[4]) }; });
+  var adds = qs.filter(function (x) { return x.acts.indexOf('add_to_basket') >= 0; }).length;
+  var quotes = qs.filter(function (x) { return x.acts.indexOf('open_quote_form') >= 0; }).length;
+  var orders = rowsOf('orders').map(rowObj_).filter(function (o) { return String(o.code).indexOf('TEST-') !== 0; });
+  var newOrders = orders.filter(function (o) { return ts(o.created) >= since; });
+  var byStage = {}; orders.forEach(function (o) { if (o.stage !== 'complete') byStage[o.stage] = (byStage[o.stage] || 0) + 1; });
+  var stale = orders.filter(function (o) { var h = NUDGE_HOURS[o.stage]; return h && o.stage_ts && (Date.now() - ts(o.stage_ts)) / 36e5 > h; });
+  var moves = 0; orders.forEach(function (o) { try { JSON.parse(o.history || '[]').forEach(function (h) { if (h.ts >= since) moves++; }); } catch (e) {} });
+  var refs = rowsOf('referrals').filter(function (r) { return ts(r[0]) >= since && String(r[2]).indexOf('test-') !== 0; }).length;
+  var ndas = rowsOf('ndas').filter(function (r) { return ts(r[0]) >= since && String(r[2]).indexOf('Test Farms') !== 0; }).length;
+  var players = {}; rowsOf('scores').forEach(function (r) { if (ts(r[0]) >= since && String(r[1]).indexOf('test-') !== 0) players[String(r[1])] = 1; });
+  var lines = [];
+  lines.push('THE STICKY TRAP APP - week ending ' + Utilities.formatDate(new Date(), tz, 'MMM d'));
+  lines.push('');
+  lines.push('ORDERS: ' + newOrders.length + ' new, ' + moves + ' stage change' + (moves === 1 ? '' : 's') + '. Open now: ' + (Object.keys(byStage).map(function (k) { return byStage[k] + ' ' + (STAGES[k] || {}).label; }).join(', ') || 'none') + '.');
+  if (stale.length) lines.push('  Needs a push: ' + stale.map(function (o) { return o.code + ' (' + (o.company || o.name) + ', ' + (STAGES[o.stage] || {}).label + ')'; }).join('; '));
+  lines.push('CHAT: ' + chats.length + ' question' + (chats.length === 1 ? '' : 's') + ' asked, ' + adds + ' basket add' + (adds === 1 ? '' : 's') + ' by the bot, ' + quotes + ' sent to the quote form.');
+  lines.push('GAME: ' + Object.keys(players).length + ' player' + (Object.keys(players).length === 1 ? '' : 's') + ' posted scores. Referrals: ' + refs + '. NDAs signed: ' + ndas + '.');
+  lines.push('');
+  if (qs.length) { lines.push('WHAT PEOPLE ASKED THE BOT (newest first) - anything it fumbled belongs in chat-facts.txt:'); qs.slice(-30).reverse().forEach(function (x) { lines.push('  Q: ' + x.q); lines.push('     A: ' + x.a); }); }
+  else lines.push('No chat questions this week.');
+  lines.push('');
+  lines.push('Console: https://thestickytrap.app/console/  -  Sheet: ' + ss.getUrl());
+  MailApp.sendEmail(notifyTo_(), 'Sticky Trap app - week in review', lines.join('\n'), { name: 'The Sticky Trap app' });
+  return lines.length;
+}
+// Run ONCE from the editor: hourly stale-order nudge + Monday 7 am digest.
 function installNudges() {
-  ScriptApp.getProjectTriggers().forEach(function (t) { if (t.getHandlerFunction() === 'nudgeStale_') ScriptApp.deleteTrigger(t); });
+  ScriptApp.getProjectTriggers().forEach(function (t) { var f = t.getHandlerFunction(); if (f === 'nudgeStale_' || f === 'weeklyDigest_') ScriptApp.deleteTrigger(t); });
   ScriptApp.newTrigger('nudgeStale_').timeBased().everyHours(1).create();
-  Logger.log('hourly nudgeStale_ trigger installed');
+  ScriptApp.newTrigger('weeklyDigest_').timeBased().onWeekDay(ScriptApp.WeekDay.MONDAY).atHour(7).create();
+  Logger.log('installed: hourly nudgeStale_ + Monday 7am weeklyDigest_');
 }
 
 /* ---------- editor helpers ---------- */
