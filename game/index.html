@@ -1328,13 +1328,16 @@
 </script>
 
 <script>
-/* ---- Game music: a generated arcade loop (Web Audio, no files). OFF by default, remembered (tp_music),
-        suspends when the tab is hidden. Different track from the app on purpose. ---- */
+/* ---- Game music: Shane's four Suno tracks as a playlist (play out, next, repeat), routed through Web Audio so the
+        time-up 'rest' mode can dull + lower it; the coded arcade loop is the fallback if a track fails. OFF by default,
+        remembered (tp_music), pauses when the tab is hidden. ---- */
 (function(){
   var b=document.getElementById('musicb'); if(!b) return;
   var AC=window.AudioContext||window.webkitAudioContext; if(!AC){ b.style.display='none'; return; }
   var BPM=132, STEP=60/BPM/4, LOOK=0.12, TICK=25;
   var ctx=null, master=null, lp=null, timer=null, step=0, nextT=0, want=false, mode='play', sfxG=null;
+  var TRACKS=['audio/g1.mp3','audio/g2.mp3','audio/g3.mp3','audio/g4.mp3'], ti=0, mus=null, running=false, synthOnly=false;
+  var LVL={play:0.55,rest:0.28}, LPF={play:16000,rest:1200};
   // iPhone: Web Audio alone obeys the ring/silent switch, so it is silent on a muted phone. A looping (silent) <audio>
   // element started on the same tap moves the page onto the media channel and the synth comes through.
   var SIL='data:audio/wav;base64,UklGRoQJAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YWAJAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIA=', sil=null;
@@ -1370,9 +1373,16 @@
   function sched(){ while(nextT<ctx.currentTime+LOOK){ play(step,nextT); step=(step+1)%64; nextT+=STEP*(mode==='rest'?2:1); } }
   function boot(){ if(ctx) return; ctx=new AC(); lp=ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=5200;
     master=ctx.createGain(); master.gain.value=0.0001; master.connect(lp); lp.connect(ctx.destination);
-    sfxG=ctx.createGain(); sfxG.gain.value=0.5; sfxG.connect(ctx.destination); }
+    sfxG=ctx.createGain(); sfxG.gain.value=0.5; sfxG.connect(ctx.destination);
+    try{ mus=new Audio(); mus.preload='none'; mus.setAttribute('playsinline',''); mus.crossOrigin='anonymous';
+      var msrc=ctx.createMediaElementSource(mus); msrc.connect(master);
+      mus.addEventListener('ended',function(){ ti=(ti+1)%TRACKS.length; mus.src=TRACKS[ti]; var p=mus.play(); if(p&&p.catch) p.catch(function(){}); });   // next track, then back to the first
+      mus.addEventListener('error',function(){ if(!synthOnly){ synthOnly=true; if(running){ step=0; nextT=ctx.currentTime+0.05; clearInterval(timer); timer=setInterval(sched,TICK); } } });   // file missing -> coded loop
+    }catch(e){ mus=null; synthOnly=true; } }
+  function level(){ return synthOnly ? (mode==='rest'?0.16:0.22) : LVL[mode]; }
   function setMode(m){ mode=(m==='rest')?'rest':'play'; if(!lp) return; var now=ctx.currentTime;
-    lp.frequency.cancelScheduledValues(now); lp.frequency.setValueAtTime(lp.frequency.value,now); lp.frequency.linearRampToValueAtTime(mode==='rest'?1400:5200, now+0.6); }
+    lp.frequency.cancelScheduledValues(now); lp.frequency.setValueAtTime(lp.frequency.value,now); lp.frequency.linearRampToValueAtTime(synthOnly?(mode==='rest'?1400:5200):LPF[mode], now+0.6);
+    if(running){ master.gain.cancelScheduledValues(now); master.gain.setValueAtTime(Math.max(0.0001,master.gain.value),now); master.gain.exponentialRampToValueAtTime(level(), now+0.6); } }
   /* one-shot sound effects (play even with music off): 'go' at the start, 'tick' at 3-2-1, 'over' when time's up */
   function sfx(kind){ boot(); if(kind==='go') unlock(); var run=function(){ var t=ctx.currentTime+0.02;
       if(kind==='tick'){ osc('square',880,t,0.07,0.25,sfxG); }
@@ -1381,16 +1391,18 @@
         var o=ctx.createOscillator(), g=ctx.createGain(); o.type='square'; o.frequency.setValueAtTime(110,t+0.64); o.frequency.exponentialRampToValueAtTime(55,t+1.1);
         g.gain.setValueAtTime(0.35,t+0.64); g.gain.exponentialRampToValueAtTime(0.0001,t+1.15); o.connect(g); g.connect(sfxG); o.start(t+0.64); o.stop(t+1.2); } };
     if(ctx.state!=='running'){ ctx.resume().then(run).catch(function(){}); } else run(); }
-  window.TPM={ sfx:sfx, mode:setMode };
+  window.TPM={ sfx:sfx, mode:setMode, state:function(){ return { running:running, track:ti, src:mus?mus.src:'', paused:mus?mus.paused:null, synthOnly:synthOnly }; } };
   function ui(on){ b.classList.toggle('on',on); b.setAttribute('aria-pressed',on?'true':'false'); b.setAttribute('aria-label',on?'Music on':'Music off'); }
-  function start(){ boot(); unlock(); var go=function(){ step=0; nextT=ctx.currentTime+0.05; clearInterval(timer); timer=setInterval(sched,TICK);
-      master.gain.cancelScheduledValues(ctx.currentTime); master.gain.setValueAtTime(0.0001,ctx.currentTime); master.gain.exponentialRampToValueAtTime(0.22,ctx.currentTime+0.8); ui(true); };
+  function start(){ boot(); var go=function(){ running=true;
+      if(mus&&!synthOnly){ if(!mus.src||mus.src==='') mus.src=TRACKS[ti]; lp.frequency.value=LPF[mode]; var p=mus.play(); if(p&&p.catch) p.catch(function(){}); }
+      else { unlock(); step=0; nextT=ctx.currentTime+0.05; clearInterval(timer); timer=setInterval(sched,TICK); }
+      master.gain.cancelScheduledValues(ctx.currentTime); master.gain.setValueAtTime(0.0001,ctx.currentTime); master.gain.exponentialRampToValueAtTime(level(),ctx.currentTime+0.8); ui(true); };
     if(ctx.state!=='running'){ ctx.resume().then(go).catch(function(){ ui(false); }); } else go(); }   // covers iOS 'interrupted' too
-  function stop(){ if(!ctx) { ui(false); return; } clearInterval(timer); timer=null;
-    master.gain.cancelScheduledValues(ctx.currentTime); master.gain.setValueAtTime(master.gain.value,ctx.currentTime); master.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+0.35);
-    setTimeout(function(){ if(!timer&&ctx&&ctx.state==='running') ctx.suspend(); },450); ui(false); }
-  b.addEventListener('click',function(){ want=!timer; try{localStorage.setItem('tp_music',want?'1':'0');}catch(e){} if(want) start(); else stop(); });   // toggle the REAL state (loop running or not)
-  document.addEventListener('visibilitychange',function(){ if(!ctx) return; if(document.hidden){ if(timer){ clearInterval(timer); timer=null; ctx.suspend(); } } else if(want){ start(); } });
+  function stop(){ if(!ctx) { ui(false); return; } clearInterval(timer); timer=null; running=false;
+    master.gain.cancelScheduledValues(ctx.currentTime); master.gain.setValueAtTime(Math.max(0.0001,master.gain.value),ctx.currentTime); master.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+0.35);
+    setTimeout(function(){ if(!running){ if(mus) mus.pause(); if(ctx&&ctx.state==='running') ctx.suspend(); } },450); ui(false); }
+  b.addEventListener('click',function(){ want=!running; try{localStorage.setItem('tp_music',want?'1':'0');}catch(e){} if(want) start(); else stop(); });   // toggle the REAL state (music running or not)
+  document.addEventListener('visibilitychange',function(){ if(!ctx) return; if(document.hidden){ if(running){ clearInterval(timer); timer=null; running=false; if(mus) mus.pause(); ctx.suspend(); } } else if(want&&!running){ start(); } });
   ui(want);   // show the remembered state; the loop itself waits for the first tap
   if(want){ var once=function(e){ document.removeEventListener('pointerdown',once,true); if(e&&e.target&&b.contains(e.target)) return; if(want) start(); }; document.addEventListener('pointerdown',once,true); }
 })();
