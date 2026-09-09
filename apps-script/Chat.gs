@@ -45,6 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
+var CODE_VERSION = 16;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -119,7 +120,7 @@ function doGet(e) {
   if (p.refresh) CACHE.remove('kb');   // ping with refresh=1 -> re-fetch the KB now instead of waiting out the 20-min cache
   if (p.ping) {
     var kb = '', n = 0; try { kb = kb_(); n = kbPrices_(kb).length; } catch (err) { kb = ''; }
-    return out_({ ok: true, key: !!PROP.getProperty('ANTHROPIC_API_KEY'), model: cfg_('MODEL'), kb: kb.length, prices: n, kb_url: cfg_('KB_URL') });
+    return out_({ ok: true, version: CODE_VERSION, key: !!PROP.getProperty('ANTHROPIC_API_KEY'), model: cfg_('MODEL'), kb: kb.length, prices: n, kb_url: cfg_('KB_URL') });
   }
   return out_({ ok: true, hint: 'POST {uid, tab, basket, messages:[{role,content}]}' });
 }
