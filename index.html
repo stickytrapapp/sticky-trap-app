@@ -1661,10 +1661,7 @@
           phone:document.getElementById('qf-phone').value||'', details:(deadline?('Deadline: '+deadline+(details?' — ':'')):'')+details, deadline:deadline, basket:basket, files:pf };
         return fetch(API,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
       }).then(function(){
-        // order tracker: create the record on the chat backend and show the client their link
-        try{ var items=String(basket||'').replace(/\s+/g,' ').slice(0,380);   // basket is already the summary text
-          fetch(CHAT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'order_new',name:document.getElementById('qf-name').value||'',email:email,phone:document.getElementById('qf-phone').value||'',items:items,due:deadline||'',source:'app'})})
-            .then(function(r){return r.json();}).then(function(j){ if(j&&j.ok&&j.url){ var st=document.getElementById('qf-status'); if(st) st.innerHTML+=' <a href="'+j.url+'" target="_blank" rel="noopener" style="color:var(--cy);font-weight:800">Track order '+j.code+' →</a>'; } }).catch(function(){}); }catch(e){}
+        // order tracker starts when the Square invoice goes out (Shane 2026-09-09), not here.
         form.reset(); files=[]; render();
         setStatus('✓ Sent! We\'ll get back to you with your quote — no charge until you approve.','ok');
         if(window.track){try{window.track('order_send',(basket&&basket.length?basket.length+' items':'no-basket')+(files.length?(' +'+files.length+' files'):''));}catch(e){}}
