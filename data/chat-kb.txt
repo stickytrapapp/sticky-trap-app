@@ -1,4 +1,4 @@
-THE STICKY TRAP -- CHAT KNOWLEDGE BASE (auto-generated 2026-09-08 from the live app by Price Engine/make_chat_kb.py; do not hand-edit -- house facts live in Price Engine/chat-facts.txt)
+THE STICKY TRAP -- CHAT KNOWLEDGE BASE (auto-generated 2026-09-09 from the live app by Price Engine/make_chat_kb.py; do not hand-edit -- house facts live in Price Engine/chat-facts.txt)
 
 == About The Sticky Trap ==
 The Sticky Trap is a design house and in-house print shop in Ann Arbor, Michigan: branding, custom art, stickers, labels, promotionals and merch. Motto: "Let's Stick Together."
