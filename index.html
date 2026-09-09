@@ -412,6 +412,7 @@
   <header class="topbar">
     <div class="brandwrap"><span class="wm">STICKYTR<span class="cur">_</span></span><span class="wtag">Branding · Print · Culture</span></div>
     <div class="tb-right">
+      <button class="iconb" id="trackb" aria-label="Track my order" title="Track my order"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg></button>
       <button class="iconb" id="musicb" aria-label="Music off" aria-pressed="false" title="Music"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></button>
       <button class="iconb" id="shareb" aria-label="Share the app"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.3 10.7l7.4-4.4M8.3 13.3l7.4 4.4"/></svg></button>
       <button class="bell" id="bell" aria-label="Notifications"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 9a6 6 0 0112 0c0 5 2 6 2 6H4s2-1 2-6z"/><path d="M10 20a2 2 0 004 0"/></svg><i class="ndot" id="bell-dot" hidden></i></button>
@@ -2033,12 +2034,17 @@
 </div>
 <script>
 (function(){
-  var panel=document.getElementById('trackpanel'), open=document.getElementById('connect-track'); if(!panel||!open) return;
+  var panel=document.getElementById('trackpanel'), open=document.getElementById('connect-track'), icon=document.getElementById('trackb'); if(!panel||!open) return;
   var C=document.getElementById('trkCode'), E=document.getElementById('trkEmail'), G=document.getElementById('trkGo');
-  try{ E.value=localStorage.getItem('st_qf_email')||''; }catch(e){}
-  function upd(){ G.href='/track/?o='+encodeURIComponent(C.value.trim().toUpperCase())+'&e='+encodeURIComponent(E.value.trim()); }
+  try{ E.value=localStorage.getItem('st_trk_email')||localStorage.getItem('st_qf_email')||''; C.value=localStorage.getItem('st_trk_code')||''; }catch(e){}
+  // arriving from a tracker email link (?o=CODE&e=EMAIL on the app) remembers the order too
+  try{ var qm=location.search.match(/[?&]o=([^&]+)/), em=location.search.match(/[?&]e=([^&]+)/); if(qm){ C.value=decodeURIComponent(qm[1]).toUpperCase(); if(em) E.value=decodeURIComponent(em[1]); } }catch(e){}
+  function upd(){ G.href='/track/?o='+encodeURIComponent(C.value.trim().toUpperCase())+'&e='+encodeURIComponent(E.value.trim()); G.textContent= C.value.trim()? 'Show order '+C.value.trim().toUpperCase() : 'Show my order';
+    try{ localStorage.setItem('st_trk_code',C.value.trim().toUpperCase()); localStorage.setItem('st_trk_email',E.value.trim()); }catch(e){} }
   [C,E].forEach(function(i){ i.addEventListener('input',upd); }); upd();
-  open.addEventListener('click',function(){ panel.classList.add('on'); panel.style.display='flex'; try{window.track&&window.track('track_open','connect');}catch(e){} });
+  function show(from){ panel.classList.add('on'); panel.style.display='flex'; try{window.track&&window.track('track_open',from);}catch(e){} }
+  open.addEventListener('click',function(){ show('connect'); });
+  if(icon) icon.addEventListener('click',function(){ show('topbar'); });
   document.getElementById('trackClose').addEventListener('click',function(){ panel.style.display='none'; });
   panel.addEventListener('click',function(e){ if(e.target===panel) panel.style.display='none'; });
 })();
