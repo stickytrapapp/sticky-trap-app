@@ -1845,7 +1845,7 @@
   if(!fab||!panel) return;
   var HELLO="Hey! I'm the Sticky Trap assistant. Ask me about pricing, materials, finishes, or how to order.";
   var OFFLINE="Chat is warming up. Call or text 734 460 3845, email thestickytrap@gmail.com, or tap Start a project in the Connect tab and we'll get right back to you.";
-  var STARTERS=['What does a 3" slap cost?','Add 100 3" slaps, holo Pro','How do I place an order?','Do I need print-ready art?'];
+  var STARTERS=['What does a 3" slap cost?','Add 100 3" slaps, holo Pro',"Where's my order?",'How do I place an order?','Do I need print-ready art?'];
   var MSGS=[]; try{ MSGS=JSON.parse(sessionStorage.getItem('st_chat')||'[]'); if(!Array.isArray(MSGS)) MSGS=[]; }catch(e){ MSGS=[]; }
   var busy=false, hideT=null;
 
