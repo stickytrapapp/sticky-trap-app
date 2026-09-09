@@ -80,6 +80,7 @@
   var HOT={proof_sent:'Proof sent',printing:'Printing',ready:'Ready',shipped:'Shipped',complete:'Complete'};
   var NUDGE={proof_sent:24,printing:72};
   var $=function(id){return document.getElementById(id);}; var PIN='';
+  var ONLY=(location.search.match(/[?&]o=([^&]*)/)||[])[1]; ONLY=ONLY?decodeURIComponent(ONLY).toUpperCase():'';
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
   function toast(m){ var t=$('toast'); t.textContent=m; t.classList.add('on'); clearTimeout(toast.t); toast.t=setTimeout(function(){t.classList.remove('on');},1800); }
   function post(body){ body.pin=PIN; return fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)}).then(function(r){return r.json();}); }
@@ -95,7 +96,8 @@
     $('list').innerHTML='<div class="sub">Loading…</div>';
     fetch(API+'?action=orders&pin='+encodeURIComponent(PIN)+'&_='+Date.now()).then(function(r){return r.json();}).then(function(j){
       if(!j||!j.ok){ if(j&&j.error==='bad_pin'){ try{localStorage.removeItem('st_console_pin');}catch(e){} $('gate').classList.remove('hidden'); $('main').classList.add('hidden'); toast('Wrong PIN'); return; } $('list').innerHTML='<div class="sub">Could not load orders.</div>'; return; }
-      $('listHead').textContent='Open orders · '+j.orders.length;
+      if(ONLY){ j.orders=j.orders.filter(function(o){ return String(o.code).toUpperCase()===ONLY; }); }
+      $('listHead').innerHTML= ONLY ? ('Order '+esc(ONLY)+' · <a href="/console/" style="color:var(--cy);font-weight:800;text-decoration:none">all orders</a>') : ('Open orders · '+j.orders.length);
       if(!j.orders.length){ $('list').innerHTML='<div class="card sub">No open orders. Add one above, or they arrive from the app\'s quote form.</div>'; return; }
       $('list').innerHTML=j.orders.map(function(o){
         var hrs=(Date.now()-new Date(o.stage_ts).getTime())/36e5, stale=NUDGE[o.stage]&&hrs>NUDGE[o.stage];
@@ -103,11 +105,12 @@
         var more='<select data-c="'+esc(o.code)+'" class="stsel"><option value="">Other stage…</option>'+STAGES.map(function(s){return '<option value="'+s[0]+'">'+s[1]+'</option>';}).join('')+'</select>';
         return '<div class="card o'+(stale?' stale':'')+'" data-code="'+esc(o.code)+'"><div class="top"><div><b>'+esc(o.code)+'</b> <span class="who">'+esc(o.company||o.name||'')+(o.due?' · due '+esc(o.due):'')+'</span></div><span class="badge'+(stale?' stale':'')+'">'+esc(label(o.stage))+'</span></div>'+
           '<div class="items">'+esc(o.items||'')+'</div><div class="age">'+esc(o.email||'no email on file')+' · in this stage '+age(o.stage_ts)+(stale?' · OVERDUE':'')+'</div>'+
-          '<div class="stages">'+hot+'</div><div class="more">'+more+'<input class="stnote" data-c="'+esc(o.code)+'" placeholder="Note to client (optional)"></div></div>';
+          '<div class="stages">'+hot+'</div><div class="more">'+more+'<input class="stnote" data-c="'+esc(o.code)+'" placeholder="Note to client (optional)"></div>'+
+          '<div class="more"><a class="btn ghost" style="flex:1;text-align:center;text-decoration:none;font-size:12.5px" href="/track/?o='+encodeURIComponent(o.code)+'&e='+encodeURIComponent(o.email||'')+'" target="_blank" rel="noopener">Client view ↗</a>'+(ONLY?'':'<a class="btn ghost" style="flex:1;text-align:center;text-decoration:none;font-size:12.5px" href="/console/?o='+encodeURIComponent(o.code)+'">Just this order</a>')+'</div></div>';
       }).join('');
       $('list').querySelectorAll('.stages button').forEach(function(b){ b.addEventListener('click',function(){ setStage(b.dataset.c,b.dataset.s,b); }); });
       $('list').querySelectorAll('.stsel').forEach(function(s){ s.addEventListener('change',function(){ if(s.value) setStage(s.dataset.c,s.value,s); }); });
-    }).catch(function(){ $('list').innerHTML='<div class="sub">Could not reach the backend.</div>'; });
+    }).catch(function(){ if(!load._retried){ load._retried=true; setTimeout(load,2500); return; } load._retried=false; $('list').innerHTML='<div class="sub">Could not reach the backend - tap Refresh.</div>'; });
   }
   function setStage(code,stage,el){ var card=el.closest('.card'), note=(card.querySelector('.stnote')||{}).value||''; el.disabled=true;
     post({action:'order_stage',code:code,stage:stage,note:note}).then(function(j){ if(j&&j.ok){ toast(code+' → '+label(stage)+(j.emailed?' · client emailed':'')); load(); } else { el.disabled=false; toast('Failed: '+((j&&j.error)||'')); } }).catch(function(){ el.disabled=false; toast('Network error'); }); }
