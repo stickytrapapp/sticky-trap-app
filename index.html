@@ -1933,31 +1933,41 @@
 (function(){
   var b=document.getElementById('musicb'); if(!b) return;
   // Playlist (Shane 2026-09-09): the two Suno takes of 'Tap The Screen' play in full, one after the other, then repeat.
-  var TRACKS=['audio/tap-a.mp3','audio/tap-b.mp3'], ti=0, SRC=TRACKS[0], VOL=0.35, a=null, want=false, armed=false, fadeT=null, actx=null, gain=null;
+  var TRACKS=['audio/tap-a.mp3','audio/tap-b.mp3'], ti=0, VOL=0.35, a=null, A=[null,null], cur=0, want=false, armed=false, fadeT=null, actx=null, gain=null, posT=0;
   try{ want=localStorage.getItem('st_music')==='1'; }catch(e){}
-  function el(){ if(!a){ a=new Audio(SRC); a.loop=false; a.preload='none';
-      a.addEventListener('ended',function(){ ti=(ti+1)%TRACKS.length; a.src=TRACKS[ti]; var p=a.play(); if(p&&p.catch) p.catch(function(){}); });   // next take, then back to the first
-      // iOS ignores element.volume, so route through a GainNode when Web Audio is available
-      try{ var AC=window.AudioContext||window.webkitAudioContext; if(AC){ actx=new AC(); var srcN=actx.createMediaElementSource(a); gain=actx.createGain(); gain.gain.value=0; srcN.connect(gain); gain.connect(actx.destination); } }catch(e){ actx=null; gain=null; }
-      if(!gain) a.volume=0; }
+  function mk(){ var x=new Audio(); x.loop=false; x.preload='none'; x.setAttribute('playsinline','');
+    // iOS ignores element.volume, so every element is routed through one shared GainNode when Web Audio is available
+    try{ var AC=window.AudioContext||window.webkitAudioContext; if(AC){ if(!actx){ actx=new AC(); gain=actx.createGain(); gain.gain.value=0; gain.connect(actx.destination); } actx.createMediaElementSource(x).connect(gain); } }catch(e){}
+    if(!gain) x.volume=0;
+    x.addEventListener('ended',function(){ if(x!==a) return; ti=(ti+1)%TRACKS.length; cur=1-cur; a=A[cur];   // the other element already holds the next take, buffered
+      if(a.src!==abs(TRACKS[ti])) a.src=TRACKS[ti]; var p=a.play(); if(p&&p.catch) p.catch(function(){}); prime(); savePos(true); });
+    x.addEventListener('timeupdate',function(){ if(x===a) savePos(false); });
+    return x; }
+  function abs(u){ var l=document.createElement('a'); l.href=u; return l.href; }
+  function prime(){ var n=A[1-cur], nxt=TRACKS[(ti+1)%TRACKS.length]; if(!n) return; if(n.src!==abs(nxt)) n.src=nxt; n.preload='auto'; try{ n.load(); }catch(e){} }   // buffer the next take while this one plays
+  function savePos(force){ var now=Date.now(); if(!force && now-posT<5000) return; posT=now; try{ localStorage.setItem('st_music_pos', JSON.stringify({ti:ti, t:Math.floor(a.currentTime||0)})); }catch(e){} }
+  function el(){ if(!a){ A[0]=mk(); A[1]=mk(); var saved=null; try{ saved=JSON.parse(localStorage.getItem('st_music_pos')||'null'); }catch(e){}
+      if(saved && saved.ti>=0 && saved.ti<TRACKS.length){ ti=saved.ti; }
+      cur=0; a=A[0]; a.src=TRACKS[ti];
+      if(saved && saved.t>3){ var t=saved.t; a.addEventListener('loadedmetadata',function once(){ a.removeEventListener('loadedmetadata',once); try{ if(t<a.duration-5) a.currentTime=t; }catch(e){} }); }   // pick up where it left off
+      prime(); }
     return a; }
   function getVol(){ return gain? gain.gain.value : a.volume; }
   function setVol(v){ if(gain) gain.gain.value=v; else a.volume=v; }
   function ui(on){ b.classList.toggle('on',on); b.setAttribute('aria-pressed',on?'true':'false'); b.setAttribute('aria-label',on?'Music on':'Music off'); }
   function fade(to,ms){ var x=el(); clearInterval(fadeT); var from=getVol(), t0=Date.now();
     fadeT=setInterval(function(){ var k=Math.min(1,(Date.now()-t0)/ms); setVol(from+(to-from)*k); if(k>=1){ clearInterval(fadeT); if(to===0) x.pause(); } },50); }
-  function start(){ var x=el(); if(actx&&actx.state==='suspended'){ try{actx.resume();}catch(e){} } var p=x.play();
+  function start(){ var x=el(); if(actx&&actx.state!=='running'){ try{actx.resume();}catch(e){} } x.preload='auto'; var p=x.play();
     if(p&&p.then){ p.then(function(){ fade(VOL,900); ui(true); }).catch(function(){ ui(false); arm(); }); }
     else { fade(VOL,900); ui(true); } }
   function stop(){ if(a&&!a.paused) fade(0,400); else if(a){ a.pause(); } ui(false); }
-  function arm(){ if(armed) return; armed=true;
+  function arm(){ if(armed) return; armed=true; try{ var x=el(); x.preload='auto'; x.load(); }catch(e){}
     var once=function(e){ document.removeEventListener('pointerdown',once,true); document.removeEventListener('keydown',once,true); armed=false;
       if(e && e.target && b.contains(e.target)) return;   // the tap IS the music button: let its click handler decide
       if(want) start(); };
     document.addEventListener('pointerdown',once,true); document.addEventListener('keydown',once,true); }
   b.addEventListener('click',function(){ var playing=!!(a&&!a.paused); want=!playing; try{localStorage.setItem('st_music',want?'1':'0');}catch(e){}
     if(want) start(); else stop(); try{window.track&&window.track('music',want?'on':'off');}catch(e){} });
-  document.addEventListener('visibilitychange',function(){ if(!a) return; if(document.hidden){ if(!a.paused) a.pause(); } else if(want){ a.play().catch(function(){}); } });
   ui(want); if(want) arm();   // show the remembered state; playback itself waits for the first tap
   // The game has its own music: fade the app track out whenever a link into /game/ is tapped (new tab or same tab),
   // and pick it back up when this tab is visible again. The toggle state (want) is untouched.

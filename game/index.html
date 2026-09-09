@@ -1336,7 +1336,7 @@
   var AC=window.AudioContext||window.webkitAudioContext; if(!AC){ b.style.display='none'; return; }
   var BPM=132, STEP=60/BPM/4, LOOK=0.12, TICK=25;
   var ctx=null, master=null, lp=null, timer=null, step=0, nextT=0, want=false, mode='play', sfxG=null;
-  var TRACKS=['audio/g1.mp3','audio/g2.mp3','audio/g3.mp3','audio/g4.mp3'], ti=0, mus=null, running=false, synthOnly=false;
+  var TRACKS=['audio/g1.mp3','audio/g2.mp3','audio/g3.mp3','audio/g4.mp3'], ti=0, mus=null, mus2=null, running=false, synthOnly=false;
   var LVL={play:0.55,rest:0.28}, LPF={play:16000,rest:1200};
   // iPhone: Web Audio alone obeys the ring/silent switch, so it is silent on a muted phone. A looping (silent) <audio>
   // element started on the same tap moves the page onto the media channel and the synth comes through.
@@ -1374,11 +1374,14 @@
   function boot(){ if(ctx) return; ctx=new AC(); lp=ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=5200;
     master=ctx.createGain(); master.gain.value=0.0001; master.connect(lp); lp.connect(ctx.destination);
     sfxG=ctx.createGain(); sfxG.gain.value=0.5; sfxG.connect(ctx.destination);
-    try{ mus=new Audio(); mus.preload='none'; mus.setAttribute('playsinline',''); mus.crossOrigin='anonymous';
-      var msrc=ctx.createMediaElementSource(mus); msrc.connect(master);
-      mus.addEventListener('ended',function(){ ti=(ti+1)%TRACKS.length; mus.src=TRACKS[ti]; var p=mus.play(); if(p&&p.catch) p.catch(function(){}); });   // next track, then back to the first
-      mus.addEventListener('error',function(){ if(!synthOnly){ synthOnly=true; if(running){ step=0; nextT=ctx.currentTime+0.05; clearInterval(timer); timer=setInterval(sched,TICK); } } });   // file missing -> coded loop
+    try{ var mkA=function(){ var x=new Audio(); x.preload='none'; x.setAttribute('playsinline',''); ctx.createMediaElementSource(x).connect(master);
+        x.addEventListener('ended',function(){ if(x!==mus) return; ti=(ti+1)%TRACKS.length; var n=mus2; mus2=mus; mus=n;   // swap: the other element already buffered the next track
+          if(!mus.src||mus.src.indexOf(TRACKS[ti])<0) mus.src=TRACKS[ti]; var p=mus.play(); if(p&&p.catch) p.catch(function(){}); prime(); });
+        x.addEventListener('error',function(){ if(!synthOnly){ synthOnly=true; if(running){ step=0; nextT=ctx.currentTime+0.05; clearInterval(timer); timer=setInterval(sched,TICK); } } });   // file missing -> coded loop
+        return x; };
+      mus=mkA(); mus2=mkA();
     }catch(e){ mus=null; synthOnly=true; } }
+  function prime(){ if(!mus2||synthOnly) return; var nxt=TRACKS[(ti+1)%TRACKS.length]; if(!mus2.src||mus2.src.indexOf(nxt)<0) mus2.src=nxt; mus2.preload='auto'; try{ mus2.load(); }catch(e){} }
   function level(){ return synthOnly ? (mode==='rest'?0.16:0.22) : LVL[mode]; }
   function setMode(m){ mode=(m==='rest')?'rest':'play'; if(!lp) return; var now=ctx.currentTime;
     lp.frequency.cancelScheduledValues(now); lp.frequency.setValueAtTime(lp.frequency.value,now); lp.frequency.linearRampToValueAtTime(synthOnly?(mode==='rest'?1400:5200):LPF[mode], now+0.6);
@@ -1394,7 +1397,7 @@
   window.TPM={ sfx:sfx, mode:setMode, state:function(){ return { running:running, track:ti, src:mus?mus.src:'', paused:mus?mus.paused:null, synthOnly:synthOnly }; } };
   function ui(on){ b.classList.toggle('on',on); b.setAttribute('aria-pressed',on?'true':'false'); b.setAttribute('aria-label',on?'Music on':'Music off'); }
   function start(){ boot(); var go=function(){ running=true;
-      if(mus&&!synthOnly){ if(!mus.src||mus.src==='') mus.src=TRACKS[ti]; lp.frequency.value=LPF[mode]; var p=mus.play(); if(p&&p.catch) p.catch(function(){}); }
+      if(mus&&!synthOnly){ if(!mus.src||mus.src==='') mus.src=TRACKS[ti]; lp.frequency.value=LPF[mode]; var p=mus.play(); if(p&&p.catch) p.catch(function(){}); prime(); }
       else { unlock(); step=0; nextT=ctx.currentTime+0.05; clearInterval(timer); timer=setInterval(sched,TICK); }
       master.gain.cancelScheduledValues(ctx.currentTime); master.gain.setValueAtTime(0.0001,ctx.currentTime); master.gain.exponentialRampToValueAtTime(level(),ctx.currentTime+0.8); ui(true); };
     if(ctx.state!=='running'){ ctx.resume().then(go).catch(function(){ ui(false); }); } else go(); }   // covers iOS 'interrupted' too
