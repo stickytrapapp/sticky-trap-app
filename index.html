@@ -841,7 +841,7 @@
   <div class="dfoot">
     <div class="sub-row"><span class="sl">Subtotal</span><span class="sv" id="subtotal">$0.00</span></div>
     <div class="dmin" id="dmin" hidden></div>
-    <p class="fine">$50 minimum order &middot; Price breaks &mdash; 500 pcs 5% off &middot; 750 pcs 7% off &middot; 1,000 pcs 10% off &middot; over 1,000 custom quote. Setup / pre-press quoted separately.</p>
+    <p class="fine">$50 minimum order &middot; Price breaks &mdash; 500 pcs 5% off &middot; 750 pcs 7% off &middot; 1,000 pcs 10% off &middot; over 1,000 custom quote &middot; Pre-press set-up is assessed per design once we see your art.</p>
     <button class="cta" id="emailbtn">Email my order</button>
     <div class="cta-row"><button class="cta cta2" id="smsbtn">Text order</button><button class="cta cta2" id="copybtn">Copy text</button></div>
     <button class="clearbtn" id="clearbtn">Clear basket</button>
@@ -870,6 +870,13 @@
   function money(v){return '$'+v.toFixed(2);}
   function key(p,m,f){return p+'|'+m+'|'+f;}
   function sub(){return CART.reduce(function(s,i){return s+unit(i)*i.qty;},0);}
+  function total(){var s=sub();return (s>0&&s<MINORDER)?MINORDER:s;}   // $50 minimum ORDER is charged, not blocked (new-client filter)
+  // under the minimum: the line that gives the most free pieces inside the $50 -> "add M more free"
+  function minCover(){
+    var s=sub(); if(!CART.length||s>=MINORDER) return null;
+    var best=null; CART.forEach(function(i){var u=unit(i); if(u<=0) return; var m=Math.floor((MINORDER-s)/u/STEP)*STEP; if(m>=STEP&&(!best||m>best.m)) best={p:i.p,m:m,n:i.qty+m};});
+    return best;
+  }
   function clampQ(q){q=Math.round(q/1)*1; if(isNaN(q))q=MINQ; return Math.max(MINQ,Math.min(MAXQ,q));}
 
   function toast(msg){var t=$('toast');t.textContent=msg;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('on');},1600);}
@@ -890,7 +897,7 @@
   function renderBtn(){
     var n=CART.length, btn=$('cartbtn');
     if(!n){btn.classList.add('empty');btn.classList.remove('min');$('ctlabel').textContent='empty';}
-    else{btn.classList.remove('empty');var _s=sub();btn.classList.toggle('min',_s<MINORDER);$('ctlabel').textContent=(_s<MINORDER? money(_s)+' \u00b7 '+money(MINORDER-_s)+' to go' : n+' item'+(n>1?'s':'')+' \u00b7 '+money(_s));}   // shows progress to the $50 minimum
+    else{btn.classList.remove('empty');var _s=sub();btn.classList.toggle('min',_s<MINORDER);$('ctlabel').textContent=(_s<MINORDER? money(MINORDER)+' \u00b7 $'+MINORDER+' min' : n+' item'+(n>1?'s':'')+' \u00b7 '+money(_s));}   // under the minimum the pill shows the $50 it will cost
   }
   function renderCart(){
     var box=$('ditems');
@@ -907,8 +914,12 @@
           +'<div class="lpr"><span class="ea'+(disc?' vol':(sur?' sur':''))+'">'+money(u)+'/pc'+tag+'</span><span class="ltot">'+money(u*i.qty)+'</span></div></div></div>';
       }).join('');
     }
-    $('subtotal').textContent=money(sub());
-    var _mn=$('dmin'); if(_mn){ var _s=sub(); if(_s>0&&_s<MINORDER){ _mn.hidden=false; _mn.textContent='$'+MINORDER+' minimum order \u00b7 add '+money(MINORDER-_s)+' more'; } else { _mn.hidden=true; } }
+    var _s=sub(), _under=(_s>0&&_s<MINORDER);
+    $('subtotal').textContent=money(total());
+    var _sl=document.querySelector('.dfoot .sub-row .sl'); if(_sl) _sl.textContent=_under?'Order total':'Subtotal';
+    var _mn=$('dmin'); if(_mn){ if(_under){ var _c=minCover(); _mn.hidden=false;
+        _mn.innerHTML='Items '+money(_s)+' \u00b7 <b>$'+MINORDER+' minimum order applied</b>'+(_c?'<br>Your minimum covers up to <b>'+_c.n+' '+String(_c.p).replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</b> \u2014 add <b>'+_c.m+' more free</b>':''); }
+      else { _mn.hidden=true; } }
     renderBtn();
   }
 
@@ -1012,8 +1023,9 @@
   function orderText(){
     var lines=['STICKY TRAP - ORDER REQUEST',''];
     CART.forEach(function(i){var u=unit(i);lines.push('- '+i.p+' - '+i.m+' - '+i.f+'  x'+i.qty+' @ '+money(u)+' = '+money(u*i.qty));});
-    lines.push('','Subtotal: '+money(sub()));
-    lines.push('(Volume pricing applied by quantity, 50-1000. Over 1000: custom quote. Setup/pre-press quoted separately.)');
+    var _s=sub(); lines.push('','Subtotal: '+money(_s));
+    if(_s>0&&_s<MINORDER) lines.push('Order total: '+money(MINORDER)+' ($'+MINORDER+' minimum order applied)');
+    lines.push('(Volume pricing applied by quantity. Over 1,000: custom quote. Pre-press set-up assessed per design with your art.)');
     return lines.join('\n');
   }
   // email order -> opens the customer's mail app, pre-addressed and pre-filled
@@ -1278,7 +1290,7 @@
       <p class="fine" style="font-size:14px">We proof <b>every file</b> with you before we print your order &#8212; shared with you as <b>photos and video</b> by text or email, whichever you prefer &#8212; so you sign off on exactly what prints, no surprises.</p>
 
       <h3 class="sec-head">Common Questions</h3>
-      <div class="faq"><div class="qa"><p class="q">Do you price match?</p><p class="a">Found a better price? <a href="mailto:thestickytrap@gmail.com?subject=Price%20match%20-%20The%20Sticky%20Trap&body=Hi%2C%20I%20found%20this%20price%20elsewhere%20%E2%80%94%20can%20you%20match%20it%3F%0A%0A(paste%20or%20attach%20the%20quote%20below)%0A%0AProduct%3A%0AQuantity%3A%0A" style="color:var(--cy);font-weight:800;text-decoration:none">Send us the quote</a> and we'll see what we can do.</p></div><div class="qa"><p class="q">Do I need to bring artwork?</p><p class="a">No. We're a design house &#8212; bring a finished file or just an idea, and we'll design it, dial in the materials, and print it in-house.</p></div><div class="qa"><p class="q">Will you help me find the best options for my art?</p><p class="a">Yes &#8212; we don't just run your file. Send whatever you've got and, if you want, we add the finishing that makes it land, plus the right material call. Curated per project, quoted with your order.</p></div><div class="qa"><p class="q">Can I get a custom shape?</p><p class="a">Yes &#8212; <b>Custom Dielines</b>. We build a bespoke cut path to any outline you want, not just a square or circle. Quoted per project.</p></div><div class="qa orphan-ctr" id="faq-prepress"><p class="q">What are pre-press / set-up charges?</p><p class="a">Pre-press makes your art print-ready &#8212; set-up, color, cut paths, bleeds, proofing. It's <b>$8 per set</b> on every order (a set is up to 3 stickers that go together, like lid + wrap + bottom). <a href="mailto:thestickytrap@gmail.com?subject=Print-Ready%20Files" style="color:var(--cy);font-weight:800;text-decoration:none">Send print-ready vector files</a> and that's all you pay. Not vector? Our vector service is a flat $35 per file, charged once. Anything beyond that we quote up front, before we start.</p></div></div>
+      <div class="faq"><div class="qa"><p class="q">Do you price match?</p><p class="a">Found a better price? <a href="mailto:thestickytrap@gmail.com?subject=Price%20match%20-%20The%20Sticky%20Trap&body=Hi%2C%20I%20found%20this%20price%20elsewhere%20%E2%80%94%20can%20you%20match%20it%3F%0A%0A(paste%20or%20attach%20the%20quote%20below)%0A%0AProduct%3A%0AQuantity%3A%0A" style="color:var(--cy);font-weight:800;text-decoration:none">Send us the quote</a> and we'll see what we can do.</p></div><div class="qa"><p class="q">Do I need to bring artwork?</p><p class="a">No. We're a design house &#8212; bring a finished file or just an idea, and we'll design it, dial in the materials, and print it in-house.</p></div><div class="qa"><p class="q">Will you help me find the best options for my art?</p><p class="a">Yes &#8212; we don't just run your file. Send whatever you've got and, if you want, we add the finishing that makes it land, plus the right material call. Curated per project, quoted with your order.</p></div><div class="qa"><p class="q">Can I get a custom shape?</p><p class="a">Yes &#8212; <b>Custom Dielines</b>. We build a bespoke cut path to any outline you want, not just a square or circle. Quoted per project.</p></div><div class="qa orphan-ctr" id="faq-prepress"><p class="q">What are pre-press / set-up charges?</p><p class="a">Pre-press makes your art print-ready &#8212; set-up, color, cut paths, bleeds, proofing. We assess it per design once we see your files, before anything prints. <a href="mailto:thestickytrap@gmail.com?subject=Print-Ready%20Files" style="color:var(--cy);font-weight:800;text-decoration:none">Print-ready vector files</a> keep it minimal. Anything beyond that we quote up front, before we start.</p></div></div>
 </section>
     </section>
 
@@ -1661,7 +1673,7 @@
       var details='';
       if(!files.length && !noArt){ setStatus('Art files are required for a pre-press quote — or tap “Place a sticker order without art” to order without them.','err'); return; }
       if(!files.length && noArt && !basketCount){ setStatus('Add items to your basket so we know what to make.','err'); return; }
-      if(basketCount && basketSub<50){ setStatus('Minimum order is $50 — your basket is at $'+basketSub.toFixed(2)+'. Add a few more pieces and try again.','err'); return; }
+      // $50 minimum is charged in the basket, not enforced here (Shane 2026-09-09): small baskets send as a $50 order
       if(total()>MAX){ setStatus('Files over ~20MB — email them to thestickytrap@ instead.','err'); return; }
       submit.disabled=true; submit.textContent='Sending…'; setStatus('','');
       Promise.all(files.map(function(f){ return readB64(f).then(function(b64){ return {name:f.name, mime:f.type, b64:b64}; }); })).then(function(pf){

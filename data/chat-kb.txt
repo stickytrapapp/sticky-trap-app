@@ -9,8 +9,8 @@ Shipping is not published here: quoted per project, tell the customer to call/te
 == Ordering in the app ==
 Menu tab: open a product, set the quantity, tap a price to add it to the basket. The basket can Email my order, Text order, Copy text, or "Upload art & get your quote" (name, email, phone, art files up to ~20 MB, deadline). Bigger files: email them.
 Nothing is charged in the app: we proof and quote first, and nothing is charged until the customer approves. The "Start a project -- get a quote" button on the Connect tab goes to the same quote form.
-Minimum order: $50 per order (any mix of items) -- there is no per-item piece minimum. Quantities step by 5 in the app, from 5 up to 1,000; more than 1,000 is a custom quote (call us).
-Volume price breaks on the per-piece menu price: 500+ pcs 5% off, 750+ pcs 7% off, 1,000+ pcs 10% off. Under 500 pcs pays the menu price. Pre-press set-up is $8 per set on top (see the house facts below).
+Minimum order: $50 per order. Quantities step by 5 in the app, from 5 up to 1,000; more than 1,000 is a custom quote (call us).
+Volume price breaks on the per-piece menu price: 500+ pcs 5% off, 750+ pcs 7% off, 1,000+ pcs 10% off. Under 500 pcs pays the menu price.
 Example: 3" Slap, White Vinyl, Base is $0.45 each -> 100 pcs = $45.00; 500 pcs = 500 x $0.45 x 0.95 = $213.75.
 
 == Finish tiers (every product, every material) ==
@@ -22,14 +22,11 @@ Flex (Ridge, Summit, Peak, Apex, Zenith) -- 4 to 8 layers, custom quoted above P
 HoloBrite -- a white-ink underbase under the art on Holographic BF or Gold BF for true, razor-sharp color while the metal still frames it. Listed as its own per-piece price where offered.
 
 == Not on the menu (always "quoted per project" -- never invent a number) ==
-Clear stock, custom dielines / custom shapes, Flex tiers, design work beyond the $75/hr rate, orders over 1,000 pcs, other materials, shipping, and anything not listed below. (Pre-press, vector service, spot gloss layer and rush ARE priced -- see the house facts.)
+Clear stock, custom dielines / custom shapes, Flex tiers, design work beyond the $75/hr rate, orders over 1,000 pcs, other materials, shipping, and anything not listed below. (Rush IS priced -- see the house facts. Pre-press / set-up is assessed with the art -- never quote a figure.)
 
 == House facts (from the shop; answer these directly) ==
 Standard turnaround is 5-7 business days with print-ready files. Art that still needs vector work or design changes adds that time before the 5-7 days start.
 Shop hours: Monday to Friday, 10am to 5pm Eastern (Ann Arbor, MI).
-Pre-press set-up is $8 per set on every order. A set is up to 3 stickers that go together, like lid + wrap + bottom or lid + wrap + collar. Print-ready vector files (.ai, .eps, .svg, or vector PDF) pay only this.
-If your files are not vector, our vector service is a flat $35 per file, charged once. Reprints of a file we have already set up do not pay it again.
-Building a UV spot gloss or emboss layer from your art is $55 per file, charged once.
 Art that needs changes before it prints (new strain name, moved logo, added call-outs, a new size) is design time at $75 per hour, quoted in writing before we start. Any unused quoted time is credited to your print order.
 Rush: same-day is +40% and within 48 hours is +30% on the order, subject to stock on hand. Ask and we will confirm before promising it.
 Before an in-person meeting we sign a short one-page mutual NDA (Michigan law, 3-year term). It can be signed on a phone at thestickytrap.app/nda - both sides get a signed PDF by email. In the app it is under Connect > Meeting NDA.
@@ -69,7 +66,7 @@ Yes — we don't just run your file. Send whatever you've got and, if you want, 
 Can I get a custom shape?
 Yes — Custom Dielines . We build a bespoke cut path to any outline you want, not just a square or circle. Quoted per project.
 What are pre-press / set-up charges?
-Pre-press makes your art print-ready — set-up, color, cut paths, bleeds, proofing. It's $8 per set on every order (a set is up to 3 stickers that go together, like lid + wrap + bottom). Send print-ready vector files and that's all you pay. Not vector? Our vector service is a flat $35 per file, charged once. Anything beyond that we quote up front, before we start.
+Pre-press makes your art print-ready — set-up, color, cut paths, bleeds, proofing. We assess it per design once we see your files, before anything prints. Print-ready vector files keep it minimal. Anything beyond that we quote up front, before we start.
 <section class="view connectbanner"
 
 == Price list: per piece, USD, at the menu quantity (5-499 pcs); apply the volume breaks above for 500+ ==

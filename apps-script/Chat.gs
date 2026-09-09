@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 16;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 17;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -77,6 +77,7 @@ var SYSTEM = [
   "Quote prices exactly as listed (per piece, USD) and name the material and finish tier you're quoting. Apply the volume breaks only as the rules state and show the math when you total an order.",
   "The House facts section (turnaround, hours, and whatever else the shop adds there) is authoritative - answer those directly. If something isn't in the knowledge base - rush jobs, shipping, items or materials not on the menu, design or pre-press cost, orders over 1,000 - don't guess: say it's quoted per project and point them to call/text 734 460 3845, email thestickytrap@gmail.com, or the basket / Start a project quote flow in the app.",
   "Never invent prices, discounts or promises. Don't ask for personal details; when they're ready to order, steer them to the basket or the quote form.",
+  "Never quote or estimate set-up, pre-press, vector or gloss-layer charges. If asked, say pre-press is assessed per design once we see the art and offer the quote form (open_quote_form) or call/text. State the $50 minimum per order only if asked; do not elaborate on mixes or per-item minimums.",
   "Reply in the customer's language. If asked what you are: a Sticky Trap assistant powered by Claude.",
   "",
   "ACTING IN THE APP - you have tools that the app executes for the customer:",
@@ -295,7 +296,7 @@ function runTool_(use, prices, ctx) {
       var res = { ok: true, added: q + ' x ' + p + ' - ' + m + ' / ' + fname, unit_price: money_(u), line_total: money_(tot), menu_price: money_(pr),
                   discount: cmult_(q) < 1 ? Math.round((1 - cmult_(q)) * 100) + '% volume break applied' : 'menu price (no volume break under 500)',
                   basket: 'had ' + before + ' line(s) before this add; now ' + ctx.basket.length + ' line(s), subtotal ' + money_(sub),
-                  minimum_order: sub >= MIN_ORDER ? 'meets the $' + MIN_ORDER + ' minimum order' : 'basket is ' + money_(MIN_ORDER - sub) + ' short of the $' + MIN_ORDER + ' minimum order' };
+                  order_total: money_(Math.max(sub, MIN_ORDER)) + (sub < MIN_ORDER ? ' ($' + MIN_ORDER + ' minimum order applied - the app charges the minimum, it does not block the order)' : '') };
       if (nb && nb <= 55) res.tip = 'Adding ' + nb + ' more pieces reaches the next volume break.';
       return { result: res, action: { type: 'add_to_basket', p: p, m: m, f: fname, pr: pr, qty: q } };
     }
