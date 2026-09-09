@@ -1,15 +1,16 @@
 <meta charset="utf-8">
 <title>Trap Points</title>
+<meta name="theme-color" content="#000000">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Manrope:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
 <style>
   :root{
-    --ink:#0A0A0F; --panel:#12121A; --panel-2:#191924; --line:rgba(245,243,250,.10);
+    --ink:#000; --panel:#0e0e0e; --panel-2:#171717; --line:rgba(245,243,250,.10);
     --line-2:rgba(245,243,250,.16);
     --mag:#FF1FA2; --pur:#8A2BE2; --cyan:#12C4FF; --gold:#EAB84B;
-    --fg:#F5F3FA; --mut:#8F8AA0; --mut-2:#6E6A80;
+    --fg:#fff; --mut:#fff; --mut-2:#fff;
     --good:#25E0A6;
     --grad:linear-gradient(100deg,var(--mag) 0%,var(--pur) 52%,var(--cyan) 100%);
     --radius:16px;
@@ -20,10 +21,7 @@
   *{box-sizing:border-box}
   html,body{margin:0;height:100%}
   body{
-    background:
-      radial-gradient(1200px 700px at 12% -10%, rgba(255,31,162,.18), transparent 55%),
-      radial-gradient(1100px 800px at 100% 110%, rgba(18,196,255,.16), transparent 55%),
-      var(--ink);
+    background:var(--ink);
     color:var(--fg); font-family:var(--fbody);
     display:grid; place-items:center; padding:26px 14px;
     -webkit-font-smoothing:antialiased;
@@ -139,7 +137,7 @@
   .rw .ic{width:40px;height:40px;border-radius:11px;flex:none;display:grid;place-items:center;
     background:var(--panel-2);border:1px solid var(--line)}
   .rw .ic svg{width:20px;height:20px}
-  .rw .thumb{width:58px;height:58px;border-radius:13px;flex:none;display:grid;place-items:center;background:#0d0d14;border:1px solid var(--line-2)}
+  .rw .thumb{width:58px;height:58px;border-radius:13px;flex:none;display:grid;place-items:center;background:#0a0a0a;border:1px solid var(--line-2)}
   .rw .thumb svg{width:50px;height:50px}
   .rw .tx small.what{display:block;margin-top:3px;color:var(--fg);opacity:.85;font-size:11.5px;line-height:1.3}
   .card.gloss{padding:6px 14px}
@@ -183,7 +181,7 @@
   .lbrow.me .sc{color:var(--cyan)}
 
   /* tab bar */
-  .tabs{display:flex;border-top:1px solid var(--line);background:rgba(10,10,15,.9);
+  .tabs{display:flex;border-top:1px solid var(--line);background:rgba(6,6,6,.9);
     backdrop-filter:blur(8px);position:relative;z-index:20;padding:8px 6px calc(8px + env(safe-area-inset-bottom))}
   .tab{flex:1;background:none;border:none;color:var(--mut-2);cursor:pointer;padding:7px 0 5px;
     display:flex;flex-direction:column;align-items:center;gap:4px;font-family:var(--fdisp);font-weight:600;
@@ -220,9 +218,9 @@
   .sf-title{font-family:var(--fdisp);font-weight:700;font-size:19px;margin:14px 0 0}
 
   .viewfinder{position:relative;width:100%;max-width:280px;aspect-ratio:1;border-radius:20px;
-    background:radial-gradient(circle at 50% 38%,#1b1b26,#0b0b10);overflow:hidden;display:grid;place-items:center;
+    background:radial-gradient(circle at 50% 38%,#171717,#080808);overflow:hidden;display:grid;place-items:center;
     box-shadow:inset 0 0 44px rgba(0,0,0,.65)}
-  .slip{width:68%;background:#f5f3fa;border-radius:8px;padding:12px 12px 9px;transform:rotate(-3deg);
+  .slip{width:68%;background:#fff;border-radius:8px;padding:12px 12px 9px;transform:rotate(-3deg);
     box-shadow:0 14px 32px -8px rgba(0,0,0,.75)}
   .slip-h{display:flex;flex-direction:column;align-items:center;margin-bottom:8px}
   .slip-h b{font-family:var(--fdisp);font-size:10px;letter-spacing:.1em;color:#0a0a0f}
@@ -321,7 +319,7 @@
   .rw .tx small{line-height:1.7}
 
   /* ---- redeem bottom sheet ---- */
-  .sheet{position:absolute;inset:0;z-index:70;display:none;align-items:flex-end;background:rgba(4,4,8,.62)}
+  .sheet{position:absolute;inset:0;z-index:70;display:none;align-items:flex-end;background:rgba(6,6,6,.62)}
   .sheet.open{display:flex;animation:fade .2s ease}
   .sheet-card{width:100%;background:var(--panel);border-top:1px solid var(--line-2);border-radius:22px 22px 0 0;
     padding:10px 20px calc(22px + env(safe-area-inset-bottom));animation:slideup .28s cubic-bezier(.2,.9,.2,1);max-height:calc(100% - 24px);overflow-y:auto;-webkit-overflow-scrolling:touch}
@@ -354,7 +352,7 @@
     display:grid;place-items:center;position:relative}
   .dh-prize svg{width:92px;height:92px}
   .dh-badge{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);font-size:8px;letter-spacing:.1em;text-transform:uppercase;
-    color:var(--mut);border:1px solid var(--line-2);border-radius:999px;padding:2px 7px;background:rgba(10,10,15,.7);white-space:nowrap}
+    color:var(--mut);border:1px solid var(--line-2);border-radius:999px;padding:2px 7px;background:rgba(6,6,6,.7);white-space:nowrap}
   .dh-info{flex:1;min-width:0;display:flex;flex-direction:column}
   .dh-tag{font-family:var(--fdisp);font-weight:700;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#0a0a0f;
     background:var(--grad);border-radius:999px;padding:3px 9px;align-self:flex-start}
@@ -382,7 +380,7 @@
   .lb-empty{color:var(--mut);font-size:13px;text-align:center;padding:26px 12px;border:1px dashed var(--line-2);border-radius:12px}
   .lbrow .dy{font-family:var(--fmono);font-size:10.5px;color:var(--mut-2);width:34px;text-align:right;flex:none}
   .result{position:absolute;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:20px;
-    background:rgba(8,8,12,.84);backdrop-filter:blur(3px)}
+    background:rgba(6,6,6,.84);backdrop-filter:blur(3px)}
   .result.show{display:flex;animation:fade .3s ease}
   .res-card{width:100%;max-width:300px;background:var(--panel);border:1px solid var(--line-2);border-radius:20px;
     padding:22px 20px;text-align:center;box-shadow:0 24px 60px -18px #000}
@@ -424,7 +422,7 @@
   .duel-r.win{color:var(--good)} .duel-r.loss{color:var(--mag)}
   .duel-r b{font-weight:700}
 
-  .sheetlike{position:absolute;inset:0;z-index:62;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(8,8,12,.85)}
+  .sheetlike{position:absolute;inset:0;z-index:62;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(6,6,6,.85)}
   .sheetlike.open{display:flex;animation:fade .25s ease}
   .sl-card{width:100%;max-width:300px;background:var(--panel);border:1px solid var(--line-2);border-radius:20px;
     padding:24px 20px;text-align:center;box-shadow:0 24px 60px -18px #000}
@@ -459,7 +457,7 @@
   @keyframes comboPop{0%{opacity:0;transform:translate(-50%,-40%) scale(.5)}25%{opacity:1;transform:translate(-50%,-56%) scale(1.18)}100%{opacity:0;transform:translate(-50%,-86%) scale(1)}}
   .board-wrap{position:relative}
   .startgate{position:absolute;inset:0;z-index:7;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
-    background:rgba(10,10,15,.62);backdrop-filter:blur(2px);border-radius:8px;padding:16px;text-align:center}
+    background:rgba(6,6,6,.62);backdrop-filter:blur(2px);border-radius:8px;padding:16px;text-align:center}
   .startgate.hide{display:none}
   .startgate .sf-primary{max-width:210px;margin:0}
   .startgate .sf-primary.done,.startgate .sf-primary:disabled{opacity:1;background:rgba(255,255,255,.10);color:#c9c4d8;box-shadow:none;filter:none;cursor:default}
@@ -680,7 +678,7 @@
 
       <div class="drop-hero">
         <div class="dh-top">
-          <div class="dh-prize"><svg viewBox="0 0 100 100" fill="none" aria-hidden="true"><defs><linearGradient id="hg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF1FA2"/><stop offset=".55" stop-color="#8A2BE2"/><stop offset="1" stop-color="#12C4FF"/></linearGradient></defs><path d="M33 33 L14 45 L21 61 L35 50 Z" fill="url(#hg)" stroke="#0a0a0f" stroke-width="1.6" stroke-linejoin="round"/><path d="M67 33 L86 45 L79 61 L65 50 Z" fill="url(#hg)" stroke="#0a0a0f" stroke-width="1.6" stroke-linejoin="round"/><path d="M33 33 Q50 25 67 33 L71 87 Q50 91 29 87 Z" fill="url(#hg)" stroke="#0a0a0f" stroke-width="1.6" stroke-linejoin="round"/><path d="M41 33 Q50 19 59 33 Q50 41 41 33 Z" fill="#12121A" stroke="#0a0a0f" stroke-width="1.6" stroke-linejoin="round"/><path d="M47 37 v7 M53 37 v7" stroke="#0a0a0f" stroke-width="1.5" stroke-linecap="round"/><path d="M39 69 h22 v9 q-11 3 -22 0 Z" fill="none" stroke="rgba(10,10,15,.45)" stroke-width="1.2"/><rect x="42.5" y="50" width="15" height="12" rx="2" fill="rgba(10,10,15,.35)" stroke="#F5F3FA" stroke-width="1" stroke-dasharray="2.5 2"/></svg><span class="dh-badge">Your logo</span></div>
+          <div class="dh-prize"><svg viewBox="0 0 100 100" fill="none" aria-hidden="true"><defs><linearGradient id="hg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF1FA2"/><stop offset=".55" stop-color="#8A2BE2"/><stop offset="1" stop-color="#12C4FF"/></linearGradient></defs><path d="M33 33 L14 45 L21 61 L35 50 Z" fill="url(#hg)" stroke="#0a0a0f" stroke-width="1.6" stroke-linejoin="round"/><path d="M67 33 L86 45 L79 61 L65 50 Z" fill="url(#hg)" stroke="#0a0a0f" stroke-width="1.6" stroke-linejoin="round"/><path d="M33 33 Q50 25 67 33 L71 87 Q50 91 29 87 Z" fill="url(#hg)" stroke="#0a0a0f" stroke-width="1.6" stroke-linejoin="round"/><path d="M41 33 Q50 19 59 33 Q50 41 41 33 Z" fill="#0e0e0e" stroke="#0a0a0f" stroke-width="1.6" stroke-linejoin="round"/><path d="M47 37 v7 M53 37 v7" stroke="#0a0a0f" stroke-width="1.5" stroke-linecap="round"/><path d="M39 69 h22 v9 q-11 3 -22 0 Z" fill="none" stroke="rgba(6,6,6,.45)" stroke-width="1.2"/><rect x="42.5" y="50" width="15" height="12" rx="2" fill="rgba(6,6,6,.35)" stroke="#fff" stroke-width="1" stroke-dasharray="2.5 2"/></svg><span class="dh-badge">Your logo</span></div>
           <div class="dh-info">
             <span class="dh-tag">Hero drop</span>
             <b>2 branded hoodies</b>
@@ -818,15 +816,15 @@
   <!-- tab bar -->
   <div class="tabs">
     <button class="tab on" data-t="play">
-      <svg viewBox="0 0 24 24" fill="none"><path class="tabi" d="M5 3l14 9-14 9z" stroke="#8F8AA0" stroke-width="1.7" stroke-linejoin="round"/></svg>Play</button>
+      <svg viewBox="0 0 24 24" fill="none"><path class="tabi" d="M5 3l14 9-14 9z" stroke="#fff" stroke-width="1.7" stroke-linejoin="round"/></svg>Play</button>
     <button class="tab" data-t="duels">
-      <svg viewBox="0 0 24 24" fill="none"><path class="tabi" d="M4 4l9 9M20 4l-9 9M14.5 10.5l5.5 5.5-2 2-5.5-5.5M9.5 12.5l-5.5 5.5 2 2 5.5-5.5" stroke="#8F8AA0" stroke-width="1.6" stroke-linejoin="round"/></svg>Duels</button>
+      <svg viewBox="0 0 24 24" fill="none"><path class="tabi" d="M4 4l9 9M20 4l-9 9M14.5 10.5l5.5 5.5-2 2-5.5-5.5M9.5 12.5l-5.5 5.5 2 2 5.5-5.5" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>Duels</button>
     <button class="tab" data-t="rewards">
-      <svg viewBox="0 0 24 24" fill="none"><path class="tabi" d="M12 3l3 6 6 .8-4.5 4.2L18 21l-6-3.5L6 21l1.5-7L3 9.8 9 9z" stroke="#8F8AA0" stroke-width="1.7" stroke-linejoin="round"/></svg>Rewards</button>
+      <svg viewBox="0 0 24 24" fill="none"><path class="tabi" d="M12 3l3 6 6 .8-4.5 4.2L18 21l-6-3.5L6 21l1.5-7L3 9.8 9 9z" stroke="#fff" stroke-width="1.7" stroke-linejoin="round"/></svg>Rewards</button>
     <button class="tab" data-t="earn">
-      <svg viewBox="0 0 24 24" fill="none"><path class="tabi" d="M4 19V10M10 19V5M16 19v-6M22 19H2" stroke="#8F8AA0" stroke-width="1.7" stroke-linecap="round"/></svg>Earn</button>
+      <svg viewBox="0 0 24 24" fill="none"><path class="tabi" d="M4 19V10M10 19V5M16 19v-6M22 19H2" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/></svg>Earn</button>
     <button class="tab" data-t="ranks">
-      <svg viewBox="0 0 24 24" fill="none"><path class="tabi" d="M6 21V9M12 21V4M18 21v-8" stroke="#8F8AA0" stroke-width="1.7" stroke-linecap="round"/></svg>Ranks</button>
+      <svg viewBox="0 0 24 24" fill="none"><path class="tabi" d="M6 21V9M12 21V4M18 21v-8" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/></svg>Ranks</button>
   </div>
 </div>
 
@@ -1135,7 +1133,7 @@
     {n:'2 lighters', d:'Hand-wrapped · YOUR logo', c:1500, t:'Lighters', f:1, img:'lighters', what:'Two lighters wrapped in a printed sleeve of your brand.'},
     {n:'1 embroidered hoodie', d:'Embroidered · YOUR brand', c:7000, t:'Apparel', f:1, tier:1, bonus:'1-in-4 shot at a 2nd', bchance:0.25, img:'hoodie', what:'A hoodie with your logo embroidered on the chest.'}
   ];
-  var THUMB={"slaps": "<svg viewBox=\"0 0 64 64\" fill=\"none\"><rect x=\"14\" y=\"16\" width=\"34\" height=\"34\" rx=\"9\" fill=\"#F5F3FA\" stroke=\"#FF1FA2\" stroke-width=\"2\" stroke-dasharray=\"4 3\"/><rect x=\"18\" y=\"12\" width=\"34\" height=\"34\" rx=\"9\" fill=\"#F5F3FA\" stroke=\"#12C4FF\" stroke-width=\"2\"/><path d=\"M35 18l9 9-9 15-9-15z\" fill=\"url(#tpg)\"/><path d=\"M35 18l9 9h-18z\" fill=\"#12C4FF\" opacity=\".9\"/></svg>", "lighters": "<svg viewBox=\"0 0 64 64\" fill=\"none\"><rect x=\"18\" y=\"22\" width=\"12\" height=\"32\" rx=\"3\" fill=\"url(#tpg)\"/><rect x=\"34\" y=\"22\" width=\"12\" height=\"32\" rx=\"3\" fill=\"#F5F3FA\" stroke=\"#8A2BE2\" stroke-width=\"1.5\"/><path d=\"M40 32l3 3-3 6-3-6z\" fill=\"#FF1FA2\"/><rect x=\"19\" y=\"18\" width=\"10\" height=\"5\" rx=\"1.5\" fill=\"#EAB84B\"/><rect x=\"35\" y=\"18\" width=\"10\" height=\"5\" rx=\"1.5\" fill=\"#EAB84B\"/><path d=\"M24 8c2 3-1 4-1 6a2.5 2.5 0 005 0c0-3-2-4-4-6z\" fill=\"#EAB84B\"/><path d=\"M40 8c2 3-1 4-1 6a2.5 2.5 0 005 0c0-3-2-4-4-6z\" fill=\"#EAB84B\"/></svg>", "hoodie": "<svg viewBox=\"0 0 64 64\" fill=\"none\"><path d=\"M22 14c3-6 17-6 20 0l12 6-5 10-5-2v28H20V28l-5 2-5-10z\" fill=\"#1b1726\" stroke=\"#F5F3FA\" stroke-width=\"1.6\"/><path d=\"M26 16c2 5 10 5 12 0\" stroke=\"#F5F3FA\" stroke-width=\"1.6\"/><path d=\"M29 20v10M35 20v10\" stroke=\"#F5F3FA\" stroke-width=\"1.4\" stroke-linecap=\"round\"/><path d=\"M32 34l5 5-5 9-5-9z\" fill=\"url(#tpg)\"/></svg>"};
+  var THUMB={"slaps": "<svg viewBox=\"0 0 64 64\" fill=\"none\"><rect x=\"14\" y=\"16\" width=\"34\" height=\"34\" rx=\"9\" fill=\"#fff\" stroke=\"#FF1FA2\" stroke-width=\"2\" stroke-dasharray=\"4 3\"/><rect x=\"18\" y=\"12\" width=\"34\" height=\"34\" rx=\"9\" fill=\"#fff\" stroke=\"#12C4FF\" stroke-width=\"2\"/><path d=\"M35 18l9 9-9 15-9-15z\" fill=\"url(#tpg)\"/><path d=\"M35 18l9 9h-18z\" fill=\"#12C4FF\" opacity=\".9\"/></svg>", "lighters": "<svg viewBox=\"0 0 64 64\" fill=\"none\"><rect x=\"18\" y=\"22\" width=\"12\" height=\"32\" rx=\"3\" fill=\"url(#tpg)\"/><rect x=\"34\" y=\"22\" width=\"12\" height=\"32\" rx=\"3\" fill=\"#fff\" stroke=\"#8A2BE2\" stroke-width=\"1.5\"/><path d=\"M40 32l3 3-3 6-3-6z\" fill=\"#FF1FA2\"/><rect x=\"19\" y=\"18\" width=\"10\" height=\"5\" rx=\"1.5\" fill=\"#EAB84B\"/><rect x=\"35\" y=\"18\" width=\"10\" height=\"5\" rx=\"1.5\" fill=\"#EAB84B\"/><path d=\"M24 8c2 3-1 4-1 6a2.5 2.5 0 005 0c0-3-2-4-4-6z\" fill=\"#EAB84B\"/><path d=\"M40 8c2 3-1 4-1 6a2.5 2.5 0 005 0c0-3-2-4-4-6z\" fill=\"#EAB84B\"/></svg>", "hoodie": "<svg viewBox=\"0 0 64 64\" fill=\"none\"><path d=\"M22 14c3-6 17-6 20 0l12 6-5 10-5-2v28H20V28l-5 2-5-10z\" fill=\"#171717\" stroke=\"#fff\" stroke-width=\"1.6\"/><path d=\"M26 16c2 5 10 5 12 0\" stroke=\"#fff\" stroke-width=\"1.6\"/><path d=\"M29 20v10M35 20v10\" stroke=\"#fff\" stroke-width=\"1.4\" stroke-linecap=\"round\"/><path d=\"M32 34l5 5-5 9-5-9z\" fill=\"url(#tpg)\"/></svg>"};
   var shopEl=document.getElementById('shop');
   function renderShop(){
     if(!shopEl)return;
