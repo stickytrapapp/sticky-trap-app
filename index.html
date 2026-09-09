@@ -1923,9 +1923,11 @@
         pauses when the app is hidden. Browsers block sound before a tap, so a remembered ON waits for the first tap. ---- */
 (function(){
   var b=document.getElementById('musicb'); if(!b) return;
-  var SRC='audio/beat.mp3', VOL=0.35, a=null, want=false, armed=false, fadeT=null, actx=null, gain=null;
+  // Playlist (Shane 2026-09-09): the two Suno takes of 'Tap The Screen' play in full, one after the other, then repeat.
+  var TRACKS=['audio/tap-a.mp3','audio/tap-b.mp3'], ti=0, SRC=TRACKS[0], VOL=0.35, a=null, want=false, armed=false, fadeT=null, actx=null, gain=null;
   try{ want=localStorage.getItem('st_music')==='1'; }catch(e){}
-  function el(){ if(!a){ a=new Audio(SRC); a.loop=true; a.preload='none';
+  function el(){ if(!a){ a=new Audio(SRC); a.loop=false; a.preload='none';
+      a.addEventListener('ended',function(){ ti=(ti+1)%TRACKS.length; a.src=TRACKS[ti]; var p=a.play(); if(p&&p.catch) p.catch(function(){}); });   // next take, then back to the first
       // iOS ignores element.volume, so route through a GainNode when Web Audio is available
       try{ var AC=window.AudioContext||window.webkitAudioContext; if(AC){ actx=new AC(); var srcN=actx.createMediaElementSource(a); gain=actx.createGain(); gain.gain.value=0; srcN.connect(gain); gain.connect(actx.destination); } }catch(e){ actx=null; gain=null; }
       if(!gain) a.volume=0; }
@@ -1948,6 +1950,10 @@
     if(want) start(); else stop(); try{window.track&&window.track('music',want?'on':'off');}catch(e){} });
   document.addEventListener('visibilitychange',function(){ if(!a) return; if(document.hidden){ if(!a.paused) a.pause(); } else if(want){ a.play().catch(function(){}); } });
   ui(want); if(want) arm();   // show the remembered state; playback itself waits for the first tap
+  // The game has its own music: fade the app track out whenever a link into /game/ is tapped (new tab or same tab),
+  // and pick it back up when this tab is visible again. The toggle state (want) is untouched.
+  document.addEventListener('click',function(e){ var l=e.target&&e.target.closest&&e.target.closest('a[href]'); if(l&&/\/game\//.test(l.getAttribute('href')||'')&&a&&!a.paused) fade(0,300); },true);
+  document.addEventListener('visibilitychange',function(){ if(document.hidden){ if(a&&!a.paused) fade(0,300); } else if(want&&a&&a.paused){ start(); } });
 })();
 </script>
 <script>
