@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 19;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 20;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -741,7 +741,8 @@ function weeklyDigest_() {
   else lines.push('No chat questions this week.');
   lines.push('');
   lines.push('Console: https://thestickytrap.app/console/  -  Sheet: ' + ss.getUrl());
-  MailApp.sendEmail(notifyTo_(), 'Sticky Trap app - week in review', lines.join('\n'), { name: 'The Sticky Trap app' });
+  var digestTo = String(PROP.getProperty('DIGEST_TO') || '').trim() || SHOP_EMAIL;   // Shane 2026-09-09: digest to the shop inbox only (Erin stays on the nudges via NUDGE_TO); set DIGEST_TO to widen it later
+  MailApp.sendEmail(digestTo, 'Sticky Trap app - week in review', lines.join('\n'), { name: 'The Sticky Trap app' });
   return lines.length;
 }
 // Run ONCE from the editor: hourly stale-order nudge + Monday 7 am digest.
