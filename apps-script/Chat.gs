@@ -30,7 +30,7 @@
  *
  * PROTOCOL
  *   POST body (sent as text/plain so the browser skips the CORS preflight):
- *     {"uid":"...","tab":"menu","basket":[{"p":"3\" Slap","m":"Holographic BF","f":"Pro","pr":"1.35","qty":100}],
+ *     {"uid":"...","tab":"menu","basket":[{"p":"3\" Slap","m":"Holographic","f":"Pro","pr":"1.35","qty":100}],
  *      "messages":[{"role":"user"|"assistant","content":"..."}, ...]}
  *   Response: {"ok":true,"reply":"...","actions":[{"type":"add_to_basket","p":...,"m":...,"f":...,"pr":1.35,"qty":100}, ...]}
  *          or {"ok":false,"error":"...","reply":"<friendly fallback>"}
@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 23;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 24;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -74,7 +74,7 @@ var SYSTEM = [
   "You're chatting with customers inside the Sticky Trap phone app (tabs: Industry, Social, Menu, Specs, Connect, Play).",
   "Answer from the knowledge base below. Be warm, direct and SHORT - this is a small phone chat panel: one to three short sentences, under 45 words, plain text. Give the one most relevant answer (e.g. the single price for the material and tier asked, or the most common option) and offer more only if they want it. Never list every material or every tier unless they ask for the full list.",
   "No markdown headers, tables or bold; a short list with one item per line and a leading dash is fine.",
-  "Quote prices exactly as listed (per piece, USD) and name the material and finish tier you're quoting. Apply the volume breaks only as the rules state and show the math when you total an order.",
+  "Quote prices exactly as listed (per piece, USD) and name the material and texture level you're quoting (the menu calls finish tiers 'textures': Flat, then 1 Spot Gloss UV, 2 Standard Embossing, 3 Pro). Apply the volume breaks only as the rules state and show the math when you total an order.",
   "The House facts section (turnaround, hours, and whatever else the shop adds there) is authoritative - answer those directly. If something isn't in the knowledge base - rush jobs, shipping, items or materials not on the menu, design or pre-press cost, orders over 1,000 - don't guess: say it's quoted per project and point them to call/text 734 460 3845, email thestickytrap@gmail.com, or the basket / Start a project quote flow in the app.",
   "Never invent prices, discounts or promises. Don't ask for personal details; when they're ready to order, steer them to the basket or the quote form.",
   "Never quote or estimate set-up, pre-press, vector or gloss-layer charges. If asked, FIRST say in one sentence that pre-press is assessed per design once we see the art, THEN offer the quote form (open_quote_form) or call/text - never open the form without that sentence. State the $50 minimum per order only if asked; do not elaborate on mixes or per-item minimums.",
@@ -93,14 +93,14 @@ var SYSTEM = [
 
 var TOOLS = [
   { name: 'add_to_basket', strict: true,
-    description: "Add a line to the customer's basket in the app. Names should match the menu (e.g. product '3\" Slap', 'Miron 250 ml', 'Tip Band'; material 'White Vinyl', 'Holographic BF', 'Gold BF' (Tip Band: 'White Vinyl' or 'Holographic'); finish 'Base', 'Spot Gloss UV', 'Standard Embossing', 'Pro' (Tip Band: Base or Spot Gloss UV only)). Fuzzy names are accepted and normalized. Returns the exact unit price (with volume break) and line total, or an error explaining what's invalid.",
+    description: "Add a line to the customer's basket in the app. Names should match the menu (e.g. product '3\" Slap', 'Miron 250 ml', 'Tip Band'; material 'White Vinyl', 'Holographic', 'Gold BF' (Tip Band: 'White Vinyl' or 'Holographic'); finish/texture 'Flat', 'Spot Gloss UV', 'Standard Embossing', 'Pro' (Tip Band: Flat or Spot Gloss UV only)). Fuzzy names are accepted and normalized. Returns the exact unit price (with volume break) and line total, or an error explaining what's invalid.",
     input_schema: { type: 'object', additionalProperties: false,
       properties: {
         product: { type: 'string', description: 'Menu product name' },
         material: { type: 'string', description: 'Material' },
-        finish: { type: 'string', description: 'Finish tier' },
+        finish: { type: 'string', description: 'Texture level / finish tier (Flat, Spot Gloss UV, Standard Embossing, Pro)' },
         qty: { type: 'integer', description: 'Pieces: 5-1000 in steps of 5' },
-        holobrite: { type: 'boolean', description: 'White-ink underbase option (Holographic BF / Gold BF only); false if not requested' }
+        holobrite: { type: 'boolean', description: 'White-ink underbase option (Holographic / Gold BF only); false if not requested' }
       }, required: ['product', 'material', 'finish', 'qty', 'holobrite'] } },
   { name: 'open_product', strict: true,
     description: 'Switch to the Menu tab and expand one product so the customer sees its prices.',
@@ -271,8 +271,11 @@ function matchFinish_(q, product, material, prices) {
   var fins = []; prices.forEach(function (r) { if (r.p === product && r.m === material && fins.indexOf(r.f) < 0) fins.push(r.f); });
   var nq = norm_(q);
   for (var i = 0; i < fins.length; i++) if (norm_(fins[i]) === nq) return fins[i];
-  var want = /pro|3layer|three|full/.test(nq) ? 'Pro' : (/standard|emboss|2layer|two|raised/.test(nq) ? 'Standard Embossing' : (/spot|gloss|uv|1layer|one/.test(nq) ? 'Spot Gloss UV' : (/base|flat|plain|none|no/.test(nq) ? 'Base' : null)));
-  return fins.indexOf(want) > -1 ? want : null;
+  // v24: match by pattern against the KB's own names, so a rename in the menu (Base -> Flat, 2026-09-10) can't strand the bot
+  var want = /pro|3layer|three|full|texture3|level3/.test(nq) ? /^pro/ : (/standard|emboss|2layer|two|raised|texture2|level2/.test(nq) ? /^standard/ : (/spot|gloss|uv|1layer|one|texture1|level1/.test(nq) ? /^spot/ : (/base|flat|plain|none|no|texture0|level0/.test(nq) ? /^(flat|base)/ : null)));
+  if (!want) return null;
+  for (var k = 0; k < fins.length; k++) if (want.test(norm_(fins[k]))) return fins[k];
+  return null;
 }
 
 /* ---------- tool execution (validated against the KB; the app applies the actions) ---------- */
@@ -292,7 +295,7 @@ function runTool_(use, prices, ctx) {
       if (q % STEP) { q = Math.round(q / STEP) * STEP; }
       var row = prices.filter(function (r) { return r.p === p && r.m === m && r.f === f; })[0];
       var hb = !!inp.holobrite;
-      if (hb && row.hb == null) return { error: true, result: { error: 'HoloBrite (white underbase) is not offered on ' + m + ' - only on Holographic BF and Gold BF.' } };
+      if (hb && row.hb == null) return { error: true, result: { error: 'HoloBrite (white underbase) is not offered on ' + m + ' - only on Holographic and Gold BF.' } };
       var pr = hb ? row.hb : row.pr, fname = f + (hb ? ' + HoloBrite' : ''), u = unit_(pr, q), tot = u * q;
       var before = ctx.basket.length;
       ctx.basket.push({ p: p, m: m, f: fname, pr: pr, qty: q });
