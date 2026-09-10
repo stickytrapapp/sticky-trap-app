@@ -1,4 +1,4 @@
-THE STICKY TRAP -- CHAT KNOWLEDGE BASE (auto-generated 2026-09-09 from the live app by Price Engine/make_chat_kb.py; do not hand-edit -- house facts live in Price Engine/chat-facts.txt)
+THE STICKY TRAP -- CHAT KNOWLEDGE BASE (auto-generated 2026-09-10 from the live app by Price Engine/make_chat_kb.py; do not hand-edit -- house facts live in Price Engine/chat-facts.txt)
 
 == About The Sticky Trap ==
 The Sticky Trap is a design house and in-house print shop in Ann Arbor, Michigan: branding, custom art, stickers, labels, promotionals and merch. Motto: "Let's Stick Together."
@@ -107,8 +107,8 @@ Format: material: finish $price (HoloBrite $price where offered).
   Gold BF: Base $1.80 (HoloBrite $2.50) | Spot Gloss UV $2.05 (HoloBrite $2.75) | Standard Embossing $2.60 (HoloBrite $3.30) | Pro $3.10 (HoloBrite $3.80)
 ### Tube 65 mm
   White Vinyl: Base $0.70 | Spot Gloss UV $0.80 | Standard Embossing $1.05 | Pro $1.35
-  Holographic BF: Base $0.95 (HoloBrite $1.45) | Spot Gloss UV $1.05 (HoloBrite $1.55) | Standard Embossing $1.35 (HoloBrite $1.85) | Pro $1.65 (HoloBrite $2.15)
-  Gold BF: Base $1.20 (HoloBrite $1.70) | Spot Gloss UV $1.30 (HoloBrite $1.80) | Standard Embossing $1.60 (HoloBrite $2.10) | Pro $1.90 (HoloBrite $2.40)
+  Holographic BF: Base $1.00 (HoloBrite $1.50) | Spot Gloss UV $1.10 (HoloBrite $1.60) | Standard Embossing $1.35 (HoloBrite $1.85) | Pro $1.65 (HoloBrite $2.15)
+  Gold BF: Base $1.25 (HoloBrite $1.75) | Spot Gloss UV $1.35 (HoloBrite $1.85) | Standard Embossing $1.60 (HoloBrite $2.10) | Pro $1.90 (HoloBrite $2.40)
 
 [Miron Jar Labels] Labels for Miron violet-glass jars, priced by jar size.
 ### Miron 5 ml (Puck)
