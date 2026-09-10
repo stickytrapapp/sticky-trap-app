@@ -801,6 +801,45 @@
 #stmenu .brandhead .contactbar .qr{flex-direction:row;gap:7px}
 #stmenu .brandhead .contactbar .qr img{width:46px;height:46px;padding:4px;border-radius:8px}
 #stmenu .brandhead .contactbar .qr span{font-size:8.5px;text-align:left;max-width:50px;line-height:1.15}
+/* phone sizing pass 2026-09-10 (Shane: 'bigger and flow better on a mobile device') - larger type and tap targets under 520px */
+@media (max-width:520px){
+#stmenu .wrap{padding:6px 14px 120px}
+#stmenu .sub{font-size:16px}
+#stmenu .navchip{font-size:14px;padding:9px 15px}
+#stmenu .pricehi{font-size:13.5px;padding:10px 12px;gap:6px 10px}
+#stmenu .howto{font-size:14px}
+#stmenu .legend summary{font-size:14px;padding:13px 16px}
+#stmenu .legbody{font-size:13.5px}
+#stmenu .cutnote{font-size:14.5px}
+#stmenu .secfine{font-size:15.5px}
+#stmenu .an{font-size:18.5px}
+#stmenu .afrom{font-size:14px}
+#stmenu .accbtn{padding:16px 14px;min-height:56px}
+#stmenu .addic{width:28px;height:28px;font-size:19px}
+#stmenu .rlab{font-size:12px}
+#stmenu .rchip{font-size:14px;padding:9px 16px}
+#stmenu .steplbl{font-size:12px}
+#stmenu .mchd b{font-size:15px}
+#stmenu .mchd .mdsc{font-size:13.5px}
+#stmenu .mchd .mil{font-size:11px}
+#stmenu .pmrow .finlab{font-size:14px}
+#stmenu .pmpr{font-size:16px}
+#stmenu .qlab{font-size:12px}
+#stmenu .qb{font-size:21px;min-width:46px;min-height:46px}
+#stmenu .qi2{font-size:18px}
+#stmenu .qqchip{font-size:14px;padding:8px 14px}
+#stmenu .qdisc,#stmenu .volnudge{font-size:13.5px}
+#stmenu .addbtn{font-size:14px;padding:10px 20px}
+#stmenu .expand{font-size:13.5px}
+#stmenu .cutdet summary{font-size:13.5px}
+#stmenu .ptable .fin{font-size:13.5px}
+#stmenu .qcell{font-size:13.5px}
+#stmenu .pnote{font-size:12.5px}
+#stmenu .line .nm{font-size:15.5px}
+#stmenu .line .meta{font-size:12.5px}
+#stmenu .foot{font-size:13.5px}
+#stmenu .sec-head{font-size:21.3px}
+}
 </style>
 <div id="stmenu">
 <div class="wrap">
@@ -1354,7 +1393,7 @@
       <div><div class="ch-title">Ask The Sticky Trap</div><div class="ch-sub">Prices &middot; materials &middot; how to order</div></div>
     </div>
     <div class="ch-log" id="chatlog" aria-live="polite"></div>
-    <div class="ch-chips" id="chatchips"></div>
+    <div class="ch-chips" id="chatchips" hidden></div>
     <form class="ch-form" id="chatform" autocomplete="off">
       <input class="ch-in" id="chatin" type="text" maxlength="600" placeholder="Ask about pricing, materials, ordering&hellip;" aria-label="Your question">
       <button class="ch-send" id="chatsend" type="submit">Send</button>
@@ -1843,7 +1882,7 @@
   if(!fab||!panel) return;
   var HELLO="Hey! I'm the Sticky Trap assistant. Ask me about pricing, materials, finishes, or how to order.";
   var OFFLINE="Chat is warming up. Call or text 734 460 3845, email thestickytrap@gmail.com, or tap Start a project in the Connect tab and we'll get right back to you.";
-  var STARTERS=['What does a 3" slap cost?','Add 100 3" slaps, holo Pro',"Where's my order?",'How do I place an order?','Do I need print-ready art?'];
+  var STARTERS=[];   // Shane 2026-09-10: no pre-written questions in the chat
   var MSGS=[]; try{ MSGS=JSON.parse(sessionStorage.getItem('st_chat')||'[]'); if(!Array.isArray(MSGS)) MSGS=[]; }catch(e){ MSGS=[]; }
   var busy=false, hideT=null;
 
@@ -2105,6 +2144,27 @@
   if(icon) icon.addEventListener('click',function(){ show('topbar'); });
   document.getElementById('trackClose').addEventListener('click',function(){ panel.style.display='none'; });
   panel.addEventListener('click',function(e){ if(e.target===panel) panel.style.display='none'; });
+})();
+</script>
+<!-- 21+ age gate (Shane 2026-09-10: 'make the app 21 and over'). Asked once per device; answer kept in localStorage st_age_ok. -->
+<div id="agegate" role="dialog" aria-modal="true" aria-labelledby="ag-h" style="position:fixed;inset:0;z-index:500;background:#000;color:#fff;display:none;align-items:center;justify-content:center;padding:24px;text-align:center;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif">
+  <div style="max-width:360px;width:100%">
+    <img src="icons/icon-192.png" alt="" width="84" height="84" style="border-radius:22px;display:block;margin:0 auto 18px">
+    <div style="font-size:52px;font-weight:900;letter-spacing:-.02em;line-height:1;background:linear-gradient(100deg,#FF1FA2,#8A2BE2 52%,#12C4FF);-webkit-background-clip:text;background-clip:text;color:transparent">21+</div>
+    <h2 id="ag-h" style="font-size:20px;font-weight:900;margin:14px 0 8px;color:#fff">Are you 21 or older?</h2>
+    <p style="font-size:14.5px;line-height:1.5;color:#fff;margin:0 0 22px">The Sticky Trap works with the cannabis industry. You must be 21 or older to use this app.</p>
+    <button type="button" id="ag-yes" style="display:block;width:100%;padding:16px;border:0;border-radius:14px;background:linear-gradient(100deg,#FF1FA2,#8A2BE2 52%,#12C4FF);color:#0A0A0F;font:inherit;font-size:16px;font-weight:900;cursor:pointer">Yes, I'm 21 or older</button>
+    <button type="button" id="ag-no" style="display:block;width:100%;margin-top:10px;padding:14px;border:1px solid rgba(255,255,255,.25);border-radius:14px;background:none;color:#fff;font:inherit;font-size:14.5px;font-weight:700;cursor:pointer">No, I'm under 21</button>
+    <p id="ag-sorry" hidden style="font-size:14.5px;line-height:1.5;color:#fff;margin:18px 0 0">Sorry, you have to be 21 or older to come in. See you in a few years.</p>
+  </div>
+</div>
+<script>
+(function(){
+  var g=document.getElementById('agegate'); if(!g) return; var ok=false; try{ ok=localStorage.getItem('st_age_ok')==='1'; }catch(e){}
+  if(ok) return;
+  g.style.display='flex'; document.documentElement.style.overflow='hidden';
+  document.getElementById('ag-yes').addEventListener('click',function(){ try{ localStorage.setItem('st_age_ok','1'); }catch(e){} g.style.display='none'; document.documentElement.style.overflow=''; try{ window.track&&window.track('age_gate','yes'); }catch(e){} });
+  document.getElementById('ag-no').addEventListener('click',function(){ document.getElementById('ag-yes').hidden=true; this.hidden=true; document.getElementById('ag-sorry').hidden=false; try{ window.track&&window.track('age_gate','no'); }catch(e){} });
 })();
 </script>
 </body>

@@ -45,18 +45,18 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 20;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 21;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
 var DEFAULTS = {
-  MODEL: 'claude-opus-5',
+  MODEL: 'claude-sonnet-5',   // Shane 2026-09-10: faster replies (was claude-opus-5; script property MODEL overrides)
   KB_URL: 'https://thestickytrap.app/data/chat-kb.txt',
   MAX_PER_HOUR: 40,        // per device
   MAX_ALL_PER_HOUR: 600,   // whole app
   MAX_TURNS: 16,           // messages kept from the client (8 exchanges)
   MAX_CHARS: 2000,         // per message
-  MAX_TOKENS: 700,
+  MAX_TOKENS: 300,
   MAX_TOOL_ROUNDS: 4       // API calls per customer message (tool use loops)
 };
 function cfg_(k) { return PROP.getProperty(k) || DEFAULTS[k]; }
@@ -72,7 +72,7 @@ var TABS = ['industry', 'social', 'menu', 'specs', 'connect', 'play'];
 var SYSTEM = [
   "You are the in-app assistant for The Sticky Trap, a design house and sticker/label print shop in Ann Arbor, Michigan.",
   "You're chatting with customers inside the Sticky Trap phone app (tabs: Industry, Social, Menu, Specs, Connect, Play).",
-  "Answer from the knowledge base below. Be warm, direct and brief - this is a small chat panel: usually one to four short sentences, plain text.",
+  "Answer from the knowledge base below. Be warm, direct and SHORT - this is a small phone chat panel: one to three short sentences, under 45 words, plain text. Give the one most relevant answer (e.g. the single price for the material and tier asked, or the most common option) and offer more only if they want it. Never list every material or every tier unless they ask for the full list.",
   "No markdown headers, tables or bold; a short list with one item per line and a leading dash is fine.",
   "Quote prices exactly as listed (per piece, USD) and name the material and finish tier you're quoting. Apply the volume breaks only as the rules state and show the math when you total an order.",
   "The House facts section (turnaround, hours, and whatever else the shop adds there) is authoritative - answer those directly. If something isn't in the knowledge base - rush jobs, shipping, items or materials not on the menu, design or pre-press cost, orders over 1,000 - don't guess: say it's quoted per project and point them to call/text 734 460 3845, email thestickytrap@gmail.com, or the basket / Start a project quote flow in the app.",
