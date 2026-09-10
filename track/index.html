@@ -39,6 +39,8 @@
   .err{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;text-align:center;color:var(--muted);line-height:1.6}
   .lookup input{width:100%;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;color:#fff;font:inherit;font-size:15px;padding:11px 12px;margin-top:8px;outline:none}
   .lookup input:focus{border-color:var(--cy)}
+  .btn.ghost{background:rgba(255,255,255,.06);color:var(--paper);border:1px solid var(--line)}
+  textarea{width:100%;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;color:#fff;font:inherit;font-size:15px;padding:10px 11px;outline:none}
 </style>
 </head>
 <body>
@@ -68,13 +70,22 @@
     app.innerHTML='<p class="code">'+esc(o.code)+'</p><div class="who">'+esc(o.company||o.name||'')+'</div>'+
       '<div class="now"><div class="k">Right now</div><div class="v">'+esc(o.label)+'</div><div class="m">'+esc(o.message||'')+'</div></div>'+
       '<div class="meta"><div><div class="k">Due</div><div class="v">'+esc(o.due||'To be set')+'</div></div><div><div class="k">Order</div><div class="v">'+esc(o.items||'See your quote')+'</div></div></div>'+
-      (o.can_approve?'<button class="btn" id="approve">✓ Approve my proof</button><div class="note">Approving tells us the proof is right and we can print. If something needs a change, reply to the proof email instead.</div>':'')+
+      (o.pay_url?'<a class="btn" id="pay" href="'+esc(o.pay_url)+'" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none">Pay the invoice →</a><div class="note">Opens your Square invoice. The deposit locks in your spot in the queue.</div>':'')+
+      (o.can_approve?'<button class="btn" id="approve">✓ Approve my proof</button><div class="note">Approving tells us the proof is right and we can print.</div>':'')+
+      (o.can_change?'<button class="btn ghost" id="chg" type="button" style="margin-top:8px">Request changes</button><div id="chgbox" hidden style="margin-top:8px"><textarea id="chgnote" rows="3" maxlength="400" placeholder="What should change? e.g. make the logo bigger, fix the strain name"></textarea><button class="btn" id="chgsend" type="button" style="margin-top:8px">Send change request</button></div>':'')+
+      (o.reorder_url?'<a class="btn" href="'+esc(o.reorder_url)+'" style="display:block;text-align:center;text-decoration:none">Reorder this job →</a><div class="note">Opens the app with this order filled in - adjust anything, then send.</div>':'')+
       '<ul class="tl" style="margin-top:18px">'+tl+'</ul>';
     var ab=document.getElementById('approve');
     if(ab) ab.addEventListener('click',function(){ ab.disabled=true; ab.textContent='Sending…';
       fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'approve',code:o.code,token:o.token})}).then(function(r){return r.json();})
         .then(function(j){ if(j&&j.ok){ load(); } else { ab.disabled=false; ab.textContent='✓ Approve my proof'; alert('Could not record the approval - try again or text 734 460 3845.'); } })
         .catch(function(){ ab.disabled=false; ab.textContent='✓ Approve my proof'; }); });
+    var cb=document.getElementById('chg'), cbox=document.getElementById('chgbox'), cs=document.getElementById('chgsend');
+    if(cb) cb.addEventListener('click',function(){ cbox.hidden=!cbox.hidden; if(!cbox.hidden){ document.getElementById('chgnote').focus(); } });
+    if(cs) cs.addEventListener('click',function(){ var note=document.getElementById('chgnote').value.trim(); if(!note){ alert('Tell us what should change.'); return; } cs.disabled=true; cs.textContent='Sending…';
+      fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'changes',code:o.code,token:o.token,note:note})}).then(function(r){return r.json();})
+        .then(function(j){ if(j&&j.ok){ load(); } else { cs.disabled=false; cs.textContent='Send change request'; alert('Could not send that - try again or text 734 460 3845.'); } })
+        .catch(function(){ cs.disabled=false; cs.textContent='Send change request'; }); });
   }
   function load(){
     var o=q('o'), t=q('t'), e=q('e'); if(!o||(!t&&!e)) return lookupForm();

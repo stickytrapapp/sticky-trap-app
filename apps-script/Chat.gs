@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 21;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 22;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -82,7 +82,7 @@ var SYSTEM = [
   "Reply in the customer's language. If asked what you are: a Sticky Trap assistant powered by Claude.",
   "",
   "ACTING IN THE APP - you have tools that the app executes for the customer:",
-  "- add_to_basket: only when they clearly ask to add or order something AND you have product, material, finish and quantity. If any piece is missing, ask for it in one short question instead of assuming (never assume a finish). Quantities: steps of 5 from 5 up to 1,000 (over 1,000 is a call-us quote). The minimum ORDER is $50 total across the basket - the tool result says whether the basket meets it; if not, tell them how much more is needed in one line. The tool result carries the exact unit price and line total - confirm those in one line, and if they're within 55 pieces of a volume break, mention it.",
+  "- add_to_basket: as soon as you have product, material, finish and quantity - whether they say 'add' or simply ask what that exact quantity costs - quote the line AND call add_to_basket in the same turn. Never ask 'want me to add it?'; they can remove it in the basket. If any piece is missing, ask for it in one short question instead of assuming (never assume a finish). Quantities: steps of 5 from 5 up to 1,000 (over 1,000 is a call-us quote). The minimum ORDER is $50 total across the basket - the tool result says whether the basket meets it; if not, tell them how much more is needed in one line. The tool result carries the exact unit price and line total - confirm those in one line, and if they're within 55 pieces of a volume break, mention it.",
   "- open_product: when they want to see or browse a product's prices; it expands that product in the Menu tab.",
   "- show_basket: when they ask to see, review or check out their basket.",
   "- open_quote_form: when they're ready to send the order, get a quote, or upload art.",
@@ -140,6 +140,7 @@ function doPost(e) {
   if (body.action === 'order_new') { try { return out_(orderNew_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
   if (body.action === 'order_stage') { try { return out_(orderStage_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
   if (body.action === 'approve') { try { return out_(approve_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
+  if (body.action === 'changes') { try { return out_(changes_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
   if (body.action === 'order_delete') { try { return out_(orderDelete_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
 
   var uid = String(body.uid || 'anon').slice(0, 40);
@@ -599,10 +600,11 @@ var STAGES = {
   complete:   { label: 'Complete',                  msg: 'All done - thank you for sticking with us.' }
 };
 var NUDGE_HOURS = { proof_sent: 24, printing: 72 };   // Shane 2026-09-08: 24 h in proof, 72 h in printing -> nudge the team (never the client)
-var ORDER_COLS = ['code', 'created', 'name', 'company', 'email', 'phone', 'items', 'due', 'stage', 'stage_ts', 'history', 'token', 'monday_item', 'square_inv', 'nudged_ts', 'notes', 'source'];
+var ORDER_COLS = ['code', 'created', 'name', 'company', 'email', 'phone', 'items', 'due', 'stage', 'stage_ts', 'history', 'token', 'monday_item', 'square_inv', 'nudged_ts', 'notes', 'source', 'pay_url'];   // pay_url = Square invoice link (v22)
 function ordersSheet_() {
   var ss = ss_(), sh = ss.getSheetByName('orders');
   if (!sh) { sh = ss.insertSheet('orders'); sh.appendRow(ORDER_COLS); try { sh.getRange('A:A').setNumberFormat('@'); sh.getRange('H:H').setNumberFormat('@'); } catch (e) {} }
+  else if (sh.getLastColumn() < ORDER_COLS.length) { sh.getRange(1, 1, 1, ORDER_COLS.length).setValues([ORDER_COLS]); }   // columns added later (pay_url) get their header
   return sh;
 }
 function consolePin_() { return String(PROP.getProperty('CONSOLE_PIN') || '4750'); }
@@ -621,6 +623,7 @@ function findOrder_(sh, code) {
   return null;
 }
 function trackUrl_(o) { return 'https://thestickytrap.app/track/?o=' + encodeURIComponent(o.code) + '&t=' + encodeURIComponent(o.token); }
+function reorderUrl_(o) { var e = encodeURIComponent; return 'https://thestickytrap.app/?reorder=' + e(o.code) + '&items=' + e(String(o.items || '').slice(0, 400)) + '&name=' + e(o.name || '') + '&co=' + e(o.company || '') + '&email=' + e(o.email || '') + '&phone=' + e(o.phone || '') + '#menu'; }   // opens the app's quote form pre-filled (v22)
 function stageMail_(o, stage, note) {
   if (!o.email || !STAGES[stage]) return false;
   var st = STAGES[stage], url = trackUrl_(o), who = o.company || o.name || '';
@@ -631,8 +634,10 @@ function stageMail_(o, stage, note) {
     '<p>' + esc_(st.msg) + '</p>' + (note ? '<p style="background:#f4f2fa;padding:10px 12px;border-radius:8px"><b>Note from the shop:</b> ' + esc_(note) + '</p>' : '') +
     (o.items ? '<p style="color:#555"><b>Order:</b> ' + esc_(o.items) + (o.due ? ' &middot; <b>Due:</b> ' + esc_(o.due) : '') + '</p>' : '') +
     (stage === 'proof_sent' ? btn('Review & approve my proof', url) : btn('Track my order', url)) +
+    (stage === 'quoted' && o.pay_url ? btn('Pay the invoice', o.pay_url) : '') +
+    (stage === 'complete' ? btn('Reorder this job', reorderUrl_(o)) : '') +
     '<p style="color:#888;font-size:12px">Reply to this email or text 734 460 3845 with any changes. FM Holdings LLC d/b/a The Sticky Trap, 4750 Venture Dr, Suite 101, Ann Arbor, MI 48108.</p></div>';
-  MailApp.sendEmail(o.email, 'Your Sticky Trap order ' + o.code + ': ' + st.label, st.label + ' - ' + st.msg + '\n' + url, { htmlBody: html, name: 'The Sticky Trap', replyTo: SHOP_EMAIL });
+  MailApp.sendEmail(o.email, 'Your Sticky Trap order ' + o.code + ': ' + st.label, st.label + ' - ' + st.msg + '\n' + url + (stage === 'quoted' && o.pay_url ? '\nPay: ' + o.pay_url : '') + (stage === 'complete' ? '\nReorder: ' + reorderUrl_(o) : ''), { htmlBody: html, name: 'The Sticky Trap', replyTo: SHOP_EMAIL });
   return true;
 }
 function orderNew_(b) {
@@ -644,7 +649,7 @@ function orderNew_(b) {
   if (findOrder_(sh, code)) return { ok: false, error: 'code_exists' };
   var stage = STAGES[b.stage] ? b.stage : 'received', now = new Date(), token = Utilities.getUuid().replace(/-/g, '').slice(0, 12);
   var o = { code: code, created: now, name: name, company: company, email: email, phone: String(b.phone || '').slice(0, 40), items: String(b.items || '').slice(0, 400), due: String(b.due || '').slice(0, 40),
-            stage: stage, stage_ts: now, history: JSON.stringify([{ stage: stage, ts: now.getTime(), note: '' }]), token: token, monday_item: '', square_inv: String(b.square_inv || '').slice(0, 60), nudged_ts: '', notes: '', source: String(b.source || '').slice(0, 20) };
+            stage: stage, stage_ts: now, history: JSON.stringify([{ stage: stage, ts: now.getTime(), note: '' }]), token: token, monday_item: '', square_inv: String(b.square_inv || '').slice(0, 60), nudged_ts: '', notes: '', source: String(b.source || '').slice(0, 20), pay_url: /^https:\/\//.test(String(b.pay_url || '')) ? String(b.pay_url).slice(0, 300) : '' };
   sh.appendRow(ORDER_COLS.map(function (k) { return o[k]; }));
   var emailed = false; try { emailed = stageMail_(o, stage, ''); } catch (e) {}
   return { ok: true, code: code, token: token, url: trackUrl_(o), emailed: emailed };
@@ -655,6 +660,7 @@ function orderStage_(b) {
   var sh = ordersSheet_(), f = findOrder_(sh, b.code); if (!f) return { ok: false, error: 'not_found' };
   var o = f.o, now = new Date(), note = String(b.note || '').slice(0, 300), hist = []; try { hist = JSON.parse(o.history || '[]'); } catch (e) {}
   if (b.square_inv && !o.square_inv) { try { sh.getRange(f.i, ORDER_COLS.indexOf('square_inv') + 1).setValue(String(b.square_inv).slice(0, 60)); } catch (e) {} }
+  if (b.pay_url && !o.pay_url && /^https:\/\//.test(String(b.pay_url))) { try { o.pay_url = String(b.pay_url).slice(0, 300); sh.getRange(f.i, ORDER_COLS.indexOf('pay_url') + 1).setValue(o.pay_url); } catch (e) {} }
   if (b.only_forward && STAGE_ORDER.indexOf(stage) <= STAGE_ORDER.indexOf(o.stage)) return { ok: true, code: o.code, stage: o.stage, skipped: true };   // automated sources never move an order backwards
   hist.push({ stage: stage, ts: now.getTime(), note: note });
   sh.getRange(f.i, ORDER_COLS.indexOf('stage') + 1, 1, 3).setValues([[stage, now, JSON.stringify(hist)]]);
@@ -675,11 +681,25 @@ function approve_(b) {
   o.stage = 'approved'; try { stageMail_(o, 'approved', ''); } catch (e) {}
   return { ok: true };
 }
+function changes_(b) {   // client asks for proof changes from the tracker page (v22): back to 'proofing', note logged, shop told
+  var sh = ordersSheet_(), f = findOrder_(sh, b.code); if (!f) return { ok: false, error: 'not_found' };
+  var o = f.o; if (String(b.token || '') !== String(o.token)) return { ok: false, error: 'bad_token' };
+  if (o.stage !== 'proof_sent' && o.stage !== 'proofing') return { ok: false, error: 'not_in_proof' };
+  var note = String(b.note || '').trim().slice(0, 400); if (!note) return { ok: false, error: 'no_note' };
+  var now = new Date(), hist = []; try { hist = JSON.parse(o.history || '[]'); } catch (e) {}
+  hist.push({ stage: 'proofing', ts: now.getTime(), note: 'Client requested changes: ' + note });
+  sh.getRange(f.i, ORDER_COLS.indexOf('stage') + 1, 1, 3).setValues([['proofing', now, JSON.stringify(hist)]]);
+  sh.getRange(f.i, ORDER_COLS.indexOf('nudged_ts') + 1).setValue('');
+  try { MailApp.sendEmail(notifyTo_(), 'CHANGES REQUESTED - ' + o.code + ' (' + (o.company || o.name) + ')', (o.company || o.name) + ' asked for changes to the proof for ' + o.code + ':' + '\n\n' + note + '\n\n' + (o.items || '') + '\n' + 'Due: ' + (o.due || 'tbd') + '\n' + 'Console: https://thestickytrap.app/console/?o=' + encodeURIComponent(o.code), { replyTo: o.email || SHOP_EMAIL }); } catch (e) {}
+  o.stage = 'proofing'; try { stageMail_(o, 'proofing', 'We got your request - ' + note + ' - and will send a revised proof.'); } catch (e) {}
+  return { ok: true };
+}
 function publicOrder_(o) {
   var hist = []; try { hist = JSON.parse(o.history || '[]'); } catch (e) {}
   var st = STAGES[o.stage] || STAGES.received;
   return { code: o.code, name: o.name, company: o.company, items: o.items, due: o.due, stage: o.stage, label: st.label, message: st.msg, token: o.token,
            stage_ts: o.stage_ts ? new Date(o.stage_ts).getTime() : null, can_approve: (o.stage === 'proof_sent' || o.stage === 'proofing'),
+           can_change: (o.stage === 'proof_sent' || o.stage === 'proofing'), pay_url: (o.stage === 'quoted' && o.pay_url) ? o.pay_url : '', reorder_url: o.stage === 'complete' ? reorderUrl_(o) : '',
            stages: STAGE_ORDER.filter(function (k) { return k !== 'shipped' || o.stage === 'shipped'; }).filter(function (k) { return k !== 'ready' || o.stage !== 'shipped'; }).map(function (k) { return { key: k, label: STAGES[k].label }; }),
            history: hist.map(function (h) { return { stage: h.stage, label: (STAGES[h.stage] || {}).label || h.stage, ts: h.ts, note: h.note || '' }; }) };
 }

@@ -1651,6 +1651,14 @@
         note=document.getElementById('qf-note'), status=document.getElementById('qf-status');
     var files=[], MAX=22*1024*1024;
     var noArt=false, noartBox=document.getElementById('noart-box');
+    // Reorder link from a finished job's email / tracker page (2026-09-10): ?reorder=CODE&items=&name=&co=&email=&phone= pre-fills the form
+    var REORDER=null; try{ var rp=new URLSearchParams(location.search); if(rp.get('reorder')){ REORDER={code:rp.get('reorder'), items:rp.get('items')||'', name:rp.get('name')||'', co:rp.get('co')||'', email:rp.get('email')||'', phone:rp.get('phone')||''}; } }catch(e){}
+    if(REORDER){ try{ var qn=document.getElementById('qf-name'), qe=document.getElementById('qf-email'), qp=document.getElementById('qf-phone');
+        if(qn&&!qn.value) qn.value=REORDER.name+(REORDER.co?' - '+REORDER.co:''); if(qe&&!qe.value) qe.value=REORDER.email; if(qp&&!qp.value) qp.value=REORDER.phone;
+        if(noartBox){ noartBox.checked=true; noArt=true; }
+        var qnote=document.getElementById('qf-note'); if(qnote){ qnote.textContent='Reordering '+REORDER.code+': '+(REORDER.items||'same as last time')+'. Adjust anything, add new art if it changed, then send.'; }
+        setTimeout(function(){ var q=document.getElementById('quoteform'); if(q) q.scrollIntoView({block:'start',behavior:'smooth'}); },900);
+        try{ history.replaceState(null,'','/#menu'); }catch(e){} }catch(e){} }
     if(noartBox) noartBox.addEventListener('change',function(){ noArt=this.checked; if(drop) drop.classList.toggle('dropdim',noArt); setStatus('',''); });
 
     // #1 show the basket order summary in the form; #2 adapt the details placeholder to context
@@ -1707,9 +1715,9 @@
       if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ setStatus('Add your email so we can send the quote.','err'); return; }
       var basket='', basketCount=0; try{ var c=JSON.parse(localStorage.getItem('st_cart')||'[]'); basketCount=c.length; if(c.length){ basket=c.map(function(i){return i.qty+'x '+i.p+' — '+i.m+' / '+i.f+' ($'+i.pr+' ea)';}).join('\n'); localStorage.setItem('st_lastorder', JSON.stringify(c)); } }catch(err){}
       var basketSub=0; try{ (c||[]).forEach(function(i){ var u=(window.STM&&window.STM.unit)?window.STM.unit(i):(parseFloat(i.pr)||0); basketSub+=u*(+i.qty||0); }); }catch(err){}
-      var details='';
+      var details=REORDER?('REORDER of '+REORDER.code+' - previous order: '+REORDER.items):'';
       if(!files.length && !noArt){ setStatus('Art files are required for a pre-press quote — or tap “Place a sticker order without art” to order without them.','err'); return; }
-      if(!files.length && noArt && !basketCount){ setStatus('Add items to your basket so we know what to make.','err'); return; }
+      if(!files.length && noArt && !basketCount && !REORDER){ setStatus('Add items to your basket so we know what to make.','err'); return; }
       // $50 minimum is charged in the basket, not enforced here (Shane 2026-09-09): small baskets send as a $50 order
       if(total()>MAX){ setStatus('Files over ~20MB — email them to thestickytrap@ instead.','err'); return; }
       submit.disabled=true; submit.textContent='Sending…'; setStatus('','');
@@ -1909,6 +1917,7 @@
   STARTERS.forEach(function(t){ var b=document.createElement('button'); b.type='button'; b.className='ch-chip'; b.textContent=t; b.addEventListener('click',function(){ ask(t); }); chips.appendChild(b); });
 
   function open(){
+    if(!open.warm){ open.warm=1; try{ fetch(CHAT_URL+'?ping=1',{mode:'no-cors',cache:'no-store'}).catch(function(){}); }catch(e){} }   // wake the script host now so the first answer skips the cold start (2026-09-10)
     panel.classList.add('on'); ov.classList.add('on'); panel.setAttribute('aria-hidden','false'); fab.classList.add('fabhide');
     try{window.track&&window.track('chat_open',(window.location.hash||'').replace('#','')||'industry');}catch(e){}
     setTimeout(function(){ scrollEnd(); try{ if(window.innerWidth>700) input.focus({preventScroll:true}); }catch(e){} },280);
