@@ -556,7 +556,7 @@
         <b>How to play</b>
         <ol>
           <li>Tap <b>2+ touching shards</b> of the same color to clear them.</li>
-          <li><b>Bigger groups score way more</b> — chain big ones for a combo.</li>
+          <li><b>Bigger groups score way more</b> — chain big ones for a combo, and combos of ×2 and up add bonus seconds to the clock.</li>
           <li><b>60 seconds</b> a try, <b>3 tries</b> — best score counts.</li>
           <li>A <b>new board every 6 hours</b> — same board for everyone, so the ladder is fair.</li>
         </ol>
@@ -920,8 +920,8 @@
     if(btn)btn.textContent=(attempt===1?'▶ Start · '+TIME+'s':'▶ Play again · '+TIME+'s');
     if(sub)sub.textContent=(attempt===1?'3 tries — your best score counts.':('Best so far '+fmt(bestScore)+' · try '+attempt+' of 3'));
   }
-  function showCombo(mult,id){ var el=document.getElementById(id||'combo'); if(!el)return;
-    el.textContent='×'+(Math.round(mult*10)/10)+' COMBO'; el.classList.remove('show'); void el.offsetWidth; el.classList.add('show'); }
+  function showCombo(mult,id,bonus){ var el=document.getElementById(id||'combo'); if(!el)return;
+    el.textContent='×'+(Math.round(mult*10)/10)+' COMBO'+(bonus?' +'+bonus+'s':''); el.classList.remove('show'); void el.offsetWidth; el.classList.add('show'); }
   function draw(){ board.innerHTML='';
     for(var r=0;r<ROWS;r++)for(var c=0;c<COLS;c++){ var v=grid[r][c], b=document.createElement('button');
       b.className='tile'+(v===null?' empty':' c'+v); if(v===null)b.style.visibility='hidden';
@@ -934,7 +934,10 @@
     var g=group(r,c); if(g.length<2)return;
     g.forEach(function(q){var el=board.children[q[0]*COLS+q[1]]; if(el)el.classList.add('pop');});
     var sz=g.length; if(sz>=4){combo=Math.min(4,combo+1);}else{combo=0;}
-    var mult=1+combo*0.5, gained=Math.round(sz*sz*mult); if(combo>=1)showCombo(mult,'combo');
+    var mult=1+combo*0.5, gained=Math.round(sz*sz*mult);
+    var bonus=combo>=2?combo-1:0;   // Shane 2026-09-10: bigger combos buy time - x2 +1 s, x2.5 +2 s, x3 +3 s (clock capped at TIME+30)
+    if(bonus){ timeLeft=Math.min(TIME+30,timeLeft+bonus); }
+    if(combo>=1)showCombo(mult,'combo',bonus);
     setTimeout(function(){ g.forEach(function(q){grid[q[0]][q[1]]=null;}); collapse(); dayScore+=gained; setStat(); draw(); },140); }
   function collapse(){ for(var c=0;c<COLS;c++){ var col=[]; for(var r=ROWS-1;r>=0;r--) if(grid[r][c]!==null)col.push(grid[r][c]);
     for(var r2=ROWS-1,i=0;r2>=0;r2--,i++) grid[r2][c]= i<col.length?col[i]:rcolor(); } }
@@ -1406,5 +1409,26 @@
   document.addEventListener('visibilitychange',function(){ if(!ctx) return; if(document.hidden){ if(running){ clearInterval(timer); timer=null; running=false; if(mus) mus.pause(); ctx.suspend(); } } else if(want&&!running){ start(); } });
   ui(want);   // show the remembered state; the loop itself waits for the first tap
   if(want){ var once=function(e){ document.removeEventListener('pointerdown',once,true); if(e&&e.target&&b.contains(e.target)) return; if(want) start(); }; document.addEventListener('pointerdown',once,true); }
+})();
+</script>
+<!-- 21+ age gate (Shane 2026-09-10: 'make the app 21 and over'). Asked once per device; answer kept in localStorage st_age_ok. -->
+<div id="agegate" role="dialog" aria-modal="true" aria-labelledby="ag-h" style="position:fixed;inset:0;z-index:500;background:#000;color:#fff;display:none;align-items:center;justify-content:center;padding:24px;text-align:center;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif">
+  <div style="max-width:360px;width:100%">
+    <img src="../icons/icon-192.png" alt="" width="84" height="84" style="border-radius:22px;display:block;margin:0 auto 18px">
+    <div style="font-size:52px;font-weight:900;letter-spacing:-.02em;line-height:1;background:linear-gradient(100deg,#FF1FA2,#8A2BE2 52%,#12C4FF);-webkit-background-clip:text;background-clip:text;color:transparent">21+</div>
+    <h2 id="ag-h" style="font-size:20px;font-weight:900;margin:14px 0 8px;color:#fff">Are you 21 or older?</h2>
+    <p style="font-size:14.5px;line-height:1.5;color:#fff;margin:0 0 22px">The Sticky Trap works with the cannabis industry. You must be 21 or older to use this app.</p>
+    <button type="button" id="ag-yes" style="display:block;width:100%;padding:16px;border:0;border-radius:14px;background:linear-gradient(100deg,#FF1FA2,#8A2BE2 52%,#12C4FF);color:#0A0A0F;font:inherit;font-size:16px;font-weight:900;cursor:pointer">Yes, I'm 21 or older</button>
+    <button type="button" id="ag-no" style="display:block;width:100%;margin-top:10px;padding:14px;border:1px solid rgba(255,255,255,.25);border-radius:14px;background:none;color:#fff;font:inherit;font-size:14.5px;font-weight:700;cursor:pointer">No, I'm under 21</button>
+    <p id="ag-sorry" hidden style="font-size:14.5px;line-height:1.5;color:#fff;margin:18px 0 0">Sorry, you have to be 21 or older to come in. See you in a few years.</p>
+  </div>
+</div>
+<script>
+(function(){
+  var g=document.getElementById('agegate'); if(!g) return; var ok=false; try{ ok=localStorage.getItem('st_age_ok')==='1'; }catch(e){}
+  if(ok) return;
+  g.style.display='flex'; document.documentElement.style.overflow='hidden';
+  document.getElementById('ag-yes').addEventListener('click',function(){ try{ localStorage.setItem('st_age_ok','1'); }catch(e){} g.style.display='none'; document.documentElement.style.overflow=''; try{ window.track&&window.track('age_gate','yes'); }catch(e){} });
+  document.getElementById('ag-no').addEventListener('click',function(){ document.getElementById('ag-yes').hidden=true; this.hidden=true; document.getElementById('ag-sorry').hidden=false; try{ window.track&&window.track('age_gate','no'); }catch(e){} });
 })();
 </script>
