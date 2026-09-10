@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 22;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 23;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -516,7 +516,7 @@ function refIn_(b) {
   for (var i = 1; i < rows.length; i++) if (String(rows[i][2]) === uid) return { ok: true, dup: true };   // one referral per new player, ever
   sh.appendRow([new Date(), ref, uid, handle]);
   CACHE.remove('refs:' + ref);
-  try { MailApp.sendEmail(SHOP_EMAIL, 'Trap Points referral: ' + ref + ' brought in ' + handle,
+  try { GmailApp.sendEmail(SHOP_EMAIL, 'Trap Points referral: ' + ref + ' brought in ' + handle,
     ref + ' referred a new player (' + handle + ', uid ' + uid + ') who just finished their first board.\nThey get +500 on their next ladder load.\nSheet: ' + ss_().getUrl()); } catch (e) {}
   return { ok: true };
 }
@@ -580,7 +580,7 @@ function ndaIn_(b) {
   var subject = 'Signed NDA - The Sticky Trap & ' + (company || name);
   var opts = { htmlBody: '<p>Here is your signed copy of the mutual NDA with The Sticky Trap' + (purpose ? ' (' + esc_(purpose) + ')' : '') + '. The PDF is attached.</p>' + html, inlineImages: inline, name: 'The Sticky Trap', cc: me };
   if (pdf) opts.attachments = [pdf];
-  MailApp.sendEmail(email, subject, 'Your signed NDA with The Sticky Trap is attached.', opts);
+  GmailApp.sendEmail(email, subject, 'Your signed NDA with The Sticky Trap is attached.', opts);
   return { ok: true };
 }
 
@@ -637,7 +637,7 @@ function stageMail_(o, stage, note) {
     (stage === 'quoted' && o.pay_url ? btn('Pay the invoice', o.pay_url) : '') +
     (stage === 'complete' ? btn('Reorder this job', reorderUrl_(o)) : '') +
     '<p style="color:#888;font-size:12px">Reply to this email or text 734 460 3845 with any changes. FM Holdings LLC d/b/a The Sticky Trap, 4750 Venture Dr, Suite 101, Ann Arbor, MI 48108.</p></div>';
-  MailApp.sendEmail(o.email, 'Your Sticky Trap order ' + o.code + ': ' + st.label, st.label + ' - ' + st.msg + '\n' + url + (stage === 'quoted' && o.pay_url ? '\nPay: ' + o.pay_url : '') + (stage === 'complete' ? '\nReorder: ' + reorderUrl_(o) : ''), { htmlBody: html, name: 'The Sticky Trap', replyTo: SHOP_EMAIL });
+  GmailApp.sendEmail(o.email, 'Your Sticky Trap order ' + o.code + ': ' + st.label, st.label + ' - ' + st.msg + '\n' + url + (stage === 'quoted' && o.pay_url ? '\nPay: ' + o.pay_url : '') + (stage === 'complete' ? '\nReorder: ' + reorderUrl_(o) : ''), { htmlBody: html, name: 'The Sticky Trap', replyTo: SHOP_EMAIL });
   return true;
 }
 function orderNew_(b) {
@@ -677,7 +677,7 @@ function approve_(b) {
   hist.push({ stage: 'approved', ts: now.getTime(), note: 'Approved by client online' });
   sh.getRange(f.i, ORDER_COLS.indexOf('stage') + 1, 1, 3).setValues([['approved', now, JSON.stringify(hist)]]);
   sh.getRange(f.i, ORDER_COLS.indexOf('nudged_ts') + 1).setValue('');
-  try { MailApp.sendEmail(SHOP_EMAIL, 'PROOF APPROVED - ' + o.code + ' (' + (o.company || o.name) + ')', (o.company || o.name) + ' approved the proof for ' + o.code + ' online.\n' + (o.items || '') + '\nDue: ' + (o.due || 'tbd') + '\nConsole: https://thestickytrap.app/console/'); } catch (e) {}
+  try { GmailApp.sendEmail(SHOP_EMAIL, 'PROOF APPROVED - ' + o.code + ' (' + (o.company || o.name) + ')', (o.company || o.name) + ' approved the proof for ' + o.code + ' online.\n' + (o.items || '') + '\nDue: ' + (o.due || 'tbd') + '\nConsole: https://thestickytrap.app/console/'); } catch (e) {}
   o.stage = 'approved'; try { stageMail_(o, 'approved', ''); } catch (e) {}
   return { ok: true };
 }
@@ -690,7 +690,7 @@ function changes_(b) {   // client asks for proof changes from the tracker page 
   hist.push({ stage: 'proofing', ts: now.getTime(), note: 'Client requested changes: ' + note });
   sh.getRange(f.i, ORDER_COLS.indexOf('stage') + 1, 1, 3).setValues([['proofing', now, JSON.stringify(hist)]]);
   sh.getRange(f.i, ORDER_COLS.indexOf('nudged_ts') + 1).setValue('');
-  try { MailApp.sendEmail(notifyTo_(), 'CHANGES REQUESTED - ' + o.code + ' (' + (o.company || o.name) + ')', (o.company || o.name) + ' asked for changes to the proof for ' + o.code + ':' + '\n\n' + note + '\n\n' + (o.items || '') + '\n' + 'Due: ' + (o.due || 'tbd') + '\n' + 'Console: https://thestickytrap.app/console/?o=' + encodeURIComponent(o.code), { replyTo: o.email || SHOP_EMAIL }); } catch (e) {}
+  try { GmailApp.sendEmail(notifyTo_(), 'CHANGES REQUESTED - ' + o.code + ' (' + (o.company || o.name) + ')', (o.company || o.name) + ' asked for changes to the proof for ' + o.code + ':' + '\n\n' + note + '\n\n' + (o.items || '') + '\n' + 'Due: ' + (o.due || 'tbd') + '\n' + 'Console: https://thestickytrap.app/console/?o=' + encodeURIComponent(o.code), { replyTo: o.email || SHOP_EMAIL }); } catch (e) {}
   o.stage = 'proofing'; try { stageMail_(o, 'proofing', 'We got your request - ' + note + ' - and will send a revised proof.'); } catch (e) {}
   return { ok: true };
 }
@@ -724,7 +724,7 @@ function nudgeStale_() {
     var age = (now - new Date(o.stage_ts).getTime()) / 36e5, last = o.nudged_ts ? (now - new Date(o.nudged_ts).getTime()) / 36e5 : 999;
     if (age > h && last > 24) { stale.push(o.code + ' - ' + (o.company || o.name) + ' - ' + STAGES[o.stage].label + ' for ' + Math.round(age) + ' h' + (o.due ? ' (due ' + o.due + ')' : '')); sh.getRange(i + 1, ORDER_COLS.indexOf('nudged_ts') + 1).setValue(new Date()); } }
   if (!stale.length) return 0;
-  MailApp.sendEmail(notifyTo_(), 'Order tracker: ' + stale.length + ' order' + (stale.length > 1 ? 's' : '') + ' need a push', stale.join('\n') + '\n\nLog the next stage: https://thestickytrap.app/console/');
+  GmailApp.sendEmail(notifyTo_(), 'Order tracker: ' + stale.length + ' order' + (stale.length > 1 ? 's' : '') + ' need a push', stale.join('\n') + '\n\nLog the next stage: https://thestickytrap.app/console/');
   return stale.length;
 }
 function orderDelete_(b) {
@@ -762,7 +762,7 @@ function weeklyDigest_() {
   lines.push('');
   lines.push('Console: https://thestickytrap.app/console/  -  Sheet: ' + ss.getUrl());
   var digestTo = String(PROP.getProperty('DIGEST_TO') || '').trim() || SHOP_EMAIL;   // Shane 2026-09-09: digest to the shop inbox only (Erin stays on the nudges via NUDGE_TO); set DIGEST_TO to widen it later
-  MailApp.sendEmail(digestTo, 'Sticky Trap app - week in review', lines.join('\n'), { name: 'The Sticky Trap app' });
+  GmailApp.sendEmail(digestTo, 'Sticky Trap app - week in review', lines.join('\n'), { name: 'The Sticky Trap app' });
   return lines.length;
 }
 // Run ONCE from the editor: hourly stale-order nudge + Monday 7 am digest.
@@ -777,7 +777,7 @@ function installNudges() {
 // Run this ONCE from the editor (pick it in the function dropdown, click Run) to grant the send-mail scope;
 // the web app then inherits the grant and NDA copies / referral alerts start going out.
 function authorizeMail() {
-  MailApp.sendEmail(SHOP_EMAIL, 'Sticky Trap chat web app: mail authorized', 'The chat web app can now send signed NDA copies and referral alerts. Sent by authorizeMail() from the Apps Script editor.');
+  GmailApp.sendEmail(SHOP_EMAIL, 'Sticky Trap chat web app: mail authorized', 'The chat web app can now send signed NDA copies and referral alerts. Sent by authorizeMail() from the Apps Script editor.');
   Logger.log('mail sent to ' + SHOP_EMAIL + ' - the web app can send email now');
 }
 function getConfig() {
