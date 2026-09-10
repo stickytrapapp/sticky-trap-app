@@ -89,7 +89,7 @@
   .avatar{width:32px;height:32px;border-radius:50%;background:var(--grad);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;box-shadow:0 2px 8px rgba(138,77,255,.4)}
 
   .views{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;position:relative}
-  .view{display:none;flex-direction:column;gap:13px;padding:16px 16px calc(36px + var(--safe-b))}
+  .view{display:none;flex-direction:column;gap:13px;padding:16px 16px calc(72px + var(--safe-b))}   /* room under the last item so the chat bubble never sits on it */
   .view.active{display:flex;animation:fade .28s ease}
   @keyframes fade{from{opacity:0}to{opacity:1}}  /* opacity-only: a transform here would make position:fixed children (basket FAB / drawer) anchor to the view instead of the screen */
 
@@ -310,7 +310,7 @@
   .softbar .st{font-size:12.5px;font-weight:800;color:var(--ink)} .softbar .ss{font-size:11px;color:var(--soft)} .softbar .go{font-size:18px;color:var(--mag)}
 
   /* connect — brand banner (dark, mirrors the header art) */
-  .view.connectbanner{background:#000;color:#fff;min-height:100%;gap:20px;align-items:center;text-align:center;padding:24px 18px calc(34px + var(--safe-b))}
+  .view.connectbanner{background:#000;color:#fff;min-height:100%;gap:20px;align-items:center;text-align:center;padding:24px 18px calc(72px + var(--safe-b))}
   .cb-cta{display:block;width:100%;max-width:340px;background:var(--grad);color:#0A0A0F;font-weight:800;font-size:15px;letter-spacing:.02em;padding:15px 20px;border:0;border-radius:26px;cursor:pointer;font-family:inherit;box-shadow:0 8px 24px rgba(138,77,255,.42);transition:.15s}
   .cb-cta:active{transform:translateY(1px)}
   .cb-cta-alt{background:rgba(255,255,255,.06);color:var(--ink);border:1px solid rgba(255,255,255,.22);box-shadow:none;margin-top:-6px}
@@ -1395,7 +1395,7 @@
     <div class="ch-log" id="chatlog" aria-live="polite"></div>
     <div class="ch-chips" id="chatchips" hidden></div>
     <form class="ch-form" id="chatform" autocomplete="off">
-      <input class="ch-in" id="chatin" type="text" maxlength="600" placeholder="Ask about pricing, materials, ordering&hellip;" aria-label="Your question">
+      <input class="ch-in" id="chatin" type="text" maxlength="600" placeholder="Ask about prices, materials, or where your order is&hellip;" aria-label="Your question">
       <button class="ch-send" id="chatsend" type="submit">Send</button>
     </form>
     <div class="ch-foot">AI assistant &middot; answers come from our live menu &middot; call/text 734 460 3845 anytime</div>
@@ -1961,7 +1961,8 @@
   // hide the bubble while the page scrolls (same manners as the basket button), bring it back when scrolling stops
   var views=document.querySelector('.views'), qform=document.getElementById('quoteform');
   function formInView(){ if(!qform) return false; var r=qform.getBoundingClientRect(); return r.top < (window.innerHeight - 40) && r.bottom > 40; }
-  function settle(){ if(panel.classList.contains('on')) return; fab.classList.toggle('fabhide', formInView()); }
+  function nearBottom(){ return !!views && (views.scrollHeight - views.scrollTop - views.clientHeight) < 110; }   // Shane 2026-09-10: the bubble was in the way at the bottom of a screen
+  function settle(){ if(panel.classList.contains('on')) return; fab.classList.toggle('fabhide', formInView() || nearBottom()); }
   if(views) views.addEventListener('scroll',function(){
     if(panel.classList.contains('on')) return;
     fab.classList.add('fabhide'); clearTimeout(hideT); hideT=setTimeout(settle,450);
