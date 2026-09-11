@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 30;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 31;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -90,7 +90,7 @@ var SYSTEM = [
   "You may call several tools in one turn (e.g. two add_to_basket lines). Their current tab and basket are given below - use them (e.g. 'your basket already has...'). After add_to_basket, state only what the result says (unit price, line total, basket subtotal); never speculate about merged or duplicate lines - the app handles that. If the result says the basket was EMPTY before the add, never say 'already' or 'merged'.",
   "",
   "HAND-OFF TO A PERSON (v25). Your job is to help enough to bring someone in; a person closes. Hand off when ANY of these fires: (1) money needs judgment - an item or material not on the menu, over 1,000 pieces, set-up / pre-press / design cost, rush, a discount request, or 'can you match this'; (2) they are ready to buy - product, quantity and art in hand; (3) they ask for a person, ask the same thing twice, or sound frustrated; (4) anything about an existing account, past pricing or an invoice (never discuss account terms); (5) compliance, legal or 'will this pass the state'; (6) the third question in a row you could not answer from the knowledge base.",
-  "How: say plainly you'll get them to our team (say 'our team' or 'our designer' - never 'a professional', never pretend to be a person). Ask their name and an email or phone in ONE short question. Then call handoff with what they want, the trigger and a two-line summary. If they have art files, also call open_quote_form so they can attach them. Close with the promise from the tool result: Erin or another customer liaison will reply within one business day. Do not hand off for things the knowledge base answers - answer them.",
+  "How: say plainly you'll get them to our team (say 'our team' or 'our designer' - never 'a professional', never pretend to be a person). Ask their name and an email or phone in ONE short question. Then call handoff with what they want, the trigger and a two-line summary. If they have art files, also call open_quote_form so they can attach them. Close with the promise from the tool result: Erin or another customer liaison will reply within one business day. If the result says routed_to 'owner', you may add that the owner has been flagged on it - same one-business-day promise, nothing more. Do not hand off for things the knowledge base answers - answer them.",
   "Say only what was asked and what the tool result says. Never volunteer reassurances or terms that are not in the knowledge base - nothing about when or whether they are charged, deposits, refunds, approval steps or what happens next in production (v26: the bot was adding 'nothing is charged until you approve' on its own). At a hand-off, the one-business-day promise is the only promise.",
   "SAVE / RESTORE A BASKET (v25): when the basket has lines and they are leaving, hesitating, or ask to save or come back later, offer to save it by email; with an email, call save_basket. If they say they saved a basket before (here, on another device, or on the website) and give the email, call load_basket - it re-adds the lines.",
   "", "KNOWLEDGE BASE:", ""
@@ -170,6 +170,8 @@ function doPost(e) {
   if (body.action === 'order_delete') { try { return out_(orderDelete_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
   if (body.action === 'order_restore') { try { return out_(orderRestore_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }   // v28
   if (body.action === 'order_update') { try { return out_(orderUpdate_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }     // v28
+  if (body.action === 'order_resend') { try { return out_(orderResend_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }     // v31
+  if (body.action === 'reauth') { try { return out_(reauth_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }                 // v31
 
   var uid = String(body.uid || 'anon').slice(0, 40);
   var msgs = clean_(body.messages);
@@ -397,7 +399,7 @@ function ask_(msgs, ctx) {
 
 /* ---------- v25: hand-off leads (sheet + email + Monday) and baskets saved by email ---------- */
 var HANDOFF_PROMISE = 'Erin or another customer liaison will reply within one business day.';
-var LEAD_COLS = ['ts', 'name', 'contact', 'want', 'trigger', 'summary', 'basket', 'channel', 'device_id', 'monday_item', 'emailed'];
+var LEAD_COLS = ['ts', 'name', 'contact', 'want', 'trigger', 'summary', 'basket', 'channel', 'device_id', 'monday_item', 'emailed', 'routed'];
 function leadsSheet_() {
   var ss = ss_(), sh = ss.getSheetByName('leads');
   if (!sh) { sh = ss.insertSheet('leads'); sh.appendRow(LEAD_COLS); }
@@ -420,24 +422,29 @@ function leadIn_(inp, ctx) {
   if (CACHE.get(key)) return { result: { ok: true, already_sent: true, promise: HANDOFF_PROMISE, note: 'This customer was already handed off a moment ago - just restate the promise; do not send again.' } };
   var want = String(inp.want || '').slice(0, 300), trig = String(inp.trigger || '').slice(0, 40), summ = String(inp.summary || '').slice(0, 800);
   var basket = basketSummary_(ctx.basket), test = isTest_(ctx), when = new Date();
+  // v31 (Shane 2026-09-11 'build the routing'): three kinds of lead go straight to the owner, Erin copied - big money, price match / discount, complaints.
+  var sub = basketLines_(ctx.basket).reduce(function (a, l) { return a + l.total; }, 0), ownerMin = +(PROP.getProperty('OWNER_LEAD_MIN') || 2000);
+  var why = trig === 'over_1000' || sub >= ownerMin ? 'over $' + ownerMin + ' / over 1,000 pcs' : (trig === 'discount_or_match' ? 'price match or discount' : (trig === 'repeat_or_frustrated' ? 'complaint / frustrated customer' : ''));
+  var toOwner = !!why;
   var mondayId = '', emailed = false;
-  if (!test) { try { mondayId = mondayLead_(name, contact, want, trig, summ, basket); } catch (e) { mondayId = 'ERR ' + String(e).slice(0, 80); } }
+  if (!test) { try { mondayId = mondayLead_(name, contact, want, trig, summ, basket, toOwner, why); } catch (e) { mondayId = 'ERR ' + String(e).slice(0, 80); } }
   try {
-    var subj = (test ? '[TEST] ' : '') + 'App chat lead: ' + name + ' - ' + (want || trig);
-    var body = ['New lead from the ' + (ctx.channel || 'app') + ' chat (' + Utilities.formatDate(when, Session.getScriptTimeZone(), 'EEE MMM d, h:mm a') + ')', '',
+    var subj = (test ? '[TEST] ' : '') + (toOwner ? '[OWNER] ' : '') + 'App chat lead: ' + name + ' - ' + (want || trig);
+    var body = ['New lead from the ' + (ctx.channel || 'app') + ' chat (' + Utilities.formatDate(when, Session.getScriptTimeZone(), 'EEE MMM d, h:mm a') + ')' + (toOwner ? '\nROUTED TO THE OWNER: ' + why + ' (Erin copied)' : ''), '',
       'Name: ' + name, 'Contact: ' + contact, 'Wants: ' + (want || '-'), 'Why handed off: ' + trig, '', 'Summary: ' + (summ || '-'), '', 'Basket: ' + basket,
       mondayId && !/^ERR/.test(mondayId) ? 'Monday item: https://thestickytraps-team.monday.com/boards/8594864074/pulses/' + mondayId : (mondayId ? 'Monday: ' + mondayId : 'Monday: not created (MONDAY_TOKEN not set)'),
       '', 'Promise made to the customer: ' + HANDOFF_PROMISE].join('\n');
-    GmailApp.sendEmail(notifyTo_(), subj, body, { name: 'Sticky Trap App', replyTo: emailOk_(contact) ? contact : SHOP_EMAIL });
+    var to = notifyTo_(); if (toOwner) { var ownerMail = PROP.getProperty('OWNER_EMAIL') || 'fmholdings.office@gmail.com'; if (to.indexOf(ownerMail) < 0) to += ',' + ownerMail; }
+    GmailApp.sendEmail(to, subj, body, { name: 'Sticky Trap App', replyTo: emailOk_(contact) ? contact : SHOP_EMAIL });
     emailed = true;
-  } catch (e) { emailed = false; }
-  try { leadsSheet_().appendRow([when, name, contact, want, trig, summ, basket, ctx.channel || 'app', ctx.uid || '', mondayId, emailed ? 'yes' : 'no']); } catch (e) {}
+  } catch (e) { emailed = false; mailErr_(e); }
+  try { leadsSheet_().appendRow([when, name, contact, want, trig, summ, basket, ctx.channel || 'app', ctx.uid || '', mondayId, emailed ? 'yes' : 'no', toOwner ? 'owner: ' + why : 'team']); } catch (e) {}
   CACHE.put(key, '1', 600);
-  return { result: { ok: true, recorded: true, promise: HANDOFF_PROMISE, monday: !!mondayId && !/^ERR/.test(mondayId), emailed: emailed },
-           action: { type: 'lead_sent', trigger: trig } };
+  return { result: { ok: true, recorded: true, promise: HANDOFF_PROMISE, routed_to: toOwner ? 'owner' : 'team', monday: !!mondayId && !/^ERR/.test(mondayId), emailed: emailed },
+           action: { type: 'lead_sent', trigger: trig, owner: toOwner } };
 }
 
-function mondayLead_(name, contact, want, trig, summ, basket) {
+function mondayLead_(name, contact, want, trig, summ, basket, toOwner, why) {
   var tok = PROP.getProperty('MONDAY_TOKEN');
   if (!tok) return '';
   var board = PROP.getProperty('LEADS_BOARD') || '8594864074', group = PROP.getProperty('LEADS_GROUP') || 'group_mm3cc2mz';   // main Board, 'Erin' group unless overridden
@@ -447,8 +454,14 @@ function mondayLead_(name, contact, want, trig, summ, basket) {
   var res = mondayGql_(tok, q, { b: board, g: group, n: title, c: JSON.stringify(cols) });
   var id = res.data && res.data.create_item && res.data.create_item.id;
   if (!id) throw new Error('monday: ' + JSON.stringify(res).slice(0, 120));
-  var upd = 'From the app chat. Why: ' + trig + '\nWants: ' + want + '\nContact: ' + contact + '\nSummary: ' + summ + '\nBasket: ' + basket + '\nPromise: ' + HANDOFF_PROMISE;
+  var upd = (toOwner ? 'OWNER LEAD (' + why + ') - Erin copied.\n' : '') + 'From the app chat. Why: ' + trig + '\nWants: ' + want + '\nContact: ' + contact + '\nSummary: ' + summ + '\nBasket: ' + basket + '\nPromise: ' + HANDOFF_PROMISE;
   try { mondayGql_(tok, 'mutation ($i: ID!, $t: String!) { create_update (item_id: $i, body: $t) { id } }', { i: id, t: upd }); } catch (e) {}
+  // v31: Monday bell - the liaison always, the owner for owner leads (script properties MONDAY_LIAISON_USER / MONDAY_OWNER_USER)
+  try {
+    var users = [PROP.getProperty('MONDAY_LIAISON_USER') || '99281761']; if (toOwner) users.push(PROP.getProperty('MONDAY_OWNER_USER') || '72735221');
+    var text = (toOwner ? 'OWNER LEAD (' + why + '): ' : 'New chat lead: ') + name + ' - ' + (want || trig).slice(0, 80);
+    users.forEach(function (u) { mondayGql_(tok, 'mutation ($u: ID!, $t: ID!, $x: String!) { create_notification (user_id: $u, target_id: $t, text: $x, target_type: Project) { text } }', { u: u, t: id, x: text }); });
+  } catch (e) {}
   return String(id);
 }
 function mondayGql_(tok, query, vars) {
@@ -585,7 +598,7 @@ function scoresSheet_() {
 function monthOfDay_(day) { var d = new Date(day * 864e5); return d.getUTCFullYear() + '-' + ('0' + (d.getUTCMonth() + 1)).slice(-2); }
 function scoreIn_(b) {
   var uid = String(b.uid || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 40);
-  var handle = String(b.handle || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8);
+  var handle = String(b.handle || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 9);   // v31: 9 chars
   var day = Math.round(+b.day || 0), slot = Math.round(+b.slot || 0), best = Math.max(0, Math.min(SCORE_MAX, Math.round(+b.best || 0))), stars = Math.max(0, Math.min(3, Math.round(+b.stars || 0)));
   var today = Math.floor(Date.now() / 864e5);
   if (!uid || !handle || !best || Math.abs(day - today) > 1) return { ok: false, error: 'bad_score' };
@@ -640,8 +653,8 @@ function refsSheet_() {
 }
 function refIn_(b) {
   var uid = String(b.uid || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 40);
-  var handle = String(b.handle || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8);
-  var ref = String(b.ref || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8);
+  var handle = String(b.handle || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 9);   // v31: 9 chars (TRAPSHIFT)
+  var ref = String(b.ref || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 9);
   if (!uid || !handle || !ref || ref === handle) return { ok: false, error: 'bad_ref' };
   if (!throttle_('ref:' + uid)) return { ok: false, error: 'rate_limited' };
   var sh = refsSheet_(), rows = sh.getDataRange().getValues();
@@ -653,7 +666,7 @@ function refIn_(b) {
   return { ok: true };
 }
 function refCount_(handle) {
-  handle = String(handle || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8); if (!handle) return 0;
+  handle = String(handle || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 9); if (!handle) return 0;
   var key = 'refs:' + handle, hit = CACHE.get(key); if (hit !== null) return +hit;
   var rows = refsSheet_().getDataRange().getValues(), n = 0;
   for (var i = 1; i < rows.length; i++) if (String(rows[i][1]) === handle && String(rows[i][2]).indexOf('test-') !== 0) n++;
@@ -787,15 +800,111 @@ var STAGES = {
   printing:   { label: 'Printing',                  msg: 'Your order is on the press.' },
   ready:      { label: 'Ready for pickup',          msg: 'Your order is finished and ready for pickup at 4750 Venture Dr, Suite 101, Ann Arbor. Mon-Fri 10-5.' },
   shipped:    { label: 'Shipped',                   msg: 'Your order is on its way.' },
-  complete:   { label: 'Complete',                  msg: 'All done - thank you for sticking with us.' }
+  complete:   { label: 'Complete',                  msg: 'All done - thank you for sticking with us.' },
+  cancelled:  { label: 'Cancelled',                 msg: '' }   // v31: soft cancel from the console; hidden from the open list, kept in the sheet, never emailed
 };
 var NUDGE_HOURS = { proof_sent: 24, printing: 72 };   // Shane 2026-09-08: 24 h in proof, 72 h in printing -> nudge the team (never the client)
-var ORDER_COLS = ['code', 'created', 'name', 'company', 'email', 'phone', 'items', 'due', 'stage', 'stage_ts', 'history', 'token', 'monday_item', 'square_inv', 'nudged_ts', 'notes', 'source', 'pay_url'];   // pay_url = Square invoice link (v22)
+var ORDER_COLS = ['code', 'created', 'name', 'company', 'email', 'phone', 'items', 'due', 'stage', 'stage_ts', 'history', 'token', 'monday_item', 'square_inv', 'nudged_ts', 'notes', 'source', 'pay_url',   // pay_url = Square invoice link (v22)
+                  'lines', 'subtotal', 'total', 'ship', 'address', 'cust_notes',                       // v31 (App step 2): cart lines re-priced on the server
+                  'payment_id', 'payment_status', 'payment_amt', 'auth_ts', 'tax_exempt'];            // v31 (App step 3): Square authorize at submit, capture on approval
 function ordersSheet_() {
   var ss = ss_(), sh = ss.getSheetByName('orders');
   if (!sh) { sh = ss.insertSheet('orders'); sh.appendRow(ORDER_COLS); try { sh.getRange('A:A').setNumberFormat('@'); sh.getRange('H:H').setNumberFormat('@'); } catch (e) {} }
-  else if (sh.getLastColumn() < ORDER_COLS.length) { sh.getRange(1, 1, 1, ORDER_COLS.length).setValues([ORDER_COLS]); }   // columns added later (pay_url) get their header
+  else {   // columns added later get their header (v22 pay_url, v31 lines/payment); rowObj_ maps by index so old rows just read ''
+    var hdr = sh.getRange(1, 1, 1, Math.max(sh.getLastColumn(), 1)).getValues()[0];
+    if (hdr.length < ORDER_COLS.length || hdr[ORDER_COLS.length - 1] !== ORDER_COLS[ORDER_COLS.length - 1]) sh.getRange(1, 1, 1, ORDER_COLS.length).setValues([ORDER_COLS]);
+  }
   return sh;
+}
+
+/* ---------- v31 (App commerce spine step 2): the cart's lines[] are re-priced here; the client's unit is only checked, never trusted ---------- */
+function deals_() {
+  var hit = CACHE.get('deals'); if (hit) return JSON.parse(hit);
+  var out = [];
+  try { var r = UrlFetchApp.fetch('https://thestickytrap.app/data/promos.json?t=' + Date.now(), { muteHttpExceptions: true });
+        if (r.getResponseCode() === 200) out = (JSON.parse(r.getContentText()).deals || []); } catch (e) {}
+  try { CACHE.put('deals', JSON.stringify(out), 1200); } catch (e) {}
+  return out;
+}
+function dealOk_(d, p, m, f, q) {   // the deal the client claims must exist in promos.json with the same terms
+  if (!d) return false;
+  var today = Utilities.formatDate(new Date(), 'America/Detroit', 'yyyy-MM-dd');
+  return deals_().some(function (x) { return x.product === p && (!x.material || x.material === m) && (!x.finish || x.finish === f) &&
+    (!x.until || x.until >= today) && q >= (+x.fromQty || 0) && Math.abs((+x.off || 0) - (+d.off || 0)) < 0.0001; });
+}
+function cartLines_(b) {
+  var lines = Array.isArray(b.lines) ? b.lines.slice(0, 40) : null; if (!lines || !lines.length) return null;
+  var prices = kbPrices_(kb_()), out = [], sub = 0;
+  for (var i = 0; i < lines.length; i++) {
+    var l = lines[i] || {}, fRaw = String(l.f || ''), hb = / \+ HoloBrite$/.test(fRaw), f = fRaw.replace(/ \+ HoloBrite$/, '');
+    var row = prices.filter(function (r) { return r.p === l.p && r.m === l.m && r.f === f; })[0];
+    var list = row ? (hb ? row.hb : row.pr) : null;
+    if (list == null) return { error: 'unknown_line', line: { p: l.p, m: l.m, f: fRaw } };
+    var q = Math.round(+l.qty || 0); if (q < MINQ || q > MAXQ || q % STEP) return { error: 'bad_qty', line: { p: l.p, qty: l.qty } };
+    var u = unit_(list, q);
+    if (l.deal && dealOk_(l.deal, l.p, l.m, f, q)) u = Math.ceil(u * (1 - (+l.deal.off)) * 100) / 100;
+    if (Math.abs(u - (+l.unit || 0)) > 0.011) return { error: 'price_mismatch', line: { p: l.p, m: l.m, f: fRaw, qty: q, sent: +l.unit || 0, actual: u } };
+    out.push({ p: l.p, m: l.m, f: fRaw, qty: q, unit: u, total: Math.round(u * q * 100) / 100, notes: String(l.notes || '').slice(0, 200), art: String(l.art || '').slice(0, 120) });
+    sub += u * q;
+  }
+  sub = Math.round(sub * 100) / 100;
+  return { lines: out, subtotal: sub, total: Math.max(MIN_ORDER, sub) };
+}
+
+/* ---------- v31 (App commerce spine step 3): Square - authorize at submit (hold, 7 days), capture only on proof approval ---------- */
+var TAX_RATE = 0.06, SHIP_EST = 15, FEE_DIV = 0.968, FEE_FLAT = 0.30;   // mirror data/square.json; App changes both when Shane changes the rule
+function cardCents_(total, taxExempt, ship) {
+  var pre = total + (taxExempt ? 0 : Math.round(total * TAX_RATE * 100) / 100) + (ship === 'ship' ? SHIP_EST : 0);
+  return Math.round(((pre + FEE_FLAT) / FEE_DIV) * 100);
+}
+function sq_(path, method, body) {
+  var env = PROP.getProperty('SQUARE_ENV') || 'sandbox', tok = PROP.getProperty('SQUARE_ACCESS_TOKEN');
+  if (!tok) throw new Error('square_not_configured');
+  var base = env === 'production' ? 'https://connect.squareup.com' : 'https://connect.squareupsandbox.com';
+  var r = UrlFetchApp.fetch(base + path, { method: method, contentType: 'application/json', muteHttpExceptions: true,
+    headers: { Authorization: 'Bearer ' + tok, 'Square-Version': '2025-05-21' }, payload: body ? JSON.stringify(body) : null });
+  var j = {}; try { j = JSON.parse(r.getContentText()); } catch (e) {}
+  if (r.getResponseCode() >= 300) { var er = (j.errors && j.errors[0]) || {}; var e2 = new Error(er.code || ('http_' + r.getResponseCode())); e2.detail = er.detail || ''; throw e2; }
+  return j;
+}
+function sqAuthorize_(code, cents, payment, email, note) {   // hold only; Square auto-cancels after delay_duration
+  return sq_('/v2/payments', 'post', {
+    idempotency_key: (code + ':' + Date.now()).slice(0, 45), source_id: payment.sourceId, verification_token: payment.verificationToken || undefined,
+    amount_money: { amount: cents, currency: 'USD' }, location_id: PROP.getProperty('SQUARE_LOCATION_ID') || undefined,
+    autocomplete: false, delay_duration: 'P7D', delay_action: 'CANCEL', reference_id: code, note: note, buyer_email_address: email || undefined,
+    accept_partial_authorization: false
+  }).payment;
+}
+function sqCapture_(paymentId, cents) {   // optional amount reduction first, then complete
+  if (cents != null) { try { sq_('/v2/payments/' + paymentId, 'put', { idempotency_key: (paymentId + ':u:' + Date.now()).slice(0, 45), payment: { amount_money: { amount: cents, currency: 'USD' } } }); } catch (e) {} }
+  return sq_('/v2/payments/' + paymentId + '/complete', 'post', {}).payment;
+}
+function sqCancel_(paymentId) { return sq_('/v2/payments/' + paymentId + '/cancel', 'post', {}).payment; }
+function captureOnApproval_(sh, f, o) {   // called from approve_ (client) and orderStage_ 'approved' (console). NEVER anywhere else.
+  if (!(o.payment_id && o.payment_status === 'authorized')) return;
+  try { sqCapture_(o.payment_id, null); sh.getRange(f.i, ORDER_COLS.indexOf('payment_status') + 1).setValue('captured'); o.payment_status = 'captured'; }
+  catch (e) { sh.getRange(f.i, ORDER_COLS.indexOf('payment_status') + 1).setValue('capture_failed'); o.payment_status = 'capture_failed';
+    try { GmailApp.sendEmail(SHOP_EMAIL, 'CARD CAPTURE FAILED - ' + o.code, String(e.message) + '\nHold may have expired - send a re-auth: https://thestickytrap.app/cart/?reauth=' + o.code + '&t=' + o.token); } catch (e2) {} }
+}
+function reauth_(b) {   // holds expire after 7 days: the customer re-enters the card from /cart/?reauth=<code>&t=<token>
+  var sh = ordersSheet_(), f = findOrder_(sh, b.code); if (!f) return { ok: false, error: 'not_found' };
+  var o = f.o; if (String(b.token || '') !== String(o.token)) return { ok: false, error: 'bad_token' };
+  if (!(b.payment && b.payment.sourceId)) return { ok: false, error: 'no_card' };
+  if (o.payment_id && o.payment_status === 'authorized') { try { sqCancel_(o.payment_id); } catch (e) {} }
+  var cents = cardCents_(+o.total || 0, o.tax_exempt === 'yes', o.ship), pay;
+  try { pay = sqAuthorize_(o.code, cents, b.payment, o.email, 'Sticky Trap order ' + o.code + ' - re-authorized, charged on proof approval'); }
+  catch (e) { return { ok: false, error: /DECLINED|CVV|VERIFY|INVALID_CARD|CARD_/i.test(String(e.message)) ? 'card_declined' : 'payment_failed', detail: String(e.detail || e.message).slice(0, 120) }; }
+  var c = ORDER_COLS.indexOf('payment_id') + 1;
+  sh.getRange(f.i, c, 1, 4).setValues([[pay.id, 'authorized', pay.amount_money.amount / 100, new Date()]]);
+  return { ok: true, code: o.code, url: trackUrl_(o), card_total: pay.amount_money.amount / 100 };
+}
+function orderResend_(b) {   // v31 (item 7): re-send the current-stage email from the console (mail was down 2026-09-11 until 16:00)
+  if (!pinOk_(b.pin)) return { ok: false, error: 'bad_pin' };
+  var sh = ordersSheet_(), f = findOrder_(sh, b.code); if (!f) return { ok: false, error: 'not_found' };
+  var o = f.o; if (!o.email) return { ok: false, error: 'no_email' };
+  if (o.stage === 'cancelled') return { ok: false, error: 'cancelled' };
+  var emailed = false; try { emailed = stageMail_(o, o.stage, String(b.note || '').slice(0, 300)); } catch (e) { mailErr_(e); return { ok: false, error: String(e).slice(0, 200) }; }
+  return { ok: true, code: o.code, stage: o.stage, emailed: emailed };
 }
 function consolePin_() { return String(PROP.getProperty('CONSOLE_PIN') || '4750'); }
 function pinOk_(p) { return String(p || '') === consolePin_(); }
@@ -813,11 +922,13 @@ function findOrder_(sh, code) {
   return null;
 }
 function trackUrl_(o) { return 'https://thestickytrap.app/track/?o=' + encodeURIComponent(o.code) + '&t=' + encodeURIComponent(o.token); }
-function reorderUrl_(o) { var e = encodeURIComponent; return 'https://thestickytrap.app/?reorder=' + e(o.code) + '&items=' + e(String(o.items || '').slice(0, 400)) + '&name=' + e(o.name || '') + '&co=' + e(o.company || '') + '&email=' + e(o.email || '') + '&phone=' + e(o.phone || '') + '#menu'; }   // opens the app's quote form pre-filled (v22)
+function reorderUrl_(o) { var e = encodeURIComponent; return 'https://thestickytrap.app/reorder/?code=' + e(o.code) + '&e=' + e(o.email || ''); }   // v31 (App step 5): the reorder page reads exact lines via track; the page falls back to /?reorder= itself
 function mailErr_(e) { try { PROP.setProperty('MAIL_LAST_ERROR', new Date().toISOString() + ' ' + String(e).slice(0, 200)); } catch (e2) {} }   // v29: why a client email did not go out (shown by ?ping=1)
 function stageMail_(o, stage, note) {
-  if (!o.email || !STAGES[stage]) return false;
+  if (!o.email || !STAGES[stage] || stage === 'cancelled') return false;
   var st = STAGES[stage], url = trackUrl_(o), who = o.company || o.name || '';
+  if (stage === 'received' && o.payment_status === 'authorized') st = { label: st.label, msg: st.msg + ' Your card is authorized and will be charged only when you approve the proof.' };   // v31
+  if (stage === 'approved' && o.payment_status === 'captured') st = { label: st.label, msg: 'Approved and paid - your order is queued for print.' };
   var btn = function (label, href) { return '<a href="' + href + '" style="display:inline-block;background:#FF1FA2;color:#fff;text-decoration:none;font-weight:800;padding:12px 20px;border-radius:24px;margin:14px 0">' + label + '</a>'; };
   var html = '<div style="font-family:Helvetica,Arial,sans-serif;max-width:560px;margin:0 auto;color:#111;font-size:15px;line-height:1.55">' +
     '<div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#888;font-weight:700">The Sticky Trap - order ' + esc_(o.code) + '</div>' +
@@ -836,14 +947,42 @@ function orderNew_(b) {
   var fromConsole = pinOk_(b.pin);
   if (!fromConsole && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return { ok: false, error: 'bad_email' };
   if (!fromConsole && !throttle_('order:' + email)) return { ok: false, error: 'rate_limited' };
-  var sh = ordersSheet_(), code = String(b.code || '').trim().toUpperCase().slice(0, 24) || orderCode_(sh);
+  var sh = ordersSheet_();
+  // v31: the cart sends an idem key; the same key within an hour returns the existing order instead of creating another
+  var idem = String(b.idem || '').slice(0, 60), idemKey = idem ? 'idem:' + idem : '';
+  if (idemKey) { var prevCode = CACHE.get(idemKey); if (prevCode) { var pf = findOrder_(sh, prevCode); if (pf) return { ok: true, code: pf.o.code, token: pf.o.token, url: trackUrl_(pf.o), emailed: false, existing: true, total: +pf.o.total || null, payment: pf.o.payment_status || null, card_total: +pf.o.payment_amt || null }; } }
+  var code = String(b.code || '').trim().toUpperCase().slice(0, 24) || orderCode_(sh);
   if (findOrder_(sh, code)) return { ok: false, error: 'code_exists' };
-  var stage = STAGES[b.stage] ? b.stage : 'received', now = new Date(), token = Utilities.getUuid().replace(/-/g, '').slice(0, 12);
-  var o = { code: code, created: now, name: name, company: company, email: email, phone: String(b.phone || '').slice(0, 40), items: String(b.items || '').slice(0, 400), due: String(b.due || '').slice(0, 40),
+  var cl = null;
+  if (b.lines) { cl = cartLines_(b); if (cl && cl.error) return { ok: false, error: cl.error, detail: cl.line }; }
+  var pay = null;
+  if (b.payment && b.payment.sourceId) {
+    var cents = cardCents_(cl ? cl.total : (+b.total || 0), !!b.payment.taxExempt, b.ship);
+    if (Math.abs(cents - (+b.payment.amount || 0)) > 1) return { ok: false, error: 'price_mismatch', detail: 'card total' };
+    try { pay = sqAuthorize_(code, cents, b.payment, email, 'Sticky Trap order ' + code + ' - authorized, charged on proof approval'); }
+    catch (e) { return { ok: false, error: /DECLINED|CVV|VERIFY|INVALID_CARD|CARD_/i.test(String(e.message)) ? 'card_declined' : 'payment_failed', detail: String(e.detail || e.message).slice(0, 120) }; }
+  }
+  var stage = STAGES[b.stage] && b.stage !== 'cancelled' ? b.stage : 'received', now = new Date(), token = Utilities.getUuid().replace(/-/g, '').slice(0, 12);
+  var itemsTxt = cl ? cl.lines.map(function (x) { return x.qty + 'x ' + x.p + ' - ' + x.m + ' / ' + x.f + ' @ ' + money_(x.unit); }).join(' | ').slice(0, 400) : String(b.items || '').slice(0, 400);
+  var o = { code: code, created: now, name: name, company: company, email: email, phone: String(b.phone || '').slice(0, 40), items: itemsTxt, due: String(b.due || '').slice(0, 40),
+            lines: cl ? JSON.stringify(cl.lines) : '', subtotal: cl ? cl.subtotal : '', total: cl ? cl.total : '', ship: String(b.ship || '').slice(0, 10), address: String(b.address || '').slice(0, 300), cust_notes: String(b.notes || '').slice(0, 600),
+            payment_id: pay ? pay.id : '', payment_status: pay ? 'authorized' : '', payment_amt: pay ? (pay.amount_money.amount / 100) : '', auth_ts: pay ? now : '', tax_exempt: b.payment && b.payment.taxExempt ? 'yes' : '',
             stage: stage, stage_ts: now, history: JSON.stringify([{ stage: stage, ts: now.getTime(), note: '' }]), token: token, monday_item: '', square_inv: String(b.square_inv || '').slice(0, 60), nudged_ts: '', notes: '', source: String(b.source || '').slice(0, 20), pay_url: /^https:\/\//.test(String(b.pay_url || '')) ? String(b.pay_url).slice(0, 300) : '' };
   sh.appendRow(ORDER_COLS.map(function (k) { return o[k]; }));
+  if (idemKey) { try { CACHE.put(idemKey, code, 3600); } catch (e) {} }
   var emailed = false; try { emailed = stageMail_(o, stage, ''); } catch (e) { mailErr_(e); }
-  return { ok: true, code: code, token: token, url: trackUrl_(o), emailed: emailed };
+  if (o.source === 'cart') {   // v31 (item 5): the shop hears about a cart order directly, not only through the upload email
+    try {
+      var body = [(company || name) + (name && company ? ' (' + name + ')' : ''), email + (o.phone ? ' / ' + o.phone : ''), '',
+        cl ? cl.lines.map(function (x) { return x.qty + ' x ' + x.p + ' - ' + x.m + ' / ' + x.f + ' @ ' + money_(x.unit) + ' = ' + money_(x.total) + (x.notes ? '  (' + x.notes + ')' : '') + (x.art ? '  art: ' + x.art : ''); }).join('\n') : o.items,
+        '', 'Subtotal ' + (cl ? money_(cl.subtotal) : '-') + ' / order total ' + (cl ? money_(cl.total) : '-'),
+        'Card: ' + (pay ? 'AUTHORIZED ' + money_(pay.amount_money.amount / 100) + ' (charged on proof approval)' : 'none'),
+        (o.ship === 'ship' ? 'SHIP to: ' + (o.address || '(no address)') : 'PICK UP'), o.cust_notes ? 'Notes: ' + o.cust_notes : '', o.due ? 'Wants it by: ' + o.due : '',
+        '', 'Console: https://thestickytrap.app/console/?o=' + encodeURIComponent(code), 'Client view: ' + trackUrl_(o)].join('\n');
+      GmailApp.sendEmail(notifyTo_(), 'NEW ORDER ' + code + ' - ' + (company || name), body, { name: 'Sticky Trap App', replyTo: email || SHOP_EMAIL });
+    } catch (e) { mailErr_(e); }
+  }
+  return { ok: true, code: code, token: token, url: trackUrl_(o), emailed: emailed, total: cl ? cl.total : null, payment: pay ? 'authorized' : null, card_total: pay ? pay.amount_money.amount / 100 : null };
 }
 function orderStage_(b) {
   if (!pinOk_(b.pin)) return { ok: false, error: 'bad_pin' };
@@ -857,6 +996,7 @@ function orderStage_(b) {
   sh.getRange(f.i, ORDER_COLS.indexOf('stage') + 1, 1, 3).setValues([[stage, now, JSON.stringify(hist)]]);
   sh.getRange(f.i, ORDER_COLS.indexOf('nudged_ts') + 1).setValue('');
   o.stage = stage; o.history = JSON.stringify(hist);
+  if (stage === 'approved') captureOnApproval_(sh, f, o);   // v31: console tap on Approved captures the card hold
   var emailed = false; try { emailed = stageMail_(o, stage, note); } catch (e) { mailErr_(e); }
   return { ok: true, code: o.code, stage: stage, emailed: emailed };
 }
@@ -869,8 +1009,9 @@ function approve_(b) {
   sh.getRange(f.i, ORDER_COLS.indexOf('stage') + 1, 1, 3).setValues([['approved', now, JSON.stringify(hist)]]);
   sh.getRange(f.i, ORDER_COLS.indexOf('nudged_ts') + 1).setValue('');
   try { GmailApp.sendEmail(SHOP_EMAIL, 'PROOF APPROVED - ' + o.code + ' (' + (o.company || o.name) + ')', (o.company || o.name) + ' approved the proof for ' + o.code + ' online.\n' + (o.items || '') + '\nDue: ' + (o.due || 'tbd') + '\nConsole: https://thestickytrap.app/console/'); } catch (e) {}
-  o.stage = 'approved'; try { stageMail_(o, 'approved', ''); } catch (e) {}
-  return { ok: true };
+  o.stage = 'approved'; captureOnApproval_(sh, f, o);   // v31: client approval captures the card hold
+  try { stageMail_(o, 'approved', ''); } catch (e) { mailErr_(e); }
+  return { ok: true, payment: o.payment_status || null };
 }
 function changes_(b) {   // client asks for proof changes from the tracker page (v22): back to 'proofing', note logged, shop told
   var sh = ordersSheet_(), f = findOrder_(sh, b.code); if (!f) return { ok: false, error: 'not_found' };
@@ -888,7 +1029,10 @@ function changes_(b) {   // client asks for proof changes from the tracker page 
 function publicOrder_(o) {
   var hist = []; try { hist = JSON.parse(o.history || '[]'); } catch (e) {}
   var st = STAGES[o.stage] || STAGES.received;
+  var lines = []; try { lines = o.lines ? JSON.parse(o.lines) : []; } catch (e) { lines = []; }
   return { code: o.code, name: o.name, company: o.company, items: o.items, due: o.due, stage: o.stage, label: st.label, message: st.msg, token: o.token,
+           lines: lines, total: o.total !== '' && o.total != null ? +o.total : null, email: o.email || '',   // v31: exact specs for reorders + re-auth
+           payment_status: o.payment_status || '', payment_amt: o.payment_amt !== '' && o.payment_amt != null ? +o.payment_amt : null, ship: o.ship || '',
            stage_ts: o.stage_ts ? new Date(o.stage_ts).getTime() : null, can_approve: (o.stage === 'proof_sent' || o.stage === 'proofing'),
            can_change: (o.stage === 'proof_sent' || o.stage === 'proofing'), pay_url: (o.stage === 'quoted' && o.pay_url) ? o.pay_url : '', reorder_url: o.stage === 'complete' ? reorderUrl_(o) : '',
            stages: STAGE_ORDER.filter(function (k) { return k !== 'shipped' || o.stage === 'shipped'; }).filter(function (k) { return k !== 'ready' || o.stage !== 'shipped'; }).map(function (k) { return { key: k, label: STAGES[k].label }; }),
@@ -904,13 +1048,14 @@ function ordersList_(p) {
   if (!pinOk_(p.pin)) return { ok: false, error: 'bad_pin' };
   var archived = String(p.archived || '') === '1';
   var sh = archived ? archiveSheet_() : ordersSheet_(), rows = sh.getDataRange().getValues(), out = [];
-  for (var i = 1; i < rows.length; i++) { var o = rowObj_(rows[i]); if (!o.code) continue; if (!archived && o.stage === 'complete') continue;
+  for (var i = 1; i < rows.length; i++) { var o = rowObj_(rows[i]); if (!o.code) continue; if (!archived && (o.stage === 'complete' || o.stage === 'cancelled')) continue;
     var hist = []; try { hist = JSON.parse(o.history || '[]'); } catch (e) {}
     var last = hist.length ? hist[hist.length - 1] : null, rawDue = rows[i][ORDER_COLS.indexOf('due')];
     out.push({ code: o.code, name: o.name, company: o.company, email: o.email, phone: o.phone, items: o.items, due: o.due, stage: o.stage, stage_ts: o.stage_ts ? new Date(o.stage_ts).getTime() : null,
                // v28: what the console and the Monday sync need to show / write more
                due_iso: rawDue instanceof Date ? Utilities.formatDate(rawDue, Session.getScriptTimeZone(), 'yyyy-MM-dd') : '', monday_item: o.monday_item || '', pay_url: o.pay_url || '', source: o.source || '',
-               last_note: last ? String(last.note || '') : '', created: o.created ? new Date(o.created).getTime() : null }); }
+               last_note: last ? String(last.note || '') : '', created: o.created ? new Date(o.created).getTime() : null,
+               payment_status: o.payment_status || '', payment_amt: o.payment_amt !== '' && o.payment_amt != null ? +o.payment_amt : null, total: o.total !== '' && o.total != null ? +o.total : null, ship: o.ship || '' }); }
   out.sort(function (a, b) { return (a.stage_ts || 0) - (b.stage_ts || 0); });
   return { ok: true, orders: out, archived: archived };
 }
@@ -920,6 +1065,13 @@ function nudgeStale_() {
   for (var i = 1; i < rows.length; i++) { var o = rowObj_(rows[i]), h = NUDGE_HOURS[o.stage]; if (!h || !o.stage_ts) continue;
     var age = (now - new Date(o.stage_ts).getTime()) / 36e5, last = o.nudged_ts ? (now - new Date(o.nudged_ts).getTime()) / 36e5 : 999;
     if (age > h && last > 24) { stale.push(o.code + ' - ' + (o.company || o.name) + ' - ' + STAGES[o.stage].label + ' for ' + Math.round(age) + ' h' + (o.due ? ' (due ' + o.due + ')' : '')); sh.getRange(i + 1, ORDER_COLS.indexOf('nudged_ts') + 1).setValue(new Date()); } }
+  // v31: card holds last 7 days - at 6 days, before approval, ask the customer to re-authorize (once) and tell the shop the proof is overdue
+  for (var j = 1; j < rows.length; j++) { var r = rowObj_(rows[j]);
+    if (r.payment_status === 'authorized' && r.auth_ts && STAGE_ORDER.indexOf(r.stage) > -1 && STAGE_ORDER.indexOf(r.stage) < STAGE_ORDER.indexOf('approved') && (now - new Date(r.auth_ts).getTime()) / 864e5 >= 6) {
+      var link = 'https://thestickytrap.app/cart/?reauth=' + encodeURIComponent(r.code) + '&t=' + encodeURIComponent(r.token);
+      try { if (r.email) GmailApp.sendEmail(r.email, 'Your Sticky Trap order ' + r.code + ' - card hold expiring', 'Card holds last 7 days and your proof is still in review. Re-authorize in one tap so approval can go straight to print: ' + link, { name: 'The Sticky Trap', replyTo: SHOP_EMAIL });
+            sh.getRange(j + 1, ORDER_COLS.indexOf('payment_status') + 1).setValue('reauth_sent'); stale.push(r.code + ' - ' + (r.company || r.name) + ' - card hold expiring, proof overdue (re-auth email sent)'); } catch (e) { mailErr_(e); }
+    } }
   if (!stale.length) return 0;
   GmailApp.sendEmail(notifyTo_(), 'Order tracker: ' + stale.length + ' order' + (stale.length > 1 ? 's' : '') + ' need a push', stale.join('\n') + '\n\nLog the next stage: https://thestickytrap.app/console/');
   return stale.length;
@@ -932,9 +1084,18 @@ function archiveSheet_() {   // v28: removed orders go here instead of being del
 function orderDelete_(b) {
   if (!pinOk_(b.pin)) return { ok: false, error: 'bad_pin' };
   var sh = ordersSheet_(), f = findOrder_(sh, b.code); if (!f) return { ok: false, error: 'not_found' };
-  var row = sh.getRange(f.i, 1, 1, ORDER_COLS.length).getValues()[0];
-  archiveSheet_().appendRow(row.concat([new Date()]));
-  sh.deleteRow(f.i); return { ok: true, deleted: f.o.code, archived: true };
+  var o = f.o;
+  if (o.payment_id && o.payment_status === 'authorized') { try { sqCancel_(o.payment_id); sh.getRange(f.i, ORDER_COLS.indexOf('payment_status') + 1).setValue('cancelled'); } catch (e) {} }   // v31: release the card hold
+  if (b.hard) {   // test rows: out of the sheet, into the archive tab (v28)
+    var row = sh.getRange(f.i, 1, 1, ORDER_COLS.length).getValues()[0];
+    archiveSheet_().appendRow(row.concat([new Date()]));
+    sh.deleteRow(f.i); return { ok: true, deleted: o.code, archived: true };
+  }
+  // v31 (App item 6): soft cancel - stage 'cancelled', hidden from the open list, kept in the sheet, client never emailed
+  var now = new Date(), hist = []; try { hist = JSON.parse(o.history || '[]'); } catch (e) {}
+  hist.push({ stage: 'cancelled', ts: now.getTime(), note: String(b.note || 'Removed from the console').slice(0, 200) });
+  sh.getRange(f.i, ORDER_COLS.indexOf('stage') + 1, 1, 3).setValues([['cancelled', now, JSON.stringify(hist)]]);
+  return { ok: true, deleted: o.code, cancelled: true };
 }
 function orderRestore_(b) {
   if (!pinOk_(b.pin)) return { ok: false, error: 'bad_pin' };
