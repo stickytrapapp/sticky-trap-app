@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Basket · The Sticky Trap</title>
+<meta name="theme-color" content="#000"><link rel="icon" href="/icons/icon-192.png"><link rel="manifest" href="/manifest.webmanifest">
+<style>
+:root{--ink:#000;--panel:#0e0e0e;--panel-2:#171717;--line:#262626;--paper:#fff;--muted:#9d97b0;--mag:#FF1FA2;--pur:#8A2BE2;--cy:#12C4FF;--good:#25E0A6;--warn:#FFB020;--bad:#ff5c7a;
+  --grad:linear-gradient(100deg,#FF1FA2 0%,#8A2BE2 52%,#12C4FF 100%);--holo:linear-gradient(105deg,#12C4FF,#8A2BE2 40%,#FF1FA2 70%,#EAB84B);--goldg:linear-gradient(105deg,#F6DA8A,#EAB84B 45%,#C9962E)}
+*{box-sizing:border-box}html,body{margin:0;background:var(--ink);color:var(--paper);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--cy)}
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;padding:12px 16px;background:rgba(0,0,0,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top a.back{color:var(--paper);text-decoration:none;font-weight:800;font-size:13px}.top .t{flex:1;font-weight:900;font-size:15px}
+.wrap{max-width:1040px;margin:0 auto;padding:14px 16px 120px}
+.grid{display:grid;grid-template-columns:1fr;gap:16px}@media(min-width:860px){.grid{grid-template-columns:1.15fr .85fr;align-items:start}.side{position:sticky;top:64px}}
+.card{background:linear-gradient(180deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:14px}
+h1{margin:0 0 10px;font-size:22px}.k{font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:14px 2px 6px}.k:first-child{margin-top:0}
+.line{display:grid;grid-template-columns:64px 1fr auto;gap:12px;padding:12px 0;border-top:1px solid var(--line)}.line:first-of-type{border-top:0;padding-top:2px}
+.th{width:64px;height:64px;border-radius:10px;border:1px solid var(--line);background:var(--panel);display:flex;align-items:center;justify-content:center;overflow:hidden}.th img{width:100%;height:100%;object-fit:cover}.th .sw{width:34px;height:34px;border-radius:8px}.sw.white{background:#fff}.sw.holo{background:var(--holo)}.sw.gold{background:var(--goldg)}
+.ln b{font-size:14.5px}.ln .sp{color:var(--muted);font-size:12.5px;margin-top:2px}.ln .art{font-size:11.5px;margin-top:4px}.art.ok{color:var(--good)}.art.warn{color:var(--warn)}.art.bad{color:var(--bad)}.art.none{color:var(--muted)}.art a{font-weight:800;text-decoration:none}
+.ln .nt{font-size:12px;color:var(--muted);font-style:italic;margin-top:3px}
+.q{display:flex;align-items:center;gap:6px;margin-top:8px}.q button{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--paper);font:inherit;font-weight:900;cursor:pointer}.q input{width:64px;padding:6px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--paper);font:inherit;font-weight:800;text-align:center}
+.q .u{font-size:12px;color:var(--muted);margin-left:4px}
+.rt{text-align:right}.rt b{font-size:15px;font-variant-numeric:tabular-nums}.rm{display:block;margin:8px 0 0 auto;background:none;border:0;color:var(--muted);font:inherit;font-size:11.5px;text-decoration:underline;cursor:pointer;padding:0}
+.sum{font-size:13.5px}.sum .r{display:flex;justify-content:space-between;padding:6px 0;border-top:1px solid var(--line)}.sum .r:first-child{border-top:0}.sum .r.tot{font-size:17px;font-weight:900;border-top:2px solid var(--line);margin-top:4px}.sum .r span:last-child{font-variant-numeric:tabular-nums}
+.note{font-size:12px;color:var(--muted);line-height:1.5;margin:8px 0 0}.note.warn{color:var(--warn)}
+input,textarea{width:100%;padding:11px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--paper);font:inherit;font-size:15px}textarea{min-height:60px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.row.one{grid-template-columns:1fr}
+.seg{display:flex;gap:6px;margin-top:8px}.seg button{flex:1;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--paper);font:inherit;font-weight:800;cursor:pointer}.seg button.on{background:var(--grad);color:#000;border-color:transparent}
+.go{width:100%;margin-top:14px;padding:15px;border:0;border-radius:30px;background:var(--grad);color:#000;font:inherit;font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 8px 30px rgba(138,43,226,.35)}.go:disabled{opacity:.55;cursor:default}
+.st{margin-top:10px;font-size:13px;min-height:18px}.st.err{color:var(--bad)}.st.ok{color:var(--good)}
+.empty{text-align:center;padding:30px 10px;color:var(--muted)}.empty a{display:inline-block;margin-top:12px;padding:11px 20px;border-radius:24px;background:var(--grad);color:#000;font-weight:900;text-decoration:none}
+.done h2{margin:0 0 6px;font-size:24px}.done .code{font-size:30px;font-weight:900;letter-spacing:.04em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.done ol{padding-left:20px;color:var(--muted);font-size:13.5px;line-height:1.6}.done a.btn{display:inline-block;margin-top:10px;padding:12px 20px;border-radius:24px;background:var(--grad);color:#000;font-weight:900;text-decoration:none}
+.hidden{display:none}
+</style></head>
+<body>
+<div class="top"><a class="back" href="/#menu">&larr; Menu</a><div class="t">Your basket</div><a href="/configure/" style="font-size:12.5px;font-weight:800;text-decoration:none">+ Add a product</a></div>
+<div class="wrap">
+  <div id="empty" class="card empty hidden">Your basket is empty.<br><a href="/configure/">Configure a product</a></div>
+  <div id="done" class="card done hidden"></div>
+  <div class="grid" id="main">
+    <div class="card"><h1>Lines</h1><div id="lines"></div></div>
+    <div class="side">
+      <div class="card">
+        <div class="k">Summary</div>
+        <div class="sum"><div class="r"><span>Subtotal</span><span id="sub">$0.00</span></div><div class="r" id="minrow" style="display:none"><span>$50 minimum order</span><span id="minadd"></span></div><div class="r"><span>Sales tax + shipping</span><span style="color:var(--muted)">on the invoice</span></div><div class="r tot"><span>Order total</span><span id="tot">$0.00</span></div></div>
+        <p class="note">MI 6% sales tax where it applies, shipping only if shipped. <b style="color:var(--paper)">Nothing is charged now.</b> We proof first; you approve, then pay.</p>
+        <div class="k">Who is this for</div>
+        <div class="row"><input id="name" placeholder="Your name" autocomplete="name"><input id="company" placeholder="Company / brand" autocomplete="organization"></div>
+        <div class="row"><input id="email" type="email" placeholder="Email (gets the updates)" autocomplete="email"><input id="phone" type="tel" placeholder="Phone" autocomplete="tel"></div>
+        <div class="seg" id="ship"><button type="button" data-v="pickup" class="on">Pick up in Ann Arbor</button><button type="button" data-v="ship">Ship it</button></div>
+        <div class="row one hidden" id="addrrow"><textarea id="addr" placeholder="Ship-to address"></textarea></div>
+        <div class="row one"><input id="due" placeholder="When do you need it? (e.g. Sep 25, or 'no rush')"></div>
+        <div class="row one"><textarea id="notes" placeholder="Anything else - strain names, what should pop, reference links"></textarea></div>
+        <button class="go" id="go" type="button">Place order &rarr;</button>
+        <div class="st" id="st"></div>
+        <p class="note">You get a tracker link by email. We proof every order before anything prints; pre-press is assessed per design once we see your art.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+var D={"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"breaks":[[500,5],[750,7],[1000,10]],"minq":5,"maxq":1000,"step":5,"minorder":50,"api":"https://script.google.com/macros/s/AKfycbzgctrnkyWjVnhzioE_B4x8J2pyi4WzRSJG2e00Y_Y5cz0vQx-q5jhvOhMWg2x-K9ciFw/exec","hub":"https://script.google.com/macros/s/AKfycbyNQSfrtPhEgLtNt8IPIQ4z0vF265j3AC-udRJOyF7MLcS4MhLTAL4SESs_AGj0JS8RdQ/exec","maxmb":20};
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var money=function(v){var f=v.toFixed(2).split('.');return '$'+(+f[0]).toLocaleString()+'.'+f[1];}, fmt=function(n){return (+n).toLocaleString();};
+  var esc=function(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');};
+  function cmult(q){for(var i=0;i<D.bands.length;i++){if(q<=D.bands[i][0])return D.bands[i][1];}return D.bands[D.bands.length-1][1];}
+  function unit(l){ var u=Math.floor((+l.pr||0)*cmult(l.qty)*100+0.5)/100; if(l.deal&&l.qty>=(l.deal.fromQty||0)) u=Math.ceil(u*(1-l.deal.off)*100)/100; return u; }
+  function clampQ(q){ q=Math.round((+q||D.minq)/D.step)*D.step; return Math.max(D.minq,Math.min(D.maxq,q)); }
+  var cart=[]; try{ cart=JSON.parse(localStorage.getItem('st_cart')||'[]')||[]; }catch(e){}
+  function save(){ try{ localStorage.setItem('st_cart',JSON.stringify(cart)); }catch(e){} }
+  function sub(){ return cart.reduce(function(s,l){ return s+unit(l)*l.qty; },0); }
+  function total(){ var s=sub(); return (s>0&&s<D.minorder)?D.minorder:s; }
+  var dbp=null; function db(){ if(dbp) return dbp; dbp=new Promise(function(res,rej){ var r=indexedDB.open('st_art',1); r.onupgradeneeded=function(){ var d=r.result; if(!d.objectStoreNames.contains('files')) d.createObjectStore('files'); }; r.onsuccess=function(){res(r.result);}; r.onerror=function(){rej(r.error);}; }); return dbp; }
+  function artGet(k){ return db().then(function(d){ return new Promise(function(res){ var q=d.transaction('files','readonly').objectStore('files').get(k); q.onsuccess=function(){res(q.result||null);}; q.onerror=function(){res(null);}; }); }).catch(function(){ return null; }); }
+  function artClear(){ return db().then(function(d){ d.transaction('files','readwrite').objectStore('files').clear(); }).catch(function(){}); }
+  function matCls(m){ return /gold/i.test(m)?'gold':(/holo/i.test(m)?'holo':'white'); }
+  function slug(s){ return String(s).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
+
+  function render(){ if(!cart.length){ $('main').classList.add('hidden'); $('empty').classList.remove('hidden'); return; }
+    $('main').classList.remove('hidden'); $('empty').classList.add('hidden');
+    $('lines').innerHTML=cart.map(function(l,i){ var u=unit(l), a=l.art||null;
+      var th=a&&a.thumb?'<img src="'+a.thumb+'" alt="">':'<span class="sw '+matCls(l.m)+'"></span>';
+      var art=a?('<div class="art '+(a.pre&&a.pre.level?a.pre.level:'ok')+'">'+esc(a.name)+(a.pre&&a.pre.dpi?' &middot; ~'+a.pre.dpi+' dpi at size':'')+(a.pre&&a.pre.vector?' &middot; vector, checked at proof':'')+(a.reupload?' &middot; re-add at the configure page':'')+'</div>')
+                  :('<div class="art none">No art yet &middot; <a href="/configure/?p='+slug(l.p)+'">add it</a> or send it after (we ask before proofing)</div>');
+      return '<div class="line" data-i="'+i+'"><div class="th">'+th+'</div><div class="ln"><b>'+esc(l.p)+'</b><div class="sp">'+esc(l.m)+' &middot; '+esc(l.f)+'</div>'+art+(l.notes?'<div class="nt">'+esc(l.notes)+'</div>':'')+
+        '<div class="q"><button type="button" data-d="-1">&minus;</button><input type="number" value="'+l.qty+'" min="'+D.minq+'" max="'+D.maxq+'" step="'+D.step+'"><button type="button" data-d="1">+</button><span class="u">&times; '+money(u)+'</span></div></div>'+
+        '<div class="rt"><b>'+money(u*l.qty)+'</b><button class="rm" type="button">Remove</button></div></div>'; }).join('');
+    var s=sub(), t=total(); $('sub').textContent=money(s); $('tot').textContent=money(t);
+    if(s<D.minorder){ $('minrow').style.display='flex'; $('minadd').textContent='+ '+money(D.minorder-s); } else { $('minrow').style.display='none'; } }
+  $('lines').addEventListener('click',function(e){ var ln=e.target.closest('.line'); if(!ln) return; var i=+ln.dataset.i, l=cart[i];
+    if(e.target.classList.contains('rm')){ cart.splice(i,1); save(); render(); return; }
+    var b=e.target.closest('button[data-d]'); if(b){ l.qty=clampQ(l.qty+(+b.dataset.d)*D.step); save(); render(); } });
+  $('lines').addEventListener('change',function(e){ var ln=e.target.closest('.line'); if(!ln||e.target.tagName!=='INPUT') return; cart[+ln.dataset.i].qty=clampQ(e.target.value); save(); render(); });
+  render();
+
+  // customer block remembered per device
+  var C={}; try{ C=JSON.parse(localStorage.getItem('st_customer')||'{}')||{}; }catch(e){}
+  ['name','company','email','phone','addr'].forEach(function(k){ if(C[k]) $(k).value=C[k]; });
+  var ship=C.ship||'pickup'; function setShip(v){ ship=v; [].forEach.call($('ship').children,function(b){ b.classList.toggle('on',b.dataset.v===v); }); $('addrrow').classList.toggle('hidden',v!=='ship'); }
+  setShip(ship); $('ship').addEventListener('click',function(e){ var b=e.target.closest('button'); if(b) setShip(b.dataset.v); });
+  function remember(){ var o={ship:ship}; ['name','company','email','phone','addr'].forEach(function(k){ o[k]=$(k).value.trim(); }); try{ localStorage.setItem('st_customer',JSON.stringify(o)); }catch(e){} }
+
+  function status(m,c){ $('st').className='st '+(c||''); $('st').textContent=m; }
+  function readB64(f){ return new Promise(function(res,rej){ var r=new FileReader(); r.onload=function(){ res(String(r.result).split(',')[1]||''); }; r.onerror=rej; r.readAsDataURL(f); }); }
+  function lineText(l){ return fmt(l.qty)+'x '+l.p+' - '+l.m+' / '+l.f+' @ '+money(unit(l))+' = '+money(unit(l)*l.qty)+(l.notes?' ('+l.notes+')':''); }
+
+  $('go').addEventListener('click',function(){
+    var email=$('email').value.trim(), name=$('name').value.trim();
+    if(!cart.length){ status('Your basket is empty.','err'); return; }
+    if(!name){ status('Add your name.','err'); return; }
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ status('Add your email - the tracker link goes there.','err'); return; }
+    if(ship==='ship'&&!$('addr').value.trim()){ status('Add the ship-to address, or pick up in Ann Arbor.','err'); return; }
+    remember(); $('go').disabled=true; status('Placing your order...','');
+    var items=cart.map(function(l){ return fmt(l.qty)+'x '+l.p+' - '+l.m+' / '+l.f+' @ '+money(unit(l)); }).join(' | ').slice(0,400);
+    var due=$('due').value.trim().slice(0,40), notes=$('notes').value.trim();
+    var lines=cart.map(function(l){ return {p:l.p,m:l.m,f:l.f,qty:l.qty,pr:l.pr,unit:unit(l),total:Math.round(unit(l)*l.qty*100)/100,notes:l.notes||'',art:l.art?l.art.name:''}; });
+    var body={ action:'order_new', name:name, company:$('company').value.trim(), email:email, phone:$('phone').value.trim(), items:items, due:due, source:'cart', stage:'received',
+               lines:lines, subtotal:Math.round(sub()*100)/100, total:Math.round(total()*100)/100, ship:ship, address:ship==='ship'?$('addr').value.trim():'', notes:notes };
+    fetch(D.api,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)}).then(function(r){ return r.json(); }).then(function(j){
+      if(!j||!j.ok){ var e=(j&&j.error)||'error'; status(e==='rate_limited'?'Too many orders from this email in an hour - text us at 734 460 3845 and we will take it by hand.':(e==='price_mismatch'?'Prices moved while you were browsing - reload the basket and try again.':'Could not place the order ('+e+'). Text us at 734 460 3845.'),'err'); $('go').disabled=false; return; }
+      var code=j.code, url=j.url||'';
+      status('Order '+code+' placed. Sending your art...','');
+      Promise.all(cart.map(function(l){ return l.art?artGet(l.art.key||l.k).then(function(f){ return f?readB64(f).then(function(b64){ return {name:l.art.name||f.name,mime:f.type||'application/octet-stream',b64:b64,size:f.size||0}; }):null; }):Promise.resolve(null); })).then(function(files){
+        files=files.filter(Boolean); var mb=files.reduce(function(s,f){ return s+(f.size||0); },0)/1048576; var tooBig=mb>D.maxmb; if(tooBig) files=[];
+        var detail='ORDER '+code+(url?' - '+url:'')+' - '+(ship==='ship'?('SHIP to: '+$('addr').value.trim()):'PICK UP')+(due?' - needed: '+due:'')+(notes?'\nNotes: '+notes:'')+'\nSubtotal '+money(sub())+' - order total '+money(total())+(tooBig?'\nART: over '+D.maxmb+' MB, customer asked to email it':'');
+        var payload={ action:'quote', name:name+(body.company?' ('+body.company+')':''), email:email, phone:body.phone, details:detail, basket:cart.map(lineText).join('\n'), files:files.map(function(f){ return {name:f.name,mime:f.mime,b64:f.b64}; }) };
+        return fetch(D.hub,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)}).then(function(){ return tooBig; }).catch(function(){ return tooBig; });
+      }).then(function(tooBig){
+        try{ localStorage.setItem('st_lastorder',JSON.stringify(cart)); localStorage.setItem('st_lastcode',code); }catch(e){}
+        cart=[]; save(); artClear();
+        try{ window.track&&window.track('order_send','cart '+lines.length+' lines'); }catch(e){}
+        $('main').classList.add('hidden');
+        $('done').innerHTML='<h2>Order placed</h2><div class="code">'+esc(code)+'</div><p class="note" style="font-size:13.5px;color:var(--paper)">Confirmation and your tracker link are on their way to <b>'+esc(email)+'</b>.</p>'+
+          (tooBig?'<p class="note warn">Your art was over '+D.maxmb+' MB, so it did not upload. Email it to <a href="mailto:thestickytrap@gmail.com?subject=Art%20for%20order%20'+encodeURIComponent(code)+'">thestickytrap@gmail.com</a> with the order code.</p>':'')+
+          '<ol><li>We check your art and build the proof.</li><li>You approve the proof from your tracker link (or ask for changes).</li><li>You pay, we print, you pick up or we ship.</li></ol>'+
+          (url?'<a class="btn" href="'+esc(url)+'">Open your tracker &rarr;</a> ':'')+'<a class="btn" style="background:var(--panel-2);color:var(--paper);border:1px solid var(--line)" href="/#menu">Back to the menu</a>';
+        $('done').classList.remove('hidden'); window.scrollTo(0,0);
+      });
+    }).catch(function(){ status('Could not reach the order desk. Try again, or text 734 460 3845.','err'); $('go').disabled=false; });
+  });
+})();
+</script>
+</body></html>
