@@ -421,7 +421,7 @@
     <div class="brandwrap"><span class="wm">STICKYTR<span class="cur">_</span></span><span class="wtag">Branding · Print · Culture</span></div>
     <div class="tb-right">
       <button class="iconb" id="trackb" aria-label="Track my order" title="Track my order"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg><small>Tracker</small></button>
-      <button class="iconb" id="musicb" hidden aria-label="Music off" aria-pressed="false" title="Music"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></button>
+      <button class="iconb" id="musicb" aria-label="Music off" aria-pressed="false" title="Music"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></button>
       <button class="iconb" id="shareb" aria-label="Share the app"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.3 10.7l7.4-4.4M8.3 13.3l7.4 4.4"/></svg></button>
       <button class="bell" id="bell" aria-label="Notifications"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 9a6 6 0 0112 0c0 5 2 6 2 6H4s2-1 2-6z"/><path d="M10 20a2 2 0 004 0"/></svg><i class="ndot" id="bell-dot" hidden></i></button>
     </div>
@@ -2008,24 +2008,32 @@
         pauses when the app is hidden. Browsers block sound before a tap, so a remembered ON waits for the first tap. ---- */
 (function(){
   var b=document.getElementById('musicb'); if(!b) return;
-  // 2026-09-11 (Shane): app music PAUSED while the tracks are cleaned up - button hidden, audio/tap-a|tap-b|menu.mp3 removed from the repo,
-  // remembered ON cleared. To add back: drop the files into audio/, remove the `hidden` attribute on #musicb, delete these three lines.
-  try{ localStorage.removeItem('st_music'); localStorage.removeItem('st_music_pos'); }catch(e){}
-  if(b.hidden) return;
-  // Playlist (Shane 2026-09-09): the two Suno takes of 'Tap The Screen' play in full, one after the other, then repeat.
-  var TRACKS=['audio/tap-a.mp3','audio/tap-b.mp3'], ti=0, VOL=0.35, a=null, A=[null,null], cur=0, want=false, armed=false, fadeT=null, actx=null, gain=null, posT=0;
+  // Playlist (Shane 2026-09-11): four Suno rap takes - Trap House Open, Understanding, Holo Wrap, Late Shift - play in full,
+  // one after the other, then repeat. Each track crossfades into the next (XF seconds) so the loop flows instead of cutting.
+  var TRACKS=['audio/app-1.mp3','audio/app-2.mp3','audio/app-3.mp3','audio/app-4.mp3'], ti=0, VOL=0.35, XF=2.5, a=null, A=[null,null], cur=0, want=false, armed=false, fadeT=null, actx=null, gain=null, posT=0;
   var MENU_SRC='audio/menu.mp3', M=null, mgain=null, menuOn=false, menuT=null, menuOK=null, xT=null;   // Menu-tab 'thinking' track
   try{ MENU_SRC=localStorage.getItem('st_menu_track')||MENU_SRC; }catch(e){}
   try{ want=localStorage.getItem('st_music')==='1'; }catch(e){}
   function mk(){ var x=new Audio(); x.loop=false; x.preload='none'; x.setAttribute('playsinline','');
     // iOS ignores element.volume, so every element is routed through one shared GainNode when Web Audio is available
-    try{ var AC=window.AudioContext||window.webkitAudioContext; if(AC){ if(!actx){ actx=new AC(); gain=actx.createGain(); gain.gain.value=0; gain.connect(actx.destination); } actx.createMediaElementSource(x).connect(gain); } }catch(e){}
+    try{ var AC=window.AudioContext||window.webkitAudioContext; if(AC){ if(!actx){ actx=new AC(); gain=actx.createGain(); gain.gain.value=0; gain.connect(actx.destination); }
+      var g=actx.createGain(); g.gain.value=1; g.connect(gain); actx.createMediaElementSource(x).connect(g); x._g=g; } }catch(e){}
     if(!gain) x.volume=0;
-    x.addEventListener('ended',function(){ if(x!==a) return; ti=(ti+1)%TRACKS.length; cur=1-cur; a=A[cur];   // the other element already holds the next take, buffered
+    x.addEventListener('ended',function(){ x._xf=false; gset(x,1);
+      if(x!==a){ prime(); return; }   // the outgoing half of a crossfade just finished: buffer the take after next
+      ti=(ti+1)%TRACKS.length; cur=1-cur; a=A[cur]; gset(a,1);   // no crossfade happened (no Web Audio): hard swap, the other element already holds the next take
       if(a.src!==abs(TRACKS[ti])) a.src=TRACKS[ti]; var p=a.play(); if(p&&p.catch) p.catch(function(){}); prime(); savePos(true); });
-    x.addEventListener('timeupdate',function(){ if(x===a) savePos(false); });
+    x.addEventListener('timeupdate',function(){ if(x!==a) return; savePos(false);
+      // crossfade: XF s before the end, start the next take under this one and ramp the per-element gains across
+      if(x._g&&actx&&!menuOn&&x.duration&&x.duration-x.currentTime<=XF&&!x._xf){ x._xf=true; var n=A[1-cur], nxt=TRACKS[(ti+1)%TRACKS.length];
+        if(n.src!==abs(nxt)) n.src=nxt; try{ n.currentTime=0; }catch(e){} var t=actx.currentTime, left=Math.max(0.3,x.duration-x.currentTime);
+        n._ramp=true; n._g.gain.cancelScheduledValues(t); n._g.gain.setValueAtTime(0,t); n._g.gain.linearRampToValueAtTime(1,t+left);
+        x._g.gain.cancelScheduledValues(t); x._g.gain.setValueAtTime(x._g.gain.value,t); x._g.gain.linearRampToValueAtTime(0,t+left);
+        var p=n.play(); if(p&&p.catch) p.catch(function(){}); ti=(ti+1)%TRACKS.length; cur=1-cur; a=n; savePos(true); } });
+    x.addEventListener('play',function(){ if(x._ramp){ x._ramp=false; return; } x._xf=false; gset(x,1); });   // a fresh (non-crossfade) start always comes in at full per-track gain
     return x; }
   function abs(u){ var l=document.createElement('a'); l.href=u; return l.href; }
+  function gset(x,v){ if(!x||!x._g) return; try{ var t=actx.currentTime; x._g.gain.cancelScheduledValues(t); x._g.gain.setValueAtTime(v,t); }catch(e){} }
   function prime(){ var n=A[1-cur], nxt=TRACKS[(ti+1)%TRACKS.length]; if(!n) return; if(n.src!==abs(nxt)) n.src=nxt; n.preload='auto'; try{ n.load(); }catch(e){} }   // buffer the next take while this one plays
   function savePos(force){ var now=Date.now(); if(!force && now-posT<5000) return; posT=now; try{ localStorage.setItem('st_music_pos', JSON.stringify({ti:ti, t:Math.floor(a.currentTime||0)})); }catch(e){} }
   function el(){ if(!a){ A[0]=mk(); A[1]=mk(); var saved=null; try{ saved=JSON.parse(localStorage.getItem('st_music_pos')||'null'); }catch(e){}
@@ -2054,7 +2062,9 @@
     if(want&&a){ var p=a.play(); if(p&&p.catch) p.catch(function(){}); } xfade(false,1500); }
   function onTab(name){ clearTimeout(menuT); if(name==='menu'){ menuT=setTimeout(enterMenu,2500); } else if(menuOn){ leaveMenu(); } }
   var _go=window.go; if(typeof _go==='function'){ window.go=function(n){ _go(n); onTab(n); }; }
-  window.STMusic={ onTab:onTab, menu:function(){ return {on:menuOn, ok:menuOK, src:MENU_SRC}; } };
+  window.STMusic={ onTab:onTab, menu:function(){ return {on:menuOn, ok:menuOK, src:MENU_SRC}; },
+    state:function(){ return {ti:ti, cur:cur, want:want, master:(gain?gain.gain.value:null), tracks:A.map(function(x){ return x?{src:(x.src||'').split('/').pop(), paused:x.paused, t:+(x.currentTime||0).toFixed(1), dur:+(x.duration||0).toFixed(1), g:(x._g?+x._g.gain.value.toFixed(2):null), xf:!!x._xf}:null; }) }; },
+    seekEnd:function(s){ if(a&&a.duration){ a.currentTime=Math.max(0,a.duration-(s||4)); } } };   // debugging: STMusic.state(), STMusic.seekEnd(4) to hear a crossfade
   function getVol(){ return gain? gain.gain.value : a.volume; }
   function setVol(v){ if(gain) gain.gain.value=v; else a.volume=v; }
   function ui(on){ b.classList.toggle('on',on); b.setAttribute('aria-pressed',on?'true':'false'); b.setAttribute('aria-label',on?'Music on':'Music off'); }
