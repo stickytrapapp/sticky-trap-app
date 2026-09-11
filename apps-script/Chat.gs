@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 24;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 25;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -76,7 +76,7 @@ var SYSTEM = [
   "No markdown headers, tables or bold; a short list with one item per line and a leading dash is fine.",
   "Quote prices exactly as listed (per piece, USD) and name the material and texture level you're quoting (the menu calls finish tiers 'textures': Flat, then 1 Spot Gloss UV, 2 Standard Embossing, 3 Pro). Apply the volume breaks only as the rules state and show the math when you total an order.",
   "The House facts section (turnaround, hours, and whatever else the shop adds there) is authoritative - answer those directly. If something isn't in the knowledge base - rush jobs, shipping, items or materials not on the menu, design or pre-press cost, orders over 1,000 - don't guess: say it's quoted per project and point them to call/text 734 460 3845, email thestickytrap@gmail.com, or the basket / Start a project quote flow in the app.",
-  "Never invent prices, discounts or promises. Don't ask for personal details; when they're ready to order, steer them to the basket or the quote form.",
+  "Never invent prices, discounts or promises. Don't collect personal details for their own sake - only an email to save a basket, or name + email/phone at a hand-off (below).",
   "Never quote or estimate set-up, pre-press, vector or gloss-layer charges. If asked, FIRST say in one sentence that pre-press is assessed per design once we see the art, THEN offer the quote form (open_quote_form) or call/text - never open the form without that sentence. State the $50 minimum per order only if asked; do not elaborate on mixes or per-item minimums.",
   "ORDER STATUS: when they ask where an order is / its status / tracking, use order_status. It needs the order code (like 247-XL, on their invoice and tracker emails) AND the email on the order; if either is missing ask for both in one short question. Never describe an order unless order_status returned it. Report the stage, its message and the due date plainly; offer the Track my order panel (go_to connect) for the full timeline.",
   "Reply in the customer's language. If asked what you are: a Sticky Trap assistant powered by Claude.",
@@ -87,7 +87,11 @@ var SYSTEM = [
   "- show_basket: when they ask to see, review or check out their basket.",
   "- open_quote_form: when they're ready to send the order, get a quote, or upload art.",
   "- go_to: when they ask for another part of the app (materials/specs, contact, episodes, the daily brief, the game).",
-  "You may call several tools in one turn (e.g. two add_to_basket lines). Their current tab and basket are given below - use them (e.g. 'your basket already has...'). After add_to_basket, state only what the result says (unit price, line total, basket subtotal); never speculate about merged or duplicate lines - the app handles that.",
+  "You may call several tools in one turn (e.g. two add_to_basket lines). Their current tab and basket are given below - use them (e.g. 'your basket already has...'). After add_to_basket, state only what the result says (unit price, line total, basket subtotal); never speculate about merged or duplicate lines - the app handles that. If the result says the basket was EMPTY before the add, never say 'already' or 'merged'.",
+  "",
+  "HAND-OFF TO A PERSON (v25). Your job is to help enough to bring someone in; a person closes. Hand off when ANY of these fires: (1) money needs judgment - an item or material not on the menu, over 1,000 pieces, set-up / pre-press / design cost, rush, a discount request, or 'can you match this'; (2) they are ready to buy - product, quantity and art in hand; (3) they ask for a person, ask the same thing twice, or sound frustrated; (4) anything about an existing account, past pricing or an invoice (never discuss account terms); (5) compliance, legal or 'will this pass the state'; (6) the third question in a row you could not answer from the knowledge base.",
+  "How: say plainly you'll get them to our team (say 'our team' or 'our designer' - never 'a professional', never pretend to be a person). Ask their name and an email or phone in ONE short question. Then call handoff with what they want, the trigger and a two-line summary. If they have art files, also call open_quote_form so they can attach them. Close with the promise from the tool result: Erin or another customer liaison will reply within one business day. Do not hand off for things the knowledge base answers - answer them.",
+  "SAVE / RESTORE A BASKET (v25): when the basket has lines and they are leaving, hesitating, or ask to save or come back later, offer to save it by email; with an email, call save_basket. If they say they saved a basket before (here, on another device, or on the website) and give the email, call load_basket - it re-adds the lines.",
   "", "KNOWLEDGE BASE:", ""
 ].join("\n");
 
@@ -112,7 +116,20 @@ var TOOLS = [
   { name: 'go_to', strict: true, description: 'Switch the app to a tab.',
     input_schema: { type: 'object', additionalProperties: false, properties: { tab: { type: 'string', enum: TABS } }, required: ['tab'] } },
   { name: 'order_status', strict: true, description: 'Look up where a customer order stands in the shop order tracker. Needs the order code (e.g. 247-XL) and the email address on the order.',
-    input_schema: { type: 'object', additionalProperties: false, properties: { code: { type: 'string' }, email: { type: 'string' } }, required: ['code', 'email'] } }
+    input_schema: { type: 'object', additionalProperties: false, properties: { code: { type: 'string' }, email: { type: 'string' } }, required: ['code', 'email'] } },
+  // v25: hand-off + basket memory
+  { name: 'handoff', strict: true, description: "Hand the customer to a person: records the lead (sheet + email to the shop + Monday item) and returns the reply promise. Call once per customer, after you have their name and an email or phone.",
+    input_schema: { type: 'object', additionalProperties: false, properties: {
+      name: { type: 'string', description: 'Customer name as given' },
+      contact: { type: 'string', description: 'Email address or phone number as given' },
+      want: { type: 'string', description: 'One line: what they want (product, qty, material, deadline if known)' },
+      trigger: { type: 'string', enum: ['custom_or_offmenu', 'over_1000', 'setup_or_design_cost', 'rush', 'discount_or_match', 'ready_to_buy', 'asked_for_person', 'repeat_or_frustrated', 'account_or_invoice', 'compliance', 'unanswered'], description: 'Which hand-off trigger fired' },
+      summary: { type: 'string', description: 'Two lines max: what was discussed and anything the team should know' }
+    }, required: ['name', 'contact', 'want', 'trigger', 'summary'] } },
+  { name: 'save_basket', strict: true, description: "Save the customer's current basket under their email so they can pick it up later, on another device or on the website.",
+    input_schema: { type: 'object', additionalProperties: false, properties: { email: { type: 'string' } }, required: ['email'] } },
+  { name: 'load_basket', strict: true, description: 'Restore a basket previously saved under this email: re-adds its lines to the basket in the app.',
+    input_schema: { type: 'object', additionalProperties: false, properties: { email: { type: 'string' } }, required: ['email'] } }
 ];
 
 /* ---------- HTTP ---------- */
@@ -149,7 +166,7 @@ function doPost(e) {
   if (!throttle_(uid)) return out_({ ok: false, error: 'rate_limited', reply: BUSY });
   if (!PROP.getProperty('ANTHROPIC_API_KEY')) return out_({ ok: false, error: 'no_key', reply: FALLBACK });
 
-  var ctx = { tab: TABS.indexOf(body.tab) > -1 ? body.tab : 'industry', basket: cleanBasket_(body.basket) };
+  var ctx = { tab: TABS.indexOf(body.tab) > -1 ? body.tab : 'industry', basket: cleanBasket_(body.basket), uid: uid, channel: String(body.channel || 'app').slice(0, 20) };   // v25: uid + channel for leads / saved baskets
   try {
     var r = ask_(msgs, ctx);
     log_(uid, msgs[msgs.length - 1].content, r.reply, r.usage, r.model, r.actions);
@@ -303,7 +320,7 @@ function runTool_(use, prices, ctx) {
       var nb = q < 500 ? (500 - q) : (q < 750 ? (750 - q) : (q < 1000 ? (1000 - q) : 0));
       var res = { ok: true, added: q + ' x ' + p + ' - ' + m + ' / ' + fname, unit_price: money_(u), line_total: money_(tot), menu_price: money_(pr),
                   discount: cmult_(q) < 1 ? Math.round((1 - cmult_(q)) * 100) + '% volume break applied' : 'menu price (no volume break under 500)',
-                  basket: 'had ' + before + ' line(s) before this add; now ' + ctx.basket.length + ' line(s), subtotal ' + money_(sub),
+                  basket: (before ? 'had ' + before + ' line(s) before this add' : 'was EMPTY before this add (nothing to merge)') + '; now ' + ctx.basket.length + ' line(s), subtotal ' + money_(sub),
                   order_total: money_(Math.max(sub, MIN_ORDER)) + (sub < MIN_ORDER ? ' ($' + MIN_ORDER + ' minimum order applied - the app charges the minimum, it does not block the order)' : '') };
       if (nb && nb <= 55) res.tip = 'Adding ' + nb + ' more pieces reaches the next volume break.';
       return { result: res, action: { type: 'add_to_basket', p: p, m: m, f: fname, pr: pr, qty: q } };
@@ -327,6 +344,9 @@ function runTool_(use, prices, ctx) {
       return { result: { ok: true, code: o.code, stage: o.label, message: o.message, due: o.due || 'not set yet', items: o.items || '', company: o.company || o.name || '',
                          last_update: last ? new Date(last.ts).toDateString() + (last.note ? ' - ' + last.note : '') : '', awaiting_client_approval: !!o.can_approve } };
     }
+    if (use.name === 'handoff') return leadIn_(inp, ctx);            // v25
+    if (use.name === 'save_basket') return basketSave_(inp, ctx);    // v25
+    if (use.name === 'load_basket') return basketLoad_(inp, ctx);    // v25
     return { error: true, result: { error: 'unknown tool ' + use.name } };
   } catch (err) { return { error: true, result: { error: String(err) } }; }
 }
@@ -355,12 +375,102 @@ function ask_(msgs, ctx) {
     var results = uses.map(function (u) {
       var r = runTool_(u, prices, ctx);
       if (r.action) actions.push(r.action);
+      if (r.actions) r.actions.forEach(function (a) { actions.push(a); });   // v25: load_basket returns one action per line
       return { type: 'tool_result', tool_use_id: u.id, content: JSON.stringify(r.result), is_error: !!r.error };
     });
     convo.push({ role: 'user', content: results });
   }
   // ran out of rounds: keep whatever actions succeeded and say so plainly
   return { reply: pre.length ? pre.join(' ') : (actions.length ? 'Done - check your basket for the update.' : FALLBACK), actions: actions, usage: usage, model: model };
+}
+
+/* ---------- v25: hand-off leads (sheet + email + Monday) and baskets saved by email ---------- */
+var HANDOFF_PROMISE = 'Erin or another customer liaison will reply within one business day.';
+var LEAD_COLS = ['ts', 'name', 'contact', 'want', 'trigger', 'summary', 'basket', 'channel', 'device_id', 'monday_item', 'emailed'];
+function leadsSheet_() {
+  var ss = ss_(), sh = ss.getSheetByName('leads');
+  if (!sh) { sh = ss.insertSheet('leads'); sh.appendRow(LEAD_COLS); }
+  return sh;
+}
+function basketsSheet_() {
+  var ss = ss_(), sh = ss.getSheetByName('baskets');
+  if (!sh) { sh = ss.insertSheet('baskets'); sh.appendRow(['email', 'ts', 'lines', 'device_id', 'channel']); }
+  return sh;
+}
+function emailOk_(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(e || '').trim()); }
+function phoneOk_(p) { return String(p || '').replace(/\D/g, '').length >= 10; }
+function isTest_(ctx) { return /^test-/.test(String(ctx.uid || '')); }
+
+function leadIn_(inp, ctx) {
+  var name = String(inp.name || '').trim().slice(0, 80), contact = String(inp.contact || '').trim().slice(0, 120);
+  if (!name) return { error: true, result: { error: 'Need the customer name first - ask for name and an email or phone in one question.' } };
+  if (!emailOk_(contact) && !phoneOk_(contact)) return { error: true, result: { error: "'" + contact + "' is not a usable email or phone. Ask again for an email address or a 10-digit phone number." } };
+  var key = 'lead:' + ctx.uid;
+  if (CACHE.get(key)) return { result: { ok: true, already_sent: true, promise: HANDOFF_PROMISE, note: 'This customer was already handed off a moment ago - just restate the promise; do not send again.' } };
+  var want = String(inp.want || '').slice(0, 300), trig = String(inp.trigger || '').slice(0, 40), summ = String(inp.summary || '').slice(0, 800);
+  var basket = basketSummary_(ctx.basket), test = isTest_(ctx), when = new Date();
+  var mondayId = '', emailed = false;
+  if (!test) { try { mondayId = mondayLead_(name, contact, want, trig, summ, basket); } catch (e) { mondayId = 'ERR ' + String(e).slice(0, 80); } }
+  try {
+    var subj = (test ? '[TEST] ' : '') + 'App chat lead: ' + name + ' - ' + (want || trig);
+    var body = ['New lead from the ' + (ctx.channel || 'app') + ' chat (' + Utilities.formatDate(when, Session.getScriptTimeZone(), 'EEE MMM d, h:mm a') + ')', '',
+      'Name: ' + name, 'Contact: ' + contact, 'Wants: ' + (want || '-'), 'Why handed off: ' + trig, '', 'Summary: ' + (summ || '-'), '', 'Basket: ' + basket,
+      mondayId && !/^ERR/.test(mondayId) ? 'Monday item: https://thestickytraps-team.monday.com/boards/8594864074/pulses/' + mondayId : (mondayId ? 'Monday: ' + mondayId : 'Monday: not created (MONDAY_TOKEN not set)'),
+      '', 'Promise made to the customer: ' + HANDOFF_PROMISE].join('\n');
+    GmailApp.sendEmail(notifyTo_(), subj, body, { name: 'Sticky Trap App', replyTo: emailOk_(contact) ? contact : SHOP_EMAIL });
+    emailed = true;
+  } catch (e) { emailed = false; }
+  try { leadsSheet_().appendRow([when, name, contact, want, trig, summ, basket, ctx.channel || 'app', ctx.uid || '', mondayId, emailed ? 'yes' : 'no']); } catch (e) {}
+  CACHE.put(key, '1', 600);
+  return { result: { ok: true, recorded: true, promise: HANDOFF_PROMISE, monday: !!mondayId && !/^ERR/.test(mondayId), emailed: emailed },
+           action: { type: 'lead_sent', trigger: trig } };
+}
+
+function mondayLead_(name, contact, want, trig, summ, basket) {
+  var tok = PROP.getProperty('MONDAY_TOKEN');
+  if (!tok) return '';
+  var board = PROP.getProperty('LEADS_BOARD') || '8594864074', group = PROP.getProperty('LEADS_GROUP') || 'group_mm3cc2mz';   // main Board, 'Erin' group unless overridden
+  var cols = { text_mm725tvw: emailOk_(contact) ? contact : '', text_mm66rc5q: phoneOk_(contact) && !emailOk_(contact) ? contact : '', date_mknk97n6: { date: Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM-dd') } };
+  var title = 'LEAD (chat): ' + name + (want ? ' - ' + want.slice(0, 60) : '');
+  var q = 'mutation ($b: ID!, $g: String!, $n: String!, $c: JSON!) { create_item (board_id: $b, group_id: $g, item_name: $n, column_values: $c) { id } }';
+  var res = mondayGql_(tok, q, { b: board, g: group, n: title, c: JSON.stringify(cols) });
+  var id = res.data && res.data.create_item && res.data.create_item.id;
+  if (!id) throw new Error('monday: ' + JSON.stringify(res).slice(0, 120));
+  var upd = 'From the app chat. Why: ' + trig + '\nWants: ' + want + '\nContact: ' + contact + '\nSummary: ' + summ + '\nBasket: ' + basket + '\nPromise: ' + HANDOFF_PROMISE;
+  try { mondayGql_(tok, 'mutation ($i: ID!, $t: String!) { create_update (item_id: $i, body: $t) { id } }', { i: id, t: upd }); } catch (e) {}
+  return String(id);
+}
+function mondayGql_(tok, query, vars) {
+  var res = UrlFetchApp.fetch('https://api.monday.com/v2', { method: 'post', contentType: 'application/json', headers: { Authorization: tok, 'API-Version': '2024-10' }, payload: JSON.stringify({ query: query, variables: vars || {} }), muteHttpExceptions: true });
+  return JSON.parse(res.getContentText());
+}
+
+function basketSave_(inp, ctx) {
+  var email = String(inp.email || '').trim().toLowerCase();
+  if (!emailOk_(email)) return { error: true, result: { error: "'" + email + "' is not a valid email address - ask again." } };
+  if (!ctx.basket.length) return { error: true, result: { error: 'The basket is empty - nothing to save. Add lines first.' } };
+  var sh = basketsSheet_(), rows = sh.getDataRange().getValues(), lines = JSON.stringify(ctx.basket.slice(0, 40)), now = new Date(), found = -1;
+  for (var i = 1; i < rows.length; i++) if (String(rows[i][0]).toLowerCase() === email) { found = i + 1; break; }
+  if (found > 0) sh.getRange(found, 1, 1, 5).setValues([[email, now, lines, ctx.uid || '', ctx.channel || 'app']]);
+  else sh.appendRow([email, now, lines, ctx.uid || '', ctx.channel || 'app']);
+  var sub = basketLines_(ctx.basket).reduce(function (a, l) { return a + l.total; }, 0);
+  return { result: { ok: true, saved_under: email, lines: ctx.basket.length, subtotal: money_(sub), note: 'Tell them: give this email to the chat on any device or the website and say "load my basket".' },
+           action: { type: 'basket_saved', email: email } };
+}
+function basketLoad_(inp, ctx) {
+  var email = String(inp.email || '').trim().toLowerCase();
+  if (!emailOk_(email)) return { error: true, result: { error: "'" + email + "' is not a valid email address - ask again." } };
+  var rows = basketsSheet_().getDataRange().getValues(), hit = null;
+  for (var i = 1; i < rows.length; i++) if (String(rows[i][0]).toLowerCase() === email) hit = rows[i];
+  if (!hit) return { error: true, result: { error: 'No saved basket under ' + email + '. Offer to save the current one instead.' } };
+  var lines = []; try { lines = JSON.parse(hit[2]) || []; } catch (e) { lines = []; }
+  lines = cleanBasket_(lines);
+  if (!lines.length) return { error: true, result: { error: 'The saved basket under ' + email + ' is empty.' } };
+  lines.forEach(function (l) { ctx.basket.push(l); });
+  var sub = basketLines_(ctx.basket).reduce(function (a, l) { return a + l.total; }, 0);
+  // the app applies one add_to_basket action per saved line; report them so the reply can list them
+  return { result: { ok: true, restored: lines.map(function (l) { return l.qty + ' x ' + l.p + ' - ' + l.m + ' / ' + l.f; }), saved_on: hit[1] instanceof Date ? hit[1].toDateString() : String(hit[1]), basket_subtotal: money_(sub) },
+           actions: lines.map(function (l) { return { type: 'add_to_basket', p: l.p, m: l.m, f: l.f, pr: l.pr, qty: l.qty }; }) };
 }
 
 /* ---------- promos (data/promos.json on the site): featured of the week, double-points rule, dated events ---------- */
