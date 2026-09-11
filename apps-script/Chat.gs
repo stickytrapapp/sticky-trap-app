@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 27;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 28;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -163,6 +163,8 @@ function doPost(e) {
   if (body.action === 'approve') { try { return out_(approve_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
   if (body.action === 'changes') { try { return out_(changes_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
   if (body.action === 'order_delete') { try { return out_(orderDelete_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
+  if (body.action === 'order_restore') { try { return out_(orderRestore_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }   // v28
+  if (body.action === 'order_update') { try { return out_(orderUpdate_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }     // v28
 
   var uid = String(body.uid || 'anon').slice(0, 40);
   var msgs = clean_(body.messages);
@@ -836,11 +838,17 @@ function trackGet_(p) {
 }
 function ordersList_(p) {
   if (!pinOk_(p.pin)) return { ok: false, error: 'bad_pin' };
-  var rows = ordersSheet_().getDataRange().getValues(), out = [];
-  for (var i = 1; i < rows.length; i++) { var o = rowObj_(rows[i]); if (o.stage === 'complete') continue;
-    out.push({ code: o.code, name: o.name, company: o.company, email: o.email, items: o.items, due: o.due, stage: o.stage, stage_ts: o.stage_ts ? new Date(o.stage_ts).getTime() : null }); }
+  var archived = String(p.archived || '') === '1';
+  var sh = archived ? archiveSheet_() : ordersSheet_(), rows = sh.getDataRange().getValues(), out = [];
+  for (var i = 1; i < rows.length; i++) { var o = rowObj_(rows[i]); if (!o.code) continue; if (!archived && o.stage === 'complete') continue;
+    var hist = []; try { hist = JSON.parse(o.history || '[]'); } catch (e) {}
+    var last = hist.length ? hist[hist.length - 1] : null, rawDue = rows[i][ORDER_COLS.indexOf('due')];
+    out.push({ code: o.code, name: o.name, company: o.company, email: o.email, phone: o.phone, items: o.items, due: o.due, stage: o.stage, stage_ts: o.stage_ts ? new Date(o.stage_ts).getTime() : null,
+               // v28: what the console and the Monday sync need to show / write more
+               due_iso: rawDue instanceof Date ? Utilities.formatDate(rawDue, Session.getScriptTimeZone(), 'yyyy-MM-dd') : '', monday_item: o.monday_item || '', pay_url: o.pay_url || '', source: o.source || '',
+               last_note: last ? String(last.note || '') : '', created: o.created ? new Date(o.created).getTime() : null }); }
   out.sort(function (a, b) { return (a.stage_ts || 0) - (b.stage_ts || 0); });
-  return { ok: true, orders: out };
+  return { ok: true, orders: out, archived: archived };
 }
 function notifyTo_() { var extra = String(PROP.getProperty('NUDGE_TO') || '').split(',').map(function (x) { return x.trim(); }).filter(Boolean); return [SHOP_EMAIL].concat(extra).join(','); }   // script property NUDGE_TO = extra addresses (Erin, ...)
 function nudgeStale_() {
@@ -852,10 +860,34 @@ function nudgeStale_() {
   GmailApp.sendEmail(notifyTo_(), 'Order tracker: ' + stale.length + ' order' + (stale.length > 1 ? 's' : '') + ' need a push', stale.join('\n') + '\n\nLog the next stage: https://thestickytrap.app/console/');
   return stale.length;
 }
+function archiveSheet_() {   // v28: removed orders go here instead of being deleted (a mis-tap is recoverable; the client is never emailed)
+  var ss = ss_(), sh = ss.getSheetByName('orders_archive');
+  if (!sh) { sh = ss.insertSheet('orders_archive'); sh.appendRow(ORDER_COLS.concat(['archived_ts'])); try { sh.getRange('A:A').setNumberFormat('@'); } catch (e) {} }
+  return sh;
+}
 function orderDelete_(b) {
   if (!pinOk_(b.pin)) return { ok: false, error: 'bad_pin' };
   var sh = ordersSheet_(), f = findOrder_(sh, b.code); if (!f) return { ok: false, error: 'not_found' };
-  sh.deleteRow(f.i); return { ok: true, deleted: f.o.code };
+  var row = sh.getRange(f.i, 1, 1, ORDER_COLS.length).getValues()[0];
+  archiveSheet_().appendRow(row.concat([new Date()]));
+  sh.deleteRow(f.i); return { ok: true, deleted: f.o.code, archived: true };
+}
+function orderRestore_(b) {
+  if (!pinOk_(b.pin)) return { ok: false, error: 'bad_pin' };
+  var ash = archiveSheet_(), rows = ash.getDataRange().getValues(), code = String(b.code || '').trim().toUpperCase(), hit = -1;
+  for (var i = rows.length - 1; i >= 1; i--) if (String(rows[i][0]).toUpperCase() === code) { hit = i; break; }
+  if (hit < 0) return { ok: false, error: 'not_found' };
+  var sh = ordersSheet_(); if (findOrder_(sh, code)) return { ok: false, error: 'code_exists' };
+  sh.appendRow(rows[hit].slice(0, ORDER_COLS.length));
+  ash.deleteRow(hit + 1);
+  return { ok: true, restored: code };
+}
+function orderUpdate_(b) {   // v28: staff / sync edits to the record itself (never the stage, never an email to the client)
+  if (!pinOk_(b.pin)) return { ok: false, error: 'bad_pin' };
+  var sh = ordersSheet_(), f = findOrder_(sh, b.code); if (!f) return { ok: false, error: 'not_found' };
+  var allowed = { name: 80, company: 80, email: 120, phone: 40, items: 400, due: 40, monday_item: 200, notes: 500, square_inv: 60, pay_url: 300 }, set = {};
+  Object.keys(allowed).forEach(function (k) { if (b[k] != null && String(b[k]) !== '') { var v = String(b[k]).slice(0, allowed[k]); if (k === 'email' && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)) return; sh.getRange(f.i, ORDER_COLS.indexOf(k) + 1).setValue(v); set[k] = v; } });
+  return { ok: true, code: f.o.code, updated: set };
 }
 /* ---------- Monday-morning digest: what the app did last week ---------- */
 function weeklyDigest_() {
