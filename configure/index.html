@@ -161,17 +161,36 @@ var D={"products":[{"name":"3\" Slap","slug":"3-slap","section":"Slaps","size":"
   drop.addEventListener('dragleave',function(){ drop.classList.toggle('has',!!art); });
   drop.addEventListener('drop',function(e){ e.preventDefault(); if(e.dataTransfer.files[0]) take(e.dataTransfer.files[0]); });
   file.addEventListener('change',function(){ if(file.files[0]) take(file.files[0]); });
+  // ---- preflight (step 4, browser side): raster = dpi at the chosen size (<100 blocks, <200 warns), transparency scan
+  //      (die-cut needs a transparent background on slaps), flat/empty image, aspect vs the sticker; vector = accepted, checked at proof
+  var CUT=(p.shape==='square'||p.shape==='rect'||p.shape==='round');   // shapes we contour-cut from the art's outline
+  function scan(im){ var k=Math.min(1,256/Math.max(im.width,im.height)), c=document.createElement('canvas'); c.width=Math.max(1,Math.round(im.width*k)); c.height=Math.max(1,Math.round(im.height*k));
+    var g=c.getContext('2d',{willReadFrequently:true}); g.drawImage(im,0,0,c.width,c.height); var d; try{ d=g.getImageData(0,0,c.width,c.height).data; }catch(e){ return null; }
+    var n=d.length/4, tr=0, edgeTr=0, edgeN=0, sum=[0,0,0], sq=[0,0,0], W=c.width, H=c.height;
+    for(var i=0;i<n;i++){ var a=d[i*4+3], x=i%W, y=(i/W)|0, edge=(x<2||y<2||x>=W-2||y>=H-2); if(a<16){ tr++; if(edge) edgeTr++; } if(edge) edgeN++;
+      if(a>=16){ for(var ch=0;ch<3;ch++){ var v=d[i*4+ch]; sum[ch]+=v; sq[ch]+=v*v; } } }
+    var opaque=n-tr, varsum=0; for(var ch2=0;ch2<3;ch2++){ if(opaque){ var m=sum[ch2]/opaque; varsum+=Math.sqrt(Math.max(0,sq[ch2]/opaque-m*m)); } }
+    return {transparent:tr/n, edgeTransparent:edgeN?edgeTr/edgeN:0, flat:opaque>0&&varsum<12&&(tr/n)<0.02, allTransparent:opaque===0}; }   // 'flat' = one colour edge to edge with no cut-out; a one-colour logo on transparency is normal
+  function setPre(lvl,msg,extra){ preflight=extra||{}; preflight.level=lvl; $('pre').className='pre '+lvl; $('pre').innerHTML=msg; $('add').disabled=(lvl==='bad'); $('add').textContent=(lvl==='bad')?'Replace the file to continue':'Add to basket'; }
   function take(f){ if(f.size>40*1024*1024){ toast('Over 40 MB - email that one to us'); return; }
     art=f; thumb=null; preflight=null; drop.classList.add('has'); $('droptxt').textContent=f.name+' · '+(f.size/1024/1024).toFixed(1)+' MB';
-    if(/^image\/(png|jpe?g|webp)/.test(f.type)){ var r=new FileReader(); r.onload=function(){ var im=new Image(); im.onload=function(){
-        var dpi=Math.round(Math.min(im.width/p.w, im.height/p.h)); var ratio=im.width/im.height, want=p.w/p.h, off=Math.abs(ratio-want)/want;
-        var lvl=dpi<100?'bad':(dpi<200?'warn':'ok'); var msg=(lvl==='bad'?'Too small to print sharp: ':lvl==='warn'?'A bit soft at this size: ':'Sharp at this size: ')+im.width+' x '+im.height+' px = ~'+dpi+' dpi at '+p.size+(off>0.15?' · shape does not match the sticker, we will crop to fit':'');
-        preflight={dpi:dpi,level:lvl,w:im.width,h:im.height}; $('pre').className='pre '+lvl; $('pre').textContent=msg;
+    if(/^image\/(png|jpe?g|webp|gif)/.test(f.type)){ var r=new FileReader(); r.onload=function(){ var im=new Image(); im.onload=function(){
+        var dpi=Math.round(Math.min(im.width/p.w, im.height/p.h)); var ratio=im.width/im.height, want=p.w/p.h, off=Math.abs(ratio-want)/want; var sc=scan(im)||{};
+        var notes=[], lvl=dpi<100?'bad':(dpi<200?'warn':'ok');
+        notes.push((lvl==='bad'?'<b>Too small to print sharp:</b> ':lvl==='warn'?'<b>A bit soft at this size:</b> ':'<b>Sharp at this size:</b> ')+im.width+' x '+im.height+' px = ~'+dpi+' dpi at '+esc(p.size)+(lvl==='bad'?'. Export at least '+Math.ceil(p.w*150)+' x '+Math.ceil(p.h*150)+' px (300 dpi = '+Math.ceil(p.w*300)+' x '+Math.ceil(p.h*300)+').':lvl==='warn'?' - fine for bold art, soft on fine lines and small text.':''));
+        if(sc.allTransparent){ lvl='bad'; notes.push('<b>The image is empty</b> (fully transparent).'); }
+        else if(sc.flat){ if(lvl!=='bad') lvl='warn'; notes.push('<b>Looks like a single flat colour</b> - is this the right file?'); }
+        if(CUT){ if(/jpe?g/.test(f.type)){ notes.push('JPG has no transparency, so this prints as a <b>square backer</b>. Want it die-cut to the outline? Send a PNG with a transparent background.'); }
+          else if(sc.edgeTransparent>0.5){ notes.push('<b>Transparent background</b> - we can contour-cut to the art\u2019s outline.'); }
+          else if(sc.transparent<0.02){ notes.push('No transparent background - prints as a <b>square backer</b> (or send a PNG cut out to the outline).'); } }
+        if(off>0.15){ notes.push('Shape is '+(ratio>want?'wider':'taller')+' than a '+esc(p.size)+' sticker - <b>we crop to fit</b>; ask the tool for the right ratio to keep everything.'); if(lvl==='ok') lvl='warn'; }
+        setPre(lvl, notes.join('<br>'), {dpi:dpi,w:im.width,h:im.height,alpha:!!(sc.edgeTransparent>0.5),flat:!!sc.flat,ratioOff:Math.round(off*100)});
         var k=Math.min(1,360/Math.max(im.width,im.height)), c=document.createElement('canvas'); c.width=Math.round(im.width*k); c.height=Math.round(im.height*k); c.getContext('2d').drawImage(im,0,0,c.width,c.height); thumb=c.toDataURL('image/png'); draw(); };
+      im.onerror=function(){ setPre('bad','<b>Could not read that image.</b> Try exporting it again as PNG.',{}); };
       im.src=r.result; }; r.readAsDataURL(f); }
-    else if(/pdf|postscript|illustrator|svg/i.test(f.type)||/\.(pdf|ai|eps|svg)$/i.test(f.name)){ preflight={level:'ok',vector:true}; $('pre').className='pre ok'; $('pre').textContent='Vector file - checked at proof.'; draw(); }
-    else { $('pre').className='pre warn'; $('pre').textContent='We will look at this one at proof.'; draw(); } }
-
+    else if(/pdf|postscript|illustrator|svg/i.test(f.type)||/\.(pdf|ai|eps|svg)$/i.test(f.name)){ setPre('ok','<b>Vector file</b> - accepted, checked at proof (outlined text and embedded images are what we look for).',{vector:true}); draw(); }
+    else if(/\.(psd|tif|tiff|heic|bmp)$/i.test(f.name)){ setPre('warn','<b>'+esc(f.name.split('.').pop().toUpperCase())+'</b> - we can open it, but we check it at proof. A PNG export lets us check it here.',{}); draw(); }
+    else { setPre('warn','We will look at this one at proof.',{}); draw(); } }
   // preview: shape + material + art
   function draw(){ var fillId=cfg.mat==='White Vinyl'?'fw':(cfg.mat==='Gold'?'fg':'fh');
     var defs='<defs><linearGradient id="fh" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#12C4FF"/><stop offset=".4" stop-color="#8A2BE2"/><stop offset=".7" stop-color="#FF1FA2"/><stop offset="1" stop-color="#EAB84B"/></linearGradient><linearGradient id="fg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F6DA8A"/><stop offset=".45" stop-color="#EAB84B"/><stop offset="1" stop-color="#C9962E"/></linearGradient><linearGradient id="fw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#e9e9ee"/></linearGradient><clipPath id="cp">__CLIP__</clipPath></defs>';
@@ -207,6 +226,7 @@ var D={"products":[{"name":"3\" Slap","slug":"3-slap","section":"Slaps","size":"
     if(r.deal){ line.deal={id:r.deal.id||'',off:r.deal.off,fromQty:r.deal.fromQty||0}; }
     var notes=$('notes').value.trim(); if(notes) line.notes=notes;
     var done=function(){ if(!ex) c.push(line); try{ localStorage.setItem('st_cart',JSON.stringify(c)); }catch(e){} cartN(); toast(fmt(qty)+' x '+p.name+' added'); $('cartlink').style.boxShadow='0 0 0 2px var(--cy)'; try{ window.track&&window.track('add_basket',p.name+' · '+cfg.mat+' · '+f+' · configure'); }catch(e){} };
+    if(preflight&&preflight.level==='bad'){ toast('Replace the art file first'); return; }
     if(art){ line.art={name:art.name,size:art.size,thumb:thumb||'',pre:preflight||null,key:k}; artPut(k,art).then(done).catch(function(){ line.art.reupload=true; done(); }); } else done(); });
 })();
 </script>
