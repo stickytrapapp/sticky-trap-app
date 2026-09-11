@@ -810,9 +810,9 @@
     <div class="ne-wrap">
       <div class="ne-eyebrow">Insert coin</div>
       <h2 class="ne-title">Enter your handle</h2>
-      <p class="ne-sub">Your arcade name, kept anonymous. <b>Up to 8 characters</b> — mix letters and numbers.</p>
-      <input class="ne-input" id="handleInput" maxlength="8" placeholder="TRAPGOD" autocomplete="off" autocapitalize="characters" spellcheck="false">
-      <div class="ne-count"><span id="handleCount">0</span> / 8</div>
+      <p class="ne-sub">Your arcade name, kept anonymous. <b>Up to 9 characters</b> — mix letters and numbers.</p>
+      <input class="ne-input" id="handleInput" maxlength="9" placeholder="TRAPGOD" autocomplete="off" autocapitalize="characters" spellcheck="false">
+      <div class="ne-count"><span id="handleCount">0</span> / 9</div>
       <button class="sf-primary" id="handleGo">Lock it in</button>
       <button class="sf-link" id="handleRand">Surprise me</button>
     </div>
@@ -1303,7 +1303,7 @@
   var handle='';
   try{handle=localStorage.getItem('tp_handle')||'';}catch(e){}
   var HRAND=['TRAPGOD','NEONWOLF','SHARDKNG','HAZEKING','PIXELPLG','GLOWGRL','VOIDCAT','SYNTH92','MIDNITE','RUGRAT','SLAPKING','HOLOFOX'];
-  function cleanHandle(v){return (v||'').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,8);}
+  function cleanHandle(v){return (v||'').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,9);}   // 9 since 2026-09-11 (Shane = TRAPSHIFT)
   function applyHandle(){
     var av=handle.slice(0,3)||'YOU';
     var m=[['hName',handle],['hAva',av],['balHdr','Your points · '+handle],['youNm',handle],['youAv',av],['rHandle',handle]];
