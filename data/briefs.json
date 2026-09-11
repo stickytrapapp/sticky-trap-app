@@ -1,63 +1,63 @@
 {
-  "updated": "2026-09-10",
+  "updated": "2026-09-11",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-09-10",
+      "date": "2026-09-11",
       "label": "Morning Brief",
-      "title": "Repeal Momentum Builds in Lansing as DEA and FDA Accelerate Federal Cannabis-Psychedelics Reform",
-      "top": "Michigan's 24% wholesale tax fight has jumped into the governor's race, with GOP nominee John James pulling in industry cash on a repeal pledge — even as new stores keep opening and operators find workarounds. Nationally, the DEA's rescheduling hearing wrapped in July and FDA is now fast-tracking psychedelic therapies, with Compass Pathways on track for a Q4 NDA filing.",
+      "title": "New Storefronts, New Momentum: Ann Arbor Opens Doors as DC Moves Toward Rescheduling",
+      "top": "Michigan operators got a fresh reason to smile as New Standard's Ann Arbor storefront threw open its doors this month, even as the 24% wholesale tax fight heads toward real legal and electoral turning points. Nationally, the DEA has now gone on record arguing for Schedule III while the FDA gears up for a landmark psychedelics hearing next week — signs the federal ground is shifting in the industry's favor.",
       "local": [
         {
-          "text": "GOP gubernatorial nominee John James is courting Michigan cannabis industry donors with a pledge to repeal or sharply reduce the 24% wholesale tax, netting nearly $90,000 from a single JARS Cannabis-hosted fundraiser — a sign operators now have real electoral leverage heading into November.",
-          "source": "Bridge Michigan",
-          "url": "https://bridgemi.com/michigan-government/john-james-pitches-marijuana-tax-repeal-courts-industry-donors/"
+          "text": "New Standard's Ann Arbor dispensary threw open its doors with an opening-weekend blitz of giveaways and discounts running September 3-6, giving Washtenaw County shoppers another premium option and operators a fresh proof point that new store launches still pencil out.",
+          "source": "ClickOnDetroit",
+          "url": "https://www.clickondetroit.com/topic/Cannabis/"
         },
         {
-          "text": "Lawmakers from both parties have now backed repeal proposals including House Bill 6224, arguing the tax has generated far less revenue than projected while piling pressure on licensed operators — bipartisan cover that improves the odds of relief.",
-          "source": "WJR-AM",
-          "url": "https://www.wjr.com/2026/09/10/debate-grows-over-michigans-24-marijuana-tax/"
-        },
-        {
-          "text": "Jars Cannabis negotiated the removal of a police-monitored Flock surveillance camera at its Madison Heights store after a public standoff, a win for operator pushback against invasive local enforcement conditions.",
+          "text": "Muskegon's Fields Cannary is pushing ahead with an ambitious hospitality-driven dispensary-restaurant buildout, a sign that operators with the right concept and capital are still expanding even as the wholesale tax squeezes weaker competitors out of rural markets.",
           "source": "Cann.dev",
           "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
         },
         {
-          "text": "Fields Cannary, a hospitality-forward dispensary-and-restaurant concept in Muskegon, is targeting a fall opening — a format bet that pushes Michigan retail further than most stores in the state have gone, even amid the tax squeeze.",
-          "source": "Cann.dev",
-          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
+          "text": "Republican gubernatorial nominee John James is campaigning on slashing Michigan's cannabis tax burden, unveiling a \"Freedom Agenda\" plank arguing the levy \"drives up prices, gives illegal operators a competitive edge, and has already fallen far short of revenue projections\" — putting real tax relief on the November ballot for operators.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/michigan-gop-governor-candidate-pledges-huge-tax-cut-for-marijuana-industry-along-with-crackdown-on-hemp-products"
         },
         {
-          "text": "The wholesale tax is badly underperforming forecasts — about $37 million in Q2 2026 and $34 million in Q1 against an initial estimate of $105 million per quarter — evidence operators can use to press lawmakers for a rate cut or repeal.",
-          "source": "Gander Newsroom",
+          "text": "The 24% wholesale tax generated roughly $37 million in Q2 and $34 million in Q1 — a fraction of the $105 million per quarter state officials projected, ammunition operators and the bipartisan repeal push in Lansing are already using to argue the tax is failing on its own terms.",
+          "source": "The 'Gander (gandernewsroom.com)",
           "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-090826/"
+        },
+        {
+          "text": "The Michigan Cannabis Industry Association's original lawsuit challenging the wholesale tax is now heading to a September trial, while a second lawsuit filed against Treasury keeps the legal pressure on — giving operators two live paths toward getting the tax struck down and back-taxes reimbursed.",
+          "source": "WWMT",
+          "url": "https://wwmt.com/news/state/michigan-marijuana-industry-lawsuit-stop-wholesale-tax-legal-court-pot-weed-economy-business-wwmt"
         }
       ],
       "national": [
         {
-          "text": "FDA finalized its clinical trial guidance for psilocybin, LSD and MDMA and will hold a public hearing September 14 on therapeutic use of psychedelics, building the regulatory infrastructure for what could soon be a live approval docket.",
-          "source": "Tech Times",
-          "url": "https://www.techtimes.com/articles/320454/20260714/fda-finalizes-psychedelic-trial-rules-unblinding-problem-gets-official-answer.htm"
+          "text": "FDA's Center for Drug Evaluation and Research just previewed its approach in the New England Journal of Medicine, with CDER's new permanent director and top psychiatry officials touting the agency's newly finalized guidance as offering developers of psilocybin, MDMA and LSD-derived therapies a flexible, science-driven path forward ahead of a public hearing on therapeutic psychedelic use next week.",
+          "source": "RAPS (Regulatory Affairs Professionals Society)",
+          "url": "https://www.raps.org/resource/fda-to-consider-innovative-approaches-to-psychedelic-drug-development.html"
         },
         {
-          "text": "Compass Pathways is on track for a Q4 2026 NDA submission for its psilocybin therapy COMP360 after the drug showed six-month durability in treatment-resistant depression, with a possible launch in the first half of 2027.",
-          "source": "Clinical Trials Arena",
-          "url": "https://www.clinicaltrialsarena.com/news/fda-finalises-psychedelic-clinical-trial-guidance/"
+          "text": "DEA's own final post-hearing brief now argues marijuana no longer meets the criteria to stay in Schedule I, and a D.C. Circuit ruling on the legality of the administration's Schedule III move is expected imminently — with billions in tax benefits for licensed operators hanging on the outcome.",
+          "source": "The Cannabis Business Advisors / Newswire",
+          "url": "https://thecannabisbusinessadvisors.com/cannabis-rescheduling-update-dea-schedule-iii-august-2026/"
         },
         {
-          "text": "FDA issued Commissioner's National Priority Vouchers to Compass Pathways, Usona Institute and Transcend Therapeutics, compressing standard drug review from roughly ten months to as little as one to two months for their psilocybin and methylone programs.",
-          "source": "Pharmacy Times",
-          "url": "https://www.pharmacytimes.com/view/fda-announces-regulatory-actions-to-accelerate-psychedelic-development-for-serious-mental-health-conditions"
-        },
-        {
-          "text": "Curaleaf's bid for Canadian operator Aurora signals the improving capital backdrop from partial federal rescheduling is now opening the door to cross-border MSO consolidation — a template other major operators are watching closely.",
+          "text": "Curaleaf's $4-per-share, 45%-premium takeover bid for Canada's Aurora Cannabis is now formally underway, a cross-border deal that would create a combined company with more than $1.5 billion in pro forma revenue and a template other major MSOs are watching closely.",
           "source": "Cann.dev",
           "url": "https://www.cann.dev/cannabis-ma-august-2026-curaleaf-vireo-consolidation/"
         },
         {
-          "text": "The House hemp THC recriminalization deadline has been pushed back to December 11 under a bill President Trump signed, giving hemp-derived product makers and retailers more runway before facing federal contraband status.",
-          "source": "Gander Newsroom",
+          "text": "Compass Pathways' psilocybin therapy COMP360 showed six-month durability in treatment-resistant depression trials and remains on track for a Q4 2026 FDA New Drug Application, with commercial launch targeted for the first half of 2027.",
+          "source": "Clinical Trials Arena",
+          "url": "https://www.clinicaltrialsarena.com/news/fda-finalises-psychedelic-clinical-trial-guidance/"
+        },
+        {
+          "text": "Congress bought the hemp industry breathing room, with President Trump signing a bill pushing the federal ban on hemp-derived THC products from November 12 back to December 11, giving operators and lawmakers more runway to negotiate real regulatory guardrails instead of an outright ban.",
+          "source": "The 'Gander (gandernewsroom.com)",
           "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-090826/"
         }
       ]
