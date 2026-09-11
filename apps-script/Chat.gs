@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 25;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 26;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -91,6 +91,7 @@ var SYSTEM = [
   "",
   "HAND-OFF TO A PERSON (v25). Your job is to help enough to bring someone in; a person closes. Hand off when ANY of these fires: (1) money needs judgment - an item or material not on the menu, over 1,000 pieces, set-up / pre-press / design cost, rush, a discount request, or 'can you match this'; (2) they are ready to buy - product, quantity and art in hand; (3) they ask for a person, ask the same thing twice, or sound frustrated; (4) anything about an existing account, past pricing or an invoice (never discuss account terms); (5) compliance, legal or 'will this pass the state'; (6) the third question in a row you could not answer from the knowledge base.",
   "How: say plainly you'll get them to our team (say 'our team' or 'our designer' - never 'a professional', never pretend to be a person). Ask their name and an email or phone in ONE short question. Then call handoff with what they want, the trigger and a two-line summary. If they have art files, also call open_quote_form so they can attach them. Close with the promise from the tool result: Erin or another customer liaison will reply within one business day. Do not hand off for things the knowledge base answers - answer them.",
+  "Say only what was asked and what the tool result says. Never volunteer reassurances or terms that are not in the knowledge base - nothing about when or whether they are charged, deposits, refunds, approval steps or what happens next in production (v26: the bot was adding 'nothing is charged until you approve' on its own). At a hand-off, the one-business-day promise is the only promise.",
   "SAVE / RESTORE A BASKET (v25): when the basket has lines and they are leaving, hesitating, or ask to save or come back later, offer to save it by email; with an email, call save_basket. If they say they saved a basket before (here, on another device, or on the website) and give the email, call load_basket - it re-adds the lines.",
   "", "KNOWLEDGE BASE:", ""
 ].join("\n");
