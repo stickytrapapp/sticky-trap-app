@@ -1354,7 +1354,7 @@
 </style>
       <div class="cb-head"><h2 class="cb-title">Connect</h2><p class="cb-intro">Let&#8217;s make something together.</p></div>
       <button type="button" class="cb-cta" id="connect-quote">✦ Start a project — get a quote &rarr;</button>
-      <button type="button" class="cb-cta cb-cta-alt" id="connect-nda">✎ Meeting NDA — sign or share by QR</button>
+      <button type="button" class="cb-cta cb-cta-alt" id="connect-nda">✎ Agreements — meeting NDA or team non-compete</button>
       <button type="button" class="cb-cta cb-cta-alt" id="connect-track">◎ Track my order</button>
       <div class="cb-zone">Reach Us</div>
       <div class="cb-contacts">
@@ -2113,15 +2113,20 @@
 <div id="ndapanel" role="dialog" aria-modal="true" aria-label="Meeting NDA">
   <div class="nda-card" style="position:relative">
     <button type="button" class="nda-x" id="ndaClose" aria-label="Close">&times;</button>
-    <h3>Meeting NDA</h3>
-    <p class="p">Our one-page mutual NDA. Fill in the meeting, then let the client scan the code to sign on their phone &mdash; both of you get a signed PDF by email.</p>
-    <div class="nda-f"><label>Purpose of the meeting</label><input id="ndaPurpose" placeholder="e.g. label refresh for the fall drop" maxlength="120"></div>
+    <h3 id="ndaTitle">Meeting NDA</h3>
+    <div class="nda-row" style="margin-bottom:10px" role="tablist" aria-label="Which agreement">
+      <button type="button" class="prim" id="ndaKindNda" role="tab" aria-selected="true">Meeting NDA</button>
+      <button type="button" id="ndaKindNc" role="tab" aria-selected="false">Team non-compete</button>
+    </div>
+    <p class="p" id="ndaBlurb">Our one-page mutual NDA. Fill in the meeting, then let the client scan the code to sign on their phone &mdash; both of you get a signed PDF by email.</p>
+    <div class="nda-f" id="ndaPurposeF"><label>Purpose of the meeting</label><input id="ndaPurpose" placeholder="e.g. label refresh for the fall drop" maxlength="120"></div>
+    <div class="nda-f" id="ndaRoleF" style="display:none"><label>Their role</label><input id="ndaRole" placeholder="employee, contractor, sales rep, or artist" maxlength="60"></div>
     <div class="nda-row" style="margin-bottom:10px">
       <div class="nda-f" style="flex:1;margin:0"><label>Signing for Sticky Trap</label><input id="ndaFm" placeholder="Your name" maxlength="60"></div>
       <div class="nda-f" style="flex:1;margin:0"><label>Title</label><input id="ndaFmTitle" placeholder="Owner" maxlength="40"></div>
     </div>
     <div class="nda-qr" id="ndaQr"><img alt="Scan to open the NDA" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQgAAAEIAQAAAACLjVdSAAABlUlEQVR4nO1a0Q7CQAijF///l2ugsO3NJwkRb8nCbiRiLQUugvZhnU8O9vf4XTxeZpBFWTQQfq/ddXhYpAwKDQtArt0xkZ4+D+ABAGXU7qxIWz1oTgx4xnzxU+bnSy4YE4sQkMV4MExKTIMhvsNZkZ4WD2MxwUF4XvV6HT+YJv3mEgrPG06L9HR5IC+DgSkg/ip2RkXa6AHXUGYXJnx8Z13/AaeCUGBWGJXc7M229acn7vRl0lTPmgBCj8MibeGHBRNw64Yadg0yG/UUVWUQwhF2tSCDIm3rT+lAUKQQZyStS+sLHQ1hEIaekiCjIu3wYMyxNy8YkFTlnRRpkwfVoEO8uE6GUmwnRdqkp6Yhzld0qIkJQ1EGRdo0v6CGObsmXDWpC/uPI2bkBONL8Igj+/LlVV87FyJHUkMW9ut2n39QwqqtsKLqbqwvTFQQJSabkYGRNvWnqPzgs/FIVKZEero9mKO/Uibn/pGR9njAb1F4s9LoGGRgpE3n66jp5UoXJ8ja+mKlqvm4sr7g/3+Hkb/LGeLxBh77veRU7rR8AAAAAElFTkSuQmCC"></div>
-    <div class="nda-scan">Client scans &rarr; signs on their phone</div>
+    <div class="nda-scan" id="ndaScan">Client scans &rarr; signs on their phone</div>
     <div class="nda-row">
       <a class="prim" id="ndaOpen" href="/nda/" target="_blank" rel="noopener">Open &amp; sign on this phone</a>
       <button type="button" id="ndaCopy">Copy link</button>
@@ -2133,21 +2138,31 @@
 /* ---- Meeting NDA: Connect tab button -> panel with a QR to thestickytrap.app/nda/ (purpose + signer carried in the link) ---- */
 (function(){
   var panel=document.getElementById('ndapanel'), open=document.getElementById('connect-nda'); if(!panel||!open) return;
-  var P=document.getElementById('ndaPurpose'), F=document.getElementById('ndaFm'), T=document.getElementById('ndaFmTitle'), box=document.getElementById('ndaQr'), A=document.getElementById('ndaOpen'), TX=document.getElementById('ndaText');
+  var P=document.getElementById('ndaPurpose'), R=document.getElementById('ndaRole'), F=document.getElementById('ndaFm'), T=document.getElementById('ndaFmTitle'), box=document.getElementById('ndaQr'), A=document.getElementById('ndaOpen'), TX=document.getElementById('ndaText');
+  var kind='nda', KN=document.getElementById('ndaKindNda'), KC=document.getElementById('ndaKindNc');
+  var COPY={ nda:{ title:'Meeting NDA', blurb:'Our one-page mutual NDA. Fill in the meeting, then let the client scan the code to sign on their phone \u2014 both of you get a signed PDF by email.', scan:'Client scans \u2192 signs on their phone', sms:'Our one-page NDA for today\u2019s meeting \u2014 sign on your phone: ' },
+             nc:{ title:'Team non-compete', blurb:'Our one-page non-compete + non-solicit for reps, artists, managers, and contractors who see customers, pricing, or art. They scan, tap what they have access to, and sign \u2014 both of you get a signed PDF by email.', scan:'Team member scans \u2192 signs on their phone', sms:'Your Sticky Trap non-compete \u2014 read and sign on your phone: ' } };
+  function setKind(k){ kind=k; var c=COPY[k]; document.getElementById('ndaTitle').textContent=c.title; document.getElementById('ndaBlurb').textContent=c.blurb; document.getElementById('ndaScan').textContent=c.scan;
+    document.getElementById('ndaPurposeF').style.display=k==='nda'?'':'none'; document.getElementById('ndaRoleF').style.display=k==='nc'?'':'none';
+    KN.classList.toggle('prim',k==='nda'); KC.classList.toggle('prim',k==='nc'); KN.setAttribute('aria-selected',k==='nda'); KC.setAttribute('aria-selected',k==='nc'); draw(); }
+  KN.addEventListener('click',function(){ setKind('nda'); }); KC.addEventListener('click',function(){ setKind('nc'); });
   try{ F.value=localStorage.getItem('st_fm_name')||''; T.value=localStorage.getItem('st_fm_title')||''; }catch(e){}
-  function link(){ var u='https://thestickytrap.app/nda/', q=[]; if(P.value.trim()) q.push('p='+encodeURIComponent(P.value.trim())); if(F.value.trim()) q.push('fm='+encodeURIComponent(F.value.trim())); if(T.value.trim()) q.push('t='+encodeURIComponent(T.value.trim())); return u+(q.length?'?'+q.join('&'):''); }
+  function link(){ var u=kind==='nc'?'https://thestickytrap.app/noncompete/':'https://thestickytrap.app/nda/', q=[];
+    if(kind==='nc'){ if(R.value.trim()) q.push('r='+encodeURIComponent(R.value.trim())); } else { if(P.value.trim()) q.push('p='+encodeURIComponent(P.value.trim())); }
+    if(F.value.trim()) q.push('fm='+encodeURIComponent(F.value.trim())); if(T.value.trim()) q.push('t='+encodeURIComponent(T.value.trim())); return u+(q.length?'?'+q.join('&'):''); }
   var libP=null;
   function lib(){ if(window.qrcode) return Promise.resolve(); if(libP) return libP; libP=new Promise(function(res,rej){ var sc=document.createElement('script'); sc.src='https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js'; sc.onload=res; sc.onerror=rej; document.head.appendChild(sc); }); return libP; }
   var t=null;
-  function draw(){ var u=link(); A.href=u; TX.href='sms:?&body='+encodeURIComponent('Our one-page NDA for today\u2019s meeting \u2014 sign on your phone: '+u);
+  function draw(){ var u=link(); A.href=u; TX.href='sms:?&body='+encodeURIComponent(COPY[kind].sms+u);
     lib().then(function(){ var q=window.qrcode(0,'M'); q.addData(u); q.make(); box.innerHTML=q.createImgTag(4,0); var im=box.querySelector('img'); if(im){ im.alt='Scan to open the NDA'; im.style.width='208px'; im.style.height='208px'; } }).catch(function(){ /* static fallback image stays */ }); }
   function sched(){ clearTimeout(t); t=setTimeout(draw,250); try{ localStorage.setItem('st_fm_name',F.value); localStorage.setItem('st_fm_title',T.value); }catch(e){} }
-  [P,F,T].forEach(function(i){ i.addEventListener('input',sched); });
+  [P,R,F,T].forEach(function(i){ i.addEventListener('input',sched); });
   open.addEventListener('click',function(){ panel.classList.add('on'); draw(); try{window.track&&window.track('nda_open','connect');}catch(e){} });
   document.getElementById('ndaClose').addEventListener('click',function(){ panel.classList.remove('on'); });
   panel.addEventListener('click',function(e){ if(e.target===panel) panel.classList.remove('on'); });
   document.getElementById('ndaCopy').addEventListener('click',function(){ var u=link(); try{ navigator.clipboard.writeText(u); }catch(e){} var b=this; b.textContent='Copied'; setTimeout(function(){ b.textContent='Copy link'; },1400); });
-  window.openNDA=function(){ open.click(); };
+  window.openNDA=function(){ open.click(); setKind('nda'); };
+  window.openNonCompete=function(){ open.click(); setKind('nc'); };
 })();
 </script>
 
