@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 26;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 27;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -142,7 +142,10 @@ function doGet(e) {
   if (p.refresh) CACHE.remove('kb');   // ping with refresh=1 -> re-fetch the KB now instead of waiting out the 20-min cache
   if (p.ping) {
     var kb = '', n = 0; try { kb = kb_(); n = kbPrices_(kb).length; } catch (err) { kb = ''; }
-    return out_({ ok: true, version: CODE_VERSION, key: !!PROP.getProperty('ANTHROPIC_API_KEY'), model: cfg_('MODEL'), kb: kb.length, prices: n, kb_url: cfg_('KB_URL') });
+    var store = String(PROP.getProperty('CHAT_SHEET_ID') || ''), open = null, storeErr = PROP.getProperty('SS_LAST_ERROR') || '';
+    try { var rows = ordersSheet_().getDataRange().getValues(); open = 0; for (var i = 1; i < rows.length; i++) if (rows[i][ORDER_COLS.indexOf('stage')] !== 'complete' && rows[i][0] !== '') open++; } catch (err2) { storeErr = String(err2).slice(0, 120); }
+    return out_({ ok: true, version: CODE_VERSION, key: !!PROP.getProperty('ANTHROPIC_API_KEY'), model: cfg_('MODEL'), kb: kb.length, prices: n, kb_url: cfg_('KB_URL'),
+                  store: store.slice(0, 8), open_orders: open, store_error: storeErr });   // v27: watch the store from outside
   }
   return out_({ ok: true, hint: 'POST {uid, tab, basket, messages:[{role,content}]}' });
 }
@@ -537,10 +540,18 @@ function callClaude_(convo, kb, ctx) {
 }
 
 /* ---------- logging (anonymous: device id, question, answer, actions, tokens) ---------- */
+var STORE_NAME = 'Sticky Trap - App Chats';
 function ss_() {
   var id = PROP.getProperty('CHAT_SHEET_ID');
-  if (id) { try { return SpreadsheetApp.openById(id); } catch (e) { /* deleted / not ours any more -> make a new one */ } }
-  var ss = SpreadsheetApp.create('Sticky Trap - App Chats');
+  if (id) {
+    // v27: NEVER replace an existing store. Until v26 a transient open failure silently created a fresh empty spreadsheet and
+    // repointed CHAT_SHEET_ID at it (2026-09-11: the orders tab "vanished" three times in one morning). Now: retry, then fail loudly.
+    var last = null;
+    for (var i = 0; i < 3; i++) { try { return SpreadsheetApp.openById(id); } catch (e) { last = e; Utilities.sleep(400 * (i + 1)); } }
+    try { PROP.setProperty('SS_LAST_ERROR', new Date().toISOString() + ' ' + String(last).slice(0, 200)); } catch (e2) {}
+    throw new Error('chat store unavailable (CHAT_SHEET_ID ' + id.slice(0, 8) + '...): ' + String(last).slice(0, 120));
+  }
+  var ss = SpreadsheetApp.create(STORE_NAME);
   PROP.setProperty('CHAT_SHEET_ID', ss.getId());
   var sh = ss.getActiveSheet(); sh.setName('chats');
   sh.appendRow(['ts', 'device_id', 'question', 'answer', 'actions', 'in_tokens', 'out_tokens', 'cache_read', 'model']);
@@ -890,6 +901,58 @@ function installNudges() {
 /* ---------- editor helpers ---------- */
 // Run this ONCE from the editor (pick it in the function dropdown, click Run) to grant the send-mail scope;
 // the web app then inherits the grant and NDA copies / referral alerts start going out.
+/* ---------- v27: recover from replaced stores. Run from the editor (needs the Drive scope once). ---------- */
+function listChatStores() {
+  // Every spreadsheet named like the store, oldest first, with row counts - so Shane can see what got split.
+  var it = DriveApp.getFilesByName(STORE_NAME), out = [], cur = PROP.getProperty('CHAT_SHEET_ID');
+  while (it.hasNext()) {
+    var f = it.next(); if (f.isTrashed()) continue;
+    var ss = SpreadsheetApp.openById(f.getId()), tabs = {};
+    ss.getSheets().forEach(function (sh) { tabs[sh.getName()] = Math.max(0, sh.getLastRow() - 1); });
+    out.push({ id: f.getId(), created: f.getDateCreated(), updated: f.getLastUpdated(), current: f.getId() === cur, rows: tabs, url: ss.getUrl() });
+  }
+  out.sort(function (a, b) { return a.created - b.created; });
+  out.forEach(function (o) { Logger.log((o.current ? '* CURRENT ' : '  ') + o.id + '  created ' + o.created + '  ' + JSON.stringify(o.rows)); });
+  return out;
+}
+function mergeChatStores() {
+  // Folds every newer copy into the OLDEST store (the original), tab by tab; orders are deduped by code keeping the newest stage_ts;
+  // then CHAT_SHEET_ID points at the original and the copies are renamed 'ZZ merged - ...' (never trashed). Safe to re-run.
+  var stores = listChatStores();
+  if (stores.length < 2) { Logger.log('nothing to merge: ' + stores.length + ' store(s)'); return 'nothing to merge'; }
+  var canon = SpreadsheetApp.openById(stores[0].id), report = [];
+  for (var k = 1; k < stores.length; k++) {
+    var src = SpreadsheetApp.openById(stores[k].id);
+    src.getSheets().forEach(function (sh) {
+      var vals = sh.getDataRange().getValues(); if (vals.length < 2) return;
+      var name = sh.getName(), dst = canon.getSheetByName(name);
+      if (!dst) { dst = canon.insertSheet(name); dst.appendRow(vals[0]); }
+      var rows = vals.slice(1).filter(function (r) { return String(r[0]) !== ''; });
+      if (name === 'orders') {
+        var have = dst.getDataRange().getValues(), idx = {}, ci = ORDER_COLS.indexOf('code'), ti = ORDER_COLS.indexOf('stage_ts');
+        for (var i = 1; i < have.length; i++) idx[String(have[i][ci]).toUpperCase()] = i + 1;
+        var add = [];
+        rows.forEach(function (r) {
+          var code = String(r[ci]).toUpperCase(), rowNo = idx[code];
+          if (!rowNo) { add.push(r); return; }
+          var oldTs = new Date(have[rowNo - 1][ti]).getTime() || 0, newTs = new Date(r[ti]).getTime() || 0;
+          if (newTs > oldTs) dst.getRange(rowNo, 1, 1, r.length).setValues([r]);   // the copy moved further along - keep that
+        });
+        if (add.length) dst.getRange(dst.getLastRow() + 1, 1, add.length, add[0].length).setValues(add);
+        report.push(name + ': +' + add.length + ' from ' + stores[k].id.slice(0, 8));
+      } else {
+        dst.getRange(dst.getLastRow() + 1, 1, rows.length, rows[0].length).setValues(rows);
+        report.push(name + ': +' + rows.length + ' from ' + stores[k].id.slice(0, 8));
+      }
+    });
+    DriveApp.getFileById(stores[k].id).setName('ZZ merged - ' + STORE_NAME + ' (' + Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM-dd HH:mm') + ')');
+  }
+  PROP.setProperty('CHAT_SHEET_ID', stores[0].id);
+  PROP.deleteProperty('SS_LAST_ERROR');
+  var msg = 'merged ' + (stores.length - 1) + ' copies into ' + stores[0].id + ' (' + canon.getUrl() + '): ' + report.join('; ');
+  Logger.log(msg); return msg;
+}
+
 function authorizeMail() {
   GmailApp.sendEmail(SHOP_EMAIL, 'Sticky Trap chat web app: mail authorized', 'The chat web app can now send signed NDA copies and referral alerts. Sent by authorizeMail() from the Apps Script editor.');
   Logger.log('mail sent to ' + SHOP_EMAIL + ' - the web app can send email now');
