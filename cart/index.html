@@ -155,7 +155,8 @@ var D={"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"breaks":[[500,5],[7
     var items=cart.map(function(l){ return fmt(l.qty)+'x '+l.p+' - '+l.m+' / '+l.f+' @ '+money(unit(l)); }).join(' | ').slice(0,400);
     var due=$('due').value.trim().slice(0,40), notes=$('notes').value.trim();
     var lines=cart.map(function(l){ return {p:l.p,m:l.m,f:l.f,qty:l.qty,pr:l.pr,unit:unit(l),total:Math.round(unit(l)*l.qty*100)/100,notes:l.notes||'',art:l.art?l.art.name:''}; });
-    var body={ action:'order_new', name:name, company:$('company').value.trim(), email:email, phone:$('phone').value.trim(), items:items, due:due, source:'cart', stage:'received',
+    var idem=''; try{ idem=localStorage.getItem('st_idem')||''; if(!idem){ idem=Date.now().toString(36)+Math.random().toString(36).slice(2,8); localStorage.setItem('st_idem',idem); } }catch(e){}
+    var body={ action:'order_new', idem:idem, name:name, company:$('company').value.trim(), email:email, phone:$('phone').value.trim(), items:items, due:due, source:'cart', stage:'received',
                lines:lines, subtotal:Math.round(sub()*100)/100, total:Math.round(total()*100)/100, ship:ship, address:ship==='ship'?$('addr').value.trim():'', notes:notes, payment:payment||null };
     if(REAUTH){ body={ action:'reauth', code:REAUTH.code, token:REAUTH.token, payment:payment }; }
     fetch(D.api,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)}).then(function(r){ return r.json(); }).then(function(j){
@@ -170,7 +171,7 @@ var D={"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"breaks":[[500,5],[7
         return fetch(D.hub,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)}).then(function(){ return tooBig; }).catch(function(){ return tooBig; });
       }).then(function(tooBig){
         try{ localStorage.setItem('st_lastorder',JSON.stringify(cart)); localStorage.setItem('st_lastcode',code); }catch(e){}
-        cart=[]; save(); artClear();
+        cart=[]; save(); artClear(); try{ localStorage.removeItem('st_idem'); }catch(e){}
         try{ window.track&&window.track('order_send','cart '+lines.length+' lines'); }catch(e){}
         $('main').classList.add('hidden');
         $('done').innerHTML='<h2>Order placed</h2><div class="code">'+esc(code)+'</div><p class="note" style="font-size:13.5px;color:var(--paper)">Confirmation and your tracker link are on their way to <b>'+esc(email)+'</b>.</p>'+
@@ -179,7 +180,9 @@ var D={"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"breaks":[[500,5],[7
           (url?'<a class="btn" href="'+esc(url)+'">Open your tracker &rarr;</a> ':'')+'<a class="btn" style="background:var(--panel-2);color:var(--paper);border:1px solid var(--line)" href="/#menu">Back to the menu</a>';
         $('done').classList.remove('hidden'); window.scrollTo(0,0);
       });
-    }).catch(function(){ status('Could not reach the order desk. Try again, or text 734 460 3845.','err'); $('go').disabled=false; });
+    }).catch(function(){ // the request may have reached the desk even though the reply did not come back: do not invite an instant re-submit (duplicate order)
+      status('No reply from the order desk. If a confirmation email arrives in the next minute, your order is in - do not place it again. Otherwise retry in a moment or text 734 460 3845.','err');
+      setTimeout(function(){ $('go').disabled=false; },45000); });
   }
 
   // re-auth mode: the tracker sent the customer here after a hold expired; the order's lines/total load, only the card step runs
