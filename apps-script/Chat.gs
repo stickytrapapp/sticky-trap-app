@@ -158,6 +158,7 @@ function doPost(e) {
   if (body.action === 'score') { try { return out_(scoreIn_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
   if (body.action === 'ref') { try { return out_(refIn_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
   if (body.action === 'nda') { try { return out_(ndaIn_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
+  if (body.action === 'noncompete') { try { return out_(noncompeteIn_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }   // v30: team non-compete (thestickytrap.app/noncompete/)
   if (body.action === 'order_new') { try { return out_(orderNew_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
   if (body.action === 'order_stage') { try { return out_(orderStage_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
   if (body.action === 'approve') { try { return out_(approve_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
@@ -690,8 +691,10 @@ function ndaIn_(b) {
     '<div style="text-align:center;color:#666;margin-bottom:16px">State of Michigan</div>' +
     '<p>This Agreement is made on <b>' + esc_(date) + '</b>, between <b>FM Holdings LLC d/b/a The Sticky Trap</b> and <b>' + esc_(party) + '</b> (each a "Party").</p>' +
     '<p>Purpose of the meeting: <b>' + esc_(purpose || '&mdash;') + '</b></p>' +
-    "<p>In connection with the Parties' discussions, each Party may share confidential information with the other, including designs, artwork, pricing, methods, customers, and business plans. Each Party agrees to keep the other Party's confidential information strictly confidential, to use it only to evaluate or conduct business between the Parties, and not to disclose it to anyone else without the other Party's prior written consent. This applies to information shared before, during, or after the meeting at which this Agreement is signed.</p>" +
-    '<p>This Agreement is governed by the laws of the State of Michigan and remains in effect for three (3) years from the date above. It does not apply to information that is or becomes public through no fault of the receiving Party, or that a Party already lawfully knew.</p>' +
+    "<p>In connection with the Parties' discussions, each Party may share confidential information with the other, including designs, artwork, pricing, methods, customers, and business plans. Each Party agrees to keep the other Party's confidential information strictly confidential, to use it only for the purpose above or to evaluate or conduct business between the Parties, and not to disclose it to anyone else without the other Party's prior written consent. On request, each Party will promptly return or destroy the other Party's confidential materials, including samples, proofs, and price sheets. Because a breach would cause harm that money alone may not repair, the harmed Party may seek an injunction without posting bond, in addition to any other remedy.</p>" +
+    '<p><b>Portfolio.</b> Once a product FM Holdings made for the other Party has been publicly released by that Party, FM Holdings may show the finished product in its portfolio and on social media, without pricing or order details, unless the other Party asks in writing that it not be shown.</p>' +
+    '<p><b>Time covered.</b> This Agreement starts on the date written above and stays in force for <b>three (3) years from that date</b>, whether or not the Parties end up doing business together. It covers information shared before that date, at the meeting, and at any time during the three years.</p>' +
+    '<p>This Agreement is governed by the laws of the State of Michigan. It does not apply to information that is or becomes public through no fault of the receiving Party, or that a Party already lawfully knew.</p>' +
     '<p><i>This Agreement may be signed in counterparts, including by electronic or photographed signature, and each Party keeps a signed copy.</i></p>' +
     '<table style="width:100%;border-collapse:separate;border-spacing:10px 0;margin-top:10px"><tr>' +
     block('FM Holdings LLC', 'd/b/a The Sticky Trap', sigF ? 'sigfm' : '', line('Print name', f.name) + line('Title', f.title) + line('Date', date)) +
@@ -708,6 +711,62 @@ function ndaIn_(b) {
   var opts = { htmlBody: '<p>Here is your signed copy of the mutual NDA with The Sticky Trap' + (purpose ? ' (' + esc_(purpose) + ')' : '') + '. The PDF is attached.</p>' + html, inlineImages: inline, name: 'The Sticky Trap', cc: me };
   if (pdf) opts.attachments = [pdf];
   GmailApp.sendEmail(email, subject, 'Your signed NDA with The Sticky Trap is attached.', opts);
+  return { ok: true };
+}
+
+/* ---------- team non-compete (thestickytrap.app/noncompete/): log + signed PDF to both parties (v30, 2026-09-11) ---------- */
+function noncompeteSheet_() {
+  var ss = ss_(), sh = ss.getSheetByName('noncompetes');
+  if (!sh) { sh = ss.insertSheet('noncompetes'); sh.appendRow(['ts', 'date_on_doc', 'name', 'role', 'access', 'email', 'fm_name', 'fm_title', 'ua']); }
+  return sh;
+}
+function noncompeteIn_(b) {
+  var y = b.you || {}, f = b.fm || {};
+  var email = String(y.email || '').trim().slice(0, 120), name = String(y.name || '').trim().slice(0, 80), role = String(y.role || '').trim().slice(0, 80);
+  var date = String(b.date || '').trim().slice(0, 40);
+  var ALLOWED = ['customers and prospects', 'pricing', 'artwork and print files', 'methods and suppliers'];
+  var access = (Array.isArray(b.access) ? b.access : []).map(String).filter(function (a) { return ALLOWED.indexOf(a) >= 0; });
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || !name || !role) return { ok: false, error: 'bad_noncompete' };
+  if (!access.length) return { ok: false, error: 'no_access' };
+  if (!throttle_('noncompete:' + email)) return { ok: false, error: 'rate_limited' };
+  var sigY = sigBlob_(y.sig, 'sig-you.png'), sigF = sigBlob_(f.sig, 'sig-fm.png');
+  if (!sigY) return { ok: false, error: 'no_signature' };
+  noncompeteSheet_().appendRow([new Date(), date, name, role, access.join('; '), email, String(f.name || '').slice(0, 80), String(f.title || '').slice(0, 80), String(b.ua || '').slice(0, 120)]);
+  var line = function (k, v) { return '<tr><td style="padding:3px 10px 3px 0;color:#666">' + k + '</td><td style="padding:3px 0"><b>' + esc_(v || '&mdash;') + '</b></td></tr>'; };
+  var block = function (title, sub, sigcid, rows) {
+    return '<td style="vertical-align:top;width:50%;padding:12px;border:1px solid #ddd;border-radius:8px">' +
+      '<div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#888;font-weight:700">' + title + '</div><div style="font-weight:700;margin:2px 0 8px">' + esc_(sub) + '</div>' +
+      (sigcid ? '<img src="cid:' + sigcid + '" style="width:220px;height:auto;display:block;border-bottom:1px solid #999;margin-bottom:6px">' : '<div style="height:60px;border-bottom:1px solid #999;margin-bottom:6px"></div>') +
+      '<table style="font-size:13px;border-collapse:collapse">' + rows + '</table></td>';
+  };
+  var accessHtml = ALLOWED.map(function (a) { return (access.indexOf(a) >= 0 ? '&#9745; <b>' : '&#9744; ') + esc_(a) + (access.indexOf(a) >= 0 ? '</b>' : ''); }).join(' &nbsp; ');
+  var html = '<div style="font-family:Helvetica,Arial,sans-serif;max-width:680px;margin:0 auto;color:#111;font-size:13.5px;line-height:1.5">' +
+    '<div style="text-align:center;font-size:18px;font-weight:900;letter-spacing:.02em;margin:10px 0 2px">NON-COMPETE AND NON-SOLICITATION AGREEMENT</div>' +
+    '<div style="text-align:center;color:#666;margin-bottom:16px">State of Michigan</div>' +
+    '<p>This Agreement is made on <b>' + esc_(date) + '</b>, between <b>FM Holdings LLC d/b/a The Sticky Trap</b> (the "Company") and <b>' + esc_(name) + '</b> ("you").</p>' +
+    '<p>Your role: <b>' + esc_(role) + '</b></p>' +
+    '<p>In this role you will have access to: ' + accessHtml + '</p>' +
+    '<p><b>Why you are signing.</b> In exchange for your engagement or continued engagement with the Company, and the access it gives you to the confidential information above, you agree to the terms below.</p>' +
+    '<p><b>Time covered.</b> The non-compete and non-solicitation below apply for the <b>entire time you are engaged with the Company, starting on the date above, and for twelve (12) months after your last day</b> with the Company, no matter how or by whom the engagement ends. The confidentiality obligation has no end date.</p>' +
+    '<p><b>Non-compete.</b> During the time covered, you will not own, operate, work for, or provide services to any business that designs, prints, or sells custom labels, stickers, or packaging graphics for cannabis or hemp products within the <b>State of Michigan</b>. This does not stop you from using your general skills in unrelated work, or from holding two percent (2%) or less of a publicly traded company.</p>' +
+    "<p><b>Non-solicitation.</b> During the time covered, you will not solicit, serve, or divert any customer or prospect of the Company that you dealt with or learned about during your last twelve (12) months with the Company, and you will not recruit or hire away any of the Company's employees or contractors.</p>" +
+    "<p><b>Confidential information.</b> You will keep the Company's confidential information strictly confidential during and after your engagement, use it only for the Company's work, and return or destroy all Company materials, files, and artwork when your engagement ends or on request.</p>" +
+    '<p><b>Your protected rights.</b> Nothing in this Agreement stops you from discussing wages or working conditions with co-workers, from reporting a possible violation of law to a government agency, or from cooperating with one. Under 18 U.S.C. &sect; 1833(b), you will not be held liable for disclosing a trade secret in confidence to a government official or an attorney solely to report or investigate a suspected violation of law, or in a sealed court filing.</p>' +
+    "<p><b>Reasonableness; remedies.</b> You agree these restrictions are reasonable in time, area, and scope and protect the Company's legitimate business interests under Michigan law (MCL 445.774a). If a court finds any restriction too broad, it may narrow it and enforce it as narrowed. Because a breach would cause harm that money alone may not repair, the Company may seek an injunction without posting bond, in addition to any other remedy. If you breach, the twelve (12) months are extended by the length of the breach.</p>" +
+    '<p><i>This Agreement is governed by the laws of the State of Michigan, with venue in Washtenaw County. It does not by itself create employment or a guarantee of continued engagement. It may be signed in counterparts, including by electronic or photographed signature, and each Party keeps a signed copy.</i></p>' +
+    '<table style="width:100%;border-collapse:separate;border-spacing:10px 0;margin-top:10px"><tr>' +
+    block('FM Holdings LLC', 'd/b/a The Sticky Trap', sigF ? 'sigfm' : '', line('Print name', f.name) + line('Title', f.title) + line('Date', date)) +
+    block('You', name, 'sigyou', line('Print name', name) + line('Role', role) + line('Email', email) + line('Date', date)) +
+    '</tr></table>' +
+    '<p style="color:#888;font-size:11px;text-align:center;margin-top:22px">FM Holdings LLC &middot; d/b/a The Sticky Trap &middot; 4750 Venture Dr, Suite 101, Ann Arbor, MI 48108 &middot; (734) 460-3845 &middot; thestickytrap@gmail.com<br>Signed electronically at thestickytrap.app/noncompete ' + new Date().toString() + '</p></div>';
+  var inline = { sigyou: sigY }; if (sigF) inline.sigfm = sigF;
+  var pdfHtml = html.replace('cid:sigyou', 'data:image/png;base64,' + Utilities.base64Encode(sigY.getBytes()));
+  if (sigF) pdfHtml = pdfHtml.replace('cid:sigfm', 'data:image/png;base64,' + Utilities.base64Encode(sigF.getBytes()));
+  var pdf = null; try { pdf = Utilities.newBlob('<html><body>' + pdfHtml + '</body></html>', 'text/html', 'noncompete.html').getAs('application/pdf').setName('Sticky Trap Non-Compete - ' + name.replace(/[^\w .-]/g, '') + '.pdf'); } catch (e) {}
+  var subject = 'Signed Non-Compete - The Sticky Trap & ' + name;
+  var opts = { htmlBody: '<p>Here is your signed copy of the Non-Compete and Non-Solicitation Agreement with The Sticky Trap. The PDF is attached.</p>' + html, inlineImages: inline, name: 'The Sticky Trap', cc: SHOP_EMAIL };
+  if (pdf) opts.attachments = [pdf];
+  GmailApp.sendEmail(email, subject, 'Your signed Non-Compete with The Sticky Trap is attached.', opts);
   return { ok: true };
 }
 

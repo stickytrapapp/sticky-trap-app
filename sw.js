@@ -21,7 +21,7 @@ self.addEventListener('fetch', (e) => {
   const url = new URL(req.url);
   if (req.method !== 'GET' || url.origin !== location.origin) return;
   // Side pages (theme-lab preview, NDA) are never served from this cache: a flaky fetch must not fall back to the main app shell.
-  if (url.pathname.startsWith('/lab/') || url.pathname.startsWith('/nda/')) return;
+  if (url.pathname.startsWith('/lab/') || url.pathname.startsWith('/nda/') || url.pathname.startsWith('/noncompete/')) return;
 
   // App shell + data (html/json): NETWORK-FIRST — always try fresh, fall back to cache offline.
   const fresh = req.mode === 'navigate'
