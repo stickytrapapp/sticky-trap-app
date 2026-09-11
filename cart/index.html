@@ -96,7 +96,7 @@ var D={"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"breaks":[[500,5],[7
     $('main').classList.remove('hidden'); $('empty').classList.add('hidden');
     $('lines').innerHTML=cart.map(function(l,i){ var u=unit(l), a=l.art||null;
       var th=a&&a.thumb?'<img src="'+a.thumb+'" alt="">':'<span class="sw '+matCls(l.m)+'"></span>';
-      var art=a?('<div class="art '+(a.pre&&a.pre.level?a.pre.level:'ok')+'">'+esc(a.name)+(a.pre&&a.pre.dpi?' &middot; ~'+a.pre.dpi+' dpi at size':'')+(a.pre&&a.pre.vector?' &middot; vector, checked at proof':'')+(a.reupload?' &middot; re-add at the configure page':'')+'</div>')
+      var art=a&&a.onFile?('<div class="art ok">Art on file from '+esc(a.onFile)+(a.name?' ('+esc(a.name)+')':'')+' &middot; nothing to upload</div>'):a?('<div class="art '+(a.pre&&a.pre.level?a.pre.level:'ok')+'">'+esc(a.name)+(a.pre&&a.pre.dpi?' &middot; ~'+a.pre.dpi+' dpi at size':'')+(a.pre&&a.pre.vector?' &middot; vector, checked at proof':'')+(a.reupload?' &middot; re-add at the configure page':'')+'</div>')
                   :('<div class="art none">No art yet &middot; <a href="/configure/?p='+slug(l.p)+'">add it</a> or send it after (we ask before proofing)</div>');
       return '<div class="line" data-i="'+i+'"><div class="th">'+th+'</div><div class="ln"><b>'+esc(l.p)+'</b><div class="sp">'+esc(l.m)+' &middot; '+esc(l.f)+'</div>'+art+(l.notes?'<div class="nt">'+esc(l.notes)+'</div>':'')+
         '<div class="q"><button type="button" data-d="-1">&minus;</button><input type="number" value="'+l.qty+'" min="'+D.minq+'" max="'+D.maxq+'" step="'+D.step+'"><button type="button" data-d="1">+</button><span class="u">&times; '+money(u)+'</span></div></div>'+
@@ -154,7 +154,7 @@ var D={"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"breaks":[[500,5],[7
     var email=$('email').value.trim(), name=$('name').value.trim();
     var items=cart.map(function(l){ return fmt(l.qty)+'x '+l.p+' - '+l.m+' / '+l.f+' @ '+money(unit(l)); }).join(' | ').slice(0,400);
     var due=$('due').value.trim().slice(0,40), notes=$('notes').value.trim();
-    var lines=cart.map(function(l){ return {p:l.p,m:l.m,f:l.f,qty:l.qty,pr:l.pr,unit:unit(l),total:Math.round(unit(l)*l.qty*100)/100,notes:l.notes||'',art:l.art?l.art.name:''}; });
+    var lines=cart.map(function(l){ return {p:l.p,m:l.m,f:l.f,qty:l.qty,pr:l.pr,unit:unit(l),total:Math.round(unit(l)*l.qty*100)/100,notes:l.notes||'',art:l.art?(l.art.onFile?'on file: '+l.art.onFile+(l.art.name?' / '+l.art.name:''):l.art.name):''}; });
     var idem=''; try{ idem=localStorage.getItem('st_idem')||''; if(!idem){ idem=Date.now().toString(36)+Math.random().toString(36).slice(2,8); localStorage.setItem('st_idem',idem); } }catch(e){}
     var body={ action:'order_new', idem:idem, name:name, company:$('company').value.trim(), email:email, phone:$('phone').value.trim(), items:items, due:due, source:'cart', stage:'received',
                lines:lines, subtotal:Math.round(sub()*100)/100, total:Math.round(total()*100)/100, ship:ship, address:ship==='ship'?$('addr').value.trim():'', notes:notes, payment:payment||null };
@@ -164,9 +164,10 @@ var D={"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"breaks":[[500,5],[7
       var code=j.code||(REAUTH&&REAUTH.code), url=j.url||'';
       if(REAUTH){ $('main').classList.add('hidden'); $('done').innerHTML='<h2>Card re-authorized</h2><div class="code">'+esc(code)+'</div><p class="note" style="font-size:13.5px;color:var(--paper)">Thanks - approving your proof charges this card.</p>'+(url?'<a class="btn" href="'+esc(url)+'">Back to your tracker &rarr;</a>':''); $('done').classList.remove('hidden'); return; }
       status('Order '+code+' placed. Sending your art...','');
-      Promise.all(cart.map(function(l){ return l.art?artGet(l.art.key||l.k).then(function(f){ return f?readB64(f).then(function(b64){ return {name:l.art.name||f.name,mime:f.type||'application/octet-stream',b64:b64,size:f.size||0}; }):null; }):Promise.resolve(null); })).then(function(files){
+      Promise.all(cart.map(function(l){ return (l.art&&!l.art.onFile)?artGet(l.art.key||l.k).then(function(f){ return f?readB64(f).then(function(b64){ return {name:l.art.name||f.name,mime:f.type||'application/octet-stream',b64:b64,size:f.size||0}; }):null; }):Promise.resolve(null); })).then(function(files){
         files=files.filter(Boolean); var mb=files.reduce(function(s,f){ return s+(f.size||0); },0)/1048576; var tooBig=mb>D.maxmb; if(tooBig) files=[];
-        var detail='ORDER '+code+(url?' - '+url:'')+' - '+(ship==='ship'?('SHIP to: '+$('addr').value.trim()):'PICK UP')+(due?' - needed: '+due:'')+(notes?'\nNotes: '+notes:'')+'\nSubtotal '+money(sub())+' - order total '+money(total())+(tooBig?'\nART: over '+D.maxmb+' MB, customer asked to email it':'');
+        var onfile=cart.filter(function(l){ return l.art&&l.art.onFile; }).map(function(l){ return l.p+' <- '+l.art.onFile; });
+        var detail='ORDER '+code+(url?' - '+url:'')+(onfile.length?' - ART ON FILE: '+onfile.join(', '):'')+' - '+(ship==='ship'?('SHIP to: '+$('addr').value.trim()):'PICK UP')+(due?' - needed: '+due:'')+(notes?'\nNotes: '+notes:'')+'\nSubtotal '+money(sub())+' - order total '+money(total())+(tooBig?'\nART: over '+D.maxmb+' MB, customer asked to email it':'');
         var payload={ action:'quote', name:name+(body.company?' ('+body.company+')':''), email:email, phone:body.phone, details:detail, basket:cart.map(lineText).join('\n'), files:files.map(function(f){ return {name:f.name,mime:f.mime,b64:f.b64}; }) };
         return fetch(D.hub,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)}).then(function(){ return tooBig; }).catch(function(){ return tooBig; });
       }).then(function(tooBig){
