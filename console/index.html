@@ -42,6 +42,9 @@
   .toast.on{opacity:1}
   .k{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:800;margin:14px 0 6px}
   .hidden{display:none}
+  .health{margin:-4px 0 12px;font-size:12px;color:var(--muted)}
+  .health b{color:var(--paper);font-weight:800}
+  .health.bad{color:var(--warn);font-weight:800}
   details summary{cursor:pointer;font-weight:800;color:var(--cy);font-size:13px;list-style:none}
   details summary::-webkit-details-marker{display:none}
   .rm{flex:1;background:none;border:0;color:var(--muted);font:inherit;font-size:11.5px;text-decoration:underline;cursor:pointer;padding:4px}
@@ -69,6 +72,7 @@
       <textarea id="nItems" rows="2" placeholder="e.g. 500 3&quot; slaps holo Pro · 250 Miron 250 lids+wraps"></textarea>
       <div class="row" style="margin-top:10px"><select id="nStage"></select><button class="btn" id="nAdd">Add order</button></div>
     </details>
+    <div class="health" id="health"></div>
     <div class="k" id="listHead">Open orders</div>
     <div id="list"><div class="sub">Loading…</div></div>
     <button class="btn ghost" id="refresh" style="width:100%">Refresh</button>
@@ -98,6 +102,13 @@
     $('list').innerHTML='<div class="sub">Loading…</div>';
     fetch(API+'?action=orders&pin='+encodeURIComponent(PIN)+'&_='+Date.now()).then(function(r){return r.json();}).then(function(j){
       if(!j||!j.ok){ if(j&&j.error==='bad_pin'){ try{localStorage.removeItem('st_console_pin');}catch(e){} $('gate').classList.remove('hidden'); $('main').classList.add('hidden'); toast('Wrong PIN'); return; } $('list').innerHTML='<div class="sub">Could not load orders.</div>'; return; }
+      // Health line (2026-09-11): how many orders the sheet holds and when it was last written. A sudden 0 with recent activity = the
+      // orders sheet was replaced or emptied (it happened 2026-09-11 09:55) - say so instead of showing an innocent empty list.
+      (function(){ var h=$('health'); if(!h) return; var n=j.orders.length, last=0; j.orders.forEach(function(o){ if(o.stage_ts&&o.stage_ts>last) last=o.stage_ts; });
+        var prev=0; try{ prev=+localStorage.getItem('st_console_last_n')||0; }catch(e){}
+        if(!n){ h.className='health bad'; h.innerHTML='&#9888; The tracker sheet holds <b>0 orders</b>'+(prev?' (it had '+prev+' last time this console loaded)':'')+'. If orders should be here, the orders sheet was replaced or emptied - check the sessions board before adding anything.'; }
+        else { h.className='health'; var d=last?new Date(last):null; h.innerHTML='Sheet OK: <b>'+n+' open order'+(n>1?'s':'')+'</b>'+(d?' &middot; last change '+d.toLocaleDateString(undefined,{month:'short',day:'numeric'})+' '+d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'}):'')+' &middot; checked '+new Date().toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'}); try{ localStorage.setItem('st_console_last_n',String(n)); }catch(e){} }
+      })();
       if(ONLY){ j.orders=j.orders.filter(function(o){ return String(o.code).toUpperCase()===ONLY; }); }
       $('listHead').innerHTML= ONLY ? ('Order '+esc(ONLY)+' · <a href="/console/" style="color:var(--cy);font-weight:800;text-decoration:none">all orders</a>') : ('Open orders · '+j.orders.length);
       if(!j.orders.length){ $('list').innerHTML='<div class="card sub">No open orders. Add one above, or they arrive from the app\'s quote form.</div>'; return; }
