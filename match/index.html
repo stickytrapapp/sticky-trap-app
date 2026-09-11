@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Trap Match · The Sticky Trap</title>
+<meta name="theme-color" content="#000"><link rel="icon" href="/icons/icon-192.png"><link rel="manifest" href="/manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Manrope:wght@500;700&family=Space+Mono:wght@400;700&display=swap">
+<style>
+:root{--ink:#000;--panel:#0e0e0e;--panel2:#171717;--line:rgba(245,243,250,.12);--fg:#fff;--mut:#9d97b0;--mag:#FF1FA2;--pur:#8A2BE2;--cyan:#12C4FF;--gold:#EAB84B;--good:#25E0A6;
+  --grad:linear-gradient(100deg,var(--mag) 0%,var(--pur) 52%,var(--cyan) 100%);--holo:linear-gradient(105deg,#12C4FF,#8A2BE2 40%,#FF1FA2 70%,#EAB84B);--goldg:linear-gradient(105deg,#F6DA8A,#EAB84B 45%,#C9962E);
+  --fdisp:"Chakra Petch",system-ui,sans-serif;--fbody:"Manrope",system-ui,sans-serif;--fmono:"Space Mono",ui-monospace,monospace}
+*{box-sizing:border-box}html,body{margin:0;background:var(--ink);color:var(--fg);font-family:var(--fbody);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;overscroll-behavior:none}
+a{color:var(--cyan)}
+.top{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.top a.back{color:var(--fg);text-decoration:none;font-weight:700;font-size:13px}.top .t{flex:1;font-family:var(--fdisp);font-weight:700;font-size:17px;letter-spacing:.04em;text-transform:uppercase}
+.top .pts{font-family:var(--fmono);font-size:12px;color:var(--mut)}.top .pts b{color:var(--fg)}
+.wrap{max-width:520px;margin:0 auto;padding:14px 14px 60px}
+.hud{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.hud div{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 10px;text-align:center}
+.hud .k{font-family:var(--fmono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}.hud .v{font-family:var(--fdisp);font-size:22px;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums}
+.mode{display:flex;gap:6px;margin-bottom:12px}.mode button{flex:1;padding:9px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--mut);font:inherit;font-weight:700;font-size:13px;cursor:pointer}.mode button.on{color:var(--fg);border-color:var(--mag);background:rgba(255,31,162,.12)}
+.board{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;perspective:900px}
+.card{position:relative;aspect-ratio:3/4;cursor:pointer;transform-style:preserve-3d;transition:transform .32s cubic-bezier(.2,.8,.2,1)}.card.flip{transform:rotateY(180deg)}
+.card.done{cursor:default}.card.done .cf{box-shadow:0 0 0 2px var(--good),0 0 18px rgba(37,224,166,.35)}
+.face{position:absolute;inset:0;border-radius:12px;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.cb{background:#0b0b0d url("/img/emblem.png") center/46% no-repeat}.cb::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,31,162,.10) 0 6px,transparent 6px 14px)}
+.cf{background:linear-gradient(180deg,var(--panel2),var(--panel));transform:rotateY(180deg)}.cf svg{width:78%;height:78%}
+.cf .lbl{position:absolute;left:0;right:0;bottom:6px;text-align:center;font-family:var(--fmono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
+.card.shake{animation:shake .32s}@keyframes shake{0%,100%{transform:rotateY(180deg) translateX(0)}30%{transform:rotateY(180deg) translateX(-5px)}60%{transform:rotateY(180deg) translateX(5px)}}
+.note{margin:12px 2px 0;font-size:12.5px;color:var(--mut);line-height:1.5;text-align:center}.note b{color:var(--fg)}
+.btn{display:block;width:100%;margin-top:12px;padding:14px;border:0;border-radius:30px;background:var(--grad);color:#000;font:inherit;font-weight:800;font-size:15px;cursor:pointer}.btn.ghost{background:var(--panel);color:var(--fg);border:1px solid var(--line)}
+.result{position:fixed;inset:0;background:rgba(0,0,0,.86);display:none;align-items:center;justify-content:center;padding:20px;z-index:40}.result.show{display:flex}
+.rcard{width:100%;max-width:380px;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px;text-align:center}
+.rcard .k{font-family:var(--fmono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}.rcard h2{font-family:var(--fdisp);font-size:26px;margin:6px 0 4px;letter-spacing:.02em}
+.rcard .stars{font-size:26px;letter-spacing:4px;margin:4px 0}.rcard .pts{font-family:var(--fdisp);font-size:34px;font-weight:700;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.rcard .sub{font-size:13px;color:var(--mut);margin:6px 0 0}
+.gate{position:fixed;inset:0;background:#000;display:none;align-items:center;justify-content:center;padding:24px;z-index:50}.gate.on{display:flex}.gate .rcard h2{font-size:30px}
+.gate .btn{margin-top:10px}
+@media(prefers-reduced-motion:reduce){.card{transition:none}.card.shake{animation:none}}
+</style></head>
+<body>
+<div class="gate" id="agegate"><div class="rcard"><div class="k">The Sticky Trap</div><h2>21+</h2><p class="note" style="color:var(--fg)">The Sticky Trap works with the cannabis industry. You must be 21 or older to play.</p><button class="btn" id="ag-yes" type="button">Yes, I'm 21 or older</button><button class="btn ghost" id="ag-no" type="button">No, I'm under 21</button></div></div>
+<div class="top"><a class="back" href="/game/">&larr; Trap Points</a><div class="t">Trap Match</div><div class="pts">Points <b id="bal">0</b></div></div>
+<div class="wrap">
+  <div class="mode"><button type="button" id="mDaily" class="on">Daily board</button><button type="button" id="mFree">Free play</button></div>
+  <div class="hud"><div><div class="k">Moves</div><div class="v" id="moves">0</div></div><div><div class="k">Time</div><div class="v" id="time">0:00</div></div><div><div class="k">Pairs</div><div class="v" id="pairs">0/8</div></div></div>
+  <div class="board" id="board"></div>
+  <p class="note" id="hint">Flip two cards. Match the pair. <b>Fewer moves, faster time, more points.</b> The daily board is the same for everyone and banks points once a day.</p>
+  <button class="btn ghost" id="again" type="button">New free-play board</button>
+</div>
+<div class="result" id="result"><div class="rcard"><div class="k" id="rk">Daily board</div><h2 id="rt">Matched!</h2><div class="stars" id="rs"></div><div class="pts" id="rp">+0</div><div class="sub" id="rsub"></div><button class="btn" id="rclose" type="button">Done</button><a class="btn ghost" href="/game/" style="text-decoration:none;text-align:center">Back to Trap Points</a></div></div>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  // ---- 21+ gate (shared with the app + game: st_age_ok) ----
+  (function(){ var g=$('agegate'); var ok=false; try{ ok=localStorage.getItem('st_age_ok')==='1'; }catch(e){} if(!ok){ g.classList.add('on'); }
+    $('ag-yes').addEventListener('click',function(){ try{ localStorage.setItem('st_age_ok','1'); }catch(e){} g.classList.remove('on'); });
+    $('ag-no').addEventListener('click',function(){ location.href='https://www.google.com'; }); })();
+
+  // ---- the pieces: Sticky Trap products drawn as SVG (material gradients match the shop) ----
+  var DEFS='<defs><linearGradient id="h" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#12C4FF"/><stop offset=".4" stop-color="#8A2BE2"/><stop offset=".7" stop-color="#FF1FA2"/><stop offset="1" stop-color="#EAB84B"/></linearGradient><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F6DA8A"/><stop offset=".45" stop-color="#EAB84B"/><stop offset="1" stop-color="#C9962E"/></linearGradient><linearGradient id="w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#d9d9e0"/></linearGradient></defs>';
+  var S='stroke="rgba(255,255,255,.25)" stroke-width="1.5"';
+  var PIECES=[
+    {id:'holo', n:'Holo slap',  svg:'<rect x="18" y="18" width="64" height="64" rx="12" fill="url(#h)" '+S+'/>'},
+    {id:'gold', n:'Gold slap',  svg:'<rect x="18" y="18" width="64" height="64" rx="12" fill="url(#g)" '+S+'/>'},
+    {id:'white',n:'White slap', svg:'<rect x="18" y="18" width="64" height="64" rx="12" fill="url(#w)" '+S+'/><circle cx="50" cy="50" r="14" fill="#FF1FA2"/>'},
+    {id:'jar',  n:'Miron jar',  svg:'<circle cx="50" cy="36" r="24" fill="url(#h)" '+S+'/><rect x="24" y="66" width="52" height="16" rx="5" fill="url(#h)" '+S+'/>'},
+    {id:'o2',   n:'o2 wrap',    svg:'<rect x="12" y="38" width="76" height="24" rx="5" fill="url(#g)" '+S+'/>'},
+    {id:'pop',  n:'Pop top',    svg:'<circle cx="50" cy="50" r="30" fill="url(#w)" '+S+'/><circle cx="50" cy="50" r="12" fill="#8A2BE2"/>'},
+    {id:'tube', n:'Tube wrap',  svg:'<rect x="24" y="14" width="52" height="72" rx="8" fill="url(#h)" '+S+'/>'},
+    {id:'band', n:'Tip band',   svg:'<rect x="10" y="42" width="80" height="16" rx="8" fill="url(#g)" '+S+'/>'},
+    {id:'deli', n:'Deli label', svg:'<rect x="24" y="12" width="52" height="76" rx="6" fill="url(#w)" '+S+'/><rect x="32" y="24" width="36" height="6" fill="#12C4FF"/><rect x="32" y="36" width="24" height="6" fill="#FF1FA2"/>'},
+    {id:'ltr',  n:'Lighter',    svg:'<rect x="36" y="16" width="28" height="70" rx="6" fill="url(#g)" '+S+'/><rect x="40" y="10" width="20" height="8" rx="2" fill="#333"/>'}
+  ];
+  function pieceSvg(p){ return '<svg viewBox="0 0 100 100" aria-hidden="true">'+DEFS+p.svg+'</svg><span class="lbl">'+p.n+'</span>'; }
+
+  // ---- seeded shuffle: the daily board is the same for everyone (day number seeds it) ----
+  function rng(seed){ var s=seed>>>0; return function(){ s=(s*1664525+1013904223)>>>0; return s/4294967296; }; }
+  function shuffle(a,r){ for(var i=a.length-1;i>0;i--){ var j=Math.floor(r()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+  var dayNum=Math.floor(Date.now()/864e5), PAIRS=8;
+
+  // ---- points: same ledger the Trap Points game reads (tp_ledger), on its scale (3-15 a day) ----
+  var LEDGER=[]; try{ LEDGER=JSON.parse(localStorage.getItem('tp_ledger')||'[]')||[]; }catch(e){}
+  function balance(){ return LEDGER.reduce(function(s,e){ return s+((e.pts||0)-(e.used||0)); },0); }
+  function fmt(n){ return (+n).toLocaleString('en-US'); }
+  function showBal(){ $('bal').textContent=fmt(Math.max(0,balance())); }
+  showBal();
+  var DAILY={}; try{ DAILY=JSON.parse(localStorage.getItem('tm_daily')||'{}')||{}; }catch(e){}
+  var dailyDone = DAILY.day===dayNum && DAILY.done;
+
+  // ---- game state ----
+  var MODE='daily', deck=[], open=[], lock=false, moves=0, matched=0, t0=0, timerId=null, elapsed=0;
+  function build(seed){ var r=rng(seed); var ids=shuffle(PIECES.slice(),r).slice(0,PAIRS); var cards=[]; ids.forEach(function(p){ cards.push(p,p); }); return shuffle(cards,r); }
+  function render(){ var b=$('board'); b.innerHTML=deck.map(function(p,i){ return '<div class="card" data-i="'+i+'"><div class="face cb"></div><div class="face cf">'+pieceSvg(p)+'</div></div>'; }).join(''); }
+  function hud(){ $('moves').textContent=moves; $('pairs').textContent=matched+'/'+PAIRS; var s=Math.floor(elapsed/1000); $('time').textContent=Math.floor(s/60)+':'+('0'+(s%60)).slice(-2); }
+  function start(mode){ MODE=mode; clearInterval(timerId); moves=0; matched=0; open=[]; lock=false; elapsed=0; t0=0;
+    $('mDaily').classList.toggle('on',mode==='daily'); $('mFree').classList.toggle('on',mode==='free');
+    deck=build(mode==='daily'? dayNum*7919+17 : (Date.now()%4294967295)); render(); hud();
+    $('hint').innerHTML = mode==='daily' ? (dailyDone ? 'Today’s board is banked (<b>+'+(DAILY.pts||0)+'</b>). Play it again for fun, or switch to free play. New board at midnight.' : 'Today’s board — same for everyone. <b>Fewer moves, faster time, more points.</b> Banks once a day.') : 'Free play — random boards, no points. Warm up here, then take on the daily.';
+    $('again').style.display = mode==='free' ? 'block' : 'none'; }
+  function tick(){ elapsed=Date.now()-t0; hud(); }
+  $('board').addEventListener('click',function(e){ var c=e.target.closest('.card'); if(!c||lock||c.classList.contains('flip')) return;
+    if(!t0){ t0=Date.now(); timerId=setInterval(tick,250); }
+    c.classList.add('flip'); open.push(c);
+    if(open.length===2){ moves++; hud(); var a=deck[+open[0].dataset.i], b=deck[+open[1].dataset.i];
+      if(a.id===b.id){ open.forEach(function(x){ x.classList.add('done'); }); open=[]; matched++; hud(); if(matched===PAIRS) finish(); }
+      else { lock=true; var o=open; open=[]; setTimeout(function(){ o.forEach(function(x){ x.classList.add('shake'); }); },120); setTimeout(function(){ o.forEach(function(x){ x.classList.remove('flip','shake'); }); lock=false; },760); } } });
+  function finish(){ clearInterval(timerId); tick(); var s=Math.floor(elapsed/1000);
+    // par for 8 pairs: 14 moves / 45 s is solid, 10 moves / 25 s is sharp
+    var stars = (moves<=11 && s<=30) ? 3 : (moves<=14 && s<=45) ? 2 : (moves<=20 && s<=90) ? 1 : 0;
+    var pts = stars>=3?15 : stars>=2?12 : stars>=1?8 : 3;
+    var banked=false;
+    if(MODE==='daily' && !dailyDone){ LEDGER.push({ts:Date.now(),pts:pts,used:0,why:'Trap Match · day '+dayNum+' · '+'★'.repeat(stars)}); try{ localStorage.setItem('tp_ledger',JSON.stringify(LEDGER)); }catch(e){} DAILY={day:dayNum,done:true,pts:pts,stars:stars,moves:moves,secs:s}; try{ localStorage.setItem('tm_daily',JSON.stringify(DAILY)); }catch(e){} dailyDone=true; banked=true; showBal(); }
+    $('rk').textContent = MODE==='daily' ? 'Daily board · '+new Date().toLocaleDateString(undefined,{month:'short',day:'numeric'}) : 'Free play';
+    $('rt').textContent = stars>=3?'Sharp.':stars>=2?'Clean.':stars>=1?'Matched.':'Done.';
+    $('rs').textContent = '★'.repeat(stars)+'☆'.repeat(3-stars);
+    $('rp').textContent = banked ? '+'+pts : (MODE==='daily' ? 'banked earlier' : 'no points in free play');
+    $('rsub').textContent = moves+' moves · '+Math.floor(s/60)+':'+('0'+(s%60)).slice(-2)+(banked?' · added to your Trap Points':'');
+    $('result').classList.add('show');
+    try{ window.track&&window.track('match_done',MODE+' '+stars+'*'); }catch(e){} }
+  $('rclose').addEventListener('click',function(){ $('result').classList.remove('show'); if(MODE==='daily') $('hint').innerHTML='Today’s board is banked (<b>+'+(DAILY.pts||0)+'</b>). Free play is open all day.'; });
+  $('mDaily').addEventListener('click',function(){ start('daily'); }); $('mFree').addEventListener('click',function(){ start('free'); }); $('again').addEventListener('click',function(){ start('free'); });
+  start('daily');
+})();
+</script>
+</body></html>
