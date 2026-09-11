@@ -1,0 +1,10 @@
+{
+  "_how": "Public Square Web Payments settings for /cart/ (commerce spine step 3). env = sandbox | production. appId = the Square APPLICATION ID (sandbox-sq0idb-... / sq0idp-...) from developer.squareup.com > your app > Credentials - it is public, safe here. locationId = the location the payment posts to (sandbox LDVP0Y0MWYPR9). Leave appId empty and the cart runs without a card (order placed, invoice later). taxRate = MI sales tax applied unless the customer ticks tax-exempt. shipEstimate = flat $ added to the authorization for shipped orders (the invoice settles the real figure at capture). feeDivisor/feeFlat = Shane's card gross-up: card total = (base + feeFlat) / feeDivisor. NEVER put an access token in this file - tokens live in the Chat.gs script properties.",
+  "env": "sandbox",
+  "appId": "",
+  "locationId": "LDVP0Y0MWYPR9",
+  "taxRate": 0.06,
+  "shipEstimate": 15,
+  "feeDivisor": 0.968,
+  "feeFlat": 0.3
+}
