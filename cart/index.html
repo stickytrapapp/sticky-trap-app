@@ -96,7 +96,7 @@ var D={"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"breaks":[[500,5],[7
     $('main').classList.remove('hidden'); $('empty').classList.add('hidden');
     $('lines').innerHTML=cart.map(function(l,i){ var u=unit(l), a=l.art||null;
       var th=a&&a.thumb?'<img src="'+a.thumb+'" alt="">':'<span class="sw '+matCls(l.m)+'"></span>';
-      var art=a&&a.onFile?('<div class="art ok">Art on file from '+esc(a.onFile)+(a.name?' ('+esc(a.name)+')':'')+' &middot; nothing to upload</div>'):a?('<div class="art '+(a.pre&&a.pre.level?a.pre.level:'ok')+'">'+esc(a.name)+(a.pre&&a.pre.dpi?' &middot; ~'+a.pre.dpi+' dpi at size':'')+(a.pre&&a.pre.vector?' &middot; vector, checked at proof':'')+(a.reupload?' &middot; re-add at the configure page':'')+'</div>')
+      var art=a&&a.onFile?('<div class="art ok">Art on file from '+esc(a.onFile)+(a.name?' ('+esc(a.name)+')':'')+' &middot; nothing to upload</div>'):a?('<div class="art '+(a.pre&&a.pre.level?a.pre.level:'ok')+'">'+esc(a.name)+(a.pre&&a.pre.dpi?' &middot; ~'+a.pre.dpi+' dpi at size':'')+(a.pre&&a.pre.alpha?' &middot; transparent bg':'')+(a.pre&&a.pre.vector?' &middot; vector, checked at proof':'')+(a.pre&&a.pre.level==='bad'?' &middot; <b>replace this file</b>':'')+(a.reupload?' &middot; re-add at the configure page':'')+'</div>')
                   :('<div class="art none">No art yet &middot; <a href="/configure/?p='+slug(l.p)+'">add it</a> or send it after (we ask before proofing)</div>');
       return '<div class="line" data-i="'+i+'"><div class="th">'+th+'</div><div class="ln"><b>'+esc(l.p)+'</b><div class="sp">'+esc(l.m)+' &middot; '+esc(l.f)+'</div>'+art+(l.notes?'<div class="nt">'+esc(l.notes)+'</div>':'')+
         '<div class="q"><button type="button" data-d="-1">&minus;</button><input type="number" value="'+l.qty+'" min="'+D.minq+'" max="'+D.maxq+'" step="'+D.step+'"><button type="button" data-d="1">+</button><span class="u">&times; '+money(u)+'</span></div></div>'+
@@ -144,6 +144,7 @@ var D={"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"breaks":[[500,5],[7
   $('go').addEventListener('click',function(){
     var email=$('email').value.trim(), name=$('name').value.trim();
     if(!cart.length){ status('Your basket is empty.','err'); return; }
+    var badArt=cart.filter(function(l){ return l.art&&l.art.pre&&l.art.pre.level==='bad'; }); if(badArt.length){ status('The art on '+badArt[0].p+' is too small to print - replace it on the configure page, or remove the file.','err'); return; }
     if(!name){ status('Add your name.','err'); return; }
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ status('Add your email - the tracker link goes there.','err'); return; }
     if(ship==='ship'&&!$('addr').value.trim()){ status('Add the ship-to address, or pick up in Ann Arbor.','err'); return; }
@@ -154,7 +155,7 @@ var D={"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"breaks":[[500,5],[7
     var email=$('email').value.trim(), name=$('name').value.trim();
     var items=cart.map(function(l){ return fmt(l.qty)+'x '+l.p+' - '+l.m+' / '+l.f+' @ '+money(unit(l)); }).join(' | ').slice(0,400);
     var due=$('due').value.trim().slice(0,40), notes=$('notes').value.trim();
-    var lines=cart.map(function(l){ return {p:l.p,m:l.m,f:l.f,qty:l.qty,pr:l.pr,unit:unit(l),total:Math.round(unit(l)*l.qty*100)/100,notes:l.notes||'',art:l.art?(l.art.onFile?'on file: '+l.art.onFile+(l.art.name?' / '+l.art.name:''):l.art.name):''}; });
+    var lines=cart.map(function(l){ return {p:l.p,m:l.m,f:l.f,qty:l.qty,pr:l.pr,unit:unit(l),total:Math.round(unit(l)*l.qty*100)/100,notes:l.notes||'',art:l.art?(l.art.onFile?'on file: '+l.art.onFile+(l.art.name?' / '+l.art.name:''):(l.art.name+(l.art.pre&&l.art.pre.dpi?' ('+l.art.pre.dpi+' dpi'+(l.art.pre.alpha?', transparent':'')+(l.art.pre.level!=='ok'?', '+l.art.pre.level:'')+')':(l.art.pre&&l.art.pre.vector?' (vector)':'')))):''}; });
     var idem=''; try{ idem=localStorage.getItem('st_idem')||''; if(!idem){ idem=Date.now().toString(36)+Math.random().toString(36).slice(2,8); localStorage.setItem('st_idem',idem); } }catch(e){}
     var body={ action:'order_new', idem:idem, name:name, company:$('company').value.trim(), email:email, phone:$('phone').value.trim(), items:items, due:due, source:'cart', stage:'received',
                lines:lines, subtotal:Math.round(sub()*100)/100, total:Math.round(total()*100)/100, ship:ship, address:ship==='ship'?$('addr').value.trim():'', notes:notes, payment:payment||null };
