@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 28;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 30;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -139,13 +139,17 @@ function doGet(e) {
   if (p.action === 'lb') { try { return out_(leaderboard_(p)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
   if (p.action === 'track') { try { return out_(trackGet_(p)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
   if (p.action === 'orders') { try { return out_(ordersList_(p)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
+  if (p.mailtest && pinOk_(p.pin)) {   // v29: ?mailtest=1&pin=... sends one line to the shop inbox and returns the real error if it fails
+    try { GmailApp.sendEmail(SHOP_EMAIL, 'Tracker mail test', 'Mail from the web app works. ' + new Date()); PROP.deleteProperty('MAIL_LAST_ERROR'); return out_({ ok: true, sent_to: SHOP_EMAIL }); }
+    catch (err3) { mailErr_(err3); return out_({ ok: false, error: String(err3).slice(0, 300) }); }
+  }
   if (p.refresh) CACHE.remove('kb');   // ping with refresh=1 -> re-fetch the KB now instead of waiting out the 20-min cache
   if (p.ping) {
     var kb = '', n = 0; try { kb = kb_(); n = kbPrices_(kb).length; } catch (err) { kb = ''; }
     var store = String(PROP.getProperty('CHAT_SHEET_ID') || ''), open = null, storeErr = PROP.getProperty('SS_LAST_ERROR') || '';
     try { var rows = ordersSheet_().getDataRange().getValues(); open = 0; for (var i = 1; i < rows.length; i++) if (rows[i][ORDER_COLS.indexOf('stage')] !== 'complete' && rows[i][0] !== '') open++; } catch (err2) { storeErr = String(err2).slice(0, 120); }
     return out_({ ok: true, version: CODE_VERSION, key: !!PROP.getProperty('ANTHROPIC_API_KEY'), model: cfg_('MODEL'), kb: kb.length, prices: n, kb_url: cfg_('KB_URL'),
-                  store: store.slice(0, 8), open_orders: open, store_error: storeErr });   // v27: watch the store from outside
+                  store: store.slice(0, 8), open_orders: open, store_error: storeErr, mail_error: PROP.getProperty('MAIL_LAST_ERROR') || '' });   // v27: watch the store from outside; v29: + last mail failure
   }
   return out_({ ok: true, hint: 'POST {uid, tab, basket, messages:[{role,content}]}' });
 }
@@ -810,6 +814,7 @@ function findOrder_(sh, code) {
 }
 function trackUrl_(o) { return 'https://thestickytrap.app/track/?o=' + encodeURIComponent(o.code) + '&t=' + encodeURIComponent(o.token); }
 function reorderUrl_(o) { var e = encodeURIComponent; return 'https://thestickytrap.app/?reorder=' + e(o.code) + '&items=' + e(String(o.items || '').slice(0, 400)) + '&name=' + e(o.name || '') + '&co=' + e(o.company || '') + '&email=' + e(o.email || '') + '&phone=' + e(o.phone || '') + '#menu'; }   // opens the app's quote form pre-filled (v22)
+function mailErr_(e) { try { PROP.setProperty('MAIL_LAST_ERROR', new Date().toISOString() + ' ' + String(e).slice(0, 200)); } catch (e2) {} }   // v29: why a client email did not go out (shown by ?ping=1)
 function stageMail_(o, stage, note) {
   if (!o.email || !STAGES[stage]) return false;
   var st = STAGES[stage], url = trackUrl_(o), who = o.company || o.name || '';
@@ -837,7 +842,7 @@ function orderNew_(b) {
   var o = { code: code, created: now, name: name, company: company, email: email, phone: String(b.phone || '').slice(0, 40), items: String(b.items || '').slice(0, 400), due: String(b.due || '').slice(0, 40),
             stage: stage, stage_ts: now, history: JSON.stringify([{ stage: stage, ts: now.getTime(), note: '' }]), token: token, monday_item: '', square_inv: String(b.square_inv || '').slice(0, 60), nudged_ts: '', notes: '', source: String(b.source || '').slice(0, 20), pay_url: /^https:\/\//.test(String(b.pay_url || '')) ? String(b.pay_url).slice(0, 300) : '' };
   sh.appendRow(ORDER_COLS.map(function (k) { return o[k]; }));
-  var emailed = false; try { emailed = stageMail_(o, stage, ''); } catch (e) {}
+  var emailed = false; try { emailed = stageMail_(o, stage, ''); } catch (e) { mailErr_(e); }
   return { ok: true, code: code, token: token, url: trackUrl_(o), emailed: emailed };
 }
 function orderStage_(b) {
@@ -852,7 +857,7 @@ function orderStage_(b) {
   sh.getRange(f.i, ORDER_COLS.indexOf('stage') + 1, 1, 3).setValues([[stage, now, JSON.stringify(hist)]]);
   sh.getRange(f.i, ORDER_COLS.indexOf('nudged_ts') + 1).setValue('');
   o.stage = stage; o.history = JSON.stringify(hist);
-  var emailed = false; try { emailed = stageMail_(o, stage, note); } catch (e) {}
+  var emailed = false; try { emailed = stageMail_(o, stage, note); } catch (e) { mailErr_(e); }
   return { ok: true, code: o.code, stage: stage, emailed: emailed };
 }
 function approve_(b) {
