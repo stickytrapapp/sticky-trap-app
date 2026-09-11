@@ -53,7 +53,7 @@ table.ladder{width:100%;border-collapse:collapse;margin-top:12px;font-size:12.5p
 .hidden{display:none}
 </style></head>
 <body>
-<div class="top"><a class="back" href="/#menu">&larr; Menu</a><div class="t" id="ttl">Configure</div><a class="cart" href="/#menu" id="cartlink">Basket <b id="cartn">0</b></a></div>
+<div class="top"><a class="back" href="/#menu">&larr; Menu</a><div class="t" id="ttl">Configure</div><a class="cart" href="/cart/" id="cartlink">Basket <b id="cartn">0</b></a></div>
 <div class="wrap">
   <div id="picker" class="hidden"><p class="sec">Pick a product</p><div class="pick" id="pick"></div></div>
   <div class="grid" id="cfg">
@@ -206,7 +206,7 @@ var D={"products":[{"name":"3\" Slap","slug":"3-slap","section":"Slaps","size":"
     var line=ex||{k:k,p:p.name,m:cfg.mat,f:f,pr:r.list,qty:0}; line.pr=r.list; line.qty=Math.min(D.maxq,(ex?ex.qty:0)+qty);
     if(r.deal){ line.deal={id:r.deal.id||'',off:r.deal.off,fromQty:r.deal.fromQty||0}; }
     var notes=$('notes').value.trim(); if(notes) line.notes=notes;
-    var done=function(){ if(!ex) c.push(line); try{ localStorage.setItem('st_cart',JSON.stringify(c)); }catch(e){} cartN(); toast(fmt(qty)+' x '+p.name+' added'); try{ window.track&&window.track('add_basket',p.name+' · '+cfg.mat+' · '+f+' · configure'); }catch(e){} };
+    var done=function(){ if(!ex) c.push(line); try{ localStorage.setItem('st_cart',JSON.stringify(c)); }catch(e){} cartN(); toast(fmt(qty)+' x '+p.name+' added'); $('cartlink').style.boxShadow='0 0 0 2px var(--cy)'; try{ window.track&&window.track('add_basket',p.name+' · '+cfg.mat+' · '+f+' · configure'); }catch(e){} };
     if(art){ line.art={name:art.name,size:art.size,thumb:thumb||'',pre:preflight||null,key:k}; artPut(k,art).then(done).catch(function(){ line.art.reupload=true; done(); }); } else done(); });
 })();
 </script>

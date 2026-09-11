@@ -251,6 +251,7 @@
   /* one order funnel: hide the basket's own email/text/copy; the drawer routes to the uploader */
   #stmenu #emailbtn,#stmenu #smsbtn,#stmenu #copybtn{display:none}
   #funnel-upload{display:flex;width:100%;margin-top:6px}
+  #funnel-checkout{display:flex;justify-content:center;width:100%;margin-top:6px;text-decoration:none}
   .faqview .brandhead header,.faqview .brandhead .contactbar,.faqview .brandhead .viewmenu{display:none}
   .faqview .brandhead{margin-top:0}
   #stmenu .navbar{top:0}
@@ -1758,6 +1759,8 @@
     var b=document.createElement('button');
     b.type='button'; b.id='funnel-upload'; b.className='cta';
     b.textContent='📎 Upload art & get your quote →';
+    // commerce spine step 2 (2026-09-11): the basket now checks out on /cart/ (lines, art, customer, order code + tracker); the uploader stays as the second path
+    var co=document.createElement('a'); co.id='funnel-checkout'; co.className='cta'; co.href='/cart/'; co.textContent='Check out →'; df.appendChild(co);
     df.appendChild(b);
     b.addEventListener('click',function(){
       var dc=document.getElementById('stm-dclose')||document.querySelector('#stmenu .dclose'); if(dc) dc.click();
