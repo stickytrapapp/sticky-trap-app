@@ -70,6 +70,19 @@ Can I get a custom shape?
 Yes — Custom Dielines . We build a bespoke cut path to any outline you want, not just a square or circle. Quoted per project.
 What are pre-press / set-up charges?
 Pre-press makes your art print-ready — set-up, color, cut paths, bleeds, proofing. We assess it per design once we see your files, before anything prints. Print-ready vector files keep it minimal. Anything beyond that we quote up front, before we start.
+Can I send AI art?
+Yes — most of what we get now is ChatGPT. Send the biggest original PNG and keep the text out of the image; we take it from there: real type, clean vector, set up for your exact material and texture. AI Art Package from $90 * . Want it to stop looking like AI? Keep the concept and let us design it into your brand.
+* Per file, for art that follows the tips. Photoreal renders and heavier fixes get one written quote before we start.
+9 tips before you generate
+Keep text out of the image. Send the exact wording separately — we set it in real type, spelled right.
+Ask for flat, bold, hard-edged art. Solid colors, clean outlines. No gradients, glow, noise or photoreal.
+Plain or transparent background. No frame, shadow or jar mockup baked in — we add the texture.
+Download the biggest original. Save the PNG the tool gives you. No screenshots, no texting it over.
+Match the sticker's shape. Square for a lid or bottom, wide for a wrap — ask the tool for that ratio.
+Leave breathing room. Nothing important touching the edges. We crop to the cut line.
+One image per sticker, named. lid.png, wrap.png, bottom.png — or just tell us which is which.
+Tell us what pops. Which parts get gloss or raise? ‘The logo and the strain name’ is plenty.
+Type out the required text. Strain, weight, warnings, license line — as text in the email, not in the art.
 <section class="view connectbanner"
 
 == Price list: per piece, USD, at the menu quantity (5-499 pcs); apply the volume breaks above for 500+ ==
