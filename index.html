@@ -420,7 +420,7 @@
     <div class="brandwrap"><span class="wm">STICKYTR<span class="cur">_</span></span><span class="wtag">Branding · Print · Culture</span></div>
     <div class="tb-right">
       <button class="iconb" id="trackb" aria-label="Track my order" title="Track my order"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg><small>Tracker</small></button>
-      <button class="iconb" id="musicb" aria-label="Music off" aria-pressed="false" title="Music"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></button>
+      <button class="iconb" id="musicb" hidden aria-label="Music off" aria-pressed="false" title="Music"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></button>
       <button class="iconb" id="shareb" aria-label="Share the app"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.3 10.7l7.4-4.4M8.3 13.3l7.4 4.4"/></svg></button>
       <button class="bell" id="bell" aria-label="Notifications"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 9a6 6 0 0112 0c0 5 2 6 2 6H4s2-1 2-6z"/><path d="M10 20a2 2 0 004 0"/></svg><i class="ndot" id="bell-dot" hidden></i></button>
     </div>
@@ -2002,6 +2002,10 @@
         pauses when the app is hidden. Browsers block sound before a tap, so a remembered ON waits for the first tap. ---- */
 (function(){
   var b=document.getElementById('musicb'); if(!b) return;
+  // 2026-09-11 (Shane): app music PAUSED while the tracks are cleaned up - button hidden, audio/tap-a|tap-b|menu.mp3 removed from the repo,
+  // remembered ON cleared. To add back: drop the files into audio/, remove the `hidden` attribute on #musicb, delete these three lines.
+  try{ localStorage.removeItem('st_music'); localStorage.removeItem('st_music_pos'); }catch(e){}
+  if(b.hidden) return;
   // Playlist (Shane 2026-09-09): the two Suno takes of 'Tap The Screen' play in full, one after the other, then repeat.
   var TRACKS=['audio/tap-a.mp3','audio/tap-b.mp3'], ti=0, VOL=0.35, a=null, A=[null,null], cur=0, want=false, armed=false, fadeT=null, actx=null, gain=null, posT=0;
   var MENU_SRC='audio/menu.mp3', M=null, mgain=null, menuOn=false, menuT=null, menuOK=null, xT=null;   // Menu-tab 'thinking' track
