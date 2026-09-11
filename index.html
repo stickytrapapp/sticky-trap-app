@@ -2039,7 +2039,7 @@
       if(k>=1){ clearInterval(xT); if(up){ if(a&&!a.paused) a.pause(); } else if(M&&!M.paused){ M.pause(); } } },50); }
   function enterMenu(){ if(menuOn||menuOK===false||!want||!a||a.paused) return; var m=menuEl(); if(actx&&actx.state!=='running'){ try{actx.resume();}catch(e){} }
     var p=m.play(); var go=function(){ menuOn=true; xfade(true,2000); try{window.track&&window.track('music','menu');}catch(e){} };
-    if(p&&p.then) p.then(go).catch(function(){ menuOK=false; }); else go(); }
+    if(p&&p.then) p.then(go).catch(function(){ /* blocked (no gesture yet) - try again next time the Menu tab is entered */ }); else go(); }
   function leaveMenu(){ if(!menuOn) return; menuOn=false; clearInterval(fadeT);
     if(want&&a){ var p=a.play(); if(p&&p.catch) p.catch(function(){}); } xfade(false,1500); }
   function onTab(name){ clearTimeout(menuT); if(name==='menu'){ menuT=setTimeout(enterMenu,2500); } else if(menuOn){ leaveMenu(); } }
@@ -2050,7 +2050,9 @@
   function ui(on){ b.classList.toggle('on',on); b.setAttribute('aria-pressed',on?'true':'false'); b.setAttribute('aria-label',on?'Music on':'Music off'); }
   function fade(to,ms){ var x=el(); clearInterval(fadeT); var from=getVol(), t0=Date.now();
     fadeT=setInterval(function(){ var k=Math.min(1,(Date.now()-t0)/ms); setVol(from+(to-from)*k); if(k>=1){ clearInterval(fadeT); if(to===0) x.pause(); } },50); }
-  function start(){ var x=el(); if(actx&&actx.state!=='running'){ try{actx.resume();}catch(e){} } x.preload='auto'; var p=x.play();
+  function unlockMenu(){ try{ var m=menuEl(); if(menuOn) return; var q=m.play(); var stopIt=function(){ if(!menuOn){ m.pause(); try{ m.currentTime=0; }catch(e){} } };
+      if(q&&q.then) q.then(stopIt).catch(function(){}); else stopIt(); }catch(e){} }   // silent play/pause at gain 0 inside the tap = the element is unlocked for the 2.5 s timer
+  function start(){ var x=el(); if(actx&&actx.state!=='running'){ try{actx.resume();}catch(e){} } x.preload='auto'; var p=x.play(); unlockMenu();
     var cv=document.querySelector('.view.active'); if(cv&&cv.dataset.view==='menu') onTab('menu');
     if(p&&p.then){ p.then(function(){ fade(VOL,900); ui(true); }).catch(function(){ ui(false); arm(); }); }
     else { fade(VOL,900); ui(true); } }
