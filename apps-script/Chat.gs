@@ -93,14 +93,14 @@ var SYSTEM = [
 
 var TOOLS = [
   { name: 'add_to_basket', strict: true,
-    description: "Add a line to the customer's basket in the app. Names should match the menu (e.g. product '3\" Slap', 'Miron 250 ml', 'Tip Band'; material 'White Vinyl', 'Holographic', 'Gold BF' (Tip Band: 'White Vinyl' or 'Holographic'); finish/texture 'Flat', 'Spot Gloss UV', 'Standard Embossing', 'Pro' (Tip Band: Flat or Spot Gloss UV only)). Fuzzy names are accepted and normalized. Returns the exact unit price (with volume break) and line total, or an error explaining what's invalid.",
+    description: "Add a line to the customer's basket in the app. Names should match the menu (e.g. product '3\" Slap', 'Miron 250 ml', 'Tip Band'; material 'White Vinyl', 'Holographic', 'Gold' (Tip Band: 'White Vinyl' or 'Holographic'); finish/texture 'Flat', 'Spot Gloss UV', 'Standard Embossing', 'Pro' (Tip Band: Flat or Spot Gloss UV only)). Fuzzy names are accepted and normalized. Returns the exact unit price (with volume break) and line total, or an error explaining what's invalid.",
     input_schema: { type: 'object', additionalProperties: false,
       properties: {
         product: { type: 'string', description: 'Menu product name' },
         material: { type: 'string', description: 'Material' },
         finish: { type: 'string', description: 'Texture level / finish tier (Flat, Spot Gloss UV, Standard Embossing, Pro)' },
         qty: { type: 'integer', description: 'Pieces: 5-1000 in steps of 5' },
-        holobrite: { type: 'boolean', description: 'White-ink underbase option (Holographic / Gold BF only); false if not requested' }
+        holobrite: { type: 'boolean', description: 'White-ink underbase option (Holographic / Gold only); false if not requested' }
       }, required: ['product', 'material', 'finish', 'qty', 'holobrite'] } },
   { name: 'open_product', strict: true,
     description: 'Switch to the Menu tab and expand one product so the customer sees its prices.',
@@ -295,7 +295,7 @@ function runTool_(use, prices, ctx) {
       if (q % STEP) { q = Math.round(q / STEP) * STEP; }
       var row = prices.filter(function (r) { return r.p === p && r.m === m && r.f === f; })[0];
       var hb = !!inp.holobrite;
-      if (hb && row.hb == null) return { error: true, result: { error: 'HoloBrite (white underbase) is not offered on ' + m + ' - only on Holographic and Gold BF.' } };
+      if (hb && row.hb == null) return { error: true, result: { error: 'HoloBrite (white underbase) is not offered on ' + m + ' - only on Holographic and Gold.' } };
       var pr = hb ? row.hb : row.pr, fname = f + (hb ? ' + HoloBrite' : ''), u = unit_(pr, q), tot = u * q;
       var before = ctx.basket.length;
       ctx.basket.push({ p: p, m: m, f: fname, pr: pr, qty: q });
