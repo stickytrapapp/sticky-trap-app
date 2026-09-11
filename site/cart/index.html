@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Your basket · The Sticky Trap</title>
+<meta name="theme-color" content="#f3efe6"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet"><style>
+:root{--s-paper:#f3efe6;--s-card:#fbf9f4;--s-ink:#14130f;--s-muted:rgba(20,19,15,.62);--s-muted2:rgba(20,19,15,.82);--s-line:rgba(20,19,15,.16);--s-line2:rgba(20,19,15,.32);
+  --s-accent:#FF1FA2;--s-accent-ink:#B0147A;--s-pur:#8A2BE2;--s-cy:#12C4FF;--s-good:#1a9e6f;--s-warn:#b3700a;--s-bad:#c62f4a;
+  --s-holo:linear-gradient(105deg,#12C4FF,#8A2BE2 40%,#FF1FA2 70%,#EAB84B);--s-goldg:linear-gradient(105deg,#F6DA8A,#EAB84B 45%,#C9962E);
+  --s-fd:'Archivo',system-ui,-apple-system,sans-serif;--s-fm:'JetBrains Mono',ui-monospace,Menlo,monospace;--s-r:6px;--s-maxw:1240px}
+*{box-sizing:border-box}html,body{margin:0;background:var(--s-paper);color:var(--s-ink);font-family:var(--s-fd);-webkit-font-smoothing:antialiased;line-height:1.5}
+a{color:inherit}
+.k{font-family:var(--s-fm);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--s-muted)}
+.nav{position:sticky;top:0;z-index:30;background:rgba(243,239,230,.94);backdrop-filter:blur(8px);border-bottom:1.5px solid var(--s-ink)}
+.nav .in{max-width:var(--s-maxw);margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:18px}
+.nav .brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:900;letter-spacing:-.01em;font-size:17px}.nav .brand img{width:30px;height:30px}
+.nav .links{display:flex;gap:18px;margin-left:auto;font-family:var(--s-fm);font-size:12.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}.nav .links a{text-decoration:none;color:var(--s-muted2)}.nav .links a:hover,.nav .links a.on{color:var(--s-ink)}
+.nav .cart{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1.5px solid var(--s-ink);border-radius:999px;text-decoration:none;font-family:var(--s-fm);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;background:var(--s-ink);color:var(--s-paper)}.nav .cart b{background:var(--s-accent);color:#fff;border-radius:999px;padding:1px 8px;font-size:11px}
+.nav .burger{display:none;margin-left:auto;background:none;border:1.5px solid var(--s-ink);border-radius:var(--s-r);padding:6px 10px;font:inherit;font-weight:700;cursor:pointer}
+html,body{overflow-x:hidden}
+@media(max-width:820px){.nav .in{padding:10px 14px;gap:10px}.nav .brand{font-size:15px}.nav .brand img{width:26px;height:26px}.nav .cart{padding:7px 10px;font-size:11px}.pgrid{grid-template-columns:repeat(2,1fr);gap:10px}.pc .body{padding:10px 12px 12px}.pc h3{font-size:15px}.hero{padding:40px 0 32px}.hero h1{overflow-wrap:anywhere}.nav .links{display:none;position:absolute;left:0;right:0;top:100%;flex-direction:column;gap:0;background:var(--s-paper);border-bottom:1.5px solid var(--s-ink)}.nav .links.open{display:flex}.nav .links a{padding:14px 20px;border-top:1px solid var(--s-line)}.nav .burger{display:block}.nav .cart{margin-left:0}}
+.wrap{max-width:var(--s-maxw);margin:0 auto;padding:0 20px}
+.hero{padding:64px 0 48px;border-bottom:1.5px solid var(--s-ink)}
+.hero h1{font-size:clamp(38px,7vw,78px);line-height:.98;letter-spacing:-.03em;margin:12px 0 18px;font-weight:900}
+.hero h1 em{font-style:normal;color:var(--s-accent-ink)}
+.hero p.lede{max-width:62ch;font-size:clamp(16px,2vw,20px);color:var(--s-muted2);margin:0 0 26px}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;background:var(--s-ink);color:var(--s-paper);text-decoration:none;font-weight:800;font-size:15px;border-radius:var(--s-r);border:1.5px solid var(--s-ink);font-family:inherit;cursor:pointer}
+.btn.alt{background:transparent;color:var(--s-ink)}.btn.acc{background:var(--s-accent);border-color:var(--s-accent);color:#fff}
+.btn:hover{filter:brightness(1.08)}
+.proof{display:flex;flex-wrap:wrap;gap:18px 28px;margin-top:26px;font-family:var(--s-fm);font-size:12px;color:var(--s-muted2)}.proof b{color:var(--s-ink)}
+.sec{padding:56px 0;border-bottom:1.5px solid var(--s-line2)}
+.sec h2{font-size:clamp(26px,4vw,42px);letter-spacing:-.02em;line-height:1.05;margin:8px 0 10px;font-weight:900}
+.sec p.sub{max-width:64ch;color:var(--s-muted2);margin:0 0 26px;font-size:16px}
+.hsteps{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+.hstep{padding:22px;background:var(--s-card);border:1.5px solid var(--s-line2);border-radius:var(--s-r)}.hstep .n{font-family:var(--s-fm);font-weight:700;color:var(--s-accent-ink);font-size:13px}.hstep h3{margin:6px 0 6px;font-size:19px;letter-spacing:-.01em}.hstep p{margin:0;color:var(--s-muted2);font-size:14.5px}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px}
+.pc{display:flex;flex-direction:column;background:var(--s-card);border:1.5px solid var(--s-line2);border-radius:var(--s-r);overflow:hidden;text-decoration:none;color:inherit;transition:transform .12s,border-color .12s}.pc:hover{transform:translateY(-2px);border-color:var(--s-ink)}
+.pc .mock{aspect-ratio:1/1;background:radial-gradient(circle at 50% 40%,#fff,#e6e1d6 75%);display:flex;align-items:center;justify-content:center}.pc .mock svg{width:70%;height:70%;filter:drop-shadow(0 10px 18px rgba(20,19,15,.25))}
+.pc .body{padding:14px 16px 16px}.pc .k{margin-bottom:4px}.pc h3{margin:0 0 4px;font-size:17px;letter-spacing:-.01em}.pc .from{font-family:var(--s-fm);font-size:12.5px;color:var(--s-muted2)}.pc .from b{color:var(--s-ink);font-size:14px}.pc .go{margin-top:10px;font-weight:800;font-size:13.5px}
+.cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.cat{padding:20px;border:1.5px solid var(--s-line2);border-radius:var(--s-r);background:var(--s-card);text-decoration:none;color:inherit}.cat .k{color:var(--s-accent-ink)}.cat h3{margin:6px 0 4px;font-size:20px}.cat p{margin:0;color:var(--s-muted2);font-size:14px}
+.faq{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px 36px}.qa .q{font-weight:800;font-size:16.5px;margin:0 0 6px}.qa .a{margin:0;color:var(--s-muted2);font-size:15px}.qa .a a{color:var(--s-accent-ink);font-weight:700;text-decoration:none}.qa .a b{color:var(--s-ink)}
+.qa details{margin-top:8px}.qa summary{cursor:pointer;font-weight:700;color:var(--s-accent-ink);font-size:13.5px}.qa ol{margin:6px 0 0;padding-left:20px;color:var(--s-muted2);font-size:14px}.qa li{margin:0 0 5px}.qa li b{color:var(--s-ink)}
+.foot{padding:40px 0 60px;color:var(--s-muted2);font-size:14px}.foot .in{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px}.foot b{color:var(--s-ink)}.foot a{color:inherit}.foot .k{margin-bottom:6px}
+.foot .motto{font-weight:900;color:var(--s-ink);font-size:22px;letter-spacing:-.01em}
+.note{font-size:13px;color:var(--s-muted)}
+</style><link rel="icon" href="/icons/icon-192.png"><link rel="manifest" href="/manifest.webmanifest">
+<style>
+:root{--ink:#000;--panel:#0e0e0e;--panel-2:#171717;--line:#262626;--paper:#fff;--muted:#9d97b0;--mag:#FF1FA2;--pur:#8A2BE2;--cy:#12C4FF;--good:#25E0A6;--warn:#FFB020;--bad:#ff5c7a;
+  --grad:linear-gradient(100deg,#FF1FA2 0%,#8A2BE2 52%,#12C4FF 100%);--holo:linear-gradient(105deg,#12C4FF,#8A2BE2 40%,#FF1FA2 70%,#EAB84B);--goldg:linear-gradient(105deg,#F6DA8A,#EAB84B 45%,#C9962E)}
+*{box-sizing:border-box}html,body{margin:0;background:var(--ink);color:var(--paper);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--cy)}
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;padding:12px 16px;background:rgba(0,0,0,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top a.back{color:var(--paper);text-decoration:none;font-weight:800;font-size:13px}.top .t{flex:1;font-weight:900;font-size:15px}
+.wrap{max-width:1040px;margin:0 auto;padding:14px 16px 120px}
+.grid{display:grid;grid-template-columns:1fr;gap:16px}@media(min-width:860px){.grid{grid-template-columns:1.15fr .85fr;align-items:start}.side{position:sticky;top:64px}}
+.card{background:linear-gradient(180deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:14px}
+h1{margin:0 0 10px;font-size:22px}.k{font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:14px 2px 6px}.k:first-child{margin-top:0}
+.line{display:grid;grid-template-columns:64px 1fr auto;gap:12px;padding:12px 0;border-top:1px solid var(--line)}.line:first-of-type{border-top:0;padding-top:2px}
+.th{width:64px;height:64px;border-radius:10px;border:1px solid var(--line);background:var(--panel);display:flex;align-items:center;justify-content:center;overflow:hidden}.th img{width:100%;height:100%;object-fit:cover}.th .sw{width:34px;height:34px;border-radius:8px}.sw.white{background:#fff}.sw.holo{background:var(--holo)}.sw.gold{background:var(--goldg)}
+.ln b{font-size:14.5px}.ln .sp{color:var(--muted);font-size:12.5px;margin-top:2px}.ln .art{font-size:11.5px;margin-top:4px}.art.ok{color:var(--good)}.art.warn{color:var(--warn)}.art.bad{color:var(--bad)}.art.none{color:var(--muted)}.art a{font-weight:800;text-decoration:none}
+.ln .nt{font-size:12px;color:var(--muted);font-style:italic;margin-top:3px}
+.q{display:flex;align-items:center;gap:6px;margin-top:8px}.q button{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--paper);font:inherit;font-weight:900;cursor:pointer}.q input{width:64px;padding:6px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--paper);font:inherit;font-weight:800;text-align:center}
+.q .u{font-size:12px;color:var(--muted);margin-left:4px}
+.rt{text-align:right}.rt b{font-size:15px;font-variant-numeric:tabular-nums}.rm{display:block;margin:8px 0 0 auto;background:none;border:0;color:var(--muted);font:inherit;font-size:11.5px;text-decoration:underline;cursor:pointer;padding:0}
+.sum{font-size:13.5px}.sum .r{display:flex;justify-content:space-between;padding:6px 0;border-top:1px solid var(--line)}.sum .r:first-child{border-top:0}.sum .r.tot{font-size:17px;font-weight:900;border-top:2px solid var(--line);margin-top:4px}.sum .r span:last-child{font-variant-numeric:tabular-nums}
+.note{font-size:12px;color:var(--muted);line-height:1.5;margin:8px 0 0}.note.warn{color:var(--warn)}
+input,textarea{width:100%;padding:11px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--paper);font:inherit;font-size:15px}textarea{min-height:60px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.row.one{grid-template-columns:1fr}
+.seg{display:flex;gap:6px;margin-top:8px}.seg button{flex:1;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--paper);font:inherit;font-weight:800;cursor:pointer}.seg button.on{background:var(--grad);color:#000;border-color:transparent}
+.go{width:100%;margin-top:14px;padding:15px;border:0;border-radius:30px;background:var(--grad);color:#000;font:inherit;font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 8px 30px rgba(138,43,226,.35)}.go:disabled{opacity:.55;cursor:default}
+.st{margin-top:10px;font-size:13px;min-height:18px}.st.err{color:var(--bad)}.st.ok{color:var(--good)}
+.empty{text-align:center;padding:30px 10px;color:var(--muted)}.empty a{display:inline-block;margin-top:12px;padding:11px 20px;border-radius:24px;background:var(--grad);color:#000;font-weight:900;text-decoration:none}
+.done h2{margin:0 0 6px;font-size:24px}.done .code{font-size:30px;font-weight:900;letter-spacing:.04em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.done ol{padding-left:20px;color:var(--muted);font-size:13.5px;line-height:1.6}.done a.btn{display:inline-block;margin-top:10px;padding:12px 20px;border-radius:24px;background:var(--grad);color:#000;font-weight:900;text-decoration:none}
+.pay{margin-top:14px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.pay .k{margin-top:0}
+#card{min-height:46px;margin-top:6px}
+.pay .tax{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:12.5px;color:var(--muted);cursor:pointer}.pay .tax input{width:auto;accent-color:var(--cy);margin:0}
+.pay .ct{display:flex;justify-content:space-between;margin-top:10px;font-size:14px;font-weight:900}.pay .ct span:last-child{font-variant-numeric:tabular-nums}
+.pay .ctn{font-size:11.5px;color:var(--muted);margin-top:4px;line-height:1.45}
+.pay .off{font-size:12.5px;color:var(--muted)}
+.hidden{display:none}
+</style>
+<style id="site-skin">
+:root{--ink:#f3efe6;--panel:#fbf9f4;--panel-2:#ffffff;--line:rgba(20,19,15,.18);--paper:#14130f;--muted:rgba(20,19,15,.62);--mag:#FF1FA2;--pur:#8A2BE2;--cy:#B0147A;--good:#1a9e6f;--warn:#b3700a;--bad:#c62f4a;
+  --grad:linear-gradient(100deg,#FF1FA2 0%,#8A2BE2 60%,#12C4FF 100%)}
+html,body{font-family:'Archivo',system-ui,-apple-system,sans-serif}
+.top{display:none}
+#psec,#pname,#pcut{display:none}
+.wrap{max-width:1240px}
+.card,.opt,.matbox{box-shadow:none}
+.card{background:#fbf9f4;border:1.5px solid rgba(20,19,15,.32);border-radius:6px}
+.opt,.breaks button,.qb,.q button,.seg button{background:#fff;border-radius:6px;color:#14130f}
+.opt.on{border-color:#14130f;box-shadow:0 0 0 1px #14130f}.opt .lv{color:#B0147A}
+.breaks button.on,.seg button.on{background:#14130f;color:#f3efe6;border-color:#14130f}
+.add,.go,.done a.btn,.empty a{background:#14130f;color:#f3efe6;box-shadow:none;border-radius:6px}.add:disabled{opacity:.4}
+.top .cart b,.done .code{background:none;-webkit-text-fill-color:#B0147A;color:#B0147A}
+.preview{background:radial-gradient(circle at 50% 40%,#fff,#e6e1d6 75%)}
+.pmpr,.unit b{color:#14130f}
+.drop{background:#fff}.drop.has{border-color:#1a9e6f}
+input,textarea,.qrow input,.q input{background:#fff;color:#14130f}
+.nudge{background:rgba(255,31,162,.08);border-color:rgba(255,31,162,.45)}.deal{background:rgba(138,43,226,.08);border-color:rgba(138,43,226,.4)}
+.steplbl b,.pnote b{color:#B0147A}
+.ladder tr.on td{color:#B0147A}
+.pay{background:#fff}
+.k{color:rgba(20,19,15,.62)}
+.pick a{background:#fff;color:#14130f}
+.tot,.sum{color:#14130f}
+</style></head>
+<body><nav class="nav"><div class="in"><a class="brand" href="/site/"><img src="/img/emblem.png" alt="">The Sticky Trap</a><button class="burger" type="button" onclick="document.querySelector('.nav .links').classList.toggle('open')">Menu</button><div class="links"><a href="/site/shop/">Shop</a><a href="/site/faq/">FAQ</a><a href="/site/about/">About</a><a href="/site/reorder/">Reorder</a><a href="/site/shop/">The App</a></div><a class="cart" href="/site/cart/">Basket <b id="navcart">0</b></a></div></nav><script>(function(){try{var c=JSON.parse(localStorage.getItem("st_cart")||"[]")||[],n=0;c.forEach(function(i){n+=i.qty||0});var e=document.getElementById("navcart");if(e)e.textContent=n.toLocaleString();}catch(e){}})();</script>
+<div class="top"><a class="back" href="/site/shop/">&larr; Menu</a><div class="t">Your basket</div><a href="/site/shop/" style="font-size:12.5px;font-weight:800;text-decoration:none">+ Add a product</a></div>
+<div class="wrap">
+  <div id="empty" class="card empty hidden">Your basket is empty.<br><a href="/site/shop/">Configure a product</a></div>
+  <div id="done" class="card done hidden"></div>
+  <div class="grid" id="main">
+    <div class="card"><h1>Lines</h1><div id="lines"></div></div>
+    <div class="side">
+      <div class="card">
+        <div class="k">Summary</div>
+        <div class="sum"><div class="r"><span>Subtotal</span><span id="sub">$0.00</span></div><div class="r" id="minrow" style="display:none"><span>$50 minimum order</span><span id="minadd"></span></div><div class="r"><span>Sales tax + shipping</span><span style="color:var(--muted)">on the invoice</span></div><div class="r tot"><span>Order total</span><span id="tot">$0.00</span></div></div>
+        <p class="note" id="paynote">MI 6% sales tax where it applies, shipping only if shipped. <b style="color:var(--paper)">Your card is authorized now and charged only when you approve the proof.</b></p>
+        <div class="k">Who is this for</div>
+        <div class="row"><input id="name" placeholder="Your name" autocomplete="name"><input id="company" placeholder="Company / brand" autocomplete="organization"></div>
+        <div class="row"><input id="email" type="email" placeholder="Email (gets the updates)" autocomplete="email"><input id="phone" type="tel" placeholder="Phone" autocomplete="tel"></div>
+        <div class="seg" id="ship"><button type="button" data-v="pickup" class="on">Pick up in Ann Arbor</button><button type="button" data-v="ship">Ship it</button></div>
+        <div class="row one hidden" id="addrrow"><textarea id="addr" placeholder="Ship-to address"></textarea></div>
+        <div class="row one"><input id="due" placeholder="When do you need it? (e.g. Sep 25, or 'no rush')"></div>
+        <div class="row one"><textarea id="notes" placeholder="Anything else - strain names, what should pop, reference links"></textarea></div>
+        <div class="pay" id="pay">
+          <div class="k">Card</div>
+          <div id="card"></div>
+          <div class="off hidden" id="payoff">Card payments are being set up &mdash; place the order and we invoice you after the proof.</div>
+          <label class="tax"><input type="checkbox" id="taxex"> Tax-exempt (resale / license on file &mdash; we verify at proof)</label>
+          <div class="ct"><span>Authorized on your card</span><span id="cardtot">$0.00</span></div>
+          <div class="ctn" id="cardnote"></div>
+        </div>
+        <button class="go" id="go" type="button">Place order &rarr;</button>
+        <div class="st" id="st"></div>
+        <p class="note">You get a tracker link by email. We proof every order before anything prints; pre-press is assessed per design once we see your art.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+var D={"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"breaks":[[500,5],[750,7],[1000,10]],"minq":5,"maxq":1000,"step":5,"minorder":50,"api":"https://script.google.com/macros/s/AKfycbzgctrnkyWjVnhzioE_B4x8J2pyi4WzRSJG2e00Y_Y5cz0vQx-q5jhvOhMWg2x-K9ciFw/exec","hub":"https://script.google.com/macros/s/AKfycbyNQSfrtPhEgLtNt8IPIQ4z0vF265j3AC-udRJOyF7MLcS4MhLTAL4SESs_AGj0JS8RdQ/exec","maxmb":20};
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var money=function(v){var f=v.toFixed(2).split('.');return '$'+(+f[0]).toLocaleString()+'.'+f[1];}, fmt=function(n){return (+n).toLocaleString();};
+  var esc=function(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');};
+  function cmult(q){for(var i=0;i<D.bands.length;i++){if(q<=D.bands[i][0])return D.bands[i][1];}return D.bands[D.bands.length-1][1];}
+  function unit(l){ var u=Math.floor((+l.pr||0)*cmult(l.qty)*100+0.5)/100; if(l.deal&&l.qty>=(l.deal.fromQty||0)) u=Math.ceil(u*(1-l.deal.off)*100)/100; return u; }
+  function clampQ(q){ q=Math.round((+q||D.minq)/D.step)*D.step; return Math.max(D.minq,Math.min(D.maxq,q)); }
+  var cart=[]; try{ cart=JSON.parse(localStorage.getItem('st_cart')||'[]')||[]; }catch(e){}
+  function save(){ try{ localStorage.setItem('st_cart',JSON.stringify(cart)); }catch(e){} }
+  function sub(){ return cart.reduce(function(s,l){ return s+unit(l)*l.qty; },0); }
+  function total(){ var s=sub(); return (s>0&&s<D.minorder)?D.minorder:s; }
+  var dbp=null; function db(){ if(dbp) return dbp; dbp=new Promise(function(res,rej){ var r=indexedDB.open('st_art',1); r.onupgradeneeded=function(){ var d=r.result; if(!d.objectStoreNames.contains('files')) d.createObjectStore('files'); }; r.onsuccess=function(){res(r.result);}; r.onerror=function(){rej(r.error);}; }); return dbp; }
+  function artGet(k){ return db().then(function(d){ return new Promise(function(res){ var q=d.transaction('files','readonly').objectStore('files').get(k); q.onsuccess=function(){res(q.result||null);}; q.onerror=function(){res(null);}; }); }).catch(function(){ return null; }); }
+  function artClear(){ return db().then(function(d){ d.transaction('files','readwrite').objectStore('files').clear(); }).catch(function(){}); }
+  function matCls(m){ return /gold/i.test(m)?'gold':(/holo/i.test(m)?'holo':'white'); }
+  function slug(s){ return String(s).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
+
+  function render(){ if(!cart.length){ $('main').classList.add('hidden'); $('empty').classList.remove('hidden'); return; }
+    $('main').classList.remove('hidden'); $('empty').classList.add('hidden');
+    $('lines').innerHTML=cart.map(function(l,i){ var u=unit(l), a=l.art||null;
+      var th=a&&a.thumb?'<img src="'+a.thumb+'" alt="">':'<span class="sw '+matCls(l.m)+'"></span>';
+      var art=a&&a.onFile?('<div class="art ok">Art on file from '+esc(a.onFile)+(a.name?' ('+esc(a.name)+')':'')+' &middot; nothing to upload</div>'):a?('<div class="art '+(a.pre&&a.pre.level?a.pre.level:'ok')+'">'+esc(a.name)+(a.pre&&a.pre.dpi?' &middot; ~'+a.pre.dpi+' dpi at size':'')+(a.pre&&a.pre.alpha?' &middot; transparent bg':'')+(a.pre&&a.pre.vector?' &middot; vector, checked at proof':'')+(a.pre&&a.pre.level==='bad'?' &middot; <b>replace this file</b>':'')+(a.reupload?' &middot; re-add at the configure page':'')+'</div>')
+                  :('<div class="art none">No art yet &middot; <a href="/site/product/?p='+slug(l.p)+'">add it</a> or send it after (we ask before proofing)</div>');
+      return '<div class="line" data-i="'+i+'"><div class="th">'+th+'</div><div class="ln"><b>'+esc(l.p)+'</b><div class="sp">'+esc(l.m)+' &middot; '+esc(l.f)+'</div>'+art+(l.notes?'<div class="nt">'+esc(l.notes)+'</div>':'')+
+        '<div class="q"><button type="button" data-d="-1">&minus;</button><input type="number" value="'+l.qty+'" min="'+D.minq+'" max="'+D.maxq+'" step="'+D.step+'"><button type="button" data-d="1">+</button><span class="u">&times; '+money(u)+'</span></div></div>'+
+        '<div class="rt"><b>'+money(u*l.qty)+'</b><button class="rm" type="button">Remove</button></div></div>'; }).join('');
+    var s=sub(), t=total(); $('sub').textContent=money(s); $('tot').textContent=money(t);
+    if(s<D.minorder){ $('minrow').style.display='flex'; $('minadd').textContent='+ '+money(D.minorder-s); } else { $('minrow').style.display='none'; } if(typeof renderCard==='function') renderCard(); }
+  $('lines').addEventListener('click',function(e){ var ln=e.target.closest('.line'); if(!ln) return; var i=+ln.dataset.i, l=cart[i];
+    if(e.target.classList.contains('rm')){ cart.splice(i,1); save(); render(); return; }
+    var b=e.target.closest('button[data-d]'); if(b){ l.qty=clampQ(l.qty+(+b.dataset.d)*D.step); save(); render(); } });
+  $('lines').addEventListener('change',function(e){ var ln=e.target.closest('.line'); if(!ln||e.target.tagName!=='INPUT') return; cart[+ln.dataset.i].qty=clampQ(e.target.value); save(); render(); });
+  render();
+
+  // customer block remembered per device
+  // ---- Square Web Payments (step 3): public config from /data/square.json; no appId = card block off, order still places ----
+  var SQ=null, card=null, payments=null, sqReady=false, REAUTH=null;
+  var qs=new URLSearchParams(location.search); if(qs.get('reauth')&&qs.get('t')){ REAUTH={code:qs.get('reauth'),token:qs.get('t')}; }
+  function cardTotal(){ if(!SQ) return null; var base=total(); if(REAUTH&&REAUTH.total) base=REAUTH.total; var tax=$('taxex').checked?0:Math.round(base*(SQ.taxRate||0)*100)/100; var shipc=ship==='ship'?(SQ.shipEstimate||0):0; var pre=base+tax+shipc; var ct=Math.round(((pre+(SQ.feeFlat||0))/(SQ.feeDivisor||1))*100)/100; return {base:base,tax:tax,ship:shipc,card:ct}; }
+  function renderCard(){ if(!SQ||!SQ.appId) return; var c=cardTotal(); if(!c) return; $('cardtot').textContent=money(c.card);
+    $('cardnote').textContent='Order '+money(c.base)+($('taxex').checked?' + no tax (exempt)':' + MI tax '+money(c.tax))+(c.ship?' + shipping est. '+money(c.ship):'')+' + card processing. Shipping settles on the invoice; anything under the hold is released.'; }
+  function payOff(){ $('payoff').classList.remove('hidden'); $('card').classList.add('hidden'); $('taxex').parentNode.classList.add('hidden'); $('cardtot').parentNode.classList.add('hidden'); $('cardnote').classList.add('hidden');
+    $('paynote').innerHTML='MI 6% sales tax where it applies, shipping only if shipped. <b style="color:var(--paper)">Nothing is charged now.</b> We proof first; you approve, then pay.'; }
+  fetch('/data/square.json?'+Date.now()).then(function(r){return r.json();}).then(function(j){ SQ=j||{}; if(!SQ.appId){ payOff(); return; }
+    var sc=document.createElement('script'); sc.src=(SQ.env==='production'?'https://web.squarecdn.com/v1/square.js':'https://sandbox.web.squarecdn.com/v1/square.js');
+    sc.onload=function(){ try{ payments=window.Square.payments(SQ.appId, SQ.locationId); payments.card({style:{input:{color:'#fff',backgroundColor:'#0e0e0e'},'input::placeholder':{color:'#9d97b0'},'.input-container':{borderColor:'#262626',borderRadius:'10px'},'.input-container.is-focus':{borderColor:'#12C4FF'}}}).then(function(c){ card=c; return card.attach('#card'); }).then(function(){ sqReady=true; renderCard(); }).catch(function(e){ $('card').textContent='Card form could not load - '+(e&&e.message||'try again'); }); }catch(e){ $('card').textContent='Card form could not load.'; } };
+    sc.onerror=function(){ $('card').textContent='Card form could not load (offline?).'; };
+    document.head.appendChild(sc); renderCard(); }).catch(function(){ payOff(); });
+  $('taxex').addEventListener('change',renderCard);
+  window.STCart={ card:function(){ return card; }, total:cardTotal };   // test hook (public objects only)
+  function tokenize(){ if(!SQ||!SQ.appId) return Promise.resolve(null); if(!sqReady||!card) return Promise.reject(new Error('The card form is still loading - give it a second.'));
+    var c=cardTotal(); return card.tokenize().then(function(r){ if(r.status!=='OK'){ var m=(r.errors&&r.errors[0]&&r.errors[0].message)||'Card not accepted'; throw new Error(m); }
+      var nm=$('name').value.trim().split(' '); var det={ amount:String(c.card.toFixed(2)), currencyCode:'USD', intent:'CHARGE', billingContact:{ givenName:nm[0]||'', familyName:nm.slice(1).join(' ')||'', email:$('email').value.trim(), phone:$('phone').value.trim() } };
+      var pay=function(v){ return {sourceId:r.token, verificationToken:v||'', amount:Math.round(c.card*100), base:c.base, tax:c.tax, ship:c.ship, taxExempt:$('taxex').checked}; };
+      return payments.verifyBuyer(r.token, det).then(function(v){ return pay(v&&v.token); }).catch(function(){ return pay(''); }); }); }
+
+  var C={}; try{ C=JSON.parse(localStorage.getItem('st_customer')||'{}')||{}; }catch(e){}
+  ['name','company','email','phone','addr'].forEach(function(k){ if(C[k]) $(k).value=C[k]; });
+  var ship=C.ship||'pickup'; function setShip(v){ ship=v; [].forEach.call($('ship').children,function(b){ b.classList.toggle('on',b.dataset.v===v); }); $('addrrow').classList.toggle('hidden',v!=='ship'); }
+  setShip(ship); $('ship').addEventListener('click',function(e){ var b=e.target.closest('button'); if(b){ setShip(b.dataset.v); renderCard(); } });
+  function remember(){ var o={ship:ship}; ['name','company','email','phone','addr'].forEach(function(k){ o[k]=$(k).value.trim(); }); try{ localStorage.setItem('st_customer',JSON.stringify(o)); }catch(e){} }
+
+  function status(m,c){ $('st').className='st '+(c||''); $('st').textContent=m; }
+  function readB64(f){ return new Promise(function(res,rej){ var r=new FileReader(); r.onload=function(){ res(String(r.result).split(',')[1]||''); }; r.onerror=rej; r.readAsDataURL(f); }); }
+  function lineText(l){ return fmt(l.qty)+'x '+l.p+' - '+l.m+' / '+l.f+' @ '+money(unit(l))+' = '+money(unit(l)*l.qty)+(l.notes?' ('+l.notes+')':''); }
+
+  $('go').addEventListener('click',function(){
+    var email=$('email').value.trim(), name=$('name').value.trim();
+    if(!cart.length){ status('Your basket is empty.','err'); return; }
+    var badArt=cart.filter(function(l){ return l.art&&l.art.pre&&l.art.pre.level==='bad'; }); if(badArt.length){ status('The art on '+badArt[0].p+' is too small to print - replace it on the configure page, or remove the file.','err'); return; }
+    if(!name){ status('Add your name.','err'); return; }
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ status('Add your email - the tracker link goes there.','err'); return; }
+    if(ship==='ship'&&!$('addr').value.trim()){ status('Add the ship-to address, or pick up in Ann Arbor.','err'); return; }
+    remember(); $('go').disabled=true; status(SQ&&SQ.appId?'Checking your card...':'Placing your order...','');
+    tokenize().then(function(payment){ status('Placing your order...',''); placeOrder(payment); }).catch(function(e){ status(String(e&&e.message||e),'err'); $('go').disabled=false; });
+  });
+  function placeOrder(payment){
+    var email=$('email').value.trim(), name=$('name').value.trim();
+    var items=cart.map(function(l){ return fmt(l.qty)+'x '+l.p+' - '+l.m+' / '+l.f+' @ '+money(unit(l)); }).join(' | ').slice(0,400);
+    var due=$('due').value.trim().slice(0,40), notes=$('notes').value.trim();
+    var lines=cart.map(function(l){ return {p:l.p,m:l.m,f:l.f,qty:l.qty,pr:l.pr,unit:unit(l),total:Math.round(unit(l)*l.qty*100)/100,notes:l.notes||'',art:l.art?(l.art.onFile?'on file: '+l.art.onFile+(l.art.name?' / '+l.art.name:''):(l.art.name+(l.art.pre&&l.art.pre.dpi?' ('+l.art.pre.dpi+' dpi'+(l.art.pre.alpha?', transparent':'')+(l.art.pre.level!=='ok'?', '+l.art.pre.level:'')+')':(l.art.pre&&l.art.pre.vector?' (vector)':'')))):''}; });
+    var idem=''; try{ idem=localStorage.getItem('st_idem')||''; if(!idem){ idem=Date.now().toString(36)+Math.random().toString(36).slice(2,8); localStorage.setItem('st_idem',idem); } }catch(e){}
+    var body={ action:'order_new', idem:idem, name:name, company:$('company').value.trim(), email:email, phone:$('phone').value.trim(), items:items, due:due, source:'cart', stage:'received',
+               lines:lines, subtotal:Math.round(sub()*100)/100, total:Math.round(total()*100)/100, ship:ship, address:ship==='ship'?$('addr').value.trim():'', notes:notes, payment:payment||null };
+    if(REAUTH){ body={ action:'reauth', code:REAUTH.code, token:REAUTH.token, payment:payment }; }
+    fetch(D.api,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)}).then(function(r){ return r.json(); }).then(function(j){
+      if(!j||!j.ok){ var e=(j&&j.error)||'error'; status(e==='card_declined'?'Your card was declined - try another card.':e==='payment_failed'?'The card could not be authorized ('+((j&&j.detail)||'')+'). Try again or text us.':e==='rate_limited'?'Too many orders from this email in an hour - text us at 734 460 3845 and we will take it by hand.':(e==='price_mismatch'?'Prices moved while you were browsing - reload the basket and try again.':'Could not place the order ('+e+'). Text us at 734 460 3845.'),'err'); $('go').disabled=false; return; }
+      var code=j.code||(REAUTH&&REAUTH.code), url=j.url||'';
+      if(REAUTH){ $('main').classList.add('hidden'); $('done').innerHTML='<h2>Card re-authorized</h2><div class="code">'+esc(code)+'</div><p class="note" style="font-size:13.5px;color:var(--paper)">Thanks - approving your proof charges this card.</p>'+(url?'<a class="btn" href="'+esc(url)+'">Back to your tracker &rarr;</a>':''); $('done').classList.remove('hidden'); return; }
+      status('Order '+code+' placed. Sending your art...','');
+      Promise.all(cart.map(function(l){ return (l.art&&!l.art.onFile)?artGet(l.art.key||l.k).then(function(f){ return f?readB64(f).then(function(b64){ return {name:l.art.name||f.name,mime:f.type||'application/octet-stream',b64:b64,size:f.size||0}; }):null; }):Promise.resolve(null); })).then(function(files){
+        files=files.filter(Boolean); var mb=files.reduce(function(s,f){ return s+(f.size||0); },0)/1048576; var tooBig=mb>D.maxmb; if(tooBig) files=[];
+        var onfile=cart.filter(function(l){ return l.art&&l.art.onFile; }).map(function(l){ return l.p+' <- '+l.art.onFile; });
+        var detail='ORDER '+code+(url?' - '+url:'')+(onfile.length?' - ART ON FILE: '+onfile.join(', '):'')+' - '+(ship==='ship'?('SHIP to: '+$('addr').value.trim()):'PICK UP')+(due?' - needed: '+due:'')+(notes?'\nNotes: '+notes:'')+'\nSubtotal '+money(sub())+' - order total '+money(total())+(tooBig?'\nART: over '+D.maxmb+' MB, customer asked to email it':'');
+        var payload={ action:'quote', name:name+(body.company?' ('+body.company+')':''), email:email, phone:body.phone, details:detail, basket:cart.map(lineText).join('\n'), files:files.map(function(f){ return {name:f.name,mime:f.mime,b64:f.b64}; }) };
+        return fetch(D.hub,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)}).then(function(){ return tooBig; }).catch(function(){ return tooBig; });
+      }).then(function(tooBig){
+        try{ localStorage.setItem('st_lastorder',JSON.stringify(cart)); localStorage.setItem('st_lastcode',code); }catch(e){}
+        cart=[]; save(); artClear(); try{ localStorage.removeItem('st_idem'); }catch(e){}
+        try{ window.track&&window.track('order_send','cart '+lines.length+' lines'); }catch(e){}
+        $('main').classList.add('hidden');
+        $('done').innerHTML='<h2>Order placed</h2><div class="code">'+esc(code)+'</div><p class="note" style="font-size:13.5px;color:var(--paper)">Confirmation and your tracker link are on their way to <b>'+esc(email)+'</b>.</p>'+
+          (tooBig?'<p class="note warn">Your art was over '+D.maxmb+' MB, so it did not upload. Email it to <a href="mailto:thestickytrap@gmail.com?subject=Art%20for%20order%20'+encodeURIComponent(code)+'">thestickytrap@gmail.com</a> with the order code.</p>':'')+
+          '<ol><li>We check your art and build the proof.</li><li>You approve the proof from your tracker link (or ask for changes).</li><li>'+(payment?'Your card is charged on approval, then we print':'You pay, we print')+', you pick up or we ship.</li></ol>'+
+          (url?'<a class="btn" href="'+esc(url)+'">Open your tracker &rarr;</a> ':'')+'<a class="btn" style="background:var(--panel-2);color:var(--paper);border:1px solid var(--line)" href="/site/shop/">Back to the menu</a>';
+        $('done').classList.remove('hidden'); window.scrollTo(0,0);
+      });
+    }).catch(function(){ // the request may have reached the desk even though the reply did not come back: do not invite an instant re-submit (duplicate order)
+      status('No reply from the order desk. If a confirmation email arrives in the next minute, your order is in - do not place it again. Otherwise retry in a moment or text 734 460 3845.','err');
+      setTimeout(function(){ $('go').disabled=false; },45000); });
+  }
+
+  // re-auth mode: the tracker sent the customer here after a hold expired; the order's lines/total load, only the card step runs
+  if(REAUTH){ $('main').classList.remove('hidden'); $('empty').classList.add('hidden'); $('lines').innerHTML='<div class="note">Loading your order...</div>';
+    fetch(D.api+'?action=track&o='+encodeURIComponent(REAUTH.code)+'&t='+encodeURIComponent(REAUTH.token)+'&e=&_='+Date.now()).then(function(r){return r.json();}).then(function(j){
+      if(!j||!j.ok){ $('lines').innerHTML='<div class="note warn">Could not load that order. Open your tracker link and try again.</div>'; return; }
+      REAUTH.total=+j.total||0; $('lines').innerHTML='<div class="note" style="color:var(--paper)">Order <b>'+esc(REAUTH.code)+'</b> &middot; '+esc(j.items||'')+'</div>'; $('sub').textContent=money(REAUTH.total); $('tot').textContent=money(REAUTH.total); $('minrow').style.display='none';
+      if(j.name) $('name').value=j.name; if(j.email) $('email').value=j.email; $('go').textContent='Re-authorize card \u2192'; renderCard(); }).catch(function(){}); }
+})();
+</script>
+<footer class="foot"><div class="wrap in"><div><div class="motto">Let’s Stick Together.</div><div class="note" style="margin-top:8px">Design House · Branding Specialists · Custom Art · Stickers · Promotionals · Merch</div></div><div><div class="k">Talk to us</div><b><a href="tel:+17344603845" style="text-decoration:none">734 460 3845</a></b> call or text<br><a href="mailto:thestickytrap@gmail.com">thestickytrap@gmail.com</a><br>@the_stickytrap</div><div><div class="k">Shop</div>4750 Venture Dr, Ste 101, Ann Arbor, MI<br>Mon–Fri 10–5 · pick up in Ann Arbor or we ship</div><div><div class="k">How we work</div>Proof before we print — nothing runs until you approve it. Print-ready files turn around in 5–7 business days. $50 minimum per order.</div></div></footer></body></html>
