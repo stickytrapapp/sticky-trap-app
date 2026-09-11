@@ -124,6 +124,7 @@ var D={"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"breaks":[[500,5],[7
     sc.onerror=function(){ $('card').textContent='Card form could not load (offline?).'; };
     document.head.appendChild(sc); renderCard(); }).catch(function(){ payOff(); });
   $('taxex').addEventListener('change',renderCard);
+  window.STCart={ card:function(){ return card; }, total:cardTotal };   // test hook (public objects only)
   function tokenize(){ if(!SQ||!SQ.appId) return Promise.resolve(null); if(!sqReady||!card) return Promise.reject(new Error('The card form is still loading - give it a second.'));
     var c=cardTotal(); return card.tokenize().then(function(r){ if(r.status!=='OK'){ var m=(r.errors&&r.errors[0]&&r.errors[0].message)||'Card not accepted'; throw new Error(m); }
       var nm=$('name').value.trim().split(' '); var det={ amount:String(c.card.toFixed(2)), currencyCode:'USD', intent:'CHARGE', billingContact:{ givenName:nm[0]||'', familyName:nm.slice(1).join(' ')||'', email:$('email').value.trim(), phone:$('phone').value.trim() } };
