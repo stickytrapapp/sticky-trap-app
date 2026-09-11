@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Configure · The Sticky Trap</title>
+<meta name="theme-color" content="#000"><link rel="icon" href="/icons/icon-192.png"><link rel="manifest" href="/manifest.webmanifest">
+<style>
+:root{--ink:#000;--panel:#0e0e0e;--panel-2:#171717;--line:#262626;--paper:#fff;--muted:#9d97b0;--mag:#FF1FA2;--pur:#8A2BE2;--cy:#12C4FF;--good:#25E0A6;--warn:#FFB020;
+  --grad:linear-gradient(100deg,#FF1FA2 0%,#8A2BE2 52%,#12C4FF 100%);--holo:linear-gradient(105deg,#12C4FF,#8A2BE2 40%,#FF1FA2 70%,#EAB84B);--goldg:linear-gradient(105deg,#F6DA8A,#EAB84B 45%,#C9962E)}
+*{box-sizing:border-box}html,body{margin:0;background:var(--ink);color:var(--paper);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--cy)}
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;padding:12px 16px;background:rgba(0,0,0,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top a.back{color:var(--paper);text-decoration:none;font-weight:800;font-size:13px}
+.top .t{flex:1;font-weight:900;font-size:15px;letter-spacing:.02em}
+.top .cart{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:20px;background:var(--panel-2);border:1px solid var(--line);color:var(--paper);text-decoration:none;font-size:12.5px;font-weight:800}
+.top .cart b{background:var(--grad);color:#000;border-radius:10px;padding:1px 7px;font-size:11.5px}
+.wrap{max-width:1040px;margin:0 auto;padding:14px 16px 120px}
+.grid{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:860px){.grid{grid-template-columns:1.1fr .9fr;align-items:start}.side{position:sticky;top:64px}}
+.card{background:linear-gradient(180deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:14px}
+h1{margin:0 0 2px;font-size:22px;letter-spacing:-.01em}.sec{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+.step{font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:14px 2px 6px}.step b{color:var(--cy)}
+.opts{display:flex;gap:6px;flex-wrap:wrap}
+.opt{flex:1;min-width:88px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 8px;border:1px solid var(--line);border-radius:11px;background:var(--panel);color:var(--paper);font:inherit;font-size:12.5px;font-weight:800;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.opt small{font-weight:600;color:var(--muted);font-size:10.5px;text-align:center;line-height:1.3}
+.opt.on{border-color:var(--cy);box-shadow:0 0 0 1px var(--cy)}
+.opt .sw{width:18px;height:18px;border-radius:6px;border:1px solid rgba(255,255,255,.18)}.sw.white{background:#fff}.sw.holo{background:var(--holo)}.sw.gold{background:var(--goldg)}
+.opt .lv{font-size:11px;color:var(--cy);font-weight:900}
+.opt.quote{border-style:dashed;color:var(--muted)}
+.hb{display:flex;align-items:center;gap:8px;margin:8px 2px 0;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.02em;color:var(--cy);cursor:pointer}.hb input{accent-color:var(--cy);width:15px;height:15px;margin:0}.hb em{font-style:normal;text-transform:none;letter-spacing:0;font-weight:600;color:var(--muted)}
+.qrow{display:flex;align-items:center;gap:8px}.qrow input{width:96px;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--paper);font:inherit;font-size:16px;font-weight:800;text-align:center}
+.qb{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--paper);font:inherit;font-size:18px;font-weight:900;cursor:pointer}
+.breaks{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}.breaks button{flex:1;min-width:56px;padding:8px 6px;border-radius:9px;border:1px solid var(--line);background:var(--panel);color:var(--paper);font:inherit;font-size:12.5px;font-weight:800;cursor:pointer}.breaks button.on{background:var(--grad);color:#000;border-color:transparent}
+.breaks a{flex:1;min-width:80px;display:flex;align-items:center;justify-content:center;padding:8px 6px;border-radius:9px;border:1px dashed var(--line);color:var(--muted);font-size:12px;font-weight:800;text-decoration:none}
+.drop{margin-top:2px;border:1px dashed var(--line);border-radius:12px;padding:16px;text-align:center;color:var(--muted);font-size:13px;cursor:pointer}.drop.has{border-color:var(--good);color:var(--paper)}.drop b{color:var(--cy)}
+.drop input{display:none}
+.pre{margin-top:6px;font-size:12px;color:var(--muted)}.pre.warn{color:var(--warn)}.pre.bad{color:#ff5c7a}.pre.ok{color:var(--good)}
+textarea{width:100%;min-height:64px;margin-top:2px;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--paper);font:inherit;font-size:14px;resize:vertical}
+.preview{position:relative;aspect-ratio:1/1;max-height:340px;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 40%,#1b1b22,#000 72%);border-radius:12px;overflow:hidden}
+.preview svg{width:82%;height:82%;filter:drop-shadow(0 12px 26px rgba(0,0,0,.6))}
+.pnote{margin:8px 0 0;font-size:11.5px;color:var(--muted);text-align:center}
+.price{margin-top:14px}
+.unit{display:flex;align-items:baseline;gap:8px}.unit b{font-size:34px;letter-spacing:-.02em}.unit span{color:var(--muted);font-size:13px}
+.tot{margin:2px 0 0;font-size:13.5px;color:var(--muted)}.tot b{color:var(--paper)}
+.nudge{margin:10px 0 0;padding:9px 12px;border-radius:10px;background:rgba(18,196,255,.09);border:1px solid rgba(18,196,255,.35);font-size:12.5px}.nudge b{color:var(--cy)}
+.deal{margin:8px 0 0;padding:9px 12px;border-radius:10px;background:rgba(255,31,162,.10);border:1px solid rgba(255,31,162,.4);font-size:12.5px}.deal b{color:var(--mag)}
+.min{margin:8px 0 0;font-size:12px;color:var(--warn)}
+table.ladder{width:100%;border-collapse:collapse;margin-top:12px;font-size:12.5px}.ladder td{padding:5px 2px;border-top:1px solid var(--line);color:var(--muted)}.ladder td:last-child{text-align:right;font-weight:800;color:var(--paper);font-variant-numeric:tabular-nums}.ladder tr.on td{color:var(--cy)}
+.ladder caption{text-align:left;font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0 0 4px}
+.add{width:100%;margin-top:14px;padding:15px;border:0;border-radius:30px;background:var(--grad);color:#000;font:inherit;font-size:15px;font-weight:900;letter-spacing:.02em;cursor:pointer;box-shadow:0 8px 30px rgba(138,43,226,.35)}
+.add:active{transform:scale(.99)}
+.fine{margin:10px 0 0;font-size:11.5px;color:var(--muted);line-height:1.5}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#fff;color:#000;font-weight:800;padding:11px 18px;border-radius:999px;font-size:13.5px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:50;white-space:nowrap}.toast.on{opacity:1}
+.pick{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}.pick a{display:block;padding:12px;border:1px solid var(--line);border-radius:12px;color:var(--paper);text-decoration:none;font-weight:800;font-size:13.5px;background:var(--panel)}.pick a small{display:block;color:var(--muted);font-weight:600;font-size:11.5px;margin-top:3px}
+.hidden{display:none}
+</style></head>
+<body>
+<div class="top"><a class="back" href="/#menu">&larr; Menu</a><div class="t" id="ttl">Configure</div><a class="cart" href="/#menu" id="cartlink">Basket <b id="cartn">0</b></a></div>
+<div class="wrap">
+  <div id="picker" class="hidden"><p class="sec">Pick a product</p><div class="pick" id="pick"></div></div>
+  <div class="grid" id="cfg">
+    <div>
+      <div class="card">
+        <p class="sec" id="psec"></p><h1 id="pname"></h1><div class="fine" id="pcut" style="margin-top:2px"></div>
+        <div class="step"><b>1</b> Size</div>
+        <div class="opts"><div class="opt on" id="sizeopt"><span id="psize"></span><small>fixed for this product</small></div><a class="opt quote" href="mailto:thestickytrap@gmail.com?subject=Custom%20size" style="text-decoration:none">Custom size<small>talk to us</small></a></div>
+        <div class="step"><b>2</b> Material</div>
+        <div class="opts" id="mats"></div>
+        <label class="hb hidden" id="hbrow"><input type="checkbox" id="hb"> + HoloBrite <em>white underbase for true color on holo / gold</em></label>
+        <div class="step"><b>3</b> Texture <span style="font-weight:600;letter-spacing:0;text-transform:none">&middot; number = layers of UV gloss</span></div>
+        <div class="opts" id="fins"></div>
+        <div class="step"><b>4</b> Quantity</div>
+        <div class="qrow"><button class="qb" id="qminus" type="button" aria-label="Less">&minus;</button><input id="qty" type="number" inputmode="numeric"><button class="qb" id="qplus" type="button" aria-label="More">+</button><span class="fine" style="margin:0" id="qhint"></span></div>
+        <div class="breaks" id="breaks"></div>
+        <div class="step"><b>5</b> Your art <span style="font-weight:600;letter-spacing:0;text-transform:none">&middot; optional now, needed before we proof</span></div>
+        <div class="drop" id="drop"><span id="droptxt"><b>Drop a file</b> or tap to choose &middot; PNG, JPG, PDF, AI, SVG</span><input type="file" id="file" accept=".png,.jpg,.jpeg,.webp,.pdf,.ai,.svg,.eps,image/*,application/pdf"></div>
+        <div class="pre" id="pre"></div>
+        <div class="step"><b>6</b> Notes</div>
+        <textarea id="notes" placeholder="Strain names, what should pop, anything we should know"></textarea>
+      </div>
+    </div>
+    <div class="side">
+      <div class="card">
+        <div class="preview" id="preview"></div>
+        <p class="pnote">Preview shows shape and material. <b>Your proof is the real thing</b> &mdash; nothing prints until you approve it.</p>
+        <div class="price">
+          <div class="unit"><b id="unit">$0.00</b><span id="unitlbl">per sticker</span></div>
+          <div class="tot" id="tot"></div>
+          <div class="nudge hidden" id="nudge"></div>
+          <div class="deal hidden" id="deal"></div>
+          <div class="min hidden" id="minnote"></div>
+          <table class="ladder"><caption>Price ladder &middot; 500 pcs 5% off · 750 pcs 7% off · 1,000 pcs 10% off · over 1,000 talk to us</caption><tbody id="ladder"></tbody></table>
+          <button class="add" id="add" type="button">Add to basket</button>
+          <p class="fine">Prices per piece, list. MI sales tax on the invoice where it applies. $50 minimum per order. Pre-press is assessed per design once we see your art. Deeper embossing (4+ layers) and anything off this page: <a href="sms:+17344603845">text us</a>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+var D={"products":[{"name":"3\" Slap","slug":"3-slap","section":"Slaps","size":"3 x 3 in","shape":"square","w":3,"h":3,"cut":"Square backer or contour cut, same price","unit":"sticker","mats":[{"key":"White Vinyl","short":"White","cls":"white","hb":false,"note":"6 mil premium white vinyl"},{"key":"Holographic","short":"Holo","cls":"holo","hb":true,"note":"6 mil rainbow holographic, bubble-free"},{"key":"Gold","short":"Gold","cls":"gold","hb":true,"note":"4 mil metallic gold, bubble-free"}],"prices":{"White Vinyl":{"Flat":[0.45,null],"Spot Gloss UV":[0.55,null],"Standard Embossing":[0.85,null],"Pro":[1.2,null]},"Holographic":{"Flat":[0.75,1.05],"Spot Gloss UV":[0.85,1.15],"Standard Embossing":[1.15,1.45],"Pro":[1.35,1.65]},"Gold":{"Flat":[0.95,1.25],"Spot Gloss UV":[1.05,1.35],"Standard Embossing":[1.35,1.65],"Pro":[1.55,1.85]}},"fins":["Flat","Spot Gloss UV","Standard Embossing","Pro"]},{"name":"4\" Slap","slug":"4-slap","section":"Slaps","size":"4 x 4 in","shape":"square","w":4,"h":4,"cut":"Square backer or contour cut, same price","unit":"sticker","mats":[{"key":"White Vinyl","short":"White","cls":"white","hb":false,"note":"6 mil premium white vinyl"},{"key":"Holographic","short":"Holo","cls":"holo","hb":true,"note":"6 mil rainbow holographic, bubble-free"},{"key":"Gold","short":"Gold","cls":"gold","hb":true,"note":"4 mil metallic gold, bubble-free"}],"prices":{"White Vinyl":{"Flat":[0.75,null],"Spot Gloss UV":[0.9,null],"Standard Embossing":[1.25,null],"Pro":[1.6,null]},"Holographic":{"Flat":[1.3,1.7],"Spot Gloss UV":[1.4,1.8],"Standard Embossing":[1.75,2.15],"Pro":[2.0,2.4]},"Gold":{"Flat":[1.6,2.0],"Spot Gloss UV":[1.7,2.1],"Standard Embossing":[2.05,2.45],"Pro":[2.3,2.7]}},"fins":["Flat","Spot Gloss UV","Standard Embossing","Pro"]},{"name":"4x5 Deli","slug":"4x5-deli","section":"Deli Labels","size":"4 x 5 in","shape":"rect","w":4,"h":5,"cut":"Deli label, square-cornered","unit":"label","mats":[{"key":"White Vinyl","short":"White","cls":"white","hb":false,"note":"6 mil premium white vinyl"},{"key":"Holographic","short":"Holo","cls":"holo","hb":true,"note":"6 mil rainbow holographic, bubble-free"},{"key":"Gold","short":"Gold","cls":"gold","hb":true,"note":"4 mil metallic gold, bubble-free"}],"prices":{"White Vinyl":{"Flat":[1.15,null],"Spot Gloss UV":[2.05,null],"Standard Embossing":[3.25,null],"Pro":[4.4,null]},"Holographic":{"Flat":[1.8,2.4],"Spot Gloss UV":[2.7,3.3],"Standard Embossing":[3.9,4.5],"Pro":[5.05,5.65]},"Gold":{"Flat":[2.15,2.75],"Spot Gloss UV":[3.05,3.65],"Standard Embossing":[4.25,4.85],"Pro":[5.4,6.0]}},"fins":["Flat","Spot Gloss UV","Standard Embossing","Pro"]},{"name":"o2 Standard","slug":"o2-standard","section":"Vape & Tube Wraps","size":"o2 cart wrap","shape":"wrap","w":2.6,"h":1.05,"cut":"Wraps the o2 cartridge","unit":"wrap","mats":[{"key":"White Vinyl","short":"White","cls":"white","hb":false,"note":"6 mil premium white vinyl"},{"key":"Holographic","short":"Holo","cls":"holo","hb":true,"note":"6 mil rainbow holographic, bubble-free"},{"key":"Gold","short":"Gold","cls":"gold","hb":true,"note":"4 mil metallic gold, bubble-free"}],"prices":{"White Vinyl":{"Flat":[0.45,null],"Spot Gloss UV":[0.55,null],"Standard Embossing":[0.65,null],"Pro":[0.75,null]},"Holographic":{"Flat":[0.55,0.8],"Spot Gloss UV":[0.6,0.85],"Standard Embossing":[0.7,0.95],"Pro":[0.8,1.05]},"Gold":{"Flat":[0.65,0.9],"Spot Gloss UV":[0.7,0.95],"Standard Embossing":[0.8,1.05],"Pro":[0.9,1.15]}},"fins":["Flat","Spot Gloss UV","Standard Embossing","Pro"]},{"name":"o2 Bucket","slug":"o2-bucket","section":"Vape & Tube Wraps","size":"o2 bucket wrap","shape":"wrap","w":2.8,"h":1.2,"cut":"Wraps the o2 bucket cart","unit":"wrap","mats":[{"key":"White Vinyl","short":"White","cls":"white","hb":false,"note":"6 mil premium white vinyl"},{"key":"Holographic","short":"Holo","cls":"holo","hb":true,"note":"6 mil rainbow holographic, bubble-free"},{"key":"Gold","short":"Gold","cls":"gold","hb":true,"note":"4 mil metallic gold, bubble-free"}],"prices":{"White Vinyl":{"Flat":[0.5,null],"Spot Gloss UV":[0.65,null],"Standard Embossing":[0.75,null],"Pro":[0.85,null]},"Holographic":{"Flat":[0.65,0.95],"Spot Gloss UV":[0.7,1.0],"Standard Embossing":[0.8,1.1],"Pro":[0.9,1.2]},"Gold":{"Flat":[0.75,1.05],"Spot Gloss UV":[0.8,1.1],"Standard Embossing":[0.9,1.2],"Pro":[1.0,1.3]}},"fins":["Flat","Spot Gloss UV","Standard Embossing","Pro"]},{"name":"Pop Top","slug":"pop-top","section":"Vape & Tube Wraps","size":"Pop top lid","shape":"round","w":1.4,"h":1.4,"cut":"Round lid label","unit":"label","mats":[{"key":"White Vinyl","short":"White","cls":"white","hb":false,"note":"6 mil premium white vinyl"},{"key":"Holographic","short":"Holo","cls":"holo","hb":true,"note":"6 mil rainbow holographic, bubble-free"},{"key":"Gold","short":"Gold","cls":"gold","hb":true,"note":"4 mil metallic gold, bubble-free"}],"prices":{"White Vinyl":{"Flat":[0.75,null],"Spot Gloss UV":[1.15,null],"Standard Embossing":[1.35,null],"Pro":[1.55,null]},"Holographic":{"Flat":[1.15,1.45],"Spot Gloss UV":[1.3,1.6],"Standard Embossing":[1.75,2.05],"Pro":[2.1,2.4]},"Gold":{"Flat":[1.45,1.75],"Spot Gloss UV":[1.6,1.9],"Standard Embossing":[2.05,2.35],"Pro":[2.4,2.7]}},"fins":["Flat","Spot Gloss UV","Standard Embossing","Pro"]},{"name":"Tube 95 mm","slug":"tube-95-mm","section":"Vape & Tube Wraps","size":"95 mm Chubby Gorilla wrap","shape":"wrap","w":3.7,"h":2.1,"cut":"Wraps the tube","unit":"wrap","mats":[{"key":"White Vinyl","short":"White","cls":"white","hb":false,"note":"6 mil premium white vinyl"},{"key":"Holographic","short":"Holo","cls":"holo","hb":true,"note":"6 mil rainbow holographic, bubble-free"},{"key":"Gold","short":"Gold","cls":"gold","hb":true,"note":"4 mil metallic gold, bubble-free"}],"prices":{"White Vinyl":{"Flat":[1.0,null],"Spot Gloss UV":[1.25,null],"Standard Embossing":[1.8,null],"Pro":[2.3,null]},"Holographic":{"Flat":[1.5,2.2],"Spot Gloss UV":[1.75,2.45],"Standard Embossing":[2.3,3.0],"Pro":[2.8,3.5]},"Gold":{"Flat":[1.8,2.5],"Spot Gloss UV":[2.05,2.75],"Standard Embossing":[2.6,3.3],"Pro":[3.1,3.8]}},"fins":["Flat","Spot Gloss UV","Standard Embossing","Pro"]},{"name":"Tube 65 mm","slug":"tube-65-mm","section":"Vape & Tube Wraps","size":"65 mm Chubby Gorilla wrap","shape":"wrap","w":2.6,"h":1.8,"cut":"Wraps the tube","unit":"wrap","mats":[{"key":"White Vinyl","short":"White","cls":"white","hb":false,"note":"6 mil premium white vinyl"},{"key":"Holographic","short":"Holo","cls":"holo","hb":true,"note":"6 mil rainbow holographic, bubble-free"},{"key":"Gold","short":"Gold","cls":"gold","hb":true,"note":"4 mil metallic gold, bubble-free"}],"prices":{"White Vinyl":{"Flat":[0.7,null],"Spot Gloss UV":[0.8,null],"Standard Embossing":[1.05,null],"Pro":[1.35,null]},"Holographic":{"Flat":[1.0,1.5],"Spot Gloss UV":[1.1,1.6],"Standard Embossing":[1.35,1.85],"Pro":[1.65,2.15]},"Gold":{"Flat":[1.25,1.75],"Spot Gloss UV":[1.35,1.85],"Standard Embossing":[1.6,2.1],"Pro":[1.9,2.4]}},"fins":["Flat","Spot Gloss UV","Standard Embossing","Pro"]},{"name":"Miron 5 ml (Puck)","slug":"miron-5-ml-puck","section":"Miron Jar Labels","size":"5 ml Miron puck set","shape":"set","w":1.6,"h":1.6,"cut":"Lid + wrap set","unit":"set","mats":[{"key":"White Vinyl","short":"White","cls":"white","hb":false,"note":"6 mil premium white vinyl"},{"key":"Holographic","short":"Holo","cls":"holo","hb":true,"note":"6 mil rainbow holographic, bubble-free"},{"key":"Gold","short":"Gold","cls":"gold","hb":true,"note":"4 mil metallic gold, bubble-free"}],"prices":{"White Vinyl":{"Flat":[0.55,null],"Spot Gloss UV":[0.7,null],"Standard Embossing":[0.85,null],"Pro":[1.0,null]},"Holographic":{"Flat":[0.95,1.2],"Spot Gloss UV":[1.1,1.35],"Standard Embossing":[1.25,1.5],"Pro":[1.4,1.65]},"Gold":{"Flat":[1.15,1.4],"Spot Gloss UV":[1.3,1.55],"Standard Embossing":[1.45,1.7],"Pro":[1.6,1.85]}},"fins":["Flat","Spot Gloss UV","Standard Embossing","Pro"]},{"name":"Miron 100 ml","slug":"miron-100-ml","section":"Miron Jar Labels","size":"100 ml Miron set","shape":"set","w":2.1,"h":2.1,"cut":"Lid + wrap set","unit":"set","mats":[{"key":"White Vinyl","short":"White","cls":"white","hb":false,"note":"6 mil premium white vinyl"},{"key":"Holographic","short":"Holo","cls":"holo","hb":true,"note":"6 mil rainbow holographic, bubble-free"},{"key":"Gold","short":"Gold","cls":"gold","hb":true,"note":"4 mil metallic gold, bubble-free"}],"prices":{"White Vinyl":{"Flat":[1.35,null],"Spot Gloss UV":[1.9,null],"Standard Embossing":[2.5,null],"Pro":[3.1,null]},"Holographic":{"Flat":[1.8,2.45],"Spot Gloss UV":[2.35,3.0],"Standard Embossing":[2.9,3.55],"Pro":[3.45,4.1]},"Gold":{"Flat":[2.1,2.75],"Spot Gloss UV":[2.65,3.3],"Standard Embossing":[3.2,3.85],"Pro":[3.75,4.4]}},"fins":["Flat","Spot Gloss UV","Standard Embossing","Pro"]},{"name":"Miron 150 ml","slug":"miron-150-ml","section":"Miron Jar Labels","size":"150 ml Miron set","shape":"set","w":2.4,"h":2.4,"cut":"Lid + wrap set","unit":"set","mats":[{"key":"White Vinyl","short":"White","cls":"white","hb":false,"note":"6 mil premium white vinyl"},{"key":"Holographic","short":"Holo","cls":"holo","hb":true,"note":"6 mil rainbow holographic, bubble-free"},{"key":"Gold","short":"Gold","cls":"gold","hb":true,"note":"4 mil metallic gold, bubble-free"}],"prices":{"White Vinyl":{"Flat":[1.6,null],"Spot Gloss UV":[2.25,null],"Standard Embossing":[2.9,null],"Pro":[3.6,null]},"Holographic":{"Flat":[2.1,2.65],"Spot Gloss UV":[2.65,3.2],"Standard Embossing":[3.2,3.75],"Pro":[3.75,4.3]},"Gold":{"Flat":[2.5,3.05],"Spot Gloss UV":[3.05,3.6],"Standard Embossing":[3.6,4.15],"Pro":[4.15,4.7]}},"fins":["Flat","Spot Gloss UV","Standard Embossing","Pro"]},{"name":"Miron 250 ml","slug":"miron-250-ml","section":"Miron Jar Labels","size":"250 ml Miron set","shape":"set","w":2.8,"h":2.8,"cut":"Lid + wrap set","unit":"set","mats":[{"key":"White Vinyl","short":"White","cls":"white","hb":false,"note":"6 mil premium white vinyl"},{"key":"Holographic","short":"Holo","cls":"holo","hb":true,"note":"6 mil rainbow holographic, bubble-free"},{"key":"Gold","short":"Gold","cls":"gold","hb":true,"note":"4 mil metallic gold, bubble-free"}],"prices":{"White Vinyl":{"Flat":[1.9,null],"Spot Gloss UV":[2.8,null],"Standard Embossing":[3.7,null],"Pro":[4.55,null]},"Holographic":{"Flat":[2.9,3.7],"Spot Gloss UV":[3.9,4.7],"Standard Embossing":[4.9,5.7],"Pro":[5.9,6.7]},"Gold":{"Flat":[3.45,4.25],"Spot Gloss UV":[4.45,5.25],"Standard Embossing":[5.45,6.25],"Pro":[6.45,7.25]}},"fins":["Flat","Spot Gloss UV","Standard Embossing","Pro"]},{"name":"Miron 500 ml","slug":"miron-500-ml","section":"Miron Jar Labels","size":"500 ml Miron set","shape":"set","w":3.3,"h":3.3,"cut":"Lid + wrap set","unit":"set","mats":[{"key":"White Vinyl","short":"White","cls":"white","hb":false,"note":"6 mil premium white vinyl"},{"key":"Holographic","short":"Holo","cls":"holo","hb":true,"note":"6 mil rainbow holographic, bubble-free"},{"key":"Gold","short":"Gold","cls":"gold","hb":true,"note":"4 mil metallic gold, bubble-free"}],"prices":{"White Vinyl":{"Flat":[4.65,null],"Spot Gloss UV":[5.05,null],"Standard Embossing":[5.4,null],"Pro":[5.75,null]},"Holographic":{"Flat":[5.3,6.8],"Spot Gloss UV":[5.95,7.45],"Standard Embossing":[6.55,8.05],"Pro":[7.2,8.7]},"Gold":{"Flat":[6.3,7.8],"Spot Gloss UV":[6.95,8.45],"Standard Embossing":[7.55,9.05],"Pro":[8.2,9.7]}},"fins":["Flat","Spot Gloss UV","Standard Embossing","Pro"]},{"name":"Tip Band","slug":"tip-band","section":"Tip Bands","size":"Tip band, 13 mm and under","shape":"band","w":2.4,"h":0.5,"cut":"Spot Gloss only, no emboss","unit":"band","mats":[{"key":"White Vinyl","short":"White","cls":"white","hb":false,"note":"6 mil premium white vinyl"},{"key":"Holographic","short":"Holo","cls":"holo","hb":false,"note":"6 mil rainbow holographic film"}],"prices":{"White Vinyl":{"Flat":[0.25,null],"Spot Gloss UV":[0.35,null]},"Holographic":{"Flat":[0.3,null],"Spot Gloss UV":[0.4,null]}},"fins":["Flat","Spot Gloss UV"]}],"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"breaks":[[500,5],[750,7],[1000,10]],"minq":5,"maxq":1000,"step":5,"minorder":50,"ladder":[50,100,500,750,1000],"lvl":{"Flat":0,"Spot Gloss UV":1,"Standard Embossing":2,"Pro":3}};
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var money=function(v){var f=v.toFixed(2).split('.');return '$'+(+f[0]).toLocaleString()+'.'+f[1];};
+  var fmt=function(n){return n.toLocaleString();};
+  function cmult(q){for(var i=0;i<D.bands.length;i++){if(q<=D.bands[i][0])return D.bands[i][1];}return D.bands[D.bands.length-1][1];}
+  function unitAt(pr,q){return Math.floor(pr*cmult(q)*100+0.5)/100;}   // same rounding as the app basket
+  function nextBreak(q){for(var i=0;i<D.breaks.length;i++){if(q<D.breaks[i][0])return {target:D.breaks[i][0],pct:D.breaks[i][1],add:D.breaks[i][0]-q};}return null;}
+  function toast(m){var t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('on');},1800);}
+  function cart(){try{return JSON.parse(localStorage.getItem('st_cart')||'[]')||[];}catch(e){return [];}}
+  function cartN(){var n=0;cart().forEach(function(i){n+=i.qty||0;});$('cartn').textContent=fmt(n);}
+  cartN();
+
+  // ---- art files live in IndexedDB (localStorage is too small); a thumbnail rides on the cart line ----
+  var dbp=null; function db(){ if(dbp) return dbp; dbp=new Promise(function(res,rej){ var r=indexedDB.open('st_art',1); r.onupgradeneeded=function(){ var d=r.result; if(!d.objectStoreNames.contains('files')) d.createObjectStore('files'); }; r.onsuccess=function(){res(r.result);}; r.onerror=function(){rej(r.error);}; }); return dbp; }
+  function artPut(k,f){ return db().then(function(d){ return new Promise(function(res,rej){ var q=d.transaction('files','readwrite').objectStore('files').put(f,k); q.onsuccess=function(){res(true);}; q.onerror=function(){rej(q.error);}; }); }); }
+  window.STArt={ get:function(k){ return db().then(function(d){ return new Promise(function(res,rej){ var q=d.transaction('files','readonly').objectStore('files').get(k); q.onsuccess=function(){res(q.result);}; q.onerror=function(){rej(q.error);}; }); }); } };
+
+  // ---- product from ?p= ----
+  var slug=new URLSearchParams(location.search).get('p')||'', p=null;
+  D.products.forEach(function(x){ if(x.slug===slug) p=x; });
+  if(!p){ $('cfg').classList.add('hidden'); $('picker').classList.remove('hidden'); $('ttl').textContent='Pick a product';
+    $('pick').innerHTML=D.products.map(function(x){ var w=x.prices['White Vinyl']||x.prices[Object.keys(x.prices)[0]]; var from=w&&w.Flat?w.Flat[0]:null; return '<a href="?p='+x.slug+'">'+esc(x.name)+'<small>'+esc(x.section)+(from!==null?' &middot; from '+money(from):'')+'</small></a>'; }).join('');
+    return; }
+  function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
+  document.title=p.name+' · Configure · The Sticky Trap';
+  $('ttl').textContent=p.name; $('psec').textContent=p.section; $('pname').textContent=p.name; $('pcut').textContent=p.cut; $('psize').textContent=p.size; $('unitlbl').textContent='per '+p.unit;
+
+  var cfg={mat:p.mats[0].key, fin:p.fins[0], hb:false}, qty=50, art=null, thumb=null, preflight=null;
+  var deals=[]; fetch('/data/promos.json?'+Date.now()).then(function(r){return r.json();}).then(function(j){ deals=(j&&j.deals)||[]; update(); }).catch(function(){});
+
+  // material
+  $('mats').innerHTML=p.mats.map(function(m){ return '<button type="button" class="opt'+(m.key===cfg.mat?' on':'')+'" data-m="'+esc(m.key)+'"><span class="sw '+m.cls+'"></span>'+esc(m.short)+'<small>'+esc(m.note)+'</small></button>'; }).join('');
+  $('mats').addEventListener('click',function(e){ var o=e.target.closest('.opt'); if(!o) return; cfg.mat=o.dataset.m; [].forEach.call($('mats').children,function(x){x.classList.toggle('on',x===o);}); if(!p.prices[cfg.mat][cfg.fin]){ cfg.fin=p.fins[0]; drawFins(); } hbRow(); update(); });
+  function hbRow(){ var m=null; p.mats.forEach(function(x){ if(x.key===cfg.mat) m=x; }); var can=!!(m&&m.hb&&p.prices[cfg.mat][cfg.fin]&&p.prices[cfg.mat][cfg.fin][1]!==null); $('hbrow').classList.toggle('hidden',!can); if(!can){ cfg.hb=false; $('hb').checked=false; } }
+  $('hb').addEventListener('change',function(){ cfg.hb=$('hb').checked; update(); });
+
+  // texture
+  var FN={'Flat':'Flat','Spot Gloss UV':'Spot Gloss','Standard Embossing':'Standard','Pro':'Pro'}, FD={'Flat':'full-color print, no texture','Spot Gloss UV':'1 layer, glossy raised accent','Standard Embossing':'2 layers, real texture','Pro':'3 layers, full dimensional emboss'};
+  function drawFins(){ var fins=p.fins.filter(function(f){ return !!p.prices[cfg.mat][f]; });
+    $('fins').innerHTML=fins.map(function(f){ var l=D.lvl[f]; return '<button type="button" class="opt'+(f===cfg.fin?' on':'')+'" data-f="'+esc(f)+'">'+(l?'<span class="lv">'+l+'</span>':'')+esc(FN[f]||f)+'<small>'+esc(FD[f]||'')+'</small></button>'; }).join('')
+      +(p.shape!=='band'?'<a class="opt quote" href="sms:+17344603845?&body='+encodeURIComponent('Hi, I want a deeper emboss (4+ layers) on '+p.name)+'" style="text-decoration:none"><span class="lv">4+</span>Deeper<small>custom quote</small></a>':''); }
+  drawFins();
+  $('fins').addEventListener('click',function(e){ var o=e.target.closest('button.opt'); if(!o) return; cfg.fin=o.dataset.f; [].forEach.call($('fins').children,function(x){x.classList.toggle('on',x===o);}); hbRow(); update(); });
+  hbRow();
+
+  // quantity
+  var Q=$('qty'); Q.min=D.minq; Q.max=D.maxq; Q.step=D.step; Q.value=qty;
+  function clampQ(q){ q=Math.round((+q||D.minq)/D.step)*D.step; return Math.max(D.minq,Math.min(D.maxq,q)); }
+  function setQ(q){ qty=clampQ(q); Q.value=qty; update(); }
+  Q.addEventListener('input',function(){ var v=+Q.value; if(v>=D.minq&&v<=D.maxq){ qty=clampQ(v); update(); } });
+  Q.addEventListener('blur',function(){ setQ(Q.value); });
+  $('qminus').addEventListener('click',function(){ setQ(qty-D.step); }); $('qplus').addEventListener('click',function(){ setQ(qty+D.step); });
+  $('breaks').innerHTML=D.ladder.map(function(b){ return '<button type="button" data-q="'+b+'">'+fmt(b)+'</button>'; }).join('')+'<a href="sms:+17344603845?&body='+encodeURIComponent('Hi, I need more than 1,000 '+p.name)+'">Over 1k? Talk to us</a>';
+  $('breaks').addEventListener('click',function(e){ var b=e.target.closest('button'); if(!b) return; setQ(+b.dataset.q); });
+  $('qhint').textContent='steps of '+D.step+', up to '+fmt(D.maxq);
+
+  // art + browser-side preflight (step 4 lite: dpi at size for raster, vector flagged for proof)
+  var drop=$('drop'), file=$('file');
+  drop.addEventListener('click',function(){ file.click(); });
+  ['dragenter','dragover'].forEach(function(ev){ drop.addEventListener(ev,function(e){ e.preventDefault(); drop.classList.add('has'); }); });
+  drop.addEventListener('dragleave',function(){ drop.classList.toggle('has',!!art); });
+  drop.addEventListener('drop',function(e){ e.preventDefault(); if(e.dataTransfer.files[0]) take(e.dataTransfer.files[0]); });
+  file.addEventListener('change',function(){ if(file.files[0]) take(file.files[0]); });
+  function take(f){ if(f.size>40*1024*1024){ toast('Over 40 MB - email that one to us'); return; }
+    art=f; thumb=null; preflight=null; drop.classList.add('has'); $('droptxt').textContent=f.name+' · '+(f.size/1024/1024).toFixed(1)+' MB';
+    if(/^image\/(png|jpe?g|webp)/.test(f.type)){ var r=new FileReader(); r.onload=function(){ var im=new Image(); im.onload=function(){
+        var dpi=Math.round(Math.min(im.width/p.w, im.height/p.h)); var ratio=im.width/im.height, want=p.w/p.h, off=Math.abs(ratio-want)/want;
+        var lvl=dpi<100?'bad':(dpi<200?'warn':'ok'); var msg=(lvl==='bad'?'Too small to print sharp: ':lvl==='warn'?'A bit soft at this size: ':'Sharp at this size: ')+im.width+' x '+im.height+' px = ~'+dpi+' dpi at '+p.size+(off>0.15?' · shape does not match the sticker, we will crop to fit':'');
+        preflight={dpi:dpi,level:lvl,w:im.width,h:im.height}; $('pre').className='pre '+lvl; $('pre').textContent=msg;
+        var k=Math.min(1,360/Math.max(im.width,im.height)), c=document.createElement('canvas'); c.width=Math.round(im.width*k); c.height=Math.round(im.height*k); c.getContext('2d').drawImage(im,0,0,c.width,c.height); thumb=c.toDataURL('image/png'); draw(); };
+      im.src=r.result; }; r.readAsDataURL(f); }
+    else if(/pdf|postscript|illustrator|svg/i.test(f.type)||/\.(pdf|ai|eps|svg)$/i.test(f.name)){ preflight={level:'ok',vector:true}; $('pre').className='pre ok'; $('pre').textContent='Vector file - checked at proof.'; draw(); }
+    else { $('pre').className='pre warn'; $('pre').textContent='We will look at this one at proof.'; draw(); } }
+
+  // preview: shape + material + art
+  function draw(){ var fillId=cfg.mat==='White Vinyl'?'fw':(cfg.mat==='Gold'?'fg':'fh');
+    var defs='<defs><linearGradient id="fh" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#12C4FF"/><stop offset=".4" stop-color="#8A2BE2"/><stop offset=".7" stop-color="#FF1FA2"/><stop offset="1" stop-color="#EAB84B"/></linearGradient><linearGradient id="fg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F6DA8A"/><stop offset=".45" stop-color="#EAB84B"/><stop offset="1" stop-color="#C9962E"/></linearGradient><linearGradient id="fw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#e9e9ee"/></linearGradient><clipPath id="cp">__CLIP__</clipPath></defs>';
+    var shape='', clip='', ax=20, ay=20, aw=160, ah=160;
+    if(p.shape==='square'){ shape='<rect x="20" y="20" width="160" height="160" rx="16"/>'; }
+    else if(p.shape==='rect'){ shape='<rect x="32" y="12" width="136" height="176" rx="10"/>'; ax=32;ay=12;aw=136;ah=176; }
+    else if(p.shape==='round'){ shape='<circle cx="100" cy="100" r="80"/>'; }
+    else if(p.shape==='wrap'||p.shape==='band'){ var h=p.shape==='band'?34:Math.round(160*Math.min(1,p.h/p.w)); var y=100-h/2; shape='<rect x="10" y="'+y+'" width="180" height="'+h+'" rx="'+(p.shape==='band'?17:8)+'"/>'; ax=10;ay=y;aw=180;ah=h; }
+    else { shape='<circle cx="100" cy="72" r="58"/><rect x="18" y="140" width="164" height="46" rx="8"/>'; ax=42;ay=14;aw=116;ah=116; }
+    clip=shape; var body=shape.replace(/\/>/g,' fill="url(#'+fillId+')" stroke="rgba(255,255,255,.25)" stroke-width="1.5"/>');
+    var artEl=thumb?'<image href="'+thumb+'" x="'+ax+'" y="'+ay+'" width="'+aw+'" height="'+ah+'" preserveAspectRatio="xMidYMid slice" clip-path="url(#cp)" opacity="0.96"/>':'<text x="100" y="'+(p.shape==='set'?76:(p.shape==='wrap'||p.shape==='band')?104:106)+'" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="900" font-size="'+(p.shape==='band'?13:18)+'" fill="'+(cfg.mat==='White Vinyl'?'#0A0A0F':'#000')+'" opacity=".55">YOUR ART</text>';
+    var tex=D.lvl[cfg.fin]?'<rect x="0" y="0" width="200" height="200" fill="none"/>':'';
+    $('preview').innerHTML='<svg viewBox="0 0 200 200" aria-hidden="true">'+defs.replace('__CLIP__',clip)+body+artEl+tex+'</svg>'; }
+
+  // price
+  function dealFor(q){ var today=new Date().toISOString().slice(0,10); for(var i=0;i<deals.length;i++){ var d=deals[i]; if(d.product!==p.name) continue; if(d.material&&d.material!==cfg.mat) continue; if(d.finish&&d.finish!==cfg.fin) continue; if(d.until&&d.until<today) continue; if(q>=(d.fromQty||0)) return d; } return null; }
+  function listPrice(){ var row=p.prices[cfg.mat][cfg.fin]; if(!row) return null; return (cfg.hb&&row[1]!==null)?row[1]:row[0]; }
+  function priceAt(q){ var pr=listPrice(); if(pr===null) return null; var u=unitAt(pr,q); var d=dealFor(q); if(d){ u=Math.ceil(u*(1-d.off)*100)/100; } return {unit:u, total:u*q, deal:d, list:pr}; }
+  function update(){ var r=priceAt(qty); if(!r){ $('unit').textContent='--'; return; }
+    $('unit').textContent=money(r.unit); $('tot').innerHTML=fmt(qty)+' &times; '+money(r.unit)+' = <b>'+money(r.total)+'</b> &middot; '+esc(cfg.mat)+(cfg.hb?' + HoloBrite':'')+' &middot; '+esc(FN[cfg.fin]||cfg.fin);
+    var nb=nextBreak(qty); if(nb){ var n=priceAt(nb.target); $('nudge').classList.remove('hidden'); $('nudge').innerHTML='Add <b>'+fmt(nb.add)+'</b> more: at '+fmt(nb.target)+' it&rsquo;s <b>'+money(n.unit)+'</b> each ('+nb.pct+'% off, '+money(n.total)+' total)'; } else { $('nudge').classList.add('hidden'); }
+    if(r.deal){ $('deal').classList.remove('hidden'); $('deal').innerHTML='<b>Running deal:</b> '+esc(r.deal.title||(Math.round(r.deal.off*100)+'% off from '+fmt(r.deal.fromQty)))+' &middot; '+money(r.unit)+' instead of '+money(unitAt(r.list,qty)); } else { $('deal').classList.add('hidden'); }
+    if(r.total<D.minorder){ $('minnote').classList.remove('hidden'); $('minnote').textContent='Orders are $'+D.minorder+' minimum - the basket tops this line up or add more.'; } else { $('minnote').classList.add('hidden'); }
+    $('ladder').innerHTML=D.ladder.map(function(b){ var x=priceAt(b); return '<tr'+(b===qty?' class="on"':'')+'><td>'+fmt(b)+(b===D.maxq?'':'+')+'</td><td>'+money(x.unit)+'</td></tr>'; }).join('');
+    draw(); }
+  update();
+
+  // add to basket: same line shape as the app's Menu basket ({k,p,m,f,pr,qty}); art thumb + notes ride along
+  $('add').addEventListener('click',function(){ var r=priceAt(qty); if(!r) return;
+    var f=cfg.fin+(cfg.hb?' + HoloBrite':''), k=p.name+'|'+cfg.mat+'|'+f, c=cart(), ex=null;
+    for(var i=0;i<c.length;i++){ if(c[i].k===k){ ex=c[i]; break; } }
+    var line=ex||{k:k,p:p.name,m:cfg.mat,f:f,pr:r.list,qty:0}; line.pr=r.list; line.qty=Math.min(D.maxq,(ex?ex.qty:0)+qty);
+    if(r.deal){ line.deal={id:r.deal.id||'',off:r.deal.off,fromQty:r.deal.fromQty||0}; }
+    var notes=$('notes').value.trim(); if(notes) line.notes=notes;
+    var done=function(){ if(!ex) c.push(line); try{ localStorage.setItem('st_cart',JSON.stringify(c)); }catch(e){} cartN(); toast(fmt(qty)+' x '+p.name+' added'); try{ window.track&&window.track('add_basket',p.name+' · '+cfg.mat+' · '+f+' · configure'); }catch(e){} };
+    if(art){ line.art={name:art.name,size:art.size,thumb:thumb||'',pre:preflight||null,key:k}; artPut(k,art).then(done).catch(function(){ line.art.reupload=true; done(); }); } else done(); });
+})();
+</script>
+</body></html>
