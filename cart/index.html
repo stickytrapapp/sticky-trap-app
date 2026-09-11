@@ -30,6 +30,13 @@ input,textarea{width:100%;padding:11px;border-radius:10px;border:1px solid var(-
 .empty{text-align:center;padding:30px 10px;color:var(--muted)}.empty a{display:inline-block;margin-top:12px;padding:11px 20px;border-radius:24px;background:var(--grad);color:#000;font-weight:900;text-decoration:none}
 .done h2{margin:0 0 6px;font-size:24px}.done .code{font-size:30px;font-weight:900;letter-spacing:.04em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .done ol{padding-left:20px;color:var(--muted);font-size:13.5px;line-height:1.6}.done a.btn{display:inline-block;margin-top:10px;padding:12px 20px;border-radius:24px;background:var(--grad);color:#000;font-weight:900;text-decoration:none}
+.pay{margin-top:14px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.pay .k{margin-top:0}
+#card{min-height:46px;margin-top:6px}
+.pay .tax{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:12.5px;color:var(--muted);cursor:pointer}.pay .tax input{width:auto;accent-color:var(--cy);margin:0}
+.pay .ct{display:flex;justify-content:space-between;margin-top:10px;font-size:14px;font-weight:900}.pay .ct span:last-child{font-variant-numeric:tabular-nums}
+.pay .ctn{font-size:11.5px;color:var(--muted);margin-top:4px;line-height:1.45}
+.pay .off{font-size:12.5px;color:var(--muted)}
 .hidden{display:none}
 </style></head>
 <body>
@@ -43,7 +50,7 @@ input,textarea{width:100%;padding:11px;border-radius:10px;border:1px solid var(-
       <div class="card">
         <div class="k">Summary</div>
         <div class="sum"><div class="r"><span>Subtotal</span><span id="sub">$0.00</span></div><div class="r" id="minrow" style="display:none"><span>$50 minimum order</span><span id="minadd"></span></div><div class="r"><span>Sales tax + shipping</span><span style="color:var(--muted)">on the invoice</span></div><div class="r tot"><span>Order total</span><span id="tot">$0.00</span></div></div>
-        <p class="note">MI 6% sales tax where it applies, shipping only if shipped. <b style="color:var(--paper)">Nothing is charged now.</b> We proof first; you approve, then pay.</p>
+        <p class="note" id="paynote">MI 6% sales tax where it applies, shipping only if shipped. <b style="color:var(--paper)">Your card is authorized now and charged only when you approve the proof.</b></p>
         <div class="k">Who is this for</div>
         <div class="row"><input id="name" placeholder="Your name" autocomplete="name"><input id="company" placeholder="Company / brand" autocomplete="organization"></div>
         <div class="row"><input id="email" type="email" placeholder="Email (gets the updates)" autocomplete="email"><input id="phone" type="tel" placeholder="Phone" autocomplete="tel"></div>
@@ -51,6 +58,14 @@ input,textarea{width:100%;padding:11px;border-radius:10px;border:1px solid var(-
         <div class="row one hidden" id="addrrow"><textarea id="addr" placeholder="Ship-to address"></textarea></div>
         <div class="row one"><input id="due" placeholder="When do you need it? (e.g. Sep 25, or 'no rush')"></div>
         <div class="row one"><textarea id="notes" placeholder="Anything else - strain names, what should pop, reference links"></textarea></div>
+        <div class="pay" id="pay">
+          <div class="k">Card</div>
+          <div id="card"></div>
+          <div class="off hidden" id="payoff">Card payments are being set up &mdash; place the order and we invoice you after the proof.</div>
+          <label class="tax"><input type="checkbox" id="taxex"> Tax-exempt (resale / license on file &mdash; we verify at proof)</label>
+          <div class="ct"><span>Authorized on your card</span><span id="cardtot">$0.00</span></div>
+          <div class="ctn" id="cardnote"></div>
+        </div>
         <button class="go" id="go" type="button">Place order &rarr;</button>
         <div class="st" id="st"></div>
         <p class="note">You get a tracker link by email. We proof every order before anything prints; pre-press is assessed per design once we see your art.</p>
@@ -87,7 +102,7 @@ var D={"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"breaks":[[500,5],[7
         '<div class="q"><button type="button" data-d="-1">&minus;</button><input type="number" value="'+l.qty+'" min="'+D.minq+'" max="'+D.maxq+'" step="'+D.step+'"><button type="button" data-d="1">+</button><span class="u">&times; '+money(u)+'</span></div></div>'+
         '<div class="rt"><b>'+money(u*l.qty)+'</b><button class="rm" type="button">Remove</button></div></div>'; }).join('');
     var s=sub(), t=total(); $('sub').textContent=money(s); $('tot').textContent=money(t);
-    if(s<D.minorder){ $('minrow').style.display='flex'; $('minadd').textContent='+ '+money(D.minorder-s); } else { $('minrow').style.display='none'; } }
+    if(s<D.minorder){ $('minrow').style.display='flex'; $('minadd').textContent='+ '+money(D.minorder-s); } else { $('minrow').style.display='none'; } if(typeof renderCard==='function') renderCard(); }
   $('lines').addEventListener('click',function(e){ var ln=e.target.closest('.line'); if(!ln) return; var i=+ln.dataset.i, l=cart[i];
     if(e.target.classList.contains('rm')){ cart.splice(i,1); save(); render(); return; }
     var b=e.target.closest('button[data-d]'); if(b){ l.qty=clampQ(l.qty+(+b.dataset.d)*D.step); save(); render(); } });
@@ -95,10 +110,30 @@ var D={"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"breaks":[[500,5],[7
   render();
 
   // customer block remembered per device
+  // ---- Square Web Payments (step 3): public config from /data/square.json; no appId = card block off, order still places ----
+  var SQ=null, card=null, payments=null, sqReady=false, REAUTH=null;
+  var qs=new URLSearchParams(location.search); if(qs.get('reauth')&&qs.get('t')){ REAUTH={code:qs.get('reauth'),token:qs.get('t')}; }
+  function cardTotal(){ if(!SQ) return null; var base=total(); if(REAUTH&&REAUTH.total) base=REAUTH.total; var tax=$('taxex').checked?0:Math.round(base*(SQ.taxRate||0)*100)/100; var shipc=ship==='ship'?(SQ.shipEstimate||0):0; var pre=base+tax+shipc; var ct=Math.round(((pre+(SQ.feeFlat||0))/(SQ.feeDivisor||1))*100)/100; return {base:base,tax:tax,ship:shipc,card:ct}; }
+  function renderCard(){ if(!SQ||!SQ.appId) return; var c=cardTotal(); if(!c) return; $('cardtot').textContent=money(c.card);
+    $('cardnote').textContent='Order '+money(c.base)+($('taxex').checked?' + no tax (exempt)':' + MI tax '+money(c.tax))+(c.ship?' + shipping est. '+money(c.ship):'')+' + card processing. Shipping settles on the invoice; anything under the hold is released.'; }
+  function payOff(){ $('payoff').classList.remove('hidden'); $('card').classList.add('hidden'); $('taxex').parentNode.classList.add('hidden'); $('cardtot').parentNode.classList.add('hidden'); $('cardnote').classList.add('hidden');
+    $('paynote').innerHTML='MI 6% sales tax where it applies, shipping only if shipped. <b style="color:var(--paper)">Nothing is charged now.</b> We proof first; you approve, then pay.'; }
+  fetch('/data/square.json?'+Date.now()).then(function(r){return r.json();}).then(function(j){ SQ=j||{}; if(!SQ.appId){ payOff(); return; }
+    var sc=document.createElement('script'); sc.src=(SQ.env==='production'?'https://web.squarecdn.com/v1/square.js':'https://sandbox.web.squarecdn.com/v1/square.js');
+    sc.onload=function(){ try{ payments=window.Square.payments(SQ.appId, SQ.locationId); payments.card({style:{input:{color:'#fff',backgroundColor:'#0e0e0e'},'input::placeholder':{color:'#9d97b0'},'.input-container':{borderColor:'#262626',borderRadius:'10px'},'.input-container.is-focus':{borderColor:'#12C4FF'}}}).then(function(c){ card=c; return card.attach('#card'); }).then(function(){ sqReady=true; renderCard(); }).catch(function(e){ $('card').textContent='Card form could not load - '+(e&&e.message||'try again'); }); }catch(e){ $('card').textContent='Card form could not load.'; } };
+    sc.onerror=function(){ $('card').textContent='Card form could not load (offline?).'; };
+    document.head.appendChild(sc); renderCard(); }).catch(function(){ payOff(); });
+  $('taxex').addEventListener('change',renderCard);
+  function tokenize(){ if(!SQ||!SQ.appId) return Promise.resolve(null); if(!sqReady||!card) return Promise.reject(new Error('The card form is still loading - give it a second.'));
+    var c=cardTotal(); return card.tokenize().then(function(r){ if(r.status!=='OK'){ var m=(r.errors&&r.errors[0]&&r.errors[0].message)||'Card not accepted'; throw new Error(m); }
+      var nm=$('name').value.trim().split(' '); var det={ amount:String(c.card.toFixed(2)), currencyCode:'USD', intent:'CHARGE', billingContact:{ givenName:nm[0]||'', familyName:nm.slice(1).join(' ')||'', email:$('email').value.trim(), phone:$('phone').value.trim() } };
+      var pay=function(v){ return {sourceId:r.token, verificationToken:v||'', amount:Math.round(c.card*100), base:c.base, tax:c.tax, ship:c.ship, taxExempt:$('taxex').checked}; };
+      return payments.verifyBuyer(r.token, det).then(function(v){ return pay(v&&v.token); }).catch(function(){ return pay(''); }); }); }
+
   var C={}; try{ C=JSON.parse(localStorage.getItem('st_customer')||'{}')||{}; }catch(e){}
   ['name','company','email','phone','addr'].forEach(function(k){ if(C[k]) $(k).value=C[k]; });
   var ship=C.ship||'pickup'; function setShip(v){ ship=v; [].forEach.call($('ship').children,function(b){ b.classList.toggle('on',b.dataset.v===v); }); $('addrrow').classList.toggle('hidden',v!=='ship'); }
-  setShip(ship); $('ship').addEventListener('click',function(e){ var b=e.target.closest('button'); if(b) setShip(b.dataset.v); });
+  setShip(ship); $('ship').addEventListener('click',function(e){ var b=e.target.closest('button'); if(b){ setShip(b.dataset.v); renderCard(); } });
   function remember(){ var o={ship:ship}; ['name','company','email','phone','addr'].forEach(function(k){ o[k]=$(k).value.trim(); }); try{ localStorage.setItem('st_customer',JSON.stringify(o)); }catch(e){} }
 
   function status(m,c){ $('st').className='st '+(c||''); $('st').textContent=m; }
@@ -111,15 +146,21 @@ var D={"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"breaks":[[500,5],[7
     if(!name){ status('Add your name.','err'); return; }
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ status('Add your email - the tracker link goes there.','err'); return; }
     if(ship==='ship'&&!$('addr').value.trim()){ status('Add the ship-to address, or pick up in Ann Arbor.','err'); return; }
-    remember(); $('go').disabled=true; status('Placing your order...','');
+    remember(); $('go').disabled=true; status(SQ&&SQ.appId?'Checking your card...':'Placing your order...','');
+    tokenize().then(function(payment){ status('Placing your order...',''); placeOrder(payment); }).catch(function(e){ status(String(e&&e.message||e),'err'); $('go').disabled=false; });
+  });
+  function placeOrder(payment){
+    var email=$('email').value.trim(), name=$('name').value.trim();
     var items=cart.map(function(l){ return fmt(l.qty)+'x '+l.p+' - '+l.m+' / '+l.f+' @ '+money(unit(l)); }).join(' | ').slice(0,400);
     var due=$('due').value.trim().slice(0,40), notes=$('notes').value.trim();
     var lines=cart.map(function(l){ return {p:l.p,m:l.m,f:l.f,qty:l.qty,pr:l.pr,unit:unit(l),total:Math.round(unit(l)*l.qty*100)/100,notes:l.notes||'',art:l.art?l.art.name:''}; });
     var body={ action:'order_new', name:name, company:$('company').value.trim(), email:email, phone:$('phone').value.trim(), items:items, due:due, source:'cart', stage:'received',
-               lines:lines, subtotal:Math.round(sub()*100)/100, total:Math.round(total()*100)/100, ship:ship, address:ship==='ship'?$('addr').value.trim():'', notes:notes };
+               lines:lines, subtotal:Math.round(sub()*100)/100, total:Math.round(total()*100)/100, ship:ship, address:ship==='ship'?$('addr').value.trim():'', notes:notes, payment:payment||null };
+    if(REAUTH){ body={ action:'reauth', code:REAUTH.code, token:REAUTH.token, payment:payment }; }
     fetch(D.api,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)}).then(function(r){ return r.json(); }).then(function(j){
-      if(!j||!j.ok){ var e=(j&&j.error)||'error'; status(e==='rate_limited'?'Too many orders from this email in an hour - text us at 734 460 3845 and we will take it by hand.':(e==='price_mismatch'?'Prices moved while you were browsing - reload the basket and try again.':'Could not place the order ('+e+'). Text us at 734 460 3845.'),'err'); $('go').disabled=false; return; }
-      var code=j.code, url=j.url||'';
+      if(!j||!j.ok){ var e=(j&&j.error)||'error'; status(e==='card_declined'?'Your card was declined - try another card.':e==='payment_failed'?'The card could not be authorized ('+((j&&j.detail)||'')+'). Try again or text us.':e==='rate_limited'?'Too many orders from this email in an hour - text us at 734 460 3845 and we will take it by hand.':(e==='price_mismatch'?'Prices moved while you were browsing - reload the basket and try again.':'Could not place the order ('+e+'). Text us at 734 460 3845.'),'err'); $('go').disabled=false; return; }
+      var code=j.code||(REAUTH&&REAUTH.code), url=j.url||'';
+      if(REAUTH){ $('main').classList.add('hidden'); $('done').innerHTML='<h2>Card re-authorized</h2><div class="code">'+esc(code)+'</div><p class="note" style="font-size:13.5px;color:var(--paper)">Thanks - approving your proof charges this card.</p>'+(url?'<a class="btn" href="'+esc(url)+'">Back to your tracker &rarr;</a>':''); $('done').classList.remove('hidden'); return; }
       status('Order '+code+' placed. Sending your art...','');
       Promise.all(cart.map(function(l){ return l.art?artGet(l.art.key||l.k).then(function(f){ return f?readB64(f).then(function(b64){ return {name:l.art.name||f.name,mime:f.type||'application/octet-stream',b64:b64,size:f.size||0}; }):null; }):Promise.resolve(null); })).then(function(files){
         files=files.filter(Boolean); var mb=files.reduce(function(s,f){ return s+(f.size||0); },0)/1048576; var tooBig=mb>D.maxmb; if(tooBig) files=[];
@@ -133,12 +174,19 @@ var D={"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"breaks":[[500,5],[7
         $('main').classList.add('hidden');
         $('done').innerHTML='<h2>Order placed</h2><div class="code">'+esc(code)+'</div><p class="note" style="font-size:13.5px;color:var(--paper)">Confirmation and your tracker link are on their way to <b>'+esc(email)+'</b>.</p>'+
           (tooBig?'<p class="note warn">Your art was over '+D.maxmb+' MB, so it did not upload. Email it to <a href="mailto:thestickytrap@gmail.com?subject=Art%20for%20order%20'+encodeURIComponent(code)+'">thestickytrap@gmail.com</a> with the order code.</p>':'')+
-          '<ol><li>We check your art and build the proof.</li><li>You approve the proof from your tracker link (or ask for changes).</li><li>You pay, we print, you pick up or we ship.</li></ol>'+
+          '<ol><li>We check your art and build the proof.</li><li>You approve the proof from your tracker link (or ask for changes).</li><li>'+(payment?'Your card is charged on approval, then we print':'You pay, we print')+', you pick up or we ship.</li></ol>'+
           (url?'<a class="btn" href="'+esc(url)+'">Open your tracker &rarr;</a> ':'')+'<a class="btn" style="background:var(--panel-2);color:var(--paper);border:1px solid var(--line)" href="/#menu">Back to the menu</a>';
         $('done').classList.remove('hidden'); window.scrollTo(0,0);
       });
     }).catch(function(){ status('Could not reach the order desk. Try again, or text 734 460 3845.','err'); $('go').disabled=false; });
-  });
+  }
+
+  // re-auth mode: the tracker sent the customer here after a hold expired; the order's lines/total load, only the card step runs
+  if(REAUTH){ $('main').classList.remove('hidden'); $('empty').classList.add('hidden'); $('lines').innerHTML='<div class="note">Loading your order...</div>';
+    fetch(D.api+'?action=track&o='+encodeURIComponent(REAUTH.code)+'&t='+encodeURIComponent(REAUTH.token)+'&e=&_='+Date.now()).then(function(r){return r.json();}).then(function(j){
+      if(!j||!j.ok){ $('lines').innerHTML='<div class="note warn">Could not load that order. Open your tracker link and try again.</div>'; return; }
+      REAUTH.total=+j.total||0; $('lines').innerHTML='<div class="note" style="color:var(--paper)">Order <b>'+esc(REAUTH.code)+'</b> &middot; '+esc(j.items||'')+'</div>'; $('sub').textContent=money(REAUTH.total); $('tot').textContent=money(REAUTH.total); $('minrow').style.display='none';
+      if(j.name) $('name').value=j.name; if(j.email) $('email').value=j.email; $('go').textContent='Re-authorize card \u2192'; renderCard(); }).catch(function(){}); }
 })();
 </script>
 </body></html>
