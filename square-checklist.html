@@ -64,6 +64,11 @@ input:checked ~ .txt{color:var(--ink-faint);text-decoration:line-through}
 .formula .unit{font-family:"JetBrains Mono",monospace;font-size:14px;font-weight:700;color:var(--ink-soft)}
 .calc-row.hours-row{margin-bottom:12px}
 .calc-in input#hours,.calc-in input#rate{width:4ch}
+.stmt{margin-top:14px;background:var(--accent-soft);border-radius:12px;padding:16px 20px}
+.stmt .lbl{font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:10px}
+.stmt p{margin:0;font-size:15px;line-height:1.5;color:var(--ink)}
+.copy{margin-top:12px;font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:700;color:#fff;background:var(--accent);border:none;border-radius:8px;padding:8px 14px;cursor:pointer}
+.copy:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .note{margin:16px 2px 0;font-size:13.5px;color:var(--ink-soft);line-height:1.45}
 .note b{color:var(--ink);font-weight:600}
 .note.send{margin-top:16px;padding-top:14px;border-top:1px solid var(--hair);color:var(--ink)}
@@ -105,6 +110,14 @@ footer{margin-top:26px;font-family:"JetBrains Mono",monospace;font-size:11px;let
     <p class="ex">Hours × rate = your price. Charge = ( price + $0.30 ) ÷ 0.968 — covers Square's fee so you net the full price.</p>
   </div>
 
+
+  <div class="stmt">
+    <span class="lbl">Design statement — paste into the invoice note</span>
+    <p id="stmt">This design invoice is a proposal. It's our best estimate of the hours the job will take. If the work needs more time than quoted, we'll tell you in writing and get your OK before we start on it. Any quoted time we don't use gets credited toward your print order.</p>
+    <button class="copy" id="copy" type="button">Copy statement</button>
+  </div>
+  <p class="note">Every design invoice carries that statement. It sets the job up as a proposal: more time gets quoted in writing first, unused time rolls into their print order. No surprises either way.</p>
+
   <p class="note">Tax-exempt customer? They need a signed <b>Michigan&nbsp;3372</b> on file — the blank is in the Team Files folder.</p>
   <p class="note">Square auto-adding tax to an exempt sale? Click the item you're selling, scroll to the bottom of the window, and <b>uncheck the tax</b>.</p>
 
@@ -112,7 +125,7 @@ footer{margin-top:26px;font-family:"JetBrains Mono",monospace;font-size:11px;let
 
   <div class="done" id="done">✓ Got everything — ready to send.</div>
 
-  <footer>Square Send Checklist · v3</footer>
+  <footer>Square Send Checklist · v5</footer>
 </div>
 
 <script>
@@ -123,9 +136,11 @@ const ITEMS = [
   "Invoice title",
   "Invoice ID",
   "Date",
+  "Due date — when the client needs it in hand (pick up or by mail); put it in the note",
   "A note explaining the goods / services",
+  "Design invoice? Paste the design statement (below) into the note",
 ];
-const KEY = "st-square-checklist-v2";
+const KEY = "st-square-checklist-v4";
 let saved = {}; try { saved = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch(e){}
 
 const list = document.getElementById("list");
@@ -163,4 +178,9 @@ function calcHours(){ const h=parseFloat(hours.value), r=parseFloat(rate.value);
 hours.addEventListener("input", calcHours);
 rate.addEventListener("input", calcHours);
 price.addEventListener("input", calc);
+document.getElementById("copy").addEventListener("click", async e=>{
+  try{ await navigator.clipboard.writeText(document.getElementById("stmt").textContent); e.target.textContent="Copied ✓"; }
+  catch(err){ e.target.textContent="Select & copy the text above"; }
+  setTimeout(()=>e.target.textContent="Copy statement",1800);
+});
 </script>
