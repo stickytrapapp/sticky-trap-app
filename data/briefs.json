@@ -1,64 +1,64 @@
 {
-  "updated": "2026-09-11",
+  "updated": "2026-09-12",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-09-11",
-      "title": "Tax Politics Turn in Cannabis's Favor as Rescheduling and Psychedelics Momentum Build Nationally",
+      "date": "2026-09-12",
       "label": "Morning Brief",
-      "top": "Michigan's 24% wholesale tax just became a genuine campaign issue, with a major-party nominee courting operators on repeal, while nationally the DEA's Schedule III process and Compass Pathways' fast-tracked psilocybin therapy are moving from promise to paperwork. Operators who adapt supply-chain terms and watch the courts have real upside on both fronts this fall.",
+      "title": "Tax-Relief Momentum Builds in Lansing While Rescheduling Survives Its First Court Test",
+      "top": "In Michigan, GOP nominee John James is courting cannabis donors with a pledge to gut the 24% wholesale tax just as new data shows the levy badly missing revenue targets — giving repeal advocates fresh ammunition heading into November. Nationally, a federal appeals court just upheld marijuana's Schedule III reclassification, Curaleaf's takeover bid for Aurora is reshaping the MSO landscape, and psychedelic medicine keeps racking up regulatory wins.",
       "local": [
         {
-          "text": "Republican gubernatorial nominee John James is actively courting Michigan's cannabis industry with a pledge to gut the 24% wholesale tax, and operators are responding with cash and support as the industry looks for a political off-ramp from its heaviest tax burden yet.",
-          "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/news/republican-gubernatorial-candidate-courts-michigan-cannabis-industry-vows-to-kill-new-24-mj-tax/618038"
+          "text": "Republican gubernatorial nominee John James is promising to repeal or sharply cut Michigan's 24% wholesale cannabis tax, a pledge that's already got industry donors opening their wallets for his campaign even without a replacement plan for road funding.",
+          "source": "Hoodline",
+          "url": "https://hoodline.com/2026/09/john-james-woos-michigan-weed-donors-with-vow-to-kill-24-pot-tax/"
         },
         {
-          "text": "Not every operator is retreating: Rize, which runs three Upper Michigan locations, has kept growing by negotiating cost-sharing arrangements with suppliers to split the wholesale tax burden rather than absorb it alone, even as rival chain Higher Love closed five of its nine U.P. stores.",
+          "text": "Product innovation is paying off for operators: Michigan cannabis beverage sales hit $2.1 million in July, up 27.2% year-over-year — the fastest-growing category in the state — led by brands like Mary Jones, Keef Cola and CQ.",
+          "source": "Headset",
+          "url": "https://www.headset.io/markets/michigan"
+        },
+        {
+          "text": "Hospitality-driven retail is still expanding despite the tax squeeze — Fields Cannary's Muskegon dispensary-restaurant buildout is moving forward toward a fall opening, a bet that experience-led cannabis retail can outrun the margin crunch.",
           "source": "Cann.dev",
           "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
         },
         {
-          "text": "After a brutal January, Michigan's market found its footing — sales climbed back to $255.4 million in March and held steady near $253.5 million through June, evidence that pass-through, not collapse, is defining the tax's real-world impact.",
-          "source": "Headset",
-          "url": "https://www.headset.io/blog/michigans-24-wholesale-tax-what-the-data-shows-july-2026-update"
-        },
-        {
-          "text": "The industry's two-front legal challenge to the wholesale tax is now heading toward trial, with the first lawsuit proceeding toward a September 2026 court date that could determine whether the tax shrinks, disappears, or triggers refunds for operators statewide.",
+          "text": "Jars Cannabis, a 54-store chain spanning Michigan, Arizona and Colorado, reached an agreement with Madison Heights to remove a surveillance camera required under a prior licensing settlement — a small but real compliance win for operators negotiating with skeptical municipalities.",
           "source": "Cann.dev",
-          "url": "https://www.cann.dev/michigan-cannabis-retail-april-2026/"
+          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
         },
         {
-          "text": "A Sixth Circuit panel wiped out a $31.8 million jury award to Michigan grower Hello Farms, ruling the underlying contract was federally illegal — a reminder that until rescheduling fully lands, interstate cannabis deals still carry outsized legal risk for operators.",
-          "source": "The Marijuana Herald",
-          "url": "https://themarijuanaherald.com/2026/09/daily-cannabis-news-brief-for-9-10-2026/"
+          "text": "The wholesale tax is badly missing its own projections — about $37 million in Q2 and $34 million in Q1 against an initial $105 million-per-quarter estimate — handing the Michigan Cannabis Industry Association's ongoing Court of Appeals challenge and the broader repeal push real momentum.",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-090826/"
         }
       ],
       "national": [
         {
-          "text": "DEA's expedited Schedule III rescheduling hearings wrapped in mid-July, and the agency has already opened a fast-track federal registration pathway letting state-licensed medical operators use their existing state credentials as conclusive proof of authorization — a live opportunity for operators to start cutting 280E exposure now.",
-          "source": "DEA.gov",
-          "url": "https://www.dea.gov/marijuana-rescheduling-regulatory-actions"
+          "text": "A legal challenge to marijuana's Schedule III reclassification was rebuffed this week: on Sept. 9 the D.C. Circuit left the medical marijuana rescheduling order fully in effect, rejecting arguments from anti-rescheduling forces.",
+          "source": "Cannabis Business Times",
+          "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order"
         },
         {
-          "text": "Compass Pathways' synthetic psilocybin treatment COMP360 is riding an FDA Commissioner's National Priority Voucher and rolling NDA review toward a Q4 2026 submission, with commercial launch readiness targeted for the end of the year — the clearest sign yet that a psychedelic medicine could reach patients on an accelerated federal timeline.",
-          "source": "Compass Pathways / Journey Clinical",
-          "url": "https://ir.compasspathways.com/News--Events-/news/news-details/2026/Compass-Pathways-Announces-FDA-Granted-NDA-Rolling-Review-Request-and-Awarded-Commissioners-National-Priority-Voucher/default.aspx"
-        },
-        {
-          "text": "Consolidation is paying off for the majors: Vireo Growth posted Q2 GAAP revenue up 335% year-over-year on the back of the Hawthorne, Eaze and Bridgewell acquisitions and is now absorbing FLUENT, C21 and Planet 13, while Trulieve completed a restructuring to list on the NYSE under ticker TRLV.",
+          "text": "Consolidation is accelerating: Curaleaf's takeover bid for Aurora Cannabis, launched Aug. 10 and formally commenced Aug. 18, would create a combined platform with pro forma revenue exceeding $1.5 billion — a clear signal MSOs are thinking bigger and more global.",
           "source": "Cann.dev",
-          "url": "https://www.cann.dev/florida-cannabis-retail-september-2026/"
+          "url": "https://www.cann.dev/cannabis-ma-august-2026-curaleaf-vireo-consolidation/"
         },
         {
-          "text": "Red White & Bloom Brands just closed a transaction establishing operations in Germany and the U.K., inheriting a European platform that dispensed or distributed more than twelve tonnes of medical cannabis in the past year — a sign North American operators are still finding fresh growth abroad even as the domestic market matures.",
-          "source": "GlobeNewswire",
-          "url": "https://www.globenewswire.com/news-release/2026/09/11/3360310/0/en/red-white-bloom-brands-expands-into-europe-with-strategic-cannabis-transaction.html"
+          "text": "The FDA is holding a public hearing Sept. 14 on the future therapeutic use of psychedelic drugs, the latest step in a regulatory push that's already put psilocybin and methylone on an accelerated approval track.",
+          "source": "Federal Register",
+          "url": "https://www.federalregister.gov/documents/2026/07/14/2026-14155/considerations-for-potential-future-therapeutic-use-of-psychedelic-drugs-public-hearing-request-for"
         },
         {
-          "text": "State governments collected $986.8 million in marijuana tax revenue in Q2 2026, up roughly 11% year-over-year and nearly 16% higher than Q1 — solid demand growth, though a companion industry survey found only 5% of cannabis businesses call commercial credit readily available, underscoring why 73% of respondents are banking on rescheduling to change their operations.",
-          "source": "The Marijuana Herald",
-          "url": "https://themarijuanaherald.com/2026/09/daily-cannabis-news-brief-for-9-10-2026/"
+          "text": "Compass Pathways just named the recipients of its U.S. grant program to train healthcare providers on delivering COMP360 psilocybin therapy, building the workforce infrastructure needed ahead of a potential first-ever FDA approval of a classic psychedelic.",
+          "source": "BiopharmaWatch",
+          "url": "https://www.biopharmawatch.com/news/CMPS/compass-pathways-grant-program-psychedelic-training"
+        },
+        {
+          "text": "Operators dodged a bullet on hemp: the federal ban on hemp THC products, originally set for Nov. 12, has been pushed back to Dec. 11 under a bill President Trump signed last week, buying the industry more runway.",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-090826/"
         }
       ]
     }
