@@ -1,64 +1,64 @@
 {
-  "updated": "2026-09-12",
+  "updated": "2026-09-13",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-09-12",
+      "date": "2026-09-13",
       "label": "Morning Brief",
-      "title": "Repeal Momentum Builds in Lansing While D.C. Circuit Backs Rescheduling and Psilocybin Nears the Finish Line",
-      "top": "Michigan's 24% wholesale tax is under real political pressure as a bipartisan repeal push gains steam, even as new stores and product rollouts show operators still finding growth. Nationally, a federal appeals court just upheld medical marijuana's move to Schedule III and Compass Pathways' psilocybin program keeps clearing regulatory hurdles toward a 2027 launch.",
+      "title": "Tax-Relief Politics Heat Up in Lansing as Psychedelics Hit the FDA's Main Stage",
+      "top": "Michigan operators just got real political cover: GOP governor nominee John James is staking his campaign on killing the 24% wholesale tax, and a bipartisan repeal bill is already sitting in the Legislature. Nationally, psychedelics take center stage this week as the FDA holds its first-ever public hearing on therapeutic use while Compass Pathways edges toward what could be the first approved psilocybin medicine.",
       "local": [
         {
-          "text": "U.S. Senate candidate John James is now publicly backing repeal of Michigan's 24% wholesale marijuana tax, giving the relief push new political weight as lawmakers from both parties line up behind it.",
+          "text": "GOP governor nominee John James is courting Michigan cannabis donors with a pledge to repeal or sharply reduce the state's 24% wholesale tax — a signal operators finally have a serious ally in Lansing's biggest race, with a JARS Cannabis-hosted fundraiser alone netting his campaign nearly $90,000.",
+          "source": "Hoodline",
+          "url": "https://hoodline.com/2026/09/john-james-woos-michigan-weed-donors-with-vow-to-kill-24-pot-tax/"
+        },
+        {
+          "text": "A Republican state rep has introduced HB 6224 to repeal the tax outright, and lawmakers from both parties are now backing repeal proposals, arguing the levy has generated less revenue than promised while piling pressure on licensed operators.",
           "source": "WJR-AM",
           "url": "https://www.wjr.com/2026/09/10/debate-grows-over-michigans-24-marijuana-tax/"
         },
         {
-          "text": "A Republican state representative has introduced House Bill 6224 to fully repeal the wholesale tax, calling it an unnecessary burden — real legislative traction operators can point to.",
+          "text": "Muskegon's Fields Cannary is pushing the retail format forward, targeting a fall opening for a dispensary paired with a full-service restaurant — a hospitality-first buildout that goes further than most Michigan stores have dared.",
           "source": "Cann.dev",
           "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
         },
         {
-          "text": "The tax is also undercutting its own case for survival: it generated roughly $37 million in Q2 and $34 million in Q1, far below the $105 million-per-quarter projection — ammunition repeal advocates are using in Lansing.",
-          "source": "Gander Newsroom (MichiGanja Report)",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-090826/"
+          "text": "JARS Cannabis notched a regulatory win in Madison Heights, getting a Flock license-plate camera removed near one of its stores — a small but real sign operators can push back on surveillance overreach.",
+          "source": "Cann.dev",
+          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
         },
         {
-          "text": "Grön's bestselling \"Pearls\" gummies just landed on Michigan shelves as part of a four-state rollout, already confirmed at Pure Options, High Profile, and Lume — a sign brands still see Michigan as worth chasing.",
-          "source": "Gander Newsroom (MichiGanja Report)",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-090826/"
-        },
-        {
-          "text": "A new dispensary, Blue Sky Cannabis Co., soft-opened in downtown Ann Arbor next to Spores Cafe — fresh proof that new retail concepts are still launching in the market despite the tax headwinds.",
-          "source": "Gander Newsroom (MichiGanja Report)",
-          "url": "https://gandernewsroom.com/news/cannabis/8-quick-hits-of-cannabis-news-from-across-michigan-17/"
+          "text": "Higher Love closed five of its nine Upper Peninsula stores under the weight of the wholesale tax, but crosstown operator Rize is proving there's a playbook: negotiating cost-sharing arrangements with suppliers to split the tax burden and keep growing.",
+          "source": "Cann.dev",
+          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
         }
       ],
       "national": [
         {
-          "text": "The D.C. Circuit just handed rescheduling backers a win: on Sept. 9 the court left the medical marijuana Schedule III order in effect, rejecting arguments that opponents had shown they'd be harmed by the change.",
+          "text": "The FDA holds its first-ever public hearing tomorrow, Sept. 14, on the potential future therapeutic use of psychedelic drugs — part of the Trump administration's push under Executive Order 14401 to accelerate research and review of psilocybin, MDMA and LSD therapies.",
+          "source": "Foley Hoag LLP",
+          "url": "https://foleyhoag.com/news-and-insights/publications/alerts-and-updates/2026/august/psychedelic-therapeutics-take-center-stage-fda-announces-public-hearing-and-finalizes-clinical/"
+        },
+        {
+          "text": "Rescheduling just got sturdier: a legal challenge to the April order moving medical marijuana to Schedule III was rebuffed this week, with the D.C. Circuit leaving the reclassification order in effect on Sept. 9.",
           "source": "Cannabis Business Times",
           "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order"
         },
         {
-          "text": "Compass Pathways' psilocybin program keeps clearing hurdles: six-month Phase 3 data confirmed a rapid and durable response, with commercial launch-readiness on track for the end of 2026 and launch expected in first half of 2027.",
-          "source": "Compass Pathways (IR)",
-          "url": "https://ir.compasspathways.com/News--Events-/news/news-details/2026/Compass-Pathways-Announces-Six-Month-Data-from-Second-Phase-3-Trial-Confirming-Rapid-and-Durable-Profile/default.aspx"
+          "text": "Compass Pathways' synthetic psilocybin COMP360 was awarded the FDA's Commissioner's National Priority Voucher and a granted rolling NDA review for treatment-resistant depression, teeing up a possible first-ever approved psychedelic medicine.",
+          "source": "Compass Pathways (BusinessWire/IR)",
+          "url": "https://ir.compasspathways.com/News--Events-/news/news-details/2026/Compass-Pathways-Announces-FDA-Granted-NDA-Rolling-Review-Request-and-Awarded-Commissioners-National-Priority-Voucher/default.aspx"
         },
         {
-          "text": "The FDA has scheduled its first public hearing on the potential future therapeutic use of psychedelic drugs for Sept. 14, 2026, following final clinical trial guidance covering psilocybin, LSD and MDMA.",
-          "source": "Tech Times",
-          "url": "https://www.techtimes.com/articles/320454/20260714/fda-finalizes-psychedelic-trial-rules-unblinding-problem-gets-official-answer.htm"
+          "text": "Cross-border consolidation is now live: Curaleaf's bid for Canada's Aurora Cannabis signals a U.S. MSO chasing a Canadian target with a realistic path to closing, powered by the improving capital backdrop since partial federal rescheduling.",
+          "source": "Cann.dev",
+          "url": "https://www.cann.dev/cannabis-ma-august-2026-curaleaf-vireo-consolidation/"
         },
         {
-          "text": "Trump signed H.R. 6500 on Sept. 2, pushing the federal hemp-derived THC restrictions from Nov. 12 to Dec. 11 and giving brands another month of runway while Congress drafts a permanent regulatory framework.",
-          "source": "Forbes",
-          "url": "https://www.forbes.com/sites/ajherrington/2026/09/03/trump-signs-bill-delaying-hemp-thc-ban-until-december/"
-        },
-        {
-          "text": "MSO Vireo Growth keeps expanding its buying spree beyond plant-touching assets — an $88.5 million New York real estate purchase and a $40 million ag-supply acquisition in the same week — while also positioning to become Florida's third-largest operator via its Fluent deal.",
-          "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/news/vireo-growths-latest-deals-see-cannabis-mso-expand-to-real-estate-agribusiness/616202"
+          "text": "The DEA's full Schedule I-to-III rescheduling hearing wrapped its formal proceedings over the summer, and though no final decision has landed yet, the process keeps grinding toward a ruling that would reshape banking, taxes and interstate commerce for the whole industry.",
+          "source": "Cannabis Business Times",
+          "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order"
         }
       ]
     }
