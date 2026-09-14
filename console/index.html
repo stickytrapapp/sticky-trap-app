@@ -48,6 +48,9 @@
   details summary{cursor:pointer;font-weight:800;color:var(--cy);font-size:13px;list-style:none}
   details summary::-webkit-details-marker{display:none}
   .rm{flex:1;background:none;border:0;color:var(--muted);font:inherit;font-size:11.5px;text-decoration:underline;cursor:pointer;padding:4px}
+  .rm.hard{color:var(--warn)}
+  .act{flex:1;background:var(--panel-2);border:1px solid var(--line);border-radius:9px;color:var(--paper);font:inherit;font-size:11.5px;font-weight:700;cursor:pointer;padding:7px 6px}
+  .prefs{align-items:center;gap:12px;font-size:12px;color:var(--muted)}.prefs .pl{font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:10px}.prefs label{display:inline-flex;align-items:center;gap:5px;cursor:pointer}.prefs label.off{opacity:.55}.prefs input{accent-color:var(--cy);width:14px;height:14px;margin:0}.prefs small{font-weight:400;font-size:10.5px}
   .rm:hover{color:var(--warn)}
 </style>
 </head>
@@ -91,7 +94,7 @@
   function toast(m){ var t=$('toast'); t.textContent=m; t.classList.add('on'); clearTimeout(toast.t); toast.t=setTimeout(function(){t.classList.remove('on');},1800); }
   function post(body){ body.pin=PIN; return fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)}).then(function(r){return r.json();}); }
   function label(k){ var s=STAGES.filter(function(x){return x[0]===k;})[0]; return s?s[1]:k; }
-  function age(ts){ var h=Math.max(0,(Date.now()-new Date(ts).getTime())/36e5); return h<1?'just now':h<48?Math.round(h)+'h':Math.round(h/24)+'d'; }
+  function age(ts){ var m=Math.max(0,(Date.now()-new Date(ts).getTime())/6e4), h=m/60; return m<1?'just now':m<60?Math.round(m)+' min':h<48?Math.round(h)+'h':Math.round(h/24)+'d'; }
   STAGES.forEach(function(s){ var o=document.createElement('option'); o.value=s[0]; o.textContent=s[1]; $('nStage').appendChild(o); }); $('nStage').value='deposit';
   try{ PIN=localStorage.getItem('st_console_pin')||''; }catch(e){}
   function open(){ $('gate').classList.add('hidden'); $('main').classList.remove('hidden'); load(); }
@@ -117,19 +120,39 @@
         var hot=Object.keys(HOT).map(function(k){ return '<button data-c="'+esc(o.code)+'" data-s="'+k+'" class="'+(k===o.stage?'hot':'')+'">'+HOT[k]+'</button>'; }).join('');
         var more='<select data-c="'+esc(o.code)+'" class="stsel"><option value="">Other stage…</option>'+STAGES.map(function(s){return '<option value="'+s[0]+'">'+s[1]+'</option>';}).join('')+'</select>';
         return '<div class="card o'+(stale?' stale':'')+'" data-code="'+esc(o.code)+'"><div class="top"><div><b>'+esc(o.code)+'</b> <span class="who">'+esc(o.company||o.name||'')+(o.due?' · due '+esc(o.due):'')+'</span></div><span class="badge'+(stale?' stale':'')+'">'+esc(label(o.stage))+'</span></div>'+
-          '<div class="items">'+esc(o.items||'')+'</div><div class="age">'+esc(o.email||'no email on file')+' · in this stage '+age(o.stage_ts)+(stale?' · OVERDUE':'')+(o.payment_status?' · <b style="color:'+(o.payment_status==='captured'?'var(--good)':o.payment_status==='authorized'?'var(--cy)':'var(--warn)')+'">card '+esc(o.payment_status.replace('_',' '))+(o.payment_amt?' $'+(+o.payment_amt).toFixed(2):'')+'</b>':'')+'</div>'+
+          '<div class="items">'+esc(o.items||'')+'</div><div class="age">'+esc(o.email||'no email on file')+(o.phone?' · …'+esc(String(o.phone).replace(/\D/g,'').slice(-4)):'')+' · in this stage '+age(o.stage_ts)+(stale?' · OVERDUE':'')+(o.payment_status?' · <b style="color:'+(o.payment_status==='captured'?'var(--good)':o.payment_status==='authorized'?'var(--cy)':'var(--warn)')+'">card '+esc(o.payment_status.replace('_',' '))+(o.payment_amt?' $'+(+o.payment_amt).toFixed(2):'')+'</b>':'')+'</div>'+
           '<div class="stages">'+hot+'</div><div class="more">'+more+'<input class="stnote" data-c="'+esc(o.code)+'" placeholder="Note to client (optional)"></div>'+
           '<div class="more"><a class="btn ghost" style="flex:1;text-align:center;text-decoration:none;font-size:12.5px" href="/track/?o='+encodeURIComponent(o.code)+'&e='+encodeURIComponent(o.email||'')+'" target="_blank" rel="noopener">Client view ↗</a>'+(ONLY?'':'<a class="btn ghost" style="flex:1;text-align:center;text-decoration:none;font-size:12.5px" href="/console/?o='+encodeURIComponent(o.code)+'">Just this order</a>')+'</div>'+
-          '<div class="more"><button class="rm" data-c="'+esc(o.code)+'" type="button">Remove this order</button></div></div>';
+          (o.monday_item?'<div class="more"><a class="btn ghost" style="flex:1;text-align:center;text-decoration:none;font-size:12.5px" href="'+esc(o.monday_item)+'" target="_blank" rel="noopener">Open in Monday ↗</a></div>':'')+
+          '<div class="more prefs" data-c="'+esc(o.code)+'"><span class="pl">Updates:</span><label><input type="checkbox" class="pf" data-v="email"'+(o.notify==='both'||o.notify==='email'||!o.notify?' checked':'')+(o.email?'':' disabled')+'> Email</label>'+
+          '<label'+(o.phone?'':' class="off"')+'><input type="checkbox" class="pf" data-v="sms"'+(o.notify==='both'||o.notify==='sms'?' checked':'')+(o.phone?'':' disabled')+'> Text'+(o.phone?(o.sms_ready?'':' <small>(texts start once the shop turns them on)</small>'):' <small>(add a phone)</small>')+'</label></div>'+
+          '<div class="more"><button class="act" data-a="items" data-c="'+esc(o.code)+'" type="button">Edit items</button><button class="act" data-a="resend" data-c="'+esc(o.code)+'" type="button">Resend email</button><button class="rm" data-c="'+esc(o.code)+'" type="button">Cancel order</button>'+(/test/i.test((o.company||'')+(o.name||''))?'<button class="rm hard" data-c="'+esc(o.code)+'" type="button">Delete test row</button>':'')+'</div></div>';
       }).join('');
       $('list').querySelectorAll('.stages button').forEach(function(b){ b.addEventListener('click',function(){ setStage(b.dataset.c,b.dataset.s,b); }); });
       $('list').querySelectorAll('.stsel').forEach(function(s){ s.addEventListener('change',function(){ if(s.value) setStage(s.dataset.c,s.value,s); }); });
-      $('list').querySelectorAll('.rm').forEach(function(b){ b.addEventListener('click',function(){ removeOrder(b.dataset.c,b); }); });
+      $('list').querySelectorAll('.rm').forEach(function(b){ b.addEventListener('click',function(){ removeOrder(b.dataset.c,b,b.classList.contains('hard')); }); });
+      $('list').querySelectorAll('.act').forEach(function(b){ b.addEventListener('click',function(){ if(b.dataset.a==='resend') resendOrder(b.dataset.c,b); else editItems(b.dataset.c,b); }); });
+      $('list').querySelectorAll('.prefs').forEach(function(box){ box.querySelectorAll('.pf').forEach(function(cb){ cb.addEventListener('change',function(){ savePrefs(box,cb); }); }); });
     }).catch(function(){ if(!load._retried){ load._retried=true; setTimeout(load,2500); return; } load._retried=false; $('list').innerHTML='<div class="sub">Could not reach the backend - tap Refresh.</div>'; });
   }
-  function removeOrder(code,el){   // test rows / mistakes. Gone for good (the sheet row is deleted) - the client gets no email.
-    if(!confirm('Remove '+code+' from the tracker?\n\nThis deletes the order. The client is not emailed. Use Complete instead if the job is just finished.')) return;
-    el.disabled=true; post({action:'order_delete',code:code}).then(function(j){ if(j&&j.ok){ toast('Removed '+code); load(); } else { el.disabled=false; toast('Failed: '+((j&&j.error)||'')); } }).catch(function(){ el.disabled=false; toast('Network error'); });
+  function removeOrder(code,el,hard){   // soft cancel (v31): stage -> cancelled, row kept, any card hold released, no client email. 'hard' = test rows only, into the archive tab.
+    var msg = hard ? ('Delete test row '+code+' for good?\n\nIt moves to the archive tab. The client is not emailed.') : ('Cancel '+code+'?\n\nIt leaves this list but stays in the sheet, and any card hold is released. The client is not emailed. Use Complete instead if the job is just finished.');
+    if(!confirm(msg)) return;
+    el.disabled=true; post({action:'order_delete',code:code,hard:!!hard}).then(function(j){ if(j&&j.ok){ toast((hard?'Deleted ':'Cancelled ')+code); load(); } else { el.disabled=false; toast('Failed: '+((j&&j.error)||'')); } }).catch(function(){ el.disabled=false; toast('Network error'); });
+  }
+  function resendOrder(code,el){   // re-send the current-stage email (mail was down 9/11; also for 'I never got it')
+    var note=prompt('Re-send the current stage email for '+code+'.\nOptional note to include:','')||''; if(note===null) return;
+    el.disabled=true; post({action:'order_resend',code:code,note:note}).then(function(j){ el.disabled=false; if(j&&j.ok){ toast('Re-sent '+code+(j.emailed?' · emailed':'')+(j.texted?' · texted':'')); } else toast('Failed: '+((j&&j.error)||'')); }).catch(function(){ el.disabled=false; toast('Network error'); });
+  }
+  function editItems(code,el){   // refresh stale item text (e.g. 'Invoice Total' from the old Square parser); never emails
+    var card=el.closest('.card'), cur=(card.querySelector('.items')||{}).textContent||''; var v=prompt('Items for '+code+':',cur); if(v===null||!v.trim()||v===cur) return;
+    el.disabled=true; post({action:'order_update',code:code,items:v.trim().slice(0,400)}).then(function(j){ el.disabled=false; if(j&&j.ok){ toast('Items updated'); load(); } else toast('Failed: '+((j&&j.error)||'')); }).catch(function(){ el.disabled=false; toast('Network error'); });
+  }
+  function savePrefs(box,cb){   // Email / Text toggles (v32 order_prefs); never lets both go off
+    var em=box.querySelector('.pf[data-v=email]'), sm=box.querySelector('.pf[data-v=sms]');
+    if(!em.checked&&!sm.checked){ cb.checked=true; toast('Keep at least one way to reach them'); return; }
+    var v=em.checked&&sm.checked?'both':(em.checked?'email':'sms');
+    post({action:'order_prefs',code:box.dataset.c,notify:v}).then(function(j){ if(j&&j.ok) toast('Updates: '+v); else { cb.checked=!cb.checked; toast('Failed: '+((j&&j.error)||'')); } }).catch(function(){ cb.checked=!cb.checked; toast('Network error'); });
   }
   function setStage(code,stage,el){ var card=el.closest('.card'), note=(card.querySelector('.stnote')||{}).value||''; el.disabled=true;
     post({action:'order_stage',code:code,stage:stage,note:note}).then(function(j){ if(j&&j.ok){ toast(code+' → '+label(stage)+(j.emailed?' · client emailed':'')); load(); } else { el.disabled=false; toast('Failed: '+((j&&j.error)||'')); } }).catch(function(){ el.disabled=false; toast('Network error'); }); }
