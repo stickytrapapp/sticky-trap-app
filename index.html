@@ -103,7 +103,7 @@
   .menu-emblem:hover{filter:drop-shadow(0 0 15px rgba(18,196,255,.8)) drop-shadow(0 0 7px rgba(255,31,162,.55))}
   .menu-emblem.spin{animation:emblemSpin 1.4s cubic-bezier(.15,.85,.25,1)}
   @keyframes emblemSpin{from{transform:perspective(600px) rotateY(0)}to{transform:perspective(600px) rotateY(1080deg)}}
-  @media (prefers-reduced-motion:reduce){.menu-emblem.spin{animation:none}}
+  @media (prefers-reduced-motion:reduce){.menu-emblem.spin{animation:emblemSpin .7s ease-out}}   /* 2026-09-14: shorter, not removed - iPhones with Reduce Motion were the 'sometimes it does not' */
 
   .lbl{display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#fff}
   .lbl svg{width:15px;height:15px} .lbl.cult{color:var(--pur)}
@@ -1498,7 +1498,7 @@
     tabs.forEach(function(b){b.classList.toggle('on',b.dataset.tab===name);});
     document.body.classList.toggle('on-menu',name==='menu');   // promo strip stays off the price list
     document.querySelector('.views').scrollTop=0;
-    if(name==='menu'){var _em=document.getElementById('menu-emblem'); if(_em){_em.classList.remove('spin'); void _em.offsetWidth; _em.classList.add('spin');}}
+    if(name==='menu'){ try{ window.emblemEntrance&&window.emblemEntrance(); }catch(e){} }   // 2026-09-14: entrance spin once per app session, only when actually visible (was: every switch, incl. hidden/at load)
     animateBars(document.querySelector('.view.active'));
     if(name==='industry'&&!industryLoaded) loadIndustry();
     if(name==='social'&&!epLoaded) loadEpisodes();
@@ -1806,10 +1806,19 @@
   (function(){
     var e=document.getElementById('menu-emblem'); if(!e) return;
     function spin(){ e.classList.remove('spin'); void e.offsetWidth; e.classList.add('spin'); }
-    e.addEventListener('mouseenter',spin);
-    e.addEventListener('click',spin);
+    e.addEventListener('click',spin);   // a tap always spins it (hover dropped: phones have no hover and desktop got double spins)
     e.addEventListener('animationend',function(){ e.classList.remove('spin'); });
     window.spinEmblem=spin;
+    // Entrance spin: exactly once per app session (sessionStorage, so every fresh open of the app replays it), and only when the
+    // emblem is really on screen - Menu view active, page visible, 21+ gate gone. Waits for that moment instead of firing blind at
+    // load, which is why it looked random: on phones the spin was often finished before the view was ever shown.
+    var played=false; try{ played=sessionStorage.getItem('st_emblem_spun')==='1'; }catch(err){}
+    function visible(){ var v=e.closest('.view'); var g=document.getElementById('agegate'); return !document.hidden && v && v.classList.contains('active') && !(g && g.style.display!=='none' && getComputedStyle(g).display!=='none'); }
+    function entrance(){ if(played) return; if(!visible()){ return; } played=true; try{ sessionStorage.setItem('st_emblem_spun','1'); }catch(err){} setTimeout(spin,260); }
+    window.emblemEntrance=entrance;
+    document.addEventListener('visibilitychange',entrance);
+    var ag=document.getElementById('ag-yes'); if(ag) ag.addEventListener('click',function(){ setTimeout(entrance,80); });
+    setTimeout(entrance,350);   // app opened straight onto the Menu tab
   })();
 
   /* ---- Saved bar: device-local Reorder + Favorites (no login) ---- */
