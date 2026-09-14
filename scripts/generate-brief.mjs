@@ -33,7 +33,7 @@ NATIONAL — lead with momentum and opportunity: progress on cannabis rescheduli
 Rules:
 - Use ONLY real facts from real sources you actually found via search. NEVER invent facts, sources, or URLs.
 - Prefer what is genuinely new today. Skip evergreen filler.
-- Exactly 5 items per section. Each item: one or two tight, specific sentences, with the outlet name and the real article URL.
+- Exactly 5 items per section. Each item is a BULLET the app renders as a bold lead plus lighter detail: write it as "<lead> — <detail>" where the lead is 4-9 words a reader can scan on its own (who did what, or the number that matters) and the detail is ONE tight sentence with the specifics; never a long single sentence. Include the outlet name and the real article URL.
 - Keep the tone sharp and useful to an industry operator.
 - POSITIVE LEAN: prioritize wins, growth, and opportunity; when a story is hard news, find the constructive, forward-looking angle. Aim for roughly a 2:1 ratio of upbeat/opportunity items to hard-news items in each section, and make the headline and lede optimistic. NEVER spin or fabricate to seem positive — credibility comes first; report real facts and let the selection and framing carry the optimism.
 
@@ -46,10 +46,10 @@ After researching, output the brief as a single JSON object between the exact ma
   "title": "<punchy headline tying local + national together>",
   "top": "<2-sentence lede on the biggest developments>",
   "local": [
-    { "text": "<specific 1-2 sentences>", "source": "<outlet>", "url": "<real url>" }
+    { "text": "<4-9 word lead> — <one specific sentence>", "source": "<outlet>", "url": "<real url>" }
   ],
   "national": [
-    { "text": "<specific 1-2 sentences>", "source": "<outlet>", "url": "<real url>" }
+    { "text": "<4-9 word lead> — <one specific sentence>", "source": "<outlet>", "url": "<real url>" }
   ]
 }
 ===BRIEF_END===
