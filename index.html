@@ -287,9 +287,13 @@
   .lede h3{font-family:"Newsreader",Georgia,serif;font-weight:600;font-size:22px;line-height:1.18;color:#eaf2f6;margin:5px 0 6px}
   .lede p{font-size:13.5px;color:#c2cfd6;line-height:1.55;margin:0}
   .lede .by{font-size:11px;color:#8fa0a8;margin-top:8px}
-  .wire{border-top:1px solid rgba(255,255,255,.12);padding:13px 0;display:block}
-  .wire .wh{font-family:"Newsreader",Georgia,serif;font-weight:600;font-size:16px;line-height:1.4;color:#e3edf1}
-  .wire .ws{font-size:11.5px;color:#a3b2ba;margin-top:3px}
+  .wires{list-style:none;margin:0;padding:0}
+  .wire{position:relative;border-top:1px solid rgba(255,255,255,.12);padding:11px 0 11px 20px;display:block}
+  .wire::before{content:"";position:absolute;left:2px;top:19px;width:8px;height:8px;border-radius:2px;transform:rotate(45deg);background:var(--grad)}
+  .wire a{color:inherit;text-decoration:none}
+  .wire b{font-family:"Newsreader",Georgia,serif;font-weight:700;font-size:16px;line-height:1.35;color:#fff}
+  .wire .wd{font-size:14px;line-height:1.5;color:#c2cfd6}
+  .wire .ws{font-size:11.5px;color:#a3b2ba;margin-top:4px}
   .scopehead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:18px;padding-bottom:5px;border-bottom:2px solid rgba(255,255,255,.16)}
   .scopehead .sh-t{font-family:"Newsreader",Georgia,serif;font-weight:700;font-size:20px;color:#e9f1f5}
   .scopehead .sh-b{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#fff;padding:4px 10px;border-radius:999px;white-space:nowrap}
@@ -1517,11 +1521,18 @@
 
   /* ---- Industry: live brief from backend ---- */
   var industryLoaded=false;
+  // Bullets (Shane 2026-09-14: 'make the industry news appear as bullet points for easy consumption'): each item is a bullet with a
+  // bold lead - the sentence up to its first dash / colon / semicolon, or the first ~8 words - and the rest in lighter type,
+  // so the leads scan on their own and the detail is there when you want it.
+  function splitLead_(s){ s=String(s||'').trim(); var m=/^(.{20,110}?)(\s[—–-]\s|:\s|;\s)/.exec(s); if(m) return [m[1], s.slice(m[0].length)];
+    var c=/^(.{25,110}?),\s/.exec(s); if(c) return [c[1], s.slice(c[0].length)];
+    var w=s.split(' '); if(w.length>14) return [w.slice(0,8).join(' '), w.slice(8).join(' ')]; return [s,'']; }
   function wires_(items){
-    var h=''; (items||[]).forEach(function(it){
-      h+='<a class="wire" '+(it.url?'href="'+esc(it.url)+'" target="_blank" rel="noopener"':'')+'>'+
-         '<div class="wh">'+esc(it.text)+'</div>'+(it.source?'<div class="ws">'+esc(it.source)+'</div>':'')+'</a>';
-    }); return h;
+    var h='<ul class="wires">'; (items||[]).forEach(function(it){ var L=splitLead_(it.text);
+      h+='<li class="wire">'+(it.url?'<a href="'+esc(it.url)+'" target="_blank" rel="noopener">':'<span>')+
+         '<b>'+esc(L[0])+'</b>'+(L[1]?' <span class="wd">'+esc(L[1])+'</span>':'')+(it.url?'</a>':'</span>')+
+         (it.source?'<div class="ws">'+esc(it.source)+'</div>':'')+'</li>';
+    }); return h+'</ul>';
   }
   function renderIndustry(b){
     industryLoaded=true;
