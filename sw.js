@@ -1,7 +1,7 @@
 // TheStickyTr_ APP — service worker (installable PWA)
 // Network-first for the app shell + data so updates always show; cache is only
 // an offline fallback. Bump CACHE to force old caches out on activate.
-const CACHE = 'st-app-v16';   // app music back 2026-09-11 (menu.mp3 reused name); black icons 2026-09-10 (icons are cache-first: bump whenever they change)
+const CACHE = 'st-app-v17';   // app music back 2026-09-11 (menu.mp3 reused name); black icons 2026-09-10 (icons are cache-first: bump whenever they change)
 const STATIC = ['./manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', (e) => {
@@ -21,7 +21,7 @@ self.addEventListener('fetch', (e) => {
   const url = new URL(req.url);
   if (req.method !== 'GET' || url.origin !== location.origin) return;
   // Side pages (theme-lab preview, NDA) are never served from this cache: a flaky fetch must not fall back to the main app shell.
-  if (url.pathname.startsWith('/lab/') || url.pathname.startsWith('/nda/') || url.pathname.startsWith('/noncompete/') || url.pathname.startsWith('/match/')) return;
+  if (url.pathname.startsWith('/lab/') || url.pathname.startsWith('/nda/') || url.pathname.startsWith('/noncompete/') || url.pathname.startsWith('/match/') || url.pathname.startsWith('/solitaire/')) return;
 
   // App shell + data (html/json): NETWORK-FIRST — always try fresh, fall back to cache offline.
   const fresh = req.mode === 'navigate'
