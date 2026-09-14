@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 31;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 33;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -149,7 +149,8 @@ function doGet(e) {
     var store = String(PROP.getProperty('CHAT_SHEET_ID') || ''), open = null, storeErr = PROP.getProperty('SS_LAST_ERROR') || '';
     try { var rows = ordersSheet_().getDataRange().getValues(); open = 0; for (var i = 1; i < rows.length; i++) if (rows[i][ORDER_COLS.indexOf('stage')] !== 'complete' && rows[i][0] !== '') open++; } catch (err2) { storeErr = String(err2).slice(0, 120); }
     return out_({ ok: true, version: CODE_VERSION, key: !!PROP.getProperty('ANTHROPIC_API_KEY'), model: cfg_('MODEL'), kb: kb.length, prices: n, kb_url: cfg_('KB_URL'),
-                  store: store.slice(0, 8), open_orders: open, store_error: storeErr, mail_error: PROP.getProperty('MAIL_LAST_ERROR') || '' });   // v27: watch the store from outside; v29: + last mail failure
+                  store: store.slice(0, 8), open_orders: open, store_error: storeErr, mail_error: PROP.getProperty('MAIL_LAST_ERROR') || '',
+                  sms: smsReady_() ? 'ready' : 'no twilio', sms_error: PROP.getProperty('SMS_LAST_ERROR') || '' });   // v27 store; v29 mail; v32 sms
   }
   return out_({ ok: true, hint: 'POST {uid, tab, basket, messages:[{role,content}]}' });
 }
@@ -171,6 +172,7 @@ function doPost(e) {
   if (body.action === 'order_restore') { try { return out_(orderRestore_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }   // v28
   if (body.action === 'order_update') { try { return out_(orderUpdate_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }     // v28
   if (body.action === 'order_resend') { try { return out_(orderResend_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }     // v31
+  if (body.action === 'order_prefs') { try { return out_(orderPrefs_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }       // v32: email / text preference
   if (body.action === 'reauth') { try { return out_(reauth_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }                 // v31
 
   var uid = String(body.uid || 'anon').slice(0, 40);
@@ -806,7 +808,8 @@ var STAGES = {
 var NUDGE_HOURS = { proof_sent: 24, printing: 72 };   // Shane 2026-09-08: 24 h in proof, 72 h in printing -> nudge the team (never the client)
 var ORDER_COLS = ['code', 'created', 'name', 'company', 'email', 'phone', 'items', 'due', 'stage', 'stage_ts', 'history', 'token', 'monday_item', 'square_inv', 'nudged_ts', 'notes', 'source', 'pay_url',   // pay_url = Square invoice link (v22)
                   'lines', 'subtotal', 'total', 'ship', 'address', 'cust_notes',                       // v31 (App step 2): cart lines re-priced on the server
-                  'payment_id', 'payment_status', 'payment_amt', 'auth_ts', 'tax_exempt'];            // v31 (App step 3): Square authorize at submit, capture on approval
+                  'payment_id', 'payment_status', 'payment_amt', 'auth_ts', 'tax_exempt',             // v31 (App step 3): Square authorize at submit, capture on approval
+                  'notify'];                                                                            // v32: 'both' (default) | 'email' | 'sms' - never neither (Shane 2026-09-11)
 function ordersSheet_() {
   var ss = ss_(), sh = ss.getSheetByName('orders');
   if (!sh) { sh = ss.insertSheet('orders'); sh.appendRow(ORDER_COLS); try { sh.getRange('A:A').setNumberFormat('@'); sh.getRange('H:H').setNumberFormat('@'); } catch (e) {} }
@@ -903,8 +906,8 @@ function orderResend_(b) {   // v31 (item 7): re-send the current-stage email fr
   var sh = ordersSheet_(), f = findOrder_(sh, b.code); if (!f) return { ok: false, error: 'not_found' };
   var o = f.o; if (!o.email) return { ok: false, error: 'no_email' };
   if (o.stage === 'cancelled') return { ok: false, error: 'cancelled' };
-  var emailed = false; try { emailed = stageMail_(o, o.stage, String(b.note || '').slice(0, 300)); } catch (e) { mailErr_(e); return { ok: false, error: String(e).slice(0, 200) }; }
-  return { ok: true, code: o.code, stage: o.stage, emailed: emailed };
+  var nres = notifyClient_(sh, f, o, o.stage, String(b.note || '').slice(0, 300));
+  return { ok: true, code: o.code, stage: o.stage, emailed: nres.emailed, texted: nres.texted, sms: nres.sms || '' };
 }
 function consolePin_() { return String(PROP.getProperty('CONSOLE_PIN') || '4750'); }
 function pinOk_(p) { return String(p || '') === consolePin_(); }
@@ -924,6 +927,64 @@ function findOrder_(sh, code) {
 function trackUrl_(o) { return 'https://thestickytrap.app/track/?o=' + encodeURIComponent(o.code) + '&t=' + encodeURIComponent(o.token); }
 function reorderUrl_(o) { var e = encodeURIComponent; return 'https://thestickytrap.app/reorder/?code=' + e(o.code) + '&e=' + e(o.email || ''); }   // v31 (App step 5): the reorder page reads exact lines via track; the page falls back to /?reorder= itself
 function mailErr_(e) { try { PROP.setProperty('MAIL_LAST_ERROR', new Date().toISOString() + ' ' + String(e).slice(0, 200)); } catch (e2) {} }   // v29: why a client email did not go out (shown by ?ping=1)
+/* ---------- v32 (Shane 2026-09-11 'build it Monday'): every update by email AND text at the same moment; a customer may turn off one, never both ---------- */
+function normPhone_(p) {   // -> +1XXXXXXXXXX for US numbers, '' if it is not a usable number
+  var d = String(p || '').replace(/\D/g, '');
+  if (d.length === 11 && d.charAt(0) === '1') d = d.slice(1);
+  if (d.length === 10) return '+1' + d;
+  if (d.length > 10 && d.length <= 15) return '+' + d;   // international as given
+  return '';
+}
+function notifyPref_(o) { var v = String(o.notify || '').toLowerCase(); return (v === 'email' || v === 'sms') ? v : 'both'; }
+function smsReady_() { return !!(PROP.getProperty('TWILIO_SID') && PROP.getProperty('TWILIO_TOKEN') && PROP.getProperty('TWILIO_FROM')); }
+function smsSend_(to, text) {   // Twilio REST; returns 'sent' | 'skipped' (no Twilio yet / no number) | 'stopped' (customer replied STOP) | throws
+  var sid = PROP.getProperty('TWILIO_SID'), tok = PROP.getProperty('TWILIO_TOKEN'), from = PROP.getProperty('TWILIO_FROM');
+  var num = normPhone_(to), fromN = normPhone_(from) || from; if (!sid || !tok || !from || !num) return 'skipped';   // v33: FROM accepted with or without the +
+  var r = UrlFetchApp.fetch('https://api.twilio.com/2010-04-01/Accounts/' + sid + '/Messages.json', { method: 'post', muteHttpExceptions: true,
+    headers: { Authorization: 'Basic ' + Utilities.base64Encode(sid + ':' + tok) }, payload: { To: num, From: fromN, Body: String(text).slice(0, 320) } });
+  var code = r.getResponseCode(); if (code < 300) return 'sent';
+  var j = {}; try { j = JSON.parse(r.getContentText()); } catch (e) {}
+  if (j.code === 21610 || /unsubscribed|STOP/i.test(String(j.message || ''))) return 'stopped';   // carrier-level opt-out
+  throw new Error('sms_' + code + ': ' + String(j.message || '').slice(0, 120));
+}
+function smsText_(o, stage, note) {
+  var st = STAGES[stage] || STAGES.received, url = trackUrl_(o);
+  var head = 'The Sticky Trap - order ' + o.code + ': ' + st.label + '.';
+  var tail = stage === 'proof_sent' ? ' Review & approve: ' + url : (stage === 'quoted' && o.pay_url ? ' Pay / track: ' + url : ' Track: ' + url);
+  var mid = note ? ' ' + String(note).slice(0, 100) : '';
+  return (head + mid + tail).slice(0, 320);
+}
+function notifyClient_(sh, f, o, stage, note) {   // the ONE place a client hears about a stage: email + text per their preference
+  var pref = notifyPref_(o), out = { emailed: false, texted: false, pref: pref };
+  if (stage === 'cancelled') return out;
+  if (pref !== 'sms') { try { out.emailed = stageMail_(o, stage, note); } catch (e) { mailErr_(e); } }
+  if (pref !== 'email' && o.phone) {
+    try {
+      var res = smsSend_(o.phone, smsText_(o, stage, note));
+      out.texted = res === 'sent'; out.sms = res;
+      if (res === 'stopped') {   // they opted out at the carrier: text off, email stays on (never both off)
+        try { if (sh && f) sh.getRange(f.i, ORDER_COLS.indexOf('notify') + 1).setValue('email'); } catch (e2) {}
+        o.notify = 'email';
+        if (pref === 'sms') { try { out.emailed = stageMail_(o, stage, note); } catch (e3) { mailErr_(e3); } }
+      }
+    } catch (e) { out.sms = 'error'; try { PROP.setProperty('SMS_LAST_ERROR', new Date().toISOString() + ' ' + String(e).slice(0, 200)); } catch (e4) {} }
+  }
+  return out;
+}
+function orderPrefs_(b) {   // staff (pin) or the customer (token) sets 'both' | 'email' | 'sms'; the last channel can never be turned off
+  var sh = ordersSheet_(), f = findOrder_(sh, b.code); if (!f) return { ok: false, error: 'not_found' };
+  var o = f.o, staff = pinOk_(b.pin);
+  if (!staff && String(b.token || '') !== String(o.token)) return { ok: false, error: 'bad_token' };
+  var want = String(b.notify || '').toLowerCase();
+  if (want !== 'both' && want !== 'email' && want !== 'sms') return { ok: false, error: 'bad_pref', hint: 'both | email | sms' };
+  if (want === 'sms' && !normPhone_(o.phone)) return { ok: false, error: 'no_phone' };
+  if (want === 'sms' && !o.email && false) return { ok: false, error: 'no_email' };
+  if (want !== 'sms' && !o.email) return { ok: false, error: 'no_email', hint: 'add an email first' };
+  var phone = b.phone != null ? normPhone_(b.phone) : null;
+  if (phone) { sh.getRange(f.i, ORDER_COLS.indexOf('phone') + 1).setValue(phone); o.phone = phone; }
+  sh.getRange(f.i, ORDER_COLS.indexOf('notify') + 1).setValue(want);
+  return { ok: true, code: o.code, notify: want, phone_last4: o.phone ? String(o.phone).slice(-4) : '', sms_ready: smsReady_() };
+}
 function stageMail_(o, stage, note) {
   if (!o.email || !STAGES[stage] || stage === 'cancelled') return false;
   var st = STAGES[stage], url = trackUrl_(o), who = o.company || o.name || '';
@@ -964,13 +1025,16 @@ function orderNew_(b) {
   }
   var stage = STAGES[b.stage] && b.stage !== 'cancelled' ? b.stage : 'received', now = new Date(), token = Utilities.getUuid().replace(/-/g, '').slice(0, 12);
   var itemsTxt = cl ? cl.lines.map(function (x) { return x.qty + 'x ' + x.p + ' - ' + x.m + ' / ' + x.f + ' @ ' + money_(x.unit); }).join(' | ').slice(0, 400) : String(b.items || '').slice(0, 400);
-  var o = { code: code, created: now, name: name, company: company, email: email, phone: String(b.phone || '').slice(0, 40), items: itemsTxt, due: String(b.due || '').slice(0, 40),
+  var phoneN = normPhone_(b.phone) || String(b.phone || '').slice(0, 40);   // v32: E.164 when it is a real number, else as typed (staff can fix it)
+  var notifyPref = (String(b.notify || '').toLowerCase() === 'email' || String(b.notify || '').toLowerCase() === 'sms') ? String(b.notify).toLowerCase() : 'both';
+  if (notifyPref === 'sms' && !normPhone_(b.phone)) notifyPref = 'both';
+  var o = { code: code, created: now, name: name, company: company, email: email, phone: phoneN, items: itemsTxt, due: String(b.due || '').slice(0, 40), notify: notifyPref,
             lines: cl ? JSON.stringify(cl.lines) : '', subtotal: cl ? cl.subtotal : '', total: cl ? cl.total : '', ship: String(b.ship || '').slice(0, 10), address: String(b.address || '').slice(0, 300), cust_notes: String(b.notes || '').slice(0, 600),
             payment_id: pay ? pay.id : '', payment_status: pay ? 'authorized' : '', payment_amt: pay ? (pay.amount_money.amount / 100) : '', auth_ts: pay ? now : '', tax_exempt: b.payment && b.payment.taxExempt ? 'yes' : '',
             stage: stage, stage_ts: now, history: JSON.stringify([{ stage: stage, ts: now.getTime(), note: '' }]), token: token, monday_item: '', square_inv: String(b.square_inv || '').slice(0, 60), nudged_ts: '', notes: '', source: String(b.source || '').slice(0, 20), pay_url: /^https:\/\//.test(String(b.pay_url || '')) ? String(b.pay_url).slice(0, 300) : '' };
   sh.appendRow(ORDER_COLS.map(function (k) { return o[k]; }));
   if (idemKey) { try { CACHE.put(idemKey, code, 3600); } catch (e) {} }
-  var emailed = false; try { emailed = stageMail_(o, stage, ''); } catch (e) { mailErr_(e); }
+  var nres = notifyClient_(sh, findOrder_(sh, code), o, stage, ''), emailed = nres.emailed;
   if (o.source === 'cart') {   // v31 (item 5): the shop hears about a cart order directly, not only through the upload email
     try {
       var body = [(company || name) + (name && company ? ' (' + name + ')' : ''), email + (o.phone ? ' / ' + o.phone : ''), '',
@@ -982,7 +1046,7 @@ function orderNew_(b) {
       GmailApp.sendEmail(notifyTo_(), 'NEW ORDER ' + code + ' - ' + (company || name), body, { name: 'Sticky Trap App', replyTo: email || SHOP_EMAIL });
     } catch (e) { mailErr_(e); }
   }
-  return { ok: true, code: code, token: token, url: trackUrl_(o), emailed: emailed, total: cl ? cl.total : null, payment: pay ? 'authorized' : null, card_total: pay ? pay.amount_money.amount / 100 : null };
+  return { ok: true, code: code, token: token, url: trackUrl_(o), emailed: emailed, texted: nres.texted, total: cl ? cl.total : null, payment: pay ? 'authorized' : null, card_total: pay ? pay.amount_money.amount / 100 : null };
 }
 function orderStage_(b) {
   if (!pinOk_(b.pin)) return { ok: false, error: 'bad_pin' };
@@ -997,8 +1061,8 @@ function orderStage_(b) {
   sh.getRange(f.i, ORDER_COLS.indexOf('nudged_ts') + 1).setValue('');
   o.stage = stage; o.history = JSON.stringify(hist);
   if (stage === 'approved') captureOnApproval_(sh, f, o);   // v31: console tap on Approved captures the card hold
-  var emailed = false; try { emailed = stageMail_(o, stage, note); } catch (e) { mailErr_(e); }
-  return { ok: true, code: o.code, stage: stage, emailed: emailed };
+  var nres = notifyClient_(sh, f, o, stage, note);
+  return { ok: true, code: o.code, stage: stage, emailed: nres.emailed, texted: nres.texted };
 }
 function approve_(b) {
   var sh = ordersSheet_(), f = findOrder_(sh, b.code); if (!f) return { ok: false, error: 'not_found' };
@@ -1010,7 +1074,7 @@ function approve_(b) {
   sh.getRange(f.i, ORDER_COLS.indexOf('nudged_ts') + 1).setValue('');
   try { GmailApp.sendEmail(SHOP_EMAIL, 'PROOF APPROVED - ' + o.code + ' (' + (o.company || o.name) + ')', (o.company || o.name) + ' approved the proof for ' + o.code + ' online.\n' + (o.items || '') + '\nDue: ' + (o.due || 'tbd') + '\nConsole: https://thestickytrap.app/console/'); } catch (e) {}
   o.stage = 'approved'; captureOnApproval_(sh, f, o);   // v31: client approval captures the card hold
-  try { stageMail_(o, 'approved', ''); } catch (e) { mailErr_(e); }
+  notifyClient_(sh, f, o, 'approved', '');
   return { ok: true, payment: o.payment_status || null };
 }
 function changes_(b) {   // client asks for proof changes from the tracker page (v22): back to 'proofing', note logged, shop told
@@ -1023,7 +1087,7 @@ function changes_(b) {   // client asks for proof changes from the tracker page 
   sh.getRange(f.i, ORDER_COLS.indexOf('stage') + 1, 1, 3).setValues([['proofing', now, JSON.stringify(hist)]]);
   sh.getRange(f.i, ORDER_COLS.indexOf('nudged_ts') + 1).setValue('');
   try { GmailApp.sendEmail(notifyTo_(), 'CHANGES REQUESTED - ' + o.code + ' (' + (o.company || o.name) + ')', (o.company || o.name) + ' asked for changes to the proof for ' + o.code + ':' + '\n\n' + note + '\n\n' + (o.items || '') + '\n' + 'Due: ' + (o.due || 'tbd') + '\n' + 'Console: https://thestickytrap.app/console/?o=' + encodeURIComponent(o.code), { replyTo: o.email || SHOP_EMAIL }); } catch (e) {}
-  o.stage = 'proofing'; try { stageMail_(o, 'proofing', 'We got your request - ' + note + ' - and will send a revised proof.'); } catch (e) {}
+  o.stage = 'proofing'; notifyClient_(sh, f, o, 'proofing', 'We got your request - ' + note + ' - and will send a revised proof.');
   return { ok: true };
 }
 function publicOrder_(o) {
@@ -1033,6 +1097,7 @@ function publicOrder_(o) {
   return { code: o.code, name: o.name, company: o.company, items: o.items, due: o.due, stage: o.stage, label: st.label, message: st.msg, token: o.token,
            lines: lines, total: o.total !== '' && o.total != null ? +o.total : null, email: o.email || '',   // v31: exact specs for reorders + re-auth
            payment_status: o.payment_status || '', payment_amt: o.payment_amt !== '' && o.payment_amt != null ? +o.payment_amt : null, ship: o.ship || '',
+           notify: notifyPref_(o), phone_last4: o.phone ? String(o.phone).slice(-4) : '', sms_ready: smsReady_(),   // v32: the tracker page shows Email / Text toggles
            stage_ts: o.stage_ts ? new Date(o.stage_ts).getTime() : null, can_approve: (o.stage === 'proof_sent' || o.stage === 'proofing'),
            can_change: (o.stage === 'proof_sent' || o.stage === 'proofing'), pay_url: (o.stage === 'quoted' && o.pay_url) ? o.pay_url : '', reorder_url: o.stage === 'complete' ? reorderUrl_(o) : '',
            stages: STAGE_ORDER.filter(function (k) { return k !== 'shipped' || o.stage === 'shipped'; }).filter(function (k) { return k !== 'ready' || o.stage !== 'shipped'; }).map(function (k) { return { key: k, label: STAGES[k].label }; }),
@@ -1055,7 +1120,8 @@ function ordersList_(p) {
                // v28: what the console and the Monday sync need to show / write more
                due_iso: rawDue instanceof Date ? Utilities.formatDate(rawDue, Session.getScriptTimeZone(), 'yyyy-MM-dd') : '', monday_item: o.monday_item || '', pay_url: o.pay_url || '', source: o.source || '',
                last_note: last ? String(last.note || '') : '', created: o.created ? new Date(o.created).getTime() : null,
-               payment_status: o.payment_status || '', payment_amt: o.payment_amt !== '' && o.payment_amt != null ? +o.payment_amt : null, total: o.total !== '' && o.total != null ? +o.total : null, ship: o.ship || '' }); }
+               payment_status: o.payment_status || '', payment_amt: o.payment_amt !== '' && o.payment_amt != null ? +o.payment_amt : null, total: o.total !== '' && o.total != null ? +o.total : null, ship: o.ship || '',
+               notify: notifyPref_(o), sms_ready: smsReady_() }); }
   out.sort(function (a, b) { return (a.stage_ts || 0) - (b.stage_ts || 0); });
   return { ok: true, orders: out, archived: archived };
 }
@@ -1111,6 +1177,7 @@ function orderUpdate_(b) {   // v28: staff / sync edits to the record itself (ne
   if (!pinOk_(b.pin)) return { ok: false, error: 'bad_pin' };
   var sh = ordersSheet_(), f = findOrder_(sh, b.code); if (!f) return { ok: false, error: 'not_found' };
   var allowed = { name: 80, company: 80, email: 120, phone: 40, items: 400, due: 40, monday_item: 200, notes: 500, square_inv: 60, pay_url: 300 }, set = {};
+  if (b.phone != null && String(b.phone) !== '') b.phone = normPhone_(b.phone) || String(b.phone);   // v32
   Object.keys(allowed).forEach(function (k) { if (b[k] != null && String(b[k]) !== '') { var v = String(b[k]).slice(0, allowed[k]); if (k === 'email' && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)) return; sh.getRange(f.i, ORDER_COLS.indexOf(k) + 1).setValue(v); set[k] = v; } });
   return { ok: true, code: f.o.code, updated: set };
 }
