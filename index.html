@@ -363,6 +363,11 @@
   .tabbar button{position:relative}
   .tabbar .tabdot{position:absolute;top:0;left:calc(50% + 6px);width:8px;height:8px;border-radius:50%;background:var(--mag);box-shadow:0 0 7px rgba(255,31,162,.85);animation:tabdotpulse 1.8s ease-in-out infinite}
   @keyframes tabdotpulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.7);opacity:.7}}
+  /* Menu tab nudge (Shane 2026-09-14: 'bobbed up and down like it wanted attention - good feature'): a small hop every 4 s while you are on
+     another tab; stops on the Menu tab. Same on iPhone and Android; Reduce Motion keeps it but smaller. */
+  .tabbar button.nudge svg{animation:tabnudge 4s ease-in-out infinite}
+  @keyframes tabnudge{0%,78%,100%{transform:translateY(0)}84%{transform:translateY(-5px)}90%{transform:translateY(0)}94%{transform:translateY(-2px)}}
+  @media (prefers-reduced-motion:reduce){.tabbar button.nudge svg{animation-duration:6s}@keyframes tabnudge{0%,80%,100%{transform:translateY(0)}86%{transform:translateY(-2px)}}}
   .tabbar button.on svg{stroke:#19C6FF;stroke-width:2.9;filter:drop-shadow(0 0 4px rgba(25,198,255,.7)) drop-shadow(0 0 9px rgba(25,198,255,.4))}
   .installbar{position:fixed;left:12px;right:12px;bottom:calc(14px + var(--safe-b));max-width:476px;margin:0 auto;z-index:6;display:flex;align-items:center;gap:10px;background:rgba(0,0,0,.97);color:#fff;border:1px solid rgba(138,77,255,.45);border-radius:15px;padding:11px 12px;box-shadow:0 14px 34px rgba(0,0,0,.45)}
   .installbar[hidden]{display:none}
@@ -1496,6 +1501,7 @@
     try{window.track&&window.track('pageview',name);}catch(e){}
     views.forEach(function(v){v.classList.toggle('active',v.dataset.view===name);});
     tabs.forEach(function(b){b.classList.toggle('on',b.dataset.tab===name);});
+    tabs.forEach(function(b){ if(b.dataset.tab==='menu') b.classList.toggle('nudge', name!=='menu'); });   // Menu tab hops while you are elsewhere (2026-09-14)
     document.body.classList.toggle('on-menu',name==='menu');   // promo strip stays off the price list
     document.querySelector('.views').scrollTop=0;
     if(name==='menu'){ try{ window.emblemEntrance&&window.emblemEntrance(); }catch(e){} }   // 2026-09-14: entrance spin once per app session, only when actually visible (was: every switch, incl. hidden/at load)
