@@ -1,64 +1,64 @@
 {
-  "updated": "2026-09-13",
+  "updated": "2026-09-14",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-09-13",
+      "date": "2026-09-14",
       "label": "Morning Brief",
-      "title": "Storefronts Open, Courts Hold the Line: Ann Arbor Expands as Rescheduling Survives Its First Legal Test",
-      "top": "Michigan operators are pushing forward with new formats and locations even as the 24% wholesale tax fight grinds on, while nationally the D.C. Circuit just upheld medical marijuana's Schedule III status and the FDA's psychedelics pipeline is accelerating faster than anyone predicted a year ago. For operators watching the tax line and the federal calendar, today's news skews toward runway and opportunity.",
+      "title": "Tax Fight Becomes a Campaign Issue as Federal Rescheduling Clears a Legal Hurdle",
+      "top": "Michigan's 24% wholesale tax is now a defining issue in the governor's race, with cannabis operators lining up behind a repeal pledge and bipartisan legislators pushing HB 6224 — real momentum for relief. Nationally, a D.C. Circuit win for medical marijuana rescheduling and accelerating FDA psychedelics pathways signal the federal landscape is bending toward opportunity even as the broader Schedule III fight grinds on.",
       "local": [
         {
-          "text": "Michigan-based Lume Cannabis Co. opened its new Ann Arbor location at 2247 W. Liberty Street, with a three-day grand opening celebration running 9 a.m. to 9 p.m. A new storefront in a college-town market is a bet on steady demand even as statewide sales soften.",
-          "source": "ClickOnDetroit",
-          "url": "https://www.clickondetroit.com/topic/Marijuana_Dispensary/"
+          "text": "GOP gubernatorial nominee John James is campaigning on a pledge to 'repeal or sharply reduce' the 24% wholesale tax, and Michigan cannabis operators — including JARS Cannabis executives who raised him $90,000 at a fundraiser — are rallying behind him, giving the industry real electoral leverage for 2026.",
+          "source": "Bridge Michigan",
+          "url": "https://bridgemi.com/michigan-government/john-james-pitches-marijuana-tax-repeal-courts-industry-donors/"
         },
         {
-          "text": "Fields Cannary, a hospitality-driven dispensary, restaurant and consumption lounge in a rebuilt former Sons of Norway Hall, is preparing to open in Muskegon by the end of September — proof that ambitious, experience-first retail concepts are still getting built in Michigan despite the tax squeeze.",
-          "source": "Fox17 (WXMI)",
-          "url": "https://www.fox17online.com/news/local-news/lakeshore/muskegon/cannabis-entertainment-facility-prepares-to-open-in-muskegon"
-        },
-        {
-          "text": "Jars Cannabis notched a rare regulatory win in Madison Heights: the retail chain reached an agreement with city authorities to remove a Flock surveillance camera that had been aimed at the store's parking lot entrance, a requirement stemming from a 2022 licensing lawsuit settlement. A template other operators can point to when negotiating restrictive local settlements.",
+          "text": "A bipartisan repeal bill, HB 6224, is now on the table in Lansing, with a Republican state representative framing the wholesale tax as an unnecessary burden — giving operators a concrete legislative vehicle to watch this fall.",
           "source": "Cann.dev",
           "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
         },
         {
-          "text": "The industry's legal path to tax relief is still very much alive: the Court of Claims declined to block the wholesale tax at the injunction stage, finding the ballot language allowed for \"other taxes,\" but that case is now headed toward trial — and a separate tax-pyramiding suit gives operators a second shot at real relief.",
-          "source": "Law Commentary",
-          "url": "https://www.lawcommentary.com/articles/michigan-cannabis-industry-files-second-lawsuit-challenging-24-marijuana-wholesale-tax"
+          "text": "Grön's bestselling 'Pearls' gummies, owned by Wyld, just landed on Michigan shelves at Pure Options, High Profile, and Lume as part of a four-state rollout — fresh proof that national edibles brands still see Michigan as a growth market worth entering.",
+          "source": "Gander Newsroom (MichiGanja Report)",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-090826/"
         },
         {
-          "text": "Even the state's own numbers are building the case for repeal: Michigan's 24% wholesale marijuana tax generated about $37 million in the second quarter of 2026 and roughly $34 million in the first — against an initial estimate of $105 million per quarter, and a gubernatorial candidate has already pledged to eliminate the tax if elected, calling it \"not fair and equitable.\"",
-          "source": "The Gander / MJBizDaily",
+          "text": "Fields Cannary is targeting a fall opening in Muskegon for a hospitality-forward dispensary-plus-restaurant buildout, pushing the retail format further than most Michigan operators have gone — a bet on experience-driven retail even amid tax pressure.",
+          "source": "Cann.dev",
+          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
+        },
+        {
+          "text": "The wholesale tax generated only about $34–37 million per quarter against a $105 million-per-quarter projection, undercutting the case for keeping the rate where it is and strengthening operators' argument for a cut or repeal as the fiscal shortfall becomes undeniable.",
+          "source": "Gander Newsroom (MichiGanja Report)",
           "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-090826/"
         }
       ],
       "national": [
         {
-          "text": "The biggest federal win in months: a lawsuit seeking to stop medical marijuana's Schedule III reclassification was rebuffed this week in federal court, as on Sept. 9, 2026, the D.C. Circuit court left the medical marijuana rescheduling order in effect, clearing a key legal hurdle as the broader adult-use rescheduling case continues.",
+          "text": "The D.C. Circuit rebuffed a lawsuit seeking to block medical marijuana's April 2026 Schedule III reclassification on Sept. 9, finding opponents had not demonstrated grounds to overturn it — clearing a key legal cloud and stabilizing the reform already in effect.",
           "source": "Cannabis Business Times",
           "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order"
         },
         {
-          "text": "Psychedelics regulation is moving fast: the FDA's finalized clinical trial guidance arrives alongside a public hearing on the potential future therapeutic use of psychedelic drugs scheduled for September 14, 2026, with analysts calling it \"a more supportive regulatory environment that could reduce regulatory risk for psychedelic drug developers.\"",
-          "source": "Tech Times",
-          "url": "https://www.techtimes.com/articles/320454/20260714/fda-finalizes-psychedelic-trial-rules-unblinding-problem-gets-official-answer.htm"
+          "text": "The DEA itself formally argued in its post-hearing brief that marijuana no longer meets the criteria for Schedule I, putting the federal government's own enforcement agency on record for full rescheduling as the case heads toward an administrative law judge's recommendation.",
+          "source": "The Cannabis Business Advisors",
+          "url": "https://thecannabisbusinessadvisors.com/cannabis-rescheduling-update-dea-schedule-iii-august-2026/"
         },
         {
-          "text": "Compass Pathways keeps setting the pace toward first psychedelic approval: the FDA granted Compass's NDA rolling review request and selected COMP360, its synthetic psilocybin formulation, for the Commissioner's National Priority Voucher program for treatment-resistant depression, after positive durability data cleared the way for submission.",
-          "source": "Compass Pathways (Investor Relations)",
-          "url": "https://ir.compasspathways.com/News--Events-/news/news-details/2026/Compass-Pathways-Announces-FDA-Granted-NDA-Rolling-Review-Request-and-Awarded-Commissioners-National-Priority-Voucher/default.aspx"
+          "text": "Compass Pathways' COMP360 psilocybin therapy hit 26-week Phase 3 durability data confirming a 'rapid onset and durable profile,' with commercial launch-readiness on track for late 2026 and a first-half-2027 launch — the psychedelics sector's most advanced approval push yet.",
+          "source": "Compass Pathways investor release",
+          "url": "https://ir.compasspathways.com/News--Events-/news/news-details/2026/Compass-Pathways-Announces-Six-Month-Data-from-Second-Phase-3-Trial-Confirming-Rapid-and-Durable-Profile/default.aspx"
         },
         {
-          "text": "M&A is going cross-border: Curaleaf announced a US$4-per-share takeover bid for Aurora Cannabis on August 10 and formally commenced the offer on August 18, a 45% premium and $1.5 billion-plus in pro forma combined revenue, a deal industry watchers say signals confidence from partial rescheduling and an improving capital backdrop.",
-          "source": "Cann.dev",
-          "url": "https://www.cann.dev/cannabis-ma-august-2026-curaleaf-vireo-consolidation/"
+          "text": "Vireo Growth's acquisition spree continues to reshape the MSO landscape, with its all-stock deal to buy Planet 13 adding 36 dispensaries and pushing Vireo toward roughly 265 stores across 15 states — a sign of consolidation-driven confidence even in a choppy capital environment.",
+          "source": "MJBizDaily",
+          "url": "https://mjbizdaily.com/news/cannabis-mso-vireo-growth-to-acquire-planet-13-in-all-stock-deal/617152/"
         },
         {
-          "text": "Operators just got a rare federal breather: the federal ban on hemp THC products that was supposed to take effect on Nov. 12 has been pushed back to Dec. 11 under a bill President Trump signed last week, buying the hemp and cross-category cannabis supply chain another month to adapt.",
-          "source": "The Gander",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-090826/"
+          "text": "FDA's newly finalized psychedelics guidance signals the agency is 'receptive' to helping companies succeed, following Trump's executive order urging an established approval path for psilocybin, MDMA, and even ibogaine — with one treating physician predicting the drug class could reshape depression treatment.",
+          "source": "BioSpace",
+          "url": "https://www.biospace.com/fda/final-psychedelics-guidance-suggests-fda-is-receptive-to-helping-companies-succeed"
         }
       ]
     }
