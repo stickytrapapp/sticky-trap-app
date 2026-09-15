@@ -34,6 +34,10 @@
   .btn{display:block;width:100%;margin-top:6px;background:var(--grad);color:#0A0A0F;border:0;border-radius:28px;padding:16px 20px;font:inherit;font-size:16px;font-weight:900;cursor:pointer;text-align:center;text-decoration:none}
   .btn[disabled]{opacity:.55}
   .note{color:var(--muted);font-size:12.5px;text-align:center;margin-top:12px;line-height:1.5}
+  .prefs{margin-top:16px;padding:12px 14px;background:var(--panel);border:1px solid var(--line);border-radius:14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .prefs .pl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:800;flex:1 1 100%}
+  .prefs label{display:inline-flex;align-items:center;gap:7px;font-size:14px;color:#fff;cursor:pointer}.prefs label.off{opacity:.5}
+  .prefs input{accent-color:var(--cy);width:18px;height:18px;margin:0}.prefs small{flex:1 1 100%;color:var(--muted);font-size:11.5px;line-height:1.4}
   .foot{color:var(--muted);font-size:11.5px;text-align:center;margin-top:28px;line-height:1.6}
   .foot a{color:var(--cy);text-decoration:none;font-weight:700}
   .err{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;text-align:center;color:var(--muted);line-height:1.6}
@@ -77,7 +81,11 @@
       (o.can_approve?'<button class="btn" id="approve">✓ Approve my proof</button><div class="note">Approving tells us the proof is right and we can print.</div>':'')+
       (o.can_change?'<button class="btn ghost" id="chg" type="button" style="margin-top:8px">Request changes</button><div id="chgbox" hidden style="margin-top:8px"><textarea id="chgnote" rows="3" maxlength="400" placeholder="What should change? e.g. make the logo bigger, fix the strain name"></textarea><button class="btn" id="chgsend" type="button" style="margin-top:8px">Send change request</button></div>':'')+
       (o.reorder_url?'<a class="btn" href="'+esc(o.reorder_url)+'" style="display:block;text-align:center;text-decoration:none">Reorder this job →</a><div class="note">Opens the app with this order filled in - adjust anything, then send.</div>':'')+
-      '<ul class="tl" style="margin-top:18px">'+tl+'</ul>';
+      '<ul class="tl" style="margin-top:18px">'+tl+'</ul>'+
+      (o.token?'<div class="prefs" id="prefs"><span class="pl">Order updates</span>'+
+        '<label><input type="checkbox" class="pf" data-v="email"'+(o.notify==='both'||o.notify==='email'||!o.notify?' checked':'')+(o.email?'':' disabled')+'> Email'+(o.email?'':' <span style="color:var(--muted)">(none on file)</span>')+'</label>'+
+        '<label'+(o.phone_last4?'':' class="off"')+'><input type="checkbox" class="pf" data-v="sms"'+(o.notify==='both'||o.notify==='sms'?' checked':'')+(o.phone_last4?'':' disabled')+'> Text'+(o.phone_last4?' <span style="color:var(--muted)">…'+esc(o.phone_last4)+'</span>':' <span style="color:var(--muted)">(no phone on file)</span>')+'</label>'+
+        '<small id="prefnote">'+(o.phone_last4&&!o.sms_ready?'Texts start once we switch them on - email keeps you covered until then.':'Pick how you want to hear from us. One has to stay on.')+'</small></div>':'');
     var ab=document.getElementById('approve');
     if(ab) ab.addEventListener('click',function(){ ab.disabled=true; ab.textContent='Sending…';
       fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'approve',code:o.code,token:o.token})}).then(function(r){return r.json();})
@@ -85,6 +93,14 @@
         .catch(function(){ ab.disabled=false; ab.textContent='✓ Approve my proof'; }); });
     var cb=document.getElementById('chg'), cbox=document.getElementById('chgbox'), cs=document.getElementById('chgsend');
     if(cb) cb.addEventListener('click',function(){ cbox.hidden=!cbox.hidden; if(!cbox.hidden){ document.getElementById('chgnote').focus(); } });
+    var pbox=document.getElementById('prefs');
+    if(pbox){ pbox.querySelectorAll('.pf').forEach(function(cb){ cb.addEventListener('change',function(){
+      var em=pbox.querySelector('.pf[data-v=email]'), sm=pbox.querySelector('.pf[data-v=sms]'), note=document.getElementById('prefnote');
+      if(!em.checked&&!sm.checked){ cb.checked=true; note.textContent='Keep at least one way for us to reach you.'; return; }
+      var v=em.checked&&sm.checked?'both':(em.checked?'email':'sms'); note.textContent='Saving…';
+      fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'order_prefs',code:o.code,token:o.token,notify:v})}).then(function(r){return r.json();})
+        .then(function(j){ if(j&&j.ok){ o.notify=v; note.textContent=v==='both'?'Saved - email and text.':v==='email'?'Saved - email only.':'Saved - text only.'; } else { cb.checked=!cb.checked; note.textContent='Could not save that - try again.'; } })
+        .catch(function(){ cb.checked=!cb.checked; note.textContent='Could not save that - try again.'; }); }); }); }
     if(cs) cs.addEventListener('click',function(){ var note=document.getElementById('chgnote').value.trim(); if(!note){ alert('Tell us what should change.'); return; } cs.disabled=true; cs.textContent='Sending…';
       fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'changes',code:o.code,token:o.token,note:note})}).then(function(r){return r.json();})
         .then(function(j){ if(j&&j.ok){ load(); } else { cs.disabled=false; cs.textContent='Send change request'; alert('Could not send that - try again or text 734 460 3845.'); } })
