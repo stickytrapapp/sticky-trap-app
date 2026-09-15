@@ -1,4 +1,4 @@
-THE STICKY TRAP -- CHAT KNOWLEDGE BASE (auto-generated 2026-09-11 from the live app by Price Engine/make_chat_kb.py; do not hand-edit -- house facts live in Price Engine/chat-facts.txt)
+THE STICKY TRAP -- CHAT KNOWLEDGE BASE (auto-generated 2026-09-15 from the live app by Price Engine/make_chat_kb.py; do not hand-edit -- house facts live in Price Engine/chat-facts.txt)
 
 == About The Sticky Trap ==
 The Sticky Trap is a design house and in-house print shop in Ann Arbor, Michigan: branding, custom art, stickers, labels, promotionals and merch. Motto: "Let's Stick Together."
@@ -49,6 +49,7 @@ If a print error is ours, we reprint it free. If the error is in art you approve
 If you cannot see a proof clearly, tell us: we are happy to retake photos or video and send them again by email or phone.
 Shipping damage is handled through a USPS claim.
 We work with anyone who wants to use our services, cannabis or not. We brand you.
+Jar label prices on the menu (Miron and Chubby) are per set: one lid label and one wrap label for each jar at that price. Do not split a lid and a wrap into two lines.
 
 == Materials, effects, how we work, common questions (from the app's Specs tab) ==
 Materials & Textures
