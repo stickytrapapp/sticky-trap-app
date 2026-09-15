@@ -1,64 +1,75 @@
 {
-  "updated": "2026-09-14",
+  "updated": "2026-09-15",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-09-14",
+      "date": "2026-09-15",
       "label": "Morning Brief",
-      "title": "Tax-Repeal Momentum Hits Michigan as Federal Courts Clear the Path for Rescheduling",
-      "top": "Michigan operators are catching real political tailwind on the 24% wholesale tax — a gubernatorial candidate is campaigning on killing it and a new repeal bill just dropped in Lansing — while new stores keep opening in Ann Arbor and beyond. Nationally, a federal appeals court just upheld cannabis rescheduling, Compass Pathways landed a fast-track FDA voucher for its psilocybin drug, and Curaleaf's hostile Aurora bid shows real money still chasing consolidation.",
+      "title": "Tax-Relief Momentum in Lansing, Psychedelic Fast-Track in D.C.: Industry Turns a Corner",
+      "top": "Michigan operators are finally seeing daylight on the 24% wholesale tax as a gubernatorial candidate courts industry cash and a Muskegon dispensary bets big on hospitality, even as JARS Cannabis expands into Arizona. Nationally, the FDA is clearing runway for psychedelic medicine while a federal court just protected the marijuana rescheduling gains operators have been waiting on.",
       "local": [
         {
-          "text": "New Standard debuts flagship Ann Arbor store — the retailer ran giveaways and discounts for its opening weekend as it staked a claim in one of the state's most competitive dispensary markets.",
-          "source": "ClickOnDetroit",
-          "url": "https://www.clickondetroit.com/topic/Dispensary/"
+          "text": "JARS Cannabis buys its way into Arizona",
+          "detail": "The Michigan-based chain is buying its way into a much bigger footprint out west, acquiring Sonoran Roots and its eight Ponderosa dispensaries to become Arizona's largest chain.",
+          "text_full": "JARS Cannabis buys its way into Arizona — The Michigan-based chain announced a deal to acquire Sonoran Roots and its eight Ponderosa dispensaries, soon making JARS the largest dispensary chain in Arizona.",
+          "source": "The 'Gander",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-083126/"
         },
         {
-          "text": "Muskegon's Fields Cannary eyes fall opening — the hospitality-forward project is building a retail cannabis dispensary paired with a full-service restaurant, pushing the format further than most Michigan shops have gone.",
-          "source": "Cann.dev",
-          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
-        },
-        {
-          "text": "John James vows to repeal marijuana tax — the GOP governor nominee is proposing to \"repeal or sharply reduce\" the 24% wholesale tax and courting industry donors as he heads into the fall campaign.",
+          "text": "James courts cannabis cash with tax-repeal vow",
+          "text_full": "James courts cannabis cash with tax-repeal vow — GOP gubernatorial nominee John James is proposing to repeal or sharply reduce the 24% wholesale tax, and a JARS-hosted fundraiser netted his campaign nearly $90,000.",
           "source": "Bridge Michigan",
           "url": "https://bridgemi.com/michigan-government/john-james-pitches-marijuana-tax-repeal-courts-industry-donors/"
         },
         {
-          "text": "Michigan Supreme Court limits weed-odor car searches — police can no longer search a vehicle on smell alone, a ruling that already helped one Kent County gun charge head toward dismissal.",
+          "text": "State Supreme Court curbs weed-smell searches",
+          "text_full": "State Supreme Court curbs weed-smell searches — Michigan cops can no longer search a car just because they think you have weed, per a new Michigan Supreme Court ruling that shields consumers and operators alike.",
           "source": "The 'Gander",
           "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-6/"
         },
         {
-          "text": "Tax revenue misses target, new repeal bill filed — the wholesale tax brought in roughly $34-37 million per quarter against a $105 million projection, and a Republican lawmaker's House Bill 6224 now aims to scrap it outright.",
-          "source": "The 'Gander / Cann.dev",
+          "text": "Muskegon dispensary-restaurant targets fall opening",
+          "text_full": "Muskegon dispensary-restaurant targets fall opening — Fields Cannary is targeting a fall launch for its retail dispensary, with a full-service restaurant to follow, pushing the hospitality format further than most Michigan stores.",
+          "source": "cann.dev",
+          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
+        },
+        {
+          "text": "Tax shortfall fuels bipartisan repeal push",
+          "text_full": "Tax shortfall fuels bipartisan repeal push — The 24% wholesale tax generated only about $37 million in Q2 against a $105 million-per-quarter projection, and a GOP lawmaker's HB 6224 now aims to repeal it outright.",
+          "source": "The 'Gander",
           "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-090826/"
         }
       ],
       "national": [
         {
-          "text": "Federal court upholds medical marijuana rescheduling — the D.C. Circuit rejected a challenge from reclassification opponents this week, keeping marijuana's move to Schedule III intact and clearing a legal cloud for medical operators.",
+          "text": "FDA hearing signals green light for psychedelics",
+          "text_full": "FDA hearing signals green light for psychedelics — Jefferies analysts say the FDA's finalized trial guidance paired with its September 14 public hearing points to a more supportive regulatory environment for developers like Compass Pathways, Atai, Cybin and GH Research.",
+          "source": "TechTimes",
+          "url": "https://www.techtimes.com/articles/320454/20260714/fda-finalizes-psychedelic-trial-rules-unblinding-problem-gets-official-answer.htm"
+        },
+        {
+          "text": "Compass Pathways nears first psilocybin approval",
+          "text_full": "Compass Pathways nears first psilocybin approval — COMP360's NDA review is underway with final submission on track for Q4 2026, and Compass anticipates launch in the first half of 2027 pending FDA approval and DEA rescheduling.",
+          "source": "Clinical Trials Arena",
+          "url": "https://www.clinicaltrialsarena.com/news/fda-finalises-psychedelic-clinical-trial-guidance/"
+        },
+        {
+          "text": "Court rejects challenge to marijuana rescheduling",
+          "text_full": "Court rejects challenge to marijuana rescheduling — A D.C. Circuit court left the medical marijuana Schedule III order in effect on Sept. 9, ruling that anti-rescheduling forces hadn't shown they'd win.",
           "source": "Cannabis Business Times",
           "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order"
         },
         {
-          "text": "DEA's own brief backs full Schedule III move — the agency told the court in its final post-hearing brief that cannabis no longer meets the statutory criteria to stay in Schedule I.",
-          "source": "The Cannabis Business Advisors",
+          "text": "DEA itself now argues for Schedule III",
+          "text_full": "DEA itself now argues for Schedule III — In its final post-hearing brief, the DEA told the court marijuana no longer meets the statutory criteria for Schedule I, a notable shift from the agency historically defending prohibition.",
+          "source": "Cannabis Business Advisors",
           "url": "https://thecannabisbusinessadvisors.com/cannabis-rescheduling-update-dea-schedule-iii-august-2026/"
         },
         {
-          "text": "Compass Pathways lands FDA priority voucher — regulators granted a rolling NDA review and selected COMP360, its synthetic psilocybin treatment for hard-to-treat depression, for the Commissioner's National Priority Voucher program.",
-          "source": "Compass Pathways",
-          "url": "https://ir.compasspathways.com/News--Events-/news/news-details/2026/Compass-Pathways-Announces-FDA-Granted-NDA-Rolling-Review-Request-and-Awarded-Commissioners-National-Priority-Voucher/default.aspx"
-        },
-        {
-          "text": "Hemp THC crackdown pushed back to December — the federal ban that was set for Nov. 12 got a reprieve to Dec. 11 under a bill President Trump signed, buying the industry more runway.",
-          "source": "The 'Gander",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-090826/"
-        },
-        {
-          "text": "Curaleaf presses hostile $4-a-share Aurora bid — the MSO's takeover offer carries a 45% premium and would create a combined company with more than $1.5 billion in pro forma revenue, even as Aurora's board urges shareholders to reject it.",
-          "source": "Cann.dev / Business of Cannabis",
-          "url": "https://www.cann.dev/cannabis-ma-august-2026-curaleaf-vireo-consolidation/"
+          "text": "Vireo Growth expands footprint via Eaze buy",
+          "text_full": "Vireo Growth expands footprint via Eaze buy — The multistate operator's acquisition of the delivery platform expands Vireo's operating footprint to 10 states with 166 dispensaries.",
+          "source": "New Cannabis Ventures",
+          "url": "https://www.newcannabisventures.com/category/mergers-and-acquisitions/"
         }
       ]
     }
