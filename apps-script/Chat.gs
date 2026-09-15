@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 43;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 44;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -147,6 +147,7 @@ var TOOLS = [
 function doGet(e) {
   var p = (e && e.parameter) || {};
   if (p.action === 'lb') { try { return out_(leaderboard_(p)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
+  if (p.action === 'awards') { try { return out_(awardsList_(p)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }   // v44
   if (p.action === 'track') { try { return out_(trackGet_(p)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
   if (p.action === 'orders') { try { return out_(ordersList_(p)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
   if (p.reporttest && pinOk_(p.pin)) {   // v40: prove the Drive archive from outside
@@ -163,7 +164,8 @@ function doGet(e) {
     try { var rows = ordersSheet_().getDataRange().getValues(); open = 0; for (var i = 1; i < rows.length; i++) if (rows[i][ORDER_COLS.indexOf('stage')] !== 'complete' && rows[i][0] !== '') open++; } catch (err2) { storeErr = String(err2).slice(0, 120); }
     return out_({ ok: true, version: CODE_VERSION, key: !!PROP.getProperty('ANTHROPIC_API_KEY'), model: cfg_('MODEL'), kb: kb.length, prices: n, kb_url: cfg_('KB_URL'),
                   store: store.slice(0, 8), open_orders: open, store_error: storeErr, mail_error: PROP.getProperty('MAIL_LAST_ERROR') || '',
-                  sms: smsReady_() ? 'ready' : 'no twilio', sms_error: PROP.getProperty('SMS_LAST_ERROR') || '', billing_draft: true });   // v27 store; v29 mail; v32 sms; v36 billing_draft
+                  sms: smsReady_() ? 'ready' : 'no twilio', sms_error: PROP.getProperty('SMS_LAST_ERROR') || '', billing_draft: true,
+                  push: !!PROP.getProperty('FCM_PRIVATE_KEY'), awards: true });   // v27 store; v29 mail; v32 sms; v36 billing_draft; v44 push + awards
   }
   return out_({ ok: true, hint: 'POST {uid, tab, basket, messages:[{role,content}]}' });
 }
@@ -192,6 +194,11 @@ function doPost(e) {
   if (body.action === 'lead_phone') { try { return out_(leadPhone_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }         // v38: 'text me when they reply' after a hand-off
   if (body.action === 'report_send') { try { return out_(reportSend_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }       // v41: any PC-side report -> email + dated Drive copy
   if (body.action === 'sms_optin') { try { return out_(smsOptin_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }           // v42: public opt-in page thestickytrap.app/sms/
+  if (body.action === 'push_sub') { try { return out_(pushSub_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }             // v44: FCM token from /push.js
+  if (body.action === 'push_unsub') { try { return out_(pushUnsub_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
+  if (body.action === 'order_rate') { try { return out_(orderRate_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }         // v44: thumbs after Complete
+  if (body.action === 'award') { try { return out_(awardIn_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }               // v44: verify / review awards
+  if (body.action === 'awards_ack') { try { return out_(awardsAck_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
   if (body.action === 'reauth') { try { return out_(reauth_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }                 // v31
 
   var uid = String(body.uid || 'anon').slice(0, 40);
@@ -673,6 +680,28 @@ function scoresSheet_() {
   try { sh.getRange('C:C').setNumberFormat('@'); sh.getRange('E:E').setNumberFormat('@'); } catch (e) {}   // keep handles like 007 and months like 2026-09 as text
   return sh;
 }
+function weekOfDay_(day) {   // v44: ISO week id 'YYYY-Www' from a UTC day number
+  var d = new Date(day * 864e5); var t = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
+  var nn = (t.getUTCDay() + 6) % 7; t.setUTCDate(t.getUTCDate() - nn + 3);
+  var y = t.getUTCFullYear(), first = new Date(Date.UTC(y, 0, 4)); var w = 1 + Math.round(((t - first) / 864e5 - 3 + ((first.getUTCDay() + 6) % 7)) / 7);
+  return y + '-W' + ('0' + w).slice(-2);
+}
+var WEEK_PRIZE = '12 branded slaps';   // Shane: the weekly ladder prize (cheap in-house run of the winner's own logo)
+function winnersSheet_() { var ss = ss_(), sh = ss.getSheetByName('winners'); if (!sh) { sh = ss.insertSheet('winners'); sh.appendRow(['ts', 'week', 'uid', 'handle', 'total', 'days', 'prize', 'claimed']); } return sh; }
+function rollWeek_() {   // Monday 00:10 trigger (installWeekly): freeze last week's #1 into the winners sheet, once
+  var lastDay = Math.floor(Date.now() / 864e5) - 1, wk = weekOfDay_(lastDay), ws = winnersSheet_(), rows = ws.getDataRange().getValues();
+  for (var i = 1; i < rows.length; i++) if (String(rows[i][1]) === wk) return;
+  var sh = scoresSheet_(), sc = sh.getDataRange().getValues(), agg = {};
+  for (var j = 1; j < sc.length; j++) { if (weekOfDay_(+sc[j][3]) !== wk) continue; var u = String(sc[j][1]); if (u.indexOf('test-') === 0) continue;
+    var a = agg[u] || (agg[u] = { uid: u, handle: String(sc[j][2]), total: 0, days: 0 }); a.total += +sc[j][5]; a.days++; a.handle = String(sc[j][2]); }
+  var top = Object.keys(agg).map(function (k) { return agg[k]; }).sort(function (x, y) { return y.total - x.total || y.days - x.days; })[0];
+  if (!top) return;
+  ws.appendRow([new Date(), wk, top.uid, top.handle, top.total, top.days, WEEK_PRIZE, false]);
+  try { GmailApp.sendEmail(notifyTo_(), 'Trap Points weekly winner: ' + top.handle, top.handle + ' topped the ladder for ' + wk + ' with ' + top.total + ' over ' + top.days + ' boards. Prize: ' + WEEK_PRIZE + '. They claim it in the app (Rewards > Your claims) - watch for the claim email.'); } catch (e) {}
+}
+function lastWinner_() { var rows = winnersSheet_().getDataRange().getValues(); if (rows.length < 2) return null; var r = rows[rows.length - 1];
+  return { week: String(r[1]), uid: String(r[2]), handle: String(r[3]), total: +r[4], days: +r[5], prize: String(r[6]), claimed: r[7] === true || String(r[7]) === 'true' }; }
+function installWeekly() { ScriptApp.getProjectTriggers().forEach(function (t) { if (t.getHandlerFunction() === 'rollWeek_') ScriptApp.deleteTrigger(t); }); ScriptApp.newTrigger('rollWeek_').timeBased().onWeekDay(ScriptApp.WeekDay.MONDAY).atHour(0).nearMinute(10).create(); }
 function monthOfDay_(day) { var d = new Date(day * 864e5); return d.getUTCFullYear() + '-' + ('0' + (d.getUTCMonth() + 1)).slice(-2); }
 function scoreIn_(b) {
   var uid = String(b.uid || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 40);
@@ -697,12 +726,13 @@ function scoreIn_(b) {
 function leaderboard_(p) {
   var month = /^\d{4}-\d{2}$/.test(p.month || '') ? p.month : monthOfDay_(Math.floor(Date.now() / 864e5));
   var uid = String(p.uid || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 40);
-  var key = 'lb:' + month, hit = CACHE.get(key), board;
+  var period = p.period === 'week' ? 'week' : 'month', today = Math.floor(Date.now() / 864e5), weekId = weekOfDay_(today);   // v44: weekly view
+  var key = (period === 'week' ? 'lb:w:' + weekId : 'lb:' + month), hit = CACHE.get(key), board;
   if (hit) board = JSON.parse(hit);
   else {
     var sh = scoresSheet_(), rows = sh.getDataRange().getValues(), agg = {};
     for (var i = 1; i < rows.length; i++) {
-      if (monthOfDay_(+rows[i][3]) !== month) continue;   // derive from the numeric day column (Sheets may coerce col E)
+      if (period === 'week' ? weekOfDay_(+rows[i][3]) !== weekId : monthOfDay_(+rows[i][3]) !== month) continue;   // derive from the numeric day column (Sheets may coerce col E)
       var u = String(rows[i][1]);
       if (u.indexOf('test-') === 0) continue;                          // test traffic never shows
       var a = agg[u] || (agg[u] = { uid: u, handle: '', total: 0, days: 0, ts: 0 });
@@ -720,7 +750,15 @@ function leaderboard_(p) {
     break;
   }
   var refs = 0; try { refs = refCount_(String(p.handle || '')); } catch (e) {}
-  return { ok: true, month: month, count: board.length, top: top, you: you, refs: refs };
+  var out = { ok: true, month: month, count: board.length, top: top, you: you, refs: refs };
+  if (period === 'week') {   // v44: week id, when it ends, the prize, and last week's recorded winner
+    var d0 = new Date(); var dow = (d0.getDay() + 6) % 7; var nextMon = new Date(d0.getFullYear(), d0.getMonth(), d0.getDate() - dow + 7, 0, 0, 0);
+    out.period = 'week'; out.week = weekId; out.week_ends = nextMon.getTime() - 1000; out.prize = WEEK_PRIZE;
+    var lw = null; try { lw = lastWinner_(); } catch (e) {}
+    if (lw) lw.you_won = !!uid && lw.uid === uid;
+    out.last_week = lw;
+  }
+  return out;
 }
 
 /* ---------- referrals: a new player's first finished board reports the handle that referred them ---------- */
@@ -896,7 +934,8 @@ var NUDGE_HOURS = { proof_sent: 24, printing: 72 };   // Shane 2026-09-08: 24 h 
 var ORDER_COLS = ['code', 'created', 'name', 'company', 'email', 'phone', 'items', 'due', 'stage', 'stage_ts', 'history', 'token', 'monday_item', 'square_inv', 'nudged_ts', 'notes', 'source', 'pay_url',   // pay_url = Square invoice link (v22)
                   'lines', 'subtotal', 'total', 'ship', 'address', 'cust_notes',                       // v31 (App step 2): cart lines re-priced on the server
                   'payment_id', 'payment_status', 'payment_amt', 'auth_ts', 'tax_exempt',             // v31 (App step 3): Square authorize at submit, capture on approval
-                  'notify'];                                                                            // v32: 'both' (default) | 'email' | 'sms' - never neither (Shane 2026-09-11)
+                  'notify',                                                                             // v32: 'both' (default) | 'email' | 'sms' - never neither (Shane 2026-09-11)
+                  'uid', 'rating'];                                                                     // v44: Trap Points player id from the cart (awards), 'how did we do' thumbs
 function ordersSheet_() {
   var ss = ss_(), sh = ss.getSheetByName('orders');
   if (!sh) { sh = ss.insertSheet('orders'); sh.appendRow(ORDER_COLS); try { sh.getRange('A:A').setNumberFormat('@'); sh.getRange('H:H').setNumberFormat('@'); } catch (e) {} }
@@ -1099,8 +1138,10 @@ function stageMail_(o, stage, note) {
     (stage === 'proof_sent' ? btn('Review & approve my proof', url) : btn('Track my order', url)) +
     (stage === 'quoted' && o.pay_url ? btn('Pay the invoice', o.pay_url) : '') +
     (stage === 'complete' ? btn('Reorder this job', reorderUrl_(o)) : '') +
+    (stage === 'complete' ? '<p style="margin:6px 0 0;color:#555">How did we do? <a href="' + url + '&rate=up" style="color:#111;font-weight:800;text-decoration:none">&#128077; Great</a> &nbsp;&nbsp; <a href="' + url + '&rate=down" style="color:#111;font-weight:800;text-decoration:none">&#128078; Not this time</a></p>' : '') +   // v44
     '<p style="color:#888;font-size:12px">Reply to this email or text 734 460 3845 with any changes. FM Holdings LLC d/b/a The Sticky Trap, 4750 Venture Dr, Suite 101, Ann Arbor, MI 48108.</p></div>';
   GmailApp.sendEmail(o.email, 'Your Sticky Trap order ' + o.code + ': ' + st.label, st.label + ' - ' + st.msg + '\n' + url + (stage === 'quoted' && o.pay_url ? '\nPay: ' + o.pay_url : '') + (stage === 'complete' ? '\nReorder: ' + reorderUrl_(o) : ''), { htmlBody: html, name: 'The Sticky Trap', replyTo: SHOP_EMAIL });
+  try { pushOrder_(o, 'Order ' + o.code + ': ' + st.label, st.msg + (note ? ' - ' + note : '')); } catch (e) {}   // v44: push to the customer's phone(s), never blocks the email
   return true;
 }
 function orderNew_(b) {
@@ -1128,7 +1169,7 @@ function orderNew_(b) {
   var phoneN = normPhone_(b.phone) || String(b.phone || '').slice(0, 40);   // v32: E.164 when it is a real number, else as typed (staff can fix it)
   var notifyPref = (String(b.notify || '').toLowerCase() === 'email' || String(b.notify || '').toLowerCase() === 'sms') ? String(b.notify).toLowerCase() : 'both';
   if (notifyPref === 'sms' && !normPhone_(b.phone)) notifyPref = 'both';
-  var o = { code: code, created: now, name: name, company: company, email: email, phone: phoneN, items: itemsTxt, due: String(b.due || '').slice(0, 40), notify: notifyPref,
+  var o = { code: code, created: now, name: name, company: company, email: email, phone: phoneN, items: itemsTxt, due: String(b.due || '').slice(0, 40), notify: notifyPref, uid: String(b.uid || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 40), rating: '',
             lines: cl ? JSON.stringify(cl.lines) : '', subtotal: cl ? cl.subtotal : '', total: cl ? cl.total : '', ship: String(b.ship || '').slice(0, 10), address: String(b.address || '').slice(0, 300), cust_notes: String(b.notes || '').slice(0, 600),
             payment_id: pay ? pay.id : '', payment_status: pay ? 'authorized' : '', payment_amt: pay ? (pay.amount_money.amount / 100) : '', auth_ts: pay ? now : '', tax_exempt: b.payment && b.payment.taxExempt ? 'yes' : '',
             stage: stage, stage_ts: now, history: JSON.stringify([{ stage: stage, ts: now.getTime(), note: '' }]), token: token, monday_item: '', square_inv: String(b.square_inv || '').slice(0, 60), nudged_ts: '', notes: '', source: String(b.source || '').slice(0, 20), pay_url: /^https:\/\//.test(String(b.pay_url || '')) ? String(b.pay_url).slice(0, 300) : '' };
@@ -1161,6 +1202,7 @@ function orderStage_(b) {
   sh.getRange(f.i, ORDER_COLS.indexOf('nudged_ts') + 1).setValue('');
   o.stage = stage; o.history = JSON.stringify(hist);
   if (stage === 'approved') captureOnApproval_(sh, f, o);   // v31: console tap on Approved captures the card hold
+  if (stage === 'shipped' || stage === 'complete') awardOnShip_(o);   // v44: +300 to the app player who placed it, +500 to their referrer (once)
   var nres = notifyClient_(sh, f, o, stage, note);
   return { ok: true, code: o.code, stage: stage, emailed: nres.emailed, texted: nres.texted };
 }
@@ -1198,6 +1240,7 @@ function publicOrder_(o) {
            lines: lines, total: o.total !== '' && o.total != null ? +o.total : null, email: o.email || '',   // v31: exact specs for reorders + re-auth
            payment_status: o.payment_status || '', payment_amt: o.payment_amt !== '' && o.payment_amt != null ? +o.payment_amt : null, ship: o.ship || '',
            notify: notifyPref_(o), phone_last4: o.phone ? String(o.phone).slice(-4) : '', sms_ready: smsReady_(),   // v32: the tracker page shows Email / Text toggles
+           rating: o.rating || '', push_devices: (function () { try { return pushTargets_(o).length; } catch (e) { return 0; } })(),   // v44
            stage_ts: o.stage_ts ? new Date(o.stage_ts).getTime() : null, can_approve: (o.stage === 'proof_sent' || o.stage === 'proofing'),
            can_change: (o.stage === 'proof_sent' || o.stage === 'proofing'), pay_url: (o.stage === 'quoted' && o.pay_url) ? o.pay_url : '', reorder_url: o.stage === 'complete' ? reorderUrl_(o) : '',
            stages: STAGE_ORDER.filter(function (k) { return k !== 'shipped' || o.stage === 'shipped'; }).filter(function (k) { return k !== 'ready' || o.stage !== 'shipped'; }).map(function (k) { return { key: k, label: STAGES[k].label }; }),
@@ -1337,6 +1380,123 @@ function smsOptin_(b) {   // v42: /sms/ opt-in page - records consent (optins ta
   try { GmailApp.sendEmail(notifyTo_(), 'SMS opt-in: ' + name + ' ' + phone, name + ' (' + email + ') opted in to order texts at ' + phone + ' via ' + (b.page || '/sms/') + '. Orders updated: ' + hit + '.', { name: 'Sticky Trap App' }); } catch (e) { mailErr_(e); }
   return { ok: true, phone: phone, orders_updated: hit };
 }
+// ---- Order-update PUSH via Firebase Cloud Messaging (v44, 2026-09-15; replaces Twilio texts). Sheet 'push': one row per device token. ----
+var PUSH_COLS = ['token', 'code', 'email', 'ua', 'standalone', 'active', 'ts', 'last_sent', 'fails'];
+function pushSheet_() { var ss = ss_(), sh = ss.getSheetByName('push'); if (!sh) { sh = ss.insertSheet('push'); sh.appendRow(PUSH_COLS); } return sh; }
+function pushRows_() { var sh = pushSheet_(), v = sh.getDataRange().getValues(), out = []; for (var i = 1; i < v.length; i++) { var o = {}; PUSH_COLS.forEach(function (c, k) { o[c] = v[i][k]; }); o._i = i + 1; out.push(o); } return out; }
+function pushSub_(b) {
+  var tok = String(b.token || '').trim(); if (tok.length < 20 || tok.length > 400) return { ok: false, error: 'bad_token' };
+  var code = String(b.code || '').trim().toUpperCase(), email = String(b.email || '').trim().toLowerCase().slice(0, 120);
+  if (code) { var f = findOrder_(ordersSheet_(), code); if (!f || String(b.order_token || '') !== String(f.o.token)) code = ''; else if (!email) email = String(f.o.email || '').toLowerCase(); }
+  var sh = pushSheet_(), rows = pushRows_(), now = new Date();
+  for (var i = 0; i < rows.length; i++) if (rows[i].token === tok) {
+    sh.getRange(rows[i]._i, 1, 1, PUSH_COLS.length).setValues([[tok, code || rows[i].code, email || rows[i].email, String(b.ua || '').slice(0, 120), !!b.standalone, true, rows[i].ts || now, rows[i].last_sent || '', 0]]);
+    return { ok: true, updated: true };
+  }
+  sh.appendRow([tok, code, email, String(b.ua || '').slice(0, 120), !!b.standalone, true, now, '', 0]);
+  return { ok: true };
+}
+function pushUnsub_(b) { var tok = String(b.token || '').trim(), sh = pushSheet_(); pushRows_().forEach(function (r) { if (r.token === tok) sh.getRange(r._i, PUSH_COLS.indexOf('active') + 1).setValue(false); }); return { ok: true }; }
+function pushTargets_(o) {   // devices for this order: linked by code first, then by the order's email
+  var em = String(o.email || '').trim().toLowerCase(), code = String(o.code || '').toUpperCase();
+  return pushRows_().filter(function (r) { return r.active === true && (r.code === code || (em && r.email === em)); });
+}
+function fcmToken_() {   // OAuth2 access token from the service account, cached ~50 min
+  var c = CacheService.getScriptCache(), hit = c.get('fcm_at'); if (hit) return hit;
+  var email = PROP.getProperty('FCM_CLIENT_EMAIL'), key = String(PROP.getProperty('FCM_PRIVATE_KEY') || '').replace(/\\n/g, '\n');
+  if (!email || !key) throw new Error('FCM props missing');
+  var now = Math.floor(Date.now() / 1000), hdr = Utilities.base64EncodeWebSafe(JSON.stringify({ alg: 'RS256', typ: 'JWT' })).replace(/=+$/, '');
+  var claim = Utilities.base64EncodeWebSafe(JSON.stringify({ iss: email, scope: 'https://www.googleapis.com/auth/firebase.messaging', aud: 'https://oauth2.googleapis.com/token', iat: now, exp: now + 3600 })).replace(/=+$/, '');
+  var sig = Utilities.base64EncodeWebSafe(Utilities.computeRsaSha256Signature(hdr + '.' + claim, key)).replace(/=+$/, '');
+  var r = UrlFetchApp.fetch('https://oauth2.googleapis.com/token', { method: 'post', payload: { grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer', assertion: hdr + '.' + claim + '.' + sig }, muteHttpExceptions: true });
+  var j = JSON.parse(r.getContentText()); if (!j.access_token) throw new Error('FCM auth ' + r.getContentText().slice(0, 120));
+  c.put('fcm_at', j.access_token, 3000); return j.access_token;
+}
+function pushOrder_(o, title, body) {   // fire-and-forget; dead tokens are switched off after an UNREGISTERED / 404
+  var t = pushTargets_(o); if (!t.length) return 0;
+  var at, sent = 0; try { at = fcmToken_(); } catch (e) { return 0; }
+  var url = 'https://thestickytrap.app/track/?o=' + encodeURIComponent(o.code) + '&t=' + encodeURIComponent(o.token || ''), sh = pushSheet_();
+  t.forEach(function (r) {
+    var msg = { message: { token: r.token, notification: { title: title, body: body }, data: { url: url, code: String(o.code) },
+      webpush: { headers: { Urgency: 'high', TTL: '86400' }, fcm_options: { link: url }, notification: { icon: 'https://thestickytrap.app/icons/icon-192.png', tag: 'order-' + o.code } } } };
+    var res = UrlFetchApp.fetch('https://fcm.googleapis.com/v1/projects/' + PROP.getProperty('FCM_PROJECT_ID') + '/messages:send', { method: 'post', contentType: 'application/json', headers: { Authorization: 'Bearer ' + at }, payload: JSON.stringify(msg), muteHttpExceptions: true });
+    var code = res.getResponseCode();
+    if (code === 200) { sent++; sh.getRange(r._i, PUSH_COLS.indexOf('last_sent') + 1).setValue(new Date()); }
+    else if (code === 404 || /UNREGISTERED|NOT_FOUND/.test(res.getContentText())) sh.getRange(r._i, PUSH_COLS.indexOf('active') + 1).setValue(false);
+    else { var fails = (+r.fails || 0) + 1; sh.getRange(r._i, PUSH_COLS.indexOf('fails') + 1).setValue(fails); if (fails >= 5) sh.getRange(r._i, PUSH_COLS.indexOf('active') + 1).setValue(false); }
+  });
+  return sent;
+}
+
+// v44: 'How did we do?' - customer thumbs on a completed order. Down votes with a note email the shop so someone calls.
+function orderRate_(b) {
+  var sh = ordersSheet_(), f = findOrder_(sh, b.code); if (!f) return { ok: false, error: 'not_found' };
+  var o = f.o; if (String(b.token || '') !== String(o.token)) return { ok: false, error: 'bad_token' };
+  var r = String(b.rating || '').toLowerCase(); if (r !== 'up' && r !== 'down') return { ok: false, error: 'bad_rating' };
+  var note = String(b.note || '').trim().slice(0, 400), now = new Date(), hist = []; try { hist = JSON.parse(o.history || '[]'); } catch (e) {}
+  hist.push({ stage: o.stage, ts: now.getTime(), note: 'Rated ' + (r === 'up' ? 'thumbs up' : 'thumbs down') + (note ? ': ' + note : '') });
+  sh.getRange(f.i, ORDER_COLS.indexOf('history') + 1).setValue(JSON.stringify(hist));
+  var ci = ORDER_COLS.indexOf('rating'); if (ci >= 0) sh.getRange(f.i, ci + 1).setValue(r + (note ? ' - ' + note : ''));
+  if (r === 'down') { try { GmailApp.sendEmail(notifyTo_(), 'THUMBS DOWN - ' + o.code + ' (' + (o.company || o.name) + ')', (o.company || o.name) + ' rated ' + o.code + ' thumbs down.' + (note ? '\n\n"' + note + '"' : '\n\n(no note)') + '\n\nCall them: ' + (o.phone || 'no phone') + ' / ' + (o.email || '') + '\nConsole: https://thestickytrap.app/console/?o=' + encodeURIComponent(o.code), { replyTo: o.email || SHOP_EMAIL }); } catch (e) { mailErr_(e); } }
+  return { ok: true, rating: r, thanked: true };
+}
+
+// ---- Awards: server-recorded points for real actions (v44, 2026-09-15). Sheet 'awards': one row per award; 'acked' flips when the phone collected it. ----
+var AWARD_PTS = { verify: 500, review: 200, order: 300, ref_order: 500 };
+var AWARD_COLS = ['ts', 'id', 'uid', 'handle', 'kind', 'pts', 'why', 'ref', 'acked'];
+function awardsSheet_() { var ss = ss_(), sh = ss.getSheetByName('awards'); if (!sh) { sh = ss.insertSheet('awards'); sh.appendRow(AWARD_COLS); } return sh; }
+function awardRows_() { var v = awardsSheet_().getDataRange().getValues(), out = []; for (var i = 1; i < v.length; i++) { var o = {}; AWARD_COLS.forEach(function (c, k) { o[c] = v[i][k]; }); o._i = i + 1; out.push(o); } return out; }
+function grantAward_(uid, handle, kind, why, ref) {   // returns the award, or null when this uid already has one of a once-only kind / this ref
+  var rows = awardRows_();
+  for (var i = 0; i < rows.length; i++) {
+    if (String(rows[i].uid) !== uid) continue;
+    if ((kind === 'verify' || kind === 'review') && rows[i].kind === kind) return null;
+    if ((kind === 'order' || kind === 'ref_order') && rows[i].kind === kind && String(rows[i].ref) === String(ref)) return null;
+  }
+  var id = kind + '-' + Utilities.getUuid().slice(0, 8), a = { id: id, kind: kind, pts: AWARD_PTS[kind], why: why };
+  awardsSheet_().appendRow([new Date(), id, uid, handle, kind, a.pts, why, ref || '', false]);
+  return a;
+}
+function awardIn_(b) {
+  var uid = String(b.uid || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 40), handle = String(b.handle || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 9), kind = String(b.kind || '');
+  if (!uid || !AWARD_PTS[kind] || (kind !== 'verify' && kind !== 'review')) return { ok: false, error: 'bad_kind' };
+  if (!throttle_('award:' + uid)) return { ok: false, error: 'rate_limited' };
+  var why = kind === 'review' ? 'Google review' : 'Verified brand';
+  if (kind === 'verify') {
+    var code = String(b.code || '').trim().toUpperCase(), em = String(b.email || '').trim().toLowerCase();
+    var f = findOrder_(ordersSheet_(), code); if (!f || !em || em !== String(f.o.email || '').trim().toLowerCase()) return { ok: false, error: 'not_found' };
+    why = 'Verified brand - ' + (f.o.company || f.o.name || code);
+    try { PROP.setProperty('uid_email:' + uid, em); } catch (e) {}   // remember uid -> customer email for the order / ref_order awards
+  }
+  var a = grantAward_(uid, handle, kind, why, '');
+  return a ? { ok: true, award: a } : { ok: true, dup: true };
+}
+function awardsList_(p) {
+  var uid = String(p.uid || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 40); if (!uid) return { ok: false, error: 'bad_uid' };
+  var rows = awardRows_().filter(function (r) { return String(r.uid) === uid; });
+  var pending = rows.filter(function (r) { return !(r.acked === true || String(r.acked) === 'true'); }).map(function (r) { return { id: r.id, kind: r.kind, pts: +r.pts, why: r.why }; });
+  return { ok: true, awards: pending, done: { verify: rows.some(function (r) { return r.kind === 'verify'; }), review: rows.some(function (r) { return r.kind === 'review'; }) } };
+}
+function awardsAck_(b) {
+  var uid = String(b.uid || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 40), ids = (Array.isArray(b.ids) ? b.ids : []).map(String), sh = awardsSheet_();
+  awardRows_().forEach(function (r) { if (String(r.uid) === uid && ids.indexOf(String(r.id)) >= 0) sh.getRange(r._i, AWARD_COLS.indexOf('acked') + 1).setValue(true); });
+  return { ok: true };
+}
+function awardOnShip_(o) {   // stage change to shipped/complete: +300 to the app player who placed it, +500 to their referrer the first time their brand ships
+  try {
+    var uid = String(o.uid || ''); if (!uid) { var em = String(o.email || '').trim().toLowerCase(); var all = PROP.getProperties(); for (var k in all) if (k.indexOf('uid_email:') === 0 && all[k] === em) { uid = k.slice(10); break; } }
+    if (!uid) return;
+    grantAward_(uid, '', 'order', 'Order ' + o.code + ' shipped', o.code);
+    var refs = refsSheet_().getDataRange().getValues();   // [ts, referrerHandle, newUid, newHandle]
+    for (var i = 1; i < refs.length; i++) if (String(refs[i][2]) === uid) {
+      var refHandle = String(refs[i][1]), refUid = '';
+      var sc = scoresSheet_().getDataRange().getValues(); for (var j = sc.length - 1; j >= 1; j--) if (String(sc[j][2]) === refHandle) { refUid = String(sc[j][1]); break; }
+      if (refUid) grantAward_(refUid, refHandle, 'ref_order', 'Your referral ' + String(refs[i][3]) + ' shipped an order', uid);
+      break;
+    }
+  } catch (e) {}
+}
+
 function reportsFolder_() {
   var name = PROP.getProperty('REPORTS_FOLDER') || 'Sticky Trap - Reports', it = DriveApp.getFoldersByName(name);
   return it.hasNext() ? it.next() : DriveApp.createFolder(name);
