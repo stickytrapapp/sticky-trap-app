@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 45;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 46;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -199,6 +199,7 @@ function doPost(e) {
   if (body.action === 'order_rate') { try { return out_(orderRate_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }         // v44: thumbs after Complete
   if (body.action === 'award') { try { return out_(awardIn_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }               // v44: verify / review awards
   if (body.action === 'awards_ack') { try { return out_(awardsAck_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
+  if (body.action === 'proof_upload') { try { return out_(proofUpload_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }     // v46: console attaches a proof image -> Drive -> tracker page
   if (body.action === 'reauth') { try { return out_(reauth_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }                 // v31
 
   var uid = String(body.uid || 'anon').slice(0, 40);
@@ -935,7 +936,8 @@ var ORDER_COLS = ['code', 'created', 'name', 'company', 'email', 'phone', 'items
                   'lines', 'subtotal', 'total', 'ship', 'address', 'cust_notes',                       // v31 (App step 2): cart lines re-priced on the server
                   'payment_id', 'payment_status', 'payment_amt', 'auth_ts', 'tax_exempt',             // v31 (App step 3): Square authorize at submit, capture on approval
                   'notify',                                                                             // v32: 'both' (default) | 'email' | 'sms' - never neither (Shane 2026-09-11)
-                  'uid', 'rating'];                                                                     // v44: Trap Points player id from the cart (awards), 'how did we do' thumbs
+                  'uid', 'rating',                                                                      // v44: Trap Points player id from the cart (awards), 'how did we do' thumbs
+                  'proof_urls', 'ship_carrier', 'ship_tracking'];                                       // v46: proof image(s) on the tracker page, carrier + tracking at Shipped
 function ordersSheet_() {
   var ss = ss_(), sh = ss.getSheetByName('orders');
   if (!sh) { sh = ss.insertSheet('orders'); sh.appendRow(ORDER_COLS); try { sh.getRange('A:A').setNumberFormat('@'); sh.getRange('H:H').setNumberFormat('@'); } catch (e) {} }
@@ -1135,6 +1137,7 @@ function stageMail_(o, stage, note) {
     '<h2 style="margin:6px 0 10px;font-size:22px">' + esc_(st.label) + '</h2>' +
     '<p>' + esc_(st.msg) + '</p>' + (note ? '<p style="background:#f4f2fa;padding:10px 12px;border-radius:8px"><b>Note from the shop:</b> ' + esc_(note) + '</p>' : '') +
     (o.items ? '<p style="color:#555"><b>Order:</b> ' + esc_(o.items) + (o.due ? ' &middot; <b>Due:</b> ' + esc_(o.due) : '') + '</p>' : '') +
+    (stage === 'shipped' && (o.ship_carrier || o.ship_tracking) ? '<p style="color:#555"><b>Shipped via</b> ' + esc_(o.ship_carrier || 'carrier') + (o.ship_tracking ? ' &middot; <b>Tracking:</b> ' + esc_(o.ship_tracking) : '') + '</p>' : '') +   // v46
     (stage === 'proof_sent' ? btn('Review & approve my proof', url) : btn('Track my order', url)) +
     (stage === 'quoted' && o.pay_url ? btn('Pay the invoice', o.pay_url) : '') +
     (stage === 'complete' ? btn('Reorder this job', reorderUrl_(o)) : '') +
@@ -1196,6 +1199,8 @@ function orderStage_(b) {
   var o = f.o, now = new Date(), note = String(b.note || '').slice(0, 300), hist = []; try { hist = JSON.parse(o.history || '[]'); } catch (e) {}
   if (b.square_inv && !o.square_inv) { try { sh.getRange(f.i, ORDER_COLS.indexOf('square_inv') + 1).setValue(String(b.square_inv).slice(0, 60)); } catch (e) {} }
   if (b.pay_url && !o.pay_url && /^https:\/\//.test(String(b.pay_url))) { try { o.pay_url = String(b.pay_url).slice(0, 300); sh.getRange(f.i, ORDER_COLS.indexOf('pay_url') + 1).setValue(o.pay_url); } catch (e) {} }
+  if (b.ship_carrier || b.ship_tracking) { try { o.ship_carrier = String(b.ship_carrier || o.ship_carrier || '').slice(0, 40); o.ship_tracking = String(b.ship_tracking || o.ship_tracking || '').slice(0, 80);   // v46: the Shipped tap carries carrier + tracking
+    sh.getRange(f.i, ORDER_COLS.indexOf('ship_carrier') + 1, 1, 2).setValues([[o.ship_carrier, o.ship_tracking]]); } catch (e) {} }
   if (b.only_forward && STAGE_ORDER.indexOf(stage) <= STAGE_ORDER.indexOf(o.stage)) return { ok: true, code: o.code, stage: o.stage, skipped: true };   // automated sources never move an order backwards
   hist.push({ stage: stage, ts: now.getTime(), note: note });
   sh.getRange(f.i, ORDER_COLS.indexOf('stage') + 1, 1, 3).setValues([[stage, now, JSON.stringify(hist)]]);
@@ -1241,6 +1246,7 @@ function publicOrder_(o) {
            payment_status: o.payment_status || '', payment_amt: o.payment_amt !== '' && o.payment_amt != null ? +o.payment_amt : null, ship: o.ship || '',
            notify: notifyPref_(o), phone_last4: o.phone ? String(o.phone).slice(-4) : '', sms_ready: smsReady_(),   // v32: the tracker page shows Email / Text toggles
            rating: o.rating || '', push_devices: (function () { try { return pushTargets_(o).length; } catch (e) { return 0; } })(),   // v44
+           proof_urls: (function () { try { return o.proof_urls ? JSON.parse(o.proof_urls) : []; } catch (e) { return []; } })(), ship_carrier: o.ship_carrier || '', ship_tracking: o.ship_tracking || '',   // v46
            stage_ts: o.stage_ts ? new Date(o.stage_ts).getTime() : null, can_approve: (o.stage === 'proof_sent' || o.stage === 'proofing'),
            can_change: (o.stage === 'proof_sent' || o.stage === 'proofing'), pay_url: (o.stage === 'quoted' && o.pay_url) ? o.pay_url : '', reorder_url: o.stage === 'complete' ? reorderUrl_(o) : '',
            stages: STAGE_ORDER.filter(function (k) { return k !== 'shipped' || o.stage === 'shipped'; }).filter(function (k) { return k !== 'ready' || o.stage !== 'shipped'; }).map(function (k) { return { key: k, label: STAGES[k].label }; }),
@@ -1319,7 +1325,7 @@ function orderRestore_(b) {
 function orderUpdate_(b) {   // v28: staff / sync edits to the record itself (never the stage, never an email to the client)
   if (!pinOk_(b.pin)) return { ok: false, error: 'bad_pin' };
   var sh = ordersSheet_(), f = findOrder_(sh, b.code); if (!f) return { ok: false, error: 'not_found' };
-  var allowed = { name: 80, company: 80, email: 120, phone: 40, items: 400, due: 40, monday_item: 200, notes: 500, square_inv: 60, pay_url: 300 }, set = {};
+  var allowed = { name: 80, company: 80, email: 120, phone: 40, items: 400, due: 40, monday_item: 200, notes: 500, square_inv: 60, pay_url: 300, proof_urls: 2000, ship_carrier: 40, ship_tracking: 80 }, set = {};
   if (b.phone != null && String(b.phone) !== '') b.phone = normPhone_(b.phone) || String(b.phone);   // v32
   Object.keys(allowed).forEach(function (k) { if (b[k] != null && String(b[k]) !== '') { var v = String(b[k]).slice(0, allowed[k]); if (k === 'email' && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)) return; sh.getRange(f.i, ORDER_COLS.indexOf(k) + 1).setValue(v); set[k] = v; } });
   return { ok: true, code: f.o.code, updated: set };
@@ -1495,6 +1501,27 @@ function awardOnShip_(o) {   // stage change to shipped/complete: +300 to the ap
       break;
     }
   } catch (e) {}
+}
+
+/* ---------- v46: proof images on the tracker page. Console posts the file; it lands in Drive folder 'Sticky Trap - Proofs' (anyone with the link can view) ---------- */
+function proofsFolder_() {
+  var name = PROP.getProperty('PROOFS_FOLDER') || 'Sticky Trap - Proofs', it = DriveApp.getFoldersByName(name);
+  return it.hasNext() ? it.next() : DriveApp.createFolder(name);
+}
+function proofUpload_(b) {   // {pin, code, name, mime, b64, replace?} -> stores the image, appends its view URL to proof_urls (max 6), returns the list
+  if (!pinOk_(b.pin)) return { ok: false, error: 'bad_pin' };
+  var sh = ordersSheet_(), f = findOrder_(sh, b.code); if (!f) return { ok: false, error: 'not_found' };
+  if (!b.b64) return { ok: false, error: 'no_file' };
+  var mime = String(b.mime || 'image/png'), name = String(b.name || 'proof').replace(/[^\w .()-]/g, '').slice(0, 60) || 'proof';
+  var blob = Utilities.newBlob(Utilities.base64Decode(String(b.b64)), mime, f.o.code + ' - ' + name);
+  var file = proofsFolder_().createFile(blob);
+  try { file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW); } catch (e) {}
+  var url = 'https://drive.google.com/uc?export=view&id=' + file.getId();
+  var list = []; try { list = f.o.proof_urls ? JSON.parse(f.o.proof_urls) : []; } catch (e) { list = []; }
+  if (b.replace) list = [];
+  list.push(url); list = list.slice(-6);
+  sh.getRange(f.i, ORDER_COLS.indexOf('proof_urls') + 1).setValue(JSON.stringify(list));
+  return { ok: true, code: f.o.code, url: url, proof_urls: list };
 }
 
 function reportsFolder_() {
