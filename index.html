@@ -410,6 +410,14 @@
   .ch-typing span{display:inline-block;width:6px;height:6px;margin:0 2px;border-radius:50%;background:var(--soft);animation:chdot 1.2s infinite}
   .ch-typing span:nth-child(2){animation-delay:.2s}.ch-typing span:nth-child(3){animation-delay:.4s}
   @keyframes chdot{0%,60%,100%{opacity:.25;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+  .ch-clip{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:12px;color:var(--paper);font-size:16px;line-height:1;padding:0 10px;cursor:pointer}
+  .ch-card{align-self:stretch;background:rgba(18,196,255,.08);border:1px solid rgba(18,196,255,.35);border-radius:14px;padding:11px 13px;font-size:13.5px;line-height:1.45}
+  .ch-card b{color:var(--cy)}
+  .ch-card .ch-cardrow{display:flex;gap:6px;margin-top:8px}
+  .ch-card input{flex:1;min-width:0;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:10px;color:#fff;font:inherit;font-size:14px;padding:8px 10px}
+  .ch-card button{background:var(--grad);border:0;border-radius:10px;color:#0A0A0F;font:inherit;font-size:13px;font-weight:800;padding:8px 12px;cursor:pointer}
+  #chatfab.nudge{animation:fabnudge 1.1s ease-in-out 2}
+  @keyframes fabnudge{0%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}60%{transform:translateY(0)}80%{transform:translateY(-3px)}}
   .ch-rate{display:flex;gap:6px;align-self:flex-start;margin:-4px 0 2px 4px}
   .ch-rate button{background:none;border:1px solid var(--line);border-radius:999px;color:var(--soft);font:inherit;font-size:12px;line-height:1;padding:5px 9px;cursor:pointer;opacity:.75}
   .ch-rate button.on{opacity:1;border-color:var(--cy);color:var(--cy)}
@@ -1430,6 +1438,8 @@
     <div class="ch-log" id="chatlog" aria-live="polite"></div>
     <div class="ch-chips" id="chatchips" hidden></div>
     <form class="ch-form" id="chatform" autocomplete="off">
+      <button class="ch-clip" id="chatclip" type="button" aria-label="Check an art file" title="Check an art file">&#128206;</button>
+      <input type="file" id="chatfile" accept=".png,.jpg,.jpeg,.pdf,.ai,.eps,.svg,.webp,.tif,.tiff,.psd,image/*,application/pdf,application/postscript,image/svg+xml" hidden>
       <input class="ch-in" id="chatin" type="text" maxlength="600" placeholder="" aria-label="Your question">
       <button class="ch-send" id="chatsend" type="submit">Send</button>
     </form>
@@ -1960,7 +1970,10 @@
     if(kind==='bot') d.innerHTML=linkify(text); else d.textContent=text;
     log.appendChild(d); scrollEnd(); return d;
   }
-  function typing(){ var d=document.createElement('div'); d.className='ch-m bot ch-typing'; d.innerHTML='<span></span><span></span><span></span>'; log.appendChild(d); scrollEnd(); return d; }
+  function typing(){ var d=document.createElement('div'); d.className='ch-m bot ch-typing'; d.innerHTML='<span></span><span></span><span></span>'; log.appendChild(d); scrollEnd();
+    var t1=setTimeout(function(){ if(d.parentNode){ d.classList.remove('ch-typing'); d.textContent='Still working on it\u2026'; } },8000);   // bot editor 2026-09-15: a slow (cold) answer should not look dead
+    var t2=setTimeout(function(){ if(d.parentNode) d.textContent='Almost there \u2013 first question of the day takes a bit longer.'; },20000);
+    var rm=d.remove.bind(d); d.remove=function(){ clearTimeout(t1); clearTimeout(t2); rm(); }; return d; }
   function save(){ try{ sessionStorage.setItem('st_chat',JSON.stringify(MSGS.slice(-20))); }catch(e){} }
   // ---- Instant answers (bot editor 2026-09-15, Shane 'build 1 and 2'): the ten-odd most common questions are answered on the
   //      phone in zero seconds from data/instant.json (generated from chat-facts.txt); everything else goes to Claude as before.
@@ -1993,7 +2006,7 @@
   }
   STARTERS.forEach(function(t){ var b=document.createElement('button'); b.type='button'; b.className='ch-chip'; b.textContent=t; b.addEventListener('click',function(){ ask(t); }); chips.appendChild(b); });
 
-  function open(){ loadInstant();
+  function open(){ loadInstant(); setTimeout(greetBack,400);
     if(!open.warm){ open.warm=1; try{ fetch(CHAT_URL+'?ping=1',{mode:'no-cors',cache:'no-store'}).catch(function(){}); }catch(e){} }   // wake the script host now so the first answer skips the cold start (2026-09-10)
     panel.classList.add('on'); ov.classList.add('on'); panel.setAttribute('aria-hidden','false'); fab.classList.add('fabhide');
     try{window.track&&window.track('chat_open',(window.location.hash||'').replace('#','')||'industry');}catch(e){}
@@ -2015,6 +2028,8 @@
       else if(a.type==='open_quote_form'){ window.go&&go('menu'); setTimeout(scrollToQuote,260); moved=true; }
       else if(a.type==='go_to'&&window.go){ go(a.tab); moved=true; }
       else if(a.type==='offer'){ offerChip(a); }   // bot editor 2026-09-15: one-tap "Take me there" chip instead of asking
+      else if(a.type==='lead_sent'){ handoffCard(a); }   // bot editor 2026-09-15: reference + promise + "text me" phone capture
+      else if(a.type==='basket_saved'&&a.email){ try{ localStorage.setItem('st_saved_email',a.email); }catch(e){} }
       try{window.track&&window.track('chat_action',a.type+(a.p?(':'+a.p):''));}catch(e){}
     }catch(e){} });
     if(added){ var row=document.createElement('div'); row.className='ch-chips'; var b=document.createElement('button'); b.type='button'; b.className='ch-chip'; b.textContent='View basket \u2192';
@@ -2030,6 +2045,60 @@
     b.addEventListener('click',function(){ row.remove(); act([o.go]); try{window.track&&window.track('chat_offer',o.go.type+(o.go.tab?(':'+o.go.tab):''));}catch(e){} });
     row.appendChild(b); log.appendChild(row); scrollEnd();
   }
+  // ---- Hand-off card (Shane 2026-09-15): what happened, the promise, and a one-tap "text me when they reply" that collects a phone
+  function handoffCard(a){
+    var card=document.createElement('div'); card.className='ch-m ch-card';
+    card.innerHTML='<b>Sent to our team.</b> Erin or another customer liaison will reply within one business day.'+(a.owner?' The owner has been flagged on it.':'')+
+      '<div class="ch-cardrow"><input type="tel" placeholder="Cell number for a text when they reply" aria-label="Cell number"><button type="button">Text me</button></div>';
+    var inp=card.querySelector('input'), btn=card.querySelector('button');
+    btn.addEventListener('click',function(){ var v=String(inp.value||'').replace(/\D/g,''); if(v.length<10){ inp.focus(); return; }
+      post({action:'lead_phone',phone:v}); card.querySelector('.ch-cardrow').innerHTML='<span style="color:var(--cy);font-weight:800">Got it - we will text that number.</span>'; try{window.track&&window.track('chat_lead_phone','1');}catch(e){} });
+    log.appendChild(card); scrollEnd();
+  }
+  // ---- "Does my art work?" (Shane 2026-09-15): instant, on the phone - format, pixel size, printable size at 300 dpi
+  function artCheck(file){
+    if(!file) return; var name=file.name||'file', ext=(name.split('.').pop()||'').toLowerCase(), kb=Math.round(file.size/1024);
+    bubble('me','Checking file: '+name+' ('+(kb>1024?(kb/1024).toFixed(1)+' MB':kb+' KB')+')');
+    var vec={ai:'Illustrator',eps:'EPS',svg:'SVG',pdf:'PDF'};
+    function say(t,good){ var d=bubble('bot',t); if(good!==undefined){ rateRow('art check: '+name,t,'artcheck'); } offerChip({label:'Send my art',go:{type:'open_quote_form'}}); }
+    if(vec[ext]){ say(vec[ext]+' file - good. If the art inside is vector (paths, not a placed photo) it prints clean at any size and pre-press stays minimal. We confirm that at proof. Send it through the form and we will assess it free.',true); return; }
+    if(ext==='psd'||ext==='tif'||ext==='tiff'){ say(ext.toUpperCase()+' file - we can work with it. Export a PNG at 300 dpi or a PDF if you can; either way send it through the form and we will assess it free.',true); return; }
+    if(!/^image\//.test(file.type||'')&&!/^(png|jpe?g|webp|gif|bmp)$/.test(ext)){ say('I cannot read a .'+ext+' file here. Vector (AI, EPS, PDF, SVG) is best; PNG at 300 dpi is fine. Send it through the form and our team will look.',true); return; }
+    var url=URL.createObjectURL(file), img=new Image();
+    img.onload=function(){ var w=img.naturalWidth, h=img.naturalHeight, inW=(w/300).toFixed(1), inH=(h/300).toFixed(1); URL.revokeObjectURL(url);
+      var maxIn=Math.max(w,h)/300, verdict;
+      if(maxIn>=3) verdict='Good for slaps up to '+Math.floor(maxIn)+'" and any jar label.';
+      else if(maxIn>=1.5) verdict='Fine for jar lids, wraps and small stickers up to about '+inW+'" x '+inH+'". Too small for a 3" or 4" slap at full quality - send a larger export or the original file.';
+      else verdict='Too small for print at this size ('+w+' x '+h+' px). Export it larger - 300 dpi at the sticker\'s real size - or send the original vector file.';
+      say(ext.toUpperCase()+' '+w+' x '+h+' px = '+inW+'" x '+inH+'" at 300 dpi. '+verdict+(ext==='jpg'||ext==='jpeg'?' JPG has no transparency - a PNG or vector file keeps clean edges.':''),true); };
+    img.onerror=function(){ URL.revokeObjectURL(url); say('I could not open that image here. Send it through the form and our team will assess it free.',true); };
+    img.src=url;
+  }
+  var clip=$('chatclip'), fileIn=$('chatfile');
+  if(clip&&fileIn){ clip.addEventListener('click',function(){ fileIn.click(); }); fileIn.addEventListener('change',function(){ if(fileIn.files&&fileIn.files[0]) artCheck(fileIn.files[0]); fileIn.value=''; }); }
+  // ---- Returning customer (Shane 2026-09-15): what this phone already knows, offered once per session
+  function greetBack(){
+    if(sessionStorage.getItem('st_chat_greeted')||MSGS.length) return; try{ sessionStorage.setItem('st_chat_greeted','1'); }catch(e){}
+    var code='', em='', saved=''; try{ code=localStorage.getItem('st_trk_code')||''; em=localStorage.getItem('st_trk_email')||localStorage.getItem('st_qf_email')||''; saved=localStorage.getItem('st_saved_email')||''; }catch(e){}
+    if(code&&em&&CHAT_URL){
+      fetch(CHAT_URL+'?action=track&o='+encodeURIComponent(code)+'&e='+encodeURIComponent(em)+'&_='+Date.now()).then(function(r){return r.json();}).then(function(j){
+        if(!(j&&j.ok&&j.order)) return; var o=j.order;
+        bubble('bot','Welcome back. Order '+o.code+' is at: '+o.label+(o.due?' (due '+o.due+')':'')+'.');
+        offerChip({label:'Open my tracker',go:{type:'go_to',tab:'connect'}});
+      }).catch(function(){});
+    } else if(saved){
+      var row=document.createElement('div'); row.className='ch-chips'; var b=document.createElement('button'); b.type='button'; b.className='ch-chip'; b.textContent='Load my saved basket \u2192';
+      b.addEventListener('click',function(){ row.remove(); ask('load my basket, '+saved); }); row.appendChild(b); log.appendChild(row); scrollEnd();
+    }
+  }
+  // ---- One contextual nudge (Shane 2026-09-15): 20 s on a product, panel closed, once per session
+  (function(){ var last='', timer=null, prev=window.track;
+    window.track=function(ev,val){ try{ if(ev==='product_open'&&val){ last=String(val); clearTimeout(timer); timer=setTimeout(function(){
+        if(panel.classList.contains('on')||sessionStorage.getItem('st_chat_nudged')) return; try{ sessionStorage.setItem('st_chat_nudged','1'); }catch(e){}
+        var lbl=fab.lastChild; var orig=lbl.textContent; lbl.textContent='Questions about '+last+'?'; fab.classList.add('nudge');
+        setTimeout(function(){ fab.classList.remove('nudge'); lbl.textContent=orig; },6000); },20000); } }catch(e){}
+      if(typeof prev==='function') return prev.apply(this,arguments); };
+  })();
   function ask(text){
     text=String(text||'').trim(); if(!text||busy) return;
     MSGS.push({role:'user',content:text}); bubble('me',text); chips.hidden=true; save(); input.value='';
