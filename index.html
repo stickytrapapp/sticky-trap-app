@@ -410,6 +410,10 @@
   .ch-typing span{display:inline-block;width:6px;height:6px;margin:0 2px;border-radius:50%;background:var(--soft);animation:chdot 1.2s infinite}
   .ch-typing span:nth-child(2){animation-delay:.2s}.ch-typing span:nth-child(3){animation-delay:.4s}
   @keyframes chdot{0%,60%,100%{opacity:.25;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+  .ch-rate{display:flex;gap:6px;align-self:flex-start;margin:-4px 0 2px 4px}
+  .ch-rate button{background:none;border:1px solid var(--line);border-radius:999px;color:var(--soft);font:inherit;font-size:12px;line-height:1;padding:5px 9px;cursor:pointer;opacity:.75}
+  .ch-rate button.on{opacity:1;border-color:var(--cy);color:var(--cy)}
+  .ch-rate .ch-thx{font-size:11px;color:var(--soft);align-self:center;opacity:.8}
   .ch-chips{display:flex;gap:7px;flex-wrap:wrap;padding:4px 14px 8px}
   .ch-chips[hidden]{display:none}
   .ch-chip{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:999px;color:var(--soft);font-size:12.5px;font-weight:700;padding:8px 12px;cursor:pointer;font-family:inherit}
@@ -1426,7 +1430,7 @@
     <div class="ch-log" id="chatlog" aria-live="polite"></div>
     <div class="ch-chips" id="chatchips" hidden></div>
     <form class="ch-form" id="chatform" autocomplete="off">
-      <input class="ch-in" id="chatin" type="text" maxlength="600" placeholder="Ask about prices, materials, or where your order is&hellip;" aria-label="Your question">
+      <input class="ch-in" id="chatin" type="text" maxlength="600" placeholder="" aria-label="Your question">
       <button class="ch-send" id="chatsend" type="submit">Send</button>
     </form>
     <div class="ch-foot">AI assistant &middot; answers come from our live menu &middot; call/text 734 460 3845 anytime</div>
@@ -1958,6 +1962,29 @@
   }
   function typing(){ var d=document.createElement('div'); d.className='ch-m bot ch-typing'; d.innerHTML='<span></span><span></span><span></span>'; log.appendChild(d); scrollEnd(); return d; }
   function save(){ try{ sessionStorage.setItem('st_chat',JSON.stringify(MSGS.slice(-20))); }catch(e){} }
+  // ---- Instant answers (bot editor 2026-09-15, Shane 'build 1 and 2'): the ten-odd most common questions are answered on the
+  //      phone in zero seconds from data/instant.json (generated from chat-facts.txt); everything else goes to Claude as before.
+  var INSTANT=null;
+  function loadInstant(){ if(INSTANT!==null) return; INSTANT=[]; fetch('data/instant.json?t='+Math.floor(Date.now()/600000)).then(function(r){return r.json();}).then(function(j){ INSTANT=(j&&j.entries)||[]; }).catch(function(){}); }
+  function instant(text){
+    var t=' '+String(text).toLowerCase().replace(/[^a-z0-9$+\-']+/g,' ').trim()+' ';
+    var words=t.trim().split(' ').length;
+    for(var i=0;i<INSTANT.length;i++){ var e=INSTANT[i]; if(words>(e.max_words||14)) continue;
+      var bad=false; for(var d=0;d<(e.deny||[]).length;d++){ if(t.indexOf(e.deny[d])>-1){ bad=true; break; } } if(bad) continue;
+      var ok=true; for(var g=0;g<e.groups.length;g++){ var hit=false; for(var w=0;w<e.groups[g].length;w++){ if(t.indexOf(e.groups[g][w])>-1){ hit=true; break; } } if(!hit){ ok=false; break; } }
+      if(ok) return e; }
+    return null;
+  }
+  function post(body){ try{ body.uid=uid(); fetch(CHAT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)}).catch(function(){}); }catch(e){} }
+  // ---- Ratings: thumbs on every bot reply -> chats sheet 'ratings' tab (what the bot gets wrong, ranked, for the weekly read)
+  function rateRow(q,a,inst){
+    var row=document.createElement('div'); row.className='ch-rate';
+    ['up','down'].forEach(function(k){ var b=document.createElement('button'); b.type='button'; b.innerHTML=k==='up'?'&#128077;':'&#128078;'; b.setAttribute('aria-label',k==='up'?'Helpful':'Not helpful');
+      b.addEventListener('click',function(){ if(row.dataset.done) return; row.dataset.done='1'; b.classList.add('on'); post({action:'rate',q:String(q).slice(0,300),a:String(a).slice(0,400),rating:k,instant:inst||''});
+        var thx=document.createElement('span'); thx.className='ch-thx'; thx.textContent=k==='up'?'Thanks':'Thanks - we will fix that'; row.appendChild(thx); try{window.track&&window.track('chat_rate',k);}catch(e){} });
+      row.appendChild(b); });
+    log.appendChild(row); scrollEnd();
+  }
   function renderAll(){
     log.innerHTML='';
     if(!MSGS.length) bubble('bot',HELLO);
@@ -1966,7 +1993,7 @@
   }
   STARTERS.forEach(function(t){ var b=document.createElement('button'); b.type='button'; b.className='ch-chip'; b.textContent=t; b.addEventListener('click',function(){ ask(t); }); chips.appendChild(b); });
 
-  function open(){
+  function open(){ loadInstant();
     if(!open.warm){ open.warm=1; try{ fetch(CHAT_URL+'?ping=1',{mode:'no-cors',cache:'no-store'}).catch(function(){}); }catch(e){} }   // wake the script host now so the first answer skips the cold start (2026-09-10)
     panel.classList.add('on'); ov.classList.add('on'); panel.setAttribute('aria-hidden','false'); fab.classList.add('fabhide');
     try{window.track&&window.track('chat_open',(window.location.hash||'').replace('#','')||'industry');}catch(e){}
@@ -1999,12 +2026,15 @@
     MSGS.push({role:'user',content:text}); bubble('me',text); chips.hidden=true; save(); input.value='';
     busy=true; send.disabled=true; var t=typing();
     try{window.track&&window.track('chat_send',text.slice(0,80));}catch(e){}
-    function done(reply,isErr){
+    function done(reply,isErr,inst){
       t.remove(); busy=false; send.disabled=false;
       if(!isErr){ MSGS.push({role:'assistant',content:reply}); save(); }
       bubble('bot',reply,isErr?'err':'');
+      if(!isErr) rateRow(text,reply,inst);
     }
     if(!CHAT_URL){ setTimeout(function(){ done(OFFLINE,true); },500); return; }
+    var ins=instant(text);
+    if(ins){ setTimeout(function(){ done(ins.a,false,ins.id); },350); post({action:'instant',q:text.slice(0,300),id:ins.id}); try{window.track&&window.track('chat_instant',ins.id);}catch(e){} return; }
     var payload={uid:uid(),tab:curTab(),basket:basket(),messages:MSGS.slice(-16)};
     fetch(CHAT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)})
       .then(function(r){ return r.json(); })
