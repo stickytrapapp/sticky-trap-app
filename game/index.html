@@ -671,8 +671,8 @@
         </div>
         <div class="rw">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#12C4FF" stroke-width="1.7"><path d="M6 20V9M12 20V4M18 20v-7"/></svg></div>
-          <div class="tx"><b>Top the weekly ladder</b><small>Resets Sunday <span class="pill soon">soon</span></small></div>
-          <div class="earn-amt mid">bonus</div>
+          <div class="tx"><b>Top the weekly ladder</b><small>#1 on Sunday night wins <span class="pill cy">12 branded slaps</span></small></div>
+          <div class="earn-amt mid">prize</div>
         </div>
         <button class="rw rw-tap" id="refBtn" type="button">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#12C4FF" stroke-width="1.7"><path d="M16 11a4 4 0 10-8 0M4 20a6 6 0 0116 0"/></svg></div>
@@ -725,8 +725,10 @@
     <!-- ============ RANKS ============ -->
     <section class="screen" id="ranks">
       <div style="height:10px"></div>
-      <div class="eyebrow">This month’s drop</div>
+      <div class="eyebrow" id="lbEyebrow">This week’s prize</div>
       <h2 class="big">Race for your brand.</h2>
+      <div class="modeseg" id="lbSeg" style="margin:0 0 12px"><button type="button" class="on" data-p="week">This week<small>12 branded slaps</small></button><button type="button" data-p="month">This month<small>hero drop</small></button></div>
+      <div class="card" id="lastWeek" hidden style="margin-bottom:12px;padding:12px 14px"></div>
 
       <div class="drop-hero">
         <div class="dh-top">
@@ -1086,24 +1088,34 @@
     var body=JSON.stringify({action:'score',uid:UID,handle:handle,day:dayNum,best:bestScore,slot:slotNum,stars:(HIST.filter(function(h){return h.day===slotNum;})[0]||{}).stars||0});
     fetch(LB_API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:body}).then(function(r){return r.json();}).then(function(){ lbCache=null; loadRanks(); }).catch(function(){});
   }
-  var lbCache=null, lbAt=0;
+  var lbCache=null, lbAt=0, LB_PERIOD='week';
+  (function(){ var seg=document.getElementById('lbSeg'); if(!seg) return; seg.querySelectorAll('button').forEach(function(b){ b.addEventListener('click',function(){ seg.querySelectorAll('button').forEach(function(x){ x.classList.toggle('on',x===b); }); LB_PERIOD=b.dataset.p; lbCache=null;
+    var ey=document.getElementById('lbEyebrow'); if(ey) ey.textContent=LB_PERIOD==='week'?'This week’s prize':'This month’s drop';
+    var hero=document.querySelector('.drop-hero'); if(hero) hero.hidden=(LB_PERIOD==='week'); tickClock(); loadRanks(true); }); }); var hero=document.querySelector('.drop-hero'); if(hero) hero.hidden=true; })();
+  function renderLastWeek(j){ var el=document.getElementById('lastWeek'); if(!el) return; var lw=j.last_week;
+    if(LB_PERIOD!=='week'){ el.hidden=true; return; }
+    var head='<div class="sec-h" style="margin:0 0 6px"><h3>This week</h3><span>'+(j.prize||'12 branded slaps')+' to #1 · ends Sunday</span></div>';
+    if(!lw){ el.hidden=false; el.innerHTML=head+'<div class="sub">First winner is crowned Monday. Top the ladder by Sunday night and a run of your own branded slaps is yours.</div>'; return; }
+    var mine=!!lw.you_won||(handle&&lw.handle===handle);
+    el.hidden=false; el.innerHTML=head+'<div class="rw" style="border:0;padding:6px 0"><div class="av" style="width:38px;height:38px;border-radius:11px;background:var(--panel-2);display:grid;place-items:center;font-weight:800">'+(lw.handle||'??').slice(0,2)+'</div><div class="tx"><b>Last week: '+(lw.handle||'—')+' <span class="crown">\u265A</span></b><small>'+fmt(lw.total||0)+' over '+(lw.days||0)+' boards · won '+(lw.prize||'12 branded slaps')+'</small></div>'+(mine&&!lw.claimed?'<button class="btn go" id="claimWeek" type="button">Claim</button>':'')+'</div>';
+    var cb=document.getElementById('claimWeek'); if(cb) cb.addEventListener('click',function(){ CAT.push({n:'Weekly winner: '+(lw.prize||'12 branded slaps'),d:'Ladder '+lw.week+' · YOUR logo',c:0,t:'Sticker',f:1,img:'slaps',what:'You topped the weekly ladder. Tell us where to send your branded run.'}); renderShop(); openSheet(CAT.length-1); }); }
   function loadRanks(force){
     var list=document.getElementById('lbList'), st=document.getElementById('stRank'), ys=document.getElementById('youStand'), yg=document.getElementById('youGap'), nd=document.getElementById('stNudge'), note=document.getElementById('lbNote');
     if(!list) return;
     if(!force && lbCache && Date.now()-lbAt<60000){ render(lbCache); return; }
-    fetch(LB_API+'?action=lb&month='+monthKey(dayNum)+'&uid='+encodeURIComponent(UID)+'&handle='+encodeURIComponent(handle||'')+'&t='+Date.now()).then(function(r){return r.json();}).then(function(j){ if(j&&j.ok&&j.top){ lbCache=j; lbAt=Date.now(); render(j); } else fail(); }).catch(fail);
+    fetch(LB_API+'?action=lb&period='+LB_PERIOD+'&month='+monthKey(dayNum)+'&uid='+encodeURIComponent(UID)+'&handle='+encodeURIComponent(handle||'')+'&t='+Date.now()).then(function(r){return r.json();}).then(function(j){ if(j&&j.ok&&j.top){ lbCache=j; lbAt=Date.now(); render(j); try{ renderLastWeek(j); }catch(e){} } else fail(); }).catch(fail);
     function fail(){ if(!loadRanks._retried){ loadRanks._retried=true; setTimeout(function(){ loadRanks(true); },2500); return; } loadRanks._retried=false; list.innerHTML='<div class="lb-empty">Couldn\u2019t reach the ladder \u2014 try again in a moment.</div>'; }
     function render(j){ loadRanks._retried=false; try{ creditRefs(j.refs); }catch(e){}
-      if(!j.top.length){ list.innerHTML='<div class="lb-empty">No scores yet this month.<br>Finish today\u2019s Trap to open the board.</div>'; }
+      if(!j.top.length){ list.innerHTML='<div class="lb-empty">No scores yet this '+(LB_PERIOD==='week'?'week':'month')+'.<br>Finish today\u2019s Trap to open the board.</div>'; }
       else{
         list.innerHTML=j.top.map(function(r){ var av=(r.handle||'??').slice(0,2), me=r.you?' me':'', top=r.rank===1?' win':'';
           return '<div class="lbrow'+top+me+'"><div class="rk">'+r.rank+'</div><div class="av">'+av+'</div><div class="nm">'+r.handle+(r.rank===1?' <span class="crown">\u265A</span>':'')+'</div><div class="dy">'+r.days+'d</div><div class="sc">'+fmt(r.total)+'</div></div>'; }).join('');
       }
       if(j.you){ st.textContent='#'+j.you.rank; ys.textContent='You\u2019re '+ord(j.you.rank)+' \u00B7 '+handle;
-        yg.textContent= j.you.rank===1 ? 'Holding the crown \u2014 keep it through month-end.' : (j.you.gap_podium? fmt(j.you.gap_podium)+' to the podium \u00B7 ' : '')+fmt(j.you.gap_crown)+' to the crown';
+        yg.textContent= j.you.rank===1 ? 'Holding the crown \u2014 keep it through '+(LB_PERIOD==='week'?'Sunday.':'month-end.') : (j.you.gap_podium? fmt(j.you.gap_podium)+' to the podium \u00B7 ' : '')+fmt(j.you.gap_crown)+' to the crown';
         nd.textContent= dayDone ? 'Next board in '+nextIn()+' \u2192' : 'Play this board \u2192'; }
       else { st.textContent='\u2013'; ys.textContent='Not on the board yet'; yg.textContent='Finish today\u2019s Trap to get ranked.'; nd.textContent='Play today \u2192'; }
-      note.textContent= j.count>10 ? (j.count+' brands on the ladder this month \u00B7 top 10 shown') : (j.count? j.count+' brand'+(j.count>1?'s':'')+' on the ladder this month' : '');
+      var per=LB_PERIOD==='week'?'this week':'this month'; note.textContent= j.count>10 ? (j.count+' brands on the ladder '+per+' \u00B7 top 10 shown') : (j.count? j.count+' brand'+(j.count>1?'s':'')+' on the ladder '+per : '');
     }
     function ord(n){ var s=['th','st','nd','rd'], v=n%100; return n+(s[(v-20)%10]||s[v]||s[0]); }
   }
@@ -1319,6 +1331,7 @@
   function tickClock(){
     var el=document.getElementById('clock'); if(!el)return;
     var now=new Date(), end=new Date(now.getFullYear(), now.getMonth()+1, 1);
+    if(LB_PERIOD==='week'){ end=new Date(now.getFullYear(), now.getMonth(), now.getDate()+((8-now.getDay())%7||7)); }   // next Monday 00:00 local
     var d=Math.max(0,end-now), day=Math.floor(d/864e5), hr=Math.floor(d%864e5/36e5), mn=Math.floor(d%36e5/6e4);
     el.textContent=day+'d '+hr+'h '+mn+'m';
   }
