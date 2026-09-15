@@ -490,6 +490,13 @@
   .claim small{display:block;color:var(--mut);font-size:11.5px}
   .claim .st{color:var(--gold);font-family:var(--fmono);font-size:11px;white-space:nowrap}
   .expnote{color:var(--gold);font-size:12px;margin-top:8px;font-weight:600}
+  .goal{padding:14px}.goal .g-top{display:flex;align-items:center;gap:12px}.goal .thumb{flex:none}
+  .goal .g-tx{flex:1;min-width:0}.goal .g-tx b{display:block;font-size:14px}.goal .g-tx small{display:block;color:var(--mut);font-size:11.5px;margin-top:2px}
+  .goal .g-pct{font-family:var(--fdisp);font-size:22px;font-weight:700;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .goal .bar{margin-top:10px;height:11px}.goal .g-foot{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:12px;color:var(--mut)}.goal .g-foot b{color:var(--fg);font-family:var(--fmono)}
+  .goal .g-foot button,.rw .aim{background:none;border:0;color:var(--cy);font:inherit;font-size:12px;font-weight:700;cursor:pointer;padding:0}
+  .goal.done{border-color:var(--good)}.goal.done .g-pct{background:none;color:var(--good);-webkit-text-fill-color:var(--good)}
+  .rw .tag.goal-tag{background:rgba(18,196,255,.14);color:var(--cy)}
   .pill.soon{color:var(--mut);border-color:var(--line-2)}
   .modeseg{display:flex;gap:6px;margin:0 0 10px;padding:4px;border-radius:12px;background:var(--panel-2);border:1px solid var(--line)}
   .modeseg button{flex:1;border:0;border-radius:9px;padding:8px 6px;background:transparent;color:var(--mut);font-family:var(--fdisp);font-weight:700;font-size:12px;letter-spacing:.04em;cursor:pointer}
@@ -575,6 +582,7 @@
             <div><span>Earned</span><b id="rpts">+0</b></div>
             <div><span>Days</span><b id="rrank">1</b></div>
           </div>
+          <div class="res-goal" id="rgoal" style="font-size:12.5px;color:var(--mut);margin:-2px 0 10px"></div>
           <button class="sf-primary" id="shareBtn">Share result</button>
           <div class="res-new">New board in <b id="rnewin">—</b></div>
         </div>
@@ -604,6 +612,9 @@
         <div class="expnote" id="expNote" hidden></div>
         <button class="scanbtn" id="scanOpen2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h5v5H4zM15 4h5v5h-5zM4 15h5v5H4zM15 15h2v2M20 20v.01M20 15h.01M15 20h.01"/></svg> Scan an order — verify your brand</button>
       </div>
+
+      <div class="sec-h"><h3>Your goal</h3><span id="goalHint">every session moves the bar</span></div>
+      <div class="card goal" id="goalCard"></div>
 
       <div class="sec-h"><h3>Prizes</h3><span>your brand, made by us</span></div>
       <div class="brandhero"><div class="bh-i">◈</div><div class="bh-txt"><b>Win your own brand.</b><span>Every prize is <b style="color:var(--fg)">YOUR</b> logo on real goods — slaps, lighters, embroidered hoodies — hand-made by us.</span></div></div>
@@ -865,7 +876,7 @@
   var ptsVal=document.getElementById('ptsVal'), ptsPill=document.getElementById('ptsPill');
   function fmt(n){return n.toLocaleString('en-US');}
   function setBalance(v){balance=v; ptsVal.textContent=fmt(v); document.getElementById('balBig').textContent=fmt(v);
-    updateTier(); if(window.__renderShop)window.__renderShop(); renderStats();
+    updateTier(); if(window.__renderShop)window.__renderShop(); if(window.__renderGoal)window.__renderGoal(); renderStats();
     var ex=document.getElementById('expNote'), exp=expiringSoon(); if(ex){ ex.hidden=!(exp>0); ex.textContent='\u25C8 '+fmt(exp)+' of your points expire within 7 days \u2014 use them.'; }
     ptsPill.classList.remove('bump'); void ptsPill.offsetWidth; ptsPill.classList.add('bump');}
   // ---- streak + stats (real) ----
@@ -985,6 +996,7 @@
     document.getElementById('rstreak').textContent='\uD83D\uDD25 '+STREAK.n;
     document.getElementById('rpts').textContent='+'+earned;
     document.getElementById('rrank').textContent=HIST.length;
+    try{ document.getElementById('rgoal').innerHTML='◈ '+goalLine(); }catch(e){}
     try{localStorage.setItem('tp_daily', JSON.stringify({day:slotNum, best:bestScore, stars:stars, earned:earned}));}catch(e){}
     document.getElementById('result').classList.add('show');
   }
@@ -1137,9 +1149,10 @@
     Sticker:'<svg viewBox="0 0 24 24" fill="none" stroke="#25E0A6" stroke-width="1.6"><path d="M5 4h9l5 5v11H5z"/><path d="M14 4v5h5"/></svg>'
   };
   var CAT=[
-    {n:'12 slaps', d:'Contour-cut · YOUR logo', c:600, t:'Sticker', f:1, img:'slaps', what:'A dozen 3" die-cut vinyl stickers of your logo.'},
-    {n:'2 lighters', d:'Hand-wrapped · YOUR logo', c:1500, t:'Lighters', f:1, img:'lighters', what:'Two lighters wrapped in a printed sleeve of your brand.'},
-    {n:'1 embroidered hoodie', d:'Embroidered · YOUR brand', c:7000, t:'Apparel', f:1, tier:1, bonus:'1-in-4 shot at a 2nd', bchance:0.25, img:'hoodie', what:'A hoodie with your logo embroidered on the chest.'}
+    // Priced 2026-09-15 by the equation: a player-day is worth $0.25 to the shop, a daily player earns ~35 pts, so ~140 pts = $1 of all-in prize cost (blank + materials + hands-on minutes).
+    {n:'12 slaps', d:'Contour-cut · YOUR logo', c:800, t:'Sticker', f:1, img:'slaps', what:'A dozen 3" die-cut vinyl stickers of your logo.', days:'about 3 weeks of play'},
+    {n:'2 lighters', d:'Hand-wrapped · YOUR logo', c:1400, t:'Lighters', f:1, img:'lighters', what:'Two lighters wrapped in a printed sleeve of your brand.', days:'about 6 weeks of play'},
+    {n:'1 embroidered hoodie', d:'Embroidered · YOUR brand', c:5000, t:'Apparel', f:1, tier:1, bonus:'1-in-4 shot at a 2nd', bchance:0.25, img:'hoodie', what:'A hoodie with your logo embroidered on the chest.', days:'about 5 months of play, or win the monthly ladder'}
   ];
   var THUMB={"slaps": "<svg viewBox=\"0 0 64 64\" fill=\"none\"><rect x=\"14\" y=\"16\" width=\"34\" height=\"34\" rx=\"9\" fill=\"#fff\" stroke=\"#FF1FA2\" stroke-width=\"2\" stroke-dasharray=\"4 3\"/><rect x=\"18\" y=\"12\" width=\"34\" height=\"34\" rx=\"9\" fill=\"#fff\" stroke=\"#12C4FF\" stroke-width=\"2\"/><path d=\"M35 18l9 9-9 15-9-15z\" fill=\"url(#tpg)\"/><path d=\"M35 18l9 9h-18z\" fill=\"#12C4FF\" opacity=\".9\"/></svg>", "lighters": "<svg viewBox=\"0 0 64 64\" fill=\"none\"><rect x=\"18\" y=\"22\" width=\"12\" height=\"32\" rx=\"3\" fill=\"url(#tpg)\"/><rect x=\"34\" y=\"22\" width=\"12\" height=\"32\" rx=\"3\" fill=\"#fff\" stroke=\"#8A2BE2\" stroke-width=\"1.5\"/><path d=\"M40 32l3 3-3 6-3-6z\" fill=\"#FF1FA2\"/><rect x=\"19\" y=\"18\" width=\"10\" height=\"5\" rx=\"1.5\" fill=\"#EAB84B\"/><rect x=\"35\" y=\"18\" width=\"10\" height=\"5\" rx=\"1.5\" fill=\"#EAB84B\"/><path d=\"M24 8c2 3-1 4-1 6a2.5 2.5 0 005 0c0-3-2-4-4-6z\" fill=\"#EAB84B\"/><path d=\"M40 8c2 3-1 4-1 6a2.5 2.5 0 005 0c0-3-2-4-4-6z\" fill=\"#EAB84B\"/></svg>", "hoodie": "<svg viewBox=\"0 0 64 64\" fill=\"none\"><path d=\"M22 14c3-6 17-6 20 0l12 6-5 10-5-2v28H20V28l-5 2-5-10z\" fill=\"#171717\" stroke=\"#fff\" stroke-width=\"1.6\"/><path d=\"M26 16c2 5 10 5 12 0\" stroke=\"#fff\" stroke-width=\"1.6\"/><path d=\"M29 20v10M35 20v10\" stroke=\"#fff\" stroke-width=\"1.4\" stroke-linecap=\"round\"/><path d=\"M32 34l5 5-5 9-5-9z\" fill=\"url(#tpg)\"/></svg>"};
   var shopEl=document.getElementById('shop');
@@ -1149,9 +1162,12 @@
     CAT.forEach(function(it,idx){
       var tierok=!it.tier||verified, afford=balance>=it.c, pending=CLAIMS.some(function(c){return c.n===it.n&&c.status==='pending';});
       var row=document.createElement('div'); row.className='rw';
-      var tags=(it.f?'<span class="tag hd">Your brand</span>':'')+(it.tier&&!tierok?'<span class="pill">Verified brands</span>':'')+(it.bonus?'<span class="tag bonus">+ '+it.bonus+'</span>':'');
+      var isGoal=goalIdx()===idx;
+      var tags=(it.f?'<span class="tag hd">Your brand</span>':'')+(it.tier&&!tierok?'<span class="pill">Verified brands</span>':'')+(it.bonus?'<span class="tag bonus">+ '+it.bonus+'</span>':'')+(isGoal?'<span class="tag goal-tag">Your goal</span>':'');
       row.innerHTML='<div class="thumb">'+(THUMB[it.img]||ICONS[it.t]||ICONS.Merch)+'</div>'+
-        '<div class="tx"><b>'+it.n+'</b><small>'+it.d+' · <span class="cost-chip">◈ '+fmt(it.c)+'</span>'+tags+'</small>'+(it.what?'<small class="what">'+it.what+'</small>':'')+'</div>';
+        '<div class="tx"><b>'+it.n+'</b><small>'+it.d+' · <span class="cost-chip">◈ '+fmt(it.c)+'</span>'+tags+'</small>'+(it.what?'<small class="what">'+it.what+(it.days?' <span style="color:var(--mut)">· '+it.days+'</span>':'')+'</small>':'')+
+        (!isGoal&&!afford?'<small><button type="button" class="aim" data-i="'+idx+'">Aim for this →</button></small>':'')+'</div>';
+      var aim=row.querySelector('.aim'); if(aim) aim.addEventListener('click',function(){ setGoal(idx); });
       var btn=document.createElement('button');
       if(pending){btn.className='btn lock';btn.disabled=true;btn.textContent='Pending';}
       else if(!tierok){btn.className='btn lock';btn.disabled=true;btn.textContent='Verify';}
@@ -1164,6 +1180,25 @@
   function renderClaims(){ var el=document.getElementById('claims'); if(!el)return; if(!CLAIMS.length){ el.innerHTML=''; return; }
     el.innerHTML='<div class="sec-h"><h3>Your claims</h3><span>we make it &amp; reach out</span></div>'+CLAIMS.slice().reverse().map(function(c){ var d=new Date(c.ts); return '<div class="claim"><div><b>'+c.n+'</b><small>'+c.brand+' \u00b7 '+d.toLocaleDateString()+' \u00b7 \u25C8 '+fmt(c.c)+'</small></div><span class="st">'+(c.status==='pending'?'IN THE QUEUE':c.status.toUpperCase())+'</span></div>'; }).join(''); }
   window.__renderShop=renderShop;
+  /* ---- Your goal (Shane 2026-09-15: rewards are the real focus): pick a prize, watch the bar move every session.
+          Default = the cheapest prize you can't afford yet. Pace = your own earn rate over the last 14 days (fallback 20/day). ---- */
+  var GOAL=null; try{ GOAL=localStorage.getItem('tp_goal'); }catch(e){}
+  function goalIdx(){ var i=-1; if(GOAL){ CAT.some(function(it,k){ if(it.n===GOAL){ i=k; return true; } }); }
+    if(i<0){ CAT.some(function(it,k){ if(balance<it.c){ i=k; return true; } }); } if(i<0) i=CAT.length-1; return i; }
+  function setGoal(i){ GOAL=CAT[i].n; try{ localStorage.setItem('tp_goal',GOAL); }catch(e){} renderGoal(); renderShop(); toast('Goal set: '+CAT[i].n); }
+  function pace(){ var cut=Date.now()-14*864e5, sum=0, first=Date.now(); LEDGER.forEach(function(e){ if(e.pts>0&&e.ts>=cut){ sum+=e.pts; if(e.ts<first) first=e.ts; } });
+    var days=Math.max(1,Math.min(14,Math.ceil((Date.now()-first)/864e5))); return sum>0?Math.max(5,sum/days):20; }
+  function goalLine(){ var it=CAT[goalIdx()], left=Math.max(0,it.c-balance); return left>0 ? fmt(left)+' to go for '+it.n : it.n+' is ready to claim'; }
+  function renderGoal(){ var el=document.getElementById('goalCard'); if(!el) return; var i=goalIdx(), it=CAT[i], left=Math.max(0,it.c-balance), pct=Math.min(100,Math.round(balance/it.c*100)), days=Math.ceil(left/pace());
+    el.classList.toggle('done',left===0);
+    el.innerHTML='<div class="g-top"><div class="thumb">'+(THUMB[it.img]||ICONS[it.t]||ICONS.Merch)+'</div><div class="g-tx"><b>'+it.n+'</b><small>'+it.d+' · ◈ '+fmt(it.c)+'</small></div><div class="g-pct">'+pct+'%</div></div>'+
+      '<div class="bar"><i style="width:'+pct+'%"></i></div>'+
+      '<div class="g-foot"><span>'+(left>0?'<b>'+fmt(left)+'</b> to go · about <b>'+days+'</b> day'+(days===1?'':'s')+' at your pace':'<b>Ready.</b> Claim it below.')+'</span><button type="button" id="goalChange">Change</button></div>';
+    var hint=document.getElementById('goalHint'); if(hint) hint.textContent=left>0?'every session moves the bar':'you did it';
+    el.querySelector('#goalChange').addEventListener('click',function(){ var n=(i+1)%CAT.length; setGoal(n); });
+  }
+  window.__renderGoal=renderGoal;
+  renderGoal();
   var sheet=document.getElementById('redeemSheet'), sheetCard=document.getElementById('sheetCard');
   // Redeem = a real CLAIM: we capture the brand + contact, email it to the shop (main backend, same path as
   // quote requests), take the points off the ledger and show it as pending until the shop reaches out.
