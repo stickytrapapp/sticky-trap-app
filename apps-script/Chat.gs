@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 38;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 40;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -149,6 +149,9 @@ function doGet(e) {
   if (p.action === 'lb') { try { return out_(leaderboard_(p)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
   if (p.action === 'track') { try { return out_(trackGet_(p)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
   if (p.action === 'orders') { try { return out_(ordersList_(p)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
+  if (p.reporttest && pinOk_(p.pin)) {   // v40: prove the Drive archive from outside
+    try { return out_({ ok: true, file: archiveReport_('Archive test', 'Test report written ' + new Date()) }); } catch (err4) { return out_({ ok: false, error: String(err4).slice(0, 300) }); }
+  }
   if (p.mailtest && pinOk_(p.pin)) {   // v29: ?mailtest=1&pin=... sends one line to the shop inbox and returns the real error if it fails
     try { GmailApp.sendEmail(SHOP_EMAIL, 'Tracker mail test', 'Mail from the web app works. ' + new Date()); PROP.deleteProperty('MAIL_LAST_ERROR'); return out_({ ok: true, sent_to: SHOP_EMAIL }); }
     catch (err3) { mailErr_(err3); return out_({ ok: false, error: String(err3).slice(0, 300) }); }
@@ -1303,9 +1306,27 @@ function weeklyDigest_() {
   lines.push('Console: https://thestickytrap.app/console/  -  Sheet: ' + ss.getUrl());
   var digestTo = String(PROP.getProperty('DIGEST_TO') || '').trim() || SHOP_EMAIL;   // Shane 2026-09-09: digest to the shop inbox only (Erin stays on the nudges via NUDGE_TO); set DIGEST_TO to widen it later
   GmailApp.sendEmail(digestTo, 'Sticky Trap app - week in review', lines.join('\n'), { name: 'The Sticky Trap app' });
+  try { archiveReport_('Weekly report', lines.join('\n')); } catch (e) { mailErr_(e); }   // v39: dated copy in Drive + a row in the reports tab
   return lines.length;
 }
 // Run ONCE from the editor: hourly stale-order nudge + Monday 7 am digest.
+/* ---------- v39 (Shane 2026-09-15): every report also lands in Drive folder 'Sticky Trap - Reports' as a dated file, and in a 'reports' tab ---------- */
+function reportsFolder_() {
+  var name = PROP.getProperty('REPORTS_FOLDER') || 'Sticky Trap - Reports', it = DriveApp.getFoldersByName(name);
+  return it.hasNext() ? it.next() : DriveApp.createFolder(name);
+}
+function archiveReport_(kind, text) {
+  var tz = Session.getScriptTimeZone(), stamp = Utilities.formatDate(new Date(), tz, 'yyyy-MM-dd'), title = stamp + ' ' + kind + '.txt';
+  var folder = reportsFolder_(), old = folder.getFilesByName(title);
+  while (old.hasNext()) old.next().setTrashed(true);   // same-day re-run replaces, never duplicates
+  var f = folder.createFile(title, text, MimeType.PLAIN_TEXT);
+  var ss = ss_(), sh = ss.getSheetByName('reports');
+  if (!sh) { sh = ss.insertSheet('reports'); sh.appendRow(['date', 'kind', 'file', 'text']); }
+  sh.appendRow([new Date(), kind, f.getUrl(), String(text).slice(0, 45000)]);
+  return f.getUrl();
+}
+function archiveTest() { Logger.log(archiveReport_('Archive test', 'Test report written ' + new Date())); }   // run once from the editor to prove the folder + scope
+
 function installNudges() {
   ScriptApp.getProjectTriggers().forEach(function (t) { var f = t.getHandlerFunction(); if (f === 'nudgeStale_' || f === 'weeklyDigest_') ScriptApp.deleteTrigger(t); });
   ScriptApp.newTrigger('nudgeStale_').timeBased().everyHours(1).create();
