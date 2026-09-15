@@ -183,6 +183,7 @@
   /* tab bar */
   .tabs{display:flex;border-top:1px solid var(--line);background:rgba(6,6,6,.9);
     backdrop-filter:blur(8px);position:relative;z-index:20;padding:8px 6px calc(8px + env(safe-area-inset-bottom))}
+  .tab[hidden]{display:none}
   .tab{flex:1;background:none;border:none;color:var(--mut-2);cursor:pointer;padding:7px 0 5px;
     display:flex;flex-direction:column;align-items:center;gap:4px;font-family:var(--fdisp);font-weight:600;
     font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;transition:.15s}
@@ -389,6 +390,12 @@
   .res-score{font-family:var(--fmono);font-weight:700;font-size:40px;line-height:1;
     background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
   .res-par{font-size:12.5px;color:var(--good);margin-top:7px}
+  .res-mile{margin:10px auto 0;display:inline-block;padding:6px 12px;border-radius:999px;background:rgba(255,31,162,.14);border:1px solid rgba(255,31,162,.5);color:#fff;font-size:12.5px;font-weight:700}
+  .goalstrip{display:flex;align-items:center;gap:8px;width:100%;margin:8px 0 0;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--mut);font:inherit;font-size:11.5px;cursor:pointer;text-align:left}
+  .goalstrip b{color:var(--fg);font-family:var(--fmono)}.goalstrip .gs-l{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .goalstrip .gs-bar{flex:0 0 64px;height:6px;border-radius:999px;background:var(--panel-2);border:1px solid var(--line);overflow:hidden}.goalstrip .gs-bar i{display:block;height:100%;width:0;background:var(--grad);border-radius:999px}
+  .goalstrip .gs-pct{font-family:var(--fdisp);font-weight:700;font-size:12px;color:var(--fg)}
+  .risk{margin:8px 0 0;padding:8px 10px;border-radius:10px;background:rgba(255,31,162,.10);border:1px solid rgba(255,31,162,.45);color:#fff;font-size:12px;line-height:1.4}.risk b{font-family:var(--fmono)}
   .res-stats{display:flex;gap:8px;margin:16px 0}
   .res-stats>div{flex:1;background:var(--panel-2);border:1px solid var(--line);border-radius:11px;padding:9px 6px}
   .res-stats span{display:block;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-bottom:3px}
@@ -543,6 +550,8 @@
         <div><b id="modeTitle">Daily Trap · <span id="pnum">#142</span><span class="x2" id="x2" hidden>2× PTS</span></b><small id="modeSub">Attempt <span id="attN">1</span> of 3 · one board</small></div>
         <span class="rst" id="newin">—</span>
       </div>
+      <button type="button" class="goalstrip" id="goalStrip" hidden><span class="gs-l">◈ <b id="gsLeft">0</b> to go for <b id="gsName">—</b></span><span class="gs-bar"><i id="gsBar"></i></span><span class="gs-pct" id="gsPct">0%</span></button>
+      <div class="risk" id="riskNote" hidden>🔥 <b id="riskN">0</b>-day streak on the line — play today's board before midnight.</div>
 
       <div class="board-wrap">
         <div class="board" id="board" aria-label="Daily shard puzzle"></div>
@@ -577,6 +586,7 @@
           <div class="res-stars" id="rstars">★★☆</div>
           <div class="res-score" id="rscore">0</div>
           <div class="res-par" id="rpar">—</div>
+          <div class="res-mile" id="rmile" hidden></div>
           <div class="res-stats">
             <div><span>Streak</span><b id="rstreak">🔥 7</b></div>
             <div><span>Earned</span><b id="rpts">+0</b></div>
@@ -746,7 +756,6 @@
     <div class="sf-top">
       <button class="sf-x" id="scanClose" aria-label="Close">&#10005;</button>
       <span class="sf-ttl">Scan your order</span>
-      <span class="demo">Demo</span>
     </div>
 
     <!-- cam -->
@@ -833,7 +842,8 @@
   <div class="tabs">
     <button class="tab on" data-t="play">
       <svg viewBox="0 0 24 24" fill="none"><path class="tabi" d="M5 3l14 9-14 9z" stroke="#fff" stroke-width="1.7" stroke-linejoin="round"/></svg>Play</button>
-    <button class="tab" data-t="duels">
+    <!-- Duels hidden 2026-09-15 (Shane: engagement pass): the tab showed demo data (fake rating / record / opponents). Bring back only with real matchmaking. -->
+    <button class="tab" data-t="duels" hidden>
       <svg viewBox="0 0 24 24" fill="none"><path class="tabi" d="M4 4l9 9M20 4l-9 9M14.5 10.5l5.5 5.5-2 2-5.5-5.5M9.5 12.5l-5.5 5.5 2 2 5.5-5.5" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>Duels</button>
     <button class="tab" data-t="rewards">
       <svg viewBox="0 0 24 24" fill="none"><path class="tabi" d="M12 3l3 6 6 .8-4.5 4.2L18 21l-6-3.5L6 21l1.5-7L3 9.8 9 9z" stroke="#fff" stroke-width="1.7" stroke-linejoin="round"/></svg>Rewards</button>
@@ -910,12 +920,16 @@
     grid=[]; for(var r=0;r<ROWS;r++){grid.push([]); for(var c=0;c<COLS;c++)grid[r][c]=rcolor();}
     draw();
   }
+  function riskCheck(){ var el=document.getElementById('riskNote'); if(!el) return; var d=Math.floor(Date.now()/864e5), h=new Date().getHours();
+    var live=STREAK.last===d-1&&(STREAK.n||0)>=2&&!dayDone&&h>=17; el.hidden=!live; if(live) document.getElementById('riskN').textContent=STREAK.n; }
+  window.__riskCheck=riskCheck;
   function initDaily(){
     attempt=1; bestScore=0; dayScore=0; dayDone=false; timeLeft=TIME; playing=false; combo=0;
     var pn=document.getElementById('pnum'); if(pn)pn.textContent='#'+trapNum;
     var pv=document.getElementById('parval'); if(pv)pv.textContent=fmt(PAR);
     var _d=null; try{_d=JSON.parse(localStorage.getItem('tp_daily')||'null');}catch(e){}
     if(_d && _d.day===slotNum){ dayDone=true; bestScore=_d.best||0; }
+    setTimeout(riskCheck,0);
     rebuildBoard(); setStat(); showGate();
   }
   function setStat(){
@@ -997,6 +1011,13 @@
     document.getElementById('rpts').textContent='+'+earned;
     document.getElementById('rrank').textContent=HIST.length;
     try{ document.getElementById('rgoal').innerHTML='◈ '+goalLine(); }catch(e){}
+    try{ var mile='', it=CAT[goalIdx()], before=balance-earned, half=Math.floor(it.c/2);
+      if(HIST.length===1) mile='First board down. Come back tomorrow for the streak.';
+      else if([3,7,14,30,60,100].indexOf(STREAK.n)>=0) mile='🔥 '+STREAK.n+' days straight';
+      else if(balance>=it.c&&before<it.c) mile='◈ '+it.n+' unlocked — claim it in Rewards';
+      else if(balance>=half&&before<half) mile='Halfway to '+it.n;
+      var rm=document.getElementById('rmile'); rm.hidden=!mile; rm.textContent=mile; }catch(e){}
+    try{ riskCheck(); }catch(e){}
     try{localStorage.setItem('tp_daily', JSON.stringify({day:slotNum, best:bestScore, stars:stars, earned:earned}));}catch(e){}
     document.getElementById('result').classList.add('show');
   }
@@ -1195,6 +1216,8 @@
       '<div class="bar"><i style="width:'+pct+'%"></i></div>'+
       '<div class="g-foot"><span>'+(left>0?'<b>'+fmt(left)+'</b> to go · about <b>'+days+'</b> day'+(days===1?'':'s')+' at your pace':'<b>Ready.</b> Claim it below.')+'</span><button type="button" id="goalChange">Change</button></div>';
     var hint=document.getElementById('goalHint'); if(hint) hint.textContent=left>0?'every session moves the bar':'you did it';
+    var gs=document.getElementById('goalStrip'); if(gs){ gs.hidden=false; document.getElementById('gsLeft').textContent=left>0?fmt(left):'0'; document.getElementById('gsName').textContent=it.n; document.getElementById('gsBar').style.width=pct+'%'; document.getElementById('gsPct').textContent=left>0?pct+'%':'ready';
+      if(!gs._wired){ gs._wired=true; gs.addEventListener('click',function(){ document.querySelector('.tab[data-t="rewards"]').click(); }); } }
     el.querySelector('#goalChange').addEventListener('click',function(){ var n=(i+1)%CAT.length; setGoal(n); });
   }
   window.__renderGoal=renderGoal;
