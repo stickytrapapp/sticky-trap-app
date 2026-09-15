@@ -38,8 +38,6 @@ input,textarea{width:100%;padding:11px;border-radius:10px;border:1px solid var(-
 .pay .ctn{font-size:11.5px;color:var(--muted);margin-top:4px;line-height:1.45}
 .pay .off{font-size:12.5px;color:var(--muted)}
 .hidden{display:none}
-  .consent{font-size:11px;line-height:1.45;color:#bbb;margin:-2px 0 10px}
-  .consent a{color:#12C4FF;text-decoration:none}
 </style></head>
 <body>
 <div class="top"><a class="back" href="/#menu">&larr; Menu</a><div class="t">Your basket</div><a href="/configure/" style="font-size:12.5px;font-weight:800;text-decoration:none">+ Add a product</a></div>
@@ -56,7 +54,6 @@ input,textarea{width:100%;padding:11px;border-radius:10px;border:1px solid var(-
         <div class="k">Who is this for</div>
         <div class="row"><input id="name" placeholder="Your name" autocomplete="name"><input id="company" placeholder="Company / brand" autocomplete="organization"></div>
         <div class="row"><input id="email" type="email" placeholder="Email (gets the updates)" autocomplete="email"><input id="phone" type="tel" placeholder="Phone" autocomplete="tel"></div>
-        <div class="consent">We use your number only to reach you about this order. <a href="/privacy/" target="_blank" rel="noopener">Privacy</a> &middot; <a href="/terms/" target="_blank" rel="noopener">Terms</a></div>
         <div class="seg" id="ship"><button type="button" data-v="pickup" class="on">Pick up in Ann Arbor</button><button type="button" data-v="ship">Ship it</button></div>
         <div class="row one hidden" id="addrrow"><textarea id="addr" placeholder="Ship-to address"></textarea></div>
         <div class="row one"><input id="due" placeholder="When do you need it? (e.g. Sep 25, or 'no rush')"></div>
@@ -160,7 +157,8 @@ var D={"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"breaks":[[500,5],[7
     var due=$('due').value.trim().slice(0,40), notes=$('notes').value.trim();
     var lines=cart.map(function(l){ return {p:l.p,m:l.m,f:l.f,qty:l.qty,pr:l.pr,unit:unit(l),total:Math.round(unit(l)*l.qty*100)/100,notes:l.notes||'',art:l.art?(l.art.onFile?'on file: '+l.art.onFile+(l.art.name?' / '+l.art.name:''):(l.art.name+(l.art.pre&&l.art.pre.dpi?' ('+l.art.pre.dpi+' dpi'+(l.art.pre.alpha?', transparent':'')+(l.art.pre.level!=='ok'?', '+l.art.pre.level:'')+')':(l.art.pre&&l.art.pre.vector?' (vector)':'')))):''}; });
     var idem=''; try{ idem=localStorage.getItem('st_idem')||''; if(!idem){ idem=Date.now().toString(36)+Math.random().toString(36).slice(2,8); localStorage.setItem('st_idem',idem); } }catch(e){}
-    var body={ action:'order_new', idem:idem, name:name, company:$('company').value.trim(), email:email, phone:$('phone').value.trim(), items:items, due:due, source:'cart', stage:'received',
+    var tpUid=''; try{ tpUid=localStorage.getItem('tp_uid')||''; }catch(e){}   // 2026-09-15: Trap Points player id -> +300 when this order ships (awards)
+    var body={ action:'order_new', idem:idem, uid:tpUid, name:name, company:$('company').value.trim(), email:email, phone:$('phone').value.trim(), items:items, due:due, source:'cart', stage:'received',
                lines:lines, subtotal:Math.round(sub()*100)/100, total:Math.round(total()*100)/100, ship:ship, address:ship==='ship'?$('addr').value.trim():'', notes:notes, payment:payment||null };
     if(REAUTH){ body={ action:'reauth', code:REAUTH.code, token:REAUTH.token, payment:payment }; }
     // The order desk occasionally answers a POST with its plain GET page (no code) even though the order was created. Same idem key ->
