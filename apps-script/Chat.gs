@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 36;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 37;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -80,6 +80,8 @@ var SYSTEM = [
   "Never quote or estimate set-up, pre-press, vector or gloss-layer charges. If asked, FIRST say in one sentence that pre-press is assessed per design once we see the art, THEN offer the quote form (open_quote_form) or call/text - never open the form without that sentence. State the $50 minimum per order only if asked; do not elaborate on mixes or per-item minimums.",
   "ORDER STATUS: when they ask where an order is / its status / tracking, use order_status. It needs the order code (like 247-XL, on their invoice and tracker emails) AND the email on the order; if either is missing ask for both in one short question. Never describe an order unless order_status returned it. Report the stage, its message and the due date plainly; offer the Track my order panel (go_to connect) for the full timeline.",
   "Reply in the customer's language. If asked what you are: a Sticky Trap assistant powered by Claude.",
+  "REORDERS (v37): 'reorder what I got last time' means a past ORDER, not a saved basket - ask for the order code and the email on it, look it up with order_status, and tell them their tracker page has a Reorder button once the order is complete (offer go_to connect > Track my order). Only mention saved baskets if they say they saved one.",
+  "You are not the shop: never say 'I can resend / I'll fix / I'll print' for things a person does (proofs, reprints, files). Say what our team will do, then hand off or point to the form. When you add an offer_nav chip, do not also ask 'want me to...' about the same thing - the chip is the offer.",
   "",
   "ACTING IN THE APP - you have tools that the app executes for the customer:",
   "- add_to_basket: as soon as you have product, material, finish and quantity - whether they say 'add' or simply ask what that exact quantity costs - quote the line AND call add_to_basket in the same turn. Never ask 'want me to add it?'; they can remove it in the basket. If any piece is missing, ask for it in one short question instead of assuming (never assume a finish). Quantities: steps of 5 from 5 up to 1,000 (over 1,000 is a call-us quote). The minimum ORDER is $50 total across the basket - the tool result says whether the basket meets it; if not, tell them how much more is needed in one line. The tool result carries the exact unit price and line total - confirm those in one line, and if they're within 55 pieces of a volume break, mention it.",
@@ -392,7 +394,7 @@ function ask_(msgs, ctx) {
   var kb = kb_(), prices = kbPrices_(kb);
   var convo = msgs.slice(), actions = [], usage = { input_tokens: 0, output_tokens: 0, cache_read_input_tokens: 0 }, model = cfg_('MODEL');
   var rounds = +cfg_('MAX_TOOL_ROUNDS');
-  var pre = [];   // v19: text the model wrote BEFORE a tool call (e.g. 'pre-press is assessed per design...') used to be dropped; keep it
+  var pre = [], lastRes = null;   // v19: text the model wrote BEFORE a tool call used to be dropped; keep it. v37: lastRes = last successful tool result (fallback reply)
   for (var i = 0; i < rounds; i++) {
     var data = callClaude_(convo, kb, ctx);
     model = data.model || model;
@@ -401,7 +403,11 @@ function ask_(msgs, ctx) {
     var text = (data.content || []).filter(function (b) { return b.type === 'text'; }).map(function (b) { return b.text; }).join('').trim();
     var uses = (data.content || []).filter(function (b) { return b.type === 'tool_use'; });
     if (data.stop_reason !== 'tool_use' || !uses.length) {
+      // v37: (a) the model sometimes repeats its pre-tool sentence after the tool result - keep one copy; (b) sometimes it returns
+      // nothing at all after a successful tool call (audit 2026-09-15: 'empty_reply' on a Miron add) - say what the tool did instead of failing
+      if (text && pre.length && text.indexOf(pre[pre.length - 1].slice(0, 60)) > -1) pre = [];
       text = pre.concat(text ? [text] : []).join(' ');
+      if (!text && lastRes) text = toolSummary_(lastRes);
       if (!text) throw new Error('empty_reply');
       return { reply: text, actions: actions, usage: usage, model: model };
     }
@@ -409,6 +415,7 @@ function ask_(msgs, ctx) {
     convo.push({ role: 'assistant', content: data.content });   // echo the whole turn back (thinking blocks included)
     var results = uses.map(function (u) {
       var r = runTool_(u, prices, ctx);
+      if (!r.error && r.result) lastRes = r.result;
       if (r.action) actions.push(r.action);
       if (r.actions) r.actions.forEach(function (a) { actions.push(a); });   // v25: load_basket returns one action per line
       return { type: 'tool_result', tool_use_id: u.id, content: JSON.stringify(r.result), is_error: !!r.error };
@@ -517,6 +524,16 @@ function basketLoad_(inp, ctx) {
   // the app applies one add_to_basket action per saved line; report them so the reply can list them
   return { result: { ok: true, restored: lines.map(function (l) { return l.qty + ' x ' + l.p + ' - ' + l.m + ' / ' + l.f; }), saved_on: hit[1] instanceof Date ? hit[1].toDateString() : String(hit[1]), basket_subtotal: money_(sub) },
            actions: lines.map(function (l) { return { type: 'add_to_basket', p: l.p, m: l.m, f: l.f, pr: l.pr, qty: l.qty }; }) };
+}
+
+function toolSummary_(res) {   // v37: a plain sentence from a tool result when the model returned no text
+  if (res.added) return 'Added ' + res.added + ' at ' + res.unit_price + ' each = ' + res.line_total + '.' + (res.order_total ? ' Order total ' + res.order_total + '.' : '');
+  if (res.saved_under) return 'Saved your basket under ' + res.saved_under + '.';
+  if (res.restored) return 'Restored your saved basket: ' + res.restored.join(', ') + '.';
+  if (res.promise) return 'Sent to our team. ' + res.promise;
+  if (res.stage) return 'Order ' + res.code + ': ' + res.stage + '. ' + (res.message || '');
+  if (res.chip) return '';
+  return '';
 }
 
 /* ---------- promos (data/promos.json on the site): featured of the week, double-points rule, dated events ---------- */
