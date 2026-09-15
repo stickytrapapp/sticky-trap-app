@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 37;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 38;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -186,6 +186,7 @@ function doPost(e) {
   if (body.action === 'instant') { try { return out_(instantIn_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }             // v34: instant answer logged
   if (body.action === 'rate') { try { return out_(rateIn_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }                   // v34: thumbs on a reply
   if (body.action === 'billing_draft') { try { return out_(billingDraft_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }   // v36: Gmail DRAFT for the Invoices billing mailer
+  if (body.action === 'lead_phone') { try { return out_(leadPhone_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }         // v38: 'text me when they reply' after a hand-off
   if (body.action === 'reauth') { try { return out_(reauth_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }                 // v31
 
   var uid = String(body.uid || 'anon').slice(0, 40);
@@ -473,6 +474,19 @@ function leadIn_(inp, ctx) {
            action: { type: 'lead_sent', trigger: trig, owner: toOwner } };
 }
 
+function leadPhone_(b) {   // v38: the hand-off card collected a cell number - attach it to this device's latest lead and tell the team
+  var uid = String(b.uid || '').slice(0, 40), phone = normPhone_(b.phone);
+  if (!uid || !phone) return { ok: false, error: 'bad_phone' };
+  if (!throttle_('leadphone:' + uid)) return { ok: false, error: 'rate_limited' };
+  var sh = leadsSheet_(), rows = sh.getDataRange().getValues(), hit = -1;
+  for (var i = rows.length - 1; i >= 1; i--) if (String(rows[i][LEAD_COLS.indexOf('device_id')]) === uid) { hit = i; break; }
+  if (hit < 0) return { ok: false, error: 'no_lead' };
+  var name = rows[hit][1], want = rows[hit][3], contact = rows[hit][2], monday = rows[hit][9];
+  var col = LEAD_COLS.indexOf('summary') + 1; sh.getRange(hit + 1, col).setValue(String(rows[hit][col - 1]) + ' | TEXT ME at ' + phone);
+  try { GmailApp.sendEmail(notifyTo_(), 'Lead wants a text: ' + name + ' ' + phone, name + ' (' + contact + ') asked to be texted when you reply. Cell: ' + phone + '\nWants: ' + want + (monday && !/^ERR/.test(String(monday)) ? '\nMonday: https://thestickytraps-team.monday.com/boards/8594864074/pulses/' + monday : ''), { name: 'Sticky Trap App' }); } catch (e) { mailErr_(e); }
+  try { if (monday && !/^ERR/.test(String(monday)) && PROP.getProperty('MONDAY_TOKEN')) mondayGql_(PROP.getProperty('MONDAY_TOKEN'), 'mutation ($i: ID!, $t: String!) { create_update (item_id: $i, body: $t) { id } }', { i: String(monday), t: 'Wants a TEXT when we reply: ' + phone }); } catch (e) {}
+  return { ok: true, phone: phone };
+}
 function mondayLead_(name, contact, want, trig, summ, basket, toOwner, why) {
   var tok = PROP.getProperty('MONDAY_TOKEN');
   if (!tok) return '';
@@ -1276,6 +1290,11 @@ function weeklyDigest_() {
   if (stale.length) lines.push('  Needs a push: ' + stale.map(function (o) { return o.code + ' (' + (o.company || o.name) + ', ' + (STAGES[o.stage] || {}).label + ')'; }).join('; '));
   lines.push('CHAT: ' + chats.length + ' question' + (chats.length === 1 ? '' : 's') + ' asked, ' + adds + ' basket add' + (adds === 1 ? '' : 's') + ' by the bot, ' + quotes + ' sent to the quote form.');
   if (rates.length) { lines.push('RATINGS: ' + (rates.length - downs.length) + ' up, ' + downs.length + ' down.' + (downs.length ? ' Thumbs-down:' : '')); downs.slice(0, 10).forEach(function (r) { lines.push('  - Q: ' + String(r[3]).slice(0, 90) + '  |  A: ' + String(r[4]).slice(0, 90)); }); }   // v34
+  // v38: the bot report Shane asked for - what it answered on the phone, and every answer that fell back to 'call us' (= facts to add)
+  var inst = chats.filter(function (r) { return /^\[instant:/.test(String(r[3])); }).length;
+  var callUs = qs.filter(function (x) { return /734 460 3845|quoted per project|per project/i.test(x.a) && !/^\[instant/.test(x.a); });
+  lines.push('BOT: ' + inst + ' answered instantly on the phone, ' + (chats.length - inst) + ' by Claude. ' + callUs.length + ' answer' + (callUs.length === 1 ? '' : 's') + ' fell back to call-us / per-project' + (callUs.length ? ' - each one is a fact worth adding:' : '.'));
+  callUs.slice(0, 12).forEach(function (x) { lines.push('  - ' + x.q); });
   lines.push('GAME: ' + Object.keys(players).length + ' player' + (Object.keys(players).length === 1 ? '' : 's') + ' posted scores. Referrals: ' + refs + '. NDAs signed: ' + ndas + '.');
   lines.push('');
   if (qs.length) { lines.push('WHAT PEOPLE ASKED THE BOT (newest first) - anything it fumbled belongs in chat-facts.txt:'); qs.slice(-30).reverse().forEach(function (x) { lines.push('  Q: ' + x.q); lines.push('     A: ' + x.a); }); }
