@@ -38,6 +38,11 @@
   .prefs .pl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:800;flex:1 1 100%}
   .prefs label{display:inline-flex;align-items:center;gap:7px;font-size:14px;color:#fff;cursor:pointer}.prefs label.off{opacity:.5}
   .prefs input{accent-color:var(--cy);width:18px;height:18px;margin:0}.prefs small{flex:1 1 100%;color:var(--muted);font-size:11.5px;line-height:1.4}
+  .pushrow{flex:1 1 100%;display:flex;align-items:center;gap:10px;padding-top:10px;margin-top:4px;border-top:1px solid var(--line)}
+  .pushrow .pt{flex:1;min-width:0}.pushrow .pt b{display:block;font-size:14px;color:#fff}.pushrow .pt small{display:block;flex:none;margin-top:2px}
+  .sw{position:relative;width:46px;height:26px;border-radius:999px;background:var(--panel-2);border:1px solid var(--line);cursor:pointer;flex:none;transition:background .2s}
+  .sw::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .2s}
+  .sw.on{background:var(--cy);border-color:var(--cy)}.sw.on::after{transform:translateX(20px)}.sw[disabled]{opacity:.45;cursor:default}
   .foot{color:var(--muted);font-size:11.5px;text-align:center;margin-top:28px;line-height:1.6}
   .foot a{color:var(--cy);text-decoration:none;font-weight:700}
   .err{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;text-align:center;color:var(--muted);line-height:1.6}
@@ -54,6 +59,7 @@
   <div id="app"><div class="err">Loading your order…</div></div>
   <div class="foot">Questions? Call or text <a href="sms:+17344603845">734 460 3845</a> · <a href="mailto:thestickytrap@gmail.com">thestickytrap@gmail.com</a><br>FM Holdings LLC · d/b/a The Sticky Trap · 4750 Venture Dr, Suite 101, Ann Arbor, MI 48108</div>
 </div>
+<script src="/push.js"></script>
 <script>
 (function(){
   var API='https://script.google.com/macros/s/AKfycbzgctrnkyWjVnhzioE_B4x8J2pyi4WzRSJG2e00Y_Y5cz0vQx-q5jhvOhMWg2x-K9ciFw/exec';
@@ -84,8 +90,10 @@
       '<ul class="tl" style="margin-top:18px">'+tl+'</ul>'+
       (o.token?'<div class="prefs" id="prefs"><span class="pl">Order updates</span>'+
         '<label><input type="checkbox" class="pf" data-v="email"'+(o.notify==='both'||o.notify==='email'||!o.notify?' checked':'')+(o.email?'':' disabled')+'> Email'+(o.email?'':' <span style="color:var(--muted)">(none on file)</span>')+'</label>'+
-        '<label'+(o.phone_last4?'':' class="off"')+'><input type="checkbox" class="pf" data-v="sms"'+(o.notify==='both'||o.notify==='sms'?' checked':'')+(o.phone_last4?'':' disabled')+'> Text'+(o.phone_last4?' <span style="color:var(--muted)">…'+esc(o.phone_last4)+'</span>':' <span style="color:var(--muted)">(no phone on file)</span>')+'</label>'+
-        '<small id="prefnote">'+(o.phone_last4&&!o.sms_ready?'Texts start once we switch them on - email keeps you covered until then.':'Pick how you want to hear from us. One has to stay on.')+'</small></div>':'');
+        '<label'+(o.phone_last4?'':' class="off"')+'><input type="checkbox" class="pf" data-v="sms"'+((o.notify==='both'||o.notify==='sms')&&o.phone_last4?' checked':'')+(o.phone_last4?'':' disabled')+'> Text'+(o.phone_last4?' <span style="color:var(--muted)">…'+esc(o.phone_last4)+'</span>':' <span style="color:var(--muted)">(no phone on file)</span>')+'</label>'+
+        '<small id="prefnote">'+(o.phone_last4&&!o.sms_ready?'Texts start once we switch them on - email keeps you covered until then.':'Pick how you want to hear from us. One has to stay on.')+'</small>'+
+        '<div class="pushrow" id="pushrow" hidden><div class="pt"><b>Updates on this phone</b><small id="pushnote">A notification the moment your order moves.</small></div><button type="button" class="sw" id="pushsw" role="switch" aria-checked="false" aria-label="Push notifications on this phone"></button></div>'+
+        '</div>':'');
     var ab=document.getElementById('approve');
     if(ab) ab.addEventListener('click',function(){ ab.disabled=true; ab.textContent='Sending…';
       fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'approve',code:o.code,token:o.token})}).then(function(r){return r.json();})
@@ -101,6 +109,15 @@
       fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'order_prefs',code:o.code,token:o.token,notify:v})}).then(function(r){return r.json();})
         .then(function(j){ if(j&&j.ok){ o.notify=v; note.textContent=v==='both'?'Saved - email and text.':v==='email'?'Saved - email only.':'Saved - text only.'; } else { cb.checked=!cb.checked; note.textContent='Could not save that - try again.'; } })
         .catch(function(){ cb.checked=!cb.checked; note.textContent='Could not save that - try again.'; }); }); }); }
+    // Push on this phone (2026-09-15): /push.js + Firebase. Hidden where the browser cannot do it; on iPhone it needs the app on the Home Screen.
+    var prow=document.getElementById('pushrow'), psw=document.getElementById('pushsw'), pnote=document.getElementById('pushnote');
+    function pushUi(s){ if(!prow) return; prow.hidden=false; psw.classList.toggle('on',s==='on'); psw.setAttribute('aria-checked',s==='on'?'true':'false'); psw.disabled=(s==='denied'||s==='unsupported');
+      pnote.textContent = s==='on' ? 'On for this phone. Turn off any time.' : s==='install' ? 'On iPhone: tap Share, then "Add to Home Screen", open the app from there and switch this on.' : s==='denied' ? 'Notifications are blocked for this site in your phone settings.' : s==='unsupported' ? 'This browser cannot do notifications - email has you covered.' : 'A notification the moment your order moves.'; }
+    if(window.STPush&&prow){ STPush.state().then(function(s){ pushUi(s); if(s==='on') STPush.attach({code:o.code,order_token:o.token,email:o.email||''}); });
+      psw.addEventListener('click',function(){ if(psw.disabled) return; psw.disabled=true; pnote.textContent='One moment…';
+        STPush.state().then(function(s){ return s==='on' ? STPush.disable() : STPush.enable({code:o.code,order_token:o.token,email:o.email||''}); })
+          .then(function(s){ psw.disabled=false; pushUi(s); if(s==='on') pnote.textContent='On. We will ping this phone when '+o.code+' moves.'; })
+          .catch(function(){ psw.disabled=false; pushUi('off'); pnote.textContent='Could not switch that on just now - email still covers you.'; }); }); }
     if(cs) cs.addEventListener('click',function(){ var note=document.getElementById('chgnote').value.trim(); if(!note){ alert('Tell us what should change.'); return; } cs.disabled=true; cs.textContent='Sending…';
       fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'changes',code:o.code,token:o.token,note:note})}).then(function(r){return r.json();})
         .then(function(j){ if(j&&j.ok){ load(); } else { cs.disabled=false; cs.textContent='Send change request'; alert('Could not send that - try again or text 734 460 3845.'); } })
