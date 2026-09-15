@@ -183,7 +183,7 @@
   /* tab bar */
   .tabs{display:flex;border-top:1px solid var(--line);background:rgba(6,6,6,.9);
     backdrop-filter:blur(8px);position:relative;z-index:20;padding:8px 6px calc(8px + env(safe-area-inset-bottom))}
-  .tab[hidden]{display:none}
+  .tab[hidden],.card[hidden],.sec-h[hidden]{display:none!important}
   .tab{flex:1;background:none;border:none;color:var(--mut-2);cursor:pointer;padding:7px 0 5px;
     display:flex;flex-direction:column;align-items:center;gap:4px;font-family:var(--fdisp);font-weight:600;
     font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;transition:.15s}
@@ -681,8 +681,34 @@
         </button>
       </div>
 
-      <div class="sec-h"><h3>Being a customer</h3><span>status, not points</span></div>
+      <div class="sec-h"><h3>Earn by doing</h3><span>real actions, flat points, never a % of spend</span></div>
       <div class="card" style="padding:4px 14px">
+        <button class="rw rw-tap" id="verifyBtn" type="button">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#25E0A6" stroke-width="1.7"><path d="M20 6L9 17l-5-5"/></svg></div>
+          <div class="tx"><b>Verify your brand</b><small>Your order code + the email on it · once <span id="verifyState"></span></small></div>
+          <div class="earn-amt mid">+500</div>
+        </button>
+        <div id="verifyBox" class="rw" hidden style="display:block;padding:8px 0 14px"><input id="vCode" placeholder="Order code, e.g. ST-K3F9 or 253-YJ" style="width:100%;margin:6px 0;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--panel-2);color:#fff;font:inherit"><input id="vEmail" type="email" placeholder="Email on the order" style="width:100%;margin:6px 0;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--panel-2);color:#fff;font:inherit"><button class="btn go" id="vGo" type="button" style="margin-top:6px">Verify · +500</button><small id="vMsg" style="display:block;margin-top:6px;color:var(--mut)"></small></div>
+        <a class="rw" href="https://thestickytrap.app/site/shop/" style="text-decoration:none;color:inherit">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#EAB84B" stroke-width="1.7"><path d="M3 6h18M6 6v13a1 1 0 001 1h10a1 1 0 001-1V6M9 6V4h6v2"/></svg></div>
+          <div class="tx"><b>Order through the app</b><small>Every order placed in the app, when it ships · lands here by itself</small></div>
+          <div class="earn-amt mid">+300</div>
+        </a>
+        <button class="rw rw-tap" id="reviewBtn" type="button">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#FF1FA2" stroke-width="1.7"><path d="M12 3l3 6 6 .8-4.5 4.2L18 21l-6-3.5L6 21l1.5-7L3 9.8 9 9z"/></svg></div>
+          <div class="tx"><b>Leave a Google review</b><small>Tap, write it, come back and tap "I left it" · once <span id="reviewState"></span></small></div>
+          <div class="earn-amt mid">+200</div>
+        </button>
+        <div class="rw">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#12C4FF" stroke-width="1.7"><path d="M16 11a4 4 0 10-8 0M4 20a6 6 0 0116 0"/></svg></div>
+          <div class="tx"><b>Refer a brand that orders</b><small>Share your link (above); when their first order ships · lands here by itself</small></div>
+          <div class="earn-amt mid">+500</div>
+        </div>
+      </div>
+
+      <!-- 'Being a customer' (demo scan flow) hidden 2026-09-15: 'Verify your brand' above is the real, server-recorded version. Elements kept for the old handlers. -->
+      <div class="sec-h" hidden><h3>Being a customer</h3><span>status, not points</span></div>
+      <div class="card" style="padding:4px 14px" hidden>
         <button class="rw rw-tap" id="scanOpen1" type="button">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#25E0A6" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><path d="M13 13h3v3M20 20v.01M16 20h.01M20 16h.01"/></svg></div>
           <div class="tx"><b>Scan an order → verified brand</b><small>Unlocks members-only prizes + a flat boost</small></div>
@@ -1201,6 +1227,32 @@
   function renderClaims(){ var el=document.getElementById('claims'); if(!el)return; if(!CLAIMS.length){ el.innerHTML=''; return; }
     el.innerHTML='<div class="sec-h"><h3>Your claims</h3><span>we make it &amp; reach out</span></div>'+CLAIMS.slice().reverse().map(function(c){ var d=new Date(c.ts); return '<div class="claim"><div><b>'+c.n+'</b><small>'+c.brand+' \u00b7 '+d.toLocaleDateString()+' \u00b7 \u25C8 '+fmt(c.c)+'</small></div><span class="st">'+(c.status==='pending'?'IN THE QUEUE':c.status.toUpperCase())+'</span></div>'; }).join(''); }
   window.__renderShop=renderShop;
+  /* ---- Earn by doing (Shane 2026-09-15: actions that pay points, flat, never % of spend). Every award is recorded by the order desk
+          (Chat.gs 'award' / 'awards' / 'awards_ack') so it can only be collected once; the phone just mirrors it into the ledger. ---- */
+  var AW_KEY='tp_awards_seen', seen=[]; try{ seen=JSON.parse(localStorage.getItem(AW_KEY)||'[]')||[]; }catch(e){}
+  function awardsPull(){ if(!UID) return; fetch(LB_API+'?action=awards&uid='+encodeURIComponent(UID)+'&_='+Date.now()).then(function(r){return r.json();}).then(function(j){
+      if(!(j&&j.ok&&j.awards)) return; var got=0, ids=[];
+      j.awards.forEach(function(a){ if(seen.indexOf(a.id)>=0) return; seen.push(a.id); ids.push(a.id); earn(+a.pts||0, a.why||a.kind); got+=(+a.pts||0); });
+      if(ids.length){ try{ localStorage.setItem(AW_KEY,JSON.stringify(seen.slice(-200))); }catch(e){} toast('+'+fmt(got)+' · '+goalLine());
+        fetch(LB_API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'awards_ack',uid:UID,ids:ids})}).catch(function(){}); }
+      var v=document.getElementById('verifyState'), rv=document.getElementById('reviewState');
+      if(v&&j.done&&j.done.verify) v.innerHTML='<span class="pill cy">done</span>'; if(rv&&j.done&&j.done.review) rv.innerHTML='<span class="pill cy">done</span>';
+    }).catch(function(){}); }
+  function awardPost(kind,extra,btn,msgEl){ if(btn) btn.disabled=true; var body={action:'award',uid:UID,handle:handle,kind:kind}; for(var k in (extra||{})) body[k]=extra[k];
+    return fetch(LB_API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)}).then(function(r){return r.json();}).then(function(j){ if(btn) btn.disabled=false;
+      if(j&&j.ok&&j.award){ if(seen.indexOf(j.award.id)<0){ seen.push(j.award.id); try{ localStorage.setItem(AW_KEY,JSON.stringify(seen.slice(-200))); }catch(e){} earn(+j.award.pts||0, j.award.why||kind); } if(msgEl) msgEl.textContent='+'+fmt(j.award.pts)+' banked. '+goalLine(); toast('+'+fmt(j.award.pts)+' · '+goalLine()); return true; }
+      if(j&&j.dup){ if(msgEl) msgEl.textContent='Already collected on this account.'; return false; }
+      if(msgEl) msgEl.textContent = j&&j.error==='not_found' ? 'We could not match that code and email.' : j&&(j.error==='not_live'||j.error==='empty') ? 'Not switched on yet - soon.' : 'Could not record that right now.'; return false; })
+      .catch(function(){ if(btn) btn.disabled=false; if(msgEl) msgEl.textContent='Could not reach the order desk - try again.'; return false; }); }
+  (function(){ var vb=document.getElementById('verifyBtn'), box=document.getElementById('verifyBox'), go=document.getElementById('vGo'), msg=document.getElementById('vMsg');
+    if(vb) vb.addEventListener('click',function(){ box.hidden=!box.hidden; if(!box.hidden) document.getElementById('vCode').focus(); });
+    if(go) go.addEventListener('click',function(){ var code=document.getElementById('vCode').value.trim().toUpperCase(), em=document.getElementById('vEmail').value.trim(); if(!code||!em){ msg.textContent='Both boxes, please.'; return; } msg.textContent='Checking…';
+      awardPost('verify',{code:code,email:em},go,msg).then(function(ok){ if(ok){ verified=true; try{ localStorage.setItem('tp_verified','1'); }catch(e){} updateTier(); renderShop(); } }); });
+    var rb=document.getElementById('reviewBtn'); if(rb) rb.addEventListener('click',function(){
+      if(!rb._opened){ rb._opened=true; window.open('https://www.google.com/maps/search/?api=1&query=The+Sticky+Trap+Ann+Arbor+MI','_blank'); rb.querySelector('.tx small').innerHTML='Wrote it? <b style="color:var(--fg)">Tap again: I left it</b> · we spot-check <span id="reviewState"></span>'; return; }
+      awardPost('review',{},rb,null).then(function(ok){ if(ok) rb.querySelector('.tx small').innerHTML='Thank you. <span class="pill cy">done</span>'; }); });
+    setTimeout(awardsPull,1200); document.addEventListener('visibilitychange',function(){ if(!document.hidden) awardsPull(); });
+  })();
   /* ---- Your goal (Shane 2026-09-15: rewards are the real focus): pick a prize, watch the bar move every session.
           Default = the cheapest prize you can't afford yet. Pace = your own earn rate over the last 14 days (fallback 20/day). ---- */
   var GOAL=null; try{ GOAL=localStorage.getItem('tp_goal'); }catch(e){}
