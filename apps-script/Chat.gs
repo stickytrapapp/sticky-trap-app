@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 44;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 45;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -919,8 +919,8 @@ function noncompeteIn_(b) {
 var STAGE_ORDER = ['received', 'quoted', 'deposit', 'proofing', 'proof_sent', 'approved', 'printing', 'ready', 'shipped', 'complete'];
 var STAGES = {
   received:   { label: 'Request received',          msg: 'We have your request and will follow up with a quote shortly.' },
-  quoted:     { label: 'Quote sent',                msg: 'Your quote / invoice is on its way. The deposit locks in your spot in the queue.' },
-  deposit:    { label: 'Deposit received',          msg: 'Thank you - your order is in the queue and art is next.' },
+  quoted:     { label: 'Quote sent',                msg: 'Your quote / invoice is on its way. Payment locks in your spot in the queue.' },
+  deposit:    { label: 'Payment received',          msg: 'Thank you - your order is in the queue and art is next.' },   // v45 (Shane 2026-09-15): print orders are paid in full, so 'payment', not 'deposit'
   proofing:   { label: 'Art & proof in progress',   msg: 'We are working on your proof now.' },
   proof_sent: { label: 'Proof sent - approval needed', msg: 'Your proof is ready. Please review it and tap Approve so we can print. Proof before we print - no surprises.' },
   approved:   { label: 'Proof approved',            msg: 'Approved - your order is queued for print.' },
