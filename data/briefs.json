@@ -5,60 +5,60 @@
     {
       "date": "2026-09-15",
       "label": "Morning Brief",
-      "title": "Rescheduling Holds, Psychedelics Go Mainstream, Michigan Eyes a Tax Reset",
-      "top": "Federal momentum is real this week: a landmark FDA psychedelics hearing, Eli Lilly's psychedelics buyout, and a court win for medical marijuana's Schedule III status all point toward a more open national market. In Michigan, operators are pushing back on the 24% wholesale tax with a fresh lawsuit and a bipartisan repeal bill, while brands like Fields Cannary keep building for what comes next.",
+      "title": "Repeal Momentum Builds in Lansing While Psychedelics Go Mainstream in D.C.",
+      "top": "Michigan operators are getting real signals of relief — a GOP frontrunner is running on killing the 24% wholesale tax, courts are backing retailers on surveillance fights, and new storefronts keep opening in Detroit and Ann Arbor. Nationally, Eli Lilly just bought into psychedelics, the FDA held a landmark hearing on psilocybin and MDMA-style therapies, and MSO consolidation keeps accelerating even as full federal rescheduling grinds on.",
       "local": [
         {
-          "text": "Fields Cannary pushes ahead with Muskegon buildout",
-          "source": "cann.dev",
+          "text": "John James pledges to gut the 24% pot tax — Michigan's GOP governor nominee is promising to \"repeal or sharply reduce\" the wholesale tax, and cannabis operators are backing him with campaign cash.",
+          "source": "MJBizDaily",
+          "url": "https://mjbizdaily.com/news/republican-gubernatorial-candidate-courts-michigan-cannabis-industry-vows-to-kill-new-24-mj-tax/618038"
+        },
+        {
+          "text": "High Profile Cannabis opens first Detroit store — Ann Arbor-based C3 Industries backed a Black woman-owned, social-equity dispensary on the city's eastside, its debut Detroit location.",
+          "source": "City of Detroit",
+          "url": "https://detroitmi.gov/news/detroit-legacy-adult-use-recreational-dispensary-high-profile-cannabis-celebrates-grand-opening"
+        },
+        {
+          "text": "JARS Cannabis scores a win against surveillance overreach — the chain got a Flock license-plate reader removed from outside its Madison Heights store after staff pushed back.",
+          "source": "Cann.dev",
           "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
         },
         {
-          "text": "Voting opens for Michigan's best weed brands",
-          "source": "The 'Gander",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-083126/"
+          "text": "U.P. operator Rize finds a workaround for the tax squeeze — the three-store chain is sustaining growth by splitting the wholesale tax burden with suppliers instead of absorbing it alone.",
+          "source": "Cann.dev",
+          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
         },
         {
-          "text": "Hemp THC ban delay buys shelf-space runway",
-          "source": "The 'Gander",
+          "text": "Tax revenue misses target, but relief could be close — the 24% levy brought in just $37 million in Q2 against a $105 million-per-quarter projection, while bipartisan lawmakers back repeal and the industry's lawsuit heads to trial this month.",
+          "source": "The 'Gander / WWMT",
           "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-090826/"
-        },
-        {
-          "text": "New MiCIA lawsuit keeps tax-relief hopes alive",
-          "source": "WWMT",
-          "url": "https://wwmt.com/news/state/michigan-marijuana-industry-lawsuit-stop-wholesale-tax-legal-court-pot-weed-economy-business-wwmt"
-        },
-        {
-          "text": "Bipartisan repeal bill gains steam under pressure",
-          "source": "WWMT",
-          "url": "https://wwmt.com/news/state/michigan-marijuana-industry-lawsuit-stop-wholesale-tax-legal-court-pot-weed-economy-business-wwmt"
         }
       ],
       "national": [
         {
-          "text": "FDA holds landmark hearing on psychedelic therapies",
-          "source": "The Washington Times",
+          "text": "Eli Lilly closes its big bet on psychedelics — the pharma giant's AtaiBeckley acquisition, approved by shareholders Sept. 8, brings drug candidates BPL-003, VLS-01 and EMP-01 into its pipeline.",
+          "source": "Clinical Trial Vanguard",
+          "url": "https://www.clinicaltrialvanguard.com/article/psych-pulse/what-the-fdas-new-psychedelic-framework-actually-means-for-the-clinic/"
+        },
+        {
+          "text": "FDA hearing pushes psilocybin and MDMA-style drugs toward the clinic — regulators gathered expert input this week on therapeutic use of psychedelics, calling the field \"much closer to home.\"",
+          "source": "Washington Times",
           "url": "https://www.washingtontimes.com/news/2026/sep/14/psychedelic-treatments-move-closer-mainstream-fda/"
         },
         {
-          "text": "Eli Lilly closes its atai Beckley psychedelics deal",
-          "source": "Clinical Trial Vanguard",
-          "url": "https://www.clinicaltrialvanguard.com/article/psych-pulse/what-the-fdas-new-psychedelic-framework-actually-means-for-the-clinic/"
-        },
-        {
-          "text": "DEA advances bid to ease psilocybin scheduling",
-          "source": "Clinical Trial Vanguard",
-          "url": "https://www.clinicaltrialvanguard.com/article/psych-pulse/what-the-fdas-new-psychedelic-framework-actually-means-for-the-clinic/"
-        },
-        {
-          "text": "Curaleaf-Aurora hostile bid turns into regulatory brawl",
-          "source": "The Marijuana Herald",
-          "url": "https://themarijuanaherald.com/2026/09/curaleaf-asks-canadian-regulator-to-halt-aurora-share-sales-during-takeover-bid/"
-        },
-        {
-          "text": "Medical marijuana's Schedule III status survives court test",
+          "text": "Federal court backs medical marijuana's Schedule III status — the D.C. Circuit rejected a challenge to April's reclassification, leaving the rescheduling order in effect.",
           "source": "Cannabis Business Times",
           "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order"
+        },
+        {
+          "text": "Vireo Growth to swallow Planet 13 in latest MSO buying spree — the all-stock deal would give Vireo roughly 265 stores across 15 states, making it one of the largest U.S. cannabis retailers.",
+          "source": "MJBizDaily",
+          "url": "https://mjbizdaily.com/news/cannabis-mso-vireo-growth-to-acquire-planet-13-in-all-stock-deal/617152/"
+        },
+        {
+          "text": "Full recreational rescheduling still stuck, but the machinery keeps turning — months after the April order, DEA is now sending detailed compliance questionnaires to state-licensed operators seeking federal protections.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/deas-list-of-cannabis-questions-for-businesses-seeking-rescheduling-protections-newsletter-september-1-2026"
         }
       ]
     }
