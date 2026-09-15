@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 34;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 35;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -87,6 +87,7 @@ var SYSTEM = [
   "- show_basket: when they ask to see, review or check out their basket.",
   "- open_quote_form: when they're ready to send the order, get a quote, or upload art.",
   "- go_to: when they ask for another part of the app (materials/specs, contact, episodes, the daily brief, the game).",
+  "- offer_nav (v35): whenever your answer relates to a place in the app and they did NOT ask to be taken there, add ONE offer_nav chip (never a 'want me to show you?' question - the chip is the question). Examples: quoting a product -> offer_nav open_product; they sound ready -> show_basket; art, quote, rush, design -> open_quote_form; address, hours, contact -> go_to connect. Max one chip per reply; skip it when you already moved them with another tool.",
   "You may call several tools in one turn (e.g. two add_to_basket lines). Their current tab and basket are given below - use them (e.g. 'your basket already has...'). After add_to_basket, state only what the result says (unit price, line total, basket subtotal); never speculate about merged or duplicate lines - the app handles that. If the result says the basket was EMPTY before the add, never say 'already' or 'merged'.",
   "",
   "HAND-OFF TO A PERSON (v25). Your job is to help enough to bring someone in; a person closes. Hand off when ANY of these fires: (1) money needs judgment - an item or material not on the menu, over 1,000 pieces, set-up / pre-press / design cost, rush, a discount request, or 'can you match this'; (2) they are ready to buy - product, quantity and art in hand; (3) they ask for a person, ask the same thing twice, or sound frustrated; (4) anything about an existing account, past pricing or an invoice (never discuss account terms); (5) compliance, legal or 'will this pass the state'; (6) the third question in a row you could not answer from the knowledge base.",
@@ -130,7 +131,14 @@ var TOOLS = [
   { name: 'save_basket', strict: true, description: "Save the customer's current basket under their email so they can pick it up later, on another device or on the website.",
     input_schema: { type: 'object', additionalProperties: false, properties: { email: { type: 'string' } }, required: ['email'] } },
   { name: 'load_basket', strict: true, description: 'Restore a basket previously saved under this email: re-adds its lines to the basket in the app.',
-    input_schema: { type: 'object', additionalProperties: false, properties: { email: { type: 'string' } }, required: ['email'] } }
+    input_schema: { type: 'object', additionalProperties: false, properties: { email: { type: 'string' } }, required: ['email'] } },
+  // v35: offer a one-tap chip under the reply instead of moving them or asking
+  { name: 'offer_nav', strict: true, description: "Put ONE tap-able chip under your reply that takes the customer somewhere in the app when THEY tap it (it does not move them now). Use it whenever the answer relates to a place in the app: a product's prices -> open_product, ready to order -> show_basket, art / quote / rush / design -> open_quote_form, address / hours / contact / NDA -> go_to connect, materials -> go_to specs. Label is the button text (max 4 words), e.g. 'Take me there', 'See 3\" Slaps', 'Send my art'.",
+    input_schema: { type: 'object', additionalProperties: false, properties: {
+      label: { type: 'string', description: 'Button text, up to 4 words' },
+      kind: { type: 'string', enum: ['go_to', 'open_product', 'show_basket', 'open_quote_form'] },
+      target: { type: 'string', description: 'For go_to: the tab (industry, social, menu, specs, connect, play). For open_product: the menu product name. Otherwise empty string.' }
+    }, required: ['label', 'kind', 'target'] } }
 ];
 
 /* ---------- HTTP ---------- */
@@ -360,6 +368,15 @@ function runTool_(use, prices, ctx) {
       var o = t.order, last = o.history.length ? o.history[o.history.length - 1] : null;
       return { result: { ok: true, code: o.code, stage: o.label, message: o.message, due: o.due || 'not set yet', items: o.items || '', company: o.company || o.name || '',
                          last_update: last ? new Date(last.ts).toDateString() + (last.note ? ' - ' + last.note : '') : '', awaiting_client_approval: !!o.can_approve } };
+    }
+    if (use.name === 'offer_nav') {   // v35
+      var lab = String(inp.label || 'Take me there').slice(0, 40), kind = String(inp.kind || ''), tgt = String(inp.target || '').slice(0, 60), go;
+      if (kind === 'go_to') { if (TABS.indexOf(tgt) < 0) return { error: true, result: { error: 'unknown tab ' + tgt + '; tabs: ' + TABS.join(', ') } }; go = { type: 'go_to', tab: tgt }; }
+      else if (kind === 'open_product') { var pp2 = matchProduct_(tgt, prices); if (!pp2) return { error: true, result: { error: "unknown product '" + tgt + "'" } }; go = { type: 'open_product', product: pp2 }; }
+      else if (kind === 'show_basket') go = { type: 'show_basket' };
+      else if (kind === 'open_quote_form') go = { type: 'open_quote_form' };
+      else return { error: true, result: { error: 'unknown kind ' + kind } };
+      return { result: { ok: true, chip: lab }, action: { type: 'offer', label: lab, go: go } };
     }
     if (use.name === 'handoff') return leadIn_(inp, ctx);            // v25
     if (use.name === 'save_basket') return basketSave_(inp, ctx);    // v25

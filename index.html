@@ -2014,6 +2014,7 @@
       else if(a.type==='show_basket'){ window.go&&go('menu'); setTimeout(function(){ window.STM&&window.STM.openDrawer&&window.STM.openDrawer(); },260); moved=true; }
       else if(a.type==='open_quote_form'){ window.go&&go('menu'); setTimeout(scrollToQuote,260); moved=true; }
       else if(a.type==='go_to'&&window.go){ go(a.tab); moved=true; }
+      else if(a.type==='offer'){ offerChip(a); }   // bot editor 2026-09-15: one-tap "Take me there" chip instead of asking
       try{window.track&&window.track('chat_action',a.type+(a.p?(':'+a.p):''));}catch(e){}
     }catch(e){} });
     if(added){ var row=document.createElement('div'); row.className='ch-chips'; var b=document.createElement('button'); b.type='button'; b.className='ch-chip'; b.textContent='View basket \u2192';
@@ -2021,6 +2022,14 @@
     if(moved) setTimeout(close,900);   // let them read the reply, then show them the result
   }
 
+  // ---- Offer chips (Shane 2026-09-15: "help navigate the site" - a button, not a question). An offer = {label, go} where go is a
+  //      normal action (go_to / open_product / show_basket / open_quote_form); tapping it runs act() on that action.
+  function offerChip(o){
+    if(!o||!o.go||!o.label) return;
+    var row=document.createElement('div'); row.className='ch-chips'; var b=document.createElement('button'); b.type='button'; b.className='ch-chip'; b.textContent=String(o.label).slice(0,40)+' \u2192';
+    b.addEventListener('click',function(){ row.remove(); act([o.go]); try{window.track&&window.track('chat_offer',o.go.type+(o.go.tab?(':'+o.go.tab):''));}catch(e){} });
+    row.appendChild(b); log.appendChild(row); scrollEnd();
+  }
   function ask(text){
     text=String(text||'').trim(); if(!text||busy) return;
     MSGS.push({role:'user',content:text}); bubble('me',text); chips.hidden=true; save(); input.value='';
@@ -2034,7 +2043,7 @@
     }
     if(!CHAT_URL){ setTimeout(function(){ done(OFFLINE,true); },500); return; }
     var ins=instant(text);
-    if(ins){ setTimeout(function(){ done(ins.a,false,ins.id); },350); post({action:'instant',q:text.slice(0,300),id:ins.id}); try{window.track&&window.track('chat_instant',ins.id);}catch(e){} return; }
+    if(ins){ setTimeout(function(){ done(ins.a,false,ins.id); if(ins.offer) offerChip(ins.offer); },350); post({action:'instant',q:text.slice(0,300),id:ins.id}); try{window.track&&window.track('chat_instant',ins.id);}catch(e){} return; }
     var payload={uid:uid(),tab:curTab(),basket:basket(),messages:MSGS.slice(-16)};
     fetch(CHAT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)})
       .then(function(r){ return r.json(); })

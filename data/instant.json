@@ -20,6 +20,13 @@
     "turnaround"
    ],
    "a": "Shop hours: Monday to Friday, 10am to 5pm Eastern (Ann Arbor, MI).",
+   "offer": {
+    "label": "Open Connect",
+    "go": {
+     "type": "go_to",
+     "tab": "connect"
+    }
+   },
    "max_words": 14
   },
   {
@@ -44,6 +51,13 @@
     "my order"
    ],
    "a": "Pick-up is at 4750 Venture Dr, Suite 101, Ann Arbor, Monday to Friday 10am-5pm. Text 734 460 3845 before you come so it is ready at the counter.",
+   "offer": {
+    "label": "Address, map & phone",
+    "go": {
+     "type": "go_to",
+     "tab": "connect"
+    }
+   },
    "max_words": 14
   },
   {
@@ -67,6 +81,12 @@
     "status"
    ],
    "a": "Standard turnaround is 5-7 business days with print-ready files; the clock starts once the proof is approved and the order is paid. Art that still needs vector work or design changes adds that time before the 5-7 days start.",
+   "offer": {
+    "label": "Start a project",
+    "go": {
+     "type": "open_quote_form"
+    }
+   },
    "max_words": 14
   },
   {
@@ -90,6 +110,13 @@
     "track"
    ],
    "a": "We ship anywhere in the US. Shipping is a flat rate added at checkout on your invoice. Shipping goes USPS Priority, Monday to Friday, about 2 days in transit; another carrier or service level is available on request.",
+   "offer": {
+    "label": "Open the menu",
+    "go": {
+     "type": "go_to",
+     "tab": "menu"
+    }
+   },
    "max_words": 14
   },
   {
@@ -118,6 +145,12 @@
     "pay url"
    ],
    "a": "Pay by ACH, card through Square, or cash. Print orders are paid in full before they print. Design work is a custom quote. Card payments through Square carry the processing fee. ACH is a flat $10 bank fee. Cash has no fee or surcharge. We do not accept checks.",
+   "offer": {
+    "label": "See my basket",
+    "go": {
+     "type": "show_basket"
+    }
+   },
    "max_words": 14
   },
   {
@@ -131,6 +164,13 @@
    ],
    "deny": [],
    "a": "Michigan sales tax is charged unless you give us a resale certificate; tax-exempt accounts are set up once and stay that way.",
+   "offer": {
+    "label": "Open the menu",
+    "go": {
+     "type": "go_to",
+     "tab": "menu"
+    }
+   },
    "max_words": 14
   },
   {
@@ -161,6 +201,12 @@
     "how much"
    ],
    "a": "Files: vector (AI, EPS, PDF, SVG) preferred; PNG at 300 dpi is fine. Every file is assessed for free before anything is quoted. Pre-press and design work are custom quoted after we see the art.",
+   "offer": {
+    "label": "Send my art",
+    "go": {
+     "type": "open_quote_form"
+    }
+   },
    "max_words": 14
   },
   {
@@ -183,6 +229,12 @@
     "approve my"
    ],
    "a": "You get a digital proof by email. Two rounds of revisions are free. Changes after you approve the proof are quoted.",
+   "offer": {
+    "label": "Start a project",
+    "go": {
+     "type": "open_quote_form"
+    }
+   },
    "max_words": 14
   },
   {
@@ -200,6 +252,13 @@
    ],
    "deny": [],
    "a": "There is a $50 minimum per order. Under that the order total is simply $50, so it is worth filling the basket up to it.",
+   "offer": {
+    "label": "Open the menu",
+    "go": {
+     "type": "go_to",
+     "tab": "menu"
+    }
+   },
    "max_words": 14
   },
   {
@@ -222,6 +281,12 @@
     "my order"
    ],
    "a": "Rush: same-day is +40% and within 48 hours is +30% on the order, subject to stock on hand. Ask and we will confirm before promising it.",
+   "offer": {
+    "label": "Start a rush project",
+    "go": {
+     "type": "open_quote_form"
+    }
+   },
    "max_words": 14
   },
   {
@@ -243,6 +308,13 @@
    ],
    "deny": [],
    "a": "Call or text 734 460 3845, email thestickytrap@gmail.com, or tap Start a project in the Connect tab. Mon-Fri 10am-5pm Eastern.",
+   "offer": {
+    "label": "Open Connect",
+    "go": {
+     "type": "go_to",
+     "tab": "connect"
+    }
+   },
    "max_words": 14
   },
   {
@@ -260,6 +332,13 @@
    ],
    "deny": [],
    "a": "Before an in-person meeting we sign a short one-page mutual NDA (Michigan law, 3-year term). It can be signed on a phone at thestickytrap.app/nda - both sides get a signed PDF by email. In the app it is under Connect > Meeting NDA.",
+   "offer": {
+    "label": "Sign the NDA",
+    "go": {
+     "type": "go_to",
+     "tab": "connect"
+    }
+   },
    "max_words": 14
   },
   {
@@ -281,6 +360,13 @@
     "price"
    ],
    "a": "If a print error is ours, we reprint it free. If the error is in art you approved, the reprint is full price, and changes after the second proof round are added to the invoice - so review every proof closely.",
+   "offer": {
+    "label": "Open Connect",
+    "go": {
+     "type": "go_to",
+     "tab": "connect"
+    }
+   },
    "max_words": 14
   }
  ]
