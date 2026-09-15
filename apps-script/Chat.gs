@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 35;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 36;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -87,7 +87,7 @@ var SYSTEM = [
   "- show_basket: when they ask to see, review or check out their basket.",
   "- open_quote_form: when they're ready to send the order, get a quote, or upload art.",
   "- go_to: when they ask for another part of the app (materials/specs, contact, episodes, the daily brief, the game).",
-  "- offer_nav (v35): whenever your answer relates to a place in the app and they did NOT ask to be taken there, add ONE offer_nav chip (never a 'want me to show you?' question - the chip is the question). Examples: quoting a product -> offer_nav open_product; they sound ready -> show_basket; art, quote, rush, design -> open_quote_form; address, hours, contact -> go_to connect. Max one chip per reply; skip it when you already moved them with another tool.",
+  "- offer_nav (v35): whenever your answer relates to a place in the app and they did NOT ask to be taken there, add ONE offer_nav chip (never a 'want me to show you?' question - the chip is the question). Examples: quoting a product -> offer_nav open_product; they sound ready -> show_basket; art, quote, rush, design -> open_quote_form; address, hours, contact -> go_to connect. Max one chip per reply; skip it when you already moved them with another tool. Never write the chip's label into your sentence - the button says it.",
   "You may call several tools in one turn (e.g. two add_to_basket lines). Their current tab and basket are given below - use them (e.g. 'your basket already has...'). After add_to_basket, state only what the result says (unit price, line total, basket subtotal); never speculate about merged or duplicate lines - the app handles that. If the result says the basket was EMPTY before the add, never say 'already' or 'merged'.",
   "",
   "HAND-OFF TO A PERSON (v25). Your job is to help enough to bring someone in; a person closes. Hand off when ANY of these fires: (1) money needs judgment - an item or material not on the menu, over 1,000 pieces, set-up / pre-press / design cost, rush, a discount request, or 'can you match this'; (2) they are ready to buy - product, quantity and art in hand; (3) they ask for a person, ask the same thing twice, or sound frustrated; (4) anything about an existing account, past pricing or an invoice (never discuss account terms); (5) compliance, legal or 'will this pass the state'; (6) the third question in a row you could not answer from the knowledge base.",
@@ -158,7 +158,7 @@ function doGet(e) {
     try { var rows = ordersSheet_().getDataRange().getValues(); open = 0; for (var i = 1; i < rows.length; i++) if (rows[i][ORDER_COLS.indexOf('stage')] !== 'complete' && rows[i][0] !== '') open++; } catch (err2) { storeErr = String(err2).slice(0, 120); }
     return out_({ ok: true, version: CODE_VERSION, key: !!PROP.getProperty('ANTHROPIC_API_KEY'), model: cfg_('MODEL'), kb: kb.length, prices: n, kb_url: cfg_('KB_URL'),
                   store: store.slice(0, 8), open_orders: open, store_error: storeErr, mail_error: PROP.getProperty('MAIL_LAST_ERROR') || '',
-                  sms: smsReady_() ? 'ready' : 'no twilio', sms_error: PROP.getProperty('SMS_LAST_ERROR') || '' });   // v27 store; v29 mail; v32 sms
+                  sms: smsReady_() ? 'ready' : 'no twilio', sms_error: PROP.getProperty('SMS_LAST_ERROR') || '', billing_draft: true });   // v27 store; v29 mail; v32 sms; v36 billing_draft
   }
   return out_({ ok: true, hint: 'POST {uid, tab, basket, messages:[{role,content}]}' });
 }
@@ -183,6 +183,7 @@ function doPost(e) {
   if (body.action === 'order_prefs') { try { return out_(orderPrefs_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }       // v32: email / text preference
   if (body.action === 'instant') { try { return out_(instantIn_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }             // v34: instant answer logged
   if (body.action === 'rate') { try { return out_(rateIn_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }                   // v34: thumbs on a reply
+  if (body.action === 'billing_draft') { try { return out_(billingDraft_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }   // v36: Gmail DRAFT for the Invoices billing mailer
   if (body.action === 'reauth') { try { return out_(reauth_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }                 // v31
 
   var uid = String(body.uid || 'anon').slice(0, 40);
@@ -939,6 +940,19 @@ function reauth_(b) {   // holds expire after 7 days: the customer re-enters the
   var c = ORDER_COLS.indexOf('payment_id') + 1;
   sh.getRange(f.i, c, 1, 4).setValues([[pay.id, 'authorized', pay.amount_money.amount / 100, new Date()]]);
   return { ok: true, code: o.code, url: trackUrl_(o), card_total: pay.amount_money.amount / 100 };
+}
+// v36 (App handoff 2026-09-15): billing-method mailer (Invoices _toolsilling_mailer.py). PIN-gated. Makes a Gmail DRAFT in the shop inbox
+// with the invoice PDF + ACH form (+ 3372) attached - never sends. `to` may be '' when the customer has no email on file (Shane fills it in).
+function billingDraft_(b) {
+  if (!pinOk_(b.pin)) return { ok: false, error: 'bad_pin' };
+  var atts = [];
+  (b.attachments || []).forEach(function (a) {
+    if (a && a.b64) atts.push(Utilities.newBlob(Utilities.base64Decode(a.b64), a.mime || 'application/pdf', a.name || 'attachment.pdf'));
+  });
+  var opts = { name: 'The Sticky Trap', attachments: atts };
+  if (b.html) opts.htmlBody = String(b.html);
+  var d = GmailApp.createDraft(String(b.to || ''), String(b.subject || '').slice(0, 200), String(b.text || ''), opts);
+  return { ok: true, draft: d.getId(), to: String(b.to || ''), attachments: atts.map(function (x) { return x.getName(); }) };
 }
 function orderResend_(b) {   // v31 (item 7): re-send the current-stage email from the console (mail was down 2026-09-11 until 16:00)
   if (!pinOk_(b.pin)) return { ok: false, error: 'bad_pin' };
