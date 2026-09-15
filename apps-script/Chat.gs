@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 41;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 42;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -191,6 +191,7 @@ function doPost(e) {
   if (body.action === 'billing_draft') { try { return out_(billingDraft_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }   // v36: Gmail DRAFT for the Invoices billing mailer
   if (body.action === 'lead_phone') { try { return out_(leadPhone_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }         // v38: 'text me when they reply' after a hand-off
   if (body.action === 'report_send') { try { return out_(reportSend_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }       // v41: any PC-side report -> email + dated Drive copy
+  if (body.action === 'sms_optin') { try { return out_(smsOptin_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }           // v42: public opt-in page thestickytrap.app/sms/
   if (body.action === 'reauth') { try { return out_(reauth_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }                 // v31
 
   var uid = String(body.uid || 'anon').slice(0, 40);
@@ -1312,6 +1313,19 @@ function weeklyDigest_() {
 }
 // Run ONCE from the editor: hourly stale-order nudge + Monday 7 am digest.
 /* ---------- v39 (Shane 2026-09-15): every report also lands in Drive folder 'Sticky Trap - Reports' as a dated file, and in a 'reports' tab ---------- */
+function smsOptin_(b) {   // v42: /sms/ opt-in page - records consent (optins tab), attaches the phone + 'both' to any order under that email, tells the shop
+  var name = String(b.name || '').trim().slice(0, 80), email = String(b.email || '').trim().toLowerCase().slice(0, 120), phone = normPhone_(b.phone);
+  if (!emailOk_(email) || !phone) return { ok: false, error: 'Enter a valid email and a 10-digit mobile number.' };
+  if (!throttle_('optin:' + email)) return { ok: false, error: 'rate_limited' };
+  var ss = ss_(), sh = ss.getSheetByName('optins');
+  if (!sh) { sh = ss.insertSheet('optins'); sh.appendRow(['ts', 'name', 'email', 'phone', 'page', 'orders_updated']); }
+  var osh = ordersSheet_(), rows = osh.getDataRange().getValues(), hit = 0;
+  for (var i = 1; i < rows.length; i++) { if (String(rows[i][ORDER_COLS.indexOf('email')]).trim().toLowerCase() === email) {
+    osh.getRange(i + 1, ORDER_COLS.indexOf('phone') + 1).setValue(phone); osh.getRange(i + 1, ORDER_COLS.indexOf('notify') + 1).setValue('both'); hit++; } }
+  sh.appendRow([new Date(), name, email, phone, String(b.page || '').slice(0, 200), hit]);
+  try { GmailApp.sendEmail(notifyTo_(), 'SMS opt-in: ' + name + ' ' + phone, name + ' (' + email + ') opted in to order texts at ' + phone + ' via ' + (b.page || '/sms/') + '. Orders updated: ' + hit + '.', { name: 'Sticky Trap App' }); } catch (e) { mailErr_(e); }
+  return { ok: true, phone: phone, orders_updated: hit };
+}
 function reportsFolder_() {
   var name = PROP.getProperty('REPORTS_FOLDER') || 'Sticky Trap - Reports', it = DriveApp.getFoldersByName(name);
   return it.hasNext() ? it.next() : DriveApp.createFolder(name);
