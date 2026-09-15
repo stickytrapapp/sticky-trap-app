@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 33;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 34;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -173,6 +173,8 @@ function doPost(e) {
   if (body.action === 'order_update') { try { return out_(orderUpdate_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }     // v28
   if (body.action === 'order_resend') { try { return out_(orderResend_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }     // v31
   if (body.action === 'order_prefs') { try { return out_(orderPrefs_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }       // v32: email / text preference
+  if (body.action === 'instant') { try { return out_(instantIn_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }             // v34: instant answer logged
+  if (body.action === 'rate') { try { return out_(rateIn_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }                   // v34: thumbs on a reply
   if (body.action === 'reauth') { try { return out_(reauth_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }                 // v31
 
   var uid = String(body.uid || 'anon').slice(0, 40);
@@ -586,6 +588,26 @@ function log_(uid, q, a, usage, model, actions) {
     sh.appendRow([new Date(), uid, String(q).slice(0, 500), String(a).slice(0, 2000), acts.slice(0, 500),
       usage ? usage.input_tokens : '', usage ? usage.output_tokens : '', usage ? (usage.cache_read_input_tokens || 0) : '', model || '']);
   } catch (e) {}
+}
+
+/* ---------- v34 (Shane 2026-09-15 'build 1 and 2'): instant answers logged like chats; thumbs on every reply -> 'ratings' tab ---------- */
+function instantIn_(b) {   // the phone answered from data/instant.json without calling Claude - keep it in the chats log so the weekly read sees the whole picture
+  var uid = String(b.uid || 'anon').slice(0, 40), q = String(b.q || '').slice(0, 300), id = String(b.id || '').replace(/[^a-z0-9_-]/gi, '').slice(0, 30);
+  if (!q || !id) return { ok: false, error: 'bad_instant' };
+  log_(uid, q, '[instant:' + id + ']', null, 'instant', []);
+  return { ok: true };
+}
+function ratingsSheet_() {
+  var ss = ss_(), sh = ss.getSheetByName('ratings');
+  if (!sh) { sh = ss.insertSheet('ratings'); sh.appendRow(['ts', 'device_id', 'rating', 'question', 'answer', 'instant_id']); }
+  return sh;
+}
+function rateIn_(b) {
+  var uid = String(b.uid || 'anon').slice(0, 40), r = String(b.rating || '').toLowerCase();
+  if (r !== 'up' && r !== 'down') return { ok: false, error: 'bad_rating' };
+  if (!throttle_('rate:' + uid)) return { ok: false, error: 'rate_limited' };
+  ratingsSheet_().appendRow([new Date(), uid, r, String(b.q || '').slice(0, 300), String(b.a || '').slice(0, 400), String(b.instant || '').slice(0, 30)]);
+  return { ok: true };
 }
 
 /* ---------- arcade leaderboard (Trap Points game) ---------- */
@@ -1189,6 +1211,7 @@ function weeklyDigest_() {
   var chats = rowsOf('chats').filter(function (r) { return ts(r[0]) >= since && String(r[1]).indexOf('test-') !== 0; });
   var qs = chats.map(function (r) { return { q: String(r[2]).slice(0, 110), a: String(r[3]).slice(0, 110), acts: String(r[4]) }; });
   var adds = qs.filter(function (x) { return x.acts.indexOf('add_to_basket') >= 0; }).length;
+  var rates = rowsOf('ratings').filter(function (r) { return ts(r[0]) >= since; }), downs = rates.filter(function (r) { return r[2] === 'down'; });   // v34
   var quotes = qs.filter(function (x) { return x.acts.indexOf('open_quote_form') >= 0; }).length;
   var orders = rowsOf('orders').map(rowObj_).filter(function (o) { return String(o.code).indexOf('TEST-') !== 0; });
   var newOrders = orders.filter(function (o) { return ts(o.created) >= since; });
@@ -1204,6 +1227,7 @@ function weeklyDigest_() {
   lines.push('ORDERS: ' + newOrders.length + ' new, ' + moves + ' stage change' + (moves === 1 ? '' : 's') + '. Open now: ' + (Object.keys(byStage).map(function (k) { return byStage[k] + ' ' + (STAGES[k] || {}).label; }).join(', ') || 'none') + '.');
   if (stale.length) lines.push('  Needs a push: ' + stale.map(function (o) { return o.code + ' (' + (o.company || o.name) + ', ' + (STAGES[o.stage] || {}).label + ')'; }).join('; '));
   lines.push('CHAT: ' + chats.length + ' question' + (chats.length === 1 ? '' : 's') + ' asked, ' + adds + ' basket add' + (adds === 1 ? '' : 's') + ' by the bot, ' + quotes + ' sent to the quote form.');
+  if (rates.length) { lines.push('RATINGS: ' + (rates.length - downs.length) + ' up, ' + downs.length + ' down.' + (downs.length ? ' Thumbs-down:' : '')); downs.slice(0, 10).forEach(function (r) { lines.push('  - Q: ' + String(r[3]).slice(0, 90) + '  |  A: ' + String(r[4]).slice(0, 90)); }); }   // v34
   lines.push('GAME: ' + Object.keys(players).length + ' player' + (Object.keys(players).length === 1 ? '' : 's') + ' posted scores. Referrals: ' + refs + '. NDAs signed: ' + ndas + '.');
   lines.push('');
   if (qs.length) { lines.push('WHAT PEOPLE ASKED THE BOT (newest first) - anything it fumbled belongs in chat-facts.txt:'); qs.slice(-30).reverse().forEach(function (x) { lines.push('  Q: ' + x.q); lines.push('     A: ' + x.a); }); }
