@@ -22,6 +22,10 @@
   .blank.wide{min-width:200px;width:70%}
   .blank:focus{border-bottom-color:var(--mag)}
   .blank::placeholder{color:#7f78a3;font-weight:500}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:6px 0 14px}
+  .chip{border:1.5px solid var(--line);border-radius:999px;padding:8px 13px;font-size:13px;font-weight:700;color:var(--paper);background:transparent;cursor:pointer;font:inherit}
+  .chip.on{border-color:var(--cy);background:rgba(18,196,255,.14)}.chip.on::before{content:'\2713  ';color:var(--cy)}
+  #btsOther{flex:1 1 160px;min-width:160px;width:auto}
   .sig-grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:18px}
   @media(min-width:600px){.sig-grid{grid-template-columns:1fr 1fr}}
   .sig{background:var(--panel-2);border:1px solid var(--line);border-radius:14px;padding:14px}
@@ -57,7 +61,10 @@
     <p>This Agreement is made on <input class="blank" id="fDate" placeholder="date"> between <b>FM Holdings LLC d/b/a The Sticky Trap</b> and <input class="blank wide" id="fParty" placeholder="your company or name" autocomplete="organization"> (each a “Party”).</p>
     <p>Purpose of the meeting: <input class="blank wide" id="fPurpose" placeholder="what we're meeting about"></p>
     <p>In connection with the Parties' discussions, each Party may share confidential information with the other, including designs, artwork, pricing, methods, customers, and business plans. Each Party agrees to keep the other Party's confidential information strictly confidential, to use it only for the purpose above or to evaluate or conduct business between the Parties, and not to disclose it to anyone else without the other Party's prior written consent. On request, each Party will promptly return or destroy the other Party's confidential materials, including samples, proofs, and price sheets. Because a breach would cause harm that money alone may not repair, the harmed Party may seek an injunction without posting bond, in addition to any other remedy.</p>
+    <p><b>Pricing and quantities.</b> The pricing The Sticky Trap gives you, the quantities you order, and any price breaks tied to those quantities are <b>absolutely no one else's business</b>. You will not share, forward, post, or quote them to anyone: not other printers, brokers, reps, or other brands. This covers quotes, invoices, price sheets, and anything said at the table, and it does not expire when this Agreement does.</p>
     <p><b>Portfolio.</b> Once a product FM Holdings made for the other Party has been publicly released by that Party, FM Holdings may show the finished product in its portfolio and on social media, without pricing or order details, unless the other Party asks in writing that it not be shown.</p>
+    <p><b>Behind the scenes.</b> May The Sticky Trap post the making of your order on social media (design, proofing, production, quality check, packaging, promo videos)? Whatever you pick, your pricing and quantities are never shown.</p>
+    <div class="chips" id="bts" role="radiogroup" aria-label="Behind the scenes"><button type="button" class="chip" data-v="YES">YES</button><button type="button" class="chip" data-v="NO">NO</button><button type="button" class="chip" data-v="OTHER">OTHER</button><input class="blank wide" id="btsOther" placeholder="tell us what works" hidden></div>
     <p><b>Time covered.</b> This Agreement starts on the date written above and stays in force for <b>three (3) years from that date</b>, whether or not the Parties end up doing business together. It covers information shared before that date, at the meeting, and at any time during the three years.</p>
     <p>This Agreement is governed by the laws of the State of Michigan. It does not apply to information that is or becomes public through no fault of the receiving Party, or that a Party already lawfully knew.</p>
     <p>This Agreement may be signed in counterparts, including by electronic or photographed signature, and each Party keeps a signed copy.</p>
@@ -120,6 +127,10 @@
     return { has:function(){return dirty;}, data:function(){ return dirty? c.toDataURL('image/png') : ''; } };
   }
   var padOther=pad('padOther'), padFm=pad('padFm');
+  // Behind the scenes: one required choice (Team Files #7, 9/15). OTHER opens a line for their words.
+  var btsChips=[].slice.call(document.querySelectorAll('#bts .chip')), btsOther=$('btsOther');
+  btsChips.forEach(function(c){ c.addEventListener('click',function(){ btsChips.forEach(function(x){ x.classList.toggle('on',x===c); }); btsOther.hidden=c.dataset.v!=='OTHER'; if(!btsOther.hidden) btsOther.focus(); }); });
+  function bts(){ var on=btsChips.filter(function(c){return c.classList.contains('on');})[0]; if(!on) return ''; var v=on.dataset.v; return v==='OTHER' ? ('OTHER: '+btsOther.value.trim()).slice(0,200) : v; }
 
   $('send').addEventListener('click',function(){
     var err=$('err'); err.textContent='';
@@ -127,7 +138,9 @@
     if(!padOther.has()) return err.textContent='Please sign in the Other Party box.';
     if(!name) return err.textContent='Add your printed name.';
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return err.textContent='Add a valid email so we can send your copy.';
-    var body={ action:'nda', date:$('fDate').value.trim(), party:party, purpose:$('fPurpose').value.trim(),
+    if(!bts()) return err.textContent='Behind the scenes: pick YES, NO or OTHER.';
+    if(bts()==='OTHER: ') return err.textContent='Behind the scenes: tell us what works for you.';
+    var body={ action:'nda', date:$('fDate').value.trim(), party:party, purpose:$('fPurpose').value.trim(), bts:bts(),
       other:{ name:name, company:company, title:$('oTitle').value.trim(), email:email, sig:padOther.data() },
       fm:{ name:$('fmName').value.trim(), title:$('fmTitle').value.trim(), sig:padFm.data() },
       ua:navigator.userAgent.slice(0,120) };
