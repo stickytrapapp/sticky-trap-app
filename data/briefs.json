@@ -5,71 +5,60 @@
     {
       "date": "2026-09-15",
       "label": "Morning Brief",
-      "title": "Tax-Relief Momentum in Lansing, Psychedelic Fast-Track in D.C.: Industry Turns a Corner",
-      "top": "Michigan operators are finally seeing daylight on the 24% wholesale tax as a gubernatorial candidate courts industry cash and a Muskegon dispensary bets big on hospitality, even as JARS Cannabis expands into Arizona. Nationally, the FDA is clearing runway for psychedelic medicine while a federal court just protected the marijuana rescheduling gains operators have been waiting on.",
+      "title": "Rescheduling Holds, Psychedelics Go Mainstream, Michigan Eyes a Tax Reset",
+      "top": "Federal momentum is real this week: a landmark FDA psychedelics hearing, Eli Lilly's psychedelics buyout, and a court win for medical marijuana's Schedule III status all point toward a more open national market. In Michigan, operators are pushing back on the 24% wholesale tax with a fresh lawsuit and a bipartisan repeal bill, while brands like Fields Cannary keep building for what comes next.",
       "local": [
         {
-          "text": "JARS Cannabis buys its way into Arizona",
-          "detail": "The Michigan-based chain is buying its way into a much bigger footprint out west, acquiring Sonoran Roots and its eight Ponderosa dispensaries to become Arizona's largest chain.",
-          "text_full": "JARS Cannabis buys its way into Arizona — The Michigan-based chain announced a deal to acquire Sonoran Roots and its eight Ponderosa dispensaries, soon making JARS the largest dispensary chain in Arizona.",
-          "source": "The 'Gander",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-083126/"
-        },
-        {
-          "text": "James courts cannabis cash with tax-repeal vow",
-          "text_full": "James courts cannabis cash with tax-repeal vow — GOP gubernatorial nominee John James is proposing to repeal or sharply reduce the 24% wholesale tax, and a JARS-hosted fundraiser netted his campaign nearly $90,000.",
-          "source": "Bridge Michigan",
-          "url": "https://bridgemi.com/michigan-government/john-james-pitches-marijuana-tax-repeal-courts-industry-donors/"
-        },
-        {
-          "text": "State Supreme Court curbs weed-smell searches",
-          "text_full": "State Supreme Court curbs weed-smell searches — Michigan cops can no longer search a car just because they think you have weed, per a new Michigan Supreme Court ruling that shields consumers and operators alike.",
-          "source": "The 'Gander",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-6/"
-        },
-        {
-          "text": "Muskegon dispensary-restaurant targets fall opening",
-          "text_full": "Muskegon dispensary-restaurant targets fall opening — Fields Cannary is targeting a fall launch for its retail dispensary, with a full-service restaurant to follow, pushing the hospitality format further than most Michigan stores.",
+          "text": "Fields Cannary pushes ahead with Muskegon buildout",
           "source": "cann.dev",
           "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
         },
         {
-          "text": "Tax shortfall fuels bipartisan repeal push",
-          "text_full": "Tax shortfall fuels bipartisan repeal push — The 24% wholesale tax generated only about $37 million in Q2 against a $105 million-per-quarter projection, and a GOP lawmaker's HB 6224 now aims to repeal it outright.",
+          "text": "Voting opens for Michigan's best weed brands",
+          "source": "The 'Gander",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-083126/"
+        },
+        {
+          "text": "Hemp THC ban delay buys shelf-space runway",
           "source": "The 'Gander",
           "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-090826/"
+        },
+        {
+          "text": "New MiCIA lawsuit keeps tax-relief hopes alive",
+          "source": "WWMT",
+          "url": "https://wwmt.com/news/state/michigan-marijuana-industry-lawsuit-stop-wholesale-tax-legal-court-pot-weed-economy-business-wwmt"
+        },
+        {
+          "text": "Bipartisan repeal bill gains steam under pressure",
+          "source": "WWMT",
+          "url": "https://wwmt.com/news/state/michigan-marijuana-industry-lawsuit-stop-wholesale-tax-legal-court-pot-weed-economy-business-wwmt"
         }
       ],
       "national": [
         {
-          "text": "FDA hearing signals green light for psychedelics",
-          "text_full": "FDA hearing signals green light for psychedelics — Jefferies analysts say the FDA's finalized trial guidance paired with its September 14 public hearing points to a more supportive regulatory environment for developers like Compass Pathways, Atai, Cybin and GH Research.",
-          "source": "TechTimes",
-          "url": "https://www.techtimes.com/articles/320454/20260714/fda-finalizes-psychedelic-trial-rules-unblinding-problem-gets-official-answer.htm"
+          "text": "FDA holds landmark hearing on psychedelic therapies",
+          "source": "The Washington Times",
+          "url": "https://www.washingtontimes.com/news/2026/sep/14/psychedelic-treatments-move-closer-mainstream-fda/"
         },
         {
-          "text": "Compass Pathways nears first psilocybin approval",
-          "text_full": "Compass Pathways nears first psilocybin approval — COMP360's NDA review is underway with final submission on track for Q4 2026, and Compass anticipates launch in the first half of 2027 pending FDA approval and DEA rescheduling.",
-          "source": "Clinical Trials Arena",
-          "url": "https://www.clinicaltrialsarena.com/news/fda-finalises-psychedelic-clinical-trial-guidance/"
+          "text": "Eli Lilly closes its atai Beckley psychedelics deal",
+          "source": "Clinical Trial Vanguard",
+          "url": "https://www.clinicaltrialvanguard.com/article/psych-pulse/what-the-fdas-new-psychedelic-framework-actually-means-for-the-clinic/"
         },
         {
-          "text": "Court rejects challenge to marijuana rescheduling",
-          "text_full": "Court rejects challenge to marijuana rescheduling — A D.C. Circuit court left the medical marijuana Schedule III order in effect on Sept. 9, ruling that anti-rescheduling forces hadn't shown they'd win.",
+          "text": "DEA advances bid to ease psilocybin scheduling",
+          "source": "Clinical Trial Vanguard",
+          "url": "https://www.clinicaltrialvanguard.com/article/psych-pulse/what-the-fdas-new-psychedelic-framework-actually-means-for-the-clinic/"
+        },
+        {
+          "text": "Curaleaf-Aurora hostile bid turns into regulatory brawl",
+          "source": "The Marijuana Herald",
+          "url": "https://themarijuanaherald.com/2026/09/curaleaf-asks-canadian-regulator-to-halt-aurora-share-sales-during-takeover-bid/"
+        },
+        {
+          "text": "Medical marijuana's Schedule III status survives court test",
           "source": "Cannabis Business Times",
           "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order"
-        },
-        {
-          "text": "DEA itself now argues for Schedule III",
-          "text_full": "DEA itself now argues for Schedule III — In its final post-hearing brief, the DEA told the court marijuana no longer meets the statutory criteria for Schedule I, a notable shift from the agency historically defending prohibition.",
-          "source": "Cannabis Business Advisors",
-          "url": "https://thecannabisbusinessadvisors.com/cannabis-rescheduling-update-dea-schedule-iii-august-2026/"
-        },
-        {
-          "text": "Vireo Growth expands footprint via Eaze buy",
-          "text_full": "Vireo Growth expands footprint via Eaze buy — The multistate operator's acquisition of the delivery platform expands Vireo's operating footprint to 10 states with 166 dispensaries.",
-          "source": "New Cannabis Ventures",
-          "url": "https://www.newcannabisventures.com/category/mergers-and-acquisitions/"
         }
       ]
     }
