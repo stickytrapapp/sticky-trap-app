@@ -572,7 +572,7 @@
         <b>How to play</b>
         <ol>
           <li>Tap <b>2+ touching shards</b> of the same color to clear them.</li>
-          <li><b>Bigger groups score way more</b> — chain big ones for a combo, and only a ×3 combo adds bonus seconds to the clock.</li>
+          <li><b>Bigger groups score way more</b> — chain big ones for a combo. Time is scarce: only a 6+ group at max combo adds a second, 8 seconds a run at most.</li>
           <li><b>60 seconds</b> a try, <b>3 tries</b> — best score counts.</li>
           <li>A <b>new board every 6 hours</b> — same board for everyone, so the ladder is fair.</li>
         </ol>
@@ -938,6 +938,7 @@
   function slotNow(){ var d=new Date(); return Math.floor((d.getTime()-d.getTimezoneOffset()*60000)/(SLOT_HOURS*3600e3)); }
   var slotNum=slotNow(), trapNum=slotNum-TRAP_BASE;
   var dseed=1, attempt=1, bestScore=0, dayScore=0, timeLeft=TIME, timerId=null, playing=false, dayDone=false, combo=0;
+  var bonusUsed=0;   // bonus seconds granted this attempt (cap 8)
   function drnd(){dseed=(dseed*1103515245+12345)&0x7fffffff; return dseed/0x7fffffff;}
   function rcolor(){return Math.floor(drnd()*COLORS);}
   var MODE='daily', FREE={day:0,bonus:0,seed:1}, FREE_CAP=5;
@@ -952,7 +953,7 @@
     var live=STREAK.last===d-1&&(STREAK.n||0)>=2&&!dayDone&&h>=17; el.hidden=!live; if(live) document.getElementById('riskN').textContent=STREAK.n; }
   window.__riskCheck=riskCheck;
   function initDaily(){
-    attempt=1; bestScore=0; dayScore=0; dayDone=false; timeLeft=TIME; playing=false; combo=0;
+    attempt=1; bestScore=0; dayScore=0; dayDone=false; timeLeft=TIME; bonusUsed=0; playing=false; combo=0;
     var pn=document.getElementById('pnum'); if(pn)pn.textContent='#'+trapNum;
     var pv=document.getElementById('parval'); if(pv)pv.textContent=fmt(PAR);
     var _d=null; try{_d=JSON.parse(localStorage.getItem('tp_daily')||'null');}catch(e){}
@@ -993,13 +994,15 @@
     g.forEach(function(q){var el=board.children[q[0]*COLS+q[1]]; if(el)el.classList.add('pop');});
     var sz=g.length; if(sz>=4){combo=Math.min(4,combo+1);}else{combo=0;}
     var mult=1+combo*0.5, gained=Math.round(sz*sz*mult);
-    var bonus=combo>=4?2:0;   // Shane 2026-09-11: only a x3 combo (the max) buys time, +2 s per group while it holds; clock capped at TIME+15 (was x2+ / +1..+3 s / TIME+30 - too much time)
-    if(bonus){ timeLeft=Math.min(TIME+15,timeLeft+bonus); }
+    // Shane 2026-09-15 ('make it harder to tack time on'): time only comes from a BIG group (6+) while the combo is maxed, +1 s each, and at most
+    // 8 bonus seconds per attempt; clock capped at TIME+8. (9/11 rule was any group at max combo, +2 s, cap TIME+15.)
+    var bonus=(combo>=4&&sz>=6&&bonusUsed<8)?1:0;
+    if(bonus){ timeLeft=Math.min(TIME+8,timeLeft+bonus); bonusUsed+=bonus; }
     if(combo>=1)showCombo(mult,'combo',bonus);
     setTimeout(function(){ g.forEach(function(q){grid[q[0]][q[1]]=null;}); collapse(); dayScore+=gained; setStat(); draw(); },140); }
   function collapse(){ for(var c=0;c<COLS;c++){ var col=[]; for(var r=ROWS-1;r>=0;r--) if(grid[r][c]!==null)col.push(grid[r][c]);
     for(var r2=ROWS-1,i=0;r2>=0;r2--,i++) grid[r2][c]= i<col.length?col[i]:rcolor(); } }
-  function startAttempt(){ if(playing||(MODE==='daily'&&dayDone))return; dayScore=0; combo=0; timeLeft=TIME; playing=true;
+  function startAttempt(){ if(playing||(MODE==='daily'&&dayDone))return; dayScore=0; combo=0; timeLeft=TIME; bonusUsed=0; playing=true;
     try{ if(window.TPM){ TPM.mode('play'); TPM.sfx('go'); } }catch(e){}
     if(MODE==='daily'){ try{localStorage.setItem('tp_daily', JSON.stringify({day:slotNum, best:bestScore}));}catch(e){} }
     else { FREE.seed=(Math.random()*4294967295)>>>0; saveFree(); }
@@ -1016,7 +1019,7 @@
     var t=document.getElementById('modeTitle'), su=document.getElementById('modeSub');
     if(MODE==='free'){ if(t) t.innerHTML='Free Play'; if(su) su.textContent='Unlimited boards \u00b7 practice \u00b7 not ranked'; }
     else { if(t) t.innerHTML='Daily Trap \u00b7 <span id="pnum">#'+trapNum+'</span><span class="x2" id="x2" hidden>2\u00d7 PTS</span>'; if(su) su.innerHTML='Attempt <span id="attN">'+attempt+'</span> of 3 \u00b7 one board'; applyPromoBadge(); }
-    dayScore=0; combo=0; timeLeft=TIME; rebuildBoard(); setStat(); showGate(); }
+    dayScore=0; combo=0; timeLeft=TIME; bonusUsed=0; rebuildBoard(); setStat(); showGate(); }
   document.querySelectorAll('#modeSeg button').forEach(function(b){ b.addEventListener('click',function(){ setMode(b.dataset.mode); }); });
   function endAttempt(){ try{ if(window.TPM){ TPM.sfx('over'); TPM.mode('rest'); } }catch(e){}   // time's up: sting, beat drops to the rest groove
     if(MODE==='free'){ endFree(); return; } playing=false; clearInterval(timerId); if(dayScore>bestScore)bestScore=dayScore; try{localStorage.setItem('tp_daily', JSON.stringify({day:slotNum, best:bestScore}));}catch(e){}
