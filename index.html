@@ -2173,12 +2173,13 @@
   function pool(){ return CAT.filter(function(t){ return mode==='beats'? t.kind==='beat' : true; }); }
   function abs(u){ var l=document.createElement('a'); l.href=u; return l.href; }
   function trackOf(x){ var s=(x&&x.src)||''; for(var i=0;i<CAT.length;i++){ if(abs(CAT[i].src)===s) return CAT[i]; } return null; }
-  function pick(prev){   // next track by rule: unplayed first, alternate kind when possible, never the same family twice running, random among what's left
+  function pick(prev){   // Shane 2026-09-15: play the recommended loop IN ORDER (CAT order = the Music session's 10-track sequence: vocal/beat alternating,
+    // no same-family B-sides back to back), starting at Trap House Open and wrapping. Beats-only mode walks the same order over the beats.
     var P=pool(); if(!P.length) return null;
-    var left=P.filter(function(t){ return played.indexOf(t.src)<0 && t!==prev; }); if(!left.length){ played=prev?[prev.src]:[]; left=P.filter(function(t){ return t!==prev; }); }
-    var c=left; if(prev){ var alt=c.filter(function(t){ return t.kind!==prev.kind; }); if(alt.length) c=alt; var fam=c.filter(function(t){ return t.fam!==prev.fam; }); if(fam.length) c=fam; }
-    return c[Math.floor(Math.random()*c.length)]; }
-  function opener(){ var P=pool(), v=P.filter(function(t){ return t.kind==='vocal'; }); var c=v.length?v:P; return c[Math.floor(Math.random()*c.length)]; }
+    var i=prev?P.indexOf(prev):-1; if(i<0&&prev){ for(var k=0;k<P.length;k++) if(P[k].src===prev.src){ i=k; break; } }
+    return P[(i+1)%P.length]; }
+  function opener(){   // Shane 2026-09-15: a fresh start always opens on Trap House Open (Full mode); Beats-only opens on the first beat in the loop
+    var P=pool(); if(!P.length) return null; var th=P.filter(function(t){ return t.fam==='th'&&t.kind==='vocal'; })[0]; return th||P[0]; }
   function xfFor(nxt,prev){ if(nxt&&nxt.xfIn) return nxt.xfIn; if(prev&&prev.kind==='beat'&&nxt&&nxt.kind==='vocal') return 4; return 2.5; }
   function mk(){ var x=new Audio(); x.loop=false; x.preload='none'; x.setAttribute('playsinline','');
     try{ var AC=window.AudioContext||window.webkitAudioContext; if(AC){ if(!actx){ actx=new AC(); gain=actx.createGain(); gain.gain.value=0; gain.connect(actx.destination); }
