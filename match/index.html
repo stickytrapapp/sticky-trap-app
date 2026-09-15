@@ -17,7 +17,7 @@ a{color:var(--cyan)}
 .hud{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
 .hud div{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 10px;text-align:center}
 .hud .k{font-family:var(--fmono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}.hud .v{font-family:var(--fdisp);font-size:22px;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums}
-.mode{display:flex;gap:6px;margin-bottom:12px}.mode button{flex:1;padding:9px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--mut);font:inherit;font-weight:700;font-size:13px;cursor:pointer}.mode button.on{color:var(--fg);border-color:var(--mag);background:rgba(255,31,162,.12)}
+.mode{display:flex;gap:6px;margin-bottom:12px}.mode button.mus{flex:0 0 auto;padding:9px 11px;line-height:0}.mode button.mus svg{width:15px;height:15px;display:block}.mode button.mus.on{color:var(--fg);border-color:var(--mag)}.mode button{flex:1;padding:9px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--mut);font:inherit;font-weight:700;font-size:13px;cursor:pointer}.mode button.on{color:var(--fg);border-color:var(--mag);background:rgba(255,31,162,.12)}
 .board{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;perspective:900px}
 .card{position:relative;aspect-ratio:3/4;cursor:pointer;transform-style:preserve-3d;transition:transform .32s cubic-bezier(.2,.8,.2,1)}.card.flip{transform:rotateY(180deg)}
 .card.done{cursor:default}.card.done .cf{box-shadow:0 0 0 2px var(--good),0 0 18px rgba(37,224,166,.35)}
@@ -41,7 +41,7 @@ a{color:var(--cyan)}
 <div class="gate" id="agegate"><div class="rcard"><div class="k">The Sticky Trap</div><h2>21+</h2><p class="note" style="color:var(--fg)">The Sticky Trap works with the cannabis industry. You must be 21 or older to play.</p><button class="btn" id="ag-yes" type="button">Yes, I'm 21 or older</button><button class="btn ghost" id="ag-no" type="button">No, I'm under 21</button></div></div>
 <div class="top"><a class="back" href="/game/">&larr; Trap Points</a><div class="t">Trap Match</div><div class="pts">Points <b id="bal">0</b></div></div>
 <div class="wrap">
-  <div class="mode"><button type="button" id="mDaily" class="on">Daily board</button><button type="button" id="mFree">Free play</button></div>
+  <div class="mode"><button type="button" id="mDaily" class="on">Daily board</button><button type="button" id="mFree">Free play</button><button type="button" id="musicb" class="mus" aria-pressed="false" aria-label="Music off" title="Music"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5" fill="currentColor"/><circle cx="16.5" cy="16" r="2.5" fill="currentColor"/></svg></button></div>
   <div class="hud"><div><div class="k">Moves</div><div class="v" id="moves">0</div></div><div><div class="k">Time</div><div class="v" id="time">0:00</div></div><div><div class="k">Pairs</div><div class="v" id="pairs">0/8</div></div></div>
   <div class="board" id="board"></div>
   <p class="note" id="hint">Flip two cards. Match the pair. <b>Fewer moves, faster time, more points.</b> The daily board is the same for everyone and banks points once a day.</p>
@@ -60,14 +60,14 @@ a{color:var(--cyan)}
   var DEFS='<defs><linearGradient id="h" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#12C4FF"/><stop offset=".4" stop-color="#8A2BE2"/><stop offset=".7" stop-color="#FF1FA2"/><stop offset="1" stop-color="#EAB84B"/></linearGradient><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F6DA8A"/><stop offset=".45" stop-color="#EAB84B"/><stop offset="1" stop-color="#C9962E"/></linearGradient><linearGradient id="w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#d9d9e0"/></linearGradient></defs>';
   var S='stroke="rgba(255,255,255,.25)" stroke-width="1.5"';
   var PIECES=[
-    {id:'holo', n:'Holo slap',  svg:'<rect x="18" y="18" width="64" height="64" rx="12" fill="url(#h)" '+S+'/>'},
-    {id:'gold', n:'Gold slap',  svg:'<rect x="18" y="18" width="64" height="64" rx="12" fill="url(#g)" '+S+'/>'},
+    {id:'holo', n:'Holo slap',  svg:'<rect x="18" y="18" width="64" height="64" rx="12" fill="url(#h)" '+S+'/><path d="M82 52 52 82V60a8 8 0 0 1 8-8z" fill="#fff" opacity=".9"/>'},
+    {id:'gold', n:'Gold slap',  svg:'<rect x="18" y="18" width="64" height="64" rx="12" fill="url(#g)" '+S+'/><path d="M82 52 52 82V60a8 8 0 0 1 8-8z" fill="#fff" opacity=".9"/>'},
     {id:'white',n:'White slap', svg:'<rect x="18" y="18" width="64" height="64" rx="12" fill="url(#w)" '+S+'/><circle cx="50" cy="50" r="14" fill="#FF1FA2"/>'},
-    {id:'jar',  n:'Miron jar',  svg:'<circle cx="50" cy="36" r="24" fill="url(#h)" '+S+'/><rect x="24" y="66" width="52" height="16" rx="5" fill="url(#h)" '+S+'/>'},
-    {id:'o2',   n:'o2 wrap',    svg:'<rect x="12" y="38" width="76" height="24" rx="5" fill="url(#g)" '+S+'/>'},
+    {id:'jar',  n:'Miron jar',  svg:'<rect x="32" y="10" width="36" height="13" rx="4" fill="url(#h)" '+S+'/><rect x="22" y="25" width="56" height="62" rx="12" fill="url(#h)" '+S+'/><rect x="32" y="44" width="36" height="18" rx="3" fill="#fff" opacity=".8"/>'},
+    {id:'o2',   n:'o2 wrap',    svg:'<path d="M10 32c12-6 24-6 40 0s28 6 40 0v36c-12 6-24 6-40 0s-28-6-40 0z" fill="url(#g)" '+S+'/><rect x="24" y="44" width="34" height="5" rx="2.5" fill="#fff" opacity=".85"/><rect x="24" y="54" width="22" height="5" rx="2.5" fill="#fff" opacity=".85"/>'},
     {id:'pop',  n:'Pop top',    svg:'<circle cx="50" cy="50" r="30" fill="url(#w)" '+S+'/><circle cx="50" cy="50" r="12" fill="#8A2BE2"/>'},
     {id:'tube', n:'Tube wrap',  svg:'<rect x="24" y="14" width="52" height="72" rx="8" fill="url(#h)" '+S+'/>'},
-    {id:'band', n:'Tip band',   svg:'<rect x="10" y="42" width="80" height="16" rx="8" fill="url(#g)" '+S+'/>'},
+    {id:'band', n:'Tip band',   svg:'<ellipse cx="50" cy="50" rx="38" ry="22" fill="none" stroke="url(#g)" stroke-width="13"/><ellipse cx="50" cy="50" rx="38" ry="22" fill="none" stroke="#fff" stroke-width="2" opacity=".45"/>'},
     {id:'deli', n:'Deli label', svg:'<rect x="24" y="12" width="52" height="76" rx="6" fill="url(#w)" '+S+'/><rect x="32" y="24" width="36" height="6" fill="#12C4FF"/><rect x="32" y="36" width="24" height="6" fill="#FF1FA2"/>'},
     {id:'ltr',  n:'Lighter',    svg:'<rect x="36" y="16" width="28" height="70" rx="6" fill="url(#g)" '+S+'/><rect x="40" y="10" width="20" height="8" rx="2" fill="#333"/>'}
   ];
@@ -120,6 +120,30 @@ a{color:var(--cyan)}
   $('rclose').addEventListener('click',function(){ $('result').classList.remove('show'); if(MODE==='daily') $('hint').innerHTML='Today’s board is banked (<b>+'+(DAILY.pts||0)+'</b>). Free play is open all day.'; });
   $('mDaily').addEventListener('click',function(){ start('daily'); }); $('mFree').addEventListener('click',function(){ start('free'); }); $('again').addEventListener('click',function(){ start('free'); });
   start('daily');
+
+  /* ---- Music (2026-09-15): the Trap Solitaire set (card-table / shuffle-up / deal-me-in), shuffled start so the two card games
+          don't open on the same track. ON for a first-time player (starts on the first tap), remembered in tp_music ('0' = off,
+          shared with the game + solitaire), pauses when hidden, silent-WAV unlock for iPhones on the silent switch. ---- */
+  (function(){
+    var b=document.getElementById('musicb'); if(!b) return;
+    var TRACKS=['/solitaire/audio/s2.mp3','/solitaire/audio/s3.mp3','/solitaire/audio/s1.mp3'], ti=0, A=null, B=null, cur=null, running=false, want=false, sil=null, dead=false;
+    var SIL='data:audio/wav;base64,UklGRoQJAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YWAJAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIA=';
+    function unlock(){ try{ if(!sil){ sil=new Audio(SIL); sil.loop=true; sil.setAttribute('playsinline',''); sil.volume=0.01; } var p=sil.play(); if(p&&p.catch) p.catch(function(){}); }catch(e){} }
+    try{ want=localStorage.getItem('tp_music')!=='0'; }catch(e){ want=true; }
+    function mk(){ var x=new Audio(); x.preload='none'; x.setAttribute('playsinline',''); x.volume=0.55;
+      x.addEventListener('ended',function(){ if(x!==cur) return; ti=(ti+1)%TRACKS.length; cur=(cur===A)?B:A; if(!cur.src||cur.src.indexOf(TRACKS[ti])<0) cur.src=TRACKS[ti]; var p=cur.play(); if(p&&p.catch) p.catch(function(){}); prime(); });
+      x.addEventListener('error',function(){ dead=true; ui(false); b.style.display='none'; });
+      return x; }
+    function prime(){ var n=(cur===A)?B:A, nxt=TRACKS[(ti+1)%TRACKS.length]; if(!n.src||n.src.indexOf(nxt)<0) n.src=nxt; n.preload='auto'; try{ n.load(); }catch(e){} }
+    function ui(on){ b.classList.toggle('on',on); b.setAttribute('aria-pressed',on?'true':'false'); b.setAttribute('aria-label',on?'Music on':'Music off'); }
+    function start(){ if(dead) return; if(!A){ A=mk(); B=mk(); cur=A; } unlock(); if(!cur.src) cur.src=TRACKS[ti]; var p=cur.play(); if(p&&p.then) p.then(function(){ running=true; ui(true); prime(); }).catch(function(){ ui(false); }); else { running=true; ui(true); prime(); } }
+    function stop(){ running=false; if(cur) cur.pause(); if(sil) sil.pause(); ui(false); }
+    b.addEventListener('click',function(){ want=!running; try{ localStorage.setItem('tp_music',want?'1':'0'); }catch(e){} if(want) start(); else stop(); });
+    document.addEventListener('visibilitychange',function(){ if(document.hidden){ if(running){ if(cur) cur.pause(); running=false; } } else if(want&&!running&&A){ start(); } });
+    window.TMM={ state:function(){ return { running:running, track:ti, src:cur?cur.src:'', paused:cur?cur.paused:null }; } };
+    ui(want);
+    if(want){ var once=function(e){ document.removeEventListener('pointerdown',once,true); if(e&&e.target&&b.contains(e.target)) return; if(want) start(); }; document.addEventListener('pointerdown',once,true); }
+  })();
 })();
 </script>
 </body></html>
