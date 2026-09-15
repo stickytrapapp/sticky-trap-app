@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 40;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 41;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -190,6 +190,7 @@ function doPost(e) {
   if (body.action === 'rate') { try { return out_(rateIn_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }                   // v34: thumbs on a reply
   if (body.action === 'billing_draft') { try { return out_(billingDraft_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }   // v36: Gmail DRAFT for the Invoices billing mailer
   if (body.action === 'lead_phone') { try { return out_(leadPhone_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }         // v38: 'text me when they reply' after a hand-off
+  if (body.action === 'report_send') { try { return out_(reportSend_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }       // v41: any PC-side report -> email + dated Drive copy
   if (body.action === 'reauth') { try { return out_(reauth_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }                 // v31
 
   var uid = String(body.uid || 'anon').slice(0, 40);
@@ -1315,15 +1316,24 @@ function reportsFolder_() {
   var name = PROP.getProperty('REPORTS_FOLDER') || 'Sticky Trap - Reports', it = DriveApp.getFoldersByName(name);
   return it.hasNext() ? it.next() : DriveApp.createFolder(name);
 }
-function archiveReport_(kind, text) {
-  var tz = Session.getScriptTimeZone(), stamp = Utilities.formatDate(new Date(), tz, 'yyyy-MM-dd'), title = stamp + ' ' + kind + '.txt';
+function archiveReport_(kind, text, html) {
+  var tz = Session.getScriptTimeZone(), stamp = Utilities.formatDate(new Date(), tz, 'yyyy-MM-dd'), title = stamp + ' ' + kind + (html ? '.html' : '.txt');
   var folder = reportsFolder_(), old = folder.getFilesByName(title);
   while (old.hasNext()) old.next().setTrashed(true);   // same-day re-run replaces, never duplicates
-  var f = folder.createFile(title, text, MimeType.PLAIN_TEXT);
+  var f = html ? folder.createFile(title, html, MimeType.HTML) : folder.createFile(title, text, MimeType.PLAIN_TEXT);
   var ss = ss_(), sh = ss.getSheetByName('reports');
   if (!sh) { sh = ss.insertSheet('reports'); sh.appendRow(['date', 'kind', 'file', 'text']); }
   sh.appendRow([new Date(), kind, f.getUrl(), String(text).slice(0, 45000)]);
   return f.getUrl();
+}
+function reportSend_(b) {   // v41: the Daily Pulse (and any other PC-side report) sends through here so every report is emailed AND filed
+  if (!pinOk_(b.pin)) return { ok: false, error: 'bad_pin' };
+  var kind = String(b.kind || 'Report').replace(/[^\w .&-]/g, '').slice(0, 40), subject = String(b.subject || kind).slice(0, 200);
+  var html = b.html ? String(b.html) : '', text = b.text ? String(b.text) : html.replace(/<style[\s\S]*?<\/style>/gi, '').replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/[ \t]+/g, ' ').replace(/\s*\n\s*/g, '\n').trim();
+  var to = String(b.to || '').trim() || SHOP_EMAIL, sent = false;
+  if (!b.archive_only) { GmailApp.sendEmail(to, subject, text, html ? { htmlBody: html, name: 'The Sticky Trap' } : { name: 'The Sticky Trap' }); sent = true; }
+  var url = archiveReport_(kind, text, html || '');
+  return { ok: true, sent: sent, to: to, file: url };
 }
 function archiveTest() { Logger.log(archiveReport_('Archive test', 'Test report written ' + new Date())); }   // run once from the editor to prove the folder + scope
 
