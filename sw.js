@@ -1,7 +1,7 @@
 // TheStickyTr_ APP — service worker (installable PWA)
 // Network-first for the app shell + data so updates always show; cache is only
 // an offline fallback. Bump CACHE to force old caches out on activate.
-const CACHE = 'st-app-v22';   // music v3 2026-09-15; black icons 2026-09-10 (icons are cache-first: bump whenever they change)
+const CACHE = 'st-app-v23';   // music v3 2026-09-15; black icons 2026-09-10 (icons are cache-first: bump whenever they change)
 const STATIC = ['./manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', (e) => {
@@ -43,4 +43,23 @@ self.addEventListener('fetch', (e) => {
       const cp = rp.clone(); caches.open(CACHE).then((c) => c.put(req, cp)); return rp;
     }))
   );
+});
+
+// ---- Order-update PUSH (2026-09-15, Firebase Cloud Messaging; replaces Twilio texts). The page side is /push.js.
+// Chat.gs sends {notification:{title,body}, data:{url,code}} via FCM; the browser hands it here as a push event.
+self.addEventListener('push', (e) => {
+  let p = {}; try { p = e.data ? e.data.json() : {}; } catch (err) { p = { notification: { title: 'The Sticky Trap', body: e.data ? e.data.text() : '' } }; }
+  const n = p.notification || {}, d = p.data || {};
+  const title = n.title || d.title || 'The Sticky Trap';
+  const opts = { body: n.body || d.body || 'Your order has an update.', icon: '/icons/icon-192.png', badge: '/icons/icon-192.png',
+    tag: d.code ? 'order-' + d.code : 'st-order', renotify: true, data: { url: d.url || (n.click_action) || '/track/' } };
+  e.waitUntil(self.registration.showNotification(title, opts));
+});
+self.addEventListener('notificationclick', (e) => {
+  e.notification.close();
+  const url = (e.notification.data && e.notification.data.url) || '/track/';
+  e.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((cs) => {
+    for (const c of cs) { if ('focus' in c) { c.navigate(url); return c.focus(); } }
+    return self.clients.openWindow(url);
+  }));
 });

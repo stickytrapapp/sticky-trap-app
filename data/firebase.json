@@ -1,0 +1,10 @@
+{
+  "_note": "Firebase web config for order-update push (public by design; the secret service-account key lives only in Chat.gs script properties). Project sticky-trap-fe078 under thestickytrap@, created 2026-09-15.",
+  "apiKey": "AIzaSyASQdJ-jyxl6owdFKVMMCU1jTqoCYSCjpE",
+  "authDomain": "sticky-trap-fe078.firebaseapp.com",
+  "projectId": "sticky-trap-fe078",
+  "storageBucket": "sticky-trap-fe078.firebasestorage.app",
+  "messagingSenderId": "799767713181",
+  "appId": "1:799767713181:web:a0e5da1cce08dd47694b74",
+  "vapidKey": "BI-cYNqy4sdbvaZErveFP-5X6SPcm11W49vNpkp9BThk0pNctm2xEpTbYLulvc2uaTjf95CD3y7tpoxZ87t4Wr4"
+}
