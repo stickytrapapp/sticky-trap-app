@@ -5,60 +5,62 @@
     {
       "date": "2026-09-16",
       "label": "Morning Brief",
-      "title": "Tax Relief in Sight as Federal Momentum Builds",
-      "top": "Michigan operators are finally seeing real paths forward on the 24% wholesale tax — a bipartisan repeal push, a landmark lawsuit finally reaching trial, and creative supplier deals are giving retailers options beyond just absorbing the hit. Nationally, a federal court just locked in medical marijuana's Schedule III status, Congress bought hemp retailers another month, and psychedelics regulation is sprinting toward first approvals.",
+      "title": "Michigan Tops $17B in Sales as Tax Relief Gains Steam; Feds Clear Path on Rescheduling and Psychedelics",
+      "top": "Michigan's legal market just crossed $17 billion in lifetime sales even as operators push hard for wholesale-tax relief — with a repeal bill in Lansing and a gubernatorial candidate courting industry cash. Nationally, courts just upheld federal marijuana rescheduling and the FDA is fast-tracking psychedelic therapies, while MSOs jockey for position through a wave of acquisitions.",
       "local": [
         {
-          "text": "John James backs cannabis tax repeal — Michigan U.S. Senate candidate throws support behind killing the 24% wholesale tax as lawmakers from both parties back relief bills.",
-          "source": "WJR-AM",
-          "url": "https://www.wjr.com/2026/09/10/debate-grows-over-michigans-24-marijuana-tax/"
+          "text": "Michigan cannabis sales cross $17 billion milestone",
+          "detail": "The state has now surpassed $17 billion in combined adult-use and medical marijuana sales since legalization, generating an estimated $2.66 billion in state excise and sales taxes, per a new CRA report.",
+          "text_full": "Michigan cannabis sales cross $17 billion milestone — the state has now surpassed $17 billion in combined adult-use and medical marijuana sales since legalization, generating an estimated $2.66 billion in state excise and sales taxes, per a new CRA report.",
+          "source": "The Marijuana Herald",
+          "url": "https://themarijuanaherald.com/2026/09/michigan-legal-marijuana-sales-surpass-17-billion/"
         },
         {
-          "text": "MiCIA's original tax lawsuit finally reaches trial — the industry group's first constitutional challenge to the wholesale tax heads to court this month, opening a real shot at relief.",
-          "source": "WWMT",
-          "url": "https://wwmt.com/news/state/michigan-marijuana-industry-lawsuit-stop-wholesale-tax-legal-court-pot-weed-economy-business-wwmt"
+          "text": "John James courts cannabis donors with tax-repeal vow — Michigan's GOP gubernatorial nominee is promising to repeal or sharply reduce the 24% wholesale tax, and a JARS Cannabis-hosted fundraiser alone netted his campaign nearly $90,000.",
+          "source": "Bridge Michigan",
+          "url": "https://bridgemi.com/michigan-government/john-james-pitches-marijuana-tax-repeal-courts-industry-donors/"
         },
         {
-          "text": "Jars Cannabis wins removal of surveillance camera — Madison Heights agrees to take down a Flock camera aimed at the retailer's parking lot after the company pushed back.",
-          "source": "cann.dev",
-          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
+          "text": "JARS Cannabis buys its way into Arizona — the Michigan-based chain is acquiring Sonoran Roots and its eight Ponderosa dispensaries, a deal that will make JARS the largest dispensary operator in Arizona.",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-083126/"
         },
         {
-          "text": "Muskegon's Fields Cannary targets fall opening — a hospitality-forward dispensary-and-restaurant combo pushes the retail format further than most Michigan stores have gone.",
-          "source": "cann.dev",
-          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
+          "text": "Grön's Pearls gummies land on Michigan shelves — the Wyld-owned edibles brand rolled its bestselling Pearls gummies into Michigan as part of a four-state expansion, already stocked at Pure Options, High Profile and Lume.",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-090826/"
         },
         {
-          "text": "Rize keeps growing despite the wholesale tax — the Upper Michigan chain negotiates cost-sharing deals with suppliers, splitting the tax burden instead of absorbing it alone.",
-          "source": "cann.dev",
+          "text": "Wholesale tax underperforms, fueling repeal momentum — the 24% tax brought in only about $34-37 million a quarter versus a $105 million projection, adding fuel to a new House repeal bill, HB 6224.",
+          "source": "Gander Newsroom / Cann.dev",
           "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
         }
       ],
       "national": [
         {
-          "text": "Court upholds medical marijuana's Schedule III status — reclassification opponents lost their bid to undo April's rescheduling order, keeping easier tax and banking rules intact.",
+          "text": "Court upholds federal marijuana rescheduling to Schedule III — the D.C. Circuit rejected a challenge to the medical marijuana rescheduling order, keeping the historic Schedule III shift intact as the DEA weighs full rescheduling.",
           "source": "Cannabis Business Times",
           "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order"
         },
         {
-          "text": "Trump signs hemp ban delay into law — the federal THC product ban is pushed from November 12 to December 11, buying retailers more runway.",
-          "source": "Sen. Amy Klobuchar / Congress.gov",
-          "url": "https://www.klobuchar.senate.gov/public/index.cfm/2026/9/klobuchar-hemp-ban-delay-passes-congress-heads-to-president-s-desk"
+          "text": "FDA holds landmark hearing on psychedelic therapies — regulators gathered expert input on clinical pathways for psilocybin and methylone-based treatments, with Compass Pathways' COMP360 eyeing a possible late-2026 approval milestone.",
+          "source": "Washington Times / Marijuana Moment",
+          "url": "https://www.washingtontimes.com/news/2026/sep/14/psychedelic-treatments-move-closer-mainstream-fda/"
         },
         {
-          "text": "FDA lays out new psychedelics review framework — fresh NEJM guidance reshapes trial design and access rules for psilocybin and MDMA therapies, signaling a faster path to approval.",
+          "text": "Eli Lilly closes its AtaiBeckley psychedelics acquisition — the pharma giant's deal, approved by stockholders and expected to close mid-September, brings psychedelic assets BPL-003, VLS-01 and EMP-01 under Lilly's development umbrella.",
           "source": "Clinical Trial Vanguard",
           "url": "https://www.clinicaltrialvanguard.com/article/psych-pulse/what-the-fdas-new-psychedelic-framework-actually-means-for-the-clinic/"
         },
         {
-          "text": "Canopy Growth rolls out new product formats — new pastilles, all-in-one vapes, and softgels expand the lineup as international growth continues.",
-          "source": "Green Stock News",
-          "url": "https://greenstocknews.com/stocks/cannabis-stocks"
+          "text": "Cresco Labs completes $50M Pennsylvania dispensary buy — the MSO closed its acquisition of nine Pennsylvania medical marijuana dispensaries, expanding its East Coast retail footprint.",
+          "source": "The Marijuana Herald",
+          "url": "https://themarijuanaherald.com/2026/09/aurora-cannabis-board-votes-unanimously-to-recommend-shareholders-reject-curaleaf-hostile-takeover-bid/"
         },
         {
-          "text": "Trulieve opens its 178th dispensary nationwide — a new Dunwoody, Georgia location pushes the company's Florida store count to 77 as expansion continues.",
-          "source": "Green Stock News",
-          "url": "https://greenstocknews.com/stocks/cannabis-stocks"
+          "text": "Curaleaf-Aurora takeover fight signals consolidation wave — Aurora's board is urging shareholders to reject Curaleaf's hostile bid, calling it undervalued, as the MSO sector's biggest fight for scale plays out in real time.",
+          "source": "BNN Bloomberg",
+          "url": "https://www.bnnbloomberg.ca/investing/cannabis/2026/09/02/aurora-cannabis-urges-shareholders-to-reject-hostile-takeover-offer-by-curaleaf/"
         }
       ]
     }
