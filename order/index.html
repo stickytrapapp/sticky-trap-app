@@ -22,6 +22,9 @@
   .grp summary::-webkit-details-marker{display:none} .grp summary::before{content:'\25B8';color:var(--muted);font-size:13px} .grp[open] summary::before{content:'\25BE'}
   .gmeta{font-size:12px;color:var(--muted);font-weight:400} .gqty{margin-left:auto;font-size:12px;color:var(--pink)}
   .grp .line{padding-left:18px}
+  .row3{display:grid;grid-template-columns:1fr 1fr 1.5fr;gap:8px} .lbl{display:block;font-size:12px;color:var(--muted);margin:4px 0}
+  .chokebox{display:grid;grid-template-columns:48px 90px 48px;gap:8px;align-items:center} .chokebox input{text-align:center;font-size:18px;font-weight:700}
+  .stp{background:#000;border:1px solid #444;color:var(--ink);border-radius:10px;font-size:20px;padding:8px 0;cursor:pointer}
   .newline{display:grid;grid-template-columns:1fr;gap:6px;padding:10px 0;border-bottom:1px solid var(--line)}
   .newline .g{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
   .btn{display:inline-block;background:var(--pink);color:#fff;border:0;border-radius:10px;padding:13px 18px;font-size:16px;font-weight:700;cursor:pointer}
@@ -115,14 +118,14 @@
 
   <div class="card">
     <h2>Print specs <span class="pill">work order only</span></h2>
-    <label>Finish</label>
-    <div class="chips" data-group="finish" data-one="1"><span class="chip" data-v="Gloss">Gloss</span><span class="chip" data-v="Matte">Matte</span></div>
+    <label>Finish layers <span class="pill">passes per layer &middot; which one sits on top</span></label>
+    <div class="row3"><div><span class="lbl">Gloss passes</span><input type="number" id="glossN" min="0" max="64" inputmode="numeric" placeholder="0" oninput="finishOrder()"></div><div><span class="lbl">Matte passes</span><input type="number" id="matteN" min="0" max="64" inputmode="numeric" placeholder="0" oninput="finishOrder()"></div><div><span class="lbl">On top</span><select id="finishTop"><option value="">&mdash;</option><option value="Gloss">Gloss over matte</option><option value="Matte">Matte over gloss</option></select></div></div>
     <label>Raised texture for the whole order <span class="pill">lines can override</span></label>
     <div class="chips" data-group="texture" data-one="1"><span class="chip" data-v="Flat">Flat</span><span class="chip" data-v="1">1 · Spot Gloss</span><span class="chip" data-v="2">2 · Standard</span><span class="chip" data-v="3">3 · Pro</span></div>
     <label>Layers &amp; services</label>
     <div class="chips" data-group="opts"><span class="chip" data-v="White ink layer">White ink layer</span><span class="chip" data-v="We apply to jars">We apply to jars</span><span class="chip" data-v="Test print first">Test print first</span><span class="chip" data-v="Proof before printing">Proof before printing</span></div>
-    <label>Choke</label>
-    <div class="chips" data-group="choke" data-one="1"><span class="chip" data-v="Sharp">Sharp</span><span class="chip" data-v="Soft">Soft</span></div>
+    <label>Choke <span class="pill">-10 to +10, 0 = none</span></label>
+    <div class="chokebox"><button type="button" class="stp" onclick="chokeStep(-1)">&minus;</button><input type="number" id="chokeN" min="-10" max="10" step="1" value="0" inputmode="numeric" onchange="chokeClamp()"><button type="button" class="stp" onclick="chokeStep(1)">+</button></div>
     <label>Cut</label>
     <div class="chips" data-group="cut" data-one="1"><span class="chip" data-v="Individual">Individual</span><span class="chip" data-v="On sheets">On sheets</span><span class="chip" data-v="Kiss-cut">Kiss-cut</span></div>
     <label>Other press notes</label><textarea id="pressNotes" placeholder="anything else the press needs to know"></textarea>
@@ -222,13 +225,17 @@ function addNewLine(){
   $('newItems').appendChild(d);
 }
 document.querySelectorAll('.chips').forEach(function(g){ g.addEventListener('click', function(e){ var c = e.target.closest('.chip'); if(!c) return; if(g.dataset.one){ g.querySelectorAll('.chip').forEach(function(x){ if(x !== c) x.classList.remove('on'); }); } c.classList.toggle('on'); }); });
+function finishOrder(){ var g = Number($('glossN').value || 0), m = Number($('matteN').value || 0); var sel = $('finishTop'); sel.disabled = !(g > 0 && m > 0); if(sel.disabled) sel.value = ''; }
+function chokeClamp(){ var el = $('chokeN'); var v = el.value === '' ? 0 : Math.max(-10, Math.min(10, Math.round(Number(el.value) || 0))); el.value = v; }
+function chokeStep(d){ var el = $('chokeN'); el.value = Math.max(-10, Math.min(10, (Number(el.value) || 0) + d)); }
 function chips(group){ return [].map.call(document.querySelectorAll('.chips[data-group="' + group + '"] .chip.on'), function(c){ return c.dataset.v; }); }
 function printSpecs(){
   var L = [];
-  var f = chips('finish')[0]; if(f) L.push('FINISH: ' + f);
+  var g = Number($('glossN').value || 0), m = Number($('matteN').value || 0), top = $('finishTop').value;
+  if(g > 0 || m > 0){ L.push('FINISH: GLOSS ' + g + ' / MATTE ' + m + (g > 0 && m > 0 && top ? ' / ' + top.toUpperCase() + ' ON TOP' : '')); }
   var t = chips('texture')[0]; if(t) L.push('TEXTURE: ' + t);
   chips('opts').forEach(function(o){ L.push(o.toUpperCase()); });
-  var ch = chips('choke')[0]; if(ch) L.push('CHOKE: ' + ch);
+  var ck = $('chokeN').value; if(ck !== ''){ ck = Math.max(-10, Math.min(10, Number(ck))); L.push('CHOKE: ' + (ck > 0 ? '+' : '') + ck); }
   var cu = chips('cut')[0]; if(cu) L.push('CUT: ' + cu);
   var n = $('pressNotes').value.trim(); if(n) L.push('NOTES: ' + n);
   return L.join(String.fromCharCode(10));
