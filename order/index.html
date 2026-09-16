@@ -1,0 +1,245 @@
+<!doctype html>
+<html><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Sticky Trap - New Order</title><meta charset="utf-8"><title>Sticky Trap - New Order</title>
+<style>
+  :root{--bg:#000;--card:#111;--line:#2a2a2a;--ink:#fff;--muted:#9a9a9a;--pink:#FF1FA2;--ok:#2ecc71;--warn:#ffb020}
+  *{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 -apple-system,Segoe UI,Roboto,Arial,sans-serif}
+  .wrap{max-width:760px;margin:0 auto;padding:16px 14px 90px}
+  h1{font-size:22px;margin:6px 0 2px;letter-spacing:.02em} .sub{color:var(--muted);font-size:13px;margin-bottom:14px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin:12px 0}
+  .card h2{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--pink);margin:0 0 10px}
+  label{display:block;font-size:12px;color:var(--muted);margin:10px 0 4px} label b{color:var(--pink)}
+  input,select,textarea{width:100%;background:#000;color:var(--ink);border:1px solid #333;border-radius:8px;padding:11px 10px;font-size:16px}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--pink)}
+  textarea{min-height:64px;resize:vertical}
+  .row{display:flex;gap:10px} .row>*{flex:1;min-width:0}
+  .line{display:grid;grid-template-columns:1fr 84px;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+  .line:last-child{border-bottom:0}
+  .line .nm{font-size:15px} .line .meta{font-size:12px;color:var(--muted)}
+  .line input[type=number]{text-align:center;padding:9px 6px}
+  .newline{display:grid;grid-template-columns:1fr;gap:6px;padding:10px 0;border-bottom:1px solid var(--line)}
+  .newline .g{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+  .btn{display:inline-block;background:var(--pink);color:#fff;border:0;border-radius:10px;padding:13px 18px;font-size:16px;font-weight:700;cursor:pointer}
+  .btn.ghost{background:transparent;border:1px solid #444;color:var(--ink);font-weight:500}
+  .btn:disabled{opacity:.5}
+  .bar{position:fixed;left:0;right:0;bottom:0;background:#000;border-top:1px solid var(--line);padding:10px 14px;display:flex;gap:10px;justify-content:space-between;align-items:center}
+  .tot{font-size:14px;color:var(--muted)} .tot b{color:var(--ink);font-size:18px}
+  .hint{font-size:12px;color:var(--muted);margin-top:6px}
+  .ok{color:var(--ok)} .warn{color:var(--warn)}
+  .hidden{display:none}
+  .pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;background:#222;color:var(--muted);margin-left:6px}
+  #gate{max-width:360px;margin:80px auto;text-align:center}
+  .spin{color:var(--muted);font-size:14px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 6px}
+  .chip{border:1px solid #444;border-radius:999px;padding:9px 14px;font-size:14px;color:var(--ink);background:#000;cursor:pointer;user-select:none}
+  .chip.on{background:var(--pink);border-color:var(--pink);color:#fff;font-weight:700}
+  .chip.on::before{content:"✓  "}
+  .row2{display:grid;grid-template-columns:2fr 1fr;gap:6px}
+  </style></head>
+<body>
+<div id="gate" class="wrap">
+  <h1>Sticky Trap</h1><div class="sub">New order</div>
+  <div class="card"><label>Staff PIN</label><input id="pin" type="password" inputmode="numeric" autocomplete="off">
+  <p class="hint" id="gateMsg"></p><br><button class="btn" onclick="unlock()">Open</button></div>
+</div>
+
+<div id="app" class="wrap hidden">
+  <h1>New order</h1><div class="sub" id="cacheNote">Loading customers and items…</div>
+
+  <div class="card">
+    <h2>Customer</h2>
+    <label>Company <b>*</b></label>
+    <select id="company" onchange="pickCompany()"><option value="">Choose…</option></select>
+    <div id="newCust" class="hidden"><label>New customer name <b>*</b></label><input id="newName" placeholder="Company name as it should print"></div>
+    <div class="row"><div><label>Contact</label><input id="contact"></div><div><label>Phone</label><input id="phone" inputmode="tel" placeholder="734-555-1234" oninput="fmtPhone(this)"></div></div>
+    <label>Email</label><input id="email" inputmode="email" placeholder="blank = console only, no client emails">
+    <div id="custNote" class="hint"></div>
+  </div>
+
+  <div class="card" id="reorderCard">
+    <h2>Previously ordered <span class="pill" id="reorderCount"></span></h2>
+    <div class="hint">Type a quantity next to anything they're reordering. Price = what they paid last time.</div>
+    <div id="reorders"></div>
+  </div>
+
+  <div class="card">
+    <h2>New items</h2>
+    <div class="hint">Anything they've never ordered. Leave price blank to use the menu (or their history if the name matches).</div>
+    <div id="newItems"></div>
+    <br><button class="btn ghost" onclick="addNewLine()">+ Add a new item</button>
+  </div>
+
+  <div class="card">
+    <h2>Order</h2>
+    <div class="row">
+      <div><label>Order due date <b>*</b></label><input id="due" type="date"></div>
+      <div><label>Delivery</label><select id="delivery"><option>Pick Up</option><option>Ship</option><option>Deliver</option></select></div>
+    </div>
+    <div class="row">
+      <div id="shipWrap" class="hidden"><label>Shipping $</label><input id="ship" type="number" step="0.01" inputmode="decimal"></div>
+      <div><label>Rush / partial dates</label><input id="rush" placeholder="e.g. lighters by Sat, rest Wed"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Terms <span class="pill">pre-filled from history</span></h2>
+    <div class="row">
+      <div><label>Payment</label><select id="payment"><option>On file</option><option>Square</option><option>ACH / Wire</option><option>Pay at pick-up</option><option>Cash</option></select></div>
+      <div><label>Tax</label><select id="tax"><option>On file</option><option>6% MI</option><option>Exempt (3372 on file)</option></select></div>
+    </div>
+    <div class="row">
+      <div><label>Pre-press</label><select id="prepress" onchange="toggleCustom()"><option>On file</option><option>$8 per set</option><option>Waived</option><option>Custom amount</option></select></div>
+      <div><label>File Print Set Up <span id="setupCalc" class="muted"></span></label><div class="row2"><input id="setupMin" type="number" inputmode="numeric" placeholder="min (blank = on file, 0 = waived)" oninput="setupCalc()"><input id="setupRate" type="number" inputmode="decimal" value="75" title="$ per hour" oninput="setupCalc()"></div></div>
+    </div>
+    <div id="customWrap" class="hidden"><label>Pre-press $ per set</label><input id="prepressCustom" type="number" step="0.01" inputmode="decimal"></div>
+    <label style="margin-top:10px">Send with invoice <span class="pill">leave blank = we decide from the terms</span></label>
+    <div class="chips" data-group="attach"><span class="chip" data-v="NDA">NDA</span><span class="chip" data-v="ACH form">ACH form</span><span class="chip" data-v="Tax form 3372">Tax form 3372</span><span class="chip" data-v="3rd party direct to print">3rd party direct to print</span><span class="chip" data-v="3rd party UV prints">3rd party UV prints</span></div>
+  </div>
+
+  <div class="card">
+    <h2>Art &amp; design</h2>
+    <div class="row">
+      <div><label>Art status</label><select id="art"><option>Have art</option><option>Need new art</option><option>Update existing</option></select></div>
+      <div><label>Design hours @ $75</label><input id="designHrs" type="number" step="0.25" inputmode="decimal" placeholder="0"></div>
+    </div>
+    <div class="row">
+      <div><label>Deposit received $</label><input id="deposit" type="number" step="0.01" inputmode="decimal"></div>
+      <div><label style="margin-top:22px"><input type="checkbox" id="designOnly" style="width:auto;margin-right:8px">Design only (nothing printed)</label></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Print specs <span class="pill">work order only</span></h2>
+    <label>Finish</label>
+    <div class="chips" data-group="finish" data-one="1"><span class="chip" data-v="Gloss">Gloss</span><span class="chip" data-v="Matte">Matte</span></div>
+    <label>Raised texture for the whole order <span class="pill">lines can override</span></label>
+    <div class="chips" data-group="texture" data-one="1"><span class="chip" data-v="Flat">Flat</span><span class="chip" data-v="1">1 · Spot Gloss</span><span class="chip" data-v="2">2 · Standard</span><span class="chip" data-v="3">3 · Pro</span></div>
+    <label>Layers &amp; services</label>
+    <div class="chips" data-group="opts"><span class="chip" data-v="White ink layer">White ink layer</span><span class="chip" data-v="We apply to jars">We apply to jars</span><span class="chip" data-v="Test print first">Test print first</span><span class="chip" data-v="Proof before printing">Proof before printing</span></div>
+    <label>Choke</label>
+    <div class="chips" data-group="choke" data-one="1"><span class="chip" data-v="Sharp">Sharp</span><span class="chip" data-v="Soft">Soft</span></div>
+    <label>Cut</label>
+    <div class="chips" data-group="cut" data-one="1"><span class="chip" data-v="Individual">Individual</span><span class="chip" data-v="On sheets">On sheets</span><span class="chip" data-v="Kiss-cut">Kiss-cut</span></div>
+    <label>Other press notes</label><textarea id="pressNotes" placeholder="anything else the press needs to know"></textarea>
+  </div>
+
+  <div class="card">
+    <h2>Notes</h2>
+    <label>Customer note (prints on the invoice)</label><textarea id="note"></textarea>
+  </div>
+
+  <div id="result" class="card hidden"></div>
+</div>
+
+<div class="bar hidden" id="bar">
+  <div class="tot"><b id="totQty">0</b> prints · est. <b id="totAmt">$0</b><div class="hint" id="totNote">before pre-press &amp; tax</div></div>
+  <button class="btn" id="submitBtn" onclick="submit()">Submit order</button>
+</div>
+
+<script>
+var CAT = null, PIN = '', LINES = [];
+// 9/16: app-hosted copy of the staff order menu. Talks to the Apps Script backend over plain fetch
+// (anonymous web app) - no Google sign-in, so the /u/1/ 'unable to open the file' routing can't happen.
+var API = 'https://script.google.com/macros/s/AKfycbzqXL9eaqKH7vetYrew5ucl9FskhHqJ5_awHSeM2I0i1LB2v7aUng2mTbDq8aYaZbwbsw/exec';
+function api(method, data){
+  var url = API, opts = { method: method, redirect: 'follow' };
+  if(method === 'GET'){ url += '?' + new URLSearchParams(data).toString(); }
+  else { opts.headers = { 'Content-Type': 'text/plain;charset=utf-8' }; opts.body = JSON.stringify(data); }
+  return fetch(url, opts).then(function(r){ if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); });
+}
+function $(id){ return document.getElementById(id); }
+function money(x){ return '$' + (Math.round(x*100)/100).toFixed(2); }
+function unlock(){
+  PIN = $('pin').value.trim(); $('gateMsg').textContent = 'Loading…';
+  api('GET', { action: 'catalog', pin: PIN }).then(function(r){
+    if(!r.ok){ $('gateMsg').textContent = 'Wrong PIN'; return; }
+    CAT = r; $('gate').classList.add('hidden'); $('app').classList.remove('hidden'); $('bar').classList.remove('hidden');
+    $('cacheNote').textContent = CAT.customers.length + ' customers · ' + CAT.skus.length + ' items from invoice history';
+    var sel = $('company'); sel.innerHTML = '<option value="">Choose…</option><option value="__new__">New Customer</option>';
+    CAT.customers.forEach(function(c){ var o = document.createElement('option'); o.value = c.name; o.textContent = c.name; sel.appendChild(o); });
+    addNewLine();
+    try { localStorage.setItem('st_pin', PIN); } catch(e){}
+  }).catch(function(e){ $('gateMsg').textContent = 'Error: ' + e.message; });
+}
+function pickCompany(){
+  var v = $('company').value, isNew = v === '__new__';
+  $('newCust').classList.toggle('hidden', !isNew);
+  var c = CAT.customers.find(function(x){ return x.name === v; });
+  $('contact').value = c ? (c.contact || '') : ''; $('email').value = c ? (c.email || '') : ''; $('phone').value = '';
+  // terms from history
+  var pay = (c && c.payment || '').toLowerCase();
+  $('payment').value = c ? (c.pickup || /pick/.test(pay) ? 'Pay at pick-up' : /square/.test(pay) ? 'Square' : /ach|wire/.test(pay) ? 'ACH / Wire' : /cash/.test(pay) ? 'Cash' : 'On file') : 'Square';
+  $('tax').value = c ? (/exempt/i.test(c.tax || '') ? 'Exempt (3372 on file)' : '6% MI') : '6% MI';
+  $('prepress').value = 'On file'; $('setupMin').value = c ? '' : '40'; $('setupRate').value = '75'; setupCalc();
+  $('custNote').innerHTML = c ? ('Last invoice ' + (c.last_invoice || '—') + ' on ' + (c.last_date || '—') + ' · pays: ' + (c.payment || 'unknown')) : (isNew ? 'New customer: Square, 6% tax, $50 file set-up unless you change them.' : '');
+  // reorder lines
+  var box = $('reorders'); box.innerHTML = '';
+  var items = c ? CAT.skus.filter(function(s){ return s.customer === c.name; }) : [];
+  $('reorderCount').textContent = items.length ? items.length + ' items' : '';
+  $('reorderCard').classList.toggle('hidden', !items.length);
+  items.sort(function(a,b){ return a.sku.toLowerCase() < b.sku.toLowerCase() ? -1 : 1; }).forEach(function(s, i){
+    var d = document.createElement('div'); d.className = 'line';
+    d.innerHTML = '<div><div class="nm">' + esc(s.sku) + '</div><div class="meta">' + esc([s.vessel, s.material, s.raised === 'Y' ? 'raised' : ''].filter(Boolean).join(' · ')) + ' · ' + money(s.unit) + ' · last ' + s.qty + ' on ' + esc(s.last_date) + '</div></div>'
+                + '<input type="number" inputmode="numeric" min="0" placeholder="qty" data-i="' + i + '" oninput="totals()">';
+    d.dataset.title = s.title; d.dataset.unit = s.unit; box.appendChild(d);
+  });
+  totals();
+}
+function addNewLine(){
+  var d = document.createElement('div'); d.className = 'newline';
+  d.innerHTML = '<div class="g" style="grid-template-columns:2fr 1fr 1fr"><input placeholder="Item name" class="n"><input type="number" inputmode="numeric" min="0" placeholder="qty" class="q" oninput="totals()"><input type="number" step="0.01" inputmode="decimal" placeholder="price (blank = menu)" class="p" oninput="totals()"></div>'
+              + '<div class="g"><select class="m"><option value="">Material</option><option>White</option><option>Holo</option><option>Gold</option></select>'
+              + '<input placeholder="Vessel / size (Miron 5 ml, 3&quot; Slap, 3x3.8)" class="v">'
+              + '<select class="t"><option value="">Texture</option><option value="Flat">Flat</option><option value="1">1 · Spot Gloss</option><option value="2">2 · Standard</option><option value="3">3 · Pro</option></select></div>';
+  $('newItems').appendChild(d);
+}
+document.querySelectorAll('.chips').forEach(function(g){ g.addEventListener('click', function(e){ var c = e.target.closest('.chip'); if(!c) return; if(g.dataset.one){ g.querySelectorAll('.chip').forEach(function(x){ if(x !== c) x.classList.remove('on'); }); } c.classList.toggle('on'); }); });
+function chips(group){ return [].map.call(document.querySelectorAll('.chips[data-group="' + group + '"] .chip.on'), function(c){ return c.dataset.v; }); }
+function printSpecs(){
+  var L = [];
+  var f = chips('finish')[0]; if(f) L.push('FINISH: ' + f);
+  var t = chips('texture')[0]; if(t) L.push('TEXTURE: ' + t);
+  chips('opts').forEach(function(o){ L.push(o.toUpperCase()); });
+  var ch = chips('choke')[0]; if(ch) L.push('CHOKE: ' + ch);
+  var cu = chips('cut')[0]; if(cu) L.push('CUT: ' + cu);
+  var n = $('pressNotes').value.trim(); if(n) L.push('NOTES: ' + n);
+  return L.join(String.fromCharCode(10));
+}
+function toggleCustom(){ $('customWrap').classList.toggle('hidden', $('prepress').value !== 'Custom amount'); }
+$('delivery').addEventListener('change', function(){ $('shipWrap').classList.toggle('hidden', this.value !== 'Ship'); });
+function totals(){
+  var q = 0, a = 0, unknown = false;
+  document.querySelectorAll('#reorders .line').forEach(function(d){ var n = Number(d.querySelector('input').value || 0); if(n > 0){ q += n; a += n * Number(d.dataset.unit || 0); } });
+  document.querySelectorAll('#newItems .newline').forEach(function(d){ var n = Number(d.querySelector('.q').value || 0), p = d.querySelector('.p').value; if(n > 0){ q += n; if(p) a += n * Number(p); else unknown = true; } });
+  $('totQty').textContent = q; $('totAmt').textContent = money(a) + (unknown ? '+' : '');
+  $('totNote').textContent = unknown ? 'some new items priced by the builder' : 'before pre-press & tax';
+}
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+function submit(){
+  var v = $('company').value, isNew = v === '__new__';
+  var company = isNew ? $('newName').value.trim() : v;
+  if(!company){ alert('Pick the company (or type the new customer name).'); return; }
+  if(!$('due').value){ alert('Order due date is required.'); return; }
+  var reorders = []; document.querySelectorAll('#reorders .line').forEach(function(d){ var n = Number(d.querySelector('input').value || 0); if(n > 0) reorders.push({ title: d.dataset.title, qty: n }); });
+  var newItems = []; document.querySelectorAll('#newItems .newline').forEach(function(d){ var n = Number(d.querySelector('.q').value || 0), nm = d.querySelector('.n').value.trim(); if(nm && n > 0) newItems.push({ name: nm, qty: n, material: d.querySelector('.m').value, vessel: d.querySelector('.v').value.trim(), texture: d.querySelector('.t').value, unit: d.querySelector('.p').value }); });
+  if(!reorders.length && !newItems.length && !$('designOnly').checked){ alert('Set a quantity on at least one item.'); return; }
+  function setupAmt() { var mn = parseFloat($('setupMin').value), rt = parseFloat($('setupRate').value || '75'); return isNaN(mn) ? null : Math.round(mn / 60 * rt * 100) / 100; }
+  function setupLabel() { var a = setupAmt(); return a === null ? 'On file' : (a === 0 ? 'Waived' : 'On file'); }
+  function setupCalc() { var a = setupAmt(); $('setupCalc').textContent = a === null ? '(on file)' : (a === 0 ? '- waived' : '= $' + a.toFixed(2) + ' (' + $('setupMin').value + ' min @ $' + (parseFloat($('setupRate').value) || 75) + '/hr)'); if (typeof total === 'function') total(); }
+  function fmtPhone(el) { var d = el.value.replace(/\D/g, ''); if (d.length === 11 && d.charAt(0) === '1') d = d.slice(1); if (d.length > 10 || /[a-zA-Z]/.test(el.value)) return; el.value = d.length > 6 ? d.slice(0,3) + '-' + d.slice(3,6) + '-' + d.slice(6) : d.length > 3 ? d.slice(0,3) + '-' + d.slice(3) : d; }
+  var payload = { pin: PIN, company: company, newCustomer: isNew, contact: $('contact').value.trim(), email: $('email').value.trim(), phone: $('phone').value.trim(),
+    due: $('due').value, delivery: $('delivery').value, ship_cost: $('ship').value, rush: $('rush').value.trim(),
+    payment: $('payment').value, tax: $('tax').value, prepress: $('prepress').value, prepress_custom: $('prepressCustom').value, setup: setupLabel(), setup_min: $('setupMin').value.trim(), setup_rate: $('setupRate').value.trim(),
+    art_status: $('art').value, design_hrs: $('designHrs').value, deposit: $('deposit').value, design_only: $('designOnly').checked,
+    note: $('note').value.trim(), callouts: printSpecs(), attach: chips('attach'), reorders: reorders, newItems: newItems };
+  $('submitBtn').disabled = true; $('submitBtn').textContent = 'Sending…';
+  api('POST', payload).then(function(r){
+    $('submitBtn').disabled = false; $('submitBtn').textContent = 'Submit order';
+    var box = $('result'); box.classList.remove('hidden');
+    if(r.ok){ box.innerHTML = '<h2 class="ok">Order sent</h2><p>' + esc(company) + ' is on the intake board as <b>Ready to build</b>. The builder makes the invoice and work order next; Shane approves before anything goes to the customer.</p><p class="hint"><a href="' + r.url + '" target="_blank" style="color:#fff">Open in Monday</a></p><br><button class="btn ghost" onclick="location.reload()">Start another order</button>'; window.scrollTo(0, document.body.scrollHeight); }
+    else { box.innerHTML = '<h2 class="warn">Not sent</h2><p>' + esc(r.error) + '</p>'; }
+  }).catch(function(e){ $('submitBtn').disabled = false; $('submitBtn').textContent = 'Submit order'; alert('Error: ' + e.message); });
+}
+try { var p = localStorage.getItem('st_pin'); if(p){ $('pin').value = p; } } catch(e){}
+</script>
+</body></html>
