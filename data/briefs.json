@@ -5,62 +5,62 @@
     {
       "date": "2026-09-16",
       "label": "Morning Brief",
-      "title": "Michigan Tops $17B in Sales as Tax Relief Gains Steam; Feds Clear Path on Rescheduling and Psychedelics",
-      "top": "Michigan's legal market just crossed $17 billion in lifetime sales even as operators push hard for wholesale-tax relief — with a repeal bill in Lansing and a gubernatorial candidate courting industry cash. Nationally, courts just upheld federal marijuana rescheduling and the FDA is fast-tracking psychedelic therapies, while MSOs jockey for position through a wave of acquisitions.",
+      "title": "Michigan Cracks $17B in Lifetime Sales as Psilocybin Nears the Finish Line Nationally",
+      "top": "Michigan's legal market just crossed a historic $17 billion in cumulative sales even as operators keep fighting the 24% wholesale tax — and now a GOP gubernatorial nominee is courting industry cash with a repeal pledge. Nationally, Compass Pathways' psilocybin therapy is racing toward an FDA decision while medical marijuana's Schedule III status just survived a court challenge, adding fuel to a record $20B sales year.",
       "local": [
         {
-          "text": "Michigan cannabis sales cross $17 billion milestone",
-          "detail": "The state has now surpassed $17 billion in combined adult-use and medical marijuana sales since legalization, generating an estimated $2.66 billion in state excise and sales taxes, per a new CRA report.",
-          "text_full": "Michigan cannabis sales cross $17 billion milestone — the state has now surpassed $17 billion in combined adult-use and medical marijuana sales since legalization, generating an estimated $2.66 billion in state excise and sales taxes, per a new CRA report.",
+          "text": "Michigan tops $17 billion in lifetime cannabis sales",
+          "detail": "",
+          "text_full": "Michigan tops $17 billion in lifetime cannabis sales — the CRA's new monthly report shows the state has generated an estimated $2.66 billion in state excise and sales taxes since legalization.",
           "source": "The Marijuana Herald",
           "url": "https://themarijuanaherald.com/2026/09/michigan-legal-marijuana-sales-surpass-17-billion/"
         },
         {
-          "text": "John James courts cannabis donors with tax-repeal vow — Michigan's GOP gubernatorial nominee is promising to repeal or sharply reduce the 24% wholesale tax, and a JARS Cannabis-hosted fundraiser alone netted his campaign nearly $90,000.",
-          "source": "Bridge Michigan",
-          "url": "https://bridgemi.com/michigan-government/john-james-pitches-marijuana-tax-repeal-courts-industry-donors/"
+          "text": "GOP nominee courts weed money with tax-repeal vow",
+          "source": "Hoodline",
+          "url": "https://hoodline.com/2026/09/john-james-woos-michigan-weed-donors-with-vow-to-kill-24-pot-tax/"
         },
         {
-          "text": "JARS Cannabis buys its way into Arizona — the Michigan-based chain is acquiring Sonoran Roots and its eight Ponderosa dispensaries, a deal that will make JARS the largest dispensary operator in Arizona.",
-          "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-083126/"
+          "text": "Supreme Court curbs car searches based on smell alone",
+          "source": "The 'Gander",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-6/"
         },
         {
-          "text": "Grön's Pearls gummies land on Michigan shelves — the Wyld-owned edibles brand rolled its bestselling Pearls gummies into Michigan as part of a four-state expansion, already stocked at Pure Options, High Profile and Lume.",
-          "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-090826/"
-        },
-        {
-          "text": "Wholesale tax underperforms, fueling repeal momentum — the 24% tax brought in only about $34-37 million a quarter versus a $105 million projection, adding fuel to a new House repeal bill, HB 6224.",
-          "source": "Gander Newsroom / Cann.dev",
+          "text": "Muskegon hospitality dispensary-restaurant still building out",
+          "source": "Cann.dev",
           "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
+        },
+        {
+          "text": "Tax revenue lags, but repeal push gains real allies",
+          "source": "The 'Gander",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-090826/"
         }
       ],
       "national": [
         {
-          "text": "Court upholds federal marijuana rescheduling to Schedule III — the D.C. Circuit rejected a challenge to the medical marijuana rescheduling order, keeping the historic Schedule III shift intact as the DEA weighs full rescheduling.",
+          "text": "Compass Pathways psilocybin drug on track for Q4 filing",
+          "source": "Compass Pathways / STAT",
+          "url": "https://ir.compasspathways.com/News--Events-/news/news-details/2026/Compass-Pathways-Announces-Six-Month-Data-from-Second-Phase-3-Trial-Confirming-Rapid-and-Durable-Profile/default.aspx"
+        },
+        {
+          "text": "Federal court upholds medical marijuana's Schedule III status",
           "source": "Cannabis Business Times",
           "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order"
         },
         {
-          "text": "FDA holds landmark hearing on psychedelic therapies — regulators gathered expert input on clinical pathways for psilocybin and methylone-based treatments, with Compass Pathways' COMP360 eyeing a possible late-2026 approval milestone.",
-          "source": "Washington Times / Marijuana Moment",
-          "url": "https://www.washingtontimes.com/news/2026/sep/14/psychedelic-treatments-move-closer-mainstream-fda/"
+          "text": "Hemp THC crackdown pushed back, buying industry more time",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/deas-list-of-cannabis-questions-for-businesses-seeking-rescheduling-protections-newsletter-september-1-2026"
         },
         {
-          "text": "Eli Lilly closes its AtaiBeckley psychedelics acquisition — the pharma giant's deal, approved by stockholders and expected to close mid-September, brings psychedelic assets BPL-003, VLS-01 and EMP-01 under Lilly's development umbrella.",
-          "source": "Clinical Trial Vanguard",
-          "url": "https://www.clinicaltrialvanguard.com/article/psych-pulse/what-the-fdas-new-psychedelic-framework-actually-means-for-the-clinic/"
+          "text": "Vireo and Grown Rogue keep consolidating state markets",
+          "source": "Cann.dev",
+          "url": "https://www.cann.dev/cannabis-ma-august-2026-curaleaf-vireo-consolidation/"
         },
         {
-          "text": "Cresco Labs completes $50M Pennsylvania dispensary buy — the MSO closed its acquisition of nine Pennsylvania medical marijuana dispensaries, expanding its East Coast retail footprint.",
+          "text": "U.S. legal cannabis sales near $20 billion for the year",
           "source": "The Marijuana Herald",
-          "url": "https://themarijuanaherald.com/2026/09/aurora-cannabis-board-votes-unanimously-to-recommend-shareholders-reject-curaleaf-hostile-takeover-bid/"
-        },
-        {
-          "text": "Curaleaf-Aurora takeover fight signals consolidation wave — Aurora's board is urging shareholders to reject Curaleaf's hostile bid, calling it undervalued, as the MSO sector's biggest fight for scale plays out in real time.",
-          "source": "BNN Bloomberg",
-          "url": "https://www.bnnbloomberg.ca/investing/cannabis/2026/09/02/aurora-cannabis-urges-shareholders-to-reject-hostile-takeover-offer-by-curaleaf/"
+          "url": "https://themarijuanaherald.com/2026/09/u-s-legal-marijuana-sales-reach-2-55-billion-in-august-bringing-2026-total-to-nearly-20-billion/"
         }
       ]
     }
