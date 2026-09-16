@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 46;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 47;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -150,6 +150,13 @@ function doGet(e) {
   if (p.action === 'awards') { try { return out_(awardsList_(p)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }   // v44
   if (p.action === 'track') { try { return out_(trackGet_(p)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
   if (p.action === 'orders') { try { return out_(ordersList_(p)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
+  if (p.diag && pinOk_(p.pin)) {   // v47: who owns the store, and which triggers the executing account (thestickytrap) holds
+    var d = { ok: true, store: String(PROP.getProperty('CHAT_SHEET_ID') || ''), executing_as: '', store_owner: '', triggers: [] };
+    try { d.executing_as = Session.getEffectiveUser().getEmail(); } catch (e) { d.executing_as = 'n/a'; }
+    try { d.store_owner = DriveApp.getFileById(d.store).getOwner().getEmail(); } catch (e) { d.store_owner = 'ERR ' + String(e).slice(0, 80); }
+    try { d.triggers = ScriptApp.getProjectTriggers().map(function (t) { return t.getHandlerFunction() + ' (' + t.getUniqueId() + ')'; }); } catch (e) { d.triggers = ['ERR ' + String(e).slice(0, 80)]; }
+    return out_(d);
+  }
   if (p.reporttest && pinOk_(p.pin)) {   // v40: prove the Drive archive from outside
     try { return out_({ ok: true, file: archiveReport_('Archive test', 'Test report written ' + new Date()) }); } catch (err4) { return out_({ ok: false, error: String(err4).slice(0, 300) }); }
   }
@@ -200,6 +207,7 @@ function doPost(e) {
   if (body.action === 'award') { try { return out_(awardIn_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }               // v44: verify / review awards
   if (body.action === 'awards_ack') { try { return out_(awardsAck_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }
   if (body.action === 'proof_upload') { try { return out_(proofUpload_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }     // v46: console attaches a proof image -> Drive -> tracker page
+  if (body.action === 'score_delete') { try { return out_(scoreDelete_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }     // v47: remove a test player's scores (PIN)
   if (body.action === 'reauth') { try { return out_(reauth_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }                 // v31
 
   var uid = String(body.uid || 'anon').slice(0, 40);
@@ -688,6 +696,15 @@ function weekOfDay_(day) {   // v44: ISO week id 'YYYY-Www' from a UTC day numbe
   return y + '-W' + ('0' + w).slice(-2);
 }
 var WEEK_PRIZE = '12 branded slaps';   // Shane: the weekly ladder prize (cheap in-house run of the winner's own logo)
+function scoreDelete_(b) {   // v47: {pin, handle|uid, dry?} -> lists (dry) or deletes every scores row for that player
+  if (!pinOk_(b.pin)) return { ok: false, error: 'bad_pin' };
+  var h = String(b.handle || '').toUpperCase().replace(/[^A-Z0-9]/g, ''), u = String(b.uid || '').slice(0, 40);
+  if (!h && !u) return { ok: false, error: 'need handle or uid' };
+  var sh = scoresSheet_(), rows = sh.getDataRange().getValues(), hits = [];
+  for (var i = 1; i < rows.length; i++) if ((h && String(rows[i][2]).toUpperCase() === h) || (u && String(rows[i][1]) === u)) hits.push({ row: i + 1, uid: String(rows[i][1]), handle: String(rows[i][2]), day: rows[i][3], best: rows[i][5], slot: rows[i][7], ts: String(rows[i][0]) });
+  if (!b.dry) { hits.slice().reverse().forEach(function (x) { sh.deleteRow(x.row); }); CACHE.remove('lb:w:' + weekOfDay_(Math.floor(Date.now() / 864e5))); CACHE.remove('lb:' + monthOfDay_(Math.floor(Date.now() / 864e5))); }
+  return { ok: true, dry: !!b.dry, rows: hits };
+}
 function winnersSheet_() { var ss = ss_(), sh = ss.getSheetByName('winners'); if (!sh) { sh = ss.insertSheet('winners'); sh.appendRow(['ts', 'week', 'uid', 'handle', 'total', 'days', 'prize', 'claimed']); } return sh; }
 function rollWeek_() {   // Monday 00:10 trigger (installWeekly): freeze last week's #1 into the winners sheet, once
   var lastDay = Math.floor(Date.now() / 864e5) - 1, wk = weekOfDay_(lastDay), ws = winnersSheet_(), rows = ws.getDataRange().getValues();
