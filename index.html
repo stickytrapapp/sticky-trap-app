@@ -2182,19 +2182,30 @@
     {src:'audio/app-10.mp3', name:'We Make Pros B2',      kind:'beat',  fam:'wmp'}
   ];
   var VOL=0.35, TRIM={vocal:0.86, beat:1}, DUCK=0.4;   // vocals sit a notch under the beats so lyrics don't fight the text on screen
-  var mode='off', a=null, A=[null,null], played=[], want=false, armed=false, fadeT=null, actx=null, gain=null, posT=0, ducked=false;
+  var mode='off', a=null, A=[null,null], played=loadPlayed(), want=false, armed=false, fadeT=null, actx=null, gain=null, posT=0, ducked=false;
   try{ var m0=localStorage.getItem('st_music'); mode=(m0==='1'||m0==='full')?'full':(m0==='beats'?'beats':'off'); }catch(e){}
   want=mode!=='off';
   function pool(){ return CAT.filter(function(t){ return mode==='beats'? t.kind==='beat' : true; }); }
   function abs(u){ var l=document.createElement('a'); l.href=u; return l.href; }
   function trackOf(x){ var s=(x&&x.src)||''; for(var i=0;i<CAT.length;i++){ if(abs(CAT[i].src)===s) return CAT[i]; } return null; }
-  function pick(prev){   // Shane 2026-09-15: play the recommended loop IN ORDER (CAT order = the Music session's 10-track sequence: vocal/beat alternating,
-    // no same-family B-sides back to back), starting at Trap House Open and wrapping. Beats-only mode walks the same order over the beats.
+  // Shane 2026-09-16 ('play each song at random before replaying a song' - it repeated the same 3): a SHUFFLE CYCLE that survives reloads.
+  // `played` = srcs heard in the current cycle, saved in localStorage st_music_played; a song cannot come back until every song in the
+  // pool has played once, then the cycle starts over (never the same song twice in a row). Picks still alternate vocal/beat and avoid
+  // the same family back to back when they can. A brand-new cycle opens on Trap House Open (Shane 9/15).
+  function loadPlayed(){ try{ var v=JSON.parse(localStorage.getItem('st_music_played')||'[]'); if(Array.isArray(v)) return v; }catch(e){} return []; }
+  function savePlayed(){ try{ localStorage.setItem('st_music_played',JSON.stringify(played.slice(-40))); }catch(e){} }
+  function mark(src){ if(played.indexOf(src)<0) played.push(src); savePlayed(); }
+  function unplayed(prev){ var P=pool(); var left=P.filter(function(t){ return played.indexOf(t.src)<0 && (!prev||t.src!==prev.src); });
+    if(!left.length){ played=prev?[prev.src]:[]; savePlayed(); left=P.filter(function(t){ return !prev||t.src!==prev.src; }); } return left; }
+  function pick(prev){
     var P=pool(); if(!P.length) return null;
-    var i=prev?P.indexOf(prev):-1; if(i<0&&prev){ for(var k=0;k<P.length;k++) if(P[k].src===prev.src){ i=k; break; } }
-    return P[(i+1)%P.length]; }
-  function opener(){   // Shane 2026-09-15: a fresh start always opens on Trap House Open (Full mode); Beats-only opens on the first beat in the loop
-    var P=pool(); if(!P.length) return null; var th=P.filter(function(t){ return t.fam==='th'&&t.kind==='vocal'; })[0]; return th||P[0]; }
+    var c=unplayed(prev); if(!c.length) return P[0];
+    if(prev){ var alt=c.filter(function(t){ return t.kind!==prev.kind; }); if(alt.length) c=alt; var fam=c.filter(function(t){ return t.fam!==prev.fam; }); if(fam.length) c=fam; }
+    return c[Math.floor(Math.random()*c.length)]; }
+  function opener(){
+    var P=pool(); if(!P.length) return null; var c=unplayed(null);
+    var th=c.filter(function(t){ return t.fam==='th'&&t.kind==='vocal'; })[0]; if(th&&played.length===0) return th;   // fresh cycle -> Trap House Open
+    var v=c.filter(function(t){ return t.kind==='vocal'; }); var pool2=v.length?v:c; return pool2[Math.floor(Math.random()*pool2.length)]; }
   function xfFor(nxt,prev){ if(nxt&&nxt.xfIn) return nxt.xfIn; if(prev&&prev.kind==='beat'&&nxt&&nxt.kind==='vocal') return 4; return 2.5; }
   function mk(){ var x=new Audio(); x.loop=false; x.preload='none'; x.setAttribute('playsinline','');
     try{ var AC=window.AudioContext||window.webkitAudioContext; if(AC){ if(!actx){ actx=new AC(); gain=actx.createGain(); gain.gain.value=0; gain.connect(actx.destination); }
@@ -2210,11 +2221,11 @@
         var tt=actx.currentTime, left=Math.max(0.3,x.duration-x.currentTime);
         n._ramp=true; n._g.gain.cancelScheduledValues(tt); n._g.gain.setValueAtTime(0,tt); n._g.gain.linearRampToValueAtTime(TRIM[nxt.kind],tt+left);
         x._g.gain.cancelScheduledValues(tt); x._g.gain.setValueAtTime(x._g.gain.value,tt); x._g.gain.linearRampToValueAtTime(0,tt+left);
-        var p=n.play(); if(p&&p.catch) p.catch(function(){}); a=n; a._next=null; played.push(nxt.src); savePos(true); } });
+        var p=n.play(); if(p&&p.catch) p.catch(function(){}); a=n; a._next=null; mark(nxt.src); savePos(true); } });
     x.addEventListener('play',function(){ if(x._ramp){ x._ramp=false; return; } x._xf=false; var t=trackOf(x); gset(x,t?TRIM[t.kind]:1); });
     return x; }
   function other(){ return a===A[0]?A[1]:A[0]; }
-  function swapTo(nxt){ if(!nxt) return; var n=other(); if(n.src!==abs(nxt.src)) n.src=nxt.src; a=n; a._next=null; gset(a,TRIM[nxt.kind]); var p=a.play(); if(p&&p.catch) p.catch(function(){}); played.push(nxt.src); prime(); savePos(true); }
+  function swapTo(nxt){ if(!nxt) return; var n=other(); if(n.src!==abs(nxt.src)) n.src=nxt.src; a=n; a._next=null; gset(a,TRIM[nxt.kind]); var p=a.play(); if(p&&p.catch) p.catch(function(){}); mark(nxt.src); prime(); savePos(true); }
   function gset(x,v){ if(!x||!x._g) return; try{ var t=actx.currentTime; x._g.gain.cancelScheduledValues(t); x._g.gain.setValueAtTime(v,t); }catch(e){} }
   function prime(){ var n=other(), nxt=a&&a._next; if(!n||!nxt||!n.paused) return;   // never touch the other element while it is still playing out a crossfade tail; its 'ended' calls prime() again
     if(n.src!==abs(nxt.src)) n.src=nxt.src; n.preload='auto'; try{ n.load(); }catch(e){} }
@@ -2222,7 +2233,7 @@
   function el(){ if(!a){ A[0]=mk(); A[1]=mk(); var saved=null; try{ saved=JSON.parse(localStorage.getItem('st_music_pos')||'null'); }catch(e){}
       var t=null; if(saved&&saved.src){ t=pool().filter(function(c){ return c.src===saved.src; })[0]||null; }
       if(!t){ t=opener(); saved=null; }
-      a=A[0]; a.src=t.src; played=[t.src]; a._next=null;
+      a=A[0]; a.src=t.src; mark(t.src); a._next=null;
       if(saved && saved.t>3){ var st=saved.t; a.addEventListener('loadedmetadata',function once(){ a.removeEventListener('loadedmetadata',once); try{ if(st<a.duration-8) a.currentTime=st; }catch(e){} }); } }
     return a; }
   function getVol(){ return gain? gain.gain.value : (a?a.volume:0); }
@@ -2246,7 +2257,7 @@
     // switching between beats/full: if the current track no longer fits the pool, move on now (short crossfade); otherwise carry on
     if(a&&!a.paused&&t&&pool().indexOf(t)<0){ var nxt=pick(t); if(nxt){ a._next=nxt; try{ a.currentTime=Math.max(0,a.duration-2.5); }catch(e){} } }
     else if(a&&!a.paused&&a._next){ a._next=pick(t); prime(); }   // pool changed: re-pick what comes next
-    if(!a||a.paused){ if(prev==='off'){ played=[]; try{ localStorage.removeItem('st_music_pos'); }catch(e){} } start(); } else ui();
+    if(!a||a.paused){ if(prev==='off'){ try{ localStorage.removeItem('st_music_pos'); }catch(e){} } start(); } else ui();
     try{window.track&&window.track('music',mode+(src?':'+src:''));}catch(e){} }
   b.addEventListener('click',function(){ hideNudge(); setMode(mode==='off'?'beats': mode==='beats'?'full':'off','btn'); });
   // ---- one quiet nudge, once: 30 s after the first tap, only if the person has never chosen ----
