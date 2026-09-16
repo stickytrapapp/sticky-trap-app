@@ -160,6 +160,20 @@ function api(method, data){
     .catch(function(e){ if(tries < 3 && method === 'GET'){ return new Promise(function(res){ setTimeout(res, 1500); }).then(go); } throw e; }); }
   return go();   // Google's redirect can 404 on a slow call - retry a read up to 3x
 }
+// catalog.json next to this page = the catalog encrypted with the staff PIN (make_catalog_file.py). Decrypt here;
+// wrong PIN = decrypt fails = 'Wrong PIN'; file missing = fall back to the Apps Script call.
+function b64(s){ var b = atob(s), u = new Uint8Array(b.length); for(var i = 0; i < b.length; i++) u[i] = b.charCodeAt(i); return u; }
+function catalogLoad(pin){
+  if(!(window.crypto && crypto.subtle && window.TextEncoder)) return api('GET', { action: 'catalog', pin: pin });
+  return fetch('catalog.json?t=' + Date.now(), { cache: 'no-store' }).then(function(r){ if(!r.ok) throw new Error('no file'); return r.json(); }).then(function(f){
+    var enc = new TextEncoder();
+    return crypto.subtle.importKey('raw', enc.encode(pin), 'PBKDF2', false, ['deriveKey']).then(function(k){
+      return crypto.subtle.deriveKey({ name: 'PBKDF2', salt: b64(f.salt), iterations: 200000, hash: 'SHA-256' }, k, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+    }).then(function(key){ return crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(f.iv) }, key, b64(f.data)); })
+    .then(function(buf){ return JSON.parse(new TextDecoder().decode(buf)); })
+    .catch(function(){ return { ok: false, error: 'bad pin' }; });
+  }).catch(function(){ return api('GET', { action: 'catalog', pin: pin }); });
+}
 function $(id){ return document.getElementById(id); }
 function setupAmt() { var mn = parseFloat($('setupMin').value), rt = parseFloat($('setupRate').value || '75'); return isNaN(mn) ? null : Math.round(mn / 60 * rt * 100) / 100; }
 function setupLabel() { var a = setupAmt(); return a === null ? 'On file' : (a === 0 ? 'Waived' : 'On file'); }
@@ -168,7 +182,7 @@ function fmtPhone(el) { var d = el.value.replace(/\D/g, ''); if (d.length === 11
 function money(x){ return '$' + (Math.round(x*100)/100).toFixed(2); }
 function unlock(){
   PIN = $('pin').value.trim(); $('gateMsg').textContent = 'Loading…';
-  api('GET', { action: 'catalog', pin: PIN }).then(function(r){
+  catalogLoad(PIN).then(function(r){
     if(!r.ok){ $('gateMsg').textContent = 'Wrong PIN'; return; }
     CAT = r; $('gate').classList.add('hidden'); $('app').classList.remove('hidden'); $('bar').classList.remove('hidden');
     $('cacheNote').textContent = CAT.customers.length + ' customers · ' + CAT.skus.length + ' items from invoice history';
