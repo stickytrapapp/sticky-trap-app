@@ -1,64 +1,64 @@
 {
-  "updated": "2026-09-15",
+  "updated": "2026-09-16",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-09-15",
+      "date": "2026-09-16",
       "label": "Morning Brief",
-      "title": "Repeal Momentum Builds in Lansing While Psychedelics Go Mainstream in D.C.",
-      "top": "Michigan operators are getting real signals of relief — a GOP frontrunner is running on killing the 24% wholesale tax, courts are backing retailers on surveillance fights, and new storefronts keep opening in Detroit and Ann Arbor. Nationally, Eli Lilly just bought into psychedelics, the FDA held a landmark hearing on psilocybin and MDMA-style therapies, and MSO consolidation keeps accelerating even as full federal rescheduling grinds on.",
+      "title": "Tax Relief in Sight as Federal Momentum Builds",
+      "top": "Michigan operators are finally seeing real paths forward on the 24% wholesale tax — a bipartisan repeal push, a landmark lawsuit finally reaching trial, and creative supplier deals are giving retailers options beyond just absorbing the hit. Nationally, a federal court just locked in medical marijuana's Schedule III status, Congress bought hemp retailers another month, and psychedelics regulation is sprinting toward first approvals.",
       "local": [
         {
-          "text": "John James pledges to gut the 24% pot tax — Michigan's GOP governor nominee is promising to \"repeal or sharply reduce\" the wholesale tax, and cannabis operators are backing him with campaign cash.",
-          "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/news/republican-gubernatorial-candidate-courts-michigan-cannabis-industry-vows-to-kill-new-24-mj-tax/618038"
+          "text": "John James backs cannabis tax repeal — Michigan U.S. Senate candidate throws support behind killing the 24% wholesale tax as lawmakers from both parties back relief bills.",
+          "source": "WJR-AM",
+          "url": "https://www.wjr.com/2026/09/10/debate-grows-over-michigans-24-marijuana-tax/"
         },
         {
-          "text": "High Profile Cannabis opens first Detroit store — Ann Arbor-based C3 Industries backed a Black woman-owned, social-equity dispensary on the city's eastside, its debut Detroit location.",
-          "source": "City of Detroit",
-          "url": "https://detroitmi.gov/news/detroit-legacy-adult-use-recreational-dispensary-high-profile-cannabis-celebrates-grand-opening"
+          "text": "MiCIA's original tax lawsuit finally reaches trial — the industry group's first constitutional challenge to the wholesale tax heads to court this month, opening a real shot at relief.",
+          "source": "WWMT",
+          "url": "https://wwmt.com/news/state/michigan-marijuana-industry-lawsuit-stop-wholesale-tax-legal-court-pot-weed-economy-business-wwmt"
         },
         {
-          "text": "JARS Cannabis scores a win against surveillance overreach — the chain got a Flock license-plate reader removed from outside its Madison Heights store after staff pushed back.",
-          "source": "Cann.dev",
+          "text": "Jars Cannabis wins removal of surveillance camera — Madison Heights agrees to take down a Flock camera aimed at the retailer's parking lot after the company pushed back.",
+          "source": "cann.dev",
           "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
         },
         {
-          "text": "U.P. operator Rize finds a workaround for the tax squeeze — the three-store chain is sustaining growth by splitting the wholesale tax burden with suppliers instead of absorbing it alone.",
-          "source": "Cann.dev",
+          "text": "Muskegon's Fields Cannary targets fall opening — a hospitality-forward dispensary-and-restaurant combo pushes the retail format further than most Michigan stores have gone.",
+          "source": "cann.dev",
           "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
         },
         {
-          "text": "Tax revenue misses target, but relief could be close — the 24% levy brought in just $37 million in Q2 against a $105 million-per-quarter projection, while bipartisan lawmakers back repeal and the industry's lawsuit heads to trial this month.",
-          "source": "The 'Gander / WWMT",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-090826/"
+          "text": "Rize keeps growing despite the wholesale tax — the Upper Michigan chain negotiates cost-sharing deals with suppliers, splitting the tax burden instead of absorbing it alone.",
+          "source": "cann.dev",
+          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
         }
       ],
       "national": [
         {
-          "text": "Eli Lilly closes its big bet on psychedelics — the pharma giant's AtaiBeckley acquisition, approved by shareholders Sept. 8, brings drug candidates BPL-003, VLS-01 and EMP-01 into its pipeline.",
-          "source": "Clinical Trial Vanguard",
-          "url": "https://www.clinicaltrialvanguard.com/article/psych-pulse/what-the-fdas-new-psychedelic-framework-actually-means-for-the-clinic/"
-        },
-        {
-          "text": "FDA hearing pushes psilocybin and MDMA-style drugs toward the clinic — regulators gathered expert input this week on therapeutic use of psychedelics, calling the field \"much closer to home.\"",
-          "source": "Washington Times",
-          "url": "https://www.washingtontimes.com/news/2026/sep/14/psychedelic-treatments-move-closer-mainstream-fda/"
-        },
-        {
-          "text": "Federal court backs medical marijuana's Schedule III status — the D.C. Circuit rejected a challenge to April's reclassification, leaving the rescheduling order in effect.",
+          "text": "Court upholds medical marijuana's Schedule III status — reclassification opponents lost their bid to undo April's rescheduling order, keeping easier tax and banking rules intact.",
           "source": "Cannabis Business Times",
           "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order"
         },
         {
-          "text": "Vireo Growth to swallow Planet 13 in latest MSO buying spree — the all-stock deal would give Vireo roughly 265 stores across 15 states, making it one of the largest U.S. cannabis retailers.",
-          "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/news/cannabis-mso-vireo-growth-to-acquire-planet-13-in-all-stock-deal/617152/"
+          "text": "Trump signs hemp ban delay into law — the federal THC product ban is pushed from November 12 to December 11, buying retailers more runway.",
+          "source": "Sen. Amy Klobuchar / Congress.gov",
+          "url": "https://www.klobuchar.senate.gov/public/index.cfm/2026/9/klobuchar-hemp-ban-delay-passes-congress-heads-to-president-s-desk"
         },
         {
-          "text": "Full recreational rescheduling still stuck, but the machinery keeps turning — months after the April order, DEA is now sending detailed compliance questionnaires to state-licensed operators seeking federal protections.",
-          "source": "Marijuana Moment",
-          "url": "https://www.marijuanamoment.net/deas-list-of-cannabis-questions-for-businesses-seeking-rescheduling-protections-newsletter-september-1-2026"
+          "text": "FDA lays out new psychedelics review framework — fresh NEJM guidance reshapes trial design and access rules for psilocybin and MDMA therapies, signaling a faster path to approval.",
+          "source": "Clinical Trial Vanguard",
+          "url": "https://www.clinicaltrialvanguard.com/article/psych-pulse/what-the-fdas-new-psychedelic-framework-actually-means-for-the-clinic/"
+        },
+        {
+          "text": "Canopy Growth rolls out new product formats — new pastilles, all-in-one vapes, and softgels expand the lineup as international growth continues.",
+          "source": "Green Stock News",
+          "url": "https://greenstocknews.com/stocks/cannabis-stocks"
+        },
+        {
+          "text": "Trulieve opens its 178th dispensary nationwide — a new Dunwoody, Georgia location pushes the company's Florida store count to 77 as expansion continues.",
+          "source": "Green Stock News",
+          "url": "https://greenstocknews.com/stocks/cannabis-stocks"
         }
       ]
     }
