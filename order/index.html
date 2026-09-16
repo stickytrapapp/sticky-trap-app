@@ -22,6 +22,8 @@
   .grp summary::-webkit-details-marker{display:none} .grp summary::before{content:'\25B8';color:var(--muted);font-size:13px} .grp[open] summary::before{content:'\25BE'}
   .gmeta{font-size:12px;color:var(--muted);font-weight:400} .gqty{margin-left:auto;font-size:12px;color:var(--pink)}
   .grp .line{padding-left:18px}
+  .mini{color:var(--pink);cursor:pointer;text-decoration:underline dotted;margin-left:4px}
+  .minibtn{float:right;background:#000;border:1px solid var(--pink);color:var(--pink);border-radius:999px;padding:5px 10px;font-size:12px;cursor:pointer;text-transform:none;letter-spacing:0}
   .row3{display:grid;grid-template-columns:1fr 1fr 1.5fr;gap:8px} .lbl{display:block;font-size:12px;color:var(--muted);margin:4px 0}
   .chokebox{display:grid;grid-template-columns:48px 90px 48px;gap:8px;align-items:center} .chokebox input{text-align:center;font-size:18px;font-weight:700}
   .stp{background:#000;border:1px solid #444;color:var(--ink);border-radius:10px;font-size:20px;padding:8px 0;cursor:pointer}
@@ -65,7 +67,7 @@
   </div>
 
   <div class="card" id="reorderCard">
-    <h2>Previously ordered <span class="pill" id="reorderCount"></span></h2>
+    <h2>Previously ordered <span class="pill" id="reorderCount"></span> <button type="button" class="minibtn" id="sameBtn" onclick="sameAsLast()">Same as last order</button></h2>
     <div class="hint">Type a quantity next to anything they're reordering. Price = what they paid last time.</div>
     <div id="reorders"></div>
   </div>
@@ -191,6 +193,7 @@ function pickCompany(){
   var box = $('reorders'); box.innerHTML = '';
   var items = c ? CAT.skus.filter(function(s){ return s.customer === c.name; }) : [];
   $('reorderCount').textContent = items.length ? items.length + ' items' : '';
+  $('sameBtn').textContent = c && c.last_invoice ? 'Same as last order (' + c.last_invoice.replace(/^.*?(\d{3,5}-[A-Z0-9]+)$/, '$1') + ')' : 'Same as last order';
   $('reorderCard').classList.toggle('hidden', !items.length);
   // 9/16 Shane: one drop-down per strain. "ZHB - Lid and Wrap" -> group ZHB; a dash-less name that starts with a known
   // group ("ZHB Mini Sticker for the 5 Pack Slap") joins it; anything else is its own group.
@@ -206,11 +209,12 @@ function pickCompany(){
     det.innerHTML = '<summary><span class="gnm">' + esc(g) + '</span><span class="gmeta">' + groups[g].length + (groups[g].length === 1 ? ' item' : ' items') + '</span><span class="gqty"></span></summary>';
     groups[g].forEach(function(pair){
       var s = pair[0], i = pair[1];
-      var shown = s.sku.indexOf(g + ' - ') === 0 ? s.sku.slice(g.length + 3) : s.sku;
+      var rest = s.sku.indexOf(g + ' - ') === 0 ? s.sku.slice(g.length + 3) : s.sku;
+      var shown = (s.vessel ? s.vessel + ' \u00b7 ' : '') + rest;   // 9/16 Shane: size first - the GG4 5 ml / 150 ml mix-up
       var d = document.createElement('div'); d.className = 'line';
-      d.innerHTML = '<div><div class="nm">' + esc(shown) + '</div><div class="meta">' + esc([s.vessel, s.material, s.raised === 'Y' ? 'raised' : ''].filter(Boolean).join(' · ')) + ' · ' + money(s.unit) + ' · last ' + s.qty + ' on ' + esc(s.last_date) + '</div></div>'
+      d.innerHTML = '<div><div class="nm">' + esc(shown) + '</div><div class="meta">' + esc([s.material, s.raised === 'Y' ? 'raised' : ''].filter(Boolean).join(' · ')) + ' · ' + money(s.unit) + ' · last ' + s.qty + ' on ' + esc(s.last_date) + ' <a class="mini" onclick="asNewItem(this)">other size / material</a></div></div>'
                   + '<input type="number" inputmode="numeric" min="0" placeholder="qty" data-i="' + i + '" oninput="totals()">';
-      d.dataset.title = s.title; d.dataset.unit = s.unit; det.appendChild(d);
+      d.dataset.title = s.title; d.dataset.unit = s.unit; d.dataset.sku = s.sku; d.dataset.material = s.material || ''; d.dataset.lastInv = s.last_invoice || ''; d.dataset.lastQty = s.qty || 0; det.appendChild(d);
     });
     box.appendChild(det);
   });
@@ -228,6 +232,17 @@ document.querySelectorAll('.chips').forEach(function(g){ g.addEventListener('cli
 function finishOrder(){ var g = Number($('glossN').value || 0), m = Number($('matteN').value || 0); var sel = $('finishTop'); sel.disabled = !(g > 0 && m > 0); if(sel.disabled) sel.value = ''; }
 function chokeClamp(){ var el = $('chokeN'); var v = el.value === '' ? 0 : Math.max(-10, Math.min(10, Math.round(Number(el.value) || 0))); el.value = v; }
 function chokeStep(d){ var el = $('chokeN'); el.value = Math.max(-10, Math.min(10, (Number(el.value) || 0) + d)); }
+function sameAsLast(){   // 9/16 Shane: one tap = the quantities from the customer's last invoice
+  var c = CAT.customers.find(function(x){ return x.name === $('company').value; }); if(!c || !c.last_invoice) return;
+  var n = 0; document.querySelectorAll('#reorders .line').forEach(function(d){ if(d.dataset.lastInv === c.last_invoice){ d.querySelector('input').value = d.dataset.lastQty; d.closest('details').open = true; n++; } });
+  totals(); $('sameBtn').textContent = n ? 'Filled ' + n + ' from ' + c.last_invoice : 'Nothing from ' + c.last_invoice;
+}
+function asNewItem(a){   // 9/16 Shane: a size or material we have not printed for them yet -> New items row, prefilled
+  var d = a.closest('.line'); addNewLine(); var row = $('newItems').lastElementChild;
+  row.querySelector('.n').value = d.dataset.sku; var mat = (d.dataset.material || '').toLowerCase();
+  row.querySelector('.m').value = mat.indexOf('holo') >= 0 ? 'Holo' : mat.indexOf('gold') >= 0 ? 'Gold' : mat.indexOf('white') >= 0 ? 'White' : '';
+  row.querySelector('.v').placeholder = 'new size (was ' + (d.querySelector('.nm').textContent.split(' \u00b7 ')[0] || 'n/a') + ')'; row.scrollIntoView({block: 'center'}); row.querySelector('.v').focus();
+}
 function openPicker(el){ try { if(el.showPicker) el.showPicker(); } catch(e){} }   // 9/16 Shane: tap anywhere on the date = calendar pops up
 function chips(group){ return [].map.call(document.querySelectorAll('.chips[data-group="' + group + '"] .chip.on'), function(c){ return c.dataset.v; }); }
 function printSpecs(){
