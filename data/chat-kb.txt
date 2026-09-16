@@ -1,4 +1,4 @@
-THE STICKY TRAP -- CHAT KNOWLEDGE BASE (auto-generated 2026-09-15 from the live app by Price Engine/make_chat_kb.py; do not hand-edit -- house facts live in Price Engine/chat-facts.txt)
+THE STICKY TRAP -- CHAT KNOWLEDGE BASE (auto-generated 2026-09-16 from the live app by Price Engine/make_chat_kb.py; do not hand-edit -- house facts live in Price Engine/chat-facts.txt)
 
 == About The Sticky Trap ==
 The Sticky Trap is a design house and in-house print shop in Ann Arbor, Michigan: branding, custom art, stickers, labels, promotionals and merch. Motto: "Let's Stick Together."
@@ -41,7 +41,7 @@ Pay by ACH, card through Square, or cash. Print orders are paid in full before t
 Card payments through Square carry the processing fee. ACH is a flat $10 bank fee. Cash has no fee or surcharge. We do not accept checks.
 Michigan sales tax is charged unless you give us a resale certificate; tax-exempt accounts are set up once and stay that way.
 Files: vector (AI, EPS, PDF, SVG) preferred; PNG at 300 dpi is fine. Every file is assessed for free before anything is quoted. Pre-press and design work are custom quoted after we see the art.
-You get a digital proof by email. Two rounds of revisions are free. Changes after you approve the proof are quoted.
+You get a digital proof by email and on your order page: first a screen proof of the art, then a photo of the actual test print - you approve on the order page. Two rounds of revisions are free. Changes after you approve are quoted.
 Rush has no quantity or material limits beyond stock on hand.
 Off the menu we also make lid collars, tubes, bags and lighter wraps - ask and we quote them. Custom shapes are quoted per project.
 Jars: we can supply Miron and Chubby jars with the labels, or label the jars you already have. The same $50 order minimum applies.
