@@ -154,7 +154,7 @@ function api(method, data){
   if(method === 'GET'){ url += '?' + new URLSearchParams(data).toString(); }
   else { opts.headers = { 'Content-Type': 'text/plain;charset=utf-8' }; opts.body = JSON.stringify(data); }
   var tries = 0;
-  function go(){ tries++; return fetch(url, opts).then(function(r){ if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+  function go(){ tries++; var o = Object.assign({}, opts); var ctl = ('AbortController' in window) ? new AbortController() : null; if(ctl){ o.signal = ctl.signal; setTimeout(function(){ ctl.abort(); }, 25000); } return fetch(url, o).then(function(r){ if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
     .catch(function(e){ if(tries < 3 && method === 'GET'){ return new Promise(function(res){ setTimeout(res, 1500); }).then(go); } throw e; }); }
   return go();   // Google's redirect can 404 on a slow call - retry a read up to 3x
 }
