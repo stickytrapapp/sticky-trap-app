@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 47;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 49;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -172,7 +172,8 @@ function doGet(e) {
     return out_({ ok: true, version: CODE_VERSION, key: !!PROP.getProperty('ANTHROPIC_API_KEY'), model: cfg_('MODEL'), kb: kb.length, prices: n, kb_url: cfg_('KB_URL'),
                   store: store.slice(0, 8), open_orders: open, store_error: storeErr, mail_error: PROP.getProperty('MAIL_LAST_ERROR') || '',
                   sms: smsReady_() ? 'ready' : 'no twilio', sms_error: PROP.getProperty('SMS_LAST_ERROR') || '', billing_draft: true,
-                  push: !!PROP.getProperty('FCM_PRIVATE_KEY'), awards: true });   // v27 store; v29 mail; v32 sms; v36 billing_draft; v44 push + awards
+                  push: !!PROP.getProperty('FCM_PRIVATE_KEY'), awards: true,
+                  cron_nudge: PROP.getProperty('CRON_LAST_nudge') || '', cron_week: PROP.getProperty('CRON_LAST_week') || '' });   // v48   // v27 store; v29 mail; v32 sms; v36 billing_draft; v44 push + awards
   }
   return out_({ ok: true, hint: 'POST {uid, tab, basket, messages:[{role,content}]}' });
 }
@@ -199,6 +200,7 @@ function doPost(e) {
   if (body.action === 'rate') { try { return out_(rateIn_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }                   // v34: thumbs on a reply
   if (body.action === 'billing_draft') { try { return out_(billingDraft_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }   // v36: Gmail DRAFT for the Invoices billing mailer
   if (body.action === 'lead_phone') { try { return out_(leadPhone_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }         // v38: 'text me when they reply' after a hand-off
+  if (body.action === 'cron') { try { return out_(cronRun_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }                // v48: timed jobs driven from the PC (no ScriptApp triggers)
   if (body.action === 'report_send') { try { return out_(reportSend_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }       // v41: any PC-side report -> email + dated Drive copy
   if (body.action === 'sms_optin') { try { return out_(smsOptin_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }           // v42: public opt-in page thestickytrap.app/sms/
   if (body.action === 'push_sub') { try { return out_(pushSub_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }             // v44: FCM token from /push.js
@@ -1565,6 +1567,25 @@ function reportSend_(b) {   // v41: the Daily Pulse (and any other PC-side repor
   return { ok: true, sent: sent, to: to, file: url };
 }
 function archiveTest() { Logger.log(archiveReport_('Archive test', 'Test report written ' + new Date())); }   // run once from the editor to prove the folder + scope
+
+/* ---------- v48 (2026-09-16): timed jobs run from the PC instead of ScriptApp triggers. Triggers run as whoever installed them, and the only
+   account that could install them could not open the store (hourly 'no permission' at :57). The web app itself runs as the store owner, so
+   Downloads\chat_cron.py (Task Scheduler: hourly 'nudge', Monday 7:05 'week') POSTs {action:'cron', pin, job} here. Idempotent: nudgeStale_
+   has its own 24 h per-order guard, rollWeek_ checks the winners sheet, the digest is keyed to the week. ---------- */
+function cronRun_(b) {
+  if (!pinOk_(b.pin)) return { ok: false, error: 'bad_pin' };
+  var job = String(b.job || ''), t0 = Date.now(), did = [];
+  if (job === 'nudge') { nudgeStale_(); did.push('nudgeStale_'); }
+  else if (job === 'week') {
+    try { rollWeek_(); did.push('rollWeek_'); } catch (e) { mailErr_(e); did.push('rollWeek_ ERR ' + String(e).slice(0, 80)); }
+    var wk = weekOfDay_(Math.floor(Date.now() / 864e5));   // keyed to the week the job RUNS in: one digest per week, whatever day it is asked
+    if (PROP.getProperty('CRON_DIGEST_WEEK') === wk && !b.force) did.push('weeklyDigest_ already sent for ' + wk);
+    else { weeklyDigest_(); PROP.setProperty('CRON_DIGEST_WEEK', wk); did.push('weeklyDigest_'); }
+  }
+  else return { ok: false, error: 'bad_job', hint: 'nudge | week' };
+  PROP.setProperty('CRON_LAST_' + job, new Date().toISOString());
+  return { ok: true, job: job, did: did, ms: Date.now() - t0 };
+}
 
 function installNudges() {
   ScriptApp.getProjectTriggers().forEach(function (t) { var f = t.getHandlerFunction(); if (f === 'nudgeStale_' || f === 'weeklyDigest_') ScriptApp.deleteTrigger(t); });
