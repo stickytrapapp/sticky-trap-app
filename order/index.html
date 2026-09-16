@@ -80,7 +80,7 @@
   <div class="card">
     <h2>Order</h2>
     <div class="row">
-      <div><label>Order due date <b>*</b></label><input id="due" type="date"></div>
+      <div><label>Order due date <b>*</b></label><input id="due" type="date" onfocus="openPicker(this)" onclick="openPicker(this)"></div>
       <div><label>Delivery</label><select id="delivery"><option>Pick Up</option><option>Ship</option><option>Deliver</option></select></div>
     </div>
     <div class="row">
@@ -228,6 +228,7 @@ document.querySelectorAll('.chips').forEach(function(g){ g.addEventListener('cli
 function finishOrder(){ var g = Number($('glossN').value || 0), m = Number($('matteN').value || 0); var sel = $('finishTop'); sel.disabled = !(g > 0 && m > 0); if(sel.disabled) sel.value = ''; }
 function chokeClamp(){ var el = $('chokeN'); var v = el.value === '' ? 0 : Math.max(-10, Math.min(10, Math.round(Number(el.value) || 0))); el.value = v; }
 function chokeStep(d){ var el = $('chokeN'); el.value = Math.max(-10, Math.min(10, (Number(el.value) || 0) + d)); }
+function openPicker(el){ try { if(el.showPicker) el.showPicker(); } catch(e){} }   // 9/16 Shane: tap anywhere on the date = calendar pops up
 function chips(group){ return [].map.call(document.querySelectorAll('.chips[data-group="' + group + '"] .chip.on'), function(c){ return c.dataset.v; }); }
 function printSpecs(){
   var L = [];
@@ -272,6 +273,7 @@ function submit(){
     else { box.innerHTML = '<h2 class="warn">Not sent</h2><p>' + esc(r.error) + '</p>'; }
   }).catch(function(e){ $('submitBtn').disabled = false; $('submitBtn').textContent = 'Submit order'; alert('Error: ' + e.message); });
 }
+try { var _d = new Date(); $('due').min = _d.getFullYear() + '-' + ('0' + (_d.getMonth() + 1)).slice(-2) + '-' + ('0' + _d.getDate()).slice(-2); } catch(e){}
 try { var p = localStorage.getItem('st_pin'); if(p){ $('pin').value = p; } } catch(e){}
 </script>
 </body></html>
