@@ -145,7 +145,7 @@
 
 <div class="bar hidden" id="bar">
   <div class="tot"><b id="totQty">0</b> prints · est. <b id="totAmt">$0</b><div class="hint" id="totNote">before pre-press &amp; tax</div></div>
-  <button class="btn" id="submitBtn" onclick="submit()">Submit order</button>
+  <div style="display:flex;gap:8px;align-items:center"><button type="button" class="minibtn" style="float:none" onclick="resetForm()">Reset</button><button class="btn" id="submitBtn" onclick="submit()">Submit order</button></div>
 </div>
 
 <script>
@@ -259,6 +259,15 @@ function asNewItem(a){   // 9/16 Shane: a size or material we have not printed f
   row.querySelector('.n').value = d.dataset.sku; var mat = (d.dataset.material || '').toLowerCase();
   row.querySelector('.m').value = mat.indexOf('holo') >= 0 ? 'Holo' : mat.indexOf('gold') >= 0 ? 'Gold' : mat.indexOf('white') >= 0 ? 'White' : '';
   row.querySelector('.v').placeholder = 'new size (was ' + (d.querySelector('.nm').textContent.split(' \u00b7 ')[0] || 'n/a') + ')'; row.scrollIntoView({block: 'center'}); row.querySelector('.v').focus();
+}
+function resetForm(){   // 9/16 Shane: reset with an are-you-sure; keeps the PIN + catalog, clears everything typed
+  if(!confirm('Clear the whole order and start over?')) return;
+  $('company').value = ''; pickCompany();
+  document.querySelectorAll('#app input:not([type=hidden]), #app textarea').forEach(function(el){ if(el.type === 'checkbox'){ el.checked = false; } else if(el.id === 'setupRate'){ el.value = '75'; } else if(el.id === 'chokeN'){ el.value = '0'; } else { el.value = ''; } });
+  document.querySelectorAll('#app select').forEach(function(el){ el.selectedIndex = 0; });
+  document.querySelectorAll('.chip.on').forEach(function(c){ c.classList.remove('on'); });
+  $('newItems').innerHTML = ''; addNewLine(); $('result').classList.add('hidden'); $('result').innerHTML = '';
+  $('submitBtn').disabled = false; $('submitBtn').textContent = 'Submit order'; finishOrder(); setupCalc(); totals(); window.scrollTo(0, 0);
 }
 function openPicker(el){ try { if(el.showPicker) el.showPicker(); } catch(e){} }   // 9/16 Shane: tap anywhere on the date = calendar pops up
 function chips(group){ return [].map.call(document.querySelectorAll('.chips[data-group="' + group + '"] .chip.on'), function(c){ return c.dataset.v; }); }
