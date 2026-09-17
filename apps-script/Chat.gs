@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 51;   // v51 9/17 bot editor: the hourly stall email (24 h proof / 72 h press) is OFF by default - the Daily Pulse 'Jobs today' email is the one stall list; set NUDGE_STALE=on to bring it back. v50 9/17 New Orders Intake (Shane): 'Quote sent' -> 'Invoice sent' (the invoice is the quote)   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 52;   // v52 9/17: 'NUDGED <customer>' replies to the Jobs today email are picked up hourly (nudgedReplies_) so the reorder list clears itself.   // v51 9/17 bot editor: the hourly stall email (24 h proof / 72 h press) is OFF by default - the Daily Pulse 'Jobs today' email is the one stall list; set NUDGE_STALE=on to bring it back. v50 9/17 New Orders Intake (Shane): 'Quote sent' -> 'Invoice sent' (the invoice is the quote)   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -1576,7 +1576,8 @@ function archiveTest() { Logger.log(archiveReport_('Archive test', 'Test report 
 function cronRun_(b) {
   if (!pinOk_(b.pin)) return { ok: false, error: 'bad_pin' };
   var job = String(b.job || ''), t0 = Date.now(), did = [];
-  if (job === 'nudge') { nudgeStale_(); did.push('nudgeStale_'); }
+  if (job === 'nudge') { nudgeStale_(); did.push('nudgeStale_'); var nr = []; try { nr = nudgedReplies_(); did.push('nudgedReplies_ ' + nr.length); } catch (e) { mailErr_(e); did.push('nudgedReplies_ ERR ' + String(e).slice(0, 80)); }
+    PROP.setProperty('CRON_LAST_' + job, new Date().toISOString()); return { ok: true, job: job, did: did, nudged: nr, ms: Date.now() - t0 }; }
   else if (job === 'week') {
     try { rollWeek_(); did.push('rollWeek_'); } catch (e) { mailErr_(e); did.push('rollWeek_ ERR ' + String(e).slice(0, 80)); }
     var wk = weekOfDay_(Math.floor(Date.now() / 864e5));   // keyed to the week the job RUNS in: one digest per week, whatever day it is asked
@@ -1586,6 +1587,23 @@ function cronRun_(b) {
   else return { ok: false, error: 'bad_job', hint: 'nudge | week' };
   PROP.setProperty('CRON_LAST_' + job, new Date().toISOString());
   return { ok: true, job: job, did: did, ms: Date.now() - t0 };
+}
+
+/* ---------- v52: 'NUDGED <customer>' replies. Erin answers the morning 'Jobs today' email with lines like 'NUDGED Uniq' (one per line, or
+   comma-separated); the hourly PC job asks for them here, marks them in the reorder nudger, and they drop off the next list. Each processed
+   message is starred so it is read once. Quoted text (lines starting with '>' or after 'On ... wrote:') is ignored. ---------- */
+function nudgedReplies_() {
+  var out = [], threads = GmailApp.search('subject:"Jobs today" newer_than:10d -is:starred', 0, 20);
+  threads.forEach(function (t) { t.getMessages().forEach(function (m) {
+    if (m.isStarred()) return;
+    var body = String(m.getPlainBody() || ''), lines = body.split(/\r?\n/), keep = [];
+    for (var i = 0; i < lines.length; i++) { var ln = lines[i]; if (/^\s*>/.test(ln) || /^On .* wrote:\s*$/.test(ln) || /^-{2,}\s*Forwarded/i.test(ln)) break; keep.push(ln); }
+    var names = [];
+    keep.forEach(function (ln) { var mm = ln.match(/^\s*(?:nudged|done|contacted|texted|called)\b\s*[:\-]?\s*(.+?)\s*$/i); if (mm) mm[1].split(/\s*[,;]\s*|\s+and\s+/i).forEach(function (x) { x = x.trim(); if (x) names.push(x); }); });
+    if (names.length) { names.forEach(function (nm) { out.push({ name: nm.slice(0, 60), by: String(m.getFrom()).slice(0, 80), date: m.getDate().toISOString() }); }); }
+    if (names.length || /^re:/i.test(m.getSubject())) { try { m.star(); } catch (e) {} }   // reports themselves are not starred: they are the originals, never 'Re:'
+  }); });
+  return out;
 }
 
 function installNudges() {
