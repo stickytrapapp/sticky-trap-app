@@ -85,7 +85,7 @@
 <script>
 (function(){
   var API='https://script.google.com/macros/s/AKfycbzgctrnkyWjVnhzioE_B4x8J2pyi4WzRSJG2e00Y_Y5cz0vQx-q5jhvOhMWg2x-K9ciFw/exec';
-  var STAGES=[['received','Request received'],['quoted','Quote sent'],['deposit','Deposit received'],['proofing','Art & proof in progress'],['proof_sent','Proof sent'],['approved','Proof approved'],['printing','Printing'],['ready','Ready for pickup'],['shipped','Shipped'],['complete','Complete']];
+  var STAGES=[['received','Request received'],['quoted','Invoice sent'],['deposit','Payment received'],['proofing','Art & proof in progress'],['proof_sent','Proof sent'],['approved','Proof approved'],['printing','Printing'],['ready','Ready for pickup'],['shipped','Shipped'],['complete','Complete']];
   var HOT={proof_sent:'Proof sent',printing:'Printing',ready:'Ready',shipped:'Shipped',complete:'Complete'};
   var NUDGE={proof_sent:24,printing:72};
   var $=function(id){return document.getElementById(id);}; var PIN='';
