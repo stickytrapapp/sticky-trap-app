@@ -87,7 +87,12 @@
         "label": "Build my o2 order",
         "url": "https://thestickytrap.app/configure/?p=o2-standard"
       },
-      "sticky": true
+      "sticky": true,
+      "pill": {
+        "kicker": "OCT DEAL",
+        "text": "o2 gloss · 45¢",
+        "url": "https://thestickytrap.app/configure/?p=o2-standard"
+      }
     },
     {
       "id": "resin-reception-2026",
@@ -151,5 +156,6 @@
       "from": "2026-10-01",
       "until": "2026-10-31"
     }
-  ]
+  ],
+  "_pill_how": "Promo pill (2026-09-17): an event may carry 'pill' {kicker, text, url} - the floating button on every commerce page shows the first active event's pill (from..to), previews it as 'NEXT · <from>: <text>' in the 7 days before 'from', and is not rendered when no event has a pill. Spec: Downloads\\Sticky Bot\\handoffs\\promo-pill.md."
 }
