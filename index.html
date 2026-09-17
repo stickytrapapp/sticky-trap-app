@@ -79,7 +79,7 @@
   .promostrip .ps-cta::after{content:" \2192"}
   .promostrip .ps-x{flex:none;background:none;border:0;color:var(--muted);font-size:18px;line-height:1;padding:2px 4px;cursor:pointer}
   @media (max-width:360px){ .promostrip .ps-t #psD{display:none} }
-  #musicb{position:relative}
+  #musicb{position:relative;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:manipulation}   /* long-press = skip: no iOS callout / selection */
   #musicb.on{color:var(--cy)}
   #musicb.on::after{content:"";position:absolute;top:-2px;right:-3px;width:7px;height:7px;border-radius:50%;background:var(--cy);border:1.5px solid #fff;animation:pulse2 2s infinite}
   #musicb.beats::after{background:#fff;border-color:var(--cy)}
