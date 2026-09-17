@@ -2167,7 +2167,8 @@
 /* ---- Music (v3, 2026-09-15; +Stay Trapping dubs x2 2026-09-16, riff instrumental + Full Speed 9/17, We Make Pros B2 removed 9/17): thirteen Suno tracks behind the top-bar note button. OFF by default and stays off until the person chooses;
         one quiet "Music?" nudge after 30 s, once. Button cycles Off -> Full -> Beats only (9/17). Rule-based sequencing (vocal/beat alternate,
         no same-family B-sides back to back, full cycle + no song within the last 40% of the pool since 9/17), random vocal opener, per-track trim (vocals a notch under beats),
-        crossfades sized by what comes next, ducks under the chat panel, remembers position, pauses when hidden or when a game link is tapped. ---- */
+        crossfades sized by what comes next, ducks under the chat panel, remembers position, keeps playing in the background (9/17), fades when a game link is tapped;
+        long-press the note = skip, lock-screen controls via Media Session, now-playing toast (9/17). ---- */
 (function(){
   var b=document.getElementById('musicb'); if(!b||b.hidden) return;
   var CAT=[
@@ -2202,7 +2203,7 @@
   // last K plays at any time (K = 40% of the pool: Full 13 -> 5, Beats 7 -> 3), so a song that closed one cycle cannot open the next. `hist` = last 40 plays in order (st_music_hist); `played` = this cycle's songs (st_music_played).
   var hist=loadHist();
   function loadHist(){ try{ var v=JSON.parse(localStorage.getItem('st_music_hist')||'[]'); if(Array.isArray(v)) return v; }catch(e){} return []; }
-  function mark(src){ if(played.indexOf(src)<0) played.push(src); if(hist[hist.length-1]!==src) hist.push(src); hist=hist.slice(-40); savePlayed();
+  function mark(src){ if(played.indexOf(src)<0) played.push(src); if(hist[hist.length-1]!==src) hist.push(src); hist=hist.slice(-40); savePlayed(); nowPlaying(src);
     try{ localStorage.setItem('st_music_hist',JSON.stringify(hist)); }catch(e){} }
   function unplayed(prev){ var P=pool(), K=Math.max(1,Math.round(P.length*0.4));   // Full 13 -> 5, Beats 7 -> 3
     var recent=hist.filter(function(s){ for(var i=0;i<P.length;i++){ if(P[i].src===s) return true; } return false; }).slice(-K);
@@ -2254,12 +2255,28 @@
   function setVol(v){ if(gain) gain.gain.value=v; else if(a) a.volume=v; }
   function target(){ return ducked? VOL*DUCK : VOL; }
   function ui(){ var on=mode!=='off'; b.classList.toggle('on',on); b.classList.toggle('beats',mode==='beats'); b.setAttribute('aria-pressed',on?'true':'false');
-    b.setAttribute('aria-label', mode==='full'?'Music on (explicit)': mode==='beats'?'Music: beats only':'Music off'); b.title= mode==='full'?'Music: full (explicit) - tap for beats only': mode==='beats'?'Music: beats only - tap for off': 'Music (explicit) - tap for on'; }
+    b.setAttribute('aria-label', mode==='full'?'Music on (explicit)': mode==='beats'?'Music: beats only':'Music off'); b.title= mode==='full'?'Music: full (explicit) - tap for beats only, hold to skip': mode==='beats'?'Music: beats only - tap for off, hold to skip': 'Music (explicit) - tap for on'; }
   function fade(to,ms,then){ var x=el(); clearInterval(fadeT); var from=getVol(), t0=Date.now();
     fadeT=setInterval(function(){ var k=Math.min(1,(Date.now()-t0)/ms); setVol(from+(to-from)*k); if(k>=1){ clearInterval(fadeT); if(to===0) x.pause(); if(then) then(); } },50); }
   function start(){ var x=el(); if(actx&&actx.state!=='running'){ try{actx.resume();}catch(e){} } x.preload='auto'; var p=x.play();
-    if(p&&p.then){ p.then(function(){ fade(target(),900); ui(); }).catch(function(){ arm(); }); } else { fade(target(),900); ui(); } }
+    if(p&&p.then){ p.then(function(){ fade(target(),900); ui(); userPaused=false; nowPlaying((trackOf(x)||{}).src,true); }).catch(function(){ arm(); }); } else { fade(target(),900); ui(); } }
   function stop(){ if(a&&!a.paused) fade(0,400); else if(a){ a.pause(); } ui(); }
+  // ---- 2026-09-17 (Shane: 'lock-screen controls, a skip, a now-playing name'): ----
+  var lastNow='', nowT=null, userPaused=false;
+  function nowPlaying(src,force){ var t=null; for(var i=0;i<CAT.length;i++){ if(CAT[i].src===src) t=CAT[i]; } if(!t) return;
+    if(force||t.src!==lastNow){ lastNow=t.src; clearTimeout(nowT); nowT=setTimeout(function(){ if(a&&!a.paused&&trackOf(a)===t&&mode!=='off'){ try{ window.toast&&toast('♫ '+t.name); }catch(e){} } },700); }
+    try{ if('mediaSession' in navigator){ navigator.mediaSession.metadata=new MediaMetadata({title:t.name, artist:'The Sticky Trap', album:t.kind==='beat'?'Beats':'Sticky Trap Radio',
+      artwork:[{src:abs('icons/icon-192.png'),sizes:'192x192',type:'image/png'},{src:abs('icons/icon-512.png'),sizes:'512x512',type:'image/png'}]}); navigator.mediaSession.playbackState='playing'; } }catch(e){} }
+  function skip(src){ if(!a||!a.duration||a.paused) return; var t=trackOf(a); try{ a.currentTime=Math.max(0,a.duration-2.5); }catch(e){}   // lands in the crossfade window -> the primed next track takes over
+    try{window.track&&window.track('music','skip:'+(t?t.name:'')+(src?':'+src:''));}catch(e){} }
+  function pauseOnly(){ userPaused=true; if(a&&!a.paused) fade(0,300); try{ if('mediaSession' in navigator) navigator.mediaSession.playbackState='paused'; }catch(e){} }
+  try{ if('mediaSession' in navigator){ var ms=navigator.mediaSession;
+    ms.setActionHandler('play',function(){ if(want) start(); });
+    ms.setActionHandler('pause',function(){ pauseOnly(); });
+    ms.setActionHandler('nexttrack',function(){ skip('lock'); });
+    ms.setActionHandler('previoustrack',function(){ if(a){ try{ a.currentTime=0; }catch(e){} } });
+    try{ ms.setActionHandler('stop',function(){ setMode('off','lock'); }); }catch(e){} } }catch(e){}
+  try{ if(navigator.audioSession) navigator.audioSession.type='playback'; }catch(e){}   // iOS 17+: keep playing with the screen locked / app in the background
   function arm(){ if(armed) return; armed=true; try{ var x=el(); x.preload='auto'; x.load(); }catch(e){}
     var once=function(e){ document.removeEventListener('pointerdown',once,true); document.removeEventListener('keydown',once,true); armed=false;
       if(e && e.target && (b.contains(e.target)||(nudge&&nudge.contains(e.target)))) return;   // the tap IS the music control: let its handler decide
@@ -2274,7 +2291,11 @@
     if(!a||a.paused){ if(prev==='off'){ try{ localStorage.removeItem('st_music_pos'); }catch(e){} } start(); } else ui();
     try{window.track&&window.track('music',mode+(src?':'+src:''));}catch(e){} }
   // 2026-09-17: first tap = FULL (the whole catalogue); Beats only is the second tap (staff demo mode). Before, the first tap gave Beats only and vocals never played.
-  b.addEventListener('click',function(){ hideNudge(); setMode(mode==='off'?'full': mode==='full'?'beats':'off','btn'); });
+  var holdT=null, held=false;   // long-press the note = skip to the next song (9/17); a tap still cycles Off -> Full -> Beats only
+  b.addEventListener('pointerdown',function(){ held=false; clearTimeout(holdT); if(mode==='off') return; holdT=setTimeout(function(){ held=true; skip('hold'); try{ navigator.vibrate&&navigator.vibrate(15); }catch(e){} },550); });
+  ['pointerup','pointerleave','pointercancel'].forEach(function(ev){ b.addEventListener(ev,function(){ clearTimeout(holdT); }); });
+  b.addEventListener('contextmenu',function(e){ e.preventDefault(); });
+  b.addEventListener('click',function(){ if(held){ held=false; return; } hideNudge(); setMode(mode==='off'?'full': mode==='full'?'beats':'off','btn'); });
   // ---- one quiet nudge, once: 30 s after the first tap, only if the person has never chosen ----
   var nudge=null, nudgeT=null;
   function showNudge(){ var chosen=null; try{ chosen=localStorage.getItem('st_music'); }catch(e){} var seen=null; try{ seen=localStorage.getItem('st_music_nudged'); }catch(e){}
@@ -2290,10 +2311,11 @@
   if(cp&&window.MutationObserver){ new MutationObserver(function(){ var open=cp.classList.contains('on'); if(open===ducked) return; ducked=open; if(a&&!a.paused) fade(target(),400); }).observe(cp,{attributes:true,attributeFilter:['class']}); }
   // ---- games have their own music: fade out on a link into one, resume when this tab is visible again ----
   document.addEventListener('click',function(e){ var l=e.target&&e.target.closest&&e.target.closest('a[href]'); if(l&&/\/(game|match|solitaire)\//.test(l.getAttribute('href')||'')&&a&&!a.paused) fade(0,300); },true);
-  document.addEventListener('visibilitychange',function(){ if(document.hidden){ if(a&&!a.paused) fade(0,300); } else if(want&&a&&a.paused){ start(); } });
+  // 9/17: music keeps playing with the screen off / app in the background (was: fade out when hidden). Game links still fade it (above); coming back resumes a system-paused element.
+  document.addEventListener('visibilitychange',function(){ if(!document.hidden){ if(actx&&actx.state!=='running'){ try{actx.resume();}catch(e){} } if(want&&a&&a.paused&&!userPaused) start(); } });
   window.STMusic={ state:function(){ var t=trackOf(a); return {mode:mode, now:t?t.name:null, next:(a&&a._next)?a._next.name:null, played:played.length, master:(gain?+gain.gain.value.toFixed(2):null), ducked:ducked,
       tracks:A.map(function(x){ var tt=trackOf(x); return x?{name:tt?tt.name:null, paused:x.paused, t:+(x.currentTime||0).toFixed(1), dur:+(x.duration||0).toFixed(1), g:(x._g?+x._g.gain.value.toFixed(2):null), xf:!!x._xf}:null; }) }; },
-    seekEnd:function(s){ if(a&&a.duration){ a.currentTime=Math.max(0,a.duration-(s||5)); } }, set:function(m){ setMode(m,'dbg'); }, nudge:function(){ try{localStorage.removeItem('st_music_nudged');}catch(e){} showNudge(); } };
+    seekEnd:function(s){ if(a&&a.duration){ a.currentTime=Math.max(0,a.duration-(s||5)); } }, skip:function(){ skip('dbg'); }, set:function(m){ setMode(m,'dbg'); }, nudge:function(){ try{localStorage.removeItem('st_music_nudged');}catch(e){} showNudge(); } };
   ui(); if(want) arm();   // remembered state shows immediately; playback waits for the first tap (autoplay policy)
 })();
 </script>
