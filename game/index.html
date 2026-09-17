@@ -194,7 +194,7 @@
   .tab.on .tabi{stroke:url(#tg)}
 
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-  /* ---- scan entry buttons ---- */
+  /* ---- verify button (was the scan entry button) ---- */
   .scanbtn{margin-top:14px;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;
     font-family:var(--fdisp);font-weight:600;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
     color:#0a0a0f;background:var(--grad);border:none;border-radius:12px;padding:12px;cursor:pointer;
@@ -621,7 +621,7 @@
         <div class="bar"><i id="tierBar" style="width:18%"></i></div>
         <div class="sub">Play to bank points, then cash them in for a run of <b>your own branded goods</b> — slaps, lighters, embroidered hoodies. Points stay banked until you cash them in.</div>
         <div class="expnote" id="expNote" hidden></div>
-        <button class="scanbtn" id="verifyOpen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h5v5H4zM15 4h5v5h-5zM4 15h5v5H4zM15 15h2v2M20 20v.01M20 15h.01M15 20h.01"/></svg> Verify your brand — order code + email</button>
+        <button class="scanbtn" id="verifyOpen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg> Verify your brand — order code + email</button>
       </div>
 
       <div class="sec-h"><h3>Your goal</h3><span id="goalHint">every session moves the bar</span></div>
