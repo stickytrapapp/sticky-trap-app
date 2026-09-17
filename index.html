@@ -63,15 +63,22 @@
   @media (prefers-reduced-motion:reduce){#trackb svg,#trackb::before{animation:none}}
   .iconb svg{width:21px;height:21px}
   .iconb:active{transform:scale(.92)}
-  .promostrip{flex:none;display:flex;align-items:center;gap:8px;margin:6px 12px 0;padding:6px 8px 6px 12px;border-radius:12px;border:1px solid rgba(224,165,42,.45);background:linear-gradient(100deg,rgba(224,165,42,.16),rgba(255,47,128,.10))}
+  /* Promo strip (2026-09-17, Shane: 'look better, more attractive, clickable on the whole thing'): one card, gradient edge, the whole
+     card is the button; the kicker is a solid gradient tag, the CTA reads as an arrow chip, the x stays small at the end. */
+  .promostrip{flex:none;display:flex;align-items:center;gap:10px;margin:8px 12px 0;padding:9px 8px 9px 10px;border-radius:14px;position:relative;cursor:pointer;
+    border:1.5px solid transparent;background:linear-gradient(#0e0e13,#0e0e13) padding-box,linear-gradient(100deg,#FF1FA2,#8A2BE2 55%,#12C4FF) border-box;
+    box-shadow:0 10px 26px -14px rgba(255,31,162,.6),0 0 0 1px rgba(255,255,255,.03) inset;-webkit-tap-highlight-color:transparent}
+  .promostrip:active{transform:translateY(1px)}
   .promostrip[hidden]{display:none}
   body.on-menu .promostrip{display:none}
-  .promostrip .ps-k{font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
-  .promostrip .ps-t{flex:1;min-width:0;font-size:12.5px;line-height:1.25;color:var(--ink);display:flex;align-items:baseline;gap:7px;white-space:nowrap;overflow:hidden}
-  .promostrip .ps-t b{font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
-  .promostrip .ps-t #psD{display:none}
-  .promostrip .ps-cta{flex:none;font-size:11px;font-weight:800;padding:6px 10px;border-radius:999px;border:1px solid rgba(224,165,42,.5);color:var(--gold);background:rgba(6,6,6,.6);cursor:pointer;font-family:inherit}
+  .promostrip .ps-k{flex:none;font-size:9.5px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:#050505;padding:5px 7px;border-radius:7px;background:linear-gradient(100deg,#FF1FA2,#12C4FF);white-space:nowrap}
+  .promostrip .ps-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;line-height:1.2;color:var(--ink)}
+  .promostrip .ps-t b{font-size:13.5px;font-weight:800;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+  .promostrip .ps-t #psD{font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .promostrip .ps-cta{flex:none;font-size:11px;font-weight:900;padding:7px 11px;border-radius:999px;border:0;color:#050505;background:linear-gradient(100deg,#FF1FA2,#12C4FF);cursor:pointer;font-family:inherit;white-space:nowrap;box-shadow:0 6px 14px -8px rgba(18,196,255,.8)}
+  .promostrip .ps-cta::after{content:" \2192"}
   .promostrip .ps-x{flex:none;background:none;border:0;color:var(--muted);font-size:18px;line-height:1;padding:2px 4px;cursor:pointer}
+  @media (max-width:360px){ .promostrip .ps-t #psD{display:none} }
   #musicb{position:relative}
   #musicb.on{color:var(--cy)}
   #musicb.on::after{content:"";position:absolute;top:-2px;right:-3px;width:7px;height:7px;border-radius:50%;background:var(--cy);border:1.5px solid #fff;animation:pulse2 2s infinite}
@@ -467,7 +474,7 @@
     <button data-tab="play"><svg viewBox="0 0 24 24"><circle cx="13.5" cy="4.5" r="2.5"/><path d="M12.6 6.6L10 14"/><path d="M4 14h16l1.5 5H2.5z"/><circle cx="14.5" cy="16.6" r=".6"/><circle cx="17.5" cy="16.6" r=".6"/></svg>Play</button>
   </nav>
 
-  <div class="promostrip" id="promostrip" hidden><div class="ps-t"><span class="ps-k" id="psK"></span><b id="psT"></b><span id="psD"></span></div><button class="ps-cta" id="psCta" type="button"></button><button class="ps-x" id="psX" type="button" aria-label="Dismiss">&times;</button></div>
+  <div class="promostrip" id="promostrip" hidden role="button" tabindex="0"><div class="ps-t"><span class="ps-k" id="psK"></span><b id="psT"></b><span id="psD"></span></div><button class="ps-cta" id="psCta" type="button"></button><button class="ps-x" id="psX" type="button" aria-label="Dismiss">&times;</button></div>
 
   <main class="views">
 
@@ -2312,9 +2319,12 @@
     if(!cur){ strip.hidden=true; return; }
     K.textContent=cur.k; T.textContent=cur.title; D.textContent=cur.text||''; C.textContent=(cur.cta&&cur.cta.label)||'See more'; strip.hidden=false;
     try{window.track&&window.track('promo_view',cur.id);}catch(e){} }
-  C.addEventListener('click',function(){ if(!cur) return; try{window.track&&window.track('promo_cta',cur.id);}catch(e){}
-    if(cur.cta&&cur.cta.url){ window.open(cur.cta.url,'_blank','noopener'); } else if(cur.cta&&cur.cta.tab&&window.go){ go(cur.cta.tab); } });
-  X.addEventListener('click',function(){ if(!cur) return; gone[cur._key||cur.id]=1; try{localStorage.setItem('st_promo_x',JSON.stringify(gone));}catch(e){} strip.hidden=true; });
+  function goPromo(){ if(!cur) return; try{window.track&&window.track('promo_cta',cur.id);}catch(e){}
+    if(cur.cta&&cur.cta.url){ if(/^https?:\/\/thestickytrap\.app\//.test(cur.cta.url)) location.href=cur.cta.url; else window.open(cur.cta.url,'_blank','noopener'); }   /* our own pages open in place; outside links in a new tab */
+    else if(cur.cta&&cur.cta.tab&&window.go){ go(cur.cta.tab); } }
+  strip.addEventListener('click',function(e){ if(e.target.closest('#psX')) return; goPromo(); });   /* 2026-09-17: the whole card is the button */
+  strip.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); goPromo(); } });
+  X.addEventListener('click',function(e){ e.stopPropagation(); if(!cur) return; gone[cur._key||cur.id]=1; try{localStorage.setItem('st_promo_x',JSON.stringify(gone));}catch(e){} strip.hidden=true; });
   fetch('data/promos.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json();}).then(function(P){ show(activePromos(P)); }).catch(function(){});
 })();
 </script>
