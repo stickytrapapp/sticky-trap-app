@@ -125,7 +125,15 @@ var D={"products":[{"name":"3\" Slap","slug":"3-slap","section":"Slaps","size":"
   document.title=p.name+' · Configure · The Sticky Trap';
   $('ttl').textContent=p.name; $('psec').textContent=p.section; $('pname').textContent=p.name; $('pcut').textContent=p.cut; $('psize').textContent=p.size; $('unitlbl').textContent='per '+p.unit;
 
+  // 2026-09-17 (promo links): ?mats=White Vinyl,Holographic limits the materials offered (Gold stays off a promo), ?m= / ?f= preselect
+  // material and texture, ?q= presets the quantity. All optional; a plain ?p= link behaves as before.
+  var Uq=new URLSearchParams(location.search), onlyMats=(Uq.get('mats')||'').split(',').map(function(x){return x.trim();}).filter(Boolean);
+  if(onlyMats.length){ var keep=p.mats.filter(function(m){ return onlyMats.indexOf(m.key)>=0; }); if(keep.length) p.mats=keep; }
   var cfg={mat:p.mats[0].key, fin:p.fins[0], hb:false}, qty=50, art=null, thumb=null, preflight=null;
+  (function(){ var m=Uq.get('m'), f=Uq.get('f'), q=parseInt(Uq.get('q')||'',10);
+    if(m&&p.mats.some(function(x){return x.key===m;})) cfg.mat=m;
+    if(f&&p.fins.indexOf(f)>=0&&p.prices[cfg.mat]&&p.prices[cfg.mat][f]) cfg.fin=f;
+    if(q>0) qty=Math.min(D.maxq,Math.max(D.minq,Math.round(q/D.step)*D.step)); })();
   var deals=[]; fetch('/data/promos.json?'+Date.now()).then(function(r){return r.json();}).then(function(j){ deals=(j&&j.deals)||[]; update(); }).catch(function(){});
 
   // material

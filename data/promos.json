@@ -20,13 +20,13 @@
       "text": "Oct 1-31: o2 Standard cart wraps with Spot Gloss UV at the Flat price - white $0.45, holo $0.55 - 250 and up, app orders only.",
       "cta": {
         "label": "Build my o2 order",
-        "url": "https://thestickytrap.app/configure/?p=o2-standard"
+        "url": "https://thestickytrap.app/configure/?p=o2-standard&mats=White%20Vinyl,Holographic&m=White%20Vinyl&f=Spot%20Gloss%20UV&q=250"
       },
       "sticky": true,
       "pill": {
         "kicker": "OCT DEAL",
         "text": "o2 gloss · 45¢",
-        "url": "https://thestickytrap.app/configure/?p=o2-standard"
+        "url": "https://thestickytrap.app/configure/?p=o2-standard&mats=White%20Vinyl,Holographic&m=White%20Vinyl&f=Spot%20Gloss%20UV&q=250"
       },
       "_note": "kicker flips to \"October only\" on Oct 1 (bot editor); the DEAL price itself starts Oct 1 via deals[].from"
     },
