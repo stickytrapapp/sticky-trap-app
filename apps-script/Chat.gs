@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 52;   // v52 9/17: 'NUDGED <customer>' replies to the Jobs today email are picked up hourly (nudgedReplies_) so the reorder list clears itself.   // v51 9/17 bot editor: the hourly stall email (24 h proof / 72 h press) is OFF by default - the Daily Pulse 'Jobs today' email is the one stall list; set NUDGE_STALE=on to bring it back. v50 9/17 New Orders Intake (Shane): 'Quote sent' -> 'Invoice sent' (the invoice is the quote)   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 53;   // v53 9/17 October promo: deals honor 'from', and a deal price is the better of band or deal (never stacked).   // v52 9/17: 'NUDGED <customer>' replies to the Jobs today email are picked up hourly (nudgedReplies_) so the reorder list clears itself.   // v51 9/17 bot editor: the hourly stall email (24 h proof / 72 h press) is OFF by default - the Daily Pulse 'Jobs today' email is the one stall list; set NUDGE_STALE=on to bring it back. v50 9/17 New Orders Intake (Shane): 'Quote sent' -> 'Invoice sent' (the invoice is the quote)   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -980,7 +980,7 @@ function dealOk_(d, p, m, f, q) {   // the deal the client claims must exist in 
   if (!d) return false;
   var today = Utilities.formatDate(new Date(), 'America/Detroit', 'yyyy-MM-dd');
   return deals_().some(function (x) { return x.product === p && (!x.material || x.material === m) && (!x.finish || x.finish === f) &&
-    (!x.until || x.until >= today) && q >= (+x.fromQty || 0) && Math.abs((+x.off || 0) - (+d.off || 0)) < 0.0001; });
+    (!x.from || x.from <= today) && (!x.until || x.until >= today) && q >= (+x.fromQty || 0) && Math.abs((+x.off || 0) - (+d.off || 0)) < 0.0001; });   // v53: 'from' honored
 }
 function cartLines_(b) {
   var lines = Array.isArray(b.lines) ? b.lines.slice(0, 40) : null; if (!lines || !lines.length) return null;
@@ -992,7 +992,7 @@ function cartLines_(b) {
     if (list == null) return { error: 'unknown_line', line: { p: l.p, m: l.m, f: fRaw } };
     var q = Math.round(+l.qty || 0); if (q < MINQ || q > MAXQ || q % STEP) return { error: 'bad_qty', line: { p: l.p, qty: l.qty } };
     var u = unit_(list, q);
-    if (l.deal && dealOk_(l.deal, l.p, l.m, f, q)) u = Math.ceil(u * (1 - (+l.deal.off)) * 100) / 100;
+    if (l.deal && dealOk_(l.deal, l.p, l.m, f, q)) u = Math.min(u, Math.ceil(list * (1 - (+l.deal.off)) * 100) / 100);   // v53: the better of band or deal, never both
     if (Math.abs(u - (+l.unit || 0)) > 0.011) return { error: 'price_mismatch', line: { p: l.p, m: l.m, f: fRaw, qty: q, sent: +l.unit || 0, actual: u } };
     out.push({ p: l.p, m: l.m, f: fRaw, qty: q, unit: u, total: Math.round(u * q * 100) / 100, notes: String(l.notes || '').slice(0, 200), art: String(l.art || '').slice(0, 120) });
     sub += u * q;

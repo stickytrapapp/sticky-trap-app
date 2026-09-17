@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-07",
+  "updated": "2026-09-17",
   "_how": "Promo cadence for the app, the game and the chatbot. 'featured' rotates one item per week (week index since epoch, so every surface agrees). 'double_points' fires on the rule below and doubles the game's daily earn. 'events' are one-offs with from/to dates (inclusive, local date) and an optional 'surfaces' list: app, game (default both). Edit, push, done - nothing to redeploy. An event with a 'hero' block {image, alt, when, venue, date (YYYY-MM-DD), tickets, ribbon} becomes the Social tab's ticket card + the Industry ribbon from now until its date passes (independent of from/to).",
   "featured": {
     "weekly": true,
@@ -77,6 +77,19 @@
   },
   "events": [
     {
+      "id": "oct-o2-2026",
+      "from": "2026-10-01",
+      "to": "2026-10-31",
+      "kicker": "October only",
+      "title": "October o2: Spot Gloss for the Flat price",
+      "text": "o2 Standard cart wraps with Spot Gloss UV - white $0.45, holo $0.55 - 250 and up, app orders only, through Oct 31.",
+      "cta": {
+        "label": "Build my o2 order",
+        "url": "https://thestickytrap.app/configure/?p=o2-standard"
+      },
+      "sticky": true
+    },
+    {
       "id": "resin-reception-2026",
       "from": "2026-09-20",
       "to": "2026-09-26",
@@ -114,6 +127,29 @@
       ]
     }
   ],
-  "_deals_how": "Running deals for the configure page (/configure/): percent off the engine price on ONE product, optionally one material/finish, from a quantity up - so a deal can never undercut cost by accident. Fields: id, product (menu name, e.g. 3\" Slap), material (optional: White Vinyl | Holographic | Gold), finish (optional: Flat | Spot Gloss UV | Standard Embossing | Pro), fromQty, off (0.15 = 15%), title, until (YYYY-MM-DD or blank). Edit, push, done.",
-  "deals": []
+  "_deals_how": "Running deals for the configure page (/configure/): percent off the engine price on ONE product, optionally one material/finish, from a quantity up - so a deal can never undercut cost by accident. Fields: id, product (menu name, e.g. 3\" Slap), material (optional: White Vinyl | Holographic | Gold), finish (optional: Flat | Spot Gloss UV | Standard Embossing | Pro), fromQty, off (0.15 = 15%), title, until (YYYY-MM-DD or blank). Edit, push, done. 2026-09-17: optional 'from' (YYYY-MM-DD) delays a deal; a deal price is the better of the volume band or the deal, never both.",
+  "deals": [
+    {
+      "id": "oct-o2-2026",
+      "product": "o2 Standard",
+      "material": "White Vinyl",
+      "finish": "Spot Gloss UV",
+      "fromQty": 250,
+      "off": 0.182,
+      "title": "October o2: Spot Gloss for the Flat price (white $0.45)",
+      "from": "2026-10-01",
+      "until": "2026-10-31"
+    },
+    {
+      "id": "oct-o2-2026-holo",
+      "product": "o2 Standard",
+      "material": "Holographic",
+      "finish": "Spot Gloss UV",
+      "fromQty": 250,
+      "off": 0.0834,
+      "title": "October o2: Spot Gloss for the Flat price (holo $0.55)",
+      "from": "2026-10-01",
+      "until": "2026-10-31"
+    }
+  ]
 }
