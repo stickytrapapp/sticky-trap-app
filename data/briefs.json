@@ -1,66 +1,64 @@
 {
-  "updated": "2026-09-16",
+  "updated": "2026-09-17",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-09-16",
+      "date": "2026-09-17",
       "label": "Morning Brief",
-      "title": "Michigan Cracks $17B in Lifetime Sales as Psilocybin Nears the Finish Line Nationally",
-      "top": "Michigan's legal market just crossed a historic $17 billion in cumulative sales even as operators keep fighting the 24% wholesale tax — and now a GOP gubernatorial nominee is courting industry cash with a repeal pledge. Nationally, Compass Pathways' psilocybin therapy is racing toward an FDA decision while medical marijuana's Schedule III status just survived a court challenge, adding fuel to a record $20B sales year.",
+      "title": "New Stores, New Allies, New Momentum: Cannabis Keeps Building Through the Tax Fight",
+      "top": "Michigan's industry is turning the 24% wholesale tax into a campaign issue and a courtroom fight it can actually win, while grand openings and a big-name endorsement show operators still finding room to grow. Nationally, a federal court just protected the Schedule III rescheduling win, Compass Pathways is staffing up for a likely FDA nod on psilocybin, and consolidation dollars are flowing back into the sector.",
       "local": [
         {
-          "text": "Michigan tops $17 billion in lifetime cannabis sales",
-          "detail": "",
-          "text_full": "Michigan tops $17 billion in lifetime cannabis sales — the CRA's new monthly report shows the state has generated an estimated $2.66 billion in state excise and sales taxes since legalization.",
-          "source": "The Marijuana Herald",
-          "url": "https://themarijuanaherald.com/2026/09/michigan-legal-marijuana-sales-surpass-17-billion/"
+          "text": "Cannabis industry endorses GOP's James for governor — The Michigan Cannabis Industry Association officially backed Republican nominee John James, citing his pledge to repeal the 24% wholesale tax hammering legal operators.",
+          "source": "Postindustrial",
+          "url": "https://postindustrial.com/stories/michigan-marijuana-industry-group-endorses-gop-governor-candidate-who-pledged-to-cut-new-wholesale-tax/"
         },
         {
-          "text": "GOP nominee courts weed money with tax-repeal vow",
-          "source": "Hoodline",
-          "url": "https://hoodline.com/2026/09/john-james-woos-michigan-weed-donors-with-vow-to-kill-24-pot-tax/"
+          "text": "New Standard opens doors in Ann Arbor — The chain's new Main Street-area store ran giveaways and discounts for its Sept. 3-6 opening weekend.",
+          "source": "ClickOnDetroit",
+          "url": "https://www.clickondetroit.com/topic/Dispensary/"
         },
         {
-          "text": "Supreme Court curbs car searches based on smell alone",
-          "source": "The 'Gander",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-6/"
-        },
-        {
-          "text": "Muskegon hospitality dispensary-restaurant still building out",
-          "source": "Cann.dev",
+          "text": "Jars Cannabis gets police camera pulled in Madison Heights — The 54-store chain negotiated removal of a Flock surveillance camera aimed at its parking lot after a public standoff with the city.",
+          "source": "cann.dev",
           "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
         },
         {
-          "text": "Tax revenue lags, but repeal push gains real allies",
-          "source": "The 'Gander",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-090826/"
+          "text": "Michigan sales holding near $260M a month — July revenue reached $260.6 million, keeping the state the nation's No. 2 cannabis market despite the new tax pressure.",
+          "source": "Headset",
+          "url": "https://www.headset.io/markets/michigan"
+        },
+        {
+          "text": "Repeal bill and trial set up a tax relief path — A GOP-backed bill (HB 6224) to kill the 24% wholesale tax is alive as the industry's first constitutional lawsuit heads to trial this month.",
+          "source": "MJBizDaily / WWMT",
+          "url": "https://wwmt.com/news/state/michigan-marijuana-industry-lawsuit-stop-wholesale-tax-legal-court-pot-weed-economy-business-wwmt"
         }
       ],
       "national": [
         {
-          "text": "Compass Pathways psilocybin drug on track for Q4 filing",
-          "source": "Compass Pathways / STAT",
-          "url": "https://ir.compasspathways.com/News--Events-/news/news-details/2026/Compass-Pathways-Announces-Six-Month-Data-from-Second-Phase-3-Trial-Confirming-Rapid-and-Durable-Profile/default.aspx"
-        },
-        {
-          "text": "Federal court upholds medical marijuana's Schedule III status",
+          "text": "Federal court protects marijuana's Schedule III move — A D.C. Circuit panel rejected a bid to undo April's medical marijuana rescheduling, keeping the reform locked in.",
           "source": "Cannabis Business Times",
           "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order"
         },
         {
-          "text": "Hemp THC crackdown pushed back, buying industry more time",
-          "source": "Marijuana Moment",
-          "url": "https://www.marijuanamoment.net/deas-list-of-cannabis-questions-for-businesses-seeking-rescheduling-protections-newsletter-september-1-2026"
+          "text": "Compass Pathways staffs up for likely psilocybin approval — The company tapped training firm Fluence to build nationwide clinician education ahead of an expected FDA decision on COMP360.",
+          "source": "Mind Medicine Law",
+          "url": "https://mindmedicinelaw.com/briefing/compass-pathways-taps-fluence-for-comp360-psilocybin-provider-training-20260910-40734"
         },
         {
-          "text": "Vireo and Grown Rogue keep consolidating state markets",
-          "source": "Cann.dev",
-          "url": "https://www.cann.dev/cannabis-ma-august-2026-curaleaf-vireo-consolidation/"
+          "text": "DEA pushes rescheduling rollout forward — Regulators sent a detailed 26-question survey to Colorado medical cannabis firms seeking federal registration under the new Schedule III framework.",
+          "source": "Marijuana Moment / GrowCola",
+          "url": "https://growcola.com/deas-list-of-cannabis-questions-for-businesses-seeking-rescheduling-protections-newsletter-september-1-2026/"
         },
         {
-          "text": "U.S. legal cannabis sales near $20 billion for the year",
-          "source": "The Marijuana Herald",
-          "url": "https://themarijuanaherald.com/2026/09/u-s-legal-marijuana-sales-reach-2-55-billion-in-august-bringing-2026-total-to-nearly-20-billion/"
+          "text": "Consolidation dollars flow into cannabis retail — A new cannabis-focused equity firm bought 15 Colorado dispensaries in a deal watchers call the start of a bigger industry shakeout.",
+          "source": "MJBizDaily",
+          "url": "https://mjbizdaily.com/news/colorado-cannabis-retail-chain-purchase-signals-ma-shift/614866/"
+        },
+        {
+          "text": "Retroactive tax refunds now on the table — The federal rescheduling order directs Treasury to consider clawing back years of 280E taxes paid by state-licensed medical cannabis businesses.",
+          "source": "Cannabis Business Times",
+          "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order"
         }
       ]
     }
