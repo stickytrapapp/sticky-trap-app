@@ -1,7 +1,7 @@
 // TheStickyTr_ APP — service worker (installable PWA)
 // Network-first for the app shell + data so updates always show; cache is only
 // an offline fallback. Bump CACHE to force old caches out on activate.
-const CACHE = 'st-app-v41';   // music background + lock screen + skip + now playing 2026-09-17; WMP opener 2026-09-17; app-10 removed 2026-09-17; promo strip card + configure presets 2026-09-17   // Play QR removed + promo strip = October 2026-09-17;   // Full Speed app-14 2026-09-17; music fence 40% 2026-09-17; Stay Trapping Riff app-11 2026-09-17; Gold on Black at app-7 2026-09-17; music window + tap order 2026-09-17; Stay Trapping dubs x2 2026-09-16; music v3 2026-09-15; black icons 2026-09-10 (icons are cache-first: bump whenever they change)
+const CACHE = 'st-app-v42';   // music background + lock screen + skip + now playing 2026-09-17; WMP opener 2026-09-17; app-10 removed 2026-09-17; promo strip card + configure presets 2026-09-17   // Play QR removed + promo strip = October 2026-09-17;   // Full Speed app-14 2026-09-17; music fence 40% 2026-09-17; Stay Trapping Riff app-11 2026-09-17; Gold on Black at app-7 2026-09-17; music window + tap order 2026-09-17; Stay Trapping dubs x2 2026-09-16; music v3 2026-09-15; black icons 2026-09-10 (icons are cache-first: bump whenever they change)
 const STATIC = ['./manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', (e) => {
