@@ -206,9 +206,9 @@ var D={"products":[{"name":"3\" Slap","slug":"3-slap","section":"Slaps","size":"
     $('preview').innerHTML='<svg viewBox="0 0 200 200" aria-hidden="true">'+defs.replace('__CLIP__',clip)+body+artEl+tex+'</svg>'; }
 
   // price
-  function dealFor(q){ var today=new Date().toISOString().slice(0,10); for(var i=0;i<deals.length;i++){ var d=deals[i]; if(d.product!==p.name) continue; if(d.material&&d.material!==cfg.mat) continue; if(d.finish&&d.finish!==cfg.fin) continue; if(d.until&&d.until<today) continue; if(q>=(d.fromQty||0)) return d; } return null; }
+  function dealFor(q){ var today=new Date().toISOString().slice(0,10); for(var i=0;i<deals.length;i++){ var d=deals[i]; if(d.product!==p.name) continue; if(d.material&&d.material!==cfg.mat) continue; if(d.finish&&d.finish!==cfg.fin) continue; if(d.from&&d.from>today) continue; if(d.until&&d.until<today) continue; if(q>=(d.fromQty||0)) return d; } return null; }
   function listPrice(){ var row=p.prices[cfg.mat][cfg.fin]; if(!row) return null; return (cfg.hb&&row[1]!==null)?row[1]:row[0]; }
-  function priceAt(q){ var pr=listPrice(); if(pr===null) return null; var u=unitAt(pr,q); var d=dealFor(q); if(d){ u=Math.ceil(u*(1-d.off)*100)/100; } return {unit:u, total:u*q, deal:d, list:pr}; }
+  function priceAt(q){ var pr=listPrice(); if(pr===null) return null; var u=unitAt(pr,q); var d=dealFor(q); if(d){ u=Math.min(u, Math.ceil(pr*(1-d.off)*100)/100); }   /* 2026-09-17: better of band or deal, never stacked */ return {unit:u, total:u*q, deal:d, list:pr}; }
   function update(){ var r=priceAt(qty); if(!r){ $('unit').textContent='--'; return; }
     $('unit').textContent=money(r.unit); $('tot').innerHTML=fmt(qty)+' &times; '+money(r.unit)+' = <b>'+money(r.total)+'</b> &middot; '+esc(cfg.mat)+(cfg.hb?' + HoloBrite':'')+' &middot; '+esc(FN[cfg.fin]||cfg.fin);
     var nb=nextBreak(qty); if(nb){ var n=priceAt(nb.target); $('nudge').classList.remove('hidden'); $('nudge').innerHTML='Add <b>'+fmt(nb.add)+'</b> more: at '+fmt(nb.target)+' it&rsquo;s <b>'+money(n.unit)+'</b> each ('+nb.pct+'% off, '+money(n.total)+' total)'; } else { $('nudge').classList.add('hidden'); }

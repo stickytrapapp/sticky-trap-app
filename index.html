@@ -2305,20 +2305,21 @@
   function ymd(d){ return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
   function isFirstWeekend(d){ var dow=d.getDay(), dm=d.getDate(); return (dow===6&&dm<=7)||(dow===0&&dm>=2&&dm<=8); }
   function activePromos(P){ var d=new Date(), out=[], t=ymd(d);
-    (P.events||[]).forEach(function(e){ if(e.surfaces&&e.surfaces.indexOf('app')<0) return; if(e.from&&t<e.from) return; if(e.to&&t>e.to) return; out.push({type:'event',id:e.id,k:'Happening',title:e.title,text:e.text,cta:e.cta,pri:3}); });
+    (P.events||[]).forEach(function(e){ if(e.surfaces&&e.surfaces.indexOf('app')<0) return; if(e.from&&t<e.from) return; if(e.to&&t>e.to) return; out.push({type:'event',id:e.id,k:e.kicker||'Happening',title:e.title,text:e.text,cta:e.cta,pri:3,sticky:!!e.sticky});   /* 2026-09-17: sticky = a month promo the X only hides for the week */ });
     if(P.double_points){ var r=P.double_points, on=r.rule==='first_weekend'?isFirstWeekend(d):(r.rule==='weekend'?(d.getDay()===0||d.getDay()===6):false);
       if(on) out.push({type:'double',id:'double-'+t.slice(0,7),k:'In the game today',title:r.label||'Double points',text:r.text||'',cta:{label:'Play',tab:'play'},pri:2}); }
     if(P.featured&&P.featured.items&&P.featured.items.length){ var wk=Math.floor(Date.now()/864e5/7), it=P.featured.items[wk%P.featured.items.length];
       out.push({type:'featured',id:'feat-'+wk,k:'This week',title:it.product,text:it.pitch,cta:it.cta||{label:'See the menu',tab:'menu'},pri:1}); }
     return out.sort(function(a,b){return b.pri-a.pri;}); }
   var cur=null;
-  function show(list){ cur=null; for(var i=0;i<list.length;i++){ if(!gone[list[i].id]){ cur=list[i]; break; } }
+  function wk(){ return Math.floor(Date.now()/864e5/7); }
+  function show(list){ cur=null; for(var i=0;i<list.length;i++){ var it=list[i], key=it.sticky?(it.id+'-w'+wk()):it.id; if(!gone[key]){ cur=it; cur._key=key; break; } }
     if(!cur){ strip.hidden=true; return; }
     K.textContent=cur.k; T.textContent=cur.title; D.textContent=cur.text||''; C.textContent=(cur.cta&&cur.cta.label)||'See more'; strip.hidden=false;
     try{window.track&&window.track('promo_view',cur.id);}catch(e){} }
   C.addEventListener('click',function(){ if(!cur) return; try{window.track&&window.track('promo_cta',cur.id);}catch(e){}
     if(cur.cta&&cur.cta.url){ window.open(cur.cta.url,'_blank','noopener'); } else if(cur.cta&&cur.cta.tab&&window.go){ go(cur.cta.tab); } });
-  X.addEventListener('click',function(){ if(!cur) return; gone[cur.id]=1; try{localStorage.setItem('st_promo_x',JSON.stringify(gone));}catch(e){} strip.hidden=true; });
+  X.addEventListener('click',function(){ if(!cur) return; gone[cur._key||cur.id]=1; try{localStorage.setItem('st_promo_x',JSON.stringify(gone));}catch(e){} strip.hidden=true; });
   fetch('data/promos.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json();}).then(function(P){ show(activePromos(P)); }).catch(function(){});
 })();
 </script>

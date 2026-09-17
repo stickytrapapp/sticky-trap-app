@@ -2,6 +2,40 @@
  "v": 1,
  "entries": [
   {
+   "id": "deal",
+   "groups": [
+    [
+     "deal",
+     "deals",
+     "promo",
+     "promotion",
+     "special",
+     "sale",
+     "discount",
+     "coupon",
+     "offer",
+     "october"
+    ]
+   ],
+   "deny": [
+    "price match",
+    "match",
+    "wholesale",
+    "account",
+    "status",
+    "my order"
+   ],
+   "a": "October only (Oct 1-31): o2 Standard cart wraps with Spot Gloss UV at the Flat price - white $0.45, holo $0.55 - at 250 or more when you order in the app (Menu > o2 Standard > Spot Gloss > build it). Phone and email orders are list price. Not stackable with the 1,000+ volume break.",
+   "offer": {
+    "label": "Build my o2 order",
+    "go": {
+     "type": "open_product",
+     "product": "o2 Standard"
+    }
+   },
+   "max_words": 14
+  },
+  {
    "id": "hours",
    "groups": [
     [
