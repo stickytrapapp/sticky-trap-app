@@ -2165,7 +2165,7 @@
 <script>
 /* ---- Music (v3, 2026-09-15; +Stay Trapping dubs x2 2026-09-16, riff instrumental 9/17): thirteen Suno tracks behind the top-bar note button. OFF by default and stays off until the person chooses;
         one quiet "Music?" nudge after 30 s, once. Button cycles Off -> Full -> Beats only (9/17). Rule-based sequencing (vocal/beat alternate,
-        no same-family B-sides back to back, sliding no-repeat window since 9/17), random vocal opener, per-track trim (vocals a notch under beats),
+        no same-family B-sides back to back, full cycle + no song within the last 40% of the pool since 9/17), random vocal opener, per-track trim (vocals a notch under beats),
         crossfades sized by what comes next, ducks under the chat panel, remembers position, pauses when hidden or when a game link is tapped. ---- */
 (function(){
   var b=document.getElementById('musicb'); if(!b||b.hidden) return;
@@ -2194,16 +2194,16 @@
   // Shane 2026-09-16 ('play each song at random before replaying a song' - it repeated the same 3): a SHUFFLE CYCLE that survives reloads.
   // `played` = srcs heard in the current cycle, saved in localStorage st_music_played; a song cannot come back until every song in the
   // pool has played once, then the cycle starts over (never the same song twice in a row). Picks still alternate vocal/beat and avoid
-  // the same family back to back when they can. A brand-new cycle opens on Trap House Open (Shane 9/15).
+  // the same family back to back when they can. Trap House Open opens the very first start only (9/17; was every fresh cycle).
   function loadPlayed(){ try{ var v=JSON.parse(localStorage.getItem('st_music_played')||'[]'); if(Array.isArray(v)) return v; }catch(e){} return []; }
   function savePlayed(){ try{ localStorage.setItem('st_music_played',JSON.stringify(played.slice(-40))); }catch(e){} }
   // 2026-09-17 (Shane: 'they still repeat' after an hour): the cycle stays (every song once before any comes back) AND no song within the
-  // last K plays at any time (K = pool/3: Full 12 -> 4, Beats 6 -> 2), so a song that closed one cycle cannot open the next. `hist` = last 40 plays in order (st_music_hist); `played` = this cycle's songs (st_music_played).
+  // last K plays at any time (K = 40% of the pool: Full 13 -> 5, Beats 7 -> 3), so a song that closed one cycle cannot open the next. `hist` = last 40 plays in order (st_music_hist); `played` = this cycle's songs (st_music_played).
   var hist=loadHist();
   function loadHist(){ try{ var v=JSON.parse(localStorage.getItem('st_music_hist')||'[]'); if(Array.isArray(v)) return v; }catch(e){} return []; }
   function mark(src){ if(played.indexOf(src)<0) played.push(src); if(hist[hist.length-1]!==src) hist.push(src); hist=hist.slice(-40); savePlayed();
     try{ localStorage.setItem('st_music_hist',JSON.stringify(hist)); }catch(e){} }
-  function unplayed(prev){ var P=pool(), K=Math.max(1,Math.floor(P.length/3));
+  function unplayed(prev){ var P=pool(), K=Math.max(1,Math.round(P.length*0.4));   // Full 13 -> 5, Beats 7 -> 3
     var recent=hist.filter(function(s){ for(var i=0;i<P.length;i++){ if(P[i].src===s) return true; } return false; }).slice(-K);
     var ok=function(t){ return recent.indexOf(t.src)<0 && (!prev||t.src!==prev.src); };   // never within the last K plays, never the same song twice running
     var left=P.filter(function(t){ return played.indexOf(t.src)<0 && ok(t); });
