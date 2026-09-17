@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 49;   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 51;   // v51 9/17 bot editor: the hourly stall email (24 h proof / 72 h press) is OFF by default - the Daily Pulse 'Jobs today' email is the one stall list; set NUDGE_STALE=on to bring it back. v50 9/17 New Orders Intake (Shane): 'Quote sent' -> 'Invoice sent' (the invoice is the quote)   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -939,7 +939,7 @@ function noncompeteIn_(b) {
 var STAGE_ORDER = ['received', 'quoted', 'deposit', 'proofing', 'proof_sent', 'approved', 'printing', 'ready', 'shipped', 'complete'];
 var STAGES = {
   received:   { label: 'Request received',          msg: 'We have your request and will follow up with a quote shortly.' },
-  quoted:     { label: 'Quote sent',                msg: 'Your quote / invoice is on its way. Payment locks in your spot in the queue.' },
+  quoted:     { label: 'Invoice sent',              msg: 'Your invoice is on its way. Payment locks in your spot in the queue.' },
   deposit:    { label: 'Payment received',          msg: 'Thank you - your order is in the queue and art is next.' },   // v45 (Shane 2026-09-15): print orders are paid in full, so 'payment', not 'deposit'
   proofing:   { label: 'Art & proof in progress',   msg: 'We are working on your proof now.' },
   proof_sent: { label: 'Proof sent - approval needed', msg: 'Your proof is ready. Please review it and tap Approve so we can print. Proof before we print - no surprises.' },
@@ -1296,7 +1296,8 @@ function ordersList_(p) {
 function notifyTo_() { var extra = String(PROP.getProperty('NUDGE_TO') || '').split(',').map(function (x) { return x.trim(); }).filter(Boolean); return [SHOP_EMAIL].concat(extra).join(','); }   // script property NUDGE_TO = extra addresses (Erin, ...)
 function nudgeStale_() {
   var sh = ordersSheet_(), rows = sh.getDataRange().getValues(), now = Date.now(), stale = [];
-  for (var i = 1; i < rows.length; i++) { var o = rowObj_(rows[i]), h = NUDGE_HOURS[o.stage]; if (!h || !o.stage_ts) continue;
+  var stallOn = String(PROP.getProperty('NUDGE_STALE') || 'off') === 'on';   // v51: off - the Daily Pulse (7 AM, 'Jobs today' email) lists CHASE / STUCK / MONEY by whose move; two stall lists were noise
+  for (var i = 1; stallOn && i < rows.length; i++) { var o = rowObj_(rows[i]), h = NUDGE_HOURS[o.stage]; if (!h || !o.stage_ts) continue;
     var age = (now - new Date(o.stage_ts).getTime()) / 36e5, last = o.nudged_ts ? (now - new Date(o.nudged_ts).getTime()) / 36e5 : 999;
     if (age > h && last > 24) { stale.push(o.code + ' - ' + (o.company || o.name) + ' - ' + STAGES[o.stage].label + ' for ' + Math.round(age) + ' h' + (o.due ? ' (due ' + o.due + ')' : '')); sh.getRange(i + 1, ORDER_COLS.indexOf('nudged_ts') + 1).setValue(new Date()); } }
   // v31: card holds last 7 days - at 6 days, before approval, ask the customer to re-authorize (once) and tell the shop the proof is overdue
