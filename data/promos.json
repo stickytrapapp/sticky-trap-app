@@ -2,73 +2,8 @@
   "updated": "2026-09-17",
   "_how": "Promo cadence for the app, the game and the chatbot. 'featured' rotates one item per week (week index since epoch, so every surface agrees). 'double_points' fires on the rule below and doubles the game's daily earn. 'events' are one-offs with from/to dates (inclusive, local date) and an optional 'surfaces' list: app, game (default both). Edit, push, done - nothing to redeploy. An event with a 'hero' block {image, alt, when, venue, date (YYYY-MM-DD), tickets, ribbon} becomes the Social tab's ticket card + the Industry ribbon from now until its date passes (independent of from/to).",
   "featured": {
-    "weekly": true,
-    "items": [
-      {
-        "product": "3\" Slap",
-        "pitch": "Square or contour cut, same price. From $0.45 in white vinyl, holographic from $0.75.",
-        "cta": {
-          "label": "See slaps",
-          "tab": "menu"
-        }
-      },
-      {
-        "product": "Miron 250 ml",
-        "pitch": "Jar labels that actually stay put. White from $1.90, holographic from $2.90, HoloBrite available.",
-        "cta": {
-          "label": "See jar labels",
-          "tab": "menu"
-        }
-      },
-      {
-        "product": "Tip Band",
-        "pitch": "Pre-roll tip bands and tamper tabs from $0.25. Holographic from $0.30.",
-        "cta": {
-          "label": "See tip bands",
-          "tab": "menu"
-        }
-      },
-      {
-        "product": "4\" Slap",
-        "pitch": "The big one. From $0.75 white, $1.30 holographic, Pro emboss $1.60 / $2.00.",
-        "cta": {
-          "label": "See slaps",
-          "tab": "menu"
-        }
-      },
-      {
-        "product": "Pop Top",
-        "pitch": "Pop-top wraps from $0.75. Add Pro emboss for a label you can feel.",
-        "cta": {
-          "label": "See wraps",
-          "tab": "menu"
-        }
-      },
-      {
-        "product": "o2 Standard",
-        "pitch": "Cart wraps from $0.45 - the cheapest way onto a shelf. Holographic from $0.55.",
-        "cta": {
-          "label": "See wraps",
-          "tab": "menu"
-        }
-      },
-      {
-        "product": "Tube 95 mm",
-        "pitch": "Pre-roll tube wraps from $1.00, holographic from $1.50.",
-        "cta": {
-          "label": "See wraps",
-          "tab": "menu"
-        }
-      },
-      {
-        "product": "4x5 Deli",
-        "pitch": "Deli labels from $1.15. Pro emboss at $4.40 is the showpiece.",
-        "cta": {
-          "label": "See deli labels",
-          "tab": "menu"
-        }
-      }
-    ]
+    "weekly": false,
+    "items": []
   },
   "double_points": {
     "rule": "first_weekend",
@@ -78,11 +13,11 @@
   "events": [
     {
       "id": "oct-o2-2026",
-      "from": "2026-10-01",
+      "from": "2026-09-17",
       "to": "2026-10-31",
-      "kicker": "October only",
+      "kicker": "Starts Oct 1",
       "title": "October o2: Spot Gloss for the Flat price",
-      "text": "o2 Standard cart wraps with Spot Gloss UV - white $0.45, holo $0.55 - 250 and up, app orders only, through Oct 31.",
+      "text": "Oct 1-31: o2 Standard cart wraps with Spot Gloss UV at the Flat price - white $0.45, holo $0.55 - 250 and up, app orders only.",
       "cta": {
         "label": "Build my o2 order",
         "url": "https://thestickytrap.app/configure/?p=o2-standard"
@@ -92,7 +27,8 @@
         "kicker": "OCT DEAL",
         "text": "o2 gloss · 45¢",
         "url": "https://thestickytrap.app/configure/?p=o2-standard"
-      }
+      },
+      "_note": "kicker flips to \"October only\" on Oct 1 (bot editor); the DEAL price itself starts Oct 1 via deals[].from"
     },
     {
       "id": "resin-reception-2026",
@@ -157,5 +93,72 @@
       "until": "2026-10-31"
     }
   ],
-  "_pill_how": "Promo pill (2026-09-17): an event may carry 'pill' {kicker, text, url} - the floating button on every commerce page shows the first active event's pill (from..to), previews it as 'NEXT · <from>: <text>' in the 7 days before 'from', and is not rendered when no event has a pill. Spec: Downloads\\Sticky Bot\\handoffs\\promo-pill.md."
+  "_pill_how": "Promo pill (2026-09-17): an event may carry 'pill' {kicker, text, url} - the floating button on every commerce page shows the first active event's pill (from..to), previews it as 'NEXT · <from>: <text>' in the 7 days before 'from', and is not rendered when no event has a pill. Spec: Downloads\\Sticky Bot\\handoffs\\promo-pill.md.",
+  "_featured_retired": "2026-09-17 (Shane: \"the app still shows the promo as a deli sticker\"): the weekly rotating product pitch is off - the strip carries the promo of the month only (Promo Playbook). Items kept below for reference; put them back under featured.items to restore.",
+  "featured_items_retired": [
+    {
+      "product": "3\" Slap",
+      "pitch": "Square or contour cut, same price. From $0.45 in white vinyl, holographic from $0.75.",
+      "cta": {
+        "label": "See slaps",
+        "tab": "menu"
+      }
+    },
+    {
+      "product": "Miron 250 ml",
+      "pitch": "Jar labels that actually stay put. White from $1.90, holographic from $2.90, HoloBrite available.",
+      "cta": {
+        "label": "See jar labels",
+        "tab": "menu"
+      }
+    },
+    {
+      "product": "Tip Band",
+      "pitch": "Pre-roll tip bands and tamper tabs from $0.25. Holographic from $0.30.",
+      "cta": {
+        "label": "See tip bands",
+        "tab": "menu"
+      }
+    },
+    {
+      "product": "4\" Slap",
+      "pitch": "The big one. From $0.75 white, $1.30 holographic, Pro emboss $1.60 / $2.00.",
+      "cta": {
+        "label": "See slaps",
+        "tab": "menu"
+      }
+    },
+    {
+      "product": "Pop Top",
+      "pitch": "Pop-top wraps from $0.75. Add Pro emboss for a label you can feel.",
+      "cta": {
+        "label": "See wraps",
+        "tab": "menu"
+      }
+    },
+    {
+      "product": "o2 Standard",
+      "pitch": "Cart wraps from $0.45 - the cheapest way onto a shelf. Holographic from $0.55.",
+      "cta": {
+        "label": "See wraps",
+        "tab": "menu"
+      }
+    },
+    {
+      "product": "Tube 95 mm",
+      "pitch": "Pre-roll tube wraps from $1.00, holographic from $1.50.",
+      "cta": {
+        "label": "See wraps",
+        "tab": "menu"
+      }
+    },
+    {
+      "product": "4x5 Deli",
+      "pitch": "Deli labels from $1.15. Pro emboss at $4.40 is the showpiece.",
+      "cta": {
+        "label": "See deli labels",
+        "tab": "menu"
+      }
+    }
+  ]
 }
