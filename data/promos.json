@@ -20,13 +20,13 @@
       "text": "White 45¢ · holo 55¢ · 250+ · app orders · Oct 1–31",
       "cta": {
         "label": "Build it",
-        "url": "https://thestickytrap.app/configure/?p=o2-standard&mats=White%20Vinyl,Holographic&m=White%20Vinyl&f=Spot%20Gloss%20UV&q=250"
+        "url": "https://thestickytrap.app/configure/?p=o2-standard&mats=White%20Vinyl,Holographic&fins=Spot%20Gloss%20UV&m=White%20Vinyl&f=Spot%20Gloss%20UV&q=250&minq=250"
       },
       "sticky": true,
       "pill": {
         "kicker": "OCT DEAL",
         "text": "o2 gloss · 45¢",
-        "url": "https://thestickytrap.app/configure/?p=o2-standard&mats=White%20Vinyl,Holographic&m=White%20Vinyl&f=Spot%20Gloss%20UV&q=250"
+        "url": "https://thestickytrap.app/configure/?p=o2-standard&mats=White%20Vinyl,Holographic&fins=Spot%20Gloss%20UV&m=White%20Vinyl&f=Spot%20Gloss%20UV&q=250&minq=250"
       },
       "_note": "kicker flips to \"October only\" on Oct 1 (bot editor); the DEAL price itself starts Oct 1 via deals[].from"
     },
