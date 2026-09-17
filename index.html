@@ -2195,7 +2195,7 @@
   // Shane 2026-09-16 ('play each song at random before replaying a song' - it repeated the same 3): a SHUFFLE CYCLE that survives reloads.
   // `played` = srcs heard in the current cycle, saved in localStorage st_music_played; a song cannot come back until every song in the
   // pool has played once, then the cycle starts over (never the same song twice in a row). Picks still alternate vocal/beat and avoid
-  // the same family back to back when they can. Trap House Open opens the very first start only (9/17; was every fresh cycle).
+  // the same family back to back when they can. We Make Pros opens the very first start only (Shane 9/17; Trap House Open before that).
   function loadPlayed(){ try{ var v=JSON.parse(localStorage.getItem('st_music_played')||'[]'); if(Array.isArray(v)) return v; }catch(e){} return []; }
   function savePlayed(){ try{ localStorage.setItem('st_music_played',JSON.stringify(played.slice(-40))); }catch(e){} }
   // 2026-09-17 (Shane: 'they still repeat' after an hour): the cycle stays (every song once before any comes back) AND no song within the
@@ -2218,7 +2218,7 @@
     return c[Math.floor(Math.random()*c.length)]; }
   function opener(){
     var P=pool(); if(!P.length) return null; var c=unplayed(null);
-    var th=c.filter(function(t){ return t.fam==='th'&&t.kind==='vocal'; })[0]; if(th&&!hist.length) return th;   // first ever start -> Trap House Open (was every fresh cycle; 9/17 variety)
+    var wmp=c.filter(function(t){ return t.fam==='wmp'&&t.kind==='vocal'; })[0]; if(wmp&&!hist.length) return wmp;   // first ever start -> We Make Pros (Shane 9/17; was Trap House Open)
     var v=c.filter(function(t){ return t.kind==='vocal'; }); var pool2=v.length?v:c; return pool2[Math.floor(Math.random()*pool2.length)]; }
   function xfFor(nxt,prev){ if(nxt&&nxt.xfIn) return nxt.xfIn; if(prev&&prev.kind==='beat'&&nxt&&nxt.kind==='vocal') return 4; return 2.5; }
   function mk(){ var x=new Audio(); x.loop=false; x.preload='none'; x.setAttribute('playsinline','');
