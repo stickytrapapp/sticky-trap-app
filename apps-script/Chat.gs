@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 53;   // v53 9/17 October promo: deals honor 'from', and a deal price is the better of band or deal (never stacked).   // v52 9/17: 'NUDGED <customer>' replies to the Jobs today email are picked up hourly (nudgedReplies_) so the reorder list clears itself.   // v51 9/17 bot editor: the hourly stall email (24 h proof / 72 h press) is OFF by default - the Daily Pulse 'Jobs today' email is the one stall list; set NUDGE_STALE=on to bring it back. v50 9/17 New Orders Intake (Shane): 'Quote sent' -> 'Invoice sent' (the invoice is the quote)   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 54;   // v54 9/17 Shane: 'no deposits - art assessed free, agreed orders paid in full' - wording; Payment received email says so.   // v53 9/17 October promo: deals honor 'from', and a deal price is the better of band or deal (never stacked).   // v52 9/17: 'NUDGED <customer>' replies to the Jobs today email are picked up hourly (nudgedReplies_) so the reorder list clears itself.   // v51 9/17 bot editor: the hourly stall email (24 h proof / 72 h press) is OFF by default - the Daily Pulse 'Jobs today' email is the one stall list; set NUDGE_STALE=on to bring it back. v50 9/17 New Orders Intake (Shane): 'Quote sent' -> 'Invoice sent' (the invoice is the quote)   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -940,7 +940,7 @@ var STAGE_ORDER = ['received', 'quoted', 'deposit', 'proofing', 'proof_sent', 'a
 var STAGES = {
   received:   { label: 'Request received',          msg: 'We have your request and will follow up with a quote shortly.' },
   quoted:     { label: 'Invoice sent',              msg: 'Your invoice is on its way. Payment locks in your spot in the queue.' },
-  deposit:    { label: 'Payment received',          msg: 'Thank you - your order is in the queue and art is next.' },   // v45 (Shane 2026-09-15): print orders are paid in full, so 'payment', not 'deposit'
+  deposit:    { label: 'Payment received',          msg: 'Paid in full - thank you. Your order is in the queue and art is next.' },   // v45 (Shane 2026-09-15): print orders are paid in full, so 'payment', not 'deposit'
   proofing:   { label: 'Art & proof in progress',   msg: 'We are working on your proof now.' },
   proof_sent: { label: 'Proof sent - approval needed', msg: 'Your proof is ready. Please review it and tap Approve so we can print. Proof before we print - no surprises.' },
   approved:   { label: 'Proof approved',            msg: 'Approved - your order is queued for print.' },
