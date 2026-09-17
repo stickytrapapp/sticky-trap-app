@@ -95,7 +95,7 @@
   function post(body){ body.pin=PIN; return fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)}).then(function(r){return r.json();}); }
   function label(k){ var s=STAGES.filter(function(x){return x[0]===k;})[0]; return s?s[1]:k; }
   function age(ts){ var m=Math.max(0,(Date.now()-new Date(ts).getTime())/6e4), h=m/60; return m<1?'just now':m<60?Math.round(m)+' min':h<48?Math.round(h)+'h':Math.round(h/24)+'d'; }
-  STAGES.forEach(function(s){ var o=document.createElement('option'); o.value=s[0]; o.textContent=s[1]; $('nStage').appendChild(o); }); $('nStage').value='deposit';
+  STAGES.forEach(function(s){ var o=document.createElement('option'); o.value=s[0]; o.textContent=s[1]; $('nStage').appendChild(o); }); $('nStage').value='received';
   try{ PIN=localStorage.getItem('st_console_pin')||''; }catch(e){}
   function open(){ $('gate').classList.add('hidden'); $('main').classList.remove('hidden'); load(); }
   $('go').addEventListener('click',function(){ PIN=$('pin').value.trim(); if(!PIN) return; try{localStorage.setItem('st_console_pin',PIN);}catch(e){} open(); });
