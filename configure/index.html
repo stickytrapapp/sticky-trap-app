@@ -129,11 +129,14 @@ var D={"products":[{"name":"3\" Slap","slug":"3-slap","section":"Slaps","size":"
   // material and texture, ?q= presets the quantity. All optional; a plain ?p= link behaves as before.
   var Uq=new URLSearchParams(location.search), onlyMats=(Uq.get('mats')||'').split(',').map(function(x){return x.trim();}).filter(Boolean);
   if(onlyMats.length){ var keep=p.mats.filter(function(m){ return onlyMats.indexOf(m.key)>=0; }); if(keep.length) p.mats=keep; }
+  var onlyFins=(Uq.get('fins')||'').split(',').map(function(x){return x.trim();}).filter(Boolean);   // ?fins=Spot Gloss UV -> only that texture is offered
+  if(onlyFins.length){ var keepF=p.fins.filter(function(f){ return onlyFins.indexOf(f)>=0; }); if(keepF.length) p.fins=keepF; }
+  var MINQ=Math.max(D.minq, parseInt(Uq.get('minq')||'',10)||0);   // ?minq=250 -> the quantity cannot go below it (promo floor)
   var cfg={mat:p.mats[0].key, fin:p.fins[0], hb:false}, qty=50, art=null, thumb=null, preflight=null;
   (function(){ var m=Uq.get('m'), f=Uq.get('f'), q=parseInt(Uq.get('q')||'',10);
     if(m&&p.mats.some(function(x){return x.key===m;})) cfg.mat=m;
     if(f&&p.fins.indexOf(f)>=0&&p.prices[cfg.mat]&&p.prices[cfg.mat][f]) cfg.fin=f;
-    if(q>0) qty=Math.min(D.maxq,Math.max(D.minq,Math.round(q/D.step)*D.step)); })();
+    if(q>0) qty=Math.min(D.maxq,Math.max(D.minq,Math.round(q/D.step)*D.step)); qty=Math.max(qty,MINQ); })();
   var deals=[]; fetch('/data/promos.json?'+Date.now()).then(function(r){return r.json();}).then(function(j){ deals=(j&&j.deals)||[]; update(); }).catch(function(){});
 
   // material
@@ -146,21 +149,21 @@ var D={"products":[{"name":"3\" Slap","slug":"3-slap","section":"Slaps","size":"
   var FN={'Flat':'Flat','Spot Gloss UV':'Spot Gloss','Standard Embossing':'Standard','Pro':'Pro'}, FD={'Flat':'full-color print, no texture','Spot Gloss UV':'1 layer, glossy raised accent','Standard Embossing':'2 layers, real texture','Pro':'3 layers, full dimensional emboss'};
   function drawFins(){ var fins=p.fins.filter(function(f){ return !!p.prices[cfg.mat][f]; });
     $('fins').innerHTML=fins.map(function(f){ var l=D.lvl[f]; return '<button type="button" class="opt'+(f===cfg.fin?' on':'')+'" data-f="'+esc(f)+'">'+(l?'<span class="lv">'+l+'</span>':'')+esc(FN[f]||f)+'<small>'+esc(FD[f]||'')+'</small></button>'; }).join('')
-      +(p.shape!=='band'?'<a class="opt quote" href="sms:+17344603845?&body='+encodeURIComponent('Hi, I want a deeper emboss (4+ layers) on '+p.name)+'" style="text-decoration:none"><span class="lv">4+</span>Deeper<small>custom quote</small></a>':''); }
+      +(p.shape!=='band'&&!onlyFins.length?'<a class="opt quote" href="sms:+17344603845?&body='+encodeURIComponent('Hi, I want a deeper emboss (4+ layers) on '+p.name)+'" style="text-decoration:none"><span class="lv">4+</span>Deeper<small>custom quote</small></a>':''); }
   drawFins();
   $('fins').addEventListener('click',function(e){ var o=e.target.closest('button.opt'); if(!o) return; cfg.fin=o.dataset.f; [].forEach.call($('fins').children,function(x){x.classList.toggle('on',x===o);}); hbRow(); update(); });
   hbRow();
 
   // quantity
-  var Q=$('qty'); Q.min=D.minq; Q.max=D.maxq; Q.step=D.step; Q.value=qty;
-  function clampQ(q){ q=Math.round((+q||D.minq)/D.step)*D.step; return Math.max(D.minq,Math.min(D.maxq,q)); }
+  var Q=$('qty'); Q.min=MINQ; Q.max=D.maxq; Q.step=D.step; Q.value=qty;
+  function clampQ(q){ q=Math.round((+q||MINQ)/D.step)*D.step; return Math.max(MINQ,Math.min(D.maxq,q)); }
   function setQ(q){ qty=clampQ(q); Q.value=qty; update(); }
-  Q.addEventListener('input',function(){ var v=+Q.value; if(v>=D.minq&&v<=D.maxq){ qty=clampQ(v); update(); } });
+  Q.addEventListener('input',function(){ var v=+Q.value; if(v>=MINQ&&v<=D.maxq){ qty=clampQ(v); update(); } });
   Q.addEventListener('blur',function(){ setQ(Q.value); });
   $('qminus').addEventListener('click',function(){ setQ(qty-D.step); }); $('qplus').addEventListener('click',function(){ setQ(qty+D.step); });
-  $('breaks').innerHTML=D.ladder.map(function(b){ return '<button type="button" data-q="'+b+'">'+fmt(b)+'</button>'; }).join('')+'<a href="sms:+17344603845?&body='+encodeURIComponent('Hi, I need more than 1,000 '+p.name)+'">Over 1k? Talk to us</a>';
+  $('breaks').innerHTML=D.ladder.filter(function(b){ return b>=MINQ; }).map(function(b){ return '<button type="button" data-q="'+b+'">'+fmt(b)+'</button>'; }).join('')+'<a href="sms:+17344603845?&body='+encodeURIComponent('Hi, I need more than 1,000 '+p.name)+'">Over 1k? Talk to us</a>';
   $('breaks').addEventListener('click',function(e){ var b=e.target.closest('button'); if(!b) return; setQ(+b.dataset.q); });
-  $('qhint').textContent='steps of '+D.step+', up to '+fmt(D.maxq);
+  $('qhint').textContent=(MINQ>D.minq?fmt(MINQ)+' minimum, ':'')+'steps of '+D.step+', up to '+fmt(D.maxq);
 
   // art + browser-side preflight (step 4 lite: dpi at size for raster, vector flagged for proof)
   var drop=$('drop'), file=$('file');
