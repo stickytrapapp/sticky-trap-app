@@ -149,11 +149,18 @@
         .then(function(j){ if(j&&j.ok){ load(); } else { cs.disabled=false; cs.textContent='Send change request'; alert('Could not send that - try again or text 734 460 3845.'); } })
         .catch(function(){ cs.disabled=false; cs.textContent='Send change request'; }); });
   }
-  function load(){
-    var o=q('o'), t=q('t'), e=q('e'); if(!o||(!t&&!e)) return lookupForm();
-    fetch(API+'?action=track&o='+encodeURIComponent(o)+'&t='+encodeURIComponent(t)+'&e='+encodeURIComponent(e)+'&_='+Date.now()).then(function(r){return r.json();})
-      .then(function(j){ if(j&&j.ok&&j.order) render(j.order); else lookupForm(j&&j.error==='not_found'?'We could not find that order. Check the code and the email, or text us.':'Could not load the order right now. Check the code and email, or text us.'); })
-      .catch(function(){ lookupForm('Could not reach the tracker right now. Try again in a moment.'); });
+  // 2026-09-18: the Google hop behind the API occasionally answers with an HTML error page or a 404 instead of JSON (seen: 35 s then a 404).
+  // A customer who scanned a QR must never sit on 'Loading' for that - retry up to 3 times (fresh URL each time) before showing the fallback.
+  function load(attempt){
+    attempt=attempt||1; var o=q('o'), t=q('t'), e=q('e'); if(!o||(!t&&!e)) return lookupForm();
+    if(attempt>1){ var el=document.querySelector('#app .err'); if(el) el.textContent='Still loading your order… (try '+attempt+' of 3)'; }
+    fetch(API+'?action=track&o='+encodeURIComponent(o)+'&t='+encodeURIComponent(t)+'&e='+encodeURIComponent(e)+'&_='+Date.now()+'&r='+attempt).then(function(r){return r.text();})
+      .then(function(txt){ var j=null; try{ j=JSON.parse(txt); }catch(x){}
+        if(j&&j.ok&&j.order) return render(j.order);
+        if(j&&j.error==='not_found') return lookupForm('We could not find that order. Check the code and the email, or text us.');
+        if(!j&&attempt<3) return setTimeout(function(){ load(attempt+1); },1500);   // HTML / empty answer = the hop hiccuped, not the order
+        lookupForm('Could not load the order right now. Check the code and email, or text us.'); })
+      .catch(function(){ if(attempt<3) return setTimeout(function(){ load(attempt+1); },1500); lookupForm('Could not reach the tracker right now. Try again in a moment.'); });
   }
   load();
 })();
