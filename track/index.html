@@ -34,6 +34,11 @@
   .btn{display:block;width:100%;margin-top:6px;background:var(--grad);color:#0A0A0F;border:0;border-radius:28px;padding:16px 20px;font:inherit;font-size:16px;font-weight:900;cursor:pointer;text-align:center;text-decoration:none}
   .btn[disabled]{opacity:.55}
   .note{color:var(--muted);font-size:12.5px;text-align:center;margin-top:12px;line-height:1.5}
+  .lookup .lk-h{font-size:18px;font-weight:800;color:#fff;margin-bottom:10px}.lookup .lk-or{color:var(--muted);font-size:12px;margin:16px 0 6px;letter-spacing:.08em;text-transform:uppercase}
+  .lookup input{width:100%;box-sizing:border-box;background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:14px;color:#fff;font:inherit;font-size:17px;margin-top:8px}
+  .lst{padding:18px 16px}.lst .lk-h{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-bottom:10px}
+  .lst-o{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px}.lst-t{display:flex;align-items:baseline;gap:10px}.lst-t b{font-size:16px;color:#fff}.lst-t span{color:var(--muted);font-size:13px}
+  .lst-s{margin-top:4px;font-weight:800;color:var(--cy)}.lst-i{margin-top:3px;color:var(--muted);font-size:13px}.lst .note{margin-top:14px;color:var(--muted);font-size:12.5px;line-height:1.45}
   .prefs{margin-top:16px;padding:12px 14px;background:var(--panel);border:1px solid var(--line);border-radius:14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
   .prefs .pl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:800;flex:1 1 100%}
   .prefs label{display:inline-flex;align-items:center;gap:7px;font-size:14px;color:#fff;cursor:pointer}.prefs label.off{opacity:.5}
@@ -76,11 +81,29 @@
   var app=document.getElementById('app');
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
   function when(ts){ if(!ts) return ''; var d=new Date(ts); return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' · '+d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}); }
+  // 2026-09-18 (Shane): phone first - 'type your number, see your orders'. Read-only: approving a proof or paying still needs the link
+  // from the email or the QR on the invoice. Order code + email stays as the second way in.
   function lookupForm(msg){
-    app.innerHTML='<div class="err lookup">'+esc(msg||'Enter your order code and the email on the order.')+
+    app.innerHTML='<div class="err lookup"><div class="lk-h">'+esc(msg||'Find your orders')+'</div>'+
+      '<input id="lp" type="tel" inputmode="tel" autocomplete="tel" placeholder="Your cell number" value="'+esc(q('p'))+'">'+
+      '<button class="btn" id="lpb" style="margin-top:10px">Show my orders</button>'+
+      '<div class="lk-or">or the order code + the email on it</div>'+
       '<input id="lo" placeholder="Order code, e.g. ST-K3F9 or 222-YO" value="'+esc(q('o'))+'"><input id="le" type="email" placeholder="Email on the order" value="'+esc(q('e'))+'">'+
-      '<button class="btn" id="lb" style="margin-top:12px">Find my order</button></div>';
+      '<button class="btn ghost" id="lb" style="margin-top:10px">Find that order</button></div>';
+    var lp=document.getElementById('lp');
+    lp.addEventListener('input',function(){ var d=lp.value.replace(/\D/g,'').slice(0,11); if(d.length===11&&d[0]==='1') d=d.slice(1); lp.value=d.length>6?d.slice(0,3)+'-'+d.slice(3,6)+'-'+d.slice(6):d.length>3?d.slice(0,3)+'-'+d.slice(3):d; });
+    document.getElementById('lpb').addEventListener('click',function(){ var d=lp.value.replace(/\D/g,''); if(d.length<10){ lp.focus(); return; } location.search='?p='+encodeURIComponent(d); });
+    lp.addEventListener('keydown',function(e){ if(e.key==='Enter') document.getElementById('lpb').click(); });
     document.getElementById('lb').addEventListener('click',function(){ var o=document.getElementById('lo').value.trim(), e=document.getElementById('le').value.trim(); if(!o||!e) return; location.search='?o='+encodeURIComponent(o)+'&e='+encodeURIComponent(e); });
+  }
+  function renderList(j){   // phone lookup: one card per order, read-only
+    var os=j.orders||[]; var h='<div class="lst"><div class="lk-h">Orders on &hellip;'+esc(j.phone_last4||'')+'</div>';
+    os.forEach(function(o){ h+='<div class="lst-o"><div class="lst-t"><b>'+esc(o.code)+'</b><span>'+esc(o.company||o.name||'')+'</span></div>'+
+      '<div class="lst-s">'+esc(o.label||'')+(o.due?' &middot; due '+esc(o.due):'')+'</div>'+(o.items?'<div class="lst-i">'+esc(o.items)+'</div>':'')+
+      (o.ship_tracking?'<div class="lst-i">'+esc(o.ship_carrier||'Tracking')+' '+esc(o.ship_tracking)+'</div>':'')+'</div>'; });
+    h+='<div class="note">To approve a proof or pay, use the link in your email or scan the QR on your invoice.</div>'+
+       '<button class="btn ghost" id="lagain" style="margin-top:12px">Look up another number</button></div>';
+    app.innerHTML=h; document.getElementById('lagain').addEventListener('click',function(){ location.search=''; });
   }
   function render(o){
     var cur=o.stage, idx=o.stages.map(function(s){return s.key;}).indexOf(cur);
@@ -152,7 +175,18 @@
   // 2026-09-18: the Google hop behind the API occasionally answers with an HTML error page or a 404 instead of JSON (seen: 35 s then a 404).
   // A customer who scanned a QR must never sit on 'Loading' for that - retry up to 3 times (fresh URL each time) before showing the fallback.
   function load(attempt){
-    attempt=attempt||1; var o=q('o'), t=q('t'), e=q('e'); if(!o||(!t&&!e)) return lookupForm();
+    attempt=attempt||1; var o=q('o'), t=q('t'), e=q('e'), p=q('p');
+    if(!o&&p){ if(attempt>1){ var el0=document.querySelector('#app .err'); if(el0) el0.textContent='Still looking… (try '+attempt+' of 3)'; }
+      fetch(API+'?action=track&p='+encodeURIComponent(p)+'&_='+Date.now()+'&r='+attempt).then(function(r){return r.text();})
+        .then(function(txt){ var j=null; try{ j=JSON.parse(txt); }catch(x){}
+          if(j&&j.ok&&j.orders) return renderList(j);
+          if(j&&j.error==='not_found') return lookupForm('No orders on that number yet. Try the order code + email, or text us.');
+          if(j&&j.error==='bad_phone') return lookupForm('That does not look like a phone number - ten digits, please.');
+          if(!j&&attempt<3) return setTimeout(function(){ load(attempt+1); },1500);
+          lookupForm('Could not look that up right now. Try again in a moment, or text us.'); })
+        .catch(function(){ if(attempt<3) return setTimeout(function(){ load(attempt+1); },1500); lookupForm('Could not reach the tracker right now. Try again in a moment.'); });
+      return; }
+    if(!o||(!t&&!e)) return lookupForm();
     if(attempt>1){ var el=document.querySelector('#app .err'); if(el) el.textContent='Still loading your order… (try '+attempt+' of 3)'; }
     fetch(API+'?action=track&o='+encodeURIComponent(o)+'&t='+encodeURIComponent(t)+'&e='+encodeURIComponent(e)+'&_='+Date.now()+'&r='+attempt).then(function(r){return r.text();})
       .then(function(txt){ var j=null; try{ j=JSON.parse(txt); }catch(x){}

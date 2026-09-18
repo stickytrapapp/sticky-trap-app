@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 55;   // v55 9/18: tracker links -> https://track.thestickytrap.app/ (the tracker's own front door; forwards to /track/ on the app origin so push keeps working).   // v54 9/17 Shane: 'no deposits - art assessed free, agreed orders paid in full' - wording; Payment received email says so.   // v53 9/17 October promo: deals honor 'from', and a deal price is the better of band or deal (never stacked).   // v52 9/17: 'NUDGED <customer>' replies to the Jobs today email are picked up hourly (nudgedReplies_) so the reorder list clears itself.   // v51 9/17 bot editor: the hourly stall email (24 h proof / 72 h press) is OFF by default - the Daily Pulse 'Jobs today' email is the one stall list; set NUDGE_STALE=on to bring it back. v50 9/17 New Orders Intake (Shane): 'Quote sent' -> 'Invoice sent' (the invoice is the quote)   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 56;   // v56 9/18 Shane: find my orders by PHONE (read-only list; approve/pay still need the tokened link) - track&p=   // v55 9/18: tracker links -> https://track.thestickytrap.app/ (the tracker's own front door; forwards to /track/ on the app origin so push keeps working).   // v54 9/17 Shane: 'no deposits - art assessed free, agreed orders paid in full' - wording; Payment received email says so.   // v53 9/17 October promo: deals honor 'from', and a deal price is the better of band or deal (never stacked).   // v52 9/17: 'NUDGED <customer>' replies to the Jobs today email are picked up hourly (nudgedReplies_) so the reorder list clears itself.   // v51 9/17 bot editor: the hourly stall email (24 h proof / 72 h press) is OFF by default - the Daily Pulse 'Jobs today' email is the one stall list; set NUDGE_STALE=on to bring it back. v50 9/17 New Orders Intake (Shane): 'Quote sent' -> 'Invoice sent' (the invoice is the quote)   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -1272,7 +1272,24 @@ function publicOrder_(o) {
            stages: STAGE_ORDER.filter(function (k) { return k !== 'shipped' || o.stage === 'shipped'; }).filter(function (k) { return k !== 'ready' || o.stage !== 'shipped'; }).map(function (k) { return { key: k, label: STAGES[k].label }; }),
            history: hist.map(function (h) { return { stage: h.stage, label: (STAGES[h.stage] || {}).label || h.stage, ts: h.ts, note: h.note || '' }; }) };
 }
+function trackByPhone_(p) {   // v56: ?action=track&p=<phone> -> every open order (and the last 60 days of finished ones) on that number, READ-ONLY
+  var ph = normPhone_(p.p); if (!ph) return { ok: false, error: 'bad_phone' };
+  if (!throttle_('trackp:' + ph)) return { ok: false, error: 'rate_limited' };
+  var since = Date.now() - 60 * 864e5, out = [];
+  [ordersSheet_(), archiveSheet_()].forEach(function (sh, k) {
+    var rows = sh.getDataRange().getValues();
+    for (var i = 1; i < rows.length; i++) { var o = rowObj_(rows[i]); if (!o.code || normPhone_(o.phone) !== ph) continue;
+      if (o.stage === 'cancelled') continue;
+      var ts = o.stage_ts ? new Date(o.stage_ts).getTime() : 0; if ((k === 1 || o.stage === 'complete') && ts && ts < since) continue;
+      var pub = publicOrder_(o);   // strip everything that lets a stranger act on the order
+      delete pub.token; delete pub.pay_url; delete pub.proof_urls; pub.can_approve = false; pub.can_change = false; pub.push_devices = 0; pub.readonly = true;
+      out.push(pub); } });
+  out.sort(function (a, b) { return (b.stage_ts || 0) - (a.stage_ts || 0); });
+  if (!out.length) return { ok: false, error: 'not_found' };
+  return { ok: true, orders: out.slice(0, 12), phone_last4: ph.slice(-4) };
+}
 function trackGet_(p) {
+  if (!p.o && p.p) return trackByPhone_(p);
   var sh = ordersSheet_(), f = findOrder_(sh, p.o); if (!f) return { ok: false, error: 'not_found' };
   var o = f.o, tok = String(p.t || ''), em = String(p.e || '').trim().toLowerCase();
   if (!(tok && tok === String(o.token)) && !(em && em === String(o.email || '').trim().toLowerCase())) return { ok: false, error: 'not_found' };
