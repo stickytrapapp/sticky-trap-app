@@ -1074,7 +1074,7 @@
     refresh();
   });
   // drawer open/close
-  function openD(){$('overlay').classList.add('on');$('drawer').classList.add('on');$('drawer').setAttribute('aria-hidden','false');}
+  function openD(){$('overlay').classList.add('on');$('drawer').classList.add('on');$('drawer').setAttribute('aria-hidden','false'); var tt=document.querySelector('.toast.show'); if(tt) tt.classList.remove('show');}   /* 2026-09-18: the 'added' toast was sitting on the Check out button */
   function closeD(){$('overlay').classList.remove('on');$('drawer').classList.remove('on');$('drawer').setAttribute('aria-hidden','true');}
   $('cartbtn').addEventListener('click',openD);
   $('dclose').addEventListener('click',closeD);
@@ -1783,7 +1783,13 @@
         try{ localStorage.setItem('st_qf_email', email); }catch(e){}
         var payload={ action:'quote', name:document.getElementById('qf-name').value||'', email:email,
           phone:document.getElementById('qf-phone').value||'', details:(deadline?('Deadline: '+deadline+(details?' — ':'')):'')+details, deadline:deadline, basket:basket, files:pf };
-        return fetch(API,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+        // 2026-09-18 (App review): a verified send. no-cors could not see a failure, so a 404 from the Google hop showed 'Sent!' to a
+        // customer whose quote never arrived. Now we read the JSON answer and retry up to 3 times before admitting a problem.
+        var body=JSON.stringify(payload);
+        function send(n){ return fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:body}).then(function(r){ return r.text(); })
+          .then(function(txt){ var j=null; try{ j=JSON.parse(txt); }catch(x){} if(j&&j.ok) return j; throw new Error((j&&j.error)||'bad_reply'); })
+          .catch(function(err){ if(n<3) return new Promise(function(res){ setTimeout(res,1500*n); }).then(function(){ return send(n+1); }); throw err; }); }
+        return send(1);
       }).then(function(){
         // order tracker starts when the Square invoice goes out (Shane 2026-09-09), not here.
         form.reset(); files=[]; render();
@@ -1791,7 +1797,7 @@
         if(window.track){try{window.track('order_send',(basket&&basket.length?basket.length+' items':'no-basket')+(files.length?(' +'+files.length+' files'):''));}catch(e){}}
         submit.disabled=false; submit.textContent='Send my request →';
       }).catch(function(){
-        setStatus('Upload hiccup — try again, or email files to thestickytrap@.','err');
+        setStatus('It did not go through — nothing was lost, your details are still here. Tap Send again, or email/text us: thestickytrap@gmail.com · 734 460 3845.','err');
         submit.disabled=false; submit.textContent='Send my request →';
       });
     });
