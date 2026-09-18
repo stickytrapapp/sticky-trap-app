@@ -45,8 +45,10 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 59;   // v59 9/18 SECURITY: token_rotate (PIN) - fresh token on every open + recently archived order, current-stage email re-sent so links work; the tracker snapshots that leaked tokens are gone for good.   // v58 9/18: staff orders list carries track_url (the tokened client link) so the console can print the QR label.   // v57 9/18 foreman notes: phone lookup returns code/stage/due only + 'track_link' emails the real link; deals support "match":"Flat" (texture at the Flat price at that quantity) in the cart re-price.   // v56 9/18 Shane: find my orders by PHONE (read-only list; approve/pay still need the tokened link) - track&p=   // v55 9/18: tracker links -> https://track.thestickytrap.app/ (the tracker's own front door; forwards to /track/ on the app origin so push keeps working).   // v54 9/17 Shane: 'no deposits - art assessed free, agreed orders paid in full' - wording; Payment received email says so.   // v53 9/17 October promo: deals honor 'from', and a deal price is the better of band or deal (never stacked).   // v52 9/17: 'NUDGED <customer>' replies to the Jobs today email are picked up hourly (nudgedReplies_) so the reorder list clears itself.   // v51 9/17 bot editor: the hourly stall email (24 h proof / 72 h press) is OFF by default - the Daily Pulse 'Jobs today' email is the one stall list; set NUDGE_STALE=on to bring it back. v50 9/17 New Orders Intake (Shane): 'Quote sent' -> 'Invoice sent' (the invoice is the quote)   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
-var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
+var CODE_VERSION = 60;   // v60 9/18 (Shane): every STAFF alert (new order, proof approved, changes, leads, referrals, NDA copies, card failures, digest) goes to the owner inbox ONLY until the flow bugs are fixed - see ALERTS_OWNER_ONLY   // v59 9/18 SECURITY: token_rotate (PIN) - fresh token on every open + recently archived order, current-stage email re-sent so links work; the tracker snapshots that leaked tokens are gone for good.   // v58 9/18: staff orders list carries track_url (the tokened client link) so the console can print the QR label.   // v57 9/18 foreman notes: phone lookup returns code/stage/due only + 'track_link' emails the real link; deals support "match":"Flat" (texture at the Flat price at that quantity) in the cart re-price.   // v56 9/18 Shane: find my orders by PHONE (read-only list; approve/pay still need the tokened link) - track&p=   // v55 9/18: tracker links -> https://track.thestickytrap.app/ (the tracker's own front door; forwards to /track/ on the app origin so push keeps working).   // v54 9/17 Shane: 'no deposits - art assessed free, agreed orders paid in full' - wording; Payment received email says so.   // v53 9/17 October promo: deals honor 'from', and a deal price is the better of band or deal (never stacked).   // v52 9/17: 'NUDGED <customer>' replies to the Jobs today email are picked up hourly (nudgedReplies_) so the reorder list clears itself.   // v51 9/17 bot editor: the hourly stall email (24 h proof / 72 h press) is OFF by default - the Daily Pulse 'Jobs today' email is the one stall list; set NUDGE_STALE=on to bring it back. v50 9/17 New Orders Intake (Shane): 'Quote sent' -> 'Invoice sent' (the invoice is the quote)   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';
+var ALERTS_OWNER_ONLY = true;   // v60 Shane 9/18: 'do not send any alerts to thestickytrap gmail for now ... send to fm holdings only' - flip to false to restore the shop inbox + NUDGE_TO
+function alertTo_() { return ALERTS_OWNER_ONLY ? (PropertiesService.getScriptProperties().getProperty('OWNER_EMAIL') || 'fmholdings.office@gmail.com') : SHOP_EMAIL; }   // where staff alerts land; customer emails are untouched   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
 var DEFAULTS = {
@@ -799,7 +801,7 @@ function refIn_(b) {
   for (var i = 1; i < rows.length; i++) if (String(rows[i][2]) === uid) return { ok: true, dup: true };   // one referral per new player, ever
   sh.appendRow([new Date(), ref, uid, handle]);
   CACHE.remove('refs:' + ref);
-  try { GmailApp.sendEmail(SHOP_EMAIL, 'Trap Points referral: ' + ref + ' brought in ' + handle,
+  try { GmailApp.sendEmail(alertTo_(), 'Trap Points referral: ' + ref + ' brought in ' + handle,
     ref + ' referred a new player (' + handle + ', uid ' + uid + ') who just finished their first board.\nThey get +500 on their next ladder load.\nSheet: ' + ss_().getUrl()); } catch (e) {}
   return { ok: true };
 }
@@ -867,7 +869,7 @@ function ndaIn_(b) {
   var pdfHtml = html.replace('cid:sigother', 'data:image/png;base64,' + Utilities.base64Encode(sigO.getBytes()));
   if (sigF) pdfHtml = pdfHtml.replace('cid:sigfm', 'data:image/png;base64,' + Utilities.base64Encode(sigF.getBytes()));
   var pdf = null; try { pdf = Utilities.newBlob('<html><body>' + pdfHtml + '</body></html>', 'text/html', 'nda.html').getAs('application/pdf').setName('Sticky Trap NDA - ' + (company || name).replace(/[^\w .-]/g, '') + '.pdf'); } catch (e) {}
-  var me = SHOP_EMAIL;
+  var me = alertTo_();
   var subject = 'Signed NDA - The Sticky Trap & ' + (company || name);
   var opts = { htmlBody: '<p>Here is your signed copy of the mutual NDA with The Sticky Trap' + (purpose ? ' (' + esc_(purpose) + ')' : '') + '. The PDF is attached.</p>' + html, inlineImages: inline, name: 'The Sticky Trap', cc: me };
   if (pdf) opts.attachments = [pdf];
@@ -930,7 +932,7 @@ function noncompeteIn_(b) {
   if (sigF) pdfHtml = pdfHtml.replace('cid:sigfm', 'data:image/png;base64,' + Utilities.base64Encode(sigF.getBytes()));
   var pdf = null; try { pdf = Utilities.newBlob('<html><body>' + pdfHtml + '</body></html>', 'text/html', 'noncompete.html').getAs('application/pdf').setName('Sticky Trap Non-Compete - ' + name.replace(/[^\w .-]/g, '') + '.pdf'); } catch (e) {}
   var subject = 'Signed Non-Compete - The Sticky Trap & ' + name;
-  var opts = { htmlBody: '<p>Here is your signed copy of the Non-Compete and Non-Solicitation Agreement with The Sticky Trap. The PDF is attached.</p>' + html, inlineImages: inline, name: 'The Sticky Trap', cc: SHOP_EMAIL };
+  var opts = { htmlBody: '<p>Here is your signed copy of the Non-Compete and Non-Solicitation Agreement with The Sticky Trap. The PDF is attached.</p>' + html, inlineImages: inline, name: 'The Sticky Trap', cc: alertTo_() };
   if (pdf) opts.attachments = [pdf];
   GmailApp.sendEmail(email, subject, 'Your signed Non-Compete with The Sticky Trap is attached.', opts);
   return { ok: true };
@@ -1041,7 +1043,7 @@ function captureOnApproval_(sh, f, o) {   // called from approve_ (client) and o
   if (!(o.payment_id && o.payment_status === 'authorized')) return;
   try { sqCapture_(o.payment_id, null); sh.getRange(f.i, ORDER_COLS.indexOf('payment_status') + 1).setValue('captured'); o.payment_status = 'captured'; }
   catch (e) { sh.getRange(f.i, ORDER_COLS.indexOf('payment_status') + 1).setValue('capture_failed'); o.payment_status = 'capture_failed';
-    try { GmailApp.sendEmail(SHOP_EMAIL, 'CARD CAPTURE FAILED - ' + o.code, String(e.message) + '\nHold may have expired - send a re-auth: https://thestickytrap.app/cart/?reauth=' + o.code + '&t=' + o.token); } catch (e2) {} }
+    try { GmailApp.sendEmail(alertTo_(), 'CARD CAPTURE FAILED - ' + o.code, String(e.message) + '\nHold may have expired - send a re-auth: https://thestickytrap.app/cart/?reauth=' + o.code + '&t=' + o.token); } catch (e2) {} }
 }
 function reauth_(b) {   // holds expire after 7 days: the customer re-enters the card from /cart/?reauth=<code>&t=<token>
   var sh = ordersSheet_(), f = findOrder_(sh, b.code); if (!f) return { ok: false, error: 'not_found' };
@@ -1246,7 +1248,7 @@ function approve_(b) {
   hist.push({ stage: 'approved', ts: now.getTime(), note: 'Approved by client online' });
   sh.getRange(f.i, ORDER_COLS.indexOf('stage') + 1, 1, 3).setValues([['approved', now, JSON.stringify(hist)]]);
   sh.getRange(f.i, ORDER_COLS.indexOf('nudged_ts') + 1).setValue('');
-  try { GmailApp.sendEmail(SHOP_EMAIL, 'PROOF APPROVED - ' + o.code + ' (' + (o.company || o.name) + ')', (o.company || o.name) + ' approved the proof for ' + o.code + ' online.\n' + (o.items || '') + '\nDue: ' + (o.due || 'tbd') + '\nConsole: https://thestickytrap.app/console/'); } catch (e) {}
+  try { GmailApp.sendEmail(alertTo_(), 'PROOF APPROVED - ' + o.code + ' (' + (o.company || o.name) + ')', (o.company || o.name) + ' approved the proof for ' + o.code + ' online.\n' + (o.items || '') + '\nDue: ' + (o.due || 'tbd') + '\nConsole: https://thestickytrap.app/console/'); } catch (e) {}
   o.stage = 'approved'; captureOnApproval_(sh, f, o);   // v31: client approval captures the card hold
   notifyClient_(sh, f, o, 'approved', '');
   return { ok: true, payment: o.payment_status || null };
@@ -1354,7 +1356,7 @@ function ordersList_(p) {
   out.sort(function (a, b) { return (a.stage_ts || 0) - (b.stage_ts || 0); });
   return { ok: true, orders: out, archived: archived };
 }
-function notifyTo_() { var extra = String(PROP.getProperty('NUDGE_TO') || '').split(',').map(function (x) { return x.trim(); }).filter(Boolean); return [SHOP_EMAIL].concat(extra).join(','); }   // script property NUDGE_TO = extra addresses (Erin, ...)
+function notifyTo_() { if (ALERTS_OWNER_ONLY) return alertTo_(); var extra = String(PROP.getProperty('NUDGE_TO') || '').split(',').map(function (x) { return x.trim(); }).filter(Boolean); return [SHOP_EMAIL].concat(extra).join(','); }   // script property NUDGE_TO = extra addresses (Erin, ...)
 function nudgeStale_() {
   var sh = ordersSheet_(), rows = sh.getDataRange().getValues(), now = Date.now(), stale = [];
   var stallOn = String(PROP.getProperty('NUDGE_STALE') || 'off') === 'on';   // v51: off - the Daily Pulse (7 AM, 'Jobs today' email) lists CHASE / STUCK / MONEY by whose move; two stall lists were noise
@@ -1447,7 +1449,7 @@ function weeklyDigest_() {
   else lines.push('No chat questions this week.');
   lines.push('');
   lines.push('Console: https://thestickytrap.app/console/  -  Sheet: ' + ss.getUrl());
-  var digestTo = String(PROP.getProperty('DIGEST_TO') || '').trim() || SHOP_EMAIL;   // Shane 2026-09-09: digest to the shop inbox only (Erin stays on the nudges via NUDGE_TO); set DIGEST_TO to widen it later
+  var digestTo = ALERTS_OWNER_ONLY ? alertTo_() : (String(PROP.getProperty('DIGEST_TO') || '').trim() || SHOP_EMAIL);   // Shane 2026-09-09: digest to the shop inbox only (Erin stays on the nudges via NUDGE_TO); set DIGEST_TO to widen it later
   GmailApp.sendEmail(digestTo, 'Sticky Trap app - week in review', lines.join('\n'), { name: 'The Sticky Trap app' });
   try { archiveReport_('Weekly report', lines.join('\n')); } catch (e) { mailErr_(e); }   // v39: dated copy in Drive + a row in the reports tab
   return lines.length;
@@ -1623,7 +1625,7 @@ function reportSend_(b) {   // v41: the Daily Pulse (and any other PC-side repor
   if (!pinOk_(b.pin)) return { ok: false, error: 'bad_pin' };
   var kind = String(b.kind || 'Report').replace(/[^\w .&-]/g, '').slice(0, 40), subject = String(b.subject || kind).slice(0, 200);
   var html = b.html ? String(b.html) : '', text = b.text ? String(b.text) : html.replace(/<style[\s\S]*?<\/style>/gi, '').replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/[ \t]+/g, ' ').replace(/\s*\n\s*/g, '\n').trim();
-  var to = String(b.to || '').trim() || SHOP_EMAIL, sent = false;
+  var to = String(b.to || '').trim() || alertTo_(), sent = false;
   if (!b.archive_only) { GmailApp.sendEmail(to, subject, text, html ? { htmlBody: html, name: 'The Sticky Trap' } : { name: 'The Sticky Trap' }); sent = true; }
   var url = archiveReport_(kind, text, html || '');
   return { ok: true, sent: sent, to: to, file: url };
