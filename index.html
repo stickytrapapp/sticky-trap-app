@@ -2173,25 +2173,27 @@
 /* ---- Music (v3, 2026-09-15; +Stay Trapping dubs x2 2026-09-16, riff instrumental + Full Speed 9/17, We Make Pros B2 removed 9/17, Understanding dropped 9/18, Twenty-Four added 9/18 (v4 take 2 at app-17b)): thirteen Suno tracks behind the top-bar note button. OFF by default and stays off until the person chooses;
         one quiet "Music?" nudge after 30 s, once. Button cycles Off -> Full -> Beats only (9/17). Rule-based sequencing (vocal/beat alternate,
         no same-family B-sides back to back, full cycle + no song within the last 40% of the pool since 9/17), random vocal opener, per-track trim (vocals a notch under beats),
-        crossfades sized by what comes next, ducks under the chat panel, remembers position, keeps playing in the background (9/17), fades when a game link is tapped;
+        per-track joins (9/18: short ramp-in, hard endings finish, decaying tails eased out), ducks under the chat panel, remembers position for 20 min, keeps playing in the background (9/17), fades when a game link is tapped;
         long-press the note = skip, lock-screen controls via Media Session, now-playing toast (9/17). ---- */
 (function(){
   var b=document.getElementById('musicb'); if(!b||b.hidden) return;
   var CAT=[
-    {src:'audio/app-1.mp3',  name:'Right Address',        kind:'vocal', fam:'ra',  xfIn:1.5},
-    {src:'audio/app-2.mp3',  name:'Trap House Open',      kind:'vocal', fam:'th'},
-    {src:'audio/app-3.mp3',  name:'We Make Pros B heavy', kind:'beat',  fam:'wmp'},
-    {src:'audio/app-4.mp3',  name:'We Make Pros',         kind:'vocal', fam:'wmp', xfIn:1.5},
+    // 2026-09-18 joins review: `out` = seconds before this song ends that the next one starts (measured from each file's last 6 s: hard stops ~1.0, decaying tails 1.5-3.5 and those are faded);
+    // `lead` = the next song's ramp-in (default 1.0; 0.5 for a spoken cold open so the first line is heard). Before: one 1.5/2.5/4 s crossfade that faded both ways = holes and chopped endings.
+    {src:'audio/app-1.mp3',  name:'Right Address',        kind:'vocal', fam:'ra',  out:1.0, lead:0.8},
+    {src:'audio/app-2.mp3',  name:'Trap House Open',      kind:'vocal', fam:'th',  out:1.0},
+    {src:'audio/app-3.mp3',  name:'We Make Pros B heavy', kind:'beat',  fam:'wmp', out:1.0},
+    {src:'audio/app-4.mp3',  name:'We Make Pros',         kind:'vocal', fam:'wmp', out:0.5},   // ends loud on the last beat
     // app-5 Understanding removed 2026-09-18 for good (Shane: 'I don't like Understanding songs'); slot 5 is free
-    {src:'audio/app-6.mp3',  name:'Right Address B1',     kind:'beat',  fam:'ra'},
-    {src:'audio/app-7.mp3',  name:'Gold on Black',        kind:'vocal', fam:'gb'},   // 2026-09-17 (Shane): replaced Holo Wrap (crunchy funk, take 2)
-    {src:'audio/app-8.mp3',  name:'Late Shift',           kind:'vocal', fam:'ls'},
-    {src:'audio/app-9.mp3',  name:'Right Address B2',     kind:'beat',  fam:'ra',  tail:3.5},
-    {src:'audio/app-12.mp3', name:'Stay Trapping Dub 1',  kind:'beat',  fam:'st',  tail:5.5},   // 2026-09-16 (Shane): reggae/dub B-sides; vocal 'Stay Trapping' -> app-11 once he picks a take
-    {src:'audio/app-13.mp3', name:'Stay Trapping Dub 2',  kind:'beat',  fam:'st',  tail:3.5},
-    {src:'audio/app-11.mp3', name:'Stay Trapping Riff',   kind:'beat',  fam:'st'},   // 2026-09-17 (Shane): instrumental cover of the riff cut, take 1
-    {src:'audio/app-14.mp3', name:'Full Speed',           kind:'beat',  fam:'fs',  xfIn:2},   // 2026-09-17 (Shane): industrial half-time DnB, v6 groove take 1
-    {src:'audio/app-17b.mp3', name:'Twenty-Four',         kind:'vocal', fam:'tf',  xfIn:1.5}    // 2026-09-18 (Shane): industrial rap, his lines vs the 24% tax; v4 take 2 = verse 2 twice, 'the hate is justified' intro
+    {src:'audio/app-6.mp3',  name:'Right Address B1',     kind:'beat',  fam:'ra',  out:1.8},
+    {src:'audio/app-7.mp3',  name:'Gold on Black',        kind:'vocal', fam:'gb',  out:2.0},   // 2026-09-17 (Shane): replaced Holo Wrap (crunchy funk, take 2)
+    {src:'audio/app-8.mp3',  name:'Late Shift',           kind:'vocal', fam:'ls',  out:1.0},
+    {src:'audio/app-9.mp3',  name:'Right Address B2',     kind:'beat',  fam:'ra',  out:2.0},   // quiet 1.3 s decay at the end
+    {src:'audio/app-12.mp3', name:'Stay Trapping Dub 1',  kind:'beat',  fam:'st',  out:3.5},   // 2026-09-16 (Shane): reggae/dub B-sides; long fade-out tail
+    {src:'audio/app-13.mp3', name:'Stay Trapping Dub 2',  kind:'beat',  fam:'st',  out:2.0},
+    {src:'audio/app-11.mp3', name:'Stay Trapping Riff',   kind:'beat',  fam:'st',  out:1.5},   // 2026-09-17 (Shane): instrumental cover of the riff cut, take 1
+    {src:'audio/app-14.mp3', name:'Full Speed',           kind:'beat',  fam:'fs',  out:1.0},   // 2026-09-17 (Shane): industrial half-time DnB, v6 groove take 1
+    {src:'audio/app-17b.mp3', name:'Twenty-Four',         kind:'vocal', fam:'tf',  out:1.0, lead:0.5}    // 2026-09-18 (Shane): industrial rap, his lines vs the 24% tax; v4 take 2 = verse 2 twice, 'the hate is justified' intro (spoken, quiet -> short ramp-in)
   ];
   var VOL=0.35, TRIM={vocal:0.86, beat:1}, DUCK=0.4;   // vocals sit a notch under the beats so lyrics don't fight the text on screen
   var mode='off', a=null, A=[null,null], played=loadPlayed(), want=false, armed=false, fadeT=null, actx=null, gain=null, posT=0, ducked=false;
@@ -2210,7 +2212,7 @@
   // last K plays at any time (K = 40% of the pool: Full 13 -> 5, Beats 7 -> 3), so a song that closed one cycle cannot open the next. `hist` = last 40 plays in order (st_music_hist); `played` = this cycle's songs (st_music_played).
   var hist=loadHist();
   function loadHist(){ try{ var v=JSON.parse(localStorage.getItem('st_music_hist')||'[]'); if(Array.isArray(v)) return v; }catch(e){} return []; }
-  function mark(src){ if(played.indexOf(src)<0) played.push(src); if(hist[hist.length-1]!==src) hist.push(src); hist=hist.slice(-40); savePlayed(); nowPlaying(src);
+  function mark(src,delay){ if(played.indexOf(src)<0) played.push(src); if(hist[hist.length-1]!==src) hist.push(src); hist=hist.slice(-40); savePlayed(); nowPlaying(src,false,delay||0);
     try{ localStorage.setItem('st_music_hist',JSON.stringify(hist)); }catch(e){} }
   function unplayed(prev){ var P=pool(), K=Math.max(1,Math.round(P.length*0.4));   // Full 13 -> 5, Beats 7 -> 3
     var recent=hist.filter(function(s){ for(var i=0;i<P.length;i++){ if(P[i].src===s) return true; } return false; }).slice(-K);
@@ -2228,9 +2230,12 @@
     var P=pool(); if(!P.length) return null; var c=unplayed(null);
     var wmp=c.filter(function(t){ return t.fam==='wmp'&&t.kind==='vocal'; })[0]; if(wmp&&!hist.length) return wmp;   // first ever start -> We Make Pros (Shane 9/17; was Trap House Open)
     var v=c.filter(function(t){ return t.kind==='vocal'; }); var pool2=v.length?v:c; return pool2[Math.floor(Math.random()*pool2.length)]; }
-  // 2026-09-18 (App review): most Suno endings fade over the last 3-4 s, so a 2.5 s crossfade started inside the fade = an energy dip.
-  // Default is 4 s now; a track's own `tail` (seconds of fade-out) can push it earlier; `xfIn` on the incoming track still wins (quiet intros).
-  function xfFor(nxt,prev){ var base=(nxt&&nxt.xfIn)?nxt.xfIn:4; if(prev&&prev.tail) base=Math.max(base,prev.tail); return base; }
+  // 2026-09-18 (Music, measured from each file's last 6 s): 8 of 13 end hard inside their final second, 5 decay. A long crossfade over a hard ending
+  // chops the last hit and starts the quiet next intro under it. So: the next song starts `out` s before this one ends (hard ~1.0, decays 1.5-3.5, and only
+  // those are eased out) and ramps in over its own `lead` (1.0; 0.5 for Twenty-Four's spoken open). Replaces the 4 s default + `tail` from earlier today.
+  function outOf(t){ return (t&&t.out)||1.0; }      // when the next song starts, counted back from this one's end
+  function leadOf(t){ return (t&&t.lead)||1.0; }    // the next song's ramp-in
+  function toEnd(t){ return Math.max(0.3,outOf(t)); }
   function mk(){ var x=new Audio(); x.loop=false; x.preload='none'; x.setAttribute('playsinline','');
     try{ var AC=window.AudioContext||window.webkitAudioContext; if(AC){ if(!actx){ actx=new AC(); gain=actx.createGain(); gain.gain.value=0; gain.connect(actx.destination); }
       var g=actx.createGain(); g.gain.value=1; g.connect(gain); actx.createMediaElementSource(x).connect(g); x._g=g; } }catch(e){}
@@ -2240,22 +2245,32 @@
       var nxt=x._next||pick(t); swapTo(nxt); });   // no crossfade happened (no Web Audio): hard swap
     x.addEventListener('timeupdate',function(){ if(x!==a) return; savePos(false);
       var t=trackOf(x), nxt=x._next; if(!nxt){ nxt=x._next=pick(t); prime(); }
-      var XF=xfFor(nxt,t);
-      if(x._g&&actx&&x.duration&&x.duration-x.currentTime<=XF&&!x._xf){ x._xf=true; var n=other(); if(n.src!==abs(nxt.src)) n.src=nxt.src; try{ n.currentTime=0; }catch(e){}
-        var tt=actx.currentTime, left=Math.max(0.3,x.duration-x.currentTime);
-        n._ramp=true; n._g.gain.cancelScheduledValues(tt); n._g.gain.setValueAtTime(0,tt); n._g.gain.linearRampToValueAtTime(TRIM[nxt.kind],tt+left);
-        x._g.gain.cancelScheduledValues(tt); x._g.gain.setValueAtTime(x._g.gain.value,tt); x._g.gain.linearRampToValueAtTime(0,tt+left);
-        var p=n.play(); if(p&&p.catch) p.catch(function(){}); a=n; a._next=null; mark(nxt.src); savePos(true); } });
+      var OUT=outOf(t);
+      if(x._g&&actx&&x.duration&&x.duration-x.currentTime<=OUT&&!x._xf){ x._xf=true; var n=other(); if(n.src!==abs(nxt.src)) n.src=nxt.src; try{ n.currentTime=0; }catch(e){}
+        var tt=actx.currentTime, left=Math.max(0.3,x.duration-x.currentTime), lead=leadOf(nxt);
+        n._ramp=true; n._g.gain.cancelScheduledValues(tt); n._g.gain.setValueAtTime(0,tt); n._g.gain.linearRampToValueAtTime(TRIM[nxt.kind],tt+lead);   // short ramp-in, its own length
+        x._g.gain.cancelScheduledValues(tt); x._g.gain.setValueAtTime(x._g.gain.value,tt);
+        if(OUT>=1.5) x._g.gain.linearRampToValueAtTime(0,tt+left);   // a decaying tail is eased out under the new song; a hard ending just finishes
+        var p=n.play(); if(p&&p.catch) p.catch(function(){}); a=n; a._next=null; mark(nxt.src,left); savePos(true); } });
     x.addEventListener('play',function(){ if(x._ramp){ x._ramp=false; return; } x._xf=false; var t=trackOf(x); gset(x,t?TRIM[t.kind]:1); });
-    x.addEventListener('error',function(){ var t=trackOf(x); if(t) mark(t.src); if(x!==a||mode==='off') return; var nxt=pick(t); if(nxt&&nxt!==t){ x._next=null; swapTo(nxt); } });   // 2026-09-18: a file that will not load is skipped, not the end of the music
+    x.addEventListener('error',function(){ var t=trackOf(x); if(x!==a||mode==='off') return; errN++;   // 2026-09-18: a file that will not load is skipped, not the end of the music
+      if(errN>=3){ try{ x.pause(); }catch(e){} clearTimeout(errT); errT=setTimeout(retry,45000);   // three in a row = the network is gone, not the file: stop spinning through the catalogue (it looped 14k times in a minute when the server dropped), try again in 45 s or when back online
+        try{window.track&&window.track('music','offline');}catch(e){} return; }
+      if(t) mark(t.src); var nxt=pick(t); if(nxt&&nxt!==t){ x._next=null; swapTo(nxt); } });
+    x.addEventListener('playing',function(){ errN=0; });
     return x; }
+  var errN=0, errT=null;   // consecutive load failures (see the 'error' handler in mk)
+  function retry(){ errN=0; clearTimeout(errT); if(!want||userPaused||mode==='off'||!a) return;   // an errored element will not reload on play(): move to a freshly picked track instead
+    var nxt=pick(trackOf(a)); if(!nxt) return; a._next=null; if(actx&&actx.state!=='running'){ try{actx.resume();}catch(e){} } swapTo(nxt); fade(target(),900); ui(); }
+  window.addEventListener('online',function(){ if(errN>=3) retry(); });
   function other(){ return a===A[0]?A[1]:A[0]; }
   function swapTo(nxt){ if(!nxt) return; var n=other(); if(n.src!==abs(nxt.src)) n.src=nxt.src; a=n; a._next=null; gset(a,TRIM[nxt.kind]); var p=a.play(); if(p&&p.catch) p.catch(function(){}); mark(nxt.src); prime(); savePos(true); }
   function gset(x,v){ if(!x||!x._g) return; try{ var t=actx.currentTime; x._g.gain.cancelScheduledValues(t); x._g.gain.setValueAtTime(v,t); }catch(e){} }
   function prime(){ var n=other(), nxt=a&&a._next; if(!n||!nxt||!n.paused) return;   // never touch the other element while it is still playing out a crossfade tail; its 'ended' calls prime() again
     if(n.src!==abs(nxt.src)) n.src=nxt.src; n.preload='auto'; try{ n.load(); }catch(e){} }
-  function savePos(force){ var now=Date.now(); if(!force && now-posT<5000) return; posT=now; var t=trackOf(a); try{ localStorage.setItem('st_music_pos', JSON.stringify({src:t?t.src:'', t:Math.floor(a.currentTime||0)})); }catch(e){} }
+  function savePos(force){ var now=Date.now(); if(!force && now-posT<5000) return; posT=now; var t=trackOf(a); try{ localStorage.setItem('st_music_pos', JSON.stringify({src:t?t.src:'', t:Math.floor(a.currentTime||0), at:now})); }catch(e){} }
   function el(){ if(!a){ A[0]=mk(); A[1]=mk(); var saved=null; try{ saved=JSON.parse(localStorage.getItem('st_music_pos')||'null'); }catch(e){}
+      if(saved&&!(saved.at&&Date.now()-saved.at<20*60000)) saved=null;   // 2026-09-18: only pick up mid-song if it was playing in the last 20 min; otherwise start fresh
       var t=null; if(saved&&saved.src){ t=pool().filter(function(c){ return c.src===saved.src; })[0]||null; }
       if(!t){ t=opener(); saved=null; }
       a=A[0]; a.src=t.src; mark(t.src); a._next=null;
@@ -2277,11 +2292,13 @@
   function stop(){ if(a&&!a.paused) fade(0,400); else if(a){ a.pause(); } try{ if(sil) sil.pause(); }catch(e){} ui(); }
   // ---- 2026-09-17 (Shane: 'lock-screen controls, a skip, a now-playing name'): ----
   var lastNow='', nowT=null, userPaused=false;
-  function nowPlaying(src,force){ var t=null; for(var i=0;i<CAT.length;i++){ if(CAT[i].src===src) t=CAT[i]; } if(!t) return;
-    if(force||t.src!==lastNow){ lastNow=t.src; clearTimeout(nowT); nowT=setTimeout(function(){ if(a&&!a.paused&&trackOf(a)===t&&mode!=='off'){ try{ window.toast&&toast('♫ '+t.name); }catch(e){} } },700); }
+  function nowPlaying(src,force,delay){ var t=null; for(var i=0;i<CAT.length;i++){ if(CAT[i].src===src) t=CAT[i]; } if(!t) return; var wait=Math.round((delay||0)*1000);
+    if(force||t.src!==lastNow){ lastNow=t.src; clearTimeout(nowT); nowT=setTimeout(function(){ if(a&&!a.paused&&trackOf(a)===t&&mode!=='off'){ try{ window.toast&&toast('♫ '+t.name); }catch(e){} } },700+wait); }
+    if(wait){ setTimeout(function(){ if(trackOf(a)===t) meta(t); },wait); } else meta(t); }
+  function meta(t){
     try{ if('mediaSession' in navigator){ navigator.mediaSession.metadata=new MediaMetadata({title:t.name, artist:'The Sticky Trap', album:t.kind==='beat'?'Beats':'Sticky Trap Radio',
       artwork:[{src:abs('icons/icon-192.png'),sizes:'192x192',type:'image/png'},{src:abs('icons/icon-512.png'),sizes:'512x512',type:'image/png'}]}); navigator.mediaSession.playbackState='playing'; } }catch(e){} }
-  function skip(src){ if(!a||!a.duration||a.paused) return; var t=trackOf(a); try{ a.currentTime=Math.max(0,a.duration-2.5); }catch(e){}   // lands in the crossfade window -> the primed next track takes over
+  function skip(src){ if(!a||!a.duration||a.paused) return; var t=trackOf(a); try{ a.currentTime=Math.max(0,a.duration-toEnd(t)); }catch(e){}   // lands in the join window -> the primed next track takes over
     try{window.track&&window.track('music','skip:'+(t?t.name:'')+(src?':'+src:''));}catch(e){} }
   function pauseOnly(){ userPaused=true; if(a&&!a.paused) fade(0,300); try{ if('mediaSession' in navigator) navigator.mediaSession.playbackState='paused'; }catch(e){} }
   try{ if('mediaSession' in navigator){ var ms=navigator.mediaSession;
@@ -2300,7 +2317,7 @@
     var t=trackOf(a);
     if(mode==='off'){ stop(); try{window.track&&window.track('music','off:'+(t?t.name:'')+(src?':'+src:''));}catch(e){} return; }
     // switching between beats/full: if the current track no longer fits the pool, move on now (short crossfade); otherwise carry on
-    if(a&&!a.paused&&t&&pool().indexOf(t)<0){ var nxt=pick(t); if(nxt){ a._next=nxt; try{ a.currentTime=Math.max(0,a.duration-2.5); }catch(e){} } }
+    if(a&&!a.paused&&t&&pool().indexOf(t)<0){ var nxt=pick(t); if(nxt){ a._next=nxt; try{ a.currentTime=Math.max(0,a.duration-toEnd(t)); }catch(e){} } }
     else if(a&&!a.paused&&a._next){ a._next=pick(t); prime(); }   // pool changed: re-pick what comes next
     if(!a||a.paused){ if(prev==='off'){ try{ localStorage.removeItem('st_music_pos'); }catch(e){} } start(); } else ui();
     try{window.track&&window.track('music',mode+(src?':'+src:''));}catch(e){} }
