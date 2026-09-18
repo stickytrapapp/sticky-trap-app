@@ -68,7 +68,7 @@
       ]
     }
   ],
-  "_deals_how": "Running deals for the configure page (/configure/): percent off the engine price on ONE product, optionally one material/finish, from a quantity up - so a deal can never undercut cost by accident. Fields: id, product (menu name, e.g. 3\" Slap), material (optional: White Vinyl | Holographic | Gold), finish (optional: Flat | Spot Gloss UV | Standard Embossing | Pro), fromQty, off (0.15 = 15%), title, until (YYYY-MM-DD or blank). Edit, push, done. 2026-09-17: optional 'from' (YYYY-MM-DD) delays a deal; a deal price is the better of the volume band or the deal, never both.",
+  "_deals_how": "Running deals for the configure page (/configure/): percent off the engine price on ONE product, optionally one material/finish, from a quantity up - so a deal can never undercut cost by accident. Fields: id, product (menu name, e.g. 3\" Slap), material (optional: White Vinyl | Holographic | Gold), finish (optional: Flat | Spot Gloss UV | Standard Embossing | Pro), fromQty, off (0.15 = 15%), title, until (YYYY-MM-DD or blank). Edit, push, done. 2026-09-17: optional 'from' (YYYY-MM-DD) delays a deal; a deal price is the better of the volume band or the deal, never both. 2026-09-18: 'match':'Flat' = this texture at the Flat price at the same quantity (bands included) - use it for 'X for the Flat price' promos; 'off' stays for % deals. Never both on one deal.",
   "deals": [
     {
       "id": "oct-o2-2026",
@@ -76,10 +76,10 @@
       "material": "White Vinyl",
       "finish": "Spot Gloss UV",
       "fromQty": 250,
-      "off": 0.182,
-      "title": "October o2: Spot Gloss for the Flat price (white $0.45)",
+      "title": "October o2: Spot Gloss for the Flat price (white)",
       "from": "2026-10-01",
-      "until": "2026-10-31"
+      "until": "2026-10-31",
+      "match": "Flat"
     },
     {
       "id": "oct-o2-2026-holo",
@@ -87,10 +87,10 @@
       "material": "Holographic",
       "finish": "Spot Gloss UV",
       "fromQty": 250,
-      "off": 0.0834,
-      "title": "October o2: Spot Gloss for the Flat price (holo $0.55)",
+      "title": "October o2: Spot Gloss for the Flat price (holo)",
       "from": "2026-10-01",
-      "until": "2026-10-31"
+      "until": "2026-10-31",
+      "match": "Flat"
     }
   ],
   "_pill_how": "Promo pill (2026-09-17): an event may carry 'pill' {kicker, text, url} - the floating button on every commerce page shows the first active event's pill (from..to), previews it as 'NEXT · <from>: <text>' in the 7 days before 'from', and is not rendered when no event has a pill. Spec: Downloads\\Sticky Bot\\handoffs\\promo-pill.md.",
