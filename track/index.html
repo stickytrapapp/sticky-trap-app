@@ -9,6 +9,7 @@
 <link rel="icon" href="/icons/track3-192.png">
 <link rel="apple-touch-icon" href="/icons/track3-apple-touch-icon.png">
 <meta name="apple-mobile-web-app-title" content="My order">
+<link rel="manifest" href="/track/manifest.webmanifest">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <style>
@@ -91,10 +92,10 @@
   function when(ts){ if(!ts) return ''; var d=new Date(ts); return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' · '+d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}); }
   // 2026-09-18 (Shane): phone first - 'type your number, see your orders'. Read-only: approving a proof or paying still needs the link
   // from the email or the QR on the invoice. Order code + email stays as the second way in.
-  function saved(code){ try{ return localStorage.getItem('st_track_saved_'+code)==='1'; }catch(e){ return false; } }
+  function saved(code){ try{ return localStorage.getItem('st_track_saved2_'+code)==='1'||window.matchMedia('(display-mode: standalone)').matches; }catch(e){ return false; } }
   function saveSteps(){ var ua=navigator.userAgent||'', ios=/iPhone|iPad|iPod/.test(ua), android=/Android/.test(ua);
-    if(ios) return '<li>Tap the <b>Share</b> button at the bottom of Safari (the square with the arrow).</li><li>Scroll and tap <b>Add to Home Screen</b>, then <b>Add</b>.</li><li>Your order lives on your home screen as <b>My order</b> - tap it any time.</li>';
-    if(android) return '<li>Tap the <b>&#8942;</b> menu at the top right of Chrome.</li><li>Tap <b>Add to Home screen</b>, then <b>Add</b>.</li><li>Your order lives on your home screen - tap it any time.</li>';
+    if(ios){ var crios=/CriOS/.test(ua); return '<li>Tap the <b>Share</b> button '+(crios?'(top right of Chrome, the square with the arrow)':'(bottom of Safari, the square with the arrow)')+'.</li><li>Scroll and tap <b>Add to Home Screen</b>, then <b>Add</b>.</li><li>Your order lives on your home screen as <b>My order</b> - tap it any time.</li>'; }
+    if(android) return '<li>Tap the <b>&#8942;</b> menu at the top right of Chrome (Samsung Internet: the <b>&#8801;</b> menu).</li><li>Tap <b>Add to Home screen</b>, then <b>Add</b>.</li><li>Your order lives on your home screen as <b>My order</b> - tap it any time.</li>';
     return '<li>Bookmark this page (Ctrl/Cmd + D), or drag the address to your desktop.</li><li>The link is yours for this order - it never expires.</li>'; }
   function lookupForm(msg){
     app.innerHTML='<div class="err lookup"><div class="lk-h">'+esc(msg||'Find your orders')+'</div>'+
@@ -134,7 +135,8 @@
     app.innerHTML='<p class="code">'+esc(o.code)+'</p><div class="who">'+esc(o.company||o.name||'')+'</div>'+
       '<div class="now"><div class="k">Right now</div><div class="v">'+esc(o.label)+'</div><div class="m">'+esc(o.message||'')+'</div></div>'+
       (o.token&&!saved(o.code)?'<div class="save" id="save"><div class="sh"><b>Keep this on your phone</b><button type="button" class="sx" id="savex" aria-label="Dismiss">&times;</button></div>'+
-        '<ol>'+saveSteps()+'</ol>'+(navigator.share?'<div class="sbtns"><button type="button" class="btn ghost" id="saveshare">Share / save</button></div>':'')+'</div>':'')+
+        '<div id="saveinst" hidden><button type="button" class="btn" id="saveadd" style="margin-top:8px">Add to home screen</button><small style="display:block;margin-top:6px">One tap. Your order opens from the icon any time.</small></div>'+
+        '<div id="savesteps"><ol>'+saveSteps()+'</ol>'+(navigator.share?'<div class="sbtns"><button type="button" class="btn ghost" id="saveshare">Share / save</button></div>':'')+'</div></div>':'')+
       '<div class="meta"><div><div class="k">Due</div><div class="v">'+esc(o.due||'To be set')+'</div></div><div><div class="k">Order</div><div class="v">'+esc(o.items||'See your quote')+'</div></div></div>'+
       (o.payment_status==='authorized'?'<div class="note" style="margin-top:8px">Card authorized'+(o.payment_amt?' for $'+(+o.payment_amt).toFixed(2):'')+' - charged only when you approve the proof.</div>':'')+
       (o.payment_status==='captured'?'<div class="note" style="margin-top:8px">Paid by card'+(o.payment_amt?' - $'+(+o.payment_amt).toFixed(2):'')+'. Thank you.</div>':'')+
@@ -161,7 +163,7 @@
     // 2026-09-18 (Shane: 'the QR should be able to be saved as a desktop link for repeated access'): the page has no manifest on purpose,
     // so Add to Home Screen saves THIS exact link (order + token) as an icon - iOS via Share, Android via the browser menu, desktop as a bookmark.
     var sv=document.getElementById('save');
-    if(sv){ document.getElementById('savex').addEventListener('click',function(){ try{ localStorage.setItem('st_track_saved_'+o.code,'1'); }catch(e){} sv.remove(); });
+    if(sv){ wireInstall(); document.getElementById('savex').addEventListener('click',function(){ try{ localStorage.setItem('st_track_saved2_'+o.code,'1'); }catch(e){} sv.remove(); });
       var sh=document.getElementById('saveshare'); if(sh) sh.addEventListener('click',function(){ navigator.share({title:'My Sticky Trap order '+o.code,url:location.href.split('#')[0]}).catch(function(){}); }); }
     var cb=document.getElementById('chg'), cbox=document.getElementById('chgbox'), cs=document.getElementById('chgsend');
     if(cb) cb.addEventListener('click',function(){ cbox.hidden=!cbox.hidden; if(!cbox.hidden){ document.getElementById('chgnote').focus(); } });
@@ -204,8 +206,15 @@
   }
   // 2026-09-18: the Google hop behind the API occasionally answers with an HTML error page or a 404 instead of JSON (seen: 35 s then a 404).
   // A customer who scanned a QR must never sit on 'Loading' for that - retry up to 3 times (fresh URL each time) before showing the fallback.
+  var deferredInstall=null;
+  window.addEventListener('beforeinstallprompt',function(ev){ ev.preventDefault(); deferredInstall=ev; var b=document.getElementById('saveinst'), st=document.getElementById('savesteps'); if(b){ b.hidden=false; if(st) st.hidden=true; } });
+  function wireInstall(){ var ba=document.getElementById('saveadd'); if(!ba) return; if(deferredInstall){ document.getElementById('saveinst').hidden=false; var st=document.getElementById('savesteps'); if(st) st.hidden=true; }
+    ba.addEventListener('click',function(){ if(!deferredInstall) return; deferredInstall.prompt(); deferredInstall.userChoice.then(function(r){ if(r&&r.outcome==='accepted'){ var sv=document.getElementById('save'); if(sv){ sv.innerHTML='<div class="sh"><b>Added to your home screen</b></div><small>Tap the My order icon any time - it opens straight to this order.</small>'; } } deferredInstall=null; }); }); }
   function load(attempt){
     attempt=attempt||1; var o=q('o'), t=q('t'), e=q('e'), p=q('p');
+    // 2026-09-18: launched from the home-screen icon (no params) -> reopen the last order this phone looked at
+    if(!o&&!p&&!e){ try{ var last=JSON.parse(localStorage.getItem('st_track_last')||'null'); if(last&&last.o&&last.t){ location.replace('/track/?o='+encodeURIComponent(last.o)+'&t='+encodeURIComponent(last.t)+'&src='+(q('src')||'icon')); return; } }catch(x){} }
+    if(o&&t){ try{ localStorage.setItem('st_track_last',JSON.stringify({o:o,t:t,ts:Date.now()})); }catch(x){} }
     if(!o&&p){ if(attempt>1){ var el0=document.querySelector('#app .err'); if(el0) el0.textContent='Still looking… (try '+attempt+' of 3)'; }
       fetch(API+'?action=track&p='+encodeURIComponent(p)+'&_='+Date.now()+'&r='+attempt).then(function(r){return r.text();})
         .then(function(txt){ var j=null; try{ j=JSON.parse(txt); }catch(x){}
@@ -219,14 +228,16 @@
     if(!o||(!t&&!e)) return lookupForm();
     // 2026-09-18 (Shane: 'having issues loading your order'): paint from the static snapshot FIRST (data/t/<sha256(token)>.json, written every
     // 10 min by track_snapshots.py on the shop PC, served by the CDN in ~50 ms), then refresh from the backend behind it. The customer never waits on Google.
+    // 2026-09-18 13:20 (App): the published snapshots (data/t) are GONE - they put customer data + tokens in the public repo. Same instant paint,
+    // from THIS phone's own copy instead: the last good order JSON is kept in localStorage per token (st_track_<token>) and painted first.
     if(attempt===1&&t&&!window.__snapTried){ window.__snapTried=true;
-      hashHex(t).then(function(h){ return fetch('/data/t/'+h+'.json?t='+Date.now(),{cache:'no-store'}); }).then(function(r){ return r.ok?r.json():null; })
+      Promise.resolve().then(function(){ var c=null; try{ c=JSON.parse(localStorage.getItem('st_track_'+t)||'null'); }catch(x){} return c; })
         .then(function(snap){ if(snap&&snap.code&&!window.__liveRendered){ render(snap); window.__snapRendered=true; var st=document.createElement('div'); st.className='note'; st.id='snapnote'; st.style.textAlign='center';
             st.textContent='As of '+when(snap.snap_ts||Date.now())+' · checking for updates…'; app.insertBefore(st, app.firstChild); } }).catch(function(){}); }
     if(attempt>1&&!window.__snapRendered){ var el=document.querySelector('#app .err'); if(el) el.textContent='Still loading your order… (try '+attempt+' of 3)'; }
     fetch(API+'?action=track&o='+encodeURIComponent(o)+'&t='+encodeURIComponent(t)+'&e='+encodeURIComponent(e)+'&_='+Date.now()+'&r='+attempt).then(function(r){return r.text();})
       .then(function(txt){ var j=null; try{ j=JSON.parse(txt); }catch(x){}
-        if(j&&j.ok&&j.order){ window.__liveRendered=true; return render(j.order); }
+        if(j&&j.ok&&j.order){ window.__liveRendered=true; try{ if(t){ var keep=j.order; keep.snap_ts=Date.now(); localStorage.setItem('st_track_'+t, JSON.stringify(keep)); } }catch(x){} return render(j.order); }
         if(j&&j.error==='not_found'){ if(window.__snapRendered) return; return lookupForm('We could not find that order. Check the code and the email, or text us.'); }
         if(!j&&attempt<3) return setTimeout(function(){ load(attempt+1); },1500);   // HTML / empty answer = the hop hiccuped, not the order
         if(window.__snapRendered){ var sn=document.getElementById('snapnote'); if(sn) sn.textContent='Showing the last update we have - live check unavailable right now.'; return; }
