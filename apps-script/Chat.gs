@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 56;   // v56 9/18 Shane: find my orders by PHONE (read-only list; approve/pay still need the tokened link) - track&p=   // v55 9/18: tracker links -> https://track.thestickytrap.app/ (the tracker's own front door; forwards to /track/ on the app origin so push keeps working).   // v54 9/17 Shane: 'no deposits - art assessed free, agreed orders paid in full' - wording; Payment received email says so.   // v53 9/17 October promo: deals honor 'from', and a deal price is the better of band or deal (never stacked).   // v52 9/17: 'NUDGED <customer>' replies to the Jobs today email are picked up hourly (nudgedReplies_) so the reorder list clears itself.   // v51 9/17 bot editor: the hourly stall email (24 h proof / 72 h press) is OFF by default - the Daily Pulse 'Jobs today' email is the one stall list; set NUDGE_STALE=on to bring it back. v50 9/17 New Orders Intake (Shane): 'Quote sent' -> 'Invoice sent' (the invoice is the quote)   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 57;   // v57 9/18 foreman notes: phone lookup returns code/stage/due only + 'track_link' emails the real link; deals support "match":"Flat" (texture at the Flat price at that quantity) in the cart re-price.   // v56 9/18 Shane: find my orders by PHONE (read-only list; approve/pay still need the tokened link) - track&p=   // v55 9/18: tracker links -> https://track.thestickytrap.app/ (the tracker's own front door; forwards to /track/ on the app origin so push keeps working).   // v54 9/17 Shane: 'no deposits - art assessed free, agreed orders paid in full' - wording; Payment received email says so.   // v53 9/17 October promo: deals honor 'from', and a deal price is the better of band or deal (never stacked).   // v52 9/17: 'NUDGED <customer>' replies to the Jobs today email are picked up hourly (nudgedReplies_) so the reorder list clears itself.   // v51 9/17 bot editor: the hourly stall email (24 h proof / 72 h press) is OFF by default - the Daily Pulse 'Jobs today' email is the one stall list; set NUDGE_STALE=on to bring it back. v50 9/17 New Orders Intake (Shane): 'Quote sent' -> 'Invoice sent' (the invoice is the quote)   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -200,6 +200,7 @@ function doPost(e) {
   if (body.action === 'rate') { try { return out_(rateIn_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }                   // v34: thumbs on a reply
   if (body.action === 'billing_draft') { try { return out_(billingDraft_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }   // v36: Gmail DRAFT for the Invoices billing mailer
   if (body.action === 'lead_phone') { try { return out_(leadPhone_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }         // v38: 'text me when they reply' after a hand-off
+  if (body.action === 'track_link') { try { return out_(trackLink_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }         // v57: 'email me my link' from the phone lookup
   if (body.action === 'cron') { try { return out_(cronRun_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }                // v48: timed jobs driven from the PC (no ScriptApp triggers)
   if (body.action === 'report_send') { try { return out_(reportSend_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }       // v41: any PC-side report -> email + dated Drive copy
   if (body.action === 'sms_optin') { try { return out_(smsOptin_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }           // v42: public opt-in page thestickytrap.app/sms/
@@ -976,12 +977,15 @@ function deals_() {
   try { CACHE.put('deals', JSON.stringify(out), 1200); } catch (e) {}
   return out;
 }
-function dealOk_(d, p, m, f, q) {   // the deal the client claims must exist in promos.json with the same terms
-  if (!d) return false;
+function dealFind_(d, p, m, f, q) {   // v57: the deal the client claims must exist in promos.json with the same terms; returns the live deal (or null)
+  if (!d) return null;
   var today = Utilities.formatDate(new Date(), 'America/Detroit', 'yyyy-MM-dd');
-  return deals_().some(function (x) { return x.product === p && (!x.material || x.material === m) && (!x.finish || x.finish === f) &&
-    (!x.from || x.from <= today) && (!x.until || x.until >= today) && q >= (+x.fromQty || 0) && Math.abs((+x.off || 0) - (+d.off || 0)) < 0.0001; });   // v53: 'from' honored
+  var hit = deals_().filter(function (x) { return x.product === p && (!x.material || x.material === m) && (!x.finish || x.finish === f) &&
+    (!x.from || x.from <= today) && (!x.until || x.until >= today) && q >= (+x.fromQty || 0) &&
+    ((d.id && x.id === d.id) || (!x.match && Math.abs((+x.off || 0) - (+d.off || 0)) < 0.0001)); })[0];
+  return hit || null;
 }
+function dealOk_(d, p, m, f, q) { return !!dealFind_(d, p, m, f, q); }
 function cartLines_(b) {
   var lines = Array.isArray(b.lines) ? b.lines.slice(0, 40) : null; if (!lines || !lines.length) return null;
   var prices = kbPrices_(kb_()), out = [], sub = 0;
@@ -992,7 +996,9 @@ function cartLines_(b) {
     if (list == null) return { error: 'unknown_line', line: { p: l.p, m: l.m, f: fRaw } };
     var q = Math.round(+l.qty || 0); if (q < MINQ || q > MAXQ || q % STEP) return { error: 'bad_qty', line: { p: l.p, qty: l.qty } };
     var u = unit_(list, q);
-    if (l.deal && dealOk_(l.deal, l.p, l.m, f, q)) u = Math.min(u, Math.ceil(list * (1 - (+l.deal.off)) * 100) / 100);   // v53: the better of band or deal, never both
+    var dl = l.deal ? dealFind_(l.deal, l.p, l.m, f, q) : null;   // v57: "match":"Flat" = this texture at the Flat price at THIS quantity (bands included); % deals = better of band or deal
+    if (dl && dl.match) { var mrow = prices.filter(function (r) { return r.p === l.p && r.m === l.m && r.f === dl.match; })[0]; var mlist = mrow ? (hb ? mrow.hb : mrow.pr) : null; if (mlist != null) u = Math.min(u, unit_(mlist, q)); }
+    else if (dl && dl.off) u = Math.min(u, Math.ceil(list * (1 - (+dl.off)) * 100) / 100);
     if (Math.abs(u - (+l.unit || 0)) > 0.011) return { error: 'price_mismatch', line: { p: l.p, m: l.m, f: fRaw, qty: q, sent: +l.unit || 0, actual: u } };
     out.push({ p: l.p, m: l.m, f: fRaw, qty: q, unit: u, total: Math.round(u * q * 100) / 100, notes: String(l.notes || '').slice(0, 200), art: String(l.art || '').slice(0, 120) });
     sub += u * q;
@@ -1281,12 +1287,27 @@ function trackByPhone_(p) {   // v56: ?action=track&p=<phone> -> every open orde
     for (var i = 1; i < rows.length; i++) { var o = rowObj_(rows[i]); if (!o.code || normPhone_(o.phone) !== ph) continue;
       if (o.stage === 'cancelled') continue;
       var ts = o.stage_ts ? new Date(o.stage_ts).getTime() : 0; if ((k === 1 || o.stage === 'complete') && ts && ts < since) continue;
-      var pub = publicOrder_(o);   // strip everything that lets a stranger act on the order
-      delete pub.token; delete pub.pay_url; delete pub.proof_urls; pub.can_approve = false; pub.can_change = false; pub.push_devices = 0; pub.readonly = true;
-      out.push(pub); } });
+      var st = STAGES[o.stage] || STAGES.received;   // v57: a phone number is not a secret - only the code, the stage and the due date go back; nothing about what or how much
+      out.push({ code: o.code, stage: o.stage, label: st.label, due: o.due || '', stage_ts: o.stage_ts ? new Date(o.stage_ts).getTime() : null, has_email: !!o.email, readonly: true }); } });
   out.sort(function (a, b) { return (b.stage_ts || 0) - (a.stage_ts || 0); });
   if (!out.length) return { ok: false, error: 'not_found' };
   return { ok: true, orders: out.slice(0, 12), phone_last4: ph.slice(-4) };
+}
+function trackLink_(b) {   // v57: {p: phone, code?} -> emails the real tracker link for every open order on that number (or the one code) to the email on file
+  var ph = normPhone_(b.p); if (!ph) return { ok: false, error: 'bad_phone' };
+  if (!throttle_('tlink:' + ph)) return { ok: false, error: 'rate_limited' };
+  var sh = ordersSheet_(), rows = sh.getDataRange().getValues(), want = String(b.code || '').trim().toUpperCase(), sent = 0, to = '';
+  for (var i = 1; i < rows.length; i++) { var o = rowObj_(rows[i]);
+    if (!o.code || normPhone_(o.phone) !== ph || o.stage === 'cancelled' || o.stage === 'complete') continue;
+    if (want && String(o.code).toUpperCase() !== want) continue;
+    if (!o.email) continue;
+    var url = trackUrl_(o), st = STAGES[o.stage] || STAGES.received;
+    try { GmailApp.sendEmail(o.email, 'Your Sticky Trap order ' + o.code + ' - your link', 'Here is your order page for ' + o.code + ' (' + st.label + '):\n' + url + '\n\nSave it to your home screen and it opens straight to your order any time.\n\nThe Sticky Trap',
+          { name: 'The Sticky Trap', htmlBody: '<p>Here is your order page for <b>' + esc_(o.code) + '</b> (' + esc_(st.label) + '):</p><p><a href="' + url + '">' + url + '</a></p><p>Save it to your home screen and it opens straight to your order any time.</p><p>The Sticky Trap</p>' });
+      sent++; to = o.email; } catch (e) { mailErr_(e); } }
+  if (!sent) return { ok: false, error: 'no_email' };
+  var at = to.indexOf('@'), hint = at > 1 ? to.charAt(0) + '***' + to.slice(at - 1) : '***';
+  return { ok: true, sent: sent, to_hint: hint };
 }
 function trackGet_(p) {
   if (!p.o && p.p) return trackByPhone_(p);

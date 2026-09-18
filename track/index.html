@@ -111,12 +111,18 @@
   }
   function renderList(j){   // phone lookup: one card per order, read-only
     var os=j.orders||[]; var h='<div class="lst"><div class="lk-h">Orders on &hellip;'+esc(j.phone_last4||'')+'</div>';
-    os.forEach(function(o){ h+='<div class="lst-o"><div class="lst-t"><b>'+esc(o.code)+'</b><span>'+esc(o.company||o.name||'')+'</span></div>'+
-      '<div class="lst-s">'+esc(o.label||'')+(o.due?' &middot; due '+esc(o.due):'')+'</div>'+(o.items?'<div class="lst-i">'+esc(o.items)+'</div>':'')+
-      (o.ship_tracking?'<div class="lst-i">'+esc(o.ship_carrier||'Tracking')+' '+esc(o.ship_tracking)+'</div>':'')+'</div>'; });
-    h+='<div class="note">To approve a proof or pay, use the link in your email or scan the QR on your invoice.</div>'+
+    // 2026-09-18 (foreman note 1): a phone number is not a secret - the list shows code, stage and due date only; the real link is EMAILED to the address on file.
+    os.forEach(function(o){ h+='<div class="lst-o"><div class="lst-t"><b>'+esc(o.code)+'</b></div>'+
+      '<div class="lst-s">'+esc(o.label||'')+(o.due?' &middot; due '+esc(o.due):'')+'</div></div>'; });
+    var anyEmail=os.some(function(o){ return o.has_email; });
+    h+=(anyEmail?'<button class="btn" id="llink" style="margin-top:6px">Email me my order link</button><div class="note" id="llnote">Your full order page - proof, approval, payment - goes to the email on the order. Never shown here.</div>'
+                :'<div class="note">No email on this order yet - text us and we will send your link.</div>')+
        '<button class="btn ghost" id="lagain" style="margin-top:12px">Look up another number</button></div>';
     app.innerHTML=h; document.getElementById('lagain').addEventListener('click',function(){ location.search=''; });
+    var ll=document.getElementById('llink'); if(ll) ll.addEventListener('click',function(){ ll.disabled=true; var nt=document.getElementById('llnote'); nt.textContent='Sending…';
+      fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'track_link',p:q('p')})}).then(function(r){return r.json();})
+        .then(function(j){ if(j&&j.ok){ nt.textContent='Sent to '+(j.to_hint||'your email')+' - check your inbox.'; ll.textContent='Sent'; } else { ll.disabled=false; nt.textContent=j&&j.error==='rate_limited'?'Already sent a moment ago - check your inbox.':'Could not send that - text us and we will send your link.'; } })
+        .catch(function(){ ll.disabled=false; nt.textContent='Could not reach us - try again.'; }); });
   }
   function render(o){
     var cur=o.stage, idx=o.stages.map(function(s){return s.key;}).indexOf(cur);
