@@ -124,7 +124,6 @@ var D={"products":[{"name":"3\" Slap","slug":"3-slap","section":"Slaps","size":"
   function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
   document.title=p.name+' · Configure · The Sticky Trap';
   $('ttl').textContent=p.name; $('psec').textContent=p.section; $('pname').textContent=p.name; $('pcut').textContent=p.cut; $('psize').textContent=p.size; $('unitlbl').textContent='per '+p.unit;
-
   // 2026-09-17 (promo links): ?mats=White Vinyl,Holographic limits the materials offered (Gold stays off a promo), ?m= / ?f= preselect
   // material and texture, ?q= presets the quantity. All optional; a plain ?p= link behaves as before.
   var Uq=new URLSearchParams(location.search), onlyMats=(Uq.get('mats')||'').split(',').map(function(x){return x.trim();}).filter(Boolean);
@@ -132,6 +131,7 @@ var D={"products":[{"name":"3\" Slap","slug":"3-slap","section":"Slaps","size":"
   var onlyFins=(Uq.get('fins')||'').split(',').map(function(x){return x.trim();}).filter(Boolean);   // ?fins=Spot Gloss UV -> only that texture is offered
   if(onlyFins.length){ var keepF=p.fins.filter(function(f){ return onlyFins.indexOf(f)>=0; }); if(keepF.length) p.fins=keepF; }
   var MINQ=Math.max(D.minq, parseInt(Uq.get('minq')||'',10)||0);   // ?minq=250 -> the quantity cannot go below it (promo floor)
+
   var cfg={mat:p.mats[0].key, fin:p.fins[0], hb:false}, qty=50, art=null, thumb=null, preflight=null;
   (function(){ var m=Uq.get('m'), f=Uq.get('f'), q=parseInt(Uq.get('q')||'',10);
     if(m&&p.mats.some(function(x){return x.key===m;})) cfg.mat=m;
@@ -219,7 +219,9 @@ var D={"products":[{"name":"3\" Slap","slug":"3-slap","section":"Slaps","size":"
   // price
   function dealFor(q){ var today=new Date().toISOString().slice(0,10); for(var i=0;i<deals.length;i++){ var d=deals[i]; if(d.product!==p.name) continue; if(d.material&&d.material!==cfg.mat) continue; if(d.finish&&d.finish!==cfg.fin) continue; if(d.from&&d.from>today) continue; if(d.until&&d.until<today) continue; if(q>=(d.fromQty||0)) return d; } return null; }
   function listPrice(){ var row=p.prices[cfg.mat][cfg.fin]; if(!row) return null; return (cfg.hb&&row[1]!==null)?row[1]:row[0]; }
-  function priceAt(q){ var pr=listPrice(); if(pr===null) return null; var u=unitAt(pr,q); var d=dealFor(q); if(d){ u=Math.min(u, Math.ceil(pr*(1-d.off)*100)/100); }   /* 2026-09-17: better of band or deal, never stacked */ return {unit:u, total:u*q, deal:d, list:pr}; }
+  function priceAt(q){ var pr=listPrice(); if(pr===null) return null; var u=unitAt(pr,q); var d=dealFor(q);
+    if(d){ if(d.match&&p.prices[cfg.mat]&&p.prices[cfg.mat][d.match]){ var row=p.prices[cfg.mat][d.match], mp=(cfg.hb&&row[1]!==null)?row[1]:row[0]; u=Math.min(u, unitAt(mp,q)); }   /* 2026-09-18: "match":"Flat" = this texture at the Flat price AT THIS QUANTITY (bands included), so the headline holds at 500+ too */
+      else if(d.off){ u=Math.min(u, Math.ceil(pr*(1-d.off)*100)/100); } }   /* 2026-09-17: % deals = better of band or deal, never stacked */ return {unit:u, total:u*q, deal:d, list:pr}; }
   function update(){ var r=priceAt(qty); if(!r){ $('unit').textContent='--'; return; }
     $('unit').textContent=money(r.unit); $('tot').innerHTML=fmt(qty)+' &times; '+money(r.unit)+' = <b>'+money(r.total)+'</b> &middot; '+esc(cfg.mat)+(cfg.hb?' + HoloBrite':'')+' &middot; '+esc(FN[cfg.fin]||cfg.fin);
     var nb=nextBreak(qty); if(nb){ var n=priceAt(nb.target); $('nudge').classList.remove('hidden'); $('nudge').innerHTML='Add <b>'+fmt(nb.add)+'</b> more: at '+fmt(nb.target)+' it&rsquo;s <b>'+money(n.unit)+'</b> each ('+nb.pct+'% off, '+money(n.total)+' total)'; } else { $('nudge').classList.add('hidden'); }
