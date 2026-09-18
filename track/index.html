@@ -214,15 +214,25 @@
         .catch(function(){ if(attempt<3) return setTimeout(function(){ load(attempt+1); },1500); lookupForm('Could not reach the tracker right now. Try again in a moment.'); });
       return; }
     if(!o||(!t&&!e)) return lookupForm();
-    if(attempt>1){ var el=document.querySelector('#app .err'); if(el) el.textContent='Still loading your order… (try '+attempt+' of 3)'; }
+    // 2026-09-18 (Shane: 'having issues loading your order'): paint from the static snapshot FIRST (data/t/<sha256(token)>.json, written every
+    // 10 min by track_snapshots.py on the shop PC, served by the CDN in ~50 ms), then refresh from the backend behind it. The customer never waits on Google.
+    if(attempt===1&&t&&!window.__snapTried){ window.__snapTried=true;
+      hashHex(t).then(function(h){ return fetch('/data/t/'+h+'.json?t='+Date.now(),{cache:'no-store'}); }).then(function(r){ return r.ok?r.json():null; })
+        .then(function(snap){ if(snap&&snap.code&&!window.__liveRendered){ render(snap); window.__snapRendered=true; var st=document.createElement('div'); st.className='note'; st.id='snapnote'; st.style.textAlign='center';
+            st.textContent='As of '+when(snap.snap_ts||Date.now())+' · checking for updates…'; app.insertBefore(st, app.firstChild); } }).catch(function(){}); }
+    if(attempt>1&&!window.__snapRendered){ var el=document.querySelector('#app .err'); if(el) el.textContent='Still loading your order… (try '+attempt+' of 3)'; }
     fetch(API+'?action=track&o='+encodeURIComponent(o)+'&t='+encodeURIComponent(t)+'&e='+encodeURIComponent(e)+'&_='+Date.now()+'&r='+attempt).then(function(r){return r.text();})
       .then(function(txt){ var j=null; try{ j=JSON.parse(txt); }catch(x){}
-        if(j&&j.ok&&j.order) return render(j.order);
-        if(j&&j.error==='not_found') return lookupForm('We could not find that order. Check the code and the email, or text us.');
+        if(j&&j.ok&&j.order){ window.__liveRendered=true; return render(j.order); }
+        if(j&&j.error==='not_found'){ if(window.__snapRendered) return; return lookupForm('We could not find that order. Check the code and the email, or text us.'); }
         if(!j&&attempt<3) return setTimeout(function(){ load(attempt+1); },1500);   // HTML / empty answer = the hop hiccuped, not the order
+        if(window.__snapRendered){ var sn=document.getElementById('snapnote'); if(sn) sn.textContent='Showing the last update we have - live check unavailable right now.'; return; }
         lookupForm('Could not load the order right now. Check the code and email, or text us.'); })
-      .catch(function(){ if(attempt<3) return setTimeout(function(){ load(attempt+1); },1500); lookupForm('Could not reach the tracker right now. Try again in a moment.'); });
+      .catch(function(){ if(attempt<3) return setTimeout(function(){ load(attempt+1); },1500);
+        if(window.__snapRendered){ var sn=document.getElementById('snapnote'); if(sn) sn.textContent='Showing the last update we have - live check unavailable right now.'; return; }
+        lookupForm('Could not reach the tracker right now. Try again in a moment.'); });
   }
+  function hashHex(str){ if(!(window.crypto&&crypto.subtle)) return Promise.reject(); return crypto.subtle.digest('SHA-256', new TextEncoder().encode(str)).then(function(buf){ return Array.prototype.map.call(new Uint8Array(buf),function(b){ return ('0'+b.toString(16)).slice(-2); }).join('').slice(0,32); }); }
   load();
 })();
 </script>
