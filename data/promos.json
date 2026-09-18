@@ -17,18 +17,18 @@
       "to": "2026-10-31",
       "kicker": "Starts Oct 1",
       "title": "o2 gloss at the Flat price",
-      "text": "White 45¢ · holo 55¢ · 250+ · app orders · Oct 1–31",
+      "text": "White 45¢ · 250+ · app orders · Oct 1–31",
       "cta": {
         "label": "Build it",
-        "url": "https://thestickytrap.app/configure/?p=o2-standard&mats=White%20Vinyl,Holographic&fins=Spot%20Gloss%20UV&m=White%20Vinyl&f=Spot%20Gloss%20UV&q=250&minq=250"
+        "url": "https://thestickytrap.app/configure/?p=o2-standard&mats=White%20Vinyl&fins=Spot%20Gloss%20UV&m=White%20Vinyl&f=Spot%20Gloss%20UV&q=250&minq=250"
       },
       "sticky": true,
       "pill": {
         "kicker": "OCT DEAL",
         "text": "o2 gloss · 45¢",
-        "url": "https://thestickytrap.app/configure/?p=o2-standard&mats=White%20Vinyl,Holographic&fins=Spot%20Gloss%20UV&m=White%20Vinyl&f=Spot%20Gloss%20UV&q=250&minq=250"
+        "url": "https://thestickytrap.app/configure/?p=o2-standard&mats=White%20Vinyl&fins=Spot%20Gloss%20UV&m=White%20Vinyl&f=Spot%20Gloss%20UV&q=250&minq=250"
       },
-      "_note": "kicker flips to \"October only\" on Oct 1 (bot editor); the DEAL price itself starts Oct 1 via deals[].from"
+      "_note": "kicker flips to \"October only\" on Oct 1 (bot editor); the DEAL price itself starts Oct 1 via deals[].from | 9/18 Shane: white only (holo dropped from the promo)."
     },
     {
       "id": "resin-reception-2026",
@@ -77,17 +77,6 @@
       "finish": "Spot Gloss UV",
       "fromQty": 250,
       "title": "October o2: Spot Gloss for the Flat price (white)",
-      "from": "2026-10-01",
-      "until": "2026-10-31",
-      "match": "Flat"
-    },
-    {
-      "id": "oct-o2-2026-holo",
-      "product": "o2 Standard",
-      "material": "Holographic",
-      "finish": "Spot Gloss UV",
-      "fromQty": 250,
-      "title": "October o2: Spot Gloss for the Flat price (holo)",
       "from": "2026-10-01",
       "until": "2026-10-31",
       "match": "Flat"

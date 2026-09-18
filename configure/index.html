@@ -227,7 +227,8 @@ var D={"products":[{"name":"3\" Slap","slug":"3-slap","section":"Slaps","size":"
     var nb=nextBreak(qty); if(nb){ var n=priceAt(nb.target); $('nudge').classList.remove('hidden'); $('nudge').innerHTML='Add <b>'+fmt(nb.add)+'</b> more: at '+fmt(nb.target)+' it&rsquo;s <b>'+money(n.unit)+'</b> each ('+nb.pct+'% off, '+money(n.total)+' total)'; } else { $('nudge').classList.add('hidden'); }
     if(r.deal){ $('deal').classList.remove('hidden'); $('deal').innerHTML='<b>Running deal:</b> '+esc(r.deal.title||(Math.round(r.deal.off*100)+'% off from '+fmt(r.deal.fromQty)))+' &middot; '+money(r.unit)+' instead of '+money(unitAt(r.list,qty)); } else { $('deal').classList.add('hidden'); }
     if(r.total<D.minorder){ $('minnote').classList.remove('hidden'); $('minnote').textContent='Orders are $'+D.minorder+' minimum - the basket tops this line up or add more.'; } else { $('minnote').classList.add('hidden'); }
-    $('ladder').innerHTML=D.ladder.map(function(b){ var x=priceAt(b); return '<tr'+(b===qty?' class="on"':'')+'><td>'+fmt(b)+(b===D.maxq?'':'+')+'</td><td>'+money(x.unit)+'</td></tr>'; }).join('');
+    var LAD=D.ladder.filter(function(b){ return b>=MINQ; }); if(MINQ>D.minq&&LAD.indexOf(MINQ)<0) LAD.unshift(MINQ);   /* 2026-09-18 (Shane): no rows under a promo floor (?minq=); the floor itself leads */
+    $('ladder').innerHTML=LAD.map(function(b){ var x=priceAt(b); return '<tr'+(b===qty?' class="on"':'')+'><td>'+fmt(b)+(b===D.maxq?'':'+')+'</td><td>'+money(x.unit)+'</td></tr>'; }).join('');
     draw(); }
   update();
 
