@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 58;   // v58 9/18: staff orders list carries track_url (the tokened client link) so the console can print the QR label.   // v57 9/18 foreman notes: phone lookup returns code/stage/due only + 'track_link' emails the real link; deals support "match":"Flat" (texture at the Flat price at that quantity) in the cart re-price.   // v56 9/18 Shane: find my orders by PHONE (read-only list; approve/pay still need the tokened link) - track&p=   // v55 9/18: tracker links -> https://track.thestickytrap.app/ (the tracker's own front door; forwards to /track/ on the app origin so push keeps working).   // v54 9/17 Shane: 'no deposits - art assessed free, agreed orders paid in full' - wording; Payment received email says so.   // v53 9/17 October promo: deals honor 'from', and a deal price is the better of band or deal (never stacked).   // v52 9/17: 'NUDGED <customer>' replies to the Jobs today email are picked up hourly (nudgedReplies_) so the reorder list clears itself.   // v51 9/17 bot editor: the hourly stall email (24 h proof / 72 h press) is OFF by default - the Daily Pulse 'Jobs today' email is the one stall list; set NUDGE_STALE=on to bring it back. v50 9/17 New Orders Intake (Shane): 'Quote sent' -> 'Invoice sent' (the invoice is the quote)   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 59;   // v59 9/18 SECURITY: token_rotate (PIN) - fresh token on every open + recently archived order, current-stage email re-sent so links work; the tracker snapshots that leaked tokens are gone for good.   // v58 9/18: staff orders list carries track_url (the tokened client link) so the console can print the QR label.   // v57 9/18 foreman notes: phone lookup returns code/stage/due only + 'track_link' emails the real link; deals support "match":"Flat" (texture at the Flat price at that quantity) in the cart re-price.   // v56 9/18 Shane: find my orders by PHONE (read-only list; approve/pay still need the tokened link) - track&p=   // v55 9/18: tracker links -> https://track.thestickytrap.app/ (the tracker's own front door; forwards to /track/ on the app origin so push keeps working).   // v54 9/17 Shane: 'no deposits - art assessed free, agreed orders paid in full' - wording; Payment received email says so.   // v53 9/17 October promo: deals honor 'from', and a deal price is the better of band or deal (never stacked).   // v52 9/17: 'NUDGED <customer>' replies to the Jobs today email are picked up hourly (nudgedReplies_) so the reorder list clears itself.   // v51 9/17 bot editor: the hourly stall email (24 h proof / 72 h press) is OFF by default - the Daily Pulse 'Jobs today' email is the one stall list; set NUDGE_STALE=on to bring it back. v50 9/17 New Orders Intake (Shane): 'Quote sent' -> 'Invoice sent' (the invoice is the quote)   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -200,6 +200,7 @@ function doPost(e) {
   if (body.action === 'rate') { try { return out_(rateIn_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }                   // v34: thumbs on a reply
   if (body.action === 'billing_draft') { try { return out_(billingDraft_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }   // v36: Gmail DRAFT for the Invoices billing mailer
   if (body.action === 'lead_phone') { try { return out_(leadPhone_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }         // v38: 'text me when they reply' after a hand-off
+  if (body.action === 'token_rotate') { try { return out_(tokenRotate_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }     // v59: security rotation
   if (body.action === 'track_link') { try { return out_(trackLink_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }         // v57: 'email me my link' from the phone lookup
   if (body.action === 'cron') { try { return out_(cronRun_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }                // v48: timed jobs driven from the PC (no ScriptApp triggers)
   if (body.action === 'report_send') { try { return out_(reportSend_(body)); } catch (err) { return out_({ ok: false, error: String(err).slice(0, 200) }); } }       // v41: any PC-side report -> email + dated Drive copy
@@ -1292,6 +1293,27 @@ function trackByPhone_(p) {   // v56: ?action=track&p=<phone> -> every open orde
   out.sort(function (a, b) { return (b.stage_ts || 0) - (a.stage_ts || 0); });
   if (!out.length) return { ok: false, error: 'not_found' };
   return { ok: true, orders: out.slice(0, 12), phone_last4: ph.slice(-4) };
+}
+function tokenRotate_(b) {   // v59 (9/18 security): every open order + archived < N days gets a new token; open orders with an email get their current-stage email again (new link)
+  if (!pinOk_(b.pin)) return { ok: false, error: 'bad_pin' };
+  var days = +b.days || 60, since = Date.now() - days * 864e5, dry = !!b.dry, rotated = [], resent = [], noEmail = [], failed = [];
+  var only = String(b.code || '').trim().toUpperCase();
+  [[ordersSheet_(), false], [archiveSheet_(), true]].forEach(function (pair) {
+    var sh = pair[0], isArch = pair[1], rows = sh.getDataRange().getValues(), tcol = ORDER_COLS.indexOf('token') + 1;
+    for (var i = 1; i < rows.length; i++) { var o = rowObj_(rows[i]); if (!o.code) continue;
+      if (only && String(o.code).toUpperCase() !== only) continue;
+      if (o.stage === 'cancelled') continue;
+      var ts = o.stage_ts ? new Date(o.stage_ts).getTime() : 0;
+      if (isArch && (!ts || ts < since)) continue;
+      var fresh = Utilities.getUuid().replace(/-/g, '').slice(0, 12);
+      if (!dry) sh.getRange(i + 1, tcol).setValue(fresh);
+      rotated.push(o.code);
+      if (isArch || o.stage === 'complete') continue;
+      if (!o.email) { noEmail.push(o.code); continue; }
+      if (dry) { resent.push(o.code); continue; }
+      try { o.token = fresh; var r = notifyClient_(sh, { i: i + 1, o: o }, o, o.stage, 'Your tracking link was refreshed - please use this one from now on.'); if (r && r.emailed) resent.push(o.code); else failed.push(o.code); }
+      catch (e) { mailErr_(e); failed.push(o.code); } } });
+  return { ok: true, dry: dry, rotated: rotated, resent: resent, no_email: noEmail, failed: failed };
 }
 function trackLink_(b) {   // v57: {p: phone, code?} -> emails the real tracker link for every open order on that number (or the one code) to the email on file
   var ph = normPhone_(b.p); if (!ph) return { ok: false, error: 'bad_phone' };
