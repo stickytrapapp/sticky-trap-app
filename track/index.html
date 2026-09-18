@@ -38,6 +38,10 @@
   .prefs .pl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:800;flex:1 1 100%}
   .prefs label{display:inline-flex;align-items:center;gap:7px;font-size:14px;color:#fff;cursor:pointer}.prefs label.off{opacity:.5}
   .prefs input{accent-color:var(--cy);width:18px;height:18px;margin:0}.prefs small{flex:1 1 100%;color:var(--muted);font-size:11.5px;line-height:1.4}
+  .prefs .chan{flex:1 1 100%;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:14px;color:#fff}.prefs .chan b{font-weight:800}.prefs .chan span{color:var(--muted)}
+  .prefs .chan small{flex:1 1 100%;margin-top:-2px}.prefs .lnk{margin-left:auto;background:none;border:0;color:var(--cy);font:inherit;font-weight:800;font-size:13px;cursor:pointer;padding:2px 0}
+  .prefs .phbox{flex:1 1 100%;display:flex;gap:8px;align-items:center}.prefs .phbox input{flex:1;min-width:0;background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:12px;color:#fff;font:inherit;font-size:16px}
+  .prefs .btn.small{width:auto;margin:0;padding:12px 18px;font-size:14px}
   .rate{margin-top:16px;padding:14px;background:var(--panel);border:1px solid var(--line);border-radius:14px;text-align:center}
   .rate .k{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-bottom:8px}
   .rate .tb{display:flex;gap:10px}.rate .tbtn{flex:1;padding:12px 8px;border-radius:12px;border:1px solid var(--line);background:var(--panel-2);color:#fff;font:inherit;font-size:15px;font-weight:800;cursor:pointer}.rate .tbtn.on{border-color:var(--cy);background:rgba(18,196,255,.14)}
@@ -95,9 +99,10 @@
       (o.stage==='complete'?'<div class="rate" id="rate"><div class="k">How did we do?</div>'+(o.rating?'<div class="thanks">'+(String(o.rating).indexOf('up')===0?'Thanks for the thumbs up.':'Thanks for telling us - we are on it.')+'</div>':'<div class="tb"><button type="button" class="tbtn" data-r="up">👍 Great</button><button type="button" class="tbtn" data-r="down">👎 Not this time</button></div><div id="ratebox" hidden><textarea id="ratenote" rows="3" maxlength="400" placeholder="What should we fix? We read every one."></textarea><button class="btn" id="ratesend" type="button" style="margin-top:8px">Send</button></div><small id="ratemsg"></small>')+'</div>':'')+
       '<ul class="tl" style="margin-top:18px">'+tl+'</ul>'+
       (o.token?'<div class="prefs" id="prefs"><span class="pl">Order updates</span>'+
-        '<label><input type="checkbox" class="pf" data-v="email"'+(o.notify==='both'||o.notify==='email'||!o.notify?' checked':'')+(o.email?'':' disabled')+'> Email'+(o.email?'':' <span style="color:var(--muted)">(none on file)</span>')+'</label>'+
-        '<label'+(o.phone_last4?'':' class="off"')+'><input type="checkbox" class="pf" data-v="sms"'+((o.notify==='both'||o.notify==='sms')&&o.phone_last4?' checked':'')+(o.phone_last4?'':' disabled')+'> Text'+(o.phone_last4?' <span style="color:var(--muted)">…'+esc(o.phone_last4)+'</span>':' <span style="color:var(--muted)">(no phone on file)</span>')+'</label>'+
-        '<small id="prefnote">'+(o.phone_last4&&!o.sms_ready?'Texts start once we switch them on - email keeps you covered until then.':'Pick how you want to hear from us. One has to stay on.')+'</small>'+
+        '<div class="chan"><b>Email</b> <span>'+(o.email?esc(o.email):'none on file')+'</span><small>Every step lands here.</small></div>'+
+        '<div class="chan" id="phrow"><b>Phone</b> <span id="phshow">'+(o.phone_last4?'on file &middot; &hellip;'+esc(o.phone_last4):'none on file')+'</span><button type="button" class="lnk" id="phadd">'+(o.phone_last4?'Change':'Add my number')+'</button><small>So we can call or text you about this order. Never shared.</small></div>'+
+        '<div class="phbox" id="phbox" hidden><input id="phin" type="tel" inputmode="tel" autocomplete="tel" placeholder="Your cell number"><button type="button" class="btn small" id="phsave">Save</button></div>'+
+        '<small id="prefnote"></small>'+
         '<div class="pushrow" id="pushrow" hidden><div class="pt"><b>Updates on this phone</b><small id="pushnote">A notification the moment your order moves.</small></div><button type="button" class="sw" id="pushsw" role="switch" aria-checked="false" aria-label="Push notifications on this phone"></button></div>'+
         '</div>':'');
     var ab=document.getElementById('approve');
@@ -108,13 +113,17 @@
     var cb=document.getElementById('chg'), cbox=document.getElementById('chgbox'), cs=document.getElementById('chgsend');
     if(cb) cb.addEventListener('click',function(){ cbox.hidden=!cbox.hidden; if(!cbox.hidden){ document.getElementById('chgnote').focus(); } });
     var pbox=document.getElementById('prefs');
-    if(pbox){ pbox.querySelectorAll('.pf').forEach(function(cb){ cb.addEventListener('change',function(){
-      var em=pbox.querySelector('.pf[data-v=email]'), sm=pbox.querySelector('.pf[data-v=sms]'), note=document.getElementById('prefnote');
-      if(!em.checked&&!sm.checked){ cb.checked=true; note.textContent='Keep at least one way for us to reach you.'; return; }
-      var v=em.checked&&sm.checked?'both':(em.checked?'email':'sms'); note.textContent='Saving…';
-      fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'order_prefs',code:o.code,token:o.token,notify:v})}).then(function(r){return r.json();})
-        .then(function(j){ if(j&&j.ok){ o.notify=v; note.textContent=v==='both'?'Saved - email and text.':v==='email'?'Saved - email only.':'Saved - text only.'; } else { cb.checked=!cb.checked; note.textContent='Could not save that - try again.'; } })
-        .catch(function(){ cb.checked=!cb.checked; note.textContent='Could not save that - try again.'; }); }); }); }
+    // 2026-09-18 (Shane: 'no phone on file and the box is not clickable - how can they add it'): texts are off (no Twilio), so the old
+    // Email/Text checkboxes are gone. Email is the channel; the customer can add or change a phone so the shop can call or text by hand.
+    if(pbox){ var padd=document.getElementById('phadd'), pboxd=document.getElementById('phbox'), pin=document.getElementById('phin'), psave=document.getElementById('phsave'), pnote2=document.getElementById('prefnote'), pshow=document.getElementById('phshow');
+      padd.addEventListener('click',function(){ pboxd.hidden=!pboxd.hidden; if(!pboxd.hidden) pin.focus(); });
+      pin.addEventListener('input',function(){ var d=pin.value.replace(/\D/g,'').slice(0,11); if(d.length===11&&d[0]==='1') d=d.slice(1); pin.value=d.length>6?d.slice(0,3)+'-'+d.slice(3,6)+'-'+d.slice(6):d.length>3?d.slice(0,3)+'-'+d.slice(3):d; });
+      psave.addEventListener('click',function(){ var d=pin.value.replace(/\D/g,''); if(d.length<10){ pnote2.textContent='Ten digits, please.'; return; }
+        psave.disabled=true; pnote2.textContent='Saving…';
+        fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'order_prefs',code:o.code,token:o.token,notify:(o.notify==='both'||o.notify==='sms')?'both':'email',phone:d})}).then(function(r){return r.json();})
+          .then(function(j){ psave.disabled=false; if(j&&j.ok){ o.phone_last4=j.phone_last4||d.slice(-4); pshow.innerHTML='on file &middot; &hellip;'+esc(o.phone_last4); padd.textContent='Change'; pboxd.hidden=true; pin.value=''; pnote2.textContent='Saved. We have your number for this order.'; }
+            else { pnote2.textContent=j&&j.error==='no_email'?'Add an email first - it is how we reach you.':'Could not save that - try again.'; } })
+          .catch(function(){ psave.disabled=false; pnote2.textContent='Could not reach us - try again.'; }); }); }
     // How did we do? (2026-09-15, order_rate): thumbs up posts at once; thumbs down opens a note. ?rate=up|down from the Complete email pre-selects.
     var rateEl=document.getElementById('rate');
     if(rateEl&&!o.rating){ var rmsg=document.getElementById('ratemsg'), rbox=document.getElementById('ratebox');
