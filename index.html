@@ -2180,11 +2180,11 @@
     {src:'audio/app-6.mp3',  name:'Right Address B1',     kind:'beat',  fam:'ra'},
     {src:'audio/app-7.mp3',  name:'Gold on Black',        kind:'vocal', fam:'gb'},   // 2026-09-17 (Shane): replaced Holo Wrap (crunchy funk, take 2)
     {src:'audio/app-8.mp3',  name:'Late Shift',           kind:'vocal', fam:'ls'},
-    {src:'audio/app-9.mp3',  name:'Right Address B2',     kind:'beat',  fam:'ra'},
-    {src:'audio/app-12.mp3', name:'Stay Trapping Dub 1',  kind:'beat',  fam:'st'},   // 2026-09-16 (Shane): reggae/dub B-sides; vocal 'Stay Trapping' -> app-11 once he picks a take
-    {src:'audio/app-13.mp3', name:'Stay Trapping Dub 2',  kind:'beat',  fam:'st'},
+    {src:'audio/app-9.mp3',  name:'Right Address B2',     kind:'beat',  fam:'ra',  tail:3.5},
+    {src:'audio/app-12.mp3', name:'Stay Trapping Dub 1',  kind:'beat',  fam:'st',  tail:5.5},   // 2026-09-16 (Shane): reggae/dub B-sides; vocal 'Stay Trapping' -> app-11 once he picks a take
+    {src:'audio/app-13.mp3', name:'Stay Trapping Dub 2',  kind:'beat',  fam:'st',  tail:3.5},
     {src:'audio/app-11.mp3', name:'Stay Trapping Riff',   kind:'beat',  fam:'st'},   // 2026-09-17 (Shane): instrumental cover of the riff cut, take 1
-    {src:'audio/app-14.mp3', name:'Full Speed',           kind:'beat',  fam:'fs'},   // 2026-09-17 (Shane): industrial half-time DnB, v6 groove take 1
+    {src:'audio/app-14.mp3', name:'Full Speed',           kind:'beat',  fam:'fs',  xfIn:2},   // 2026-09-17 (Shane): industrial half-time DnB, v6 groove take 1
     {src:'audio/app-17b.mp3', name:'Twenty-Four',         kind:'vocal', fam:'tf',  xfIn:1.5}    // 2026-09-18 (Shane): industrial rap, his lines vs the 24% tax; v4 take 2 = verse 2 twice, 'the hate is justified' intro
   ];
   var VOL=0.35, TRIM={vocal:0.86, beat:1}, DUCK=0.4;   // vocals sit a notch under the beats so lyrics don't fight the text on screen
@@ -2222,7 +2222,9 @@
     var P=pool(); if(!P.length) return null; var c=unplayed(null);
     var wmp=c.filter(function(t){ return t.fam==='wmp'&&t.kind==='vocal'; })[0]; if(wmp&&!hist.length) return wmp;   // first ever start -> We Make Pros (Shane 9/17; was Trap House Open)
     var v=c.filter(function(t){ return t.kind==='vocal'; }); var pool2=v.length?v:c; return pool2[Math.floor(Math.random()*pool2.length)]; }
-  function xfFor(nxt,prev){ if(nxt&&nxt.xfIn) return nxt.xfIn; if(prev&&prev.kind==='beat'&&nxt&&nxt.kind==='vocal') return 4; return 2.5; }
+  // 2026-09-18 (App review): most Suno endings fade over the last 3-4 s, so a 2.5 s crossfade started inside the fade = an energy dip.
+  // Default is 4 s now; a track's own `tail` (seconds of fade-out) can push it earlier; `xfIn` on the incoming track still wins (quiet intros).
+  function xfFor(nxt,prev){ var base=(nxt&&nxt.xfIn)?nxt.xfIn:4; if(prev&&prev.tail) base=Math.max(base,prev.tail); return base; }
   function mk(){ var x=new Audio(); x.loop=false; x.preload='none'; x.setAttribute('playsinline','');
     try{ var AC=window.AudioContext||window.webkitAudioContext; if(AC){ if(!actx){ actx=new AC(); gain=actx.createGain(); gain.gain.value=0; gain.connect(actx.destination); }
       var g=actx.createGain(); g.gain.value=1; g.connect(gain); actx.createMediaElementSource(x).connect(g); x._g=g; } }catch(e){}
@@ -2239,6 +2241,7 @@
         x._g.gain.cancelScheduledValues(tt); x._g.gain.setValueAtTime(x._g.gain.value,tt); x._g.gain.linearRampToValueAtTime(0,tt+left);
         var p=n.play(); if(p&&p.catch) p.catch(function(){}); a=n; a._next=null; mark(nxt.src); savePos(true); } });
     x.addEventListener('play',function(){ if(x._ramp){ x._ramp=false; return; } x._xf=false; var t=trackOf(x); gset(x,t?TRIM[t.kind]:1); });
+    x.addEventListener('error',function(){ var t=trackOf(x); if(t) mark(t.src); if(x!==a||mode==='off') return; var nxt=pick(t); if(nxt&&nxt!==t){ x._next=null; swapTo(nxt); } });   // 2026-09-18: a file that will not load is skipped, not the end of the music
     return x; }
   function other(){ return a===A[0]?A[1]:A[0]; }
   function swapTo(nxt){ if(!nxt) return; var n=other(); if(n.src!==abs(nxt.src)) n.src=nxt.src; a=n; a._next=null; gset(a,TRIM[nxt.kind]); var p=a.play(); if(p&&p.catch) p.catch(function(){}); mark(nxt.src); prime(); savePos(true); }
@@ -2259,9 +2262,13 @@
     b.setAttribute('aria-label', mode==='full'?'Music on (explicit)': mode==='beats'?'Music: beats only':'Music off'); b.title= mode==='full'?'Music: full (explicit) - tap for beats only, hold to skip': mode==='beats'?'Music: beats only - tap for off, hold to skip': 'Music (explicit) - tap for on'; }
   function fade(to,ms,then){ var x=el(); clearInterval(fadeT); var from=getVol(), t0=Date.now();
     fadeT=setInterval(function(){ var k=Math.min(1,(Date.now()-t0)/ms); setVol(from+(to-from)*k); if(k>=1){ clearInterval(fadeT); if(to===0) x.pause(); if(then) then(); } },50); }
-  function start(){ var x=el(); if(actx&&actx.state!=='running'){ try{actx.resume();}catch(e){} } x.preload='auto'; var p=x.play();
+  // 2026-09-18 (App review): on iPhone, audio routed through Web Audio obeys the ring/silent switch, so a muted phone heard nothing. A looping
+  // silent <audio> (NOT connected to Web Audio) started on the same tap moves the page onto the media channel, and the music comes through.
+  var SIL='data:audio/wav;base64,UklGRoQJAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YWAJAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIA=', sil=null;
+  function unlock(){ try{ if(!sil){ sil=new Audio(SIL); sil.loop=true; sil.setAttribute('playsinline',''); sil.volume=0.01; } var p=sil.play(); if(p&&p.catch) p.catch(function(){}); }catch(e){} }
+  function start(){ var x=el(); unlock(); if(actx&&actx.state!=='running'){ try{actx.resume();}catch(e){} } x.preload='auto'; var p=x.play();
     if(p&&p.then){ p.then(function(){ fade(target(),900); ui(); userPaused=false; nowPlaying((trackOf(x)||{}).src,true); }).catch(function(){ arm(); }); } else { fade(target(),900); ui(); } }
-  function stop(){ if(a&&!a.paused) fade(0,400); else if(a){ a.pause(); } ui(); }
+  function stop(){ if(a&&!a.paused) fade(0,400); else if(a){ a.pause(); } try{ if(sil) sil.pause(); }catch(e){} ui(); }
   // ---- 2026-09-17 (Shane: 'lock-screen controls, a skip, a now-playing name'): ----
   var lastNow='', nowT=null, userPaused=false;
   function nowPlaying(src,force){ var t=null; for(var i=0;i<CAT.length;i++){ if(CAT[i].src===src) t=CAT[i]; } if(!t) return;
