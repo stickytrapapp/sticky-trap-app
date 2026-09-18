@@ -124,14 +124,17 @@
         .then(function(j){ if(j&&j.ok){ nt.textContent='Sent to '+(j.to_hint||'your email')+' - check your inbox.'; ll.textContent='Sent'; } else { ll.disabled=false; nt.textContent=j&&j.error==='rate_limited'?'Already sent a moment ago - check your inbox.':'Could not send that - text us and we will send your link.'; } })
         .catch(function(){ ll.disabled=false; nt.textContent='Could not reach us - try again.'; }); });
   }
+  var TRACK_EV='https://script.google.com/macros/s/AKfycbwVUSDnQ46hApEe1k4LWlUmyOGnLMuMoVLTlD5_501K0U5AcA7Nl_jXcn05DNOJRKNlMg/exec';
+  function beacon(o){ if(window.__beaconed) return; window.__beaconed=true; try{ new Image().src=TRACK_EV+'?e=track_open&uid='+encodeURIComponent(o.code)+'&d='+encodeURIComponent((q('src')||'link')+':'+o.stage)+'&t='+Date.now(); }catch(e){} }
   function render(o){
+    beacon(o);
     var cur=o.stage, idx=o.stages.map(function(s){return s.key;}).indexOf(cur);
     var hist={}; (o.history||[]).forEach(function(h){ hist[h.stage]=h; });
     var tl=o.stages.map(function(s,i){ var cls=i<idx?'done':(i===idx?'cur':''); var h=hist[s.key]; return '<li class="'+cls+'">'+esc(s.label)+(h?'<small>'+esc(when(h.ts))+(h.note?' · '+esc(h.note):'')+'</small>':'')+'</li>'; }).join('');
     app.innerHTML='<p class="code">'+esc(o.code)+'</p><div class="who">'+esc(o.company||o.name||'')+'</div>'+
       '<div class="now"><div class="k">Right now</div><div class="v">'+esc(o.label)+'</div><div class="m">'+esc(o.message||'')+'</div></div>'+
       (o.token&&!saved(o.code)?'<div class="save" id="save"><div class="sh"><b>Keep this on your phone</b><button type="button" class="sx" id="savex" aria-label="Dismiss">&times;</button></div>'+
-        '<ol>'+saveSteps()+'</ol><div class="sbtns"><button type="button" class="btn ghost" id="savecopy">Copy my link</button>'+(navigator.share?'<button type="button" class="btn ghost" id="saveshare">Share / save</button>':'')+'</div></div>':'')+
+        '<ol>'+saveSteps()+'</ol>'+(navigator.share?'<div class="sbtns"><button type="button" class="btn ghost" id="saveshare">Share / save</button></div>':'')+'</div>':'')+
       '<div class="meta"><div><div class="k">Due</div><div class="v">'+esc(o.due||'To be set')+'</div></div><div><div class="k">Order</div><div class="v">'+esc(o.items||'See your quote')+'</div></div></div>'+
       (o.payment_status==='authorized'?'<div class="note" style="margin-top:8px">Card authorized'+(o.payment_amt?' for $'+(+o.payment_amt).toFixed(2):'')+' - charged only when you approve the proof.</div>':'')+
       (o.payment_status==='captured'?'<div class="note" style="margin-top:8px">Paid by card'+(o.payment_amt?' - $'+(+o.payment_amt).toFixed(2):'')+'. Thank you.</div>':'')+
@@ -142,6 +145,7 @@
       (o.reorder_url?'<a class="btn" href="'+esc(o.reorder_url)+'" style="display:block;text-align:center;text-decoration:none">Reorder this job →</a><div class="note">Opens the app with this order filled in - adjust anything, then send.</div>':'')+
       (o.stage==='complete'?'<div class="rate" id="rate"><div class="k">How did we do?</div>'+(o.rating?'<div class="thanks">'+(String(o.rating).indexOf('up')===0?'Thanks for the thumbs up.':'Thanks for telling us - we are on it.')+'</div>':'<div class="tb"><button type="button" class="tbtn" data-r="up">👍 Great</button><button type="button" class="tbtn" data-r="down">👎 Not this time</button></div><div id="ratebox" hidden><textarea id="ratenote" rows="3" maxlength="400" placeholder="What should we fix? We read every one."></textarea><button class="btn" id="ratesend" type="button" style="margin-top:8px">Send</button></div><small id="ratemsg"></small>')+'</div>':'')+
       '<ul class="tl" style="margin-top:18px">'+tl+'</ul>'+
+      '<a class="btn ghost" id="txtus" href="sms:+17344603845?&body='+encodeURIComponent('Order '+o.code+' - ')+'" style="display:block;text-align:center;text-decoration:none;margin-top:14px">Text us about this order</a>'+
       (o.token?'<div class="prefs" id="prefs"><span class="pl">Order updates</span>'+
         '<div class="chan"><b>Email</b> <span>'+(o.email?esc(o.email):'none on file')+'</span><small>Every step lands here.</small></div>'+
         '<div class="chan" id="phrow"><b>Phone</b> <span id="phshow">'+(o.phone_last4?'on file &middot; &hellip;'+esc(o.phone_last4):'none on file')+'</span><button type="button" class="lnk" id="phadd">'+(o.phone_last4?'Change':'Add my number')+'</button><small>So we can call or text you about this order. Never shared.</small></div>'+
@@ -158,7 +162,6 @@
     // so Add to Home Screen saves THIS exact link (order + token) as an icon - iOS via Share, Android via the browser menu, desktop as a bookmark.
     var sv=document.getElementById('save');
     if(sv){ document.getElementById('savex').addEventListener('click',function(){ try{ localStorage.setItem('st_track_saved_'+o.code,'1'); }catch(e){} sv.remove(); });
-      var cp=document.getElementById('savecopy'); cp.addEventListener('click',function(){ var u=location.href.split('#')[0]; (navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){ cp.textContent='Copied'; },function(){ prompt('Your order link:',u); }); });
       var sh=document.getElementById('saveshare'); if(sh) sh.addEventListener('click',function(){ navigator.share({title:'My Sticky Trap order '+o.code,url:location.href.split('#')[0]}).catch(function(){}); }); }
     var cb=document.getElementById('chg'), cbox=document.getElementById('chgbox'), cs=document.getElementById('chgsend');
     if(cb) cb.addEventListener('click',function(){ cbox.hidden=!cbox.hidden; if(!cbox.hidden){ document.getElementById('chgnote').focus(); } });
