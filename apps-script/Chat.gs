@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 54;   // v54 9/17 Shane: 'no deposits - art assessed free, agreed orders paid in full' - wording; Payment received email says so.   // v53 9/17 October promo: deals honor 'from', and a deal price is the better of band or deal (never stacked).   // v52 9/17: 'NUDGED <customer>' replies to the Jobs today email are picked up hourly (nudgedReplies_) so the reorder list clears itself.   // v51 9/17 bot editor: the hourly stall email (24 h proof / 72 h press) is OFF by default - the Daily Pulse 'Jobs today' email is the one stall list; set NUDGE_STALE=on to bring it back. v50 9/17 New Orders Intake (Shane): 'Quote sent' -> 'Invoice sent' (the invoice is the quote)   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 55;   // v55 9/18: tracker links -> https://track.thestickytrap.app/ (the tracker's own front door; forwards to /track/ on the app origin so push keeps working).   // v54 9/17 Shane: 'no deposits - art assessed free, agreed orders paid in full' - wording; Payment received email says so.   // v53 9/17 October promo: deals honor 'from', and a deal price is the better of band or deal (never stacked).   // v52 9/17: 'NUDGED <customer>' replies to the Jobs today email are picked up hourly (nudgedReplies_) so the reorder list clears itself.   // v51 9/17 bot editor: the hourly stall email (24 h proof / 72 h press) is OFF by default - the Daily Pulse 'Jobs today' email is the one stall list; set NUDGE_STALE=on to bring it back. v50 9/17 New Orders Intake (Shane): 'Quote sent' -> 'Invoice sent' (the invoice is the quote)   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';   // where NDA copies + referral alerts go (Session.getEffectiveUser needs a scope the web app lacks)
 var CACHE = CacheService.getScriptCache();
 
@@ -1084,7 +1084,8 @@ function findOrder_(sh, code) {
   for (var i = 1; i < rows.length; i++) if (String(rows[i][0]).toUpperCase() === code) return { i: i + 1, o: rowObj_(rows[i]) };
   return null;
 }
-function trackUrl_(o) { return 'https://thestickytrap.app/track/?o=' + encodeURIComponent(o.code) + '&t=' + encodeURIComponent(o.token); }
+var TRACK_HOME = 'https://track.thestickytrap.app/';   // v55: the tracker's own address (GitHub Pages repo stickytrapapp/track forwards to thestickytrap.app/track/ with the same query)
+function trackUrl_(o) { return TRACK_HOME + '?o=' + encodeURIComponent(o.code) + '&t=' + encodeURIComponent(o.token); }
 function reorderUrl_(o) { var e = encodeURIComponent; return 'https://thestickytrap.app/reorder/?code=' + e(o.code) + '&e=' + e(o.email || ''); }   // v31 (App step 5): the reorder page reads exact lines via track; the page falls back to /?reorder= itself
 function mailErr_(e) { try { PROP.setProperty('MAIL_LAST_ERROR', new Date().toISOString() + ' ' + String(e).slice(0, 200)); } catch (e2) {} }   // v29: why a client email did not go out (shown by ?ping=1)
 /* ---------- v32 (Shane 2026-09-11 'build it Monday'): every update by email AND text at the same moment; a customer may turn off one, never both ---------- */
@@ -1441,7 +1442,7 @@ function fcmToken_() {   // OAuth2 access token from the service account, cached
 function pushOrder_(o, title, body) {   // fire-and-forget; dead tokens are switched off after an UNREGISTERED / 404
   var t = pushTargets_(o); if (!t.length) return 0;
   var at, sent = 0; try { at = fcmToken_(); } catch (e) { return 0; }
-  var url = 'https://thestickytrap.app/track/?o=' + encodeURIComponent(o.code) + '&t=' + encodeURIComponent(o.token || ''), sh = pushSheet_();
+  var url = trackUrl_(o), sh = pushSheet_();
   t.forEach(function (r) {
     var msg = { message: { token: r.token, notification: { title: title, body: body }, data: { url: url, code: String(o.code) },
       webpush: { headers: { Urgency: 'high', TTL: '86400' }, fcm_options: { link: url }, notification: { icon: 'https://thestickytrap.app/icons/icon-192.png', tag: 'order-' + o.code } } } };
