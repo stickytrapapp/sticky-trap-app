@@ -71,6 +71,13 @@
   .promostrip:active{transform:translateY(1px)}
   .promostrip[hidden]{display:none}
   body.on-menu .promostrip{display:none}
+  /* Trap Points today line (2026-09-18): one tappable row under the promo strip - points, streak, goal, and whether today's board is done */
+  .tpline{flex:none;display:flex;align-items:center;gap:9px;margin:6px 12px 0;padding:8px 10px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0e0e13;cursor:pointer;-webkit-tap-highlight-color:transparent;font-size:12.5px;line-height:1.2;color:var(--ink)}
+  .tpline .tl-ic{flex:none;width:22px;height:22px;border-radius:7px;background:linear-gradient(135deg,#FF1FA2,#8A2BE2 55%,#12C4FF);display:grid;place-items:center;color:#fff;font-size:12px;font-weight:900}
+  .tpline .tl-t{flex:1;min-width:0;line-height:1.3}.tpline .tl-t b{color:#fff}.tpline .tl-t .mut{color:var(--muted)}
+  .tpline .tl-cta{flex:none;font-size:11px;font-weight:900;padding:6px 10px;border-radius:999px;color:#050505;background:linear-gradient(100deg,#FF1FA2,#12C4FF);white-space:nowrap}
+  .tpline.done .tl-cta{background:#1d1d24;color:var(--muted);border:1px solid rgba(255,255,255,.12)}
+  body.on-menu .tpline{display:none}
   .promostrip .ps-k{flex:none;font-size:9.5px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:#050505;padding:5px 7px;border-radius:7px;background:linear-gradient(100deg,#FF1FA2,#12C4FF);white-space:nowrap}
   .promostrip .ps-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;line-height:1.2;color:var(--ink)}
   .promostrip .ps-t b{font-size:13.5px;font-weight:800;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
@@ -475,6 +482,7 @@
   </nav>
 
   <div class="promostrip" id="promostrip" hidden role="button" tabindex="0"><div class="ps-t"><span class="ps-k" id="psK"></span><b id="psT"></b><span id="psD"></span></div><button class="ps-cta" id="psCta" type="button"></button><button class="ps-x" id="psX" type="button" aria-label="Dismiss">&times;</button></div>
+  <a class="tpline" id="tpline" href="https://thestickytrap.app/game/" hidden><span class="tl-ic">◈</span><span class="tl-t" id="tlT"></span><span class="tl-cta" id="tlC">Play</span></a>
 
   <main class="views">
 
@@ -1953,6 +1961,29 @@
   })();
 
   if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}
+  /* ---- Trap Points today line (2026-09-18): reads what the games already keep on this phone - tp_ledger (points), tp_streak, tp_daily (this
+          6-hour board), tp_goal (target prize) - and says the one thing that matters now. Prize costs mirror /game/ CAT (800 / 1,400 / 5,000). ---- */
+  (function(){ var el=document.getElementById('tpline'), tt=document.getElementById('tlT'), tc=document.getElementById('tlC'); if(!el) return;
+    var PRIZES=[['12 slaps',800],['2 lighters',1400],['1 embroidered hoodie',5000]];
+    function rj(k,d){ try{ return JSON.parse(localStorage.getItem(k)||'null')||d; }catch(e){ return d; } }
+    function fmt(n){ return (+n||0).toLocaleString('en-US'); }
+    function paint(){ var led=rj('tp_ledger',[]), streak=rj('tp_streak',{}), daily=rj('tp_daily',{}), goal=localStorage.getItem('tp_goal')||'';
+      var bal=0, today=0, d0=new Date(); d0.setHours(0,0,0,0);
+      led.forEach(function(e){ if(e.pts>0){ bal+=e.pts-(e.used||0); if(e.ts>=d0.getTime()) today+=e.pts; } });
+      var played=led.length>0||!!localStorage.getItem('tp_handle');
+      var d=new Date(), slot=Math.floor((d.getTime()-d.getTimezoneOffset()*60000)/(6*3600e3)), boardDone=daily&&daily.day===slot&&daily.earned!=null;
+      var dayN=Math.floor(Date.now()/864e5), sn=(streak.last===dayN||streak.last===dayN-1)?(streak.n||0):0;
+      var pick=PRIZES.filter(function(x){return x[0]===goal;})[0]||PRIZES.filter(function(x){return bal<x[1];})[0]||PRIZES[PRIZES.length-1];
+      var left=Math.max(0,pick[1]-bal);
+      if(!played){ tt.innerHTML='<b>Trap Points</b> <span class="mut">· play a 60 s board, win a run of your own branded slaps</span>'; tc.textContent='Play'; el.classList.remove('done'); }
+      else { var short={'12 slaps':'slaps','2 lighters':'lighters','1 embroidered hoodie':'hoodie'}[pick[0]]||pick[0];
+        tt.innerHTML='<b>'+fmt(bal)+'</b>'+(sn?' <span class="mut">·</span> 🔥'+sn:'')+(today?' <span class="mut">· +'+fmt(today)+' today</span>':'')+' <span class="mut">· '+(left?fmt(left)+' to '+short:short+' ready')+'</span>';
+        tc.textContent=boardDone?'✓ Today':'Play'; el.classList.toggle('done',!!boardDone); }
+      el.hidden=false; }
+    try{ paint(); }catch(e){}
+    document.addEventListener('visibilitychange',function(){ if(!document.hidden){ try{ paint(); }catch(e){} } });
+    window.addEventListener('storage',function(ev){ if(ev.key&&ev.key.indexOf('tp_')===0){ try{ paint(); }catch(e){} } });
+  })();
   /* ---- Order updates on this phone (2026-09-15): push via /push.js + Firebase; linked to the email we already know (st_customer from the cart) or one we ask for. ---- */
   (function(){ var b=document.getElementById('connect-push'), st=document.getElementById('connect-push-state'); if(!b||!('serviceWorker' in navigator)) return;
     function ready(fn){ if(window.STPush) return fn(); var s=document.createElement('script'); s.src='/push.js'; s.onload=fn; document.head.appendChild(s); }
