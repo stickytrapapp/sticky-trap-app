@@ -7,6 +7,10 @@
 <meta name="theme-color" content="#000000">
 <title>Order tracker · The Sticky Trap</title>
 <link rel="icon" href="/icons/icon-192.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="My order">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <style>
   :root{--ink:#000;--panel:#0e0e0e;--panel-2:#171717;--line:#262626;--paper:#fff;--muted:#fff;--mag:#FF1FA2;--pur:#8A2BE2;--cy:#12C4FF;--good:#25E0A6;--grad:linear-gradient(100deg,#FF1FA2 0%,#8A2BE2 52%,#12C4FF 100%)}
   *{box-sizing:border-box}
@@ -39,6 +43,10 @@
   .lst{padding:18px 16px}.lst .lk-h{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-bottom:10px}
   .lst-o{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px}.lst-t{display:flex;align-items:baseline;gap:10px}.lst-t b{font-size:16px;color:#fff}.lst-t span{color:var(--muted);font-size:13px}
   .lst-s{margin-top:4px;font-weight:800;color:var(--cy)}.lst-i{margin-top:3px;color:var(--muted);font-size:13px}.lst .note{margin-top:14px;color:var(--muted);font-size:12.5px;line-height:1.45}
+  .save{margin-top:14px;padding:12px 14px;background:var(--panel);border:1px solid var(--line);border-radius:14px}
+  .save .sh{display:flex;align-items:center;gap:10px}.save .sh b{flex:1;font-size:14px;color:#fff}.save .sx{background:none;border:0;color:var(--muted);font-size:18px;line-height:1;padding:2px 4px;cursor:pointer}
+  .save ol{margin:8px 0 0;padding-left:20px;color:var(--muted);font-size:13px;line-height:1.5}.save ol b{color:#fff}
+  .save .sbtns{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}.save .sbtns .btn{width:auto;margin:0;padding:11px 16px;font-size:14px}
   .prefs{margin-top:16px;padding:12px 14px;background:var(--panel);border:1px solid var(--line);border-radius:14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
   .prefs .pl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:800;flex:1 1 100%}
   .prefs label{display:inline-flex;align-items:center;gap:7px;font-size:14px;color:#fff;cursor:pointer}.prefs label.off{opacity:.5}
@@ -83,6 +91,11 @@
   function when(ts){ if(!ts) return ''; var d=new Date(ts); return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' · '+d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}); }
   // 2026-09-18 (Shane): phone first - 'type your number, see your orders'. Read-only: approving a proof or paying still needs the link
   // from the email or the QR on the invoice. Order code + email stays as the second way in.
+  function saved(code){ try{ return localStorage.getItem('st_track_saved_'+code)==='1'; }catch(e){ return false; } }
+  function saveSteps(){ var ua=navigator.userAgent||'', ios=/iPhone|iPad|iPod/.test(ua), android=/Android/.test(ua);
+    if(ios) return '<li>Tap the <b>Share</b> button at the bottom of Safari (the square with the arrow).</li><li>Scroll and tap <b>Add to Home Screen</b>, then <b>Add</b>.</li><li>Your order lives on your home screen as <b>My order</b> - tap it any time.</li>';
+    if(android) return '<li>Tap the <b>&#8942;</b> menu at the top right of Chrome.</li><li>Tap <b>Add to Home screen</b>, then <b>Add</b>.</li><li>Your order lives on your home screen - tap it any time.</li>';
+    return '<li>Bookmark this page (Ctrl/Cmd + D), or drag the address to your desktop.</li><li>The link is yours for this order - it never expires.</li>'; }
   function lookupForm(msg){
     app.innerHTML='<div class="err lookup"><div class="lk-h">'+esc(msg||'Find your orders')+'</div>'+
       '<input id="lp" type="tel" inputmode="tel" autocomplete="tel" placeholder="Your cell number" value="'+esc(q('p'))+'">'+
@@ -111,6 +124,8 @@
     var tl=o.stages.map(function(s,i){ var cls=i<idx?'done':(i===idx?'cur':''); var h=hist[s.key]; return '<li class="'+cls+'">'+esc(s.label)+(h?'<small>'+esc(when(h.ts))+(h.note?' · '+esc(h.note):'')+'</small>':'')+'</li>'; }).join('');
     app.innerHTML='<p class="code">'+esc(o.code)+'</p><div class="who">'+esc(o.company||o.name||'')+'</div>'+
       '<div class="now"><div class="k">Right now</div><div class="v">'+esc(o.label)+'</div><div class="m">'+esc(o.message||'')+'</div></div>'+
+      (o.token&&!saved(o.code)?'<div class="save" id="save"><div class="sh"><b>Keep this on your phone</b><button type="button" class="sx" id="savex" aria-label="Dismiss">&times;</button></div>'+
+        '<ol>'+saveSteps()+'</ol><div class="sbtns"><button type="button" class="btn ghost" id="savecopy">Copy my link</button>'+(navigator.share?'<button type="button" class="btn ghost" id="saveshare">Share / save</button>':'')+'</div></div>':'')+
       '<div class="meta"><div><div class="k">Due</div><div class="v">'+esc(o.due||'To be set')+'</div></div><div><div class="k">Order</div><div class="v">'+esc(o.items||'See your quote')+'</div></div></div>'+
       (o.payment_status==='authorized'?'<div class="note" style="margin-top:8px">Card authorized'+(o.payment_amt?' for $'+(+o.payment_amt).toFixed(2):'')+' - charged only when you approve the proof.</div>':'')+
       (o.payment_status==='captured'?'<div class="note" style="margin-top:8px">Paid by card'+(o.payment_amt?' - $'+(+o.payment_amt).toFixed(2):'')+'. Thank you.</div>':'')+
@@ -133,6 +148,12 @@
       fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'approve',code:o.code,token:o.token})}).then(function(r){return r.json();})
         .then(function(j){ if(j&&j.ok){ load(); } else { ab.disabled=false; ab.textContent='✓ Approve my proof'; alert('Could not record the approval - try again or text 734 460 3845.'); } })
         .catch(function(){ ab.disabled=false; ab.textContent='✓ Approve my proof'; }); });
+    // 2026-09-18 (Shane: 'the QR should be able to be saved as a desktop link for repeated access'): the page has no manifest on purpose,
+    // so Add to Home Screen saves THIS exact link (order + token) as an icon - iOS via Share, Android via the browser menu, desktop as a bookmark.
+    var sv=document.getElementById('save');
+    if(sv){ document.getElementById('savex').addEventListener('click',function(){ try{ localStorage.setItem('st_track_saved_'+o.code,'1'); }catch(e){} sv.remove(); });
+      var cp=document.getElementById('savecopy'); cp.addEventListener('click',function(){ var u=location.href.split('#')[0]; (navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){ cp.textContent='Copied'; },function(){ prompt('Your order link:',u); }); });
+      var sh=document.getElementById('saveshare'); if(sh) sh.addEventListener('click',function(){ navigator.share({title:'My Sticky Trap order '+o.code,url:location.href.split('#')[0]}).catch(function(){}); }); }
     var cb=document.getElementById('chg'), cbox=document.getElementById('chgbox'), cs=document.getElementById('chgsend');
     if(cb) cb.addEventListener('click',function(){ cbox.hidden=!cbox.hidden; if(!cbox.hidden){ document.getElementById('chgnote').focus(); } });
     var pbox=document.getElementById('prefs');
