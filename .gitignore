@@ -1,2 +1,5 @@
 __pycache__/
 *.pyc
+
+# tracker snapshots must never live in this PUBLIC repo (customer data + order tokens) - 2026-09-18
+data/t/
