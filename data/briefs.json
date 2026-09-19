@@ -5,60 +5,60 @@
     {
       "date": "2026-09-19",
       "label": "Morning Brief",
-      "title": "Michigan Cracks $17B in Sales as Psychedelics Sprint Toward FDA Approval",
-      "top": "Michigan's legal cannabis market just topped $17 billion in lifetime sales and the state's biggest trade group is now backing a gubernatorial candidate who's promised to kill the 24% wholesale tax. Nationally, momentum is building fast — courts just upheld medical marijuana's Schedule III status, Compass Pathways' psilocybin therapy is closing in on FDA approval, and MSOs are raising cash and striking deals at a pace not seen in years.",
+      "title": "Michigan Tops $17B as National Psychedelics Wave Builds",
+      "top": "Michigan's legal cannabis market just blew past a massive lifetime sales milestone, and operators are rallying behind a gubernatorial candidate who's vowed to kill the 24% wholesale tax squeezing margins. Nationally, the FDA is fast-tracking psychedelic medicine, Eli Lilly just bought into the space, and a federal court win keeps marijuana's Schedule III momentum intact.",
       "local": [
         {
-          "text": "Michigan cannabis sales cross $17 billion lifetime",
+          "text": "Michigan crosses $17B in lifetime legal weed sales — Michigan has now surpassed $17 billion in combined adult-use and medical marijuana sales, generating an estimated $2.66 billion in state excise and sales taxes.",
           "source": "The Marijuana Herald",
           "url": "https://themarijuanaherald.com/2026/09/michigan-legal-marijuana-sales-surpass-17-billion/"
         },
         {
-          "text": "MiCIA backs James over pledge to repeal wholesale tax",
-          "source": "Marijuana Moment",
-          "url": "https://www.marijuanamoment.net/scotus-asked-to-take-up-cannabis-licensing-dispute-newsletter-september-17-2026"
+          "text": "Industry throws weight behind tax-cut candidate for governor — The Michigan Cannabis Industry Association has officially endorsed Republican gubernatorial candidate John James, citing his commitment to repealing the controversial 24% wholesale tax.",
+          "source": "Postindustrial",
+          "url": "https://postindustrial.com/stories/michigan-marijuana-industry-group-endorses-gop-governor-candidate-who-pledged-to-cut-new-wholesale-tax/"
         },
         {
-          "text": "Wholesale tax revenue keeps missing state's own targets",
+          "text": "Jars Cannabis wins fight to pull police camera — Jars Cannabis confirmed it reached an agreement with the city to remove a Flock surveillance camera after recent uproar concerning surveillance at its retail location on 12 Mile Road.",
           "source": "Crain's Detroit Business",
           "url": "https://www.crainsdetroit.com/cannabis/"
         },
         {
-          "text": "Operators, patients rally at Capitol for a voice on cannabis bills",
-          "source": "WILX",
-          "url": "https://www.wilx.com/2026/09/17/advocates-patients-push-back-proposed-michigan-cannabis-law-changes/"
+          "text": "U.P. chain grows by splitting the tax bill with suppliers — Rize, which operates three Upper Michigan locations, has managed to sustain growth by negotiating cost-sharing arrangements with suppliers, splitting the tax burden rather than absorbing it alone.",
+          "source": "Cann.dev",
+          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
         },
         {
-          "text": "Jars Cannabis wins fight to pull Flock surveillance camera",
-          "source": "Crain's Detroit Business",
+          "text": "Wholesale tax revenue misses targets, fueling repeal push — Revenue for Michigan's controversial 24% wholesale tax on marijuana continues to fall short of projections in its first year, and a Republican state representative has filed legislation to reverse the tax after it generated less than half of the $420 million lawmakers projected.",
+          "source": "Crain's Detroit Business / Marijuana Moment",
           "url": "https://www.crainsdetroit.com/cannabis/"
         }
       ],
       "national": [
         {
-          "text": "Court upholds medical marijuana's Schedule III status",
+          "text": "FDA pushes psychedelic medicine toward the mainstream — the agency is moving toward possibly greenlighting psilocybin and methylone after President Trump ordered an acceleration of federal research, fast-tracked FDA reviews and expanded patient access to psychedelic treatments.",
+          "source": "The Washington Times",
+          "url": "https://www.washingtontimes.com/news/2026/sep/14/psychedelic-treatments-move-closer-mainstream-fda/"
+        },
+        {
+          "text": "Eli Lilly closes its blockbuster psychedelics buyout — the AtaiBeckley acquisition by Eli Lilly, approved by stockholders September 8 and expected to close September 11, brings BPL-003, VLS-01 and EMP-01 under Lilly's development umbrella.",
+          "source": "Clinical Trial Vanguard",
+          "url": "https://www.clinicaltrialvanguard.com/article/psych-pulse/what-the-fdas-new-psychedelic-framework-actually-means-for-the-clinic/"
+        },
+        {
+          "text": "DEA advances bid to move psilocybin off Schedule I — the DEA has advanced a petition to move psilocybin from Schedule I to Schedule II, now under Department of Justice review.",
+          "source": "Clinical Trial Vanguard",
+          "url": "https://www.clinicaltrialvanguard.com/article/psych-pulse/what-the-fdas-new-psychedelic-framework-actually-means-for-the-clinic/"
+        },
+        {
+          "text": "Court leaves medical marijuana's Schedule III move intact — a lawsuit to stop medical marijuana's rescheduling was rebuffed this week when the D.C. Circuit court left the reclassification order in effect, finding opponents had not demonstrated grounds to block it.",
           "source": "Cannabis Business Times",
           "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order"
         },
         {
-          "text": "Compass Pathways' psilocybin therapy nears the finish line",
-          "source": "BioSpace",
-          "url": "https://www.biospace.com/fda/psychedelic-therapies-ride-wave-of-public-favor-into-fda-hearing"
-        },
-        {
-          "text": "Curaleaf's $1.5B cross-border bid targets Aurora Cannabis",
-          "source": "cann.dev",
-          "url": "https://www.cann.dev/cannabis-ma-august-2026-curaleaf-vireo-consolidation/"
-        },
-        {
-          "text": "Cresco lands $50M credit line as cannabis stocks hit highs",
-          "source": "Yahoo Finance",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/msos-hits-2026-high-cannabis-040610250.html"
-        },
-        {
-          "text": "Vireo Growth's buying spree reshapes the MSO map",
-          "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/news/cannabis-mso-vireo-growth-continues-buying-spree-acquires-fluent-in-debt-for-stock-deal/615771/"
+          "text": "Curaleaf's hostile bid for Aurora escalates into proxy fight — Curaleaf's initial $272 million hostile takeover bid claims a 45% premium, but Aurora's board rejected the offer unanimously and is urging shareholders to follow suit, with Curaleaf's CEO firing back that Aurora has never presented a counteroffer.",
+          "source": "MJBizDaily / Cannabis Equipment News",
+          "url": "https://mjbizdaily.com/news/what-curaleafs-hostile-takeover-bid-for-aurora-cannabis-is-really-about/618022/"
         }
       ]
     }
