@@ -1,64 +1,64 @@
 {
-  "updated": "2026-09-18",
+  "updated": "2026-09-19",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-09-18",
+      "date": "2026-09-19",
       "label": "Morning Brief",
-      "title": "Relief in Reach: Michigan Operators Find Openings as Psychedelics Go Mainstream Nationally",
-      "top": "Michigan operators are finding real paths forward — new dispensary formats, an expanding city cap, and a supplier-cost-sharing playbook — even as the 24% wholesale tax reshapes the map. Nationally, momentum is undeniable: a federal court just upheld medical marijuana's Schedule III status, and the FDA's historic psychedelics hearing plus Compass Pathways' and Eli Lilly's moves signal 2027 could be the breakout year for legal psilocybin and MDMA-based therapies.",
+      "title": "Michigan Tops $17B in Sales as Psychedelics Race Toward FDA Finish Line",
+      "top": "Michigan operators have real wins to point to this week — a $17 billion sales milestone, a hospitality-forward Muskegon buildout, and a trade group pushing hard for wholesale-tax relief — even as regulators clean house on bad actors. Nationally, psychedelics are the story: Compass Pathways, Usona and Transcend just got FDA fast-track vouchers while courts keep medical marijuana's Schedule III win intact.",
       "local": [
         {
-          "text": "Muskegon dispensary-restaurant pushes format further — Fields Cannary, a Muskegon development, is targeting a fall opening for its retail cannabis dispensary, with a full-service restaurant to follow.",
-          "source": "Cann.dev",
+          "text": "Michigan crosses $17 billion in lifetime weed sales — Combined adult-use and medical sales have surpassed $17 billion since legalization, with August alone generating roughly $259 million, according to a new CRA report.",
+          "source": "The Marijuana Herald",
+          "url": "https://themarijuanaherald.com/2026/09/michigan-legal-marijuana-sales-surpass-17-billion/"
+        },
+        {
+          "text": "Muskegon dispensary-restaurant combo eyes fall debut — Fields Cannary is targeting a fall opening for its retail cannabis shop, with a full-service restaurant to follow, pushing the state's hospitality format further than most Michigan stores.",
+          "source": "cann.dev",
           "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
         },
         {
-          "text": "Menominee could add four new dispensaries — a pending petition drive could lead to four more dispensaries in the city, formally increasing the local cap from nine to 13 stores, with organizers saying they turned in more than enough signatures to get the measure on the November ballot.",
-          "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-091626/"
+          "text": "Jars Cannabis wins removal of Madison Heights surveillance camera — After community backlash over a Flock license-plate camera at its 12 Mile Road store, Jars struck a deal with the city to take it down.",
+          "source": "Crain's Detroit Business",
+          "url": "https://www.crainsdetroit.com/cannabis/"
         },
         {
-          "text": "U.P. chain Rize grows despite 24% tax — Rize, which operates three Upper Michigan locations, has managed to sustain growth by negotiating cost-sharing arrangements with suppliers, splitting the tax burden rather than absorbing it alone.",
-          "source": "Cann.dev",
-          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
+          "text": "Cannabis trade group bets on tax repeal via James — MiCIA endorsed GOP gubernatorial nominee John James, calling him \"the clear choice\" over his pledge to repeal or sharply cut the 24% wholesale tax.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/michigan-marijuana-industry-group-endorses-gop-governor-candidate-who-pledged-to-cut-new-wholesale-tax"
         },
         {
-          "text": "Treasury softens the first-year tax bite — Treasury will waive penalties and interest for the first three quarters of 2026 if a business pays at least 75 percent of what it owes on the new 24% wholesale tax, giving operators room to adjust.",
-          "source": "Michigan Department of Treasury",
-          "url": "https://www.michigan.gov/treasury/news/2026/03/17/michigan-treasury-releases-guidance"
-        },
-        {
-          "text": "Gubernatorial hopeful vows to kill wholesale tax — Democratic candidate Chris Swanson came out strongly against the 24% cannabis tax and promised that, if elected, he would work to repeal it, saying it is \"not fair and equitable\" to a licensed industry.",
-          "source": "Michigan Advance",
-          "url": "https://michiganadvance.com/2026/03/30/democratic-gubernatorial-hopeful-promises-to-repeal-cannabis-tax-key-to-whitmers-road-funding-plan/"
+          "text": "State pulls Muha Meds manufacturer's license, $2M fine — Regulators shut down the Pinconning-based processor behind Muha Meds for \"egregious violations,\" though its two Detroit and Ypsilanti retail stores remain open, clearing shelf space for compliant Michigan brands.",
+          "source": "MJBizDaily",
+          "url": "https://mjbizdaily.com/news/michigan-cannabis-regulators-impose-record-fine-revoke-permit-of-popular-product-maker-after-egregious-violations/618180"
         }
       ],
       "national": [
         {
-          "text": "Federal court upholds medical marijuana's Schedule III win — reclassification opponents filed a lawsuit to stop medical marijuana's change in schedule, but that challenge was rebuffed this week in federal court, when the D.C. Circuit court left the medical marijuana rescheduling order in effect.",
+          "text": "DC Circuit upholds medical marijuana's Schedule III move — On Sept. 9, judges rejected a bid to unwind the reclassification, keeping the order — and its §280E tax relief — in effect for state-licensed medical operators.",
           "source": "Cannabis Business Times",
           "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order"
         },
         {
-          "text": "FDA holds landmark hearing on psychedelic therapies — the FDA's September 14 hearing marked one of the most consequential regulatory moments for psychedelic-assisted therapy to date, and MAPS attended and plans to submit formal, written testimony on systems readiness, therapist training, and patient access.",
-          "source": "GlobeNewswire (MAPS)",
-          "url": "https://www.globenewswire.com/news-release/2026/09/17/3364358/0/en/maps-attends-historic-fda-hearing-on-psychedelics.html"
+          "text": "FDA fast-tracks three psychedelic drug programs — Compass Pathways, Usona Institute and Transcend Therapeutics each landed Commissioner's National Priority Vouchers, shrinking standard review from roughly a year to as little as one to two months.",
+          "source": "Journey Clinical",
+          "url": "https://www.journeyclinical.com/resources/psilocybin-timeline"
         },
         {
-          "text": "Compass Pathways' psilocybin drug nears 2027 launch — management struck an upbeat tone on clinical progress and commercial readiness at the Deutsche Bank Healthcare Summit, noting the company has finished two Phase III trials with strong statistical results and is now in rolling review with the FDA.",
-          "source": "Investing.com",
-          "url": "https://www.investing.com/news/transcripts/compass-pathways-at-deutsche-bank-summit-launch-nears-for-comp360-93CH-4906106"
+          "text": "Compass Pathways' psilocybin drug nears FDA finish line — Analysts peg 75-85% odds that regulators approve COMP360 for treatment-resistant depression, with a possible green light by year-end or early 2027.",
+          "source": "BioSpace",
+          "url": "https://www.biospace.com/fda/psychedelic-therapies-ride-wave-of-public-favor-into-fda-hearing"
         },
         {
-          "text": "Eli Lilly closes major psychedelics acquisition — the AtaiBeckley acquisition by Eli Lilly, approved by stockholders on September 8, 2026 and expected to close September 11, brings BPL-003, VLS-01, and EMP-01 under Lilly's development umbrella.",
-          "source": "Clinical Trial Vanguard",
-          "url": "https://www.clinicaltrialvanguard.com/article/psych-pulse/what-the-fdas-new-psychedelic-framework-actually-means-for-the-clinic/"
+          "text": "State weed tax hauls jump 11% nationwide — State governments collected $986.8 million in marijuana taxes in Q2 2026, pushing year-to-date collections to about $1.84 billion through June.",
+          "source": "The Marijuana Herald",
+          "url": "https://themarijuanaherald.com/2026/09/daily-cannabis-news-brief-for-9-10-2026/"
         },
         {
-          "text": "Optimi Health advances MDMA trial for veterans — Optimi Health announced plans to launch a Health Canada-authorized Phase 3 clinical trial in 2027 evaluating MDMA-assisted therapy for PTSD in up to 100 veterans and frontline workers, funded partly by a $15 million public offering alongside its Nasdaq listing.",
-          "source": "Benzinga",
-          "url": "https://www.benzinga.com/markets/equities/26/09/61834504/elon-musk-once-said-psychedelics-could-help-ptsd-now-fda-holds-hearing-as-optimi-health-advances-mdma-trial"
+          "text": "Adult-use rescheduling verdict still pending months later — DEA hasn't ruled on moving recreational marijuana to Schedule III, even as 73% of surveyed cannabis businesses expect the change to hit their operations.",
+          "source": "The Marijuana Herald",
+          "url": "https://themarijuanaherald.com/2026/09/daily-cannabis-news-brief-for-9-10-2026/"
         }
       ]
     }
