@@ -1,64 +1,84 @@
 {
-  "updated": "2026-09-19",
+  "updated": "2026-09-20",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-09-19",
+      "date": "2026-09-20",
       "label": "Morning Brief",
-      "title": "Michigan Tops $17B as National Psychedelics Wave Builds",
-      "top": "Michigan's legal cannabis market just blew past a massive lifetime sales milestone, and operators are rallying behind a gubernatorial candidate who's vowed to kill the 24% wholesale tax squeezing margins. Nationally, the FDA is fast-tracking psychedelic medicine, Eli Lilly just bought into the space, and a federal court win keeps marijuana's Schedule III momentum intact.",
+      "title": "Tax Fight Turns Political as National Rescheduling & Psychedelics Momentum Builds",
+      "top": "Michigan's cannabis industry is finding a political lifeline against the 24% wholesale tax just as JARS and Grön expand their footprints in-state. Nationally, courts, the FDA, and Wall Street are all moving cannabis and psychedelics further into the mainstream this week.",
       "local": [
         {
-          "text": "Michigan crosses $17B in lifetime legal weed sales — Michigan has now surpassed $17 billion in combined adult-use and medical marijuana sales, generating an estimated $2.66 billion in state excise and sales taxes.",
-          "source": "The Marijuana Herald",
-          "url": "https://themarijuanaherald.com/2026/09/michigan-legal-marijuana-sales-surpass-17-billion/"
-        },
-        {
-          "text": "Industry throws weight behind tax-cut candidate for governor — The Michigan Cannabis Industry Association has officially endorsed Republican gubernatorial candidate John James, citing his commitment to repealing the controversial 24% wholesale tax.",
+          "text": "MiCIA endorses John James over tax repeal pledge",
+          "detail": "The Michigan Cannabis Industry Association threw its weight behind GOP gubernatorial nominee John James, calling him the clear choice for the industry over his 24% wholesale tax repeal promise.",
+          "text_full": "MiCIA endorses John James over tax repeal pledge — The Michigan Cannabis Industry Association threw its weight behind GOP gubernatorial nominee John James over his pledge to repeal the 24% wholesale tax.",
           "source": "Postindustrial",
           "url": "https://postindustrial.com/stories/michigan-marijuana-industry-group-endorses-gop-governor-candidate-who-pledged-to-cut-new-wholesale-tax/"
         },
         {
-          "text": "Jars Cannabis wins fight to pull police camera — Jars Cannabis confirmed it reached an agreement with the city to remove a Flock surveillance camera after recent uproar concerning surveillance at its retail location on 12 Mile Road.",
-          "source": "Crain's Detroit Business",
-          "url": "https://www.crainsdetroit.com/cannabis/"
+          "text": "JARS Cannabis buys its way into Arizona's top spot",
+          "detail": "The Michigan-based chain is acquiring Sonoran Roots and its eight Ponderosa dispensaries, a deal that will make JARS the largest dispensary chain in Arizona.",
+          "text_full": "JARS Cannabis buys its way into Arizona's top spot — The Michigan-based chain is acquiring Sonoran Roots and its eight Ponderosa brand dispensaries, set to become the largest chain in Arizona.",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-083126/"
         },
         {
-          "text": "U.P. chain grows by splitting the tax bill with suppliers — Rize, which operates three Upper Michigan locations, has managed to sustain growth by negotiating cost-sharing arrangements with suppliers, splitting the tax burden rather than absorbing it alone.",
+          "text": "Grön's Pearls gummies hit Michigan shelves",
+          "detail": "Wyld-owned Grön's bestselling Pearls gummies are now confirmed at Pure Options, High Profile and Lume as part of a four-state rollout.",
+          "text_full": "Grön's Pearls gummies hit Michigan shelves — Wyld-owned Grön's bestselling Pearls gummies are now confirmed on shelves at Pure Options, High Profile and Lume as part of a four-state rollout.",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-090826/"
+        },
+        {
+          "text": "Repeal bill gains traction as tax revenue falls short",
+          "detail": "A Republican lawmaker's HB 6224 to kill the wholesale tax gets fresh ammunition after the levy pulled in just $37 million in Q2 against a $105 million quarterly projection.",
+          "text_full": "Repeal bill gains traction as tax revenue falls short — HB 6224 to repeal the wholesale tax gains ammunition after the levy generated just $37 million in Q2 versus a $105 million quarterly projection.",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-090826/"
+        },
+        {
+          "text": "Rize keeps growing in the U.P. by splitting the tax hit",
+          "detail": "While Higher Love shuttered five of nine U.P. locations over the tax, Rize sustained growth by negotiating cost-sharing arrangements with suppliers instead of absorbing the hit alone.",
+          "text_full": "Rize keeps growing in the U.P. by splitting the tax hit — While Higher Love shuttered five of nine U.P. locations over the tax, Rize sustained growth by negotiating cost-sharing deals with suppliers.",
           "source": "Cann.dev",
           "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
-        },
-        {
-          "text": "Wholesale tax revenue misses targets, fueling repeal push — Revenue for Michigan's controversial 24% wholesale tax on marijuana continues to fall short of projections in its first year, and a Republican state representative has filed legislation to reverse the tax after it generated less than half of the $420 million lawmakers projected.",
-          "source": "Crain's Detroit Business / Marijuana Moment",
-          "url": "https://www.crainsdetroit.com/cannabis/"
         }
       ],
       "national": [
         {
-          "text": "FDA pushes psychedelic medicine toward the mainstream — the agency is moving toward possibly greenlighting psilocybin and methylone after President Trump ordered an acceleration of federal research, fast-tracked FDA reviews and expanded patient access to psychedelic treatments.",
-          "source": "The Washington Times",
-          "url": "https://www.washingtontimes.com/news/2026/sep/14/psychedelic-treatments-move-closer-mainstream-fda/"
-        },
-        {
-          "text": "Eli Lilly closes its blockbuster psychedelics buyout — the AtaiBeckley acquisition by Eli Lilly, approved by stockholders September 8 and expected to close September 11, brings BPL-003, VLS-01 and EMP-01 under Lilly's development umbrella.",
-          "source": "Clinical Trial Vanguard",
-          "url": "https://www.clinicaltrialvanguard.com/article/psych-pulse/what-the-fdas-new-psychedelic-framework-actually-means-for-the-clinic/"
-        },
-        {
-          "text": "DEA advances bid to move psilocybin off Schedule I — the DEA has advanced a petition to move psilocybin from Schedule I to Schedule II, now under Department of Justice review.",
-          "source": "Clinical Trial Vanguard",
-          "url": "https://www.clinicaltrialvanguard.com/article/psych-pulse/what-the-fdas-new-psychedelic-framework-actually-means-for-the-clinic/"
-        },
-        {
-          "text": "Court leaves medical marijuana's Schedule III move intact — a lawsuit to stop medical marijuana's rescheduling was rebuffed this week when the D.C. Circuit court left the reclassification order in effect, finding opponents had not demonstrated grounds to block it.",
+          "text": "DC Circuit upholds medical marijuana's Schedule III move",
+          "detail": "The federal appeals court rejected a challenge to the April rescheduling order, finding opponents had not shown the change was unlawful.",
+          "text_full": "DC Circuit upholds medical marijuana's Schedule III move — The federal appeals court rejected a challenge to the April rescheduling order on Sept. 9, finding opponents hadn't proven the change unlawful.",
           "source": "Cannabis Business Times",
           "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order"
         },
         {
-          "text": "Curaleaf's hostile bid for Aurora escalates into proxy fight — Curaleaf's initial $272 million hostile takeover bid claims a 45% premium, but Aurora's board rejected the offer unanimously and is urging shareholders to follow suit, with Curaleaf's CEO firing back that Aurora has never presented a counteroffer.",
-          "source": "MJBizDaily / Cannabis Equipment News",
-          "url": "https://mjbizdaily.com/news/what-curaleafs-hostile-takeover-bid-for-aurora-cannabis-is-really-about/618022/"
+          "text": "FDA convenes landmark hearing on psychedelic therapies",
+          "detail": "The agency held a public hearing Sept. 14 on the potential future therapeutic use of psychedelic drugs, part of a wave of regulatory engagement this year.",
+          "text_full": "FDA convenes landmark hearing on psychedelic therapies — The agency held a Sept. 14 public hearing on the future therapeutic use of psychedelic drugs, part of its accelerated 2026 engagement.",
+          "source": "Psychedelic Beacon",
+          "url": "https://psychedelicbeacon.com/blog/psilocybin-fda-approval-tracker"
+        },
+        {
+          "text": "Compass Pathways closes in on psilocybin approval",
+          "detail": "Analysts anticipate a possible FDA approval by year-end as Compass moves through a rolling NDA submission for its COMP360 depression treatment.",
+          "text_full": "Compass Pathways closes in on psilocybin approval — Analysts anticipate a possible FDA approval by year-end as Compass moves through its rolling NDA submission for COMP360.",
+          "source": "BioSpace",
+          "url": "https://www.biospace.com/drug-development/deep-dive-psychedelics-back-on-fdas-doorstep"
+        },
+        {
+          "text": "Apollo drops $1.5B on MJBizCon's parent company",
+          "detail": "Apollo Global Management agreed to take Emerald Holding, owner of MJBizCon, private in an all-cash deal signaling consolidation in cannabis B2B events.",
+          "text_full": "Apollo drops $1.5B on MJBizCon's parent company — Apollo Global Management agreed to take Emerald Holding, owner of MJBizCon, private in an all-cash deal.",
+          "source": "mg Magazine",
+          "url": "https://mgmagazine.com/business-strategy/finance-acquisitions-business-strategy/"
+        },
+        {
+          "text": "Trump delays hemp THC ban, buying operators time",
+          "detail": "The federal ban on hemp-derived THC products was pushed from Nov. 12 to Dec. 11, giving compliant brands another month to adjust before Congress acts.",
+          "text_full": "Trump delays hemp THC ban, buying operators time — The federal ban on hemp-derived THC products was pushed from Nov. 12 to Dec. 11 under a bill Trump signed last week.",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-090826/"
         }
       ]
     }
