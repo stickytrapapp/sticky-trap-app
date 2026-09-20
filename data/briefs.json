@@ -5,71 +5,60 @@
     {
       "date": "2026-09-20",
       "label": "Morning Brief",
-      "title": "Michigan Tops $17B in Sales as Repeal Bill Drops; DEA Nears a Verdict, Psychedelics Sprint to FDA",
-      "top": "Michigan's cannabis market just crossed $17 billion in cumulative sales even as operators fight the 24% wholesale tax with a new repeal bill and supplier cost-sharing deals. Nationally, the DEA's rescheduling hearing record is locked and awaiting a judge's call, while FDA-fast-tracked psilocybin and a wave of MSO M&A signal real momentum for the industry heading into Q4.",
+      "title": "Michigan Weed Hits $17B Milestone as Psychedelics Go Mainstream Nationally",
+      "top": "Michigan's legal cannabis market just crossed $17 billion in lifetime sales even as the 24% wholesale tax becomes the defining issue of the governor's race, with both the industry and a leading candidate now aligned on repeal. Nationally, momentum is building fast on multiple fronts — FDA is fast-tracking psychedelic therapies, courts just upheld marijuana's Schedule III status, and Eli Lilly is putting real money behind next-gen mental health drugs.",
       "local": [
         {
-          "text": "Michigan crosses $17 billion in lifetime sales",
-          "detail": "State data shows combined adult-use and medical marijuana sales have surpassed $17 billion since regulated sales began, with August alone bringing in roughly $259 million.",
-          "text_full": "Michigan crosses $17 billion in lifetime sales — State data shows combined adult-use and medical marijuana sales have surpassed $17 billion since regulated sales began, with August alone bringing in roughly $259 million.",
+          "text": "Michigan cannabis market tops $17 billion lifetime — Combined adult-use and medical marijuana sales have surpassed $17 billion since legalization, per the CRA's newest monthly report, with August alone bringing in $259 million.",
           "source": "The Marijuana Herald",
-          "url": "https://themarijuanaherald.com/2026/09/daily-cannabis-news-brief-for-9-15-2026/"
+          "url": "https://themarijuanaherald.com/2026/09/michigan-legal-marijuana-sales-surpass-17-billion/"
         },
         {
-          "text": "Lawmaker files bill to kill the 24% wholesale tax",
-          "detail": "A Republican state representative introduced House Bill 6224 to repeal the wholesale tax outright, calling it an unnecessary burden on operators.",
+          "text": "Industry group endorses GOP nominee over tax repeal — MiCIA officially backed John James for governor, with Executive Director Robin Schneider calling him \"the clear choice for the cannabis industry\" over his pledge to kill the 24% wholesale tax.",
+          "source": "Postindustrial",
+          "url": "https://postindustrial.com/stories/michigan-marijuana-industry-group-endorses-gop-governor-candidate-who-pledged-to-cut-new-wholesale-tax/"
+        },
+        {
+          "text": "Muskegon hospitality dispensary build keeps moving forward — Fields Cannary's ambitious dispensary-restaurant concept is still on track for a fall opening, proof that hospitality-driven cannabis retail hasn't stalled despite industry headwinds.",
           "source": "cann.dev",
           "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
         },
         {
-          "text": "Jars Cannabis forces removal of surveillance camera",
-          "detail": "The Madison Heights store got city officials to take down a parking-lot-facing Flock camera that had been required under a 2022 licensing settlement.",
-          "source": "cann.dev",
-          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
+          "text": "Voting opens for Michigan's best weed brands — The MichiGanja Report launched its statewide brand awards ballot, with polls closing Sept. 30 and winners announced in October.",
+          "source": "The 'Gander",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-083126/"
         },
         {
-          "text": "Muskegon's dispensary-restaurant hybrid readies fall launch",
-          "detail": "Fields Cannary is targeting a fall opening for its retail cannabis dispensary, with a full-service restaurant to follow — a hospitality-forward format ahead of most Michigan stores.",
-          "source": "cann.dev",
-          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
-        },
-        {
-          "text": "Tax squeezes U.P. chain, but a rival finds the fix",
-          "detail": "Higher Love closed five of its nine Upper Michigan stores citing the 24% tax, while competitor Rize kept growing by negotiating cost-sharing arrangements that split the tax burden with suppliers.",
-          "source": "cann.dev",
-          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
+          "text": "Tax revenue miss adds fuel to repeal push — The 24% wholesale tax generated just $37 million in Q2 against a $105 million-per-quarter projection, strengthening the case behind a bipartisan repeal bill and a second industry lawsuit headed to trial.",
+          "source": "The 'Gander",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-090826/"
         }
       ],
       "national": [
         {
-          "text": "DEA rescheduling hearing transcript finalized",
-          "detail": "With the record now locked, Chief ALJ Derek Julius is next up to issue a recommended decision on whether marijuana qualifies for Schedule III.",
-          "source": "Vicente LLP",
-          "url": "https://vicentellp.com/insights/final-week-dea-marijuana-rescheduling-hearing-ends-opposition-builds-appellate-record-but-leaves-statutory-gaps/"
+          "text": "FDA advances roadmap for psychedelic therapies — The agency held a Sept. 14 public hearing on therapeutic psychedelics and issued its first final clinical-trial guidance for psilocybin, LSD and MDMA, its most concrete step yet under the April executive order.",
+          "source": "NWVCIL",
+          "url": "https://nwvcil.org/blog/2026-07-15-fda-public-hearing-psychedelic-therapy-september"
         },
         {
-          "text": "FDA fast-tracks three psychedelic medicines",
-          "detail": "Compass Pathways, Usona Institute and Transcend Therapeutics each landed a Commissioner's National Priority Voucher, cutting standard FDA review time from about a year to just one to two months.",
-          "source": "Journey Clinical",
-          "url": "https://www.journeyclinical.com/resources/psilocybin-timeline"
+          "text": "Compass Pathways psilocybin nears FDA finish line — COMP360 could win approval by late 2026 for treatment-resistant depression, positioning it as the first psychedelic drug reviewed under the FDA's new framework.",
+          "source": "NWVCIL",
+          "url": "https://nwvcil.org/blog/2026-07-15-fda-public-hearing-psychedelic-therapy-september"
         },
         {
-          "text": "Compass Pathways eyes psilocybin approval by year-end",
-          "detail": "Journey Clinical, which is prepping treatment sites in Virginia, says it expects FDA approval of Compass's COMP360 by year's end with a potential 2027 rollout.",
-          "source": "Axios Richmond",
-          "url": "https://www.axios.com/local/richmond/2026/09/16/virginia-magic-mushrooms-psilocybin-fda-approval"
+          "text": "Eli Lilly bets big on psychedelic medicine — Lilly's acquisition of atai Beckley closed Sept. 11, bringing three clinical-stage psychedelic candidates in-house just days after FDA published its new trial framework.",
+          "source": "Clinical Trial Vanguard",
+          "url": "https://www.clinicaltrialvanguard.com/article/psych-pulse/what-the-fdas-new-psychedelic-framework-actually-means-for-the-clinic/"
         },
         {
-          "text": "Vireo Growth's buying spree hits 265 stores nationwide",
-          "detail": "Vireo's all-stock merger with Planet 13 adds 36 dispensaries across three states, pushing its footprint toward roughly 265 stores across 15 states.",
-          "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/news/cannabis-mso-vireo-growth-to-acquire-planet-13-in-all-stock-deal/617152/"
+          "text": "Court upholds marijuana's Schedule III reclassification — The D.C. Circuit left the medical marijuana rescheduling order in effect on Sept. 9, rejecting opponents' bid to block the shift out of Schedule I.",
+          "source": "Cannabis Business Times",
+          "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order"
         },
         {
-          "text": "Curaleaf presses $1.5B hostile bid for Aurora",
-          "detail": "Curaleaf launched a shareholder campaign urging Aurora investors to tender into its 45%-premium takeover offer, pitching a combined company with over $1.5B in revenue and $40M in cost synergies.",
-          "source": "TipRanks",
-          "url": "https://www.tipranks.com/news/company-announcements/curaleaf-launches-campaign-backing-aurora-cannabis-takeover-bid"
+          "text": "Hemp industry wins extra runway on THC ban — GOP lawmakers filed amendments aimed at regulating rather than recriminalizing hemp THC products, building on the recent delay of the federal ban to Dec. 11.",
+          "source": "Cannabis Insight",
+          "url": "https://cannabisinsight420.substack.com/p/cannabis-newsletter-daily-roundup-820"
         }
       ]
     }
