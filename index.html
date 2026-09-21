@@ -90,6 +90,7 @@
   #musicb.on{color:var(--cy)}
   #musicb.on::after{content:"";position:absolute;top:-2px;right:-3px;width:7px;height:7px;border-radius:50%;background:var(--cy);border:1.5px solid #fff;animation:pulse2 2s infinite}
   #musicb.beats::after{background:#fff;border-color:var(--cy)}
+  #musicb.on.paused{opacity:.55}#musicb.on.paused::after{animation:none;background:#fff;border-color:var(--cy)}   /* 9/21: paused from the lock screen - tap = play again */
   #musicb.nudge{animation:pulse2 1s infinite}
   #musicnudge{position:absolute;top:44px;right:8px;z-index:60;background:var(--cy);color:#000;border:0;border-radius:999px;padding:5px 11px;font:700 12px/1 inherit;box-shadow:0 4px 14px rgba(0,0,0,.5);cursor:pointer}
   #musicnudge::before{content:"";position:absolute;top:-5px;right:16px;border:5px solid transparent;border-top:0;border-bottom-color:var(--cy)}
@@ -2288,7 +2289,8 @@
       if(errN>=3){ try{ x.pause(); }catch(e){} clearTimeout(errT); errT=setTimeout(retry,45000);   // three in a row = the network is gone, not the file: stop spinning through the catalogue (it looped 14k times in a minute when the server dropped), try again in 45 s or when back online
         try{window.track&&window.track('music','offline');}catch(e){} return; }
       if(t) mark(t.src); var nxt=pick(t); if(nxt&&nxt!==t){ x._next=null; swapTo(nxt); } });
-    x.addEventListener('playing',function(){ errN=0; });
+    x.addEventListener('playing',function(){ errN=0; ui(); });
+    x.addEventListener('pause',function(){ if(x===a) ui(); });   // 9/21: an OS pause (lock screen) dims the note so the tap reads as 'play again'
     return x; }
   var errN=0, errT=null;   // consecutive load failures (see the 'error' handler in mk)
   function retry(){ errN=0; clearTimeout(errT); if(!want||userPaused||mode==='off'||!a) return;   // an errored element will not reload on play(): move to a freshly picked track instead
@@ -2310,7 +2312,7 @@
   function getVol(){ return gain? gain.gain.value : (a?a.volume:0); }
   function setVol(v){ if(gain) gain.gain.value=v; else if(a) a.volume=v; }
   function target(){ return ducked? VOL*DUCK : VOL; }
-  function ui(){ var on=mode!=='off'; b.classList.toggle('on',on); b.classList.toggle('beats',mode==='beats'); b.setAttribute('aria-pressed',on?'true':'false');
+  function ui(){ var on=mode!=='off'; b.classList.toggle('on',on); b.classList.toggle('beats',mode==='beats'); b.classList.toggle('paused', on && (userPaused || (!!a && a.paused) || (!!actx && actx.state!=='running'))); b.setAttribute('aria-pressed',on?'true':'false');
     b.setAttribute('aria-label', mode==='full'?'Music on (explicit)': mode==='beats'?'Music: beats only':'Music off'); b.title= mode==='full'?'Music: full (explicit) - tap for beats only, hold to skip': mode==='beats'?'Music: beats only - tap for off, hold to skip': 'Music (explicit) - tap for on'; }
   function fade(to,ms,then){ var x=el(); clearInterval(fadeT); var from=getVol(), t0=Date.now();
     fadeT=setInterval(function(){ var k=Math.min(1,(Date.now()-t0)/ms); setVol(from+(to-from)*k); if(k>=1){ clearInterval(fadeT); if(to===0) x.pause(); if(then) then(); } },50); }
@@ -2319,7 +2321,7 @@
   var SIL='data:audio/wav;base64,UklGRoQJAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YWAJAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIA=', sil=null;
   function unlock(){ try{ if(!sil){ sil=new Audio(SIL); sil.loop=true; sil.setAttribute('playsinline',''); sil.volume=0.01; } var p=sil.play(); if(p&&p.catch) p.catch(function(){}); }catch(e){} }
   function start(){ var x=el(); unlock(); if(actx&&actx.state!=='running'){ try{actx.resume();}catch(e){} } x.preload='auto'; var p=x.play();
-    if(p&&p.then){ p.then(function(){ fade(target(),900); ui(); userPaused=false; nowPlaying((trackOf(x)||{}).src,true); }).catch(function(){ arm(); }); } else { fade(target(),900); ui(); } }
+    if(p&&p.then){ p.then(function(){ userPaused=false; fade(target(),900); if(actx&&actx.state!=='running'){ try{ actx.resume().then(ui,ui); }catch(e){} } ui(); nowPlaying((trackOf(x)||{}).src,true); }).catch(function(){ arm(); }); } else { fade(target(),900); ui(); } }
   function stop(){ if(a&&!a.paused) fade(0,400); else if(a){ a.pause(); } try{ if(sil) sil.pause(); }catch(e){} ui(); }
   // ---- 2026-09-17 (Shane: 'lock-screen controls, a skip, a now-playing name'): ----
   var lastNow='', nowT=null, userPaused=false;
@@ -2331,9 +2333,10 @@
       artwork:[{src:abs('icons/icon-192.png'),sizes:'192x192',type:'image/png'},{src:abs('icons/icon-512.png'),sizes:'512x512',type:'image/png'}]}); navigator.mediaSession.playbackState='playing'; } }catch(e){} }
   function skip(src){ if(!a||!a.duration||a.paused) return; var t=trackOf(a); try{ a.currentTime=Math.max(0,a.duration-toEnd(t)); }catch(e){}   // lands in the join window -> the primed next track takes over
     try{window.track&&window.track('music','skip:'+(t?t.name:'')+(src?':'+src:''));}catch(e){} }
-  function pauseOnly(){ userPaused=true; if(a&&!a.paused) fade(0,300); try{ if('mediaSession' in navigator) navigator.mediaSession.playbackState='paused'; }catch(e){} }
+  function pauseOnly(){ userPaused=true; if(a&&!a.paused) fade(0,300,function(){ try{ if(sil) sil.pause(); }catch(e){} }); else { try{ if(a) a.pause(); if(sil) sil.pause(); }catch(e){} }
+    try{ if('mediaSession' in navigator) navigator.mediaSession.playbackState='paused'; }catch(e){} ui(); }
   try{ if('mediaSession' in navigator){ var ms=navigator.mediaSession;
-    ms.setActionHandler('play',function(){ if(want) start(); });
+    ms.setActionHandler('play',function(){ userPaused=false; if(want) start(); });
     ms.setActionHandler('pause',function(){ pauseOnly(); });
     ms.setActionHandler('nexttrack',function(){ skip('lock'); });
     ms.setActionHandler('previoustrack',function(){ if(a){ try{ a.currentTime=0; }catch(e){} } });
@@ -2357,7 +2360,8 @@
   b.addEventListener('pointerdown',function(){ held=false; clearTimeout(holdT); if(mode==='off') return; holdT=setTimeout(function(){ held=true; skip('hold'); try{ navigator.vibrate&&navigator.vibrate(15); }catch(e){} },550); });
   ['pointerup','pointerleave','pointercancel'].forEach(function(ev){ b.addEventListener(ev,function(){ clearTimeout(holdT); }); });
   b.addEventListener('contextmenu',function(e){ e.preventDefault(); });
-  b.addEventListener('click',function(){ if(held){ held=false; return; } hideNudge(); setMode(mode==='off'?'full': mode==='full'?'beats':'off','btn'); });
+  function stalled(){ return mode!=='off' && (userPaused || (a&&a.paused) || (actx&&actx.state!=='running')); }   // 9/21 (Shane): after a lock-screen pause the note lit cyan but a tap only relabelled it; off-then-on was the only way back
+  b.addEventListener('click',function(){ if(held){ held=false; return; } hideNudge(); if(stalled()){ userPaused=false; start(); try{window.track&&window.track('music','resume:btn');}catch(e){} return; } setMode(mode==='off'?'full': mode==='full'?'beats':'off','btn'); });
   // ---- one quiet nudge, once: 30 s after the first tap, only if the person has never chosen ----
   var nudge=null, nudgeT=null;
   function showNudge(){ var chosen=null; try{ chosen=localStorage.getItem('st_music'); }catch(e){} var seen=null; try{ seen=localStorage.getItem('st_music_nudged'); }catch(e){}
