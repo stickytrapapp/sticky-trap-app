@@ -5,60 +5,71 @@
     {
       "date": "2026-09-21",
       "label": "Morning Brief",
-      "title": "Michigan Weed Finds Its Footing While D.C. Locks In a Medical Win",
-      "top": "Michigan operators are finding room to grow — from JARS' Arizona buyout to a fresh push for more Menominee licenses — even as the 24% wholesale tax keeps fueling lawsuits and a gubernatorial fight. Nationally, a federal appeals court just cemented marijuana's Schedule III status and Compass Pathways' psilocybin data keeps clearing hurdles, giving operators real reasons to plan for growth into 2027.",
+      "title": "Michigan Brands Push Through the Tax Squeeze While D.C. Clears a Path Forward",
+      "top": "Michigan operators are finding workarounds and growth even as the 24% wholesale tax bites — from a Detroit-born chain going national to a governor's-race tax-repeal pledge gaining industry backing. Nationally, a federal court just cleared the way for Schedule III to stick, psychedelics cleared another FDA hurdle, and Congress bought the hemp industry more runway.",
       "local": [
         {
-          "text": "JARS Cannabis becomes Arizona's biggest chain — the Michigan-based retailer is acquiring Sonoran Roots and its eight Ponderosa dispensaries, expanding well beyond its home turf.",
+          "text": "JARS Cannabis goes national, buys into Arizona",
+          "detail": "",
           "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-083126/"
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-083126/",
+          "text_full": "JARS Cannabis goes national, buys into Arizona — the Michigan-based chain announced a deal to acquire Sonoran Roots and its eight Ponderosa brand dispensaries, soon making JARS the largest dispensary chain in Arizona."
         },
         {
-          "text": "Muskegon hospitality bet keeps moving forward — Fields Cannary's dispensary-restaurant buildout shows ambitious cannabis retail still has runway in Michigan despite the tax squeeze.",
-          "source": "Cann.dev",
-          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
+          "text": "MiCIA backs GOP nominee on tax-repeal pledge",
+          "source": "Postindustrial",
+          "url": "https://postindustrial.com/stories/michigan-marijuana-industry-group-endorses-gop-governor-candidate-who-pledged-to-cut-new-wholesale-tax/",
+          "text_full": "MiCIA backs GOP nominee on tax-repeal pledge — the Michigan Cannabis Industry Association officially endorsed Republican gubernatorial candidate John James, citing his commitment to repealing the 24% wholesale tax."
         },
         {
-          "text": "Menominee could add four more dispensaries — a petition drive gathered enough signatures to put a cap increase from nine to 13 stores on the November ballot.",
+          "text": "Menominee could add four more dispensaries",
           "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-091626/"
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-091626/",
+          "text_full": "Menominee could add four more dispensaries — a petition drive turned in enough signatures to put a cap increase from nine to 13 stores on the November ballot."
         },
         {
-          "text": "Cannabis industry rallies behind tax-cut candidate — MiCIA formally endorsed GOP nominee John James after he pledged to repeal the 24% wholesale tax, giving operators a clear path to relief on the ballot.",
-          "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/news/republican-gubernatorial-candidate-courts-michigan-cannabis-industry-vows-to-kill-new-24-mj-tax/618038"
+          "text": "Muskegon's Fields Cannary targets fall dispensary-restaurant opening",
+          "source": "cann.dev",
+          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/",
+          "text_full": "Muskegon's Fields Cannary targets fall dispensary-restaurant opening — the hospitality-forward buildout pairs a retail cannabis dispensary with a full-service restaurant, pushing the format further than most Michigan shops."
         },
         {
-          "text": "License shakeout thins the herd, but survivors adapt — Michigan's active cannabis licenses fell for the first time since 2019, with roughly 940 licenses now inactive as weaker operators exit and stronger ones consolidate market share.",
-          "source": "MITechNews",
-          "url": "https://mitechnews.com/news/michigan-cannabis-licenses-decline-as-industry-shakeout-forces-growers-and-dispensaries-to-exit/"
+          "text": "Tax pain drives closures, but cost-sharing offers a workaround",
+          "source": "cann.dev",
+          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/",
+          "text_full": "Tax pain drives closures, but cost-sharing offers a workaround — U.P. chain Higher Love shut five of nine locations citing the 24% wholesale tax, while three-store operator Rize has sustained growth by splitting the tax burden with suppliers instead of absorbing it alone."
         }
       ],
       "national": [
         {
-          "text": "Federal court locks in medical cannabis win — the D.C. Circuit rejected a challenge to marijuana's Schedule III reclassification, leaving the rescheduling order in effect and clearing a legal cloud over 280E tax relief.",
+          "text": "Federal court upholds Schedule III reclassification of medical marijuana",
           "source": "Cannabis Business Times",
-          "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order"
+          "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order",
+          "text_full": "Federal court upholds Schedule III reclassification of medical marijuana — on Sept. 9, 2026, the D.C. Circuit left the rescheduling order in effect, ruling that anti-rescheduling forces had not shown grounds to overturn it."
         },
         {
-          "text": "FDA builds the runway for psychedelic approvals — a new September framework for trial design and REMS requirements signals the agency is preparing a live approval docket for psilocybin and MDMA therapies.",
-          "source": "Clinical Trial Vanguard",
-          "url": "https://www.clinicaltrialvanguard.com/article/psych-pulse/what-the-fdas-new-psychedelic-framework-actually-means-for-the-clinic/"
+          "text": "Compass Pathways lands FDA priority voucher for psilocybin depression drug",
+          "source": "Compass Pathways",
+          "url": "https://ir.compasspathways.com/News--Events-/news/news-details/2026/Compass-Pathways-Announces-FDA-Granted-NDA-Rolling-Review-Request-and-Awarded-Commissioners-National-Priority-Voucher/default.aspx",
+          "text_full": "Compass Pathways lands FDA priority voucher for psilocybin depression drug — the FDA granted a rolling NDA review and awarded COMP360 a Commissioner's National Priority Voucher, which shortens the standard review to roughly one to two months."
         },
         {
-          "text": "Compass Pathways' psilocybin clears its second Phase 3 hurdle — 39% of treatment-resistant depression patients responded after two doses, with benefits holding for six months and an NDA submission targeted for Q4.",
-          "source": "Compass Pathways / HCPLive",
-          "url": "https://ir.compasspathways.com/News--Events-/news/news-details/2026/Compass-Pathways-Announces-Six-Month-Data-from-Second-Phase-3-Trial-Confirming-Rapid-and-Durable-Profile/default.aspx"
+          "text": "FDA builds out infrastructure for a psychedelics approval pathway",
+          "source": "Tech Times",
+          "url": "https://www.techtimes.com/articles/320454/20260714/fda-finalizes-psychedelic-trial-rules-unblinding-problem-gets-official-answer.htm",
+          "text_full": "FDA builds out infrastructure for a psychedelics approval pathway — the agency finalized clinical trial guidance for psilocybin, LSD and MDMA and held a public hearing on psychedelic therapeutic use, signaling it's preparing for a live approval docket."
         },
         {
-          "text": "Curaleaf swings for a European crown — its $4-per-share takeover bid for Aurora Cannabis is reshaping the M&A landscape as consolidation accelerates industry-wide.",
-          "source": "Business of Cannabis",
-          "url": "https://businessofcannabis.com/has-rescheduling-accelerated-the-cannabis-ma-wave/"
+          "text": "Congress buys hemp industry a one-month reprieve",
+          "source": "Akerman LLP",
+          "url": "https://www.akerman.com/en/perspectives/congress-approves-one-month-delay-of-federal-hemp-thc-restrictions.html",
+          "text_full": "Congress buys hemp industry a one-month reprieve — the House passed a funding measure 370-48 delaying federal hemp-THC restrictions from Nov. 12 to Dec. 11, giving lawmakers more time to craft regulation instead of a ban."
         },
         {
-          "text": "Full rescheduling still waits on DEA — months after the administrative hearing wrapped, no final decision has dropped and 280E guidance remains murky, leaving operators banking medical wins while the bigger prize stays pending.",
-          "source": "Cannabis Business Times",
-          "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order"
+          "text": "Brand M&A heats up as Sunderstorm scoops up Lime",
+          "source": "PAC Garden",
+          "url": "https://www.pacgarden.com/post/cannabis-ma-under-schedule-iii",
+          "text_full": "Brand M&A heats up as Sunderstorm scoops up Lime — the KANHA edibles maker is bringing the Lime brand into its house of brands, strengthening its foothold in high-velocity retail categories as brand equity rises in the post-Schedule III market."
         }
       ]
     }
