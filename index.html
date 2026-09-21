@@ -92,6 +92,38 @@
   #musicb.beats::after{background:#fff;border-color:var(--cy)}
   #musicb.on.paused{opacity:.55}#musicb.on.paused::after{animation:none;background:#fff;border-color:var(--cy)}   /* 9/21: paused from the lock screen - tap = play again */
   #musicb.nudge{animation:pulse2 1s infinite}
+  /* 2026-09-21 (Shane): a real player - tap the note = sheet with now-playing, play/pause, next, Full/Beats and the whole list to pick from */
+  #musicsheet{position:fixed;left:0;right:0;bottom:0;z-index:72;max-height:min(78vh,620px);max-height:min(78dvh,620px);display:flex;flex-direction:column;
+    background:linear-gradient(180deg,#141414,#0b0722);border-top:1px solid var(--line);border-radius:18px 18px 0 0;box-shadow:0 -16px 40px rgba(0,0,0,.5);
+    transform:translateY(105%);transition:transform .26s ease;padding-bottom:env(safe-area-inset-bottom)}
+  #musicsheet.on{transform:translateY(0)}
+  #musicshade{position:fixed;inset:0;z-index:71;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .2s}
+  #musicshade.on{opacity:1;pointer-events:auto}
+  .ms-head{display:flex;align-items:center;gap:12px;padding:14px 16px 10px;border-bottom:1px solid var(--line)}
+  .ms-head .ms-x{margin-left:auto;background:rgba(255,255,255,.08);border:1px solid var(--line);border-radius:10px;color:var(--ink);font-weight:800;font-size:14px;padding:9px 13px;cursor:pointer;font-family:inherit;line-height:1}
+  .ms-title{font-weight:900;font-size:16px;letter-spacing:.01em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .ms-now{padding:12px 16px 4px}
+  .ms-now .k{font-size:11px;color:var(--muted);opacity:.7;text-transform:uppercase;letter-spacing:.08em}
+  .ms-now .t{font-weight:900;font-size:19px;line-height:1.15;margin-top:2px;min-height:22px}
+  .ms-ctl{display:flex;align-items:center;gap:10px;padding:10px 16px 12px;border-bottom:1px solid var(--line)}
+  .ms-btn{background:rgba(255,255,255,.08);border:1px solid var(--line);border-radius:12px;color:var(--ink);font-weight:800;font-size:14px;padding:11px 14px;cursor:pointer;font-family:inherit;line-height:1;display:flex;align-items:center;gap:6px;white-space:nowrap}
+  .ms-btn.main{background:linear-gradient(100deg,#ff2e88,#8a4dff);border-color:transparent;color:#fff;min-width:96px;justify-content:center}
+  .ms-modes{margin-left:auto;display:flex;gap:6px}
+  .ms-chip{background:none;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-weight:800;font-size:12px;padding:8px 11px;cursor:pointer;font-family:inherit;line-height:1}
+  .ms-chip.on{color:#fff;border-color:var(--cy);box-shadow:inset 0 0 0 1px var(--cy)}
+  .ms-list{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:6px 8px 14px}
+  .ms-row{display:flex;align-items:center;gap:12px;width:100%;background:none;border:0;border-radius:12px;color:var(--ink);font-family:inherit;text-align:left;padding:11px 10px;cursor:pointer;font-size:15px}
+  .ms-row:active{background:rgba(255,255,255,.06)}
+  .ms-row .n{width:22px;text-align:center;font-size:12px;color:var(--muted);opacity:.6;flex:none}
+  .ms-row .nm{flex:1;font-weight:700}
+  .ms-row .kd{font-size:11px;color:var(--muted);opacity:.7;border:1px solid var(--line);border-radius:999px;padding:3px 8px;flex:none}
+  .ms-row.on .nm{color:var(--cy)} .ms-row.on .n{color:var(--cy);opacity:1}
+  .ms-row.dim{opacity:.45}
+  @keyframes msbars{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
+  .ms-eq{display:inline-flex;gap:2px;align-items:flex-end;height:12px;width:14px;flex:none}
+  .ms-eq i{display:block;width:3px;height:12px;background:var(--cy);transform-origin:bottom;animation:msbars .9s infinite ease-in-out}
+  .ms-eq i:nth-child(2){animation-delay:.25s}.ms-eq i:nth-child(3){animation-delay:.5s}
+  .ms-eq.paused i{animation:none;transform:scaleY(.35)}
   #musicnudge{position:absolute;top:44px;right:8px;z-index:60;background:var(--cy);color:#000;border:0;border-radius:999px;padding:5px 11px;font:700 12px/1 inherit;box-shadow:0 4px 14px rgba(0,0,0,.5);cursor:pointer}
   #musicnudge::before{content:"";position:absolute;top:-5px;right:16px;border:5px solid transparent;border-top:0;border-bottom-color:var(--cy)}
   .bell{position:relative;display:flex;align-items:center;color:#fff;background:none;border:0;cursor:pointer;padding:0}
@@ -2309,7 +2341,7 @@
   function getVol(){ return gain? gain.gain.value : (a?a.volume:0); }
   function setVol(v){ if(gain) gain.gain.value=v; else if(a) a.volume=v; }
   function target(){ return ducked? VOL*DUCK : VOL; }
-  function ui(){ var on=mode!=='off'; b.classList.toggle('on',on); b.classList.toggle('beats',mode==='beats'); b.classList.toggle('paused', on && (userPaused || (!!a && a.paused) || (!!actx && actx.state!=='running'))); b.setAttribute('aria-pressed',on?'true':'false');
+  function ui(){ try{ if(window.__msDraw) window.__msDraw(); }catch(e){} var on=mode!=='off'; b.classList.toggle('on',on); b.classList.toggle('beats',mode==='beats'); b.classList.toggle('paused', on && (userPaused || (!!a && a.paused) || (!!actx && actx.state!=='running'))); b.setAttribute('aria-pressed',on?'true':'false');
     b.setAttribute('aria-label', mode==='full'?'Music on (explicit)': mode==='beats'?'Music: beats only':'Music off'); b.title= mode==='full'?'Music: full (explicit) - tap for beats only, hold to skip': mode==='beats'?'Music: beats only - tap for off, hold to skip': 'Music (explicit) - tap for on'; }
   function fade(to,ms,then){ var x=el(); clearInterval(fadeT); var from=getVol(), t0=Date.now();
     fadeT=setInterval(function(){ var k=Math.min(1,(Date.now()-t0)/ms); setVol(from+(to-from)*k); if(k>=1){ clearInterval(fadeT); if(to===0) x.pause(); if(then) then(); } },50); }
@@ -2328,6 +2360,16 @@
   function meta(t){
     try{ if('mediaSession' in navigator){ navigator.mediaSession.metadata=new MediaMetadata({title:t.name, artist:'The Sticky Trap', album:t.kind==='beat'?'Beats':'Sticky Trap Radio',
       artwork:[{src:abs('icons/icon-192.png'),sizes:'192x192',type:'image/png'},{src:abs('icons/icon-512.png'),sizes:'512x512',type:'image/png'}]}); navigator.mediaSession.playbackState='playing'; } }catch(e){} }
+  // 2026-09-21 (Shane: 'a player with all the songs with names so people can skip but can also pick one'): play THIS track now.
+  // Playing: fade the current one out over 250 ms, swap in the pick, fade up. Paused / not started: point the element at it and start().
+  function playTrack(t,src){ if(!t) return; hideNudge();
+    if(mode==='off'||(mode==='beats'&&t.kind!=='beat')){ mode='full'; want=true; try{ localStorage.setItem('st_music','1'); }catch(e){} }
+    userPaused=false;
+    try{ localStorage.removeItem('st_music_pos'); }catch(e){}   // a remembered position belongs to the song that was playing, not this pick
+    var x=el();
+    if(a&&!a.paused){ fade(0,250,function(){ swapTo(t); fade(target(),600); ui(); nowPlaying(t.src,true); }); }
+    else { if(a.src!==abs(t.src)) a.src=t.src; a._next=null; mark(t.src); start(); }
+    try{window.track&&window.track('music','pick:'+t.name+(src?':'+src:''));}catch(e){} }
   function skip(src){ if(!a||!a.duration||a.paused) return; var t=trackOf(a); try{ a.currentTime=Math.max(0,a.duration-toEnd(t)); }catch(e){}   // lands in the join window -> the primed next track takes over
     try{window.track&&window.track('music','skip:'+(t?t.name:'')+(src?':'+src:''));}catch(e){} }
   function pauseOnly(){ userPaused=true; if(a&&!a.paused) fade(0,300,function(){ try{ if(sil) sil.pause(); }catch(e){} }); else { try{ if(a) a.pause(); if(sil) sil.pause(); }catch(e){} }
@@ -2358,7 +2400,47 @@
   ['pointerup','pointerleave','pointercancel'].forEach(function(ev){ b.addEventListener(ev,function(){ clearTimeout(holdT); }); });
   b.addEventListener('contextmenu',function(e){ e.preventDefault(); });
   function stalled(){ return mode!=='off' && (userPaused || (a&&a.paused) || (actx&&actx.state!=='running')); }   // 9/21 (Shane): after a lock-screen pause the note lit cyan but a tap only relabelled it; off-then-on was the only way back
-  b.addEventListener('click',function(){ if(held){ held=false; return; } hideNudge(); if(stalled()){ userPaused=false; start(); try{window.track&&window.track('music','resume:btn');}catch(e){} return; } setMode(mode==='off'?'full': mode==='full'?'beats':'off','btn'); });
+  b.addEventListener('click',function(){ if(held){ held=false; return; } hideNudge();
+    if(mode==='off'){ setMode('full','btn'); }                       // first tap still = music on (Full), Shane 9/17
+    else if(stalled()){ userPaused=false; start(); try{window.track&&window.track('music','resume:btn');}catch(e){} }
+    openSheet(); });
+  // ---- the player sheet (2026-09-21) ----
+  var sheet=null, shade=null;
+  function buildSheet(){ if(sheet) return;
+    shade=document.createElement('div'); shade.id='musicshade'; document.body.appendChild(shade);
+    sheet=document.createElement('section'); sheet.id='musicsheet'; sheet.setAttribute('role','dialog'); sheet.setAttribute('aria-label','Music player'); sheet.setAttribute('aria-hidden','true');
+    sheet.innerHTML='<div class="ms-head"><div><div class="ms-title">Sticky Trap Radio</div></div><button type="button" class="ms-x" id="msx" aria-label="Close">Close</button></div>'+
+      '<div class="ms-now"><div class="k" id="msk">Now playing</div><div class="t" id="mst">&nbsp;</div></div>'+
+      '<div class="ms-ctl"><button type="button" class="ms-btn main" id="msplay">Play</button><button type="button" class="ms-btn" id="msnext">Next &#9197;</button>'+
+      '<div class="ms-modes"><button type="button" class="ms-chip" data-m="full">Full</button><button type="button" class="ms-chip" data-m="beats">Beats</button><button type="button" class="ms-chip" data-m="off">Off</button></div></div>'+
+      '<div class="ms-list" id="mslist"></div>';
+    document.body.appendChild(sheet);
+    var list=document.getElementById('mslist');
+    CAT.forEach(function(t,i){ var r=document.createElement('button'); r.type='button'; r.className='ms-row'; r.dataset.i=i;
+      r.innerHTML='<span class="n">'+(i+1)+'</span><span class="nm"></span><span class="kd">'+(t.kind==='beat'?'Beat':'Vocal')+'</span>';
+      r.querySelector('.nm').textContent=t.name;
+      r.addEventListener('click',function(){ playTrack(t,'sheet'); }); list.appendChild(r); });
+    document.getElementById('msx').addEventListener('click',closeSheet); shade.addEventListener('click',closeSheet);
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&sheet.classList.contains('on')) closeSheet(); });
+    document.getElementById('msplay').addEventListener('click',function(){
+      if(mode==='off'||!a){ playTrack(opener(),'sheet-play'); return; }
+      if(a&&!a.paused&&!stalled()){ pauseOnly(); ui(); return; }
+      userPaused=false; start(); });
+    document.getElementById('msnext').addEventListener('click',function(){ if(a&&!a.paused&&a.duration){ skip('sheet'); } else { playTrack(pick(trackOf(a)),'sheet-next'); } });
+    sheet.querySelectorAll('.ms-chip').forEach(function(c){ c.addEventListener('click',function(){ setMode(c.dataset.m,'sheet'); }); });
+    window.__msDraw=drawSheet; }
+  function drawSheet(){ if(!sheet||!sheet.classList.contains('on')) return;
+    var t=trackOf(a), playing=!!(a&&!a.paused&&mode!=='off'&&!(actx&&actx.state!=='running'));
+    document.getElementById('msk').textContent= mode==='off'?'Music off': playing?'Now playing':'Paused';
+    document.getElementById('mst').textContent= (mode!=='off'&&t)?t.name:(mode==='off'?'Tap a song or Play':'-');
+    document.getElementById('msplay').innerHTML= playing?'&#10074;&#10074; Pause':'&#9654; Play';
+    sheet.querySelectorAll('.ms-chip').forEach(function(c){ c.classList.toggle('on',c.dataset.m===mode); });
+    sheet.querySelectorAll('.ms-row').forEach(function(r){ var tr=CAT[+r.dataset.i], on=!!(t&&tr===t&&mode!=='off'); r.classList.toggle('on',on); r.classList.toggle('dim',mode==='beats'&&tr.kind!=='beat');
+      var eq=r.querySelector('.ms-eq'); if(on){ if(!eq){ eq=document.createElement('span'); eq.className='ms-eq'; eq.innerHTML='<i></i><i></i><i></i>'; r.insertBefore(eq,r.querySelector('.kd')); } eq.classList.toggle('paused',!playing); } else if(eq){ eq.remove(); } }); }
+  var drawT=null;
+  function openSheet(){ buildSheet(); sheet.classList.add('on'); shade.classList.add('on'); sheet.setAttribute('aria-hidden','false'); drawSheet(); clearInterval(drawT); drawT=setInterval(drawSheet,1000);
+    var on=sheet.querySelector('.ms-row.on'); if(on){ try{ on.scrollIntoView({block:'nearest'}); }catch(e){} } try{window.track&&window.track('music','sheet');}catch(e){} }
+  function closeSheet(){ if(!sheet) return; sheet.classList.remove('on'); shade.classList.remove('on'); sheet.setAttribute('aria-hidden','true'); clearInterval(drawT); }
   // ---- one quiet nudge, once: 30 s after the first tap, only if the person has never chosen ----
   var nudge=null, nudgeT=null;
   function showNudge(){ var chosen=null; try{ chosen=localStorage.getItem('st_music'); }catch(e){} var seen=null; try{ seen=localStorage.getItem('st_music_nudged'); }catch(e){}
@@ -2378,7 +2460,7 @@
   document.addEventListener('visibilitychange',function(){ if(!document.hidden){ if(actx&&actx.state!=='running'){ try{actx.resume();}catch(e){} } if(want&&a&&a.paused&&!userPaused) start(); } });
   window.STMusic={ state:function(){ var t=trackOf(a); return {mode:mode, now:t?t.name:null, next:(a&&a._next)?a._next.name:null, played:played.length, master:(gain?+gain.gain.value.toFixed(2):null), ducked:ducked,
       tracks:A.map(function(x){ var tt=trackOf(x); return x?{name:tt?tt.name:null, paused:x.paused, t:+(x.currentTime||0).toFixed(1), dur:+(x.duration||0).toFixed(1), g:(x._g?+x._g.gain.value.toFixed(2):null), xf:!!x._xf}:null; }) }; },
-    seekEnd:function(s){ if(a&&a.duration){ a.currentTime=Math.max(0,a.duration-(s||5)); } }, skip:function(){ skip('dbg'); }, set:function(m){ setMode(m,'dbg'); }, nudge:function(){ try{localStorage.removeItem('st_music_nudged');}catch(e){} showNudge(); } };
+    seekEnd:function(s){ if(a&&a.duration){ a.currentTime=Math.max(0,a.duration-(s||5)); } }, skip:function(){ skip('dbg'); }, set:function(m){ setMode(m,'dbg'); }, play:function(i){ playTrack(CAT[i],'dbg'); }, open:function(){ openSheet(); }, close:function(){ closeSheet(); }, nudge:function(){ try{localStorage.removeItem('st_music_nudged');}catch(e){} showNudge(); } };
   ui(); if(want){ arm(); ui(); }   // remembered state shows immediately; playback waits for the first tap (autoplay policy) - 9/21: the second ui() runs after arm() made the element, so the note shows DIMMED (on, not playing) until that tap
 })();
 </script>
