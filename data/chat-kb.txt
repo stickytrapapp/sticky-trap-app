@@ -58,41 +58,48 @@ Reply time: we usually get back to you within a business day, during shop hours 
 Durability, waterproof, weather, outdoor life, fridge or freezer, samples, or a size that is not on the menu: never answer these yourself and never call the stickers waterproof, water-resistant, weatherproof or cold-rated - say it depends on the job and to send the art or call or text 734 460 3845 and we will confirm for their exact use.
 
 == Materials, effects, how we work, common questions (from the app's Specs tab) ==
-Materials & Textures
-Substrate
-Our materials. We run only stocks we'd put our name on — if it won't print to that standard, we don't offer it. Other premium materials available on request.
-White Vinyl
-6 mil premium white vinyl — durable, with crisp, clean color.
-Rainbow Holographic
-6 mil rainbow holographic — bubble-free (BF). Lays dead-flat, applies clean.
-Gold
-4 mil premium gold — warm metallic shine, bubble-free; makes gold-forward art read high-end.
-Clear By quote
-Premium glass-clear stock — art reads like it's floating in the material. A niche specialty, priced per project .
-Rainbow Holographic Tip bands & tabs 6 mil rainbow holographic (not bubble-free) — our solution for tip bands, tamper tabs & small pieces; helps them stick.
-Effects
-Spot Gloss UV
-A high-gloss coating on a select area, so whatever you want to stand out catches the light — ideal for extreme, detailed accents.
-HoloBrite™
-A white-ink base under the art on holographic or gold stock for true, razor-sharp color while the metal still frames it.
-Custom Embossing
-A raised, dimensional texture you can actually feel. This is where the gloss gets layered and built up.
-How We Work
-Getting to Print
-Print-ready art files get you to print fastest — we'll assess yours free . Not there yet? We provide whatever's needed to get you there, and walk you through it. Email them to us to start.
-Proofing
-We proof every file with you before we print your order — shared with you as photos and video by text or email, whichever you prefer — so you sign off on exactly what prints, no surprises.
-Common Questions
-Do you price match?
-Found a better price? Send us the quote and we'll see what we can do.
-Do I need to bring artwork?
-No. We're a design house — bring a finished file or just an idea, and we'll design it, dial in the materials, and print it in-house.
-Will you help me find the best options for my art?
-Yes — we don't just run your file. Send whatever you've got and, if you want, we add the finishing that makes it land, plus the right material call. Curated per project, quoted with your order.
-Can I get a custom shape?
-Yes — Custom Dielines . We build a bespoke cut path to any outline you want, not just a square or circle. Quoted per project.
+What we print on, what we can do to it, and what happens after you order.
+What we print on
+Only stocks we’d put our name on. Something else in mind? Ask us .
+White 6 mil vinyl Bright white, crisp color. The workhorse for labels, slaps and wraps.
+See prices →
+Holo 6 mil, bubble-free Rainbow shift under light. Lays flat, applies clean. Add HoloBrite™ — white ink under the art — when you want the color true and the holo as the frame.
+Tip bands and tamper tabs run on a thinner holo that grips small pieces.
+See prices →
+Gold 4 mil Warm metallic gold. Makes gold art look expensive. HoloBrite™ available.
+See prices →
+Clear Custom quote Glass-clear. The art looks like it’s floating on the jar. Not on the menu — quoted per job.
+Ask us for a quote →
+Textures
+Passes are how crisp. Layers are how high. The number on the menu is the layers of UV gloss on top of the print.
+Flat
+Printed, no raise. Clean and quick.
+1 Spot Gloss
+One glossy layer on the parts you pick — the logo, the strain name. Catches the light.
+2 Standard
+Two layers built up. You feel it under your thumb.
+3 Pro
+Three layers, full raise. Our top menu tier. Need higher? Flex runs 4–8 layers, quoted.
+See texture prices on the menu →
+How it works
+1 Send your art
+Any file, any state — even a ChatGPT PNG. We assess it free and tell you what it needs. Email it or build the order in the app.
+2 Approve the proof
+A screen proof first, then a photo of the real test print, on your order page. Two rounds of changes are free.
+3 We print and ship
+5–7 business days after the proof is approved and the order is paid. Pick up free or USPS Priority — tracking the day it ships.
+Common questions
+How do shipping and pick-up work?
+Pick up free at the shop — 4750 Venture Dr, Suite 101, Ann Arbor, Mon–Fri 10–5. Text 734 460 3845 first so it’s boxed and waiting at the counter. Or we ship anywhere in the US: USPS Priority, about 2 days in transit, flat-rate postage plus a $5 handling fee on one line of your invoice — most orders land $10–$15, big jar runs more. Need it out today? Same-day post office run is $25 in place of the handling fee — approved and paid by 1 pm and it ships today. Need UPS, FedEx or overnight? Ask and we quote it.
+The fine print
+Turnaround first, then transit. The 5–7 business days is the printing; shipping days are on top.
+Tracking the day it ships. You get an email (and a push if you turned it on) with the number. Pick-ups get a “ready at the counter” note.
+Shipped orders are paid in full before they go out. Pick-up orders can be paid at the counter — cash, card or ACH.
+Damaged in the mail? Send photos of the box and the labels within 48 hours. We file the USPS claim and reprint.
+Wrong address given to us, or a package returned? The reship is a new shipping charge.
+US only for now.
 What are pre-press / set-up charges?
-Pre-press makes your art print-ready — set-up, color, cut paths, bleeds, proofing. We assess it per design once we see your files, before anything prints. Print-ready vector files keep it minimal. Anything beyond that we quote up front, before we start.
+Pre-press is what makes your art print right — set-up, color, cut paths, bleeds, the test print. We assess it per design once we see the files, before anything prints. Print-ready vector keeps it small. Anything beyond that is quoted up front.
 Can I send AI art?
 Yes — most of what we get now is ChatGPT. Send the biggest original PNG and keep the text out of the image; we take it from there: real type, clean vector, set up for your exact material and texture. AI Art Package from $90 * . Want it to stop looking like AI? Keep the concept and let us design it into your brand.
 * Per file, for art that follows the tips. Photoreal renders and heavier fixes get one written quote before we start.
@@ -106,15 +113,12 @@ Leave breathing room. Nothing important touching the edges. We crop to the cut l
 One image per sticker, named. lid.png, wrap.png, bottom.png — or just tell us which is which.
 Tell us what pops. Which parts get gloss or raise? ‘The logo and the strain name’ is plenty.
 Type out the required text. Strain, weight, warnings, license line — as text in the email, not in the art.
-How do shipping and pick-up work?
-Pick up free at the shop — 4750 Venture Dr, Suite 101, Ann Arbor, Mon–Fri 10–5. Text 734 460 3845 first so it’s boxed and waiting at the counter. Or we ship anywhere in the US: USPS Priority, about 2 days in transit, flat-rate postage plus a $5 handling fee on one line of your invoice — most orders land $10–$15, big jar runs more. Need it out today? Same-day post office run is $25 in place of the handling fee — approved and paid by 1 pm and it ships today. Need UPS, FedEx or overnight? Ask and we quote it.
-The fine print
-Turnaround first, then transit. The 5–7 business days is the printing; shipping days are on top.
-Tracking the day it ships. You get an email (and a push if you turned it on) with the number. Pick-ups get a “ready at the counter” note.
-Shipped orders are paid in full before they go out. Pick-up orders can be paid at the counter — cash, card or ACH.
-Damaged in the mail? Send photos of the box and the labels within 48 hours. We file the USPS claim and reprint.
-Wrong address given to us, or a package returned? The reship is a new shipping charge.
-US only for now.
+Can I get a custom shape?
+Yes. Any outline you want, not just a square or a circle — we cut a custom dieline to it. Quoted per job.
+Do I need finished art?
+No. Bring a file or just an idea. We’re a design house: we design it, pick the material and texture that make it land, and print it here. Design time is quoted with your order.
+Do you price match?
+Found a better price? Send us the quote and we’ll see what we can do.
 <section class="view connectbanner"
 
 == Price list: per piece, USD, at the menu quantity (5-499 pcs); apply the volume breaks above for 500+ ==
