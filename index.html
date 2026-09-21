@@ -2382,7 +2382,7 @@
   window.STMusic={ state:function(){ var t=trackOf(a); return {mode:mode, now:t?t.name:null, next:(a&&a._next)?a._next.name:null, played:played.length, master:(gain?+gain.gain.value.toFixed(2):null), ducked:ducked,
       tracks:A.map(function(x){ var tt=trackOf(x); return x?{name:tt?tt.name:null, paused:x.paused, t:+(x.currentTime||0).toFixed(1), dur:+(x.duration||0).toFixed(1), g:(x._g?+x._g.gain.value.toFixed(2):null), xf:!!x._xf}:null; }) }; },
     seekEnd:function(s){ if(a&&a.duration){ a.currentTime=Math.max(0,a.duration-(s||5)); } }, skip:function(){ skip('dbg'); }, set:function(m){ setMode(m,'dbg'); }, nudge:function(){ try{localStorage.removeItem('st_music_nudged');}catch(e){} showNudge(); } };
-  ui(); if(want) arm();   // remembered state shows immediately; playback waits for the first tap (autoplay policy)
+  ui(); if(want){ arm(); ui(); }   // remembered state shows immediately; playback waits for the first tap (autoplay policy) - 9/21: the second ui() runs after arm() made the element, so the note shows DIMMED (on, not playing) until that tap
 })();
 </script>
 <script>
