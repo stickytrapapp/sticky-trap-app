@@ -28,7 +28,8 @@
         "text": "o2 gloss · 45¢",
         "url": "https://thestickytrap.app/configure/?p=o2-standard&mats=White%20Vinyl&fins=Spot%20Gloss%20UV&m=White%20Vinyl&f=Spot%20Gloss%20UV&q=250&minq=250"
       },
-      "_note": "kicker flips to \"October only\" on Oct 1 (bot editor); the DEAL price itself starts Oct 1 via deals[].from | 9/18 Shane: white only (holo dropped from the promo)."
+      "_note": "kicker flips to \"October only\" on Oct 1 (bot editor); the DEAL price itself starts Oct 1 via deals[].from | 9/18 Shane: white only (holo dropped from the promo).",
+      "theme": "halloween"
     },
     {
       "id": "resin-reception-2026",

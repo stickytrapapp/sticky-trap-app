@@ -87,6 +87,15 @@
   .promostrip .ps-cta::after{content:" \2192"}
   .promostrip .ps-x{flex:none;background:none;border:0;color:var(--muted);font-size:18px;line-height:1;padding:2px 4px;cursor:pointer}
   @media (max-width:360px){ .promostrip .ps-t #psD{display:none} }
+  /* 2026-09-21 (Shane): no closing the promo; October wears a Halloween skin in the Trap palette - set by "theme":"halloween" on the event in promos.json */
+  .promostrip .ps-x{display:none}
+  .promostrip.hallow{background:radial-gradient(130% 160% at 0% 0%,rgba(255,122,0,.20),transparent 55%),radial-gradient(90% 120% at 100% 100%,rgba(138,43,226,.22),transparent 60%),linear-gradient(#0b0710,#0b0710) padding-box,linear-gradient(100deg,#FF7A00,#FF1FA2 50%,#8A2BE2) border-box;
+    box-shadow:0 10px 28px -12px rgba(255,122,0,.65),0 0 0 1px rgba(255,255,255,.03) inset}
+  .promostrip.hallow .ps-k{background:linear-gradient(100deg,#FF7A00,#FF1FA2);color:#0b0710}
+  .promostrip.hallow .ps-cta{background:linear-gradient(100deg,#FF7A00,#FF1FA2);box-shadow:0 6px 14px -8px rgba(255,122,0,.9)}
+  .promostrip .ps-pk{display:none}
+  .promostrip.hallow .ps-pk{display:block;flex:none;width:34px;height:34px;filter:drop-shadow(0 4px 8px rgba(255,122,0,.45));animation:pkbob 3.2s ease-in-out infinite}
+  @keyframes pkbob{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg) translateY(-1px)}}
   #musicb{position:relative;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:manipulation}   /* long-press = skip: no iOS callout / selection */
   #musicb.on{color:var(--cy)}
   #musicb.on::after{content:"";position:absolute;top:-2px;right:-3px;width:7px;height:7px;border-radius:50%;background:var(--cy);border:1.5px solid #fff;animation:pulse2 2s infinite}
@@ -520,7 +529,7 @@
     <button data-tab="play"><svg viewBox="0 0 24 24"><circle cx="13.5" cy="4.5" r="2.5"/><path d="M12.6 6.6L10 14"/><path d="M4 14h16l1.5 5H2.5z"/><circle cx="14.5" cy="16.6" r=".6"/><circle cx="17.5" cy="16.6" r=".6"/></svg>Play</button>
   </nav>
 
-  <div class="promostrip" id="promostrip" hidden role="button" tabindex="0"><div class="ps-t"><span class="ps-k" id="psK"></span><b id="psT"></b><span id="psD"></span></div><button class="ps-cta" id="psCta" type="button"></button><button class="ps-x" id="psX" type="button" aria-label="Dismiss">&times;</button></div>
+  <div class="promostrip" id="promostrip" hidden role="button" tabindex="0"><svg class="ps-pk" viewBox="0 0 40 40" aria-hidden="true"><path d="M19 4c1 2 1 4 1 6h2c0-2-.3-4 1-6" stroke="#2fd36b" stroke-width="2.6" fill="none" stroke-linecap="round"/><ellipse cx="20" cy="24" rx="16" ry="13" fill="#FF7A00"/><ellipse cx="20" cy="24" rx="16" ry="13" fill="url(#pkg)"/><path d="M12 12c-3 4-3 20 0 24M28 12c3 4 3 20 0 24M20 11v26" stroke="#c94f00" stroke-width="1.6" fill="none" opacity=".7"/><path d="M10 20l5 5h-8zM30 20l-5 5h8z" fill="#0b0710"/><path d="M9 28c3 5 8 7 11 7s8-2 11-7l-3 1-2-2-2 3-2-2-2 2-2-3-2 2-2-1z" fill="#0b0710"/><path d="M13 30l2 2M25 32l2-2" stroke="#12C4FF" stroke-width="1.4" stroke-linecap="round"/><defs><linearGradient id="pkg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF1FA2" stop-opacity=".35"/><stop offset="1" stop-color="#8A2BE2" stop-opacity=".45"/></linearGradient></defs></svg><div class="ps-t"><span class="ps-k" id="psK"></span><b id="psT"></b><span id="psD"></span></div><button class="ps-cta" id="psCta" type="button"></button><button class="ps-x" id="psX" type="button" aria-label="Dismiss">&times;</button></div>
   <a class="tpline" id="tpline" href="https://thestickytrap.app/game/" hidden><span class="tl-ic">◈</span><span class="tl-t" id="tlT"></span><span class="tl-cta" id="tlC">Play</span></a>
 
   <main class="views">
@@ -2458,7 +2467,7 @@
   function ymd(d){ return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
   function isFirstWeekend(d){ var dow=d.getDay(), dm=d.getDate(); return (dow===6&&dm<=7)||(dow===0&&dm>=2&&dm<=8); }
   function activePromos(P){ var d=new Date(), out=[], t=ymd(d);
-    (P.events||[]).forEach(function(e){ if(e.surfaces&&e.surfaces.indexOf('app')<0) return; if(e.from&&t<e.from) return; if(e.to&&t>e.to) return; out.push({type:'event',id:e.id,k:e.kicker||'Happening',title:e.title,text:e.text,cta:e.cta,pri:3,sticky:!!e.sticky});   /* 2026-09-17: sticky = a month promo the X only hides for the week */ });
+    (P.events||[]).forEach(function(e){ if(e.surfaces&&e.surfaces.indexOf('app')<0) return; if(e.from&&t<e.from) return; if(e.to&&t>e.to) return; out.push({type:'event',id:e.id,k:e.kicker||'Happening',title:e.title,text:e.text,cta:e.cta,pri:3,theme:e.theme||'',sticky:!!e.sticky});   /* 2026-09-17: sticky = a month promo the X only hides for the week */ });
     if(P.double_points){ var r=P.double_points, on=r.rule==='first_weekend'?isFirstWeekend(d):(r.rule==='weekend'?(d.getDay()===0||d.getDay()===6):false);
       if(on) out.push({type:'double',id:'double-'+t.slice(0,7),k:'In the game today',title:r.label||'Double points',text:r.text||'',cta:{label:'Play',tab:'play'},pri:2}); }
     if(P.featured&&P.featured.items&&P.featured.items.length){ var wk=Math.floor(Date.now()/864e5/7), it=P.featured.items[wk%P.featured.items.length];
@@ -2468,7 +2477,7 @@
   function wk(){ return Math.floor(Date.now()/864e5/7); }
   function show(list){ cur=null; for(var i=0;i<list.length;i++){ var it=list[i], key=it.sticky?(it.id+'-w'+wk()):it.id; if(!gone[key]){ cur=it; cur._key=key; break; } }
     if(!cur){ strip.hidden=true; return; }
-    K.textContent=cur.k; T.textContent=cur.title; D.textContent=cur.text||''; C.textContent=(cur.cta&&cur.cta.label)||'See more'; strip.hidden=false;
+    K.textContent=cur.k; T.textContent=cur.title; D.textContent=cur.text||''; C.textContent=(cur.cta&&cur.cta.label)||'See more'; strip.classList.toggle('hallow',cur.theme==='halloween'); strip.hidden=false;
     try{window.track&&window.track('promo_view',cur.id);}catch(e){} }
   function goPromo(){ if(!cur) return; try{window.track&&window.track('promo_cta',cur.id);}catch(e){}
     if(cur.cta&&cur.cta.url){ if(/^https?:\/\/thestickytrap\.app\//.test(cur.cta.url)) location.href=cur.cta.url; else window.open(cur.cta.url,'_blank','noopener'); }   /* our own pages open in place; outside links in a new tab */
