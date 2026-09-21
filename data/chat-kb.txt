@@ -1,4 +1,4 @@
-THE STICKY TRAP -- CHAT KNOWLEDGE BASE (auto-generated 2026-09-18 from the live app by Price Engine/make_chat_kb.py; do not hand-edit -- house facts live in Price Engine/chat-facts.txt)
+THE STICKY TRAP -- CHAT KNOWLEDGE BASE (auto-generated 2026-09-21 from the live app by Price Engine/make_chat_kb.py; do not hand-edit -- house facts live in Price Engine/chat-facts.txt)
 
 == About The Sticky Trap ==
 The Sticky Trap is a design house and in-house print shop in Ann Arbor, Michigan: branding, custom art, stickers, labels, promotionals and merch. Motto: "Let's Stick Together."
@@ -106,6 +106,15 @@ Leave breathing room. Nothing important touching the edges. We crop to the cut l
 One image per sticker, named. lid.png, wrap.png, bottom.png — or just tell us which is which.
 Tell us what pops. Which parts get gloss or raise? ‘The logo and the strain name’ is plenty.
 Type out the required text. Strain, weight, warnings, license line — as text in the email, not in the art.
+How do shipping and pick-up work?
+Pick up free at the shop — 4750 Venture Dr, Suite 101, Ann Arbor, Mon–Fri 10–5. Text 734 460 3845 first so it’s boxed and waiting at the counter. Or we ship anywhere in the US: USPS Priority, about 2 days in transit, flat-rate postage plus a $5 handling fee on one line of your invoice — most orders land $10–$15, big jar runs more. Need it out today? Same-day post office run is $20 in place of the handling fee — approved and paid by 2 pm and it ships today. Need UPS, FedEx or overnight? Ask and we quote it.
+The fine print
+Turnaround first, then transit. The 5–7 business days is the printing; shipping days are on top.
+Tracking the day it ships. You get an email (and a push if you turned it on) with the number. Pick-ups get a “ready at the counter” note.
+Shipped orders are paid in full before they go out. Pick-up orders can be paid at the counter — cash, card or ACH.
+Damaged in the mail? Send photos of the box and the labels within 48 hours. We file the USPS claim and reprint.
+Wrong address given to us, or a package returned? The reship is a new shipping charge.
+US only for now.
 <section class="view connectbanner"
 
 == Price list: per piece, USD, at the menu quantity (5-499 pcs); apply the volume breaks above for 500+ ==
