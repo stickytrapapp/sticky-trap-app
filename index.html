@@ -2218,8 +2218,8 @@
   var CAT=[
     // 2026-09-18 joins review: `out` = seconds before this song ends that the next one starts (measured from each file's last 6 s: hard stops ~1.0, decaying tails 1.5-3.5 and those are faded);
     // `lead` = the next song's ramp-in (default 1.0; 0.5 for a spoken cold open so the first line is heard). Before: one 1.5/2.5/4 s crossfade that faded both ways = holes and chopped endings.
+    {src:'audio/app-2.mp3',  name:'Trap House Open',      kind:'vocal', fam:'th',  out:1.0},   // song 1 (Shane 9/21): first in the list and the first-ever opener,
     {src:'audio/app-1.mp3',  name:'Right Address',        kind:'vocal', fam:'ra',  out:1.0, lead:0.8},
-    {src:'audio/app-2.mp3',  name:'Trap House Open',      kind:'vocal', fam:'th',  out:1.0},
     {src:'audio/app-3.mp3',  name:'Triple 6',             kind:'beat',  fam:'wmp', out:1.0},
     {src:'audio/app-4.mp3',  name:'We Make Pros',         kind:'vocal', fam:'wmp', out:0.5},   // ends loud on the last beat
     // app-5 Understanding removed 2026-09-18 for good (Shane: 'I don't like Understanding songs'); slot 5 is free
@@ -2239,7 +2239,7 @@
   // Shane 2026-09-16 ('play each song at random before replaying a song' - it repeated the same 3): a SHUFFLE CYCLE that survives reloads.
   // `played` = srcs heard in the current cycle, saved in localStorage st_music_played; a song cannot come back until every song in the
   // pool has played once, then the cycle starts over (never the same song twice in a row). Picks still alternate vocal/beat and avoid
-  // the same family back to back when they can. We Make Pros opens the very first start only (Shane 9/17; Trap House Open before that).
+  // the same family back to back when they can. Trap House Open opens the very first start only (Shane 9/21 'song 1'; We Make Pros 9/17-9/21).
   function loadPlayed(){ try{ var v=JSON.parse(localStorage.getItem('st_music_played')||'[]'); if(Array.isArray(v)) return v; }catch(e){} return []; }
   function savePlayed(){ try{ localStorage.setItem('st_music_played',JSON.stringify(played.slice(-40))); }catch(e){} }
   // 2026-09-17 (Shane: 'they still repeat' after an hour): the cycle stays (every song once before any comes back) AND no song within the
@@ -2262,7 +2262,7 @@
     return c[Math.floor(Math.random()*c.length)]; }
   function opener(){
     var P=pool(); if(!P.length) return null; var c=unplayed(null);
-    var wmp=c.filter(function(t){ return t.fam==='wmp'&&t.kind==='vocal'; })[0]; if(wmp&&!hist.length) return wmp;   // first ever start -> We Make Pros (Shane 9/17; was Trap House Open)
+    var th=c.filter(function(t){ return t.fam==='th'&&t.kind==='vocal'; })[0]; if(th&&!hist.length) return th;   // first ever start -> Trap House Open (Shane 9/21 'song 1'; We Make Pros 9/17-9/21)
     var v=c.filter(function(t){ return t.kind==='vocal'; }); var pool2=v.length?v:c; return pool2[Math.floor(Math.random()*pool2.length)]; }
   // 2026-09-18 (Music, measured from each file's last 6 s): 8 of 13 end hard inside their final second, 5 decay. A long crossfade over a hard ending
   // chops the last hit and starts the quiet next intro under it. So: the next song starts `out` s before this one ends (hard ~1.0, decays 1.5-3.5, and only
