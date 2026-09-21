@@ -81,7 +81,8 @@ var D={"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"breaks":[[500,5],[7
 (function(){
   var $=function(id){return document.getElementById(id);};
   var money=function(v){var f=v.toFixed(2).split('.');return '$'+(+f[0]).toLocaleString()+'.'+f[1];}, fmt=function(n){return (+n).toLocaleString();};
-  var esc=function(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');};
+  var esc=function(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
+  var SHORT={'White Vinyl':'White','Holographic':'Holo','Gold':'Gold','Clear':'Clear','Spot Gloss UV':'Spot Gloss','Standard Embossing':'Standard','Flat':'Flat','Pro':'Pro'};   // 2026-09-21: the basket shows the Menu's names, not the pricing keys;
   function cmult(q){for(var i=0;i<D.bands.length;i++){if(q<=D.bands[i][0])return D.bands[i][1];}return D.bands[D.bands.length-1][1];}
   function unit(l){ var u=Math.floor((+l.pr||0)*cmult(l.qty)*100+0.5)/100; if(l.deal&&l.qty>=(l.deal.fromQty||0)) u=Math.ceil(u*(1-l.deal.off)*100)/100; return u; }
   function clampQ(q){ q=Math.round((+q||D.minq)/D.step)*D.step; return Math.max(D.minq,Math.min(D.maxq,q)); }
@@ -101,7 +102,7 @@ var D={"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"breaks":[[500,5],[7
       var th=a&&a.thumb?'<img src="'+a.thumb+'" alt="">':'<span class="sw '+matCls(l.m)+'"></span>';
       var art=a&&a.onFile?('<div class="art ok">Art on file from '+esc(a.onFile)+(a.name?' ('+esc(a.name)+')':'')+' &middot; nothing to upload</div>'):a?('<div class="art '+(a.pre&&a.pre.level?a.pre.level:'ok')+'">'+esc(a.name)+(a.pre&&a.pre.dpi?' &middot; ~'+a.pre.dpi+' dpi at size':'')+(a.pre&&a.pre.alpha?' &middot; transparent bg':'')+(a.pre&&a.pre.vector?' &middot; vector, checked at proof':'')+(a.pre&&a.pre.level==='bad'?' &middot; <b>replace this file</b>':'')+(a.reupload?' &middot; re-add at the configure page':'')+'</div>')
                   :('<div class="art none">No art yet &middot; <a href="/configure/?p='+slug(l.p)+'">add it</a> or send it after (we ask before proofing)</div>');
-      return '<div class="line" data-i="'+i+'"><div class="th">'+th+'</div><div class="ln"><b>'+esc(l.p)+'</b><div class="sp">'+esc(l.m)+' &middot; '+esc(l.f)+'</div>'+art+(l.notes?'<div class="nt">'+esc(l.notes)+'</div>':'')+
+      return '<div class="line" data-i="'+i+'"><div class="th">'+th+'</div><div class="ln"><b>'+esc(l.p)+'</b><div class="sp">'+esc(SHORT[l.m]||l.m)+' &middot; '+esc(SHORT[l.f]||l.f)+'</div>'+art+(l.notes?'<div class="nt">'+esc(l.notes)+'</div>':'')+
         '<div class="q"><button type="button" data-d="-1">&minus;</button><input type="number" value="'+l.qty+'" min="'+D.minq+'" max="'+D.maxq+'" step="'+D.step+'"><button type="button" data-d="1">+</button><span class="u">&times; '+money(u)+'</span></div></div>'+
         '<div class="rt"><b>'+money(u*l.qty)+'</b><button class="rm" type="button">Remove</button></div></div>'; }).join('');
     var s=sub(), t=total(); $('sub').textContent=money(s); $('tot').textContent=money(t);
