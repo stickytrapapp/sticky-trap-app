@@ -1437,7 +1437,8 @@
   function jsonp(url,cb,onerr){
     var name='cb_'+(++_jc)+'_'+Date.now(),s=document.createElement('script'),done=false;
     var t=setTimeout(function(){if(!done){done=true;clean();onerr&&onerr();}},12000);
-    function clean(){clearTimeout(t);delete window[name];if(s.parentNode)s.parentNode.removeChild(s);}
+    // 2026-09-21: after a timeout the Google hop can still answer late; leave a no-op behind for a minute so the late script does not throw 'cb_… is not defined'
+    function clean(){clearTimeout(t);window[name]=function(){};setTimeout(function(){try{delete window[name];}catch(e){}},60000);if(s.parentNode)s.parentNode.removeChild(s);}
     window[name]=function(d){if(done)return;done=true;clean();cb(d);};
     s.onerror=function(){if(!done){done=true;clean();onerr&&onerr();}};
     s.src=url+(url.indexOf('?')>-1?'&':'?')+'callback='+name;document.head.appendChild(s);
