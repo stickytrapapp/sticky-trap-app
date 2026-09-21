@@ -5,71 +5,60 @@
     {
       "date": "2026-09-21",
       "label": "Morning Brief",
-      "title": "Michigan Brands Push Through the Tax Squeeze While D.C. Clears a Path Forward",
-      "top": "Michigan operators are finding workarounds and growth even as the 24% wholesale tax bites — from a Detroit-born chain going national to a governor's-race tax-repeal pledge gaining industry backing. Nationally, a federal court just cleared the way for Schedule III to stick, psychedelics cleared another FDA hurdle, and Congress bought the hemp industry more runway.",
+      "title": "Michigan Cannabis Tops $17B as DC and Big Pharma Fast-Track the Future",
+      "top": "Michigan's legal cannabis market just crossed $17 billion in lifetime sales and Ann Arbor operators are picking up industry hardware, even as regulators drop the state's biggest-ever fine and a tax-repeal candidate courts the industry ahead of 2026's governor's race. Nationally, momentum is building fast — the FDA is fast-tracking psychedelic medicine, Eli Lilly just closed a major psychedelics acquisition, and DEA/DOJ reviews keep inching cannabis and psilocybin toward the mainstream.",
       "local": [
         {
-          "text": "JARS Cannabis goes national, buys into Arizona",
-          "detail": "",
+          "text": "Michigan cannabis sales cross $17 billion — Combined adult-use and medical sales have topped $17 billion since legal sales began, with August alone generating roughly $259 million in revenue, according to a new state report.",
+          "source": "The Marijuana Herald",
+          "url": "https://themarijuanaherald.com/2026/09/michigan-legal-marijuana-sales-surpass-17-billion/"
+        },
+        {
+          "text": "Ann Arbor dispensary lands Best of Detroit honors — Metro Times' 2026 staff picks crowned Information Entropy's converted-church Ann Arbor shop for its flower and live rosin, with Lansing-based edibles brand Captain also singled out for innovation.",
+          "source": "Detroit Metro Times",
+          "url": "https://www.metrotimes.com/topic/best-of-detroit/best-of-detroit-2026-staff-picks-weed/"
+        },
+        {
+          "text": "GOP governor candidate courts industry on tax repeal — Michigan cannabis operators are rallying behind a Republican gubernatorial hopeful who's made killing the 24% wholesale tax his centerpiece pitch, opening a real political path to relief.",
+          "source": "Cannabis Insight 420 Newsletter",
+          "url": "https://cannabisinsight420.substack.com/p/cannabis-newsletter-daily-roundup-4c1"
+        },
+        {
+          "text": "JARS Cannabis becomes Arizona's biggest chain — The Michigan-based dispensary operator sealed a deal to acquire Sonoran Roots and its eight Ponderosa-brand stores, turning a home-state playbook into a major out-of-state expansion.",
           "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-083126/",
-          "text_full": "JARS Cannabis goes national, buys into Arizona — the Michigan-based chain announced a deal to acquire Sonoran Roots and its eight Ponderosa brand dispensaries, soon making JARS the largest dispensary chain in Arizona."
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-083126/"
         },
         {
-          "text": "MiCIA backs GOP nominee on tax-repeal pledge",
-          "source": "Postindustrial",
-          "url": "https://postindustrial.com/stories/michigan-marijuana-industry-group-endorses-gop-governor-candidate-who-pledged-to-cut-new-wholesale-tax/",
-          "text_full": "MiCIA backs GOP nominee on tax-repeal pledge — the Michigan Cannabis Industry Association officially endorsed Republican gubernatorial candidate John James, citing his commitment to repealing the 24% wholesale tax."
-        },
-        {
-          "text": "Menominee could add four more dispensaries",
-          "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-091626/",
-          "text_full": "Menominee could add four more dispensaries — a petition drive turned in enough signatures to put a cap increase from nine to 13 stores on the November ballot."
-        },
-        {
-          "text": "Muskegon's Fields Cannary targets fall dispensary-restaurant opening",
-          "source": "cann.dev",
-          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/",
-          "text_full": "Muskegon's Fields Cannary targets fall dispensary-restaurant opening — the hospitality-forward buildout pairs a retail cannabis dispensary with a full-service restaurant, pushing the format further than most Michigan shops."
-        },
-        {
-          "text": "Tax pain drives closures, but cost-sharing offers a workaround",
-          "source": "cann.dev",
-          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/",
-          "text_full": "Tax pain drives closures, but cost-sharing offers a workaround — U.P. chain Higher Love shut five of nine locations citing the 24% wholesale tax, while three-store operator Rize has sustained growth by splitting the tax burden with suppliers instead of absorbing it alone."
+          "text": "State drops record fine, clears a bad actor — Regulators hit Muha Meds manufacturer Michigan Investment 10 with a $2 million fine and full license revocation for 'egregious' violations, the toughest enforcement action in state history and a signal the market is cleaning up while tax lawsuits keep pressing forward.",
+          "source": "MJBizDaily",
+          "url": "https://mjbizdaily.com/news/michigan-cannabis-regulators-impose-record-fine-revoke-permit-of-popular-product-maker-after-egregious-violations/618180/"
         }
       ],
       "national": [
         {
-          "text": "Federal court upholds Schedule III reclassification of medical marijuana",
+          "text": "FDA fast-tracks psychedelic therapies with priority vouchers — The agency issued national priority vouchers to three companies advancing psilocybin and methylone treatments and cleared the first-ever clinical study of an ibogaine derivative.",
+          "source": "Pharmacy Times",
+          "url": "https://www.pharmacytimes.com/view/fda-announces-regulatory-actions-to-accelerate-psychedelic-development-for-serious-mental-health-conditions"
+        },
+        {
+          "text": "Eli Lilly closes acquisition of three psychedelic drugs — Lilly's AtaiBeckley deal closed September 11, bringing clinical-stage assets BPL-003, VLS-01 and EMP-01 under a major pharma company's development arm.",
+          "source": "Clinical Trial Vanguard",
+          "url": "https://www.clinicaltrialvanguard.com/article/psych-pulse/what-the-fdas-new-psychedelic-framework-actually-means-for-the-clinic/"
+        },
+        {
+          "text": "DEA advances bid to reschedule psilocybin — A petition to move psilocybin from Schedule I to Schedule II has cleared DEA review and now sits with the Department of Justice.",
+          "source": "Clinical Trial Vanguard",
+          "url": "https://www.clinicaltrialvanguard.com/article/psych-pulse/what-the-fdas-new-psychedelic-framework-actually-means-for-the-clinic/"
+        },
+        {
+          "text": "Court upholds marijuana's Schedule III status — The D.C. Circuit rejected a legal challenge this month and left the federal reclassification of medical marijuana to Schedule III fully in effect.",
           "source": "Cannabis Business Times",
-          "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order",
-          "text_full": "Federal court upholds Schedule III reclassification of medical marijuana — on Sept. 9, 2026, the D.C. Circuit left the rescheduling order in effect, ruling that anti-rescheduling forces had not shown grounds to overturn it."
+          "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order"
         },
         {
-          "text": "Compass Pathways lands FDA priority voucher for psilocybin depression drug",
-          "source": "Compass Pathways",
-          "url": "https://ir.compasspathways.com/News--Events-/news/news-details/2026/Compass-Pathways-Announces-FDA-Granted-NDA-Rolling-Review-Request-and-Awarded-Commissioners-National-Priority-Voucher/default.aspx",
-          "text_full": "Compass Pathways lands FDA priority voucher for psilocybin depression drug — the FDA granted a rolling NDA review and awarded COMP360 a Commissioner's National Priority Voucher, which shortens the standard review to roughly one to two months."
-        },
-        {
-          "text": "FDA builds out infrastructure for a psychedelics approval pathway",
-          "source": "Tech Times",
-          "url": "https://www.techtimes.com/articles/320454/20260714/fda-finalizes-psychedelic-trial-rules-unblinding-problem-gets-official-answer.htm",
-          "text_full": "FDA builds out infrastructure for a psychedelics approval pathway — the agency finalized clinical trial guidance for psilocybin, LSD and MDMA and held a public hearing on psychedelic therapeutic use, signaling it's preparing for a live approval docket."
-        },
-        {
-          "text": "Congress buys hemp industry a one-month reprieve",
-          "source": "Akerman LLP",
-          "url": "https://www.akerman.com/en/perspectives/congress-approves-one-month-delay-of-federal-hemp-thc-restrictions.html",
-          "text_full": "Congress buys hemp industry a one-month reprieve — the House passed a funding measure 370-48 delaying federal hemp-THC restrictions from Nov. 12 to Dec. 11, giving lawmakers more time to craft regulation instead of a ban."
-        },
-        {
-          "text": "Brand M&A heats up as Sunderstorm scoops up Lime",
-          "source": "PAC Garden",
-          "url": "https://www.pacgarden.com/post/cannabis-ma-under-schedule-iii",
-          "text_full": "Brand M&A heats up as Sunderstorm scoops up Lime — the KANHA edibles maker is bringing the Lime brand into its house of brands, strengthening its foothold in high-velocity retail categories as brand equity rises in the post-Schedule III market."
+          "text": "Curaleaf presses hostile bid for Aurora Cannabis — The MSO's takeover push has triggered a proxy fight pitting America's largest cannabis operator against a Canadian licensed producer, underscoring continued consolidation ambition even as Aurora's board urges shareholders to reject the offer.",
+          "source": "Munchmakers",
+          "url": "https://www.munchmakers.com/news/article/aurora-cannabis-rejects-curaleafs-hostile-bid-cites-strong-balance-sheet-mtnmfs28"
         }
       ]
     }
