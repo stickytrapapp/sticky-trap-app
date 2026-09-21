@@ -1,64 +1,64 @@
 {
-  "updated": "2026-09-20",
+  "updated": "2026-09-21",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-09-20",
+      "date": "2026-09-21",
       "label": "Morning Brief",
-      "title": "Michigan Tops $17B in Sales as Industry Rallies Behind Tax-Cut Candidate; Federal Psychedelics and Cannabis Policy Keep Advancing",
-      "top": "Michigan operators have a real path forward this week: cumulative sales just crossed $17 billion and the state's top trade group is now backing a gubernatorial candidate who's pledged to gut the 24% wholesale tax. Nationally, momentum keeps building on multiple fronts — DEA rescheduling is grinding forward, Compass Pathways' psilocybin program hit another milestone, and Trump issued fresh marijuana clemency.",
+      "title": "Michigan Weed Finds Its Footing While D.C. Locks In a Medical Win",
+      "top": "Michigan operators are finding room to grow — from JARS' Arizona buyout to a fresh push for more Menominee licenses — even as the 24% wholesale tax keeps fueling lawsuits and a gubernatorial fight. Nationally, a federal appeals court just cemented marijuana's Schedule III status and Compass Pathways' psilocybin data keeps clearing hurdles, giving operators real reasons to plan for growth into 2027.",
       "local": [
         {
-          "text": "Cannabis industry endorses James, tax-cut candidate",
-          "source": "Postindustrial",
-          "url": "https://postindustrial.com/stories/michigan-marijuana-industry-group-endorses-gop-governor-candidate-who-pledged-to-cut-new-wholesale-tax/"
+          "text": "JARS Cannabis becomes Arizona's biggest chain — the Michigan-based retailer is acquiring Sonoran Roots and its eight Ponderosa dispensaries, expanding well beyond its home turf.",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-083126/"
         },
         {
-          "text": "Michigan sales blow past $17 billion all-time",
-          "source": "The Marijuana Herald",
-          "url": "https://themarijuanaherald.com/2026/09/michigan-legal-marijuana-sales-surpass-17-billion/"
-        },
-        {
-          "text": "New Standard opens Ann Arbor store with giveaways",
-          "source": "ClickOnDetroit",
-          "url": "https://www.clickondetroit.com/topic/Dispensary/"
-        },
-        {
-          "text": "Black-owned High Profile Cannabis debuts on Detroit's east side",
-          "source": "City of Detroit",
-          "url": "https://detroitmi.gov/news/detroit-legacy-adult-use-recreational-dispensary-high-profile-cannabis-celebrates-grand-opening"
-        },
-        {
-          "text": "U.P. tax pain hits hard, but a playbook emerges",
+          "text": "Muskegon hospitality bet keeps moving forward — Fields Cannary's dispensary-restaurant buildout shows ambitious cannabis retail still has runway in Michigan despite the tax squeeze.",
           "source": "Cann.dev",
           "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
+        },
+        {
+          "text": "Menominee could add four more dispensaries — a petition drive gathered enough signatures to put a cap increase from nine to 13 stores on the November ballot.",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-091626/"
+        },
+        {
+          "text": "Cannabis industry rallies behind tax-cut candidate — MiCIA formally endorsed GOP nominee John James after he pledged to repeal the 24% wholesale tax, giving operators a clear path to relief on the ballot.",
+          "source": "MJBizDaily",
+          "url": "https://mjbizdaily.com/news/republican-gubernatorial-candidate-courts-michigan-cannabis-industry-vows-to-kill-new-24-mj-tax/618038"
+        },
+        {
+          "text": "License shakeout thins the herd, but survivors adapt — Michigan's active cannabis licenses fell for the first time since 2019, with roughly 940 licenses now inactive as weaker operators exit and stronger ones consolidate market share.",
+          "source": "MITechNews",
+          "url": "https://mitechnews.com/news/michigan-cannabis-licenses-decline-as-industry-shakeout-forces-growers-and-dispensaries-to-exit/"
         }
       ],
       "national": [
         {
-          "text": "DEA rescheduling clears another procedural checkpoint",
-          "source": "CannIntel",
-          "url": "https://cannintel.com/laws/dea-cannabis-rescheduling-hits-key-milestone-august-2026"
+          "text": "Federal court locks in medical cannabis win — the D.C. Circuit rejected a challenge to marijuana's Schedule III reclassification, leaving the rescheduling order in effect and clearing a legal cloud over 280E tax relief.",
+          "source": "Cannabis Business Times",
+          "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order"
         },
         {
-          "text": "Compass Pathways psilocybin clears second Phase 3 trial",
-          "source": "Psychedelic Alpha",
-          "url": "https://psychedelicalpha.com/news/breaking-second-positive-phase-3-for-compass-psilocybin-though-modest-magnitude-raises-questions/"
+          "text": "FDA builds the runway for psychedelic approvals — a new September framework for trial design and REMS requirements signals the agency is preparing a live approval docket for psilocybin and MDMA therapies.",
+          "source": "Clinical Trial Vanguard",
+          "url": "https://www.clinicaltrialvanguard.com/article/psych-pulse/what-the-fdas-new-psychedelic-framework-actually-means-for-the-clinic/"
         },
         {
-          "text": "FDA holds first-ever hearing on psychedelic therapeutics",
-          "source": "Psychedelic Beacon",
-          "url": "https://psychedelicbeacon.com/blog/psilocybin-fda-approval-tracker"
+          "text": "Compass Pathways' psilocybin clears its second Phase 3 hurdle — 39% of treatment-resistant depression patients responded after two doses, with benefits holding for six months and an NDA submission targeted for Q4.",
+          "source": "Compass Pathways / HCPLive",
+          "url": "https://ir.compasspathways.com/News--Events-/news/news-details/2026/Compass-Pathways-Announces-Six-Month-Data-from-Second-Phase-3-Trial-Confirming-Rapid-and-Durable-Profile/default.aspx"
         },
         {
-          "text": "Trump commutes two federal marijuana prison sentences",
-          "source": "The Marijuana Herald",
-          "url": "https://themarijuanaherald.com/2026/09/daily-cannabis-news-brief-for-9-10-2026/"
+          "text": "Curaleaf swings for a European crown — its $4-per-share takeover bid for Aurora Cannabis is reshaping the M&A landscape as consolidation accelerates industry-wide.",
+          "source": "Business of Cannabis",
+          "url": "https://businessofcannabis.com/has-rescheduling-accelerated-the-cannabis-ma-wave/"
         },
         {
-          "text": "Appeals court voids $31.8M award to Michigan grower",
-          "source": "The Marijuana Herald",
-          "url": "https://themarijuanaherald.com/2026/09/daily-cannabis-news-brief-for-9-10-2026/"
+          "text": "Full rescheduling still waits on DEA — months after the administrative hearing wrapped, no final decision has dropped and 280E guidance remains murky, leaving operators banking medical wins while the bigger prize stays pending.",
+          "source": "Cannabis Business Times",
+          "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order"
         }
       ]
     }
