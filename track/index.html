@@ -138,7 +138,7 @@
         '<div id="saveinst" hidden><button type="button" class="btn" id="saveadd" style="margin-top:8px">Add to home screen</button><small style="display:block;margin-top:6px">One tap. Your order opens from the icon any time.</small></div>'+
         '<div id="savesteps"><ol>'+saveSteps()+'</ol>'+(navigator.share?'<div class="sbtns"><button type="button" class="btn ghost" id="saveshare">Share / save</button></div>':'')+'</div></div>':'')+
       '<div class="meta"><div><div class="k">Due</div><div class="v">'+esc(o.due||'To be set')+'</div></div><div><div class="k">Order</div><div class="v">'+esc(o.items||'See your quote')+'</div></div></div>'+
-      (o.payment_status==='authorized'?'<div class="note" style="margin-top:8px">Card charged'+(o.payment_amt?' $'+(+o.payment_amt).toFixed(2):'')+' when you approve the proof.</div>':'')+
+      (o.payment_status==='authorized'?'<div class="note" style="margin-top:8px">Card authorized'+(o.payment_amt?' for $'+(+o.payment_amt).toFixed(2):'')+' - charged when you approve the proof.</div>':'')+   /* pre-v67 orders only: these are still on a hold. New orders are charged at order and show the 'captured' line below. */
       (o.payment_status==='captured'?'<div class="note" style="margin-top:8px">Paid by card'+(o.payment_amt?' - $'+(+o.payment_amt).toFixed(2):'')+'. Thank you.</div>':'')+
       
       (o.pay_url?'<a class="btn" id="pay" href="'+esc(o.pay_url)+'" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none">Pay the invoice →</a><div class="note">Opens your Square invoice. Payment locks in your spot in the queue.</div>':'')+
