@@ -7,7 +7,7 @@
   .wrap{max-width:760px;margin:0 auto;padding:16px 14px 90px}
   /* 9/22 Shane 'allignment is off': an item line needs ~900px, the 760px form gave it 704 and the row
      ran past the card. On a desktop screen the form gets the room the line needs. */
-  @media(min-width:1080px){ .wrap{max-width:1040px} }
+  @media(min-width:1000px){ .wrap{max-width:1040px} }
   h1{font-size:22px;margin:6px 0 2px;letter-spacing:.02em} .sub{color:var(--muted);font-size:13px;margin-bottom:14px}
   .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin:12px 0;box-shadow:0 1px 2px rgba(17,17,17,.05)}
   .card h2{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--pink);margin:0 0 10px}
@@ -33,7 +33,8 @@
   .newline{display:grid;grid-template-columns:1fr;gap:6px;padding:10px 0;border-bottom:1px solid var(--line)}
   .newline .g{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
   .newline .nlrow{display:grid;grid-template-columns:minmax(0,2fr) 66px 84px minmax(0,1.1fr) minmax(0,1.25fr) minmax(0,1.25fr) minmax(0,.9fr) minmax(0,.9fr) 36px;gap:6px;align-items:center}
-  .newline .nlrow>*{min-width:0} .newline .nlrow input,.newline .nlrow select{width:100%}
+  .newline .nlrow>*{min-width:0} .newline .nlrow input,.newline .nlrow select{width:100%;min-width:0}
+  .newline,.newline .nlrow{max-width:100%} #newItems{overflow-x:hidden}
   .newline input,.newline select{padding:9px 8px;font-size:15px}
   .newline .vcell{display:block;min-width:0}
   .newline .vcell select,.newline .vcell input{width:100%}
@@ -173,6 +174,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-22b</div>
 </div>
 
 <div class="bar hidden" id="bar">
