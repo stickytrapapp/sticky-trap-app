@@ -90,6 +90,7 @@
   @media (max-width:360px){ .promostrip .ps-t #psD{display:none} }
   /* 2026-09-21 (Shane): no closing the promo; October wears a Halloween skin in the Trap palette - set by "theme":"halloween" on the event in promos.json */
   .promostrip .ps-x{display:none}
+  .promostrip .ps-t #psD s{opacity:.55;text-decoration-thickness:1px}
   .promostrip.locked{cursor:default}
   .promostrip.locked .ps-cta{background:transparent;border:1.5px solid rgba(18,196,255,.55);color:#fff;box-shadow:none;cursor:default;font-weight:800}
   .promostrip.hallow{background:radial-gradient(130% 160% at 0% 0%,rgba(255,122,0,.20),transparent 55%),radial-gradient(90% 120% at 100% 100%,rgba(138,43,226,.22),transparent 60%),linear-gradient(#0b0710,#0b0710) padding-box,linear-gradient(100deg,#FF7A00,#FF1FA2 50%,#8A2BE2) border-box;
@@ -2458,7 +2459,7 @@
   function ymd(d){ return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
   function isFirstWeekend(d){ var dow=d.getDay(), dm=d.getDate(); return (dow===6&&dm<=7)||(dow===0&&dm>=2&&dm<=8); }
   function activePromos(P){ var d=new Date(), out=[], t=ymd(d);
-    (P.events||[]).forEach(function(e){ if(e.surfaces&&e.surfaces.indexOf('app')<0) return; if(e.from&&t<e.from) return; if(e.to&&t>e.to) return; out.push({type:'event',id:e.id,k:e.kicker||'Happening',title:e.title,text:e.text,cta:e.cta,pri:3,theme:e.theme||'',cta_from:e.cta_from||'',_to:e.to||'',_km:e.kicker_live||'',sticky:!!e.sticky});   /* 2026-09-17: sticky = a month promo the X only hides for the week */ });
+    (P.events||[]).forEach(function(e){ if(e.surfaces&&e.surfaces.indexOf('app')<0) return; if(e.from&&t<e.from) return; if(e.to&&t>e.to) return; out.push({type:'event',id:e.id,k:e.kicker||'Happening',title:e.title,text:e.text,text_soon:e.text_soon||'',was:e.was||'',cta:e.cta,pri:3,theme:e.theme||'',cta_from:e.cta_from||'',_to:e.to||'',_km:e.kicker_live||'',sticky:!!e.sticky});   /* 2026-09-17: sticky = a month promo the X only hides for the week */ });
     if(P.double_points){ var r=P.double_points, on=r.rule==='first_weekend'?isFirstWeekend(d):(r.rule==='weekend'?(d.getDay()===0||d.getDay()===6):false);
       if(on) out.push({type:'double',id:'double-'+t.slice(0,7),k:'In the game today',title:r.label||'Double points',text:r.text||'',cta:{label:'Play',tab:'play'},pri:2}); }
     if(P.featured&&P.featured.items&&P.featured.items.length){ var wk=Math.floor(Date.now()/864e5/7), it=P.featured.items[wk%P.featured.items.length];
@@ -2477,7 +2478,11 @@
       if(start && td<start) cur.k='Starts '+niceDay(start);
       else if(end){ var left=Math.round((new Date(end+'T12:00:00')-new Date(td+'T12:00:00'))/864e5);
         cur.k = left<=0 ? 'Last day' : (left<=6 ? 'Last '+left+' days' : (cur._km||cur.k)); } }
-    K.textContent=cur.k; T.textContent=cur.title; D.textContent=cur.text||''; C.textContent= cur._locked ? ((cur.cta&&cur.cta.soon)||'Opens '+niceDay(cur.cta_from)) : ((cur.cta&&cur.cta.label)||'See more');
+    K.textContent=cur.k; T.textContent=cur.title;
+    // 2026-09-22 (Shane): a discount nobody can see is not a discount - show what it was. Before the offer opens the
+    // card uses `text_soon` instead, because a struck price next to a price we are not charging yet reads as a lie.
+    D.textContent = (cur._locked && cur.text_soon) ? cur.text_soon : (cur.text||'');
+    if(!cur._locked && cur.was){ var wEl=document.createElement('s'); wEl.textContent=cur.was; D.appendChild(document.createTextNode(' ')); D.appendChild(wEl); } C.textContent= cur._locked ? ((cur.cta&&cur.cta.soon)||'Opens '+niceDay(cur.cta_from)) : ((cur.cta&&cur.cta.label)||'See more');
     strip.classList.toggle('locked',cur._locked); strip.classList.toggle('hallow',cur.theme==='halloween');
     if(cur._locked){ strip.removeAttribute('role'); strip.removeAttribute('tabindex'); } else { strip.setAttribute('role','button'); strip.setAttribute('tabindex','0'); }
     strip.hidden=false;

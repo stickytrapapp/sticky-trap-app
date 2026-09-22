@@ -18,6 +18,7 @@ a{color:inherit}
 html,body{overflow-x:hidden}
 @media(max-width:820px){.nav .in{padding:10px 14px;gap:10px}.nav .brand{font-size:15px}.nav .brand img{width:26px;height:26px}.nav .cart{padding:7px 10px;font-size:11px}.pgrid{grid-template-columns:repeat(2,1fr);gap:10px}.pc .body{padding:10px 12px 12px}.pc h3{font-size:15px}.hero{padding:40px 0 32px}.hero h1{overflow-wrap:anywhere}.nav .links{display:none;position:absolute;left:0;right:0;top:100%;flex-direction:column;gap:0;background:var(--s-paper);border-bottom:1.5px solid var(--s-ink)}.nav .links.open{display:flex}.nav .links a{padding:14px 20px;border-top:1px solid var(--s-line)}.nav .burger{display:block}.nav .cart{margin-left:0}}
 .wrap{max-width:var(--s-maxw);margin:0 auto;padding:0 20px}
+.spromo{display:none;background:var(--s-ink);color:var(--s-paper)}.spromo .in{max-width:1180px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}.spromo .k{flex:none;font-size:10px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;background:var(--s-cy);color:var(--s-ink);padding:4px 8px;border-radius:6px}.spromo .t{flex:1 1 220px;font-size:14px;font-weight:800;line-height:1.3}.spromo .t s{opacity:.6;font-weight:600;margin-left:6px}.spromo .t span{display:block;font-weight:600;font-size:12.5px;opacity:.78}.spromo a.go,.spromo b.soon{flex:none;font-size:12px;font-weight:900;padding:8px 14px;border-radius:999px;text-decoration:none;white-space:nowrap}.spromo a.go{background:#fff;color:var(--s-ink);border:1.5px solid var(--s-cy);box-shadow:0 0 0 3px rgba(18,196,255,.22)}.spromo b.soon{background:transparent;color:#fff;border:1.5px solid rgba(18,196,255,.55)}@media(max-width:560px){.spromo .in{padding:9px 14px;gap:9px}.spromo .t{flex-basis:100%}}
 .hero{padding:64px 0 48px;border-bottom:1.5px solid var(--s-ink)}
 .hero h1{font-size:clamp(38px,7vw,78px);line-height:.98;letter-spacing:-.03em;margin:12px 0 18px;font-weight:900}
 .hero h1 em{font-style:normal;color:var(--s-accent-ink)}
@@ -65,7 +66,7 @@ h1{margin:0 0 2px;font-size:22px;letter-spacing:-.01em}.sec{font-size:11px;font-
 .opt .sw{width:18px;height:18px;border-radius:6px;border:1px solid rgba(255,255,255,.18)}.sw.white{background:#fff}.sw.holo{background:var(--holo)}.sw.gold{background:var(--goldg)}
 .opt .lv{font-size:11px;color:var(--cy);font-weight:900}
 .opt.quote{border-style:dashed;color:var(--muted)}
-.hb{display:flex;align-items:center;gap:8px;margin:8px 2px 0;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.02em;color:var(--cy);cursor:pointer}.hb input{accent-color:var(--cy);width:15px;height:15px;margin:0}.hb em{font-style:normal;text-transform:none;letter-spacing:0;font-weight:600;color:var(--muted)}
+.hb{display:grid;grid-template-columns:15px auto 1fr;align-items:center;column-gap:8px;row-gap:2px;margin:8px 2px 0;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.02em;color:var(--cy);cursor:pointer}.hb input{accent-color:var(--cy);width:15px;height:15px;margin:0}.hb b{white-space:nowrap;color:var(--paper)}.hb em{grid-column:2/-1;font-style:normal;text-transform:none;letter-spacing:0;font-weight:600;color:var(--muted);font-size:11.5px;line-height:1.35}
 .qrow{display:flex;align-items:center;gap:8px}.qrow input{width:96px;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--paper);font:inherit;font-size:16px;font-weight:800;text-align:center}
 .qb{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--paper);font:inherit;font-size:18px;font-weight:900;cursor:pointer}
 .breaks{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}.breaks button{flex:1;min-width:56px;padding:8px 6px;border-radius:9px;border:1px solid var(--line);background:var(--panel);color:var(--paper);font:inherit;font-size:12.5px;font-weight:800;cursor:pointer}.breaks button.on{background:var(--grad);color:#000;border-color:transparent}
@@ -78,7 +79,8 @@ textarea{width:100%;min-height:64px;margin-top:2px;padding:10px;border-radius:10
 .preview svg{width:82%;height:82%;filter:drop-shadow(0 12px 26px rgba(0,0,0,.6))}
 .pnote{margin:8px 0 0;font-size:11.5px;color:var(--muted);text-align:center}
 .price{margin-top:14px}
-.unit{display:flex;align-items:baseline;gap:8px}.unit b{font-size:34px;letter-spacing:-.02em}.unit span{color:var(--muted);font-size:13px}
+.unit{display:flex;align-items:baseline;gap:8px}
+.unit s{color:var(--muted);font-weight:800;font-size:17px;opacity:.75;text-decoration-thickness:1.5px}.unit b{font-size:34px;letter-spacing:-.02em}.unit span{color:var(--muted);font-size:13px}
 .tot{margin:2px 0 0;font-size:13.5px;color:var(--muted)}.tot b{color:var(--paper)}
 .nudge{margin:10px 0 0;padding:9px 12px;border-radius:10px;background:rgba(18,196,255,.09);border:1px solid rgba(18,196,255,.35);font-size:12.5px}.nudge b{color:var(--cy)}
 .deal{margin:8px 0 0;padding:9px 12px;border-radius:10px;background:rgba(255,31,162,.10);border:1px solid rgba(255,31,162,.4);font-size:12.5px}.deal b{color:var(--mag)}
@@ -130,7 +132,7 @@ input,textarea,.qrow input,.q input{background:#fff;color:#14130f}
         <div class="opts"><div class="opt on" id="sizeopt"><span id="psize"></span><small>fixed for this product</small></div><a class="opt quote" href="mailto:thestickytrap@gmail.com?subject=Custom%20size" style="text-decoration:none">Custom size<small>talk to us</small></a></div>
         <div class="step"><b>2</b> Material</div>
         <div class="opts" id="mats"></div>
-        <label class="hb hidden" id="hbrow"><input type="checkbox" id="hb"> + HoloBrite <em>white underbase for true color on holo / gold</em></label>
+        <label class="hb hidden" id="hbrow"><input type="checkbox" id="hb"> Add white ink <b id="hbadd"></b> <em>prints a white underbase first so the colors stay true on holo and gold</em></label>
         <div class="step"><b>3</b> Texture <span style="font-weight:600;letter-spacing:0;text-transform:none">&middot; number = layers of UV gloss</span></div>
         <div class="opts" id="fins"></div>
         <div class="step"><b>4</b> Quantity</div>
@@ -148,7 +150,7 @@ input,textarea,.qrow input,.q input{background:#fff;color:#14130f}
         <div class="preview" id="preview"></div>
         <p class="pnote">Preview shows shape and material. <b>Your proof is the real thing</b> &mdash; nothing prints until you approve it.</p>
         <div class="price">
-          <div class="unit"><b id="unit">$0.00</b><span id="unitlbl">per sticker</span></div>
+          <div class="unit"><b id="unit">$0.00</b><s id="wasunit" class="hidden"></s><span id="unitlbl">per sticker</span></div>
           <div class="tot" id="tot"></div>
           <div class="nudge hidden" id="nudge"></div>
           <div class="deal hidden" id="deal"></div>
@@ -190,35 +192,48 @@ var D={"products":[{"name":"3\" Slap","slug":"3-slap","section":"Slaps","size":"
   function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
   document.title=p.name+' · Configure · The Sticky Trap';
   $('ttl').textContent=p.name; $('psec').textContent=p.section; $('pname').textContent=p.name; $('pcut').textContent=p.cut; $('psize').textContent=p.size; $('unitlbl').textContent='per '+p.unit;
+  // 2026-09-17 (promo links): ?mats=White Vinyl,Holographic limits the materials offered (Gold stays off a promo), ?m= / ?f= preselect
+  // material and texture, ?q= presets the quantity. All optional; a plain ?p= link behaves as before.
+  var Uq=new URLSearchParams(location.search), onlyMats=(Uq.get('mats')||'').split(',').map(function(x){return x.trim();}).filter(Boolean);
+  if(onlyMats.length){ var keep=p.mats.filter(function(m){ return onlyMats.indexOf(m.key)>=0; }); if(keep.length) p.mats=keep; }
+  var onlyFins=(Uq.get('fins')||'').split(',').map(function(x){return x.trim();}).filter(Boolean);   // ?fins=Spot Gloss UV -> only that texture is offered
+  if(onlyFins.length){ var keepF=p.fins.filter(function(f){ return onlyFins.indexOf(f)>=0; }); if(keepF.length) p.fins=keepF; }
+  var MINQ=Math.max(D.minq, parseInt(Uq.get('minq')||'',10)||0);   // ?minq=250 -> the quantity cannot go below it (promo floor)
 
   var cfg={mat:p.mats[0].key, fin:p.fins[0], hb:false}, qty=50, art=null, thumb=null, preflight=null;
+  (function(){ var m=Uq.get('m'), f=Uq.get('f'), q=parseInt(Uq.get('q')||'',10);
+    if(m&&p.mats.some(function(x){return x.key===m;})) cfg.mat=m;
+    if(f&&p.fins.indexOf(f)>=0&&p.prices[cfg.mat]&&p.prices[cfg.mat][f]) cfg.fin=f;
+    if(q>0) qty=Math.min(D.maxq,Math.max(D.minq,Math.round(q/D.step)*D.step)); qty=Math.max(qty,MINQ); })();
   var deals=[]; fetch('/data/promos.json?'+Date.now()).then(function(r){return r.json();}).then(function(j){ deals=(j&&j.deals)||[]; update(); }).catch(function(){});
 
   // material
   $('mats').innerHTML=p.mats.map(function(m){ return '<button type="button" class="opt'+(m.key===cfg.mat?' on':'')+'" data-m="'+esc(m.key)+'"><span class="sw '+m.cls+'"></span>'+esc(m.short)+'<small>'+esc(m.note)+'</small></button>'; }).join('');
   $('mats').addEventListener('click',function(e){ var o=e.target.closest('.opt'); if(!o) return; cfg.mat=o.dataset.m; [].forEach.call($('mats').children,function(x){x.classList.toggle('on',x===o);}); if(!p.prices[cfg.mat][cfg.fin]){ cfg.fin=p.fins[0]; drawFins(); } hbRow(); update(); });
-  function hbRow(){ var m=null; p.mats.forEach(function(x){ if(x.key===cfg.mat) m=x; }); var can=!!(m&&m.hb&&p.prices[cfg.mat][cfg.fin]&&p.prices[cfg.mat][cfg.fin][1]!==null); $('hbrow').classList.toggle('hidden',!can); if(!can){ cfg.hb=false; $('hb').checked=false; } }
+  function hbRow(){ var m=null; p.mats.forEach(function(x){ if(x.key===cfg.mat) m=x; }); var row=p.prices[cfg.mat]&&p.prices[cfg.mat][cfg.fin]; var can=!!(m&&m.hb&&row&&row[1]!==null); $('hbrow').classList.toggle('hidden',!can); if(!can){ cfg.hb=false; $('hb').checked=false; }
+    /* 2026-09-22 (Shane, 'like a value menu'): show what it costs right on the checkbox. The gap is the same at every texture level, so this number never moves while you change textures. */
+    if(can){ var add=Math.round((row[1]-row[0])*100); $('hbadd').textContent='+ '+(add<100? add+'\u00a2' : money((row[1]-row[0])))+' a piece'; } }
   $('hb').addEventListener('change',function(){ cfg.hb=$('hb').checked; update(); });
 
   // texture
   var FN={'Flat':'Flat','Spot Gloss UV':'Spot Gloss','Standard Embossing':'Standard','Pro':'Pro'}, FD={'Flat':'full-color print, no texture','Spot Gloss UV':'1 layer, glossy raised accent','Standard Embossing':'2 layers, real texture','Pro':'3 layers, full dimensional emboss'};
   function drawFins(){ var fins=p.fins.filter(function(f){ return !!p.prices[cfg.mat][f]; });
     $('fins').innerHTML=fins.map(function(f){ var l=D.lvl[f]; return '<button type="button" class="opt'+(f===cfg.fin?' on':'')+'" data-f="'+esc(f)+'">'+(l?'<span class="lv">'+l+'</span>':'')+esc(FN[f]||f)+'<small>'+esc(FD[f]||'')+'</small></button>'; }).join('')
-      +(p.shape!=='band'?'<a class="opt quote" href="sms:+17344603845?&body='+encodeURIComponent('Hi, I want a deeper emboss (4+ layers) on '+p.name)+'" style="text-decoration:none"><span class="lv">4+</span>Deeper<small>custom quote</small></a>':''); }
+      +(p.shape!=='band'&&!onlyFins.length?'<a class="opt quote" href="sms:+17344603845?&body='+encodeURIComponent('Hi, I want a deeper emboss (4+ layers) on '+p.name)+'" style="text-decoration:none"><span class="lv">4+</span>Deeper<small>custom quote</small></a>':''); }
   drawFins();
   $('fins').addEventListener('click',function(e){ var o=e.target.closest('button.opt'); if(!o) return; cfg.fin=o.dataset.f; [].forEach.call($('fins').children,function(x){x.classList.toggle('on',x===o);}); hbRow(); update(); });
   hbRow();
 
   // quantity
-  var Q=$('qty'); Q.min=D.minq; Q.max=D.maxq; Q.step=D.step; Q.value=qty;
-  function clampQ(q){ q=Math.round((+q||D.minq)/D.step)*D.step; return Math.max(D.minq,Math.min(D.maxq,q)); }
+  var Q=$('qty'); Q.min=MINQ; Q.max=D.maxq; Q.step=D.step; Q.value=qty;
+  function clampQ(q){ q=Math.round((+q||MINQ)/D.step)*D.step; return Math.max(MINQ,Math.min(D.maxq,q)); }
   function setQ(q){ qty=clampQ(q); Q.value=qty; update(); }
-  Q.addEventListener('input',function(){ var v=+Q.value; if(v>=D.minq&&v<=D.maxq){ qty=clampQ(v); update(); } });
+  Q.addEventListener('input',function(){ var v=+Q.value; if(v>=MINQ&&v<=D.maxq){ qty=clampQ(v); update(); } });
   Q.addEventListener('blur',function(){ setQ(Q.value); });
   $('qminus').addEventListener('click',function(){ setQ(qty-D.step); }); $('qplus').addEventListener('click',function(){ setQ(qty+D.step); });
-  $('breaks').innerHTML=D.ladder.map(function(b){ return '<button type="button" data-q="'+b+'">'+fmt(b)+'</button>'; }).join('')+'<a href="sms:+17344603845?&body='+encodeURIComponent('Hi, I need more than 1,000 '+p.name)+'">Over 1k? Talk to us</a>';
+  $('breaks').innerHTML=D.ladder.filter(function(b){ return b>=MINQ; }).map(function(b){ return '<button type="button" data-q="'+b+'">'+fmt(b)+'</button>'; }).join('')+'<a href="sms:+17344603845?&body='+encodeURIComponent('Hi, I need more than 1,000 '+p.name)+'">Over 1k? Talk to us</a>';
   $('breaks').addEventListener('click',function(e){ var b=e.target.closest('button'); if(!b) return; setQ(+b.dataset.q); });
-  $('qhint').textContent='steps of '+D.step+', up to '+fmt(D.maxq);
+  $('qhint').textContent=(MINQ>D.minq?fmt(MINQ)+' minimum, ':'')+'steps of '+D.step+', up to '+fmt(D.maxq);
 
   // art + browser-side preflight (step 4 lite: dpi at size for raster, vector flagged for proof)
   var drop=$('drop'), file=$('file');
@@ -272,15 +287,20 @@ var D={"products":[{"name":"3\" Slap","slug":"3-slap","section":"Slaps","size":"
     $('preview').innerHTML='<svg viewBox="0 0 200 200" aria-hidden="true">'+defs.replace('__CLIP__',clip)+body+artEl+tex+'</svg>'; }
 
   // price
-  function dealFor(q){ var today=new Date().toISOString().slice(0,10); for(var i=0;i<deals.length;i++){ var d=deals[i]; if(d.product!==p.name) continue; if(d.material&&d.material!==cfg.mat) continue; if(d.finish&&d.finish!==cfg.fin) continue; if(d.until&&d.until<today) continue; if(q>=(d.fromQty||0)) return d; } return null; }
+  function dealFor(q){ var today=new Date().toISOString().slice(0,10); for(var i=0;i<deals.length;i++){ var d=deals[i]; if(d.product!==p.name) continue; if(d.material&&d.material!==cfg.mat) continue; if(d.finish&&d.finish!==cfg.fin) continue; if(d.from&&d.from>today) continue; if(d.until&&d.until<today) continue; if(q>=(d.fromQty||0)) return d; } return null; }
   function listPrice(){ var row=p.prices[cfg.mat][cfg.fin]; if(!row) return null; return (cfg.hb&&row[1]!==null)?row[1]:row[0]; }
-  function priceAt(q){ var pr=listPrice(); if(pr===null) return null; var u=unitAt(pr,q); var d=dealFor(q); if(d){ u=Math.ceil(u*(1-d.off)*100)/100; } return {unit:u, total:u*q, deal:d, list:pr}; }
+  function priceAt(q){ var pr=listPrice(); if(pr===null) return null; var u=unitAt(pr,q); var d=dealFor(q);
+    if(d){ if(d.match&&p.prices[cfg.mat]&&p.prices[cfg.mat][d.match]){ var row=p.prices[cfg.mat][d.match], mp=(cfg.hb&&row[1]!==null)?row[1]:row[0]; u=Math.min(u, unitAt(mp,q)); }   /* 2026-09-18: "match":"Flat" = this texture at the Flat price AT THIS QUANTITY (bands included), so the headline holds at 500+ too */
+      else if(d.off){ u=Math.min(u, Math.ceil(pr*(1-d.off)*100)/100); } }   /* 2026-09-17: % deals = better of band or deal, never stacked */ return {unit:u, total:u*q, deal:d, list:pr}; }
   function update(){ var r=priceAt(qty); if(!r){ $('unit').textContent='--'; return; }
+    // 2026-09-22 (Shane): when a deal is doing the work, show the price it replaced right next to the number.
+    var was=r.deal?unitAt(r.list,qty):null; if(was&&was>r.unit+0.001){ $('wasunit').textContent=money(was); $('wasunit').classList.remove('hidden'); } else { $('wasunit').classList.add('hidden'); }
     $('unit').textContent=money(r.unit); $('tot').innerHTML=fmt(qty)+' &times; '+money(r.unit)+' = <b>'+money(r.total)+'</b> &middot; '+esc(cfg.mat)+(cfg.hb?' + HoloBrite':'')+' &middot; '+esc(FN[cfg.fin]||cfg.fin);
     var nb=nextBreak(qty); if(nb){ var n=priceAt(nb.target); $('nudge').classList.remove('hidden'); $('nudge').innerHTML='Add <b>'+fmt(nb.add)+'</b> more: at '+fmt(nb.target)+' it&rsquo;s <b>'+money(n.unit)+'</b> each ('+nb.pct+'% off, '+money(n.total)+' total)'; } else { $('nudge').classList.add('hidden'); }
     if(r.deal){ $('deal').classList.remove('hidden'); $('deal').innerHTML='<b>Running deal:</b> '+esc(r.deal.title||(Math.round(r.deal.off*100)+'% off from '+fmt(r.deal.fromQty)))+' &middot; '+money(r.unit)+' instead of '+money(unitAt(r.list,qty)); } else { $('deal').classList.add('hidden'); }
     if(r.total<D.minorder){ $('minnote').classList.remove('hidden'); $('minnote').textContent='Orders are $'+D.minorder+' minimum - the basket tops this line up or add more.'; } else { $('minnote').classList.add('hidden'); }
-    $('ladder').innerHTML=D.ladder.map(function(b){ var x=priceAt(b); return '<tr'+(b===qty?' class="on"':'')+'><td>'+fmt(b)+(b===D.maxq?'':'+')+'</td><td>'+money(x.unit)+'</td></tr>'; }).join('');
+    var LAD=D.ladder.filter(function(b){ return b>=MINQ; }); if(MINQ>D.minq&&LAD.indexOf(MINQ)<0) LAD.unshift(MINQ);   /* 2026-09-18 (Shane): no rows under a promo floor (?minq=); the floor itself leads */
+    $('ladder').innerHTML=LAD.map(function(b){ var x=priceAt(b); return '<tr'+(b===qty?' class="on"':'')+'><td>'+fmt(b)+(b===D.maxq?'':'+')+'</td><td>'+money(x.unit)+'</td></tr>'; }).join('');
     draw(); }
   update();
 

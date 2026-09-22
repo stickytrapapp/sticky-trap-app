@@ -38,7 +38,8 @@ textarea{width:100%;min-height:64px;margin-top:2px;padding:10px;border-radius:10
 .preview svg{width:82%;height:82%;filter:drop-shadow(0 12px 26px rgba(0,0,0,.6))}
 .pnote{margin:8px 0 0;font-size:11.5px;color:var(--muted);text-align:center}
 .price{margin-top:14px}
-.unit{display:flex;align-items:baseline;gap:8px}.unit b{font-size:34px;letter-spacing:-.02em}.unit span{color:var(--muted);font-size:13px}
+.unit{display:flex;align-items:baseline;gap:8px}
+.unit s{color:var(--muted);font-weight:800;font-size:17px;opacity:.75;text-decoration-thickness:1.5px}.unit b{font-size:34px;letter-spacing:-.02em}.unit span{color:var(--muted);font-size:13px}
 .tot{margin:2px 0 0;font-size:13.5px;color:var(--muted)}.tot b{color:var(--paper)}
 .nudge{margin:10px 0 0;padding:9px 12px;border-radius:10px;background:rgba(18,196,255,.09);border:1px solid rgba(18,196,255,.35);font-size:12.5px}.nudge b{color:var(--cy)}
 .deal{margin:8px 0 0;padding:9px 12px;border-radius:10px;background:rgba(255,31,162,.10);border:1px solid rgba(255,31,162,.4);font-size:12.5px}.deal b{color:var(--mag)}
@@ -82,7 +83,7 @@ table.ladder{width:100%;border-collapse:collapse;margin-top:12px;font-size:12.5p
         <div class="preview" id="preview"></div>
         <p class="pnote">Preview shows shape and material. <b>Your proof is the real thing</b> &mdash; nothing prints until you approve it.</p>
         <div class="price">
-          <div class="unit"><b id="unit">$0.00</b><span id="unitlbl">per sticker</span></div>
+          <div class="unit"><b id="unit">$0.00</b><s id="wasunit" class="hidden"></s><span id="unitlbl">per sticker</span></div>
           <div class="tot" id="tot"></div>
           <div class="nudge hidden" id="nudge"></div>
           <div class="deal hidden" id="deal"></div>
@@ -225,6 +226,8 @@ var D={"products":[{"name":"3\" Slap","slug":"3-slap","section":"Slaps","size":"
     if(d){ if(d.match&&p.prices[cfg.mat]&&p.prices[cfg.mat][d.match]){ var row=p.prices[cfg.mat][d.match], mp=(cfg.hb&&row[1]!==null)?row[1]:row[0]; u=Math.min(u, unitAt(mp,q)); }   /* 2026-09-18: "match":"Flat" = this texture at the Flat price AT THIS QUANTITY (bands included), so the headline holds at 500+ too */
       else if(d.off){ u=Math.min(u, Math.ceil(pr*(1-d.off)*100)/100); } }   /* 2026-09-17: % deals = better of band or deal, never stacked */ return {unit:u, total:u*q, deal:d, list:pr}; }
   function update(){ var r=priceAt(qty); if(!r){ $('unit').textContent='--'; return; }
+    // 2026-09-22 (Shane): when a deal is doing the work, show the price it replaced right next to the number.
+    var was=r.deal?unitAt(r.list,qty):null; if(was&&was>r.unit+0.001){ $('wasunit').textContent=money(was); $('wasunit').classList.remove('hidden'); } else { $('wasunit').classList.add('hidden'); }
     $('unit').textContent=money(r.unit); $('tot').innerHTML=fmt(qty)+' &times; '+money(r.unit)+' = <b>'+money(r.total)+'</b> &middot; '+esc(cfg.mat)+(cfg.hb?' + HoloBrite':'')+' &middot; '+esc(FN[cfg.fin]||cfg.fin);
     var nb=nextBreak(qty); if(nb){ var n=priceAt(nb.target); $('nudge').classList.remove('hidden'); $('nudge').innerHTML='Add <b>'+fmt(nb.add)+'</b> more: at '+fmt(nb.target)+' it&rsquo;s <b>'+money(n.unit)+'</b> each ('+nb.pct+'% off, '+money(n.total)+' total)'; } else { $('nudge').classList.add('hidden'); }
     if(r.deal){ $('deal').classList.remove('hidden'); $('deal').innerHTML='<b>Running deal:</b> '+esc(r.deal.title||(Math.round(r.deal.off*100)+'% off from '+fmt(r.deal.fromQty)))+' &middot; '+money(r.unit)+' instead of '+money(unitAt(r.list,qty)); } else { $('deal').classList.add('hidden'); }
