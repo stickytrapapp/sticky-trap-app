@@ -80,7 +80,7 @@
   </div>
 
   <div class="card" id="reorderCard">
-    <h2>Previously ordered <span class="pill" id="reorderCount"></span> <button type="button" class="minibtn" id="sameBtn" onclick="sameAsLast()">Same as last order</button></h2>
+    <h2>Previously ordered <span class="pill" id="reorderCount"></span></h2>
     <div class="hint">Type a quantity next to anything they're reordering. Price = what they paid last time.</div>
     <div id="reorders"></div>
   </div>
@@ -231,7 +231,6 @@ function pickCompany(){
   var box = $('reorders'); box.innerHTML = '';
   var items = c ? CAT.skus.filter(function(s){ return s.customer === c.name; }) : [];
   $('reorderCount').textContent = items.length ? items.length + ' items' : '';
-  $('sameBtn').textContent = c && c.last_invoice ? 'Same as last order (' + c.last_invoice.replace(/^.*?(\d{3,5}-[A-Z0-9]+)$/, '$1') + ')' : 'Same as last order';
   $('reorderCard').classList.toggle('hidden', !items.length);
   // 9/16 Shane: one drop-down per strain. "ZHB - Lid and Wrap" -> group ZHB; a dash-less name that starts with a known
   // group ("ZHB Mini Sticker for the 5 Pack Slap") joins it; anything else is its own group.
@@ -284,11 +283,8 @@ document.querySelectorAll('.chips').forEach(function(g){ g.addEventListener('cli
 function finishOrder(){ var g = Number($('glossN').value || 0), m = Number($('matteN').value || 0); var sel = $('finishTop'); sel.disabled = !(g > 0 && m > 0); if(sel.disabled) sel.value = ''; }
 function chokeClamp(){ var el = $('chokeN'); var v = el.value === '' ? 0 : Math.max(-10, Math.min(10, Math.round(Number(el.value) || 0))); el.value = v; }
 function chokeStep(d){ var el = $('chokeN'); el.value = Math.max(-10, Math.min(10, (Number(el.value) || 0) + d)); }
-function sameAsLast(){   // 9/16 Shane: one tap = the quantities from the customer's last invoice
-  var c = CAT.customers.find(function(x){ return x.name === $('company').value; }); if(!c || !c.last_invoice) return;
-  var n = 0; document.querySelectorAll('#reorders .line').forEach(function(d){ if(d.dataset.lastInv === c.last_invoice){ d.querySelector('input').value = d.dataset.lastQty; d.closest('details').open = true; n++; } });
-  totals(); $('sameBtn').textContent = n ? 'Filled ' + n + ' from ' + c.last_invoice : 'Nothing from ' + c.last_invoice;
-}
+// sameAsLast() removed 9/22 (Shane: "almost no one orders the same thing twice in a row") - the reorder list
+// still shows every past SKU with its last price; the staff type the quantities they actually want.
 function asNewItem(a){   // 9/16 Shane: a size or material we have not printed for them yet -> New items row, prefilled
   var d = a.closest('.line'); addNewLine(); var row = $('newItems').lastElementChild;
   row.querySelector('.n').value = d.dataset.sku; var mat = (d.dataset.material || '').toLowerCase();
