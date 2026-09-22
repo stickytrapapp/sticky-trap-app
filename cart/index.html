@@ -66,7 +66,7 @@ input,textarea{width:100%;padding:11px;border-radius:10px;border:1px solid var(-
           <div id="card"></div>
           <div class="off hidden" id="payoff">Card payments are being set up &mdash; place the order and we invoice you after the proof.</div>
           <label class="tax"><input type="checkbox" id="taxex"> Tax-exempt (resale / license on file &mdash; we verify at proof)</label>
-          <div class="ct"><span>Authorized on your card</span><span id="cardtot">$0.00</span></div>
+          <div class="ct"><span>Charged to your card today</span><span id="cardtot">$0.00</span></div>
           <div class="ctn" id="cardnote"></div>
         </div>
         <button class="go" id="go" type="button">Place order &rarr;</button>
@@ -118,7 +118,7 @@ var D={"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"breaks":[[500,5],[7
   var SQ=null, card=null, payments=null, sqReady=false;   /* 2026-09-22: the re-authorization mode is gone - cards are charged at order, nothing expires */
   function cardTotal(){ if(!SQ) return null; var base=total(); var tax=$('taxex').checked?0:Math.round(base*(SQ.taxRate||0)*100)/100; var shipc=ship==='ship'?(SQ.shipEstimate||0):0; var pre=base+tax+shipc; var ct=Math.round(((pre+(SQ.feeFlat||0))/(SQ.feeDivisor||1))*100)/100; return {base:base,tax:tax,ship:shipc,card:ct}; }
   function renderCard(){ if(!SQ||!SQ.appId) return; var c=cardTotal(); if(!c) return; $('cardtot').textContent=money(c.card);
-    $('cardnote').textContent='Order '+money(c.base)+($('taxex').checked?' + no tax (exempt)':' + MI tax '+money(c.tax))+(c.ship?' + shipping est. '+money(c.ship):'')+' + card processing. Shipping settles on the invoice; anything under the hold is released.'; }
+    $('cardnote').textContent='Order '+money(c.base)+($('taxex').checked?' + no tax (exempt)':' + MI tax '+money(c.tax))+(c.ship?' + shipping est. '+money(c.ship):'')+' + card processing. Shipping is billed on the invoice if your order ships.'; }
   function payOff(){ $('payoff').classList.remove('hidden'); $('card').classList.add('hidden'); $('taxex').parentNode.classList.add('hidden'); $('cardtot').parentNode.classList.add('hidden'); $('cardnote').classList.add('hidden');
     $('paynote').innerHTML='MI 6% sales tax where it applies, shipping only if shipped. <b style="color:var(--paper)">Nothing is charged now.</b> We send an invoice - we proof before we print.'; }
   fetch('/data/square.json?'+Date.now()).then(function(r){return r.json();}).then(function(j){ SQ=j||{}; if(!SQ.appId){ payOff(); return; }
@@ -168,7 +168,7 @@ var D={"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"breaks":[[500,5],[7
     var send=function(){ return fetch(D.api,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)}).then(function(r){ return r.json(); }); };
     send().then(function(j){ if(j&&j.ok&&!j.code){ return new Promise(function(res){ setTimeout(res,2500); }).then(send); } return j; }).then(function(j){
       if(j&&j.ok&&!j.code){ status('The order desk did not confirm. If a confirmation email arrives in the next minute, your order is in - do not place it again. Otherwise retry in a moment or text 734 460 3845.','err'); setTimeout(function(){ $('go').disabled=false; },45000); return; }
-      if(!j||!j.ok){ var e=(j&&j.error)||'error'; status(e==='card_declined'?'Your card was declined - try another card.':e==='payment_failed'?'The card could not be authorized ('+((j&&j.detail)||'')+'). Try again or text us.':e==='rate_limited'?'Too many orders from this email in an hour - text us at 734 460 3845 and we will take it by hand.':(e==='price_mismatch'?'Prices moved while you were browsing - reload the basket and try again.':'Could not place the order ('+e+'). Text us at 734 460 3845.'),'err'); $('go').disabled=false; return; }
+      if(!j||!j.ok){ var e=(j&&j.error)||'error'; status(e==='card_declined'?'Your card was declined - try another card.':e==='payment_failed'?'The card could not be charged ('+((j&&j.detail)||'')+'). Try again or text us.':e==='rate_limited'?'Too many orders from this email in an hour - text us at 734 460 3845 and we will take it by hand.':(e==='price_mismatch'?'Prices moved while you were browsing - reload the basket and try again.':'Could not place the order ('+e+'). Text us at 734 460 3845.'),'err'); $('go').disabled=false; return; }
       var code=j.code, url=j.url||'';
       status('Order '+code+' placed. Sending your art...','');
       Promise.all(cart.map(function(l){ return (l.art&&!l.art.onFile)?artGet(l.art.key||l.k).then(function(f){ return f?readB64(f).then(function(b64){ return {name:l.art.name||f.name,mime:f.type||'application/octet-stream',b64:b64,size:f.size||0}; }):null; }):Promise.resolve(null); })).then(function(files){
