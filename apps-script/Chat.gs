@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 68;   // v68 9/22 Shane 'delete the reauth flow': the re-authorization path is gone - action, handler, the 6-day hold-expiry emailer, the tracker button and the cart screen. It only existed to rescue the 7-day hold that v67 removed. A failed charge is now just a declined card at checkout.   // v67 9/22 Shane ('if a card is run it is authorized and charged - its not contingent on a proof being done. what if that proof required design work?'): app card orders are CAPTURED at order time (autocomplete:true). No 7-day hold, no expiry, no re-auth chase. Refunds are manual in Square: what they paid less design/pre-press/proofing already done, and nothing once it is on the press.   // v66 9/22 Shane ('monday is just on hold while we restructure it'): MONDAY_HOLD - the bot stops writing to Monday. Chat leads still land in the leads sheet and the ATTN ERIN email; no card, no update. Flip MONDAY_HOLD to false (or set Script Property MONDAY_HOLD=off) when the restructure is done.   // v65 9/21 Shane: 'for the time being do not send anything to erinnomids - send it to thestickytrap gmail to her attention': chat leads -> owner inbox + thestickytrap@ with ATTN ERIN in the subject.   // v64 9/21 Shane 'leads to Erin too': chat leads (hand-off + lead_phone) go to the owner AND Erin; every other alert stays owner-only.   // v63 9/21 Shane: hand-off promise = 'Erin will text you back - usually within a business day' (email if no phone); ask for the cell first.   // v62 9/18 Shane 'stop sending notifications in the client list': no Monday bells from chat leads (card + update + owner email only).   // v61 9/18: where-is-my-order always offers the phone lookup at track.thestickytrap.app alongside code+email.   // v60 9/18 (Shane): every STAFF alert (new order, proof approved, changes, leads, referrals, NDA copies, card failures, digest) goes to the owner inbox ONLY until the flow bugs are fixed - see ALERTS_OWNER_ONLY   // v59 9/18 SECURITY: token_rotate (PIN) - fresh token on every open + recently archived order, current-stage email re-sent so links work; the tracker snapshots that leaked tokens are gone for good.   // v58 9/18: staff orders list carries track_url (the tokened client link) so the console can print the QR label.   // v57 9/18 foreman notes: phone lookup returns code/stage/due only + 'track_link' emails the real link; deals support "match":"Flat" (texture at the Flat price at that quantity) in the cart re-price.   // v56 9/18 Shane: find my orders by PHONE (read-only list; approve/pay still need the tokened link) - track&p=   // v55 9/18: tracker links -> https://track.thestickytrap.app/ (the tracker's own front door; forwards to /track/ on the app origin so push keeps working).   // v54 9/17 Shane: 'no deposits - art assessed free, agreed orders paid in full' - wording; Payment received email says so.   // v53 9/17 October promo: deals honor 'from', and a deal price is the better of band or deal (never stacked).   // v52 9/17: 'NUDGED <customer>' replies to the Jobs today email are picked up hourly (nudgedReplies_) so the reorder list clears itself.   // v51 9/17 bot editor: the hourly stall email (24 h proof / 72 h press) is OFF by default - the Daily Pulse 'Jobs today' email is the one stall list; set NUDGE_STALE=on to bring it back. v50 9/17 New Orders Intake (Shane): 'Quote sent' -> 'Invoice sent' (the invoice is the quote)   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 69;   // v69 9/22 CLIENT NOTICE POLICY (Shane, via the Monday & Square handoff - Budding Bliss got 5 automated emails in an hour): a client is emailed ONLY when we need something from them - invoice sent (pay), proof sent (approve), ready/shipped (collect). Everything else is page-only. Max ONE client email per order per day. order_stage takes silent:true, notify accepts 'none', and an order built from an invoice does not get a new-order email.   // v68 9/22 Shane 'delete the reauth flow': the re-authorization path is gone - action, handler, the 6-day hold-expiry emailer, the tracker button and the cart screen. It only existed to rescue the 7-day hold that v67 removed. A failed charge is now just a declined card at checkout.   // v67 9/22 Shane ('if a card is run it is authorized and charged - its not contingent on a proof being done. what if that proof required design work?'): app card orders are CAPTURED at order time (autocomplete:true). No 7-day hold, no expiry, no re-auth chase. Refunds are manual in Square: what they paid less design/pre-press/proofing already done, and nothing once it is on the press.   // v66 9/22 Shane ('monday is just on hold while we restructure it'): MONDAY_HOLD - the bot stops writing to Monday. Chat leads still land in the leads sheet and the ATTN ERIN email; no card, no update. Flip MONDAY_HOLD to false (or set Script Property MONDAY_HOLD=off) when the restructure is done.   // v65 9/21 Shane: 'for the time being do not send anything to erinnomids - send it to thestickytrap gmail to her attention': chat leads -> owner inbox + thestickytrap@ with ATTN ERIN in the subject.   // v64 9/21 Shane 'leads to Erin too': chat leads (hand-off + lead_phone) go to the owner AND Erin; every other alert stays owner-only.   // v63 9/21 Shane: hand-off promise = 'Erin will text you back - usually within a business day' (email if no phone); ask for the cell first.   // v62 9/18 Shane 'stop sending notifications in the client list': no Monday bells from chat leads (card + update + owner email only).   // v61 9/18: where-is-my-order always offers the phone lookup at track.thestickytrap.app alongside code+email.   // v60 9/18 (Shane): every STAFF alert (new order, proof approved, changes, leads, referrals, NDA copies, card failures, digest) goes to the owner inbox ONLY until the flow bugs are fixed - see ALERTS_OWNER_ONLY   // v59 9/18 SECURITY: token_rotate (PIN) - fresh token on every open + recently archived order, current-stage email re-sent so links work; the tracker snapshots that leaked tokens are gone for good.   // v58 9/18: staff orders list carries track_url (the tokened client link) so the console can print the QR label.   // v57 9/18 foreman notes: phone lookup returns code/stage/due only + 'track_link' emails the real link; deals support "match":"Flat" (texture at the Flat price at that quantity) in the cart re-price.   // v56 9/18 Shane: find my orders by PHONE (read-only list; approve/pay still need the tokened link) - track&p=   // v55 9/18: tracker links -> https://track.thestickytrap.app/ (the tracker's own front door; forwards to /track/ on the app origin so push keeps working).   // v54 9/17 Shane: 'no deposits - art assessed free, agreed orders paid in full' - wording; Payment received email says so.   // v53 9/17 October promo: deals honor 'from', and a deal price is the better of band or deal (never stacked).   // v52 9/17: 'NUDGED <customer>' replies to the Jobs today email are picked up hourly (nudgedReplies_) so the reorder list clears itself.   // v51 9/17 bot editor: the hourly stall email (24 h proof / 72 h press) is OFF by default - the Daily Pulse 'Jobs today' email is the one stall list; set NUDGE_STALE=on to bring it back. v50 9/17 New Orders Intake (Shane): 'Quote sent' -> 'Invoice sent' (the invoice is the quote)   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';
 var ALERTS_OWNER_ONLY = true;   // v60 Shane 9/18: 'do not send any alerts to thestickytrap gmail for now ... send to fm holdings only' - flip to false to restore the shop inbox + NUDGE_TO
 var LEADS_TO = SHOP_EMAIL;   // v65: chat leads land in the shop inbox marked ATTN ERIN (Shane 9/21: nothing to erinnomids for now); every other alert stays owner-only
@@ -960,13 +960,19 @@ var STAGES = {
   complete:   { label: 'Complete',                  msg: 'All done - thank you for sticking with us.' },
   cancelled:  { label: 'Cancelled',                 msg: '' }   // v31: soft cancel from the console; hidden from the open list, kept in the sheet, never emailed
 };
+// v69 2026-09-22: the ONLY stages that email the client. The rule is "we need something from them":
+// quoted = pay it, proof_sent = approve it, ready/shipped = collect it / it is coming. received, deposit,
+// proofing, approved, printing and complete move the tracker page and say nothing. This lives inside
+// notifyClient_ as well as at the call sites, so a new pusher added later cannot spam by default.
+var CLIENT_MAIL_STAGES = { quoted: 1, proof_sent: 1, ready: 1, shipped: 1 };
 var NUDGE_HOURS = { proof_sent: 24, printing: 72 };   // Shane 2026-09-08: 24 h in proof, 72 h in printing -> nudge the team (never the client)
 var ORDER_COLS = ['code', 'created', 'name', 'company', 'email', 'phone', 'items', 'due', 'stage', 'stage_ts', 'history', 'token', 'monday_item', 'square_inv', 'nudged_ts', 'notes', 'source', 'pay_url',   // pay_url = Square invoice link (v22)
                   'lines', 'subtotal', 'total', 'ship', 'address', 'cust_notes',                       // v31 (App step 2): cart lines re-priced on the server
                   'payment_id', 'payment_status', 'payment_amt', 'auth_ts', 'tax_exempt',             // v31 (App step 3): Square authorize at submit, capture on approval
                   'notify',                                                                             // v32: 'both' (default) | 'email' | 'sms' - never neither (Shane 2026-09-11)
                   'uid', 'rating',                                                                      // v44: Trap Points player id from the cart (awards), 'how did we do' thumbs
-                  'proof_urls', 'ship_carrier', 'ship_tracking'];                                       // v46: proof image(s) on the tracker page, carrier + tracking at Shipped
+                  'proof_urls', 'ship_carrier', 'ship_tracking',                                       // v46: proof image(s) on the tracker page, carrier + tracking at Shipped
+                  'last_mail'];                                                                        // v69: when this order last emailed the client - one a day, maximum                                       // v46: proof image(s) on the tracker page, carrier + tracking at Shipped
 function ordersSheet_() {
   var ss = ss_(), sh = ss.getSheetByName('orders');
   if (!sh) { sh = ss.insertSheet('orders'); sh.appendRow(ORDER_COLS); try { sh.getRange('A:A').setNumberFormat('@'); sh.getRange('H:H').setNumberFormat('@'); } catch (e) {} }
@@ -1075,7 +1081,7 @@ function orderResend_(b) {   // v31 (item 7): re-send the current-stage email fr
   var sh = ordersSheet_(), f = findOrder_(sh, b.code); if (!f) return { ok: false, error: 'not_found' };
   var o = f.o; if (!o.email) return { ok: false, error: 'no_email' };
   if (o.stage === 'cancelled') return { ok: false, error: 'cancelled' };
-  var nres = notifyClient_(sh, f, o, o.stage, String(b.note || '').slice(0, 300));
+  var nres = notifyClient_(sh, f, o, o.stage, String(b.note || '').slice(0, 300), { force: true });   // v69: a human pressed Resend - it beats the milestone filter and the daily cap (not the 'none' preference)
   return { ok: true, code: o.code, stage: o.stage, emailed: nres.emailed, texted: nres.texted, sms: nres.sms || '' };
 }
 function consolePin_() { return String(PROP.getProperty('CONSOLE_PIN') || '4750'); }
@@ -1105,7 +1111,7 @@ function normPhone_(p) {   // -> +1XXXXXXXXXX for US numbers, '' if it is not a 
   if (d.length > 10 && d.length <= 15) return '+' + d;   // international as given
   return '';
 }
-function notifyPref_(o) { var v = String(o.notify || '').toLowerCase(); return (v === 'email' || v === 'sms') ? v : 'both'; }
+function notifyPref_(o) { var v = String(o.notify || '').toLowerCase(); return (v === 'email' || v === 'sms' || v === 'none') ? v : 'both'; }   // v69: 'none' = this client asked us to stop
 function smsReady_() { return !!(PROP.getProperty('TWILIO_SID') && PROP.getProperty('TWILIO_TOKEN') && PROP.getProperty('TWILIO_FROM')); }
 function smsSend_(to, text) {   // Twilio REST; returns 'sent' | 'skipped' (no Twilio yet / no number) | 'stopped' (customer replied STOP) | throws
   var sid = PROP.getProperty('TWILIO_SID'), tok = PROP.getProperty('TWILIO_TOKEN'), from = PROP.getProperty('TWILIO_FROM');
@@ -1124,9 +1130,28 @@ function smsText_(o, stage, note) {
   var mid = note ? ' ' + String(note).slice(0, 100) : '';
   return (head + mid + tail).slice(0, 320);
 }
-function notifyClient_(sh, f, o, stage, note) {   // the ONE place a client hears about a stage: email + text per their preference
+// v69: stamp the order row with when we last emailed this client, so the daily cap has something to read.
+// The column is appended to an existing sheet on first use - older rows simply have no value yet.
+function mailStampCol_(sh) {
+  var c = ORDER_COLS.indexOf('last_mail') + 1;
+  try { var h = sh.getRange(1, c).getValue(); if (String(h || '') !== 'last_mail') sh.getRange(1, c).setValue('last_mail'); } catch (e) {}
+  return c;
+}
+function mailedToday_(o) {
+  var v = o.last_mail; if (!v) return false;
+  var d = (v instanceof Date) ? v : new Date(v); if (isNaN(d.getTime())) return false;
+  var tz = Session.getScriptTimeZone(), f = 'yyyy-MM-dd';
+  return Utilities.formatDate(d, tz, f) === Utilities.formatDate(new Date(), tz, f);
+}
+function notifyClient_(sh, f, o, stage, note, opts) {   // the ONE place a client hears about a stage: email + text per their preference
+  opts = opts || {};
   var pref = notifyPref_(o), out = { emailed: false, texted: false, pref: pref };
   if (stage === 'cancelled') return out;
+  // v69, in order: the client asked us to stop -> this stage is not one they have to act on -> we already wrote today.
+  // `opts.force` is only for a human at the console pressing Resend.
+  if (pref === 'none') { out.skipped = 'pref_none'; return out; }
+  if (!opts.force && !CLIENT_MAIL_STAGES[stage]) { out.skipped = 'not_milestone'; return out; }
+  if (!opts.force && mailedToday_(o)) { out.skipped = 'daily_cap'; return out; }
   if (pref !== 'sms') { try { out.emailed = stageMail_(o, stage, note); } catch (e) { mailErr_(e); } }
   if (pref !== 'email' && o.phone) {
     try {
@@ -1139,6 +1164,7 @@ function notifyClient_(sh, f, o, stage, note) {   // the ONE place a client hear
       }
     } catch (e) { out.sms = 'error'; try { PROP.setProperty('SMS_LAST_ERROR', new Date().toISOString() + ' ' + String(e).slice(0, 200)); } catch (e4) {} }
   }
+  if ((out.emailed || out.texted) && sh && f) { try { var now = new Date(); sh.getRange(f.i, mailStampCol_(sh)).setValue(now); o.last_mail = now; } catch (e5) {} }   // v69: the daily cap
   return out;
 }
 function orderPrefs_(b) {   // staff (pin) or the customer (token) sets 'both' | 'email' | 'sms'; the last channel can never be turned off
@@ -1146,10 +1172,11 @@ function orderPrefs_(b) {   // staff (pin) or the customer (token) sets 'both' |
   var o = f.o, staff = pinOk_(b.pin);
   if (!staff && String(b.token || '') !== String(o.token)) return { ok: false, error: 'bad_token' };
   var want = String(b.notify || '').toLowerCase();
-  if (want !== 'both' && want !== 'email' && want !== 'sms') return { ok: false, error: 'bad_pref', hint: 'both | email | sms' };
+  // v69 (Shane): 'none' is a real answer. Before this the last channel could never be turned off, so a client who
+  // asked us to stop could not be switched off at all - it took a code change. Now it is a setting on their order.
+  if (want !== 'both' && want !== 'email' && want !== 'sms' && want !== 'none') return { ok: false, error: 'bad_pref', hint: 'both | email | sms | none' };
   if (want === 'sms' && !normPhone_(o.phone)) return { ok: false, error: 'no_phone' };
-  if (want === 'sms' && !o.email && false) return { ok: false, error: 'no_email' };
-  if (want !== 'sms' && !o.email) return { ok: false, error: 'no_email', hint: 'add an email first' };
+  if (want !== 'sms' && want !== 'none' && !o.email) return { ok: false, error: 'no_email', hint: 'add an email first' };
   var phone = b.phone != null ? normPhone_(b.phone) : null;
   if (phone) { sh.getRange(f.i, ORDER_COLS.indexOf('phone') + 1).setValue(phone); o.phone = phone; }
   sh.getRange(f.i, ORDER_COLS.indexOf('notify') + 1).setValue(want);
@@ -1208,7 +1235,9 @@ function orderNew_(b) {
             stage: stage, stage_ts: now, history: JSON.stringify([{ stage: stage, ts: now.getTime(), note: '' }]), token: token, monday_item: '', square_inv: String(b.square_inv || '').slice(0, 60), nudged_ts: '', notes: '', source: String(b.source || '').slice(0, 20), pay_url: /^https:\/\//.test(String(b.pay_url || '')) ? String(b.pay_url).slice(0, 300) : '' };
   sh.appendRow(ORDER_COLS.map(function (k) { return o[k]; }));
   if (idemKey) { try { CACHE.put(idemKey, code, 3600); } catch (e) {} }
-  var nres = notifyClient_(sh, findOrder_(sh, code), o, stage, ''), emailed = nres.emailed;
+  // v69: an order filed by the invoice engine does not get a new-order email - the invoice the client just received
+  // already carries the tracker link. Orders the client placed themselves (app/cart) still get theirs.
+  var nres = (o.source === 'invoice' || b.silent) ? { emailed: false, texted: false, skipped: 'invoice_source' } : notifyClient_(sh, findOrder_(sh, code), o, stage, ''), emailed = nres.emailed;
   if (o.source === 'cart') {   // v31 (item 5): the shop hears about a cart order directly, not only through the upload email
     try {
       var body = [(company || name) + (name && company ? ' (' + name + ')' : ''), email + (o.phone ? ' / ' + o.phone : ''), '',
@@ -1238,8 +1267,11 @@ function orderStage_(b) {
   o.stage = stage; o.history = JSON.stringify(hist);
   if (stage === 'approved') captureOnApproval_(sh, f, o);   // v31: console tap on Approved captures the card hold
   if (stage === 'shipped' || stage === 'complete') awardOnShip_(o);   // v44: +300 to the app player who placed it, +500 to their referrer (once)
+  // v69: `silent:true` moves the stage and writes history without telling the client. Every automated PC-side
+  // source passes it; the console does not, so a human tap still behaves exactly as it always did.
+  if (b.silent) return { ok: true, code: o.code, stage: stage, emailed: false, texted: false, silent: true };
   var nres = notifyClient_(sh, f, o, stage, note);
-  return { ok: true, code: o.code, stage: stage, emailed: nres.emailed, texted: nres.texted };
+  return { ok: true, code: o.code, stage: stage, emailed: nres.emailed, texted: nres.texted, skipped: nres.skipped || '' };
 }
 function approve_(b) {
   var sh = ordersSheet_(), f = findOrder_(sh, b.code); if (!f) return { ok: false, error: 'not_found' };
