@@ -201,9 +201,6 @@ function catalogLoad(pin){
   }).catch(function(){ return api('GET', { action: 'catalog', pin: pin }); });
 }
 function $(id){ return document.getElementById(id); }
-// retired 9/22 (File Print Set Up came off the menu): function setupAmt() { var mn = parseFloat($('setupMin').value), rt = parseFloat($('setupRate').value || '75'); return isNaN(mn) ? null : Math.round(mn / 60 * rt * 100) / 100; }
-// retired 9/22 (File Print Set Up came off the menu): function setupLabel() { var a = setupAmt(); return a === null ? 'On file' : (a === 0 ? 'Waived' : 'On file'); }
-// retired 9/22 (File Print Set Up came off the menu): function setupCalc() { var a = setupAmt(); $('setupCalc').textContent = a === null ? '(on file)' : (a === 0 ? '- waived' : '= $' + a.toFixed(2) + ' (' + $('setupMin').value + ' min @ $' + (parseFloat($('setupRate').value) || 75) + '/hr)'); if (typeof total === 'function') total(); }
 function fmtPhone(el) { var d = el.value.replace(/\D/g, ''); if (d.length === 11 && d.charAt(0) === '1') d = d.slice(1); if (d.length > 10 || /[a-zA-Z]/.test(el.value)) return; el.value = d.length > 6 ? d.slice(0,3) + '-' + d.slice(3,6) + '-' + d.slice(6) : d.length > 3 ? d.slice(0,3) + '-' + d.slice(3) : d; }
 function money(x){ return '$' + (Math.round(x*100)/100).toFixed(2); }
 function unlock(){
