@@ -17,7 +17,7 @@
       "to": "2026-10-31",
       "kicker": "Starts Oct 1",
       "title": "One texture level on us",
-      "text": "o2 wraps · from 45¢ · 250+",
+      "text": "o2 wraps · 45¢ in October · 250+",
       "cta": {
         "label": "See October's deal",
         "url": "https://thestickytrap.app/configure/?p=o2-standard&mats=White%20Vinyl,Holographic&fins=Spot%20Gloss%20UV,Standard%20Embossing,Pro&m=White%20Vinyl&f=Standard%20Embossing&q=250&minq=250"
@@ -28,7 +28,7 @@
         "text": "o2 wraps · one level on us · from 45¢",
         "url": "https://thestickytrap.app/configure/?p=o2-standard&mats=White%20Vinyl,Holographic&fins=Spot%20Gloss%20UV,Standard%20Embossing,Pro&m=White%20Vinyl&f=Standard%20Embossing&q=250&minq=250"
       },
-      "_note": "2026-09-22 (Shane 'do all'): the offer was Spot Gloss at the Flat price, which was worth 10c on white but only 5c on holo and nothing at 1,000+ (the volume band beat it). Now every rung is priced one step down, so the money is at Emboss/Pro where the product actually sells itself. Kicker flips: 'October only' on 10/1, 'Last week' on 10/28. Remove the whole event + the deals + the chat fact + the instant answer on 11/1."
+      "_note": "2026-09-22 (Shane 'do all'): the offer was Spot Gloss at the Flat price, which was worth 10c on white but only 5c on holo and nothing at 1,000+ (the volume band beat it). Now every rung is priced one step down, so the money is at Emboss/Pro where the product actually sells itself. Kicker flips: 'October only' on 10/1, 'Last week' on 10/28. Remove the whole event + the deals + the chat fact + the instant answer on 11/1. 9/22: detail line says \"45c IN OCTOBER\" - before Oct 1 the configurator still shows list ($0.55 white gloss), so the card must not read as if the price is live today. On Oct 1, when the price and the card agree, it can go back to \"from 45c\"."
     },
     {
       "id": "resin-reception-2026",
