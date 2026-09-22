@@ -55,6 +55,9 @@
   .chip.on{background:var(--pink);border-color:var(--pink);color:#fff;font-weight:700}
   .chip.on::before{content:"✓  "}
   .row2{display:grid;grid-template-columns:2fr 1fr;gap:6px}
+  .draftbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--soft);border:1px solid var(--line2);border-radius:10px;padding:9px 12px;margin:0 0 12px;font-size:13px}
+  .draftbar .dbtn{padding:7px 12px;font-size:13px}
+  .savetag{font-size:11px;color:var(--muted);margin-right:10px}
   .dline{display:grid;grid-template-columns:1fr 100px 100px 110px;gap:8px;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
   .dline .dl{font-size:15px;font-weight:600}
   .dline .damt{text-align:right;font-size:16px;font-weight:700}
@@ -69,6 +72,7 @@
 
 <div id="app" class="wrap hidden">
   <h1>New order</h1><div class="sub" id="cacheNote">Loading customers and items…</div>
+  <div id="draftBar" class="draftbar hidden"><span id="draftMsg"></span><button type="button" class="btn ghost dbtn" onclick="restoreDraft()">Restore</button><button type="button" class="btn ghost dbtn" onclick="dropDraft(true)">Discard</button></div>
 
   <div class="card">
     <h2>Customer</h2>
@@ -168,7 +172,7 @@
 </div>
 
 <div class="bar hidden" id="bar">
-  <div class="tot"><b id="totQty">0</b> prints · est. <b id="totAmt">$0</b><div class="hint" id="totNote">before pre-press &amp; tax</div></div>
+  <div class="tot"><b id="totQty">0</b> prints · est. <b id="totAmt">$0</b><div class="hint" id="totNote">before pre-press &amp; tax</div><div class="savetag" id="saveTag"></div></div>
   <div style="display:flex;gap:8px;align-items:center"><button type="button" class="minibtn" style="float:none" onclick="resetForm()">Reset</button><button class="btn" id="submitBtn" onclick="submit()">Submit order</button></div>
 </div>
 
@@ -212,6 +216,7 @@ function unlock(){
     var sel = $('company'); sel.innerHTML = '<option value="">Choose…</option><option value="__new__">New Customer</option>';
     CAT.customers.forEach(function(c){ var o = document.createElement('option'); o.value = c.name; o.textContent = c.name; sel.appendChild(o); });
     addNewLine(); addNewLine();   // 9/22: two lines ready to fill, + adds more
+    offerDraft();
     try { localStorage.setItem('st_pin', PIN); } catch(e){}
   }).catch(function(e){ $('gateMsg').textContent = 'Error: ' + e.message; });
 }
@@ -316,6 +321,7 @@ function asNewItem(a){   // 9/16 Shane: a size or material we have not printed f
   row.querySelector('.v').placeholder = 'new size (was ' + (d.querySelector('.nm').textContent.split(' \u00b7 ')[0] || 'n/a') + ')'; row.scrollIntoView({block: 'center'}); row.querySelector('.v').focus();
 }
 function resetForm(){   // 9/16 Shane: reset with an are-you-sure; keeps the PIN + catalog, clears everything typed
+  dropDraft(true);
   if(!confirm('Clear the whole order and start over?')) return;
   $('company').value = ''; pickCompany();
   document.querySelectorAll('#app input:not([type=hidden]), #app textarea').forEach(function(el){ if(el.type === 'checkbox'){ el.checked = false; } else if(el.id === 'prepressCustom'){ el.value = '8'; } else if(el.id === 'designRate'){ el.value = '75'; } else if(el.id === 'chokeN'){ el.value = '0'; } else { el.value = ''; } });
@@ -371,6 +377,82 @@ function totals(){
   $('totNote').textContent = unknown ? 'some new items priced by the builder' : 'before pre-press & tax';
 }
 function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+// ---- AUTOSAVE (9/22 Shane: "yes to an autosave") -------------------------------------------------
+// Everything typed is kept in THIS browser under st_order_draft and offered back after a reload or a
+// closed tab. Cleared when the order sends, or by Discard / Start over. It never leaves the device.
+var DKEY = 'st_order_draft', dtimer = null;
+var DFIELDS = ['newName','contact','email','phone','contact2','email2','phone2','due','delivery','ship','rush',
+               'payment','tax','prepressCustom','terms','art','designHrs','designRate','deposit','note',
+               'glossN','matteN','finishTop','chokeN','pressNotes'];
+function draftSnap(){
+  var reorders = {};
+  document.querySelectorAll('#reorders .line').forEach(function(d){
+    var n = Number(d.querySelector('input').value || 0); if(n > 0) reorders[d.dataset.title] = n; });
+  var items = [];
+  document.querySelectorAll('#newItems .newline').forEach(function(d){
+    var o = { n: d.querySelector('.n').value, q: d.querySelector('.q').value, p: d.querySelector('.p').value,
+              m: d.querySelector('.m').value, v: d.querySelector('.v').value, t: d.querySelector('.t').value,
+              w: d.querySelector('.w').value, ap: d.querySelector('.ap').value };
+    if(o.n || o.q || o.v) items.push(o); });
+  var f = {}; DFIELDS.forEach(function(id){ if($(id)) f[id] = $(id).value; });
+  var ch = {}; document.querySelectorAll('.chips').forEach(function(g){ ch[g.dataset.group] = chips(g.dataset.group); });
+  return { company: $('company').value, designOnly: $('designOnly').checked, f: f, chips: ch, reorders: reorders, items: items };
+}
+function saveDraft(){
+  if(!CAT || !$('company').value) return;
+  clearTimeout(dtimer);
+  dtimer = setTimeout(function(){
+    try {
+      localStorage.setItem(DKEY, JSON.stringify({ t: Date.now(), d: draftSnap() }));
+      var s = $('saveTag'); if(s) s.textContent = 'saved ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    } catch(e){}
+  }, 500);
+}
+function dropDraft(hide){ try { localStorage.removeItem(DKEY); } catch(e){} if(hide) $('draftBar').classList.add('hidden'); }
+function offerDraft(){
+  var raw; try { raw = localStorage.getItem(DKEY); } catch(e){ return; }
+  if(!raw) return;
+  var j; try { j = JSON.parse(raw); } catch(e){ return dropDraft(); }
+  if(!j || !j.d || !j.d.company) return dropDraft();
+  if(Date.now() - j.t > 7 * 864e5) return dropDraft();
+  var who = j.d.company === '__new__' ? ((j.d.f && j.d.f.newName) || 'a new customer') : j.d.company;
+  $('draftMsg').innerHTML = 'Unfinished order for <b>' + esc(who) + '</b> from ' +
+      new Date(j.t).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+  $('draftBar').classList.remove('hidden');
+}
+function restoreDraft(){
+  var j; try { j = JSON.parse(localStorage.getItem(DKEY)); } catch(e){ return; }
+  if(!j || !j.d) return;
+  var d = j.d;
+  $('company').value = d.company; pickCompany();
+  DFIELDS.forEach(function(id){ if($(id) && d.f && d.f[id] !== undefined) $(id).value = d.f[id]; });
+  $('designOnly').checked = !!d.designOnly;
+  document.querySelectorAll('#reorders .line').forEach(function(el){
+    var q = d.reorders && d.reorders[el.dataset.title];
+    if(q){ el.querySelector('input').value = q; var det = el.closest('details'); if(det) det.open = true; } });
+  $('newItems').innerHTML = '';
+  (d.items || []).forEach(function(o){
+    var row = addNewLine();
+    row.querySelector('.n').value = o.n || ''; row.querySelector('.q').value = o.q || ''; row.querySelector('.p').value = o.p || '';
+    row.querySelector('.m').value = o.m || ''; row.querySelector('.t').value = o.t || '';
+    row.querySelector('.w').value = o.w || ''; row.querySelector('.ap').value = o.ap || '';
+    if(o.v){
+      var sel = row.querySelector('.vsel');
+      if(VESSEL_LIST.indexOf(o.v) >= 0){ sel.value = o.v; vesselPick(sel); }
+      else { sel.value = '__other__'; vesselPick(sel); row.querySelector('.v').value = o.v; }
+    }
+  });
+  if(!document.querySelectorAll('#newItems .newline').length){ addNewLine(); addNewLine(); }
+  Object.keys(d.chips || {}).forEach(function(g){
+    var want = d.chips[g] || [];
+    document.querySelectorAll('.chips[data-group="' + g + '"] .chip').forEach(function(c){
+      c.classList.toggle('on', want.indexOf(c.dataset.v) >= 0); }); });
+  $('draftBar').classList.add('hidden');
+  finishOrder(); ppCalc(); designCalc(); termsPick(); totals();
+}
+document.addEventListener('input', function(e){ if(e.target.closest && e.target.closest('#app')) saveDraft(); });
+document.addEventListener('change', function(e){ if(e.target.closest && e.target.closest('#app')) saveDraft(); });
+document.addEventListener('click', function(e){ if(e.target.closest && (e.target.closest('#app .chip') || e.target.closest('#app .minus') || e.target.closest('#app .plus'))) saveDraft(); });
 function submit(){
   var v = $('company').value, isNew = v === '__new__';
   var company = isNew ? $('newName').value.trim() : v;
@@ -389,7 +471,7 @@ function submit(){
   api('POST', payload).then(function(r){
     $('submitBtn').disabled = false; $('submitBtn').textContent = 'Submit order';
     var box = $('result'); box.classList.remove('hidden');
-    if(r.ok){ box.innerHTML = '<h2 class="ok">Order sent</h2><p>' + esc(company) + ' is on the intake board as <b>Ready to build</b>. The builder makes the invoice and work order next; Shane approves before anything goes to the customer.</p><p class="hint"><a href="' + r.url + '" target="_blank" style="color:#fff">Open in Monday</a></p><br><button class="btn ghost" onclick="location.reload()">Start another order</button>'; window.scrollTo(0, document.body.scrollHeight); }
+    if(r.ok){ dropDraft(true); box.innerHTML = '<h2 class="ok">Order sent</h2><p>' + esc(company) + ' is on the intake board as <b>Ready to build</b>. The builder makes the invoice and work order next; Shane approves before anything goes to the customer.</p><p class="hint"><a href="' + r.url + '" target="_blank" style="color:#fff">Open in Monday</a></p><br><button class="btn ghost" onclick="location.reload()">Start another order</button>'; window.scrollTo(0, document.body.scrollHeight); }
     else { box.innerHTML = '<h2 class="warn">Not sent</h2><p>' + esc(r.error) + '</p>'; }
   }).catch(function(e){ $('submitBtn').disabled = false; $('submitBtn').textContent = 'Submit order'; alert('Error: ' + e.message); });
 }
