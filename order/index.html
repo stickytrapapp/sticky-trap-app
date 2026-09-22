@@ -181,7 +181,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-22c</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-22d</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -382,7 +382,7 @@ function openPast(inv){
   if(o.delivery) $('delivery').value = /ship/i.test(o.delivery) ? 'Ship' : /deliver/i.test(o.delivery) ? 'Deliver' : 'Pick Up';
   var sent = (o.status === 'Sent' || o.status === 'Paid');
   $('editMsg').innerHTML = 'Editing <b>' + esc(o.inv) + '</b> (' + esc(o.date) + ')'
-    + (sent ? ' — this one has already gone out, so the edit is issued as a <b>revision</b> and the Square invoice is cancelled.'
+    + (sent ? ' — this one has already gone out, so the edit is built as a <b>revision (R2)</b>. Cancel and reissue the Square invoice when you are ready.'
             : ' — sending replaces the invoice and work order on its line in Monday.');
   $('editBar').classList.remove('hidden');
   $('pastCard').classList.add('hidden');
