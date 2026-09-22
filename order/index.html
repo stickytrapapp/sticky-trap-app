@@ -29,11 +29,12 @@
   .stp{background:var(--soft);border:1px solid #c9c9d1;color:var(--ink);border-radius:10px;font-size:20px;padding:8px 0;cursor:pointer}
   .newline{display:grid;grid-template-columns:1fr;gap:6px;padding:10px 0;border-bottom:1px solid var(--line)}
   .newline .g{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
-  .newline .nl1{display:grid;grid-template-columns:2fr 84px 1fr 40px;gap:6px}
-  .newline .nl2{display:grid;grid-template-columns:1fr 1.4fr 1fr 1fr 1fr;gap:6px}
-  .minus,.plus{border:1px solid #c9c9d1;background:#fff;color:var(--ink);border-radius:999px;width:40px;height:42px;font-size:22px;line-height:1;cursor:pointer}
+  .newline .nlrow{display:grid;grid-template-columns:minmax(150px,2fr) 62px 78px 104px minmax(110px,1.2fr) 122px 84px 84px 36px;gap:6px;align-items:center}
+  .newline input,.newline select{padding:9px 8px;font-size:15px}
+  .minus,.plus{border:1px solid #c9c9d1;background:#fff;color:var(--ink);border-radius:999px;width:36px;height:38px;font-size:20px;line-height:1;cursor:pointer;padding:0}
   .minus:hover{border-color:var(--pink);color:var(--pink)}
   .plus{border-color:var(--pink);color:var(--pink);font-weight:700}
+  @media(max-width:860px){ .newline .nlrow{grid-template-columns:1fr 62px 78px 36px} .newline .nlrow .m,.newline .nlrow .v,.newline .nlrow .t{grid-column:span 2} .newline .nlrow .w,.newline .nlrow .ap{grid-column:span 2} }
   .addrow{display:flex;align-items:center;gap:10px;margin-top:10px}
   @media(max-width:640px){ .newline .nl2{grid-template-columns:1fr 1fr} .newline .nl1{grid-template-columns:1fr 70px 40px} .newline .nl1 .p{grid-column:1/3} }
   .btn{display:inline-block;background:var(--pink);color:#fff;border:0;border-radius:10px;padding:13px 18px;font-size:16px;font-weight:700;cursor:pointer}
@@ -87,7 +88,7 @@
 
   <div class="card">
     <h2>New items</h2>
-    <div class="hint">Anything they've never ordered. Leave price blank to use the menu (or their history if the name matches).</div>
+    <div class="hint">Anything they've never ordered. Blank price = menu price (or their history if the name matches).</div>
     <div id="newItems"></div>
     <div class="addrow"><button type="button" class="plus" onclick="addNewLine()" title="Add a line">+</button><span class="hint" style="margin:0">add a line</span></div>
   </div>
@@ -211,7 +212,7 @@ function unlock(){
     $('cacheNote').textContent = CAT.customers.length + ' customers · ' + CAT.skus.length + ' items from invoice history';
     var sel = $('company'); sel.innerHTML = '<option value="">Choose…</option><option value="__new__">New Customer</option>';
     CAT.customers.forEach(function(c){ var o = document.createElement('option'); o.value = c.name; o.textContent = c.name; sel.appendChild(o); });
-    addNewLine(); addNewLine(); addNewLine();   // 9/22 Shane: start with lines ready to fill
+    addNewLine(); addNewLine();   // 9/22: two lines ready to fill, + adds more
     try { localStorage.setItem('st_pin', PIN); } catch(e){}
   }).catch(function(e){ $('gateMsg').textContent = 'Error: ' + e.message; });
 }
@@ -258,18 +259,19 @@ function pickCompany(){
   totals();
 }
 function addNewLine(){
-  // 9/22 Shane: lines laid out like the work order (SKU / QTY / Material / Vessel / Texture / White ink / Apply),
-  // three ready on open, a minus on each row and a plus under the list.
+  // 9/22 Shane "streamline the item material add items section": ONE row per item instead of two stacked rows -
+  // name, qty, price, material, vessel, texture, white ink, apply, minus. Classes unchanged so submit() still reads them.
   var d = document.createElement('div'); d.className = 'newline';
-  d.innerHTML = '<div class="nl1"><input placeholder="Item name" class="n">'
+  d.innerHTML = '<div class="nlrow">'
+              + '<input placeholder="Item name" class="n">'
               + '<input type="number" inputmode="numeric" min="0" placeholder="qty" class="q" oninput="totals()">'
-              + '<input type="number" step="0.01" inputmode="decimal" placeholder="price (blank = menu)" class="p" oninput="totals()">'
-              + '<button type="button" class="minus" title="Remove this line" onclick="delNewLine(this)">−</button></div>'
-              + '<div class="nl2"><select class="m"><option value="">Material</option><option>White</option><option>Holo</option><option>Gold</option></select>'
-              + '<input placeholder="Vessel / size (Miron 5 ml, 3&quot; Slap, 3x3.8)" class="v">'
+              + '<input type="number" step="0.01" inputmode="decimal" placeholder="price" class="p" oninput="totals()">'
+              + '<select class="m"><option value="">Material</option><option>White</option><option>Holo</option><option>Gold</option></select>'
+              + '<input placeholder="Vessel / size" class="v">'
               + '<select class="t"><option value="">Texture</option><option value="Flat">Flat</option><option value="1">1 &middot; Spot Gloss</option><option value="2">2 &middot; Standard</option><option value="3">3 &middot; Pro</option></select>'
-              + '<select class="w"><option value="">White ink</option><option value="Y">White ink: Y</option><option value="N">White ink: N</option></select>'
-              + '<select class="ap"><option value="">Apply</option><option value="Y">Apply: Y</option><option value="N">Apply: N</option></select></div>';
+              + '<select class="w" title="White ink"><option value="">W ink</option><option value="Y">W: Y</option><option value="N">W: N</option></select>'
+              + '<select class="ap" title="We apply to jars"><option value="">Apply</option><option value="Y">A: Y</option><option value="N">A: N</option></select>'
+              + '<button type="button" class="minus" title="Remove this line" onclick="delNewLine(this)">−</button></div>';
   $('newItems').appendChild(d);
   return d;
 }
@@ -297,7 +299,7 @@ function resetForm(){   // 9/16 Shane: reset with an are-you-sure; keeps the PIN
   document.querySelectorAll('#app input:not([type=hidden]), #app textarea').forEach(function(el){ if(el.type === 'checkbox'){ el.checked = false; } else if(el.id === 'prepressCustom'){ el.value = '8'; } else if(el.id === 'designRate'){ el.value = '75'; } else if(el.id === 'chokeN'){ el.value = '0'; } else { el.value = ''; } });
   document.querySelectorAll('#app select').forEach(function(el){ el.selectedIndex = 0; });
   document.querySelectorAll('.chip.on').forEach(function(c){ c.classList.remove('on'); });
-  $('newItems').innerHTML = ''; addNewLine(); addNewLine(); addNewLine(); $('result').classList.add('hidden'); $('result').innerHTML = '';
+  $('newItems').innerHTML = ''; addNewLine(); addNewLine(); $('result').classList.add('hidden'); $('result').innerHTML = '';
   $('submitBtn').disabled = false; $('submitBtn').textContent = 'Submit order'; finishOrder(); ppCalc(); designCalc(); termsPick(); totals(); window.scrollTo(0, 0);
 }
 function openPicker(el){ try { if(el.showPicker) el.showPicker(); } catch(e){} }   // 9/16 Shane: tap anywhere on the date = calendar pops up
