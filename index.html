@@ -1465,7 +1465,6 @@
       <div class="pv-title">SHARD SLAM</div>
       <div class="pv-sub">Tap. Match. Chain combos. Play the daily board and race to win a run of your own branded goods.</div>
       <a class="pv-play" href="https://thestickytrap.app/game/"><svg width="18" height="18" viewBox="0 0 24 24" fill="#050505"><path d="M6 3l15 9-15 9z"/></svg> Play now</a>
-      <a class="pv-play" href="https://thestickytrap.app/solitaire/" style="margin-top:10px;background:#111;color:#fff;border:1px solid rgba(255,255,255,.2);box-shadow:none">&#9824;&#65039; Trap Solitaire &middot; daily deal</a>
       <!-- 2026-09-17 (Shane): the "Scan to play on any phone" QR + download link removed - pointless on the phone that is already in the app -->
     </section>
   </main>
@@ -2437,7 +2436,7 @@
   var cp=document.getElementById('chatpanel');
   if(cp&&window.MutationObserver){ new MutationObserver(function(){ var open=cp.classList.contains('on'); if(open===ducked) return; ducked=open; if(a&&!a.paused) fade(target(),400); }).observe(cp,{attributes:true,attributeFilter:['class']}); }
   // ---- games have their own music: fade out on a link into one, resume when this tab is visible again ----
-  document.addEventListener('click',function(e){ var l=e.target&&e.target.closest&&e.target.closest('a[href]'); if(l&&/\/(game|match|solitaire)\//.test(l.getAttribute('href')||'')&&a&&!a.paused) fade(0,300); },true);
+  document.addEventListener('click',function(e){ var l=e.target&&e.target.closest&&e.target.closest('a[href]'); if(l&&/\/game\//.test(l.getAttribute('href')||'')&&a&&!a.paused) fade(0,300); },true);
   // 9/17: music keeps playing with the screen off / app in the background (was: fade out when hidden). Game links still fade it (above); coming back resumes a system-paused element.
   document.addEventListener('visibilitychange',function(){ if(!document.hidden){ if(actx&&actx.state!=='running'){ try{actx.resume();}catch(e){} } if(want&&a&&a.paused&&!userPaused) start(); } });
   window.STMusic={ state:function(){ var t=trackOf(a); return {mode:mode, now:t?t.name:null, track:t?idxOf(t)+1:null, of:CAT.length, next:(a&&a._next)?a._next.name:null, master:(gain?+gain.gain.value.toFixed(2):null), ducked:ducked,

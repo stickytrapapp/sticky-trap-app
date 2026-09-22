@@ -566,7 +566,7 @@
       </div>
 
       <div class="goalwrap">
-        <div class="goalrow"><span>Par to beat</span><span><b id="gcur">0</b> / <b id="parval">1,800</b></span></div>
+        <div class="goalrow"><span id="goallbl">Next star</span><span><b id="gcur">0</b> / <b id="parval">3,000</b></span></div>
         <div class="bar"><i id="goalbar"></i></div>
       </div>
       <div class="rules">
@@ -660,11 +660,6 @@
           <div class="tx"><b>Trap puzzle</b><small>New board every 6 hours <span class="pill cy">up to +15 a board</span></small></div>
           <div class="earn-amt mid">+15</div>
         </div>
-        <a class="rw" href="/solitaire/" style="text-decoration:none;color:inherit">
-          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#12C4FF" stroke-width="1.7"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M12 8c-2 2-4 3-4 5a3 3 0 0 0 6 0c0-2-2-3-2-5z"/></svg></div>
-          <div class="tx"><b>Trap Solitaire</b><small>Daily deal, same for everyone <span class="pill cy">up to +15 a day</span> &middot; tap to play</small></div>
-          <div class="earn-amt mid">+15</div>
-        </a>
         <div class="rw">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#12C4FF" stroke-width="1.7"><path d="M12 3c1 3-1 4-1 6a3 3 0 006 0c0 4-2 6-5 6a5 5 0 01-5-5c0-4 4-4 5-7z"/></svg></div>
           <div class="tx"><b>Play streak bonus</b><small>From day 2 of a run</small></div>
@@ -859,7 +854,10 @@
   }
 
   // ---- daily challenge (timed, 3 tries, best counts) ----
-  var COLS=6, ROWS=7, COLORS=3, TIME=60, ATTEMPTS=3, PAR=6000;   // 3 x 60 s = a 3-minute session; par scaled with the clock
+  var COLS=6, ROWS=7, COLORS=3, TIME=60, ATTEMPTS=3;
+  // 2026-09-22 star ladder, set from 400 simulated boards per skill level (best of 3 tries): a steady player lands ~3-4k, a quick one ~10k,
+  // an expert ~17k. Old ladder was 6,000 / 8,400 / 12,000 -> normal players scored NOTHING and fast tappers maxed it every time.
+  var STAR=[3000,9000,18000], PAR=STAR[0];   // PAR = 1 star = 'par to beat' in free play
   var grid=[], board=document.getElementById('board');
   var dayNum=Math.floor(Date.now()/864e5);
   // Boards live in 6-hour LOCAL slots (00/06/12/18): everyone gets the same board in a slot; a new one unlocks at the next boundary.
@@ -884,7 +882,7 @@
   function initDaily(){
     attempt=1; bestScore=0; dayScore=0; dayDone=false; timeLeft=TIME; bonusUsed=0; playing=false; combo=0;
     var pn=document.getElementById('pnum'); if(pn)pn.textContent='#'+trapNum;
-    var pv=document.getElementById('parval'); if(pv)pv.textContent=fmt(PAR);
+    var pv=document.getElementById('parval'); if(pv)pv.textContent=fmt(STAR[0]);
     var _d=null; try{_d=JSON.parse(localStorage.getItem('tp_daily')||'null');}catch(e){}
     if(_d && _d.day===slotNum){ dayDone=true; bestScore=_d.best||0; }
     setTimeout(riskCheck,0);
@@ -896,7 +894,13 @@
     var a=document.getElementById('attN'); if(a)a.textContent=attempt;
     var best= MODE==='free' ? dayScore : Math.max(bestScore,dayScore);
     document.getElementById('gcur').textContent=fmt(best);
-    document.getElementById('goalbar').style.width=Math.min(100,best/PAR*100)+'%';
+    // the bar chases the next star you have not got yet (was: a flat par, so most players watched a bar that never moved past 60%)
+    var si=0; while(si<STAR.length&&best>=STAR[si]) si++;
+    var lbl=document.getElementById('goallbl'), pv2=document.getElementById('parval');
+    if(si>=STAR.length){ if(lbl)lbl.textContent='★★★ maxed'; if(pv2)pv2.textContent=fmt(STAR[STAR.length-1]);
+      document.getElementById('goalbar').style.width='100%'; }
+    else { if(lbl)lbl.textContent=(si===0?'First star':si===1?'Second star':'Third star'); if(pv2)pv2.textContent=fmt(STAR[si]);
+      var from=si?STAR[si-1]:0; document.getElementById('goalbar').style.width=Math.min(100,(best-from)/(STAR[si]-from)*100)+'%'; }
   }
   function showGate(){
     var g=document.getElementById('startGate'); if(!g)return; g.classList.remove('hide');
@@ -954,7 +958,7 @@
     if(MODE==='free'){ endFree(); return; } playing=false; clearInterval(timerId); if(dayScore>bestScore)bestScore=dayScore; try{localStorage.setItem('tp_daily', JSON.stringify({day:slotNum, best:bestScore}));}catch(e){}
     if(attempt<ATTEMPTS){ attempt++; dayScore=0; setStat(); showGate(); } else { finishDaily(); } }
   function finishDaily(){ dayDone=true;
-    var stars= bestScore>=PAR*2?3 : bestScore>=Math.round(PAR*1.4)?2 : bestScore>=PAR?1 : 0;
+    var stars= bestScore>=STAR[2]?3 : bestScore>=STAR[1]?2 : bestScore>=STAR[0]?1 : 0;
     var today=dayNum; if(STREAK.last===today-1){ STREAK.n=(STREAK.n||0)+1; } else if(STREAK.last!==today){ STREAK.n=1; } STREAK.last=today;
     var streakBonus=STREAK.n>=2?5:0;
     var earned=((stars>=3?15:stars>=2?12:stars>=1?8:3)+streakBonus)*promoMult();
