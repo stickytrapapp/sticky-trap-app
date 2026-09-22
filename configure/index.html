@@ -25,7 +25,7 @@ h1{margin:0 0 2px;font-size:22px;letter-spacing:-.01em}.sec{font-size:11px;font-
 .opt .sw{width:18px;height:18px;border-radius:6px;border:1px solid rgba(255,255,255,.18)}.sw.white{background:#fff}.sw.holo{background:var(--holo)}.sw.gold{background:var(--goldg)}
 .opt .lv{font-size:11px;color:var(--cy);font-weight:900}
 .opt.quote{border-style:dashed;color:var(--muted)}
-.hb{display:flex;align-items:center;gap:8px;margin:8px 2px 0;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.02em;color:var(--cy);cursor:pointer}.hb input{accent-color:var(--cy);width:15px;height:15px;margin:0}.hb em{font-style:normal;text-transform:none;letter-spacing:0;font-weight:600;color:var(--muted)}
+.hb{display:grid;grid-template-columns:15px auto 1fr;align-items:center;column-gap:8px;row-gap:2px;margin:8px 2px 0;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.02em;color:var(--cy);cursor:pointer}.hb input{accent-color:var(--cy);width:15px;height:15px;margin:0}.hb b{white-space:nowrap;color:var(--paper)}.hb em{grid-column:2/-1;font-style:normal;text-transform:none;letter-spacing:0;font-weight:600;color:var(--muted);font-size:11.5px;line-height:1.35}
 .qrow{display:flex;align-items:center;gap:8px}.qrow input{width:96px;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--paper);font:inherit;font-size:16px;font-weight:800;text-align:center}
 .qb{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--paper);font:inherit;font-size:18px;font-weight:900;cursor:pointer}
 .breaks{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}.breaks button{flex:1;min-width:56px;padding:8px 6px;border-radius:9px;border:1px solid var(--line);background:var(--panel);color:var(--paper);font:inherit;font-size:12.5px;font-weight:800;cursor:pointer}.breaks button.on{background:var(--grad);color:#000;border-color:transparent}
@@ -64,7 +64,7 @@ table.ladder{width:100%;border-collapse:collapse;margin-top:12px;font-size:12.5p
         <div class="opts"><div class="opt on" id="sizeopt"><span id="psize"></span><small>fixed for this product</small></div><a class="opt quote" href="mailto:thestickytrap@gmail.com?subject=Custom%20size" style="text-decoration:none">Custom size<small>talk to us</small></a></div>
         <div class="step"><b>2</b> Material</div>
         <div class="opts" id="mats"></div>
-        <label class="hb hidden" id="hbrow"><input type="checkbox" id="hb"> + HoloBrite <em>white underbase for true color on holo / gold</em></label>
+        <label class="hb hidden" id="hbrow"><input type="checkbox" id="hb"> Add white ink <b id="hbadd"></b> <em>prints a white underbase first so the colors stay true on holo and gold</em></label>
         <div class="step"><b>3</b> Texture <span style="font-weight:600;letter-spacing:0;text-transform:none">&middot; number = layers of UV gloss</span></div>
         <div class="opts" id="fins"></div>
         <div class="step"><b>4</b> Quantity</div>
@@ -142,7 +142,9 @@ var D={"products":[{"name":"3\" Slap","slug":"3-slap","section":"Slaps","size":"
   // material
   $('mats').innerHTML=p.mats.map(function(m){ return '<button type="button" class="opt'+(m.key===cfg.mat?' on':'')+'" data-m="'+esc(m.key)+'"><span class="sw '+m.cls+'"></span>'+esc(m.short)+'<small>'+esc(m.note)+'</small></button>'; }).join('');
   $('mats').addEventListener('click',function(e){ var o=e.target.closest('.opt'); if(!o) return; cfg.mat=o.dataset.m; [].forEach.call($('mats').children,function(x){x.classList.toggle('on',x===o);}); if(!p.prices[cfg.mat][cfg.fin]){ cfg.fin=p.fins[0]; drawFins(); } hbRow(); update(); });
-  function hbRow(){ var m=null; p.mats.forEach(function(x){ if(x.key===cfg.mat) m=x; }); var can=!!(m&&m.hb&&p.prices[cfg.mat][cfg.fin]&&p.prices[cfg.mat][cfg.fin][1]!==null); $('hbrow').classList.toggle('hidden',!can); if(!can){ cfg.hb=false; $('hb').checked=false; } }
+  function hbRow(){ var m=null; p.mats.forEach(function(x){ if(x.key===cfg.mat) m=x; }); var row=p.prices[cfg.mat]&&p.prices[cfg.mat][cfg.fin]; var can=!!(m&&m.hb&&row&&row[1]!==null); $('hbrow').classList.toggle('hidden',!can); if(!can){ cfg.hb=false; $('hb').checked=false; }
+    /* 2026-09-22 (Shane, 'like a value menu'): show what it costs right on the checkbox. The gap is the same at every texture level, so this number never moves while you change textures. */
+    if(can){ var add=Math.round((row[1]-row[0])*100); $('hbadd').textContent='+ '+(add<100? add+'\u00a2' : money((row[1]-row[0])))+' a piece'; } }
   $('hb').addEventListener('change',function(){ cfg.hb=$('hb').checked; update(); });
 
   // texture

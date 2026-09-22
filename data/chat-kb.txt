@@ -1,4 +1,4 @@
-THE STICKY TRAP -- CHAT KNOWLEDGE BASE (auto-generated 2026-09-21 from the live app by Price Engine/make_chat_kb.py; do not hand-edit -- house facts live in Price Engine/chat-facts.txt)
+THE STICKY TRAP -- CHAT KNOWLEDGE BASE (auto-generated 2026-09-22 from the live app by Price Engine/make_chat_kb.py; do not hand-edit -- house facts live in Price Engine/chat-facts.txt)
 
 == About The Sticky Trap ==
 The Sticky Trap is a design house and in-house print shop in Ann Arbor, Michigan: branding, custom art, stickers, labels, promotionals and merch. Motto: "Let's Stick Together."
@@ -50,7 +50,7 @@ If you cannot see a proof clearly, tell us: we are happy to retake photos or vid
 Shipping damage is handled through a USPS claim.
 We work with anyone who wants to use our services, cannabis or not. We brand you.
 Jar label prices on the menu (Miron and Chubby) are per set: one lid label and one wrap label for each jar at that price. Do not split a lid and a wrap into two lines.
-October only (Oct 1-31): o2 Standard cart wraps with Spot Gloss UV at the Flat price - white vinyl $0.45, holographic $0.55 - at 250 or more when you order in the app (Menu > o2 Standard > Spot Gloss > build it). Phone and email orders are list price. Not stackable with the 1,000+ volume break.
+October only (Oct 1-31): on o2 Standard cart wraps you pay one texture level down - Spot Gloss UV at the Flat price, Standard Embossing at the Spot Gloss price, Pro at the Standard Embossing price. White vinyl: gloss $0.45, embossing $0.55, Pro $0.65. Holographic: gloss $0.55, embossing $0.60, Pro $0.70 (add $0.25 a piece for white ink under the holo at any level). 250 pieces or more, when you order in the app (Menu > o2 Standard > pick a texture > build it). Phone and email orders are list price. The volume breaks still apply on top of the October price - at 1,000 pieces white Pro works out to $0.59 a piece and holographic Pro to $0.63.
 We keep your approved files, so a reorder is quick: reorder from your order page or Menu > Reorder in the app. Pre-press is on every run, reorders included - it is the set-up, test print, color and cut check that makes each run print right, not a one-time fee.
 Before you approve the proof, tap Request changes on your order page - two rounds are free. After approval it is a new job.
 Where is my order: the order page link is in the order email and texts. If they do not have the link or the code, send them to track.thestickytrap.app to enter their phone number - it lists their orders and can email the link. Do not make them hunt for a code first.

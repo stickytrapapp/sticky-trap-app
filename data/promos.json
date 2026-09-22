@@ -16,19 +16,19 @@
       "from": "2026-09-17",
       "to": "2026-10-31",
       "kicker": "Starts Oct 1",
-      "title": "o2 with UV spot gloss at the no gloss price",
-      "text": "",
+      "title": "October: one texture level on us",
+      "text": "o2 wraps · white + holo · 250+",
       "cta": {
-        "label": "Build it",
-        "url": "https://thestickytrap.app/configure/?p=o2-standard&mats=White%20Vinyl,Holographic&fins=Spot%20Gloss%20UV&m=White%20Vinyl&f=Spot%20Gloss%20UV&q=250&minq=250"
+        "label": "See October's deal",
+        "url": "https://thestickytrap.app/configure/?p=o2-standard&mats=White%20Vinyl,Holographic&fins=Spot%20Gloss%20UV,Standard%20Embossing,Pro&m=White%20Vinyl&f=Standard%20Embossing&q=250&minq=250"
       },
       "sticky": true,
       "pill": {
         "kicker": "OCT DEAL",
-        "text": "o2 gloss · white 45¢ / holo 55¢",
-        "url": "https://thestickytrap.app/configure/?p=o2-standard&mats=White%20Vinyl,Holographic&fins=Spot%20Gloss%20UV&m=White%20Vinyl&f=Spot%20Gloss%20UV&q=250&minq=250"
+        "text": "o2 wraps: one texture level on us",
+        "url": "https://thestickytrap.app/configure/?p=o2-standard&mats=White%20Vinyl,Holographic&fins=Spot%20Gloss%20UV,Standard%20Embossing,Pro&m=White%20Vinyl&f=Standard%20Embossing&q=250&minq=250"
       },
-      "_note": "kicker flips to \"October only\" on Oct 1 (bot editor); the DEAL price itself starts Oct 1 via deals[].from | 9/18 Shane: white only (holo dropped from the promo)."
+      "_note": "2026-09-22 (Shane 'do all'): the offer was Spot Gloss at the Flat price, which was worth 10c on white but only 5c on holo and nothing at 1,000+ (the volume band beat it). Now every rung is priced one step down, so the money is at Emboss/Pro where the product actually sells itself. Kicker flips: 'October only' on 10/1, 'Last week' on 10/28. Remove the whole event + the deals + the chat fact + the instant answer on 11/1."
     },
     {
       "id": "resin-reception-2026",
@@ -71,26 +71,70 @@
   "_deals_how": "Running deals for the configure page (/configure/): percent off the engine price on ONE product, optionally one material/finish, from a quantity up - so a deal can never undercut cost by accident. Fields: id, product (menu name, e.g. 3\" Slap), material (optional: White Vinyl | Holographic | Gold), finish (optional: Flat | Spot Gloss UV | Standard Embossing | Pro), fromQty, off (0.15 = 15%), title, until (YYYY-MM-DD or blank). Edit, push, done. 2026-09-17: optional 'from' (YYYY-MM-DD) delays a deal; a deal price is the better of the volume band or the deal, never both. 2026-09-18: 'match':'Flat' = this texture at the Flat price at the same quantity (bands included) - use it for 'X for the Flat price' promos; 'off' stays for % deals. Never both on one deal.",
   "deals": [
     {
-      "id": "oct-o2-2026",
+      "id": "oct-o2-2026-white-spot",
       "product": "o2 Standard",
       "material": "White Vinyl",
       "finish": "Spot Gloss UV",
       "fromQty": 250,
-      "title": "October o2: Spot Gloss for the Flat price (white)",
+      "title": "October o2: Spot Gloss UV at the Flat price (white)",
       "from": "2026-10-01",
       "until": "2026-10-31",
       "match": "Flat"
     },
     {
-      "id": "oct-o2-2026-holo",
+      "id": "oct-o2-2026-white-standard",
+      "product": "o2 Standard",
+      "material": "White Vinyl",
+      "finish": "Standard Embossing",
+      "fromQty": 250,
+      "title": "October o2: Standard Embossing at the Spot Gloss UV price (white)",
+      "from": "2026-10-01",
+      "until": "2026-10-31",
+      "match": "Spot Gloss UV"
+    },
+    {
+      "id": "oct-o2-2026-white-pro",
+      "product": "o2 Standard",
+      "material": "White Vinyl",
+      "finish": "Pro",
+      "fromQty": 250,
+      "title": "October o2: Pro at the Standard Embossing price (white)",
+      "from": "2026-10-01",
+      "until": "2026-10-31",
+      "match": "Standard Embossing"
+    },
+    {
+      "id": "oct-o2-2026-holo-spot",
       "product": "o2 Standard",
       "material": "Holographic",
       "finish": "Spot Gloss UV",
       "fromQty": 250,
-      "title": "October o2: Spot Gloss for the Flat price (holo)",
+      "title": "October o2: Spot Gloss UV at the Flat price (holo)",
       "from": "2026-10-01",
       "until": "2026-10-31",
       "match": "Flat"
+    },
+    {
+      "id": "oct-o2-2026-holo-standard",
+      "product": "o2 Standard",
+      "material": "Holographic",
+      "finish": "Standard Embossing",
+      "fromQty": 250,
+      "title": "October o2: Standard Embossing at the Spot Gloss UV price (holo)",
+      "from": "2026-10-01",
+      "until": "2026-10-31",
+      "match": "Spot Gloss UV"
+    },
+    {
+      "id": "oct-o2-2026-holo-pro",
+      "product": "o2 Standard",
+      "material": "Holographic",
+      "finish": "Pro",
+      "fromQty": 250,
+      "title": "October o2: Pro at the Standard Embossing price (holo)",
+      "from": "2026-10-01",
+      "until": "2026-10-31",
+      "match": "Standard Embossing"
     }
   ],
   "_pill_how": "Promo pill (2026-09-17): an event may carry 'pill' {kicker, text, url} - the floating button on every commerce page shows the first active event's pill (from..to), previews it as 'NEXT · <from>: <text>' in the 7 days before 'from', and is not rendered when no event has a pill. Spec: Downloads\\Sticky Bot\\handoffs\\promo-pill.md.",
