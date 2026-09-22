@@ -123,6 +123,8 @@
   #musicshade{position:fixed;inset:0;z-index:71;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .2s}
   #musicshade.on{opacity:1;pointer-events:auto}
   .ms-head{display:flex;align-items:center;gap:12px;padding:14px 16px 10px;border-bottom:1px solid var(--line)}
+  .ms-head .ms-sh{margin-left:auto;background:linear-gradient(100deg,#FF1FA2,#12C4FF);border:0;border-radius:10px;color:#050505;font-weight:900;font-size:14px;padding:9px 13px;cursor:pointer;font-family:inherit;line-height:1}
+  .ms-head .ms-sh + .ms-x{margin-left:8px}
   .ms-head .ms-x{margin-left:auto;background:rgba(255,255,255,.08);border:1px solid var(--line);border-radius:10px;color:var(--ink);font-weight:800;font-size:14px;padding:9px 13px;cursor:pointer;font-family:inherit;line-height:1}
   .ms-title{font-weight:900;font-size:16px;letter-spacing:.01em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
   .ms-now{padding:12px 16px 4px}
@@ -2395,7 +2397,7 @@
   function buildSheet(){ if(sheet) return;
     shade=document.createElement('div'); shade.id='musicshade'; document.body.appendChild(shade);
     sheet=document.createElement('section'); sheet.id='musicsheet'; sheet.setAttribute('role','dialog'); sheet.setAttribute('aria-label','Music player'); sheet.setAttribute('aria-hidden','true');
-    sheet.innerHTML='<div class="ms-head"><div><div class="ms-title">Trapp Radio</div></div><button type="button" class="ms-x" id="msx" aria-label="Close">Close</button></div>'+
+    sheet.innerHTML='<div class="ms-head"><div><div class="ms-title">Trapp Radio</div></div><button type="button" class="ms-sh" id="mssh" aria-label="Share Trapp Radio">Share</button><button type="button" class="ms-x" id="msx" aria-label="Close">Close</button></div>'+
       '<div class="ms-now"><div class="k" id="msk">Now playing</div><div class="t" id="mst">&nbsp;</div></div>'+
       '<div class="ms-ctl"><button type="button" class="ms-btn main" id="msplay">Play</button><button type="button" class="ms-btn" id="msnext">Next &#9197;</button>'+
       '<div class="ms-modes"><button type="button" class="ms-chip" data-m="full">On</button><button type="button" class="ms-chip" data-m="off">Off</button></div></div>'+
@@ -2407,6 +2409,12 @@
       r.querySelector('.nm').textContent=t.name;
       r.addEventListener('click',function(){ playTrack(t,'sheet'); }); list.appendChild(r); });
     document.getElementById('msx').addEventListener('click',closeSheet); shade.addEventListener('click',closeSheet);
+    var _sh=document.getElementById('mssh');   /* 2026-09-22: the playlist is a link you can send - /radio/ plays without the app */
+    if(_sh) _sh.addEventListener('click',function(){ var d={title:'Trapp Radio', text:'Six tracks out of the print shop. The Sticky Trap, Ann Arbor. Explicit, 21+.', url:'https://thestickytrap.app/radio/'};
+      try{ window.track&&window.track('radio_share','sheet'); }catch(e){}
+      if(navigator.share){ navigator.share(d).catch(function(){}); }
+      else if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(d.url).then(function(){ toast('Link copied - paste it anywhere'); },function(){ toast(d.url); }); }
+      else { toast(d.url); } });
     document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&sheet.classList.contains('on')) closeSheet(); });
     document.getElementById('msplay').addEventListener('click',function(){
       if(mode==='off'||!a){ playTrack(opener(),'sheet-play'); return; }
