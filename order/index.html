@@ -132,8 +132,12 @@
       <div class="damt" id="designAmt">&mdash;</div>
     </div>
     <div class="row">
-      <div><label>Deposit received $</label><input id="deposit" type="number" step="0.01" inputmode="decimal"></div>
+      <div><label>Terms</label><select id="terms" onchange="termsPick()"><option value="Paid in full">Paid in full</option><option value="Half down, half upon delivery">Half down, half upon delivery</option></select></div>
       <div><label style="margin-top:22px"><input type="checkbox" id="designOnly" style="width:auto;margin-right:8px">Design only (nothing printed)</label></div>
+    </div>
+    <div class="row" id="depWrap" style="display:none">
+      <div><label>Amount taken now $ <span class="muted" id="depHint"></span></label><input id="deposit" type="number" step="0.01" inputmode="decimal" placeholder="half of the order"></div>
+      <div><label>&nbsp;</label><div class="hint" style="margin:0">Half now, half when they pick it up or it ships. Leave blank and we bill half.</div></div>
     </div>
   </div>
 
@@ -298,7 +302,7 @@ function resetForm(){   // 9/16 Shane: reset with an are-you-sure; keeps the PIN
   document.querySelectorAll('#app select').forEach(function(el){ el.selectedIndex = 0; });
   document.querySelectorAll('.chip.on').forEach(function(c){ c.classList.remove('on'); });
   $('newItems').innerHTML = ''; addNewLine(); addNewLine(); addNewLine(); $('result').classList.add('hidden'); $('result').innerHTML = '';
-  $('submitBtn').disabled = false; $('submitBtn').textContent = 'Submit order'; finishOrder(); ppCalc(); designCalc(); totals(); window.scrollTo(0, 0);
+  $('submitBtn').disabled = false; $('submitBtn').textContent = 'Submit order'; finishOrder(); ppCalc(); designCalc(); termsPick(); totals(); window.scrollTo(0, 0);
 }
 function openPicker(el){ try { if(el.showPicker) el.showPicker(); } catch(e){} }   // 9/16 Shane: tap anywhere on the date = calendar pops up
 function chips(group){ return [].map.call(document.querySelectorAll('.chips[data-group="' + group + '"] .chip.on'), function(c){ return c.dataset.v; }); }
@@ -312,6 +316,13 @@ function printSpecs(){
   var cu = chips('cut')[0]; if(cu) L.push('CUT: ' + cu);
   var n = $('pressNotes').value.trim(); if(n) L.push('NOTES: ' + n);
   return L.join(String.fromCharCode(10));
+}
+function termsPick(){   // 9/22 Shane: terms = paid in full, or half down / half on delivery
+  var half = $('terms').value.indexOf('Half') === 0;
+  $('depWrap').style.display = half ? '' : 'none';
+  if(!half){ $('deposit').value = ''; $('depHint').textContent = ''; return; }
+  var a = Number(String($('totAmt').textContent).replace(/[^0-9.]/g, '')) || 0;
+  $('depHint').textContent = a ? '— half of ' + $('totAmt').textContent + ' is $' + (Math.round(a / 2 * 100) / 100).toFixed(2) : '';
 }
 function designCalc(){   // 9/22 Shane: "the design time and price should be a separate line"
   var h = parseFloat($('designHrs').value), r = parseFloat($('designRate').value || '75');
@@ -336,6 +347,7 @@ function totals(){
   document.querySelectorAll('#newItems .newline').forEach(function(d){ var n = Number(d.querySelector('.q').value || 0), p = d.querySelector('.p').value; if(n > 0){ q += n; if(p) a += n * Number(p); else unknown = true; } });
   document.querySelectorAll('#reorders .grp').forEach(function(g){ var n = 0; g.querySelectorAll('input').forEach(function(x){ n += Number(x.value || 0); }); var el = g.querySelector('.gqty'); if(el) el.textContent = n ? n + ' pcs' : ''; });
   $('totQty').textContent = q; $('totAmt').textContent = money(a) + (unknown ? '+' : '');
+  if($('terms') && $('terms').value.indexOf('Half') === 0) termsPick();
   $('totNote').textContent = unknown ? 'some new items priced by the builder' : 'before pre-press & tax';
 }
 function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
@@ -351,7 +363,7 @@ function submit(){
   var payload = { pin: PIN, company: company, newCustomer: isNew, contact: $('contact').value.trim(), email: $('email').value.trim(), phone: $('phone').value.trim(), contact2: $('contact2').value.trim(), email2: $('email2').value.trim(), phone2: $('phone2').value.trim(),
     due: $('due').value, delivery: $('delivery').value, ship_cost: $('ship').value, rush: $('rush').value.trim(),
     payment: $('payment').value, tax: $('tax').value, prepress: prepressLabel(), prepress_custom: $('prepressCustom').value.trim(), setup: 'On file', setup_min: '', setup_rate: '',
-    art_status: $('art').value, design_hrs: $('designHrs').value, design_rate: $('designRate').value.trim(), deposit: $('deposit').value, design_only: $('designOnly').checked,
+    terms: $('terms').value, art_status: $('art').value, design_hrs: $('designHrs').value, design_rate: $('designRate').value.trim(), deposit: $('deposit').value, design_only: $('designOnly').checked,
     note: $('note').value.trim(), callouts: printSpecs(), attach: chips('attach'), reorders: reorders, newItems: newItems };
   $('submitBtn').disabled = true; $('submitBtn').textContent = 'Sending…';
   api('POST', payload).then(function(r){
