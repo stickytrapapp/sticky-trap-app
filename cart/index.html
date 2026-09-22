@@ -52,7 +52,7 @@ input,textarea{width:100%;padding:11px;border-radius:10px;border:1px solid var(-
       <div class="card">
         <div class="k">Summary</div>
         <div class="sum"><div class="r"><span>Subtotal</span><span id="sub">$0.00</span></div><div class="r" id="minrow" style="display:none"><span>$50 minimum order</span><span id="minadd"></span></div><div class="r"><span>Sales tax + shipping</span><span style="color:var(--muted)">on the invoice</span></div><div class="r tot"><span>Order total</span><span id="tot">$0.00</span></div></div>
-        <p class="note" id="paynote">MI 6% sales tax where it applies, shipping only if shipped. <b style="color:var(--paper)">Your card is authorized now and charged only when you approve the proof.</b></p>
+        <p class="note" id="paynote">MI 6% sales tax where it applies, shipping only if shipped. <b style="color:var(--paper)">Your card is charged when you place this order.</b> We proof before we print - approve it or ask for changes - but the order is paid when you place it. Cancel before we print and we refund what you paid less any design, pre-press or proofing already done.</p>
         <div class="k">Who is this for</div>
         <div class="row"><input id="name" placeholder="Your name" autocomplete="name"><input id="company" placeholder="Company / brand" autocomplete="organization"></div>
         <div class="row"><input id="email" type="email" placeholder="Email (gets the updates)" autocomplete="email"><input id="phone" type="tel" placeholder="Phone" autocomplete="tel"></div>
@@ -121,7 +121,7 @@ var D={"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"breaks":[[500,5],[7
   function renderCard(){ if(!SQ||!SQ.appId) return; var c=cardTotal(); if(!c) return; $('cardtot').textContent=money(c.card);
     $('cardnote').textContent='Order '+money(c.base)+($('taxex').checked?' + no tax (exempt)':' + MI tax '+money(c.tax))+(c.ship?' + shipping est. '+money(c.ship):'')+' + card processing. Shipping settles on the invoice; anything under the hold is released.'; }
   function payOff(){ $('payoff').classList.remove('hidden'); $('card').classList.add('hidden'); $('taxex').parentNode.classList.add('hidden'); $('cardtot').parentNode.classList.add('hidden'); $('cardnote').classList.add('hidden');
-    $('paynote').innerHTML='MI 6% sales tax where it applies, shipping only if shipped. <b style="color:var(--paper)">Nothing is charged now.</b> We proof first; you approve, then pay.'; }
+    $('paynote').innerHTML='MI 6% sales tax where it applies, shipping only if shipped. <b style="color:var(--paper)">Nothing is charged now.</b> We send an invoice - we proof before we print.'; }
   fetch('/data/square.json?'+Date.now()).then(function(r){return r.json();}).then(function(j){ SQ=j||{}; if(!SQ.appId){ payOff(); return; }
     var sc=document.createElement('script'); sc.src=(SQ.env==='production'?'https://web.squarecdn.com/v1/square.js':'https://sandbox.web.squarecdn.com/v1/square.js');
     sc.onload=function(){ try{ payments=window.Square.payments(SQ.appId, SQ.locationId); payments.card({style:{input:{color:'#fff',backgroundColor:'#0e0e0e'},'input::placeholder':{color:'#9d97b0'},'.input-container':{borderColor:'#262626',borderRadius:'10px'},'.input-container.is-focus':{borderColor:'#12C4FF'}}}).then(function(c){ card=c; return card.attach('#card'); }).then(function(){ sqReady=true; renderCard(); }).catch(function(e){ $('card').textContent='Card form could not load - '+(e&&e.message||'try again'); }); }catch(e){ $('card').textContent='Card form could not load.'; } };
@@ -187,7 +187,7 @@ var D={"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"breaks":[[500,5],[7
         $('main').classList.add('hidden');
         $('done').innerHTML='<h2>Order placed</h2><div class="code">'+esc(code)+'</div><p class="note" style="font-size:13.5px;color:var(--paper)">Confirmation and your tracker link are on their way to <b>'+esc(email)+'</b>.</p>'+
           (tooBig?'<p class="note warn">Your art was over '+D.maxmb+' MB, so it did not upload. Email it to <a href="mailto:thestickytrap@gmail.com?subject=Art%20for%20order%20'+encodeURIComponent(code)+'">thestickytrap@gmail.com</a> with the order code.</p>':'')+
-          '<ol><li>We check your art and build the proof.</li><li>You approve the proof from your tracker link (or ask for changes).</li><li>'+(payment?'Your card is charged on approval, then we print':'You pay, we print')+', you pick up or we ship.</li></ol>'+
+          '<ol><li>We check your art and build the proof.</li><li>You approve the proof from your tracker link (or ask for changes).</li><li>'+(payment?'Your card was charged when you placed the order, so we print as soon as you approve':'You pay, we print')+', you pick up or we ship.</li></ol>'+
           (url?'<a class="btn" href="'+esc(url)+'">Open your tracker &rarr;</a> ':'')+'<a class="btn" style="background:var(--panel-2);color:var(--paper);border:1px solid var(--line)" href="/#menu">Back to the menu</a>';
         $('done').classList.remove('hidden'); window.scrollTo(0,0);
       });

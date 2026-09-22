@@ -8,7 +8,7 @@ Shipping and rush ARE covered in the house facts below (flat-rate shipping added
 
 == Ordering in the app ==
 Menu tab: open a product, set the quantity, tap a price to add it to the basket. The basket can Email my order, Text order, Copy text, or "Upload art & get your quote" (name, email, phone, art files up to ~20 MB, deadline). Bigger files: email them.
-Nothing is charged in the app: we proof and quote first, and nothing is charged until the customer approves. The "Start a project -- get a quote" button on the Connect tab goes to the same quote form.
+Quotes cost nothing: the "Start a project -- get a quote" button on the Connect tab and the basket's "Upload art & get your quote" both just send us the job, and a quote is never a charge. A CARD ORDER is different: when a customer pays by card in the basket, the card is charged when the order is placed, not when the proof is approved. The proof still comes before anything prints and two rounds of changes are free. If they cancel before we print, we refund what they paid less any design, pre-press or proofing already done; once it is on the press it cannot be cancelled.
 Minimum order: $50 per order. Quantities step by 5 in the app, from 5 up to 1,000; more than 1,000 is a custom quote (call us).
 Volume price breaks on the per-piece menu price: 500+ pcs 5% off, 750+ pcs 7% off, 1,000+ pcs 10% off. Under 500 pcs pays the menu price.
 Example: 3" Slap, White Vinyl, Flat is $0.45 each -> 100 pcs = $45.00; 500 pcs = 500 x $0.45 x 0.95 = $213.75.
@@ -37,7 +37,7 @@ Team members and contractors sign the non-compete at thestickytrap.app/noncompet
 We ship anywhere in the US. Shipping is a flat rate added at checkout on your invoice.
 Shipping goes USPS Priority, Monday to Friday, about 2 days in transit; another carrier or service level is available on request.
 Pick-up is at 4750 Venture Dr, Suite 101, Ann Arbor, Monday to Friday 10am-5pm. Text 734 460 3845 before you come so it is ready at the counter.
-Pay by ACH, card through Square, or cash. We do not take deposits: art assessment is free, and once the order is agreed it is paid in full before we print. Design work is a custom quote.
+Pay by ACH, card through Square, or cash. We do not take deposits: art assessment is free, and once the order is agreed it is paid in full before we print. App card orders are charged at the moment the order is placed, not on proof approval; cancel before press and we refund less any design, pre-press or proofing already done. Design work is a custom quote.
 Card payments through Square carry the processing fee. ACH is a flat $10 bank fee. Cash has no fee or surcharge. We do not accept checks.
 Michigan sales tax is charged unless you give us a resale certificate; tax-exempt accounts are set up once and stay that way.
 Files: vector (AI, EPS, PDF, SVG) preferred; PNG at 300 dpi is fine. Every file is assessed for free before anything is quoted. Pre-press and design work are custom quoted after we see the art.

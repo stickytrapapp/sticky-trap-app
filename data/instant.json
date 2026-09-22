@@ -178,7 +178,7 @@
     "my order",
     "pay url"
    ],
-   "a": "Pay by ACH, card through Square, or cash. We do not take deposits: art assessment is free, and once the order is agreed it is paid in full before we print. Design work is a custom quote. Card payments through Square carry the processing fee. ACH is a flat $10 bank fee. Cash has no fee or surcharge. We do not accept checks.",
+   "a": "Pay by ACH, card through Square, or cash. We do not take deposits: art assessment is free, and once the order is agreed it is paid in full before we print. App card orders are charged at the moment the order is placed, not on proof approval; cancel before press and we refund less any design, pre-press or proofing already done. Design work is a custom quote. Card payments through Square carry the processing fee. ACH is a flat $10 bank fee. Cash has no fee or surcharge. We do not accept checks.",
    "offer": {
     "label": "See my basket",
     "go": {

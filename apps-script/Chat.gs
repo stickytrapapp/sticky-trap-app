@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 66;   // v66 9/22 Shane ('monday is just on hold while we restructure it'): MONDAY_HOLD - the bot stops writing to Monday. Chat leads still land in the leads sheet and the ATTN ERIN email; no card, no update. Flip MONDAY_HOLD to false (or set Script Property MONDAY_HOLD=off) when the restructure is done.   // v65 9/21 Shane: 'for the time being do not send anything to erinnomids - send it to thestickytrap gmail to her attention': chat leads -> owner inbox + thestickytrap@ with ATTN ERIN in the subject.   // v64 9/21 Shane 'leads to Erin too': chat leads (hand-off + lead_phone) go to the owner AND Erin; every other alert stays owner-only.   // v63 9/21 Shane: hand-off promise = 'Erin will text you back - usually within a business day' (email if no phone); ask for the cell first.   // v62 9/18 Shane 'stop sending notifications in the client list': no Monday bells from chat leads (card + update + owner email only).   // v61 9/18: where-is-my-order always offers the phone lookup at track.thestickytrap.app alongside code+email.   // v60 9/18 (Shane): every STAFF alert (new order, proof approved, changes, leads, referrals, NDA copies, card failures, digest) goes to the owner inbox ONLY until the flow bugs are fixed - see ALERTS_OWNER_ONLY   // v59 9/18 SECURITY: token_rotate (PIN) - fresh token on every open + recently archived order, current-stage email re-sent so links work; the tracker snapshots that leaked tokens are gone for good.   // v58 9/18: staff orders list carries track_url (the tokened client link) so the console can print the QR label.   // v57 9/18 foreman notes: phone lookup returns code/stage/due only + 'track_link' emails the real link; deals support "match":"Flat" (texture at the Flat price at that quantity) in the cart re-price.   // v56 9/18 Shane: find my orders by PHONE (read-only list; approve/pay still need the tokened link) - track&p=   // v55 9/18: tracker links -> https://track.thestickytrap.app/ (the tracker's own front door; forwards to /track/ on the app origin so push keeps working).   // v54 9/17 Shane: 'no deposits - art assessed free, agreed orders paid in full' - wording; Payment received email says so.   // v53 9/17 October promo: deals honor 'from', and a deal price is the better of band or deal (never stacked).   // v52 9/17: 'NUDGED <customer>' replies to the Jobs today email are picked up hourly (nudgedReplies_) so the reorder list clears itself.   // v51 9/17 bot editor: the hourly stall email (24 h proof / 72 h press) is OFF by default - the Daily Pulse 'Jobs today' email is the one stall list; set NUDGE_STALE=on to bring it back. v50 9/17 New Orders Intake (Shane): 'Quote sent' -> 'Invoice sent' (the invoice is the quote)   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 67;   // v67 9/22 Shane ('if a card is run it is authorized and charged - its not contingent on a proof being done. what if that proof required design work?'): app card orders are CAPTURED at order time (autocomplete:true). No 7-day hold, no expiry, no re-auth chase. Refunds are manual in Square: what they paid less design/pre-press/proofing already done, and nothing once it is on the press.   // v66 9/22 Shane ('monday is just on hold while we restructure it'): MONDAY_HOLD - the bot stops writing to Monday. Chat leads still land in the leads sheet and the ATTN ERIN email; no card, no update. Flip MONDAY_HOLD to false (or set Script Property MONDAY_HOLD=off) when the restructure is done.   // v65 9/21 Shane: 'for the time being do not send anything to erinnomids - send it to thestickytrap gmail to her attention': chat leads -> owner inbox + thestickytrap@ with ATTN ERIN in the subject.   // v64 9/21 Shane 'leads to Erin too': chat leads (hand-off + lead_phone) go to the owner AND Erin; every other alert stays owner-only.   // v63 9/21 Shane: hand-off promise = 'Erin will text you back - usually within a business day' (email if no phone); ask for the cell first.   // v62 9/18 Shane 'stop sending notifications in the client list': no Monday bells from chat leads (card + update + owner email only).   // v61 9/18: where-is-my-order always offers the phone lookup at track.thestickytrap.app alongside code+email.   // v60 9/18 (Shane): every STAFF alert (new order, proof approved, changes, leads, referrals, NDA copies, card failures, digest) goes to the owner inbox ONLY until the flow bugs are fixed - see ALERTS_OWNER_ONLY   // v59 9/18 SECURITY: token_rotate (PIN) - fresh token on every open + recently archived order, current-stage email re-sent so links work; the tracker snapshots that leaked tokens are gone for good.   // v58 9/18: staff orders list carries track_url (the tokened client link) so the console can print the QR label.   // v57 9/18 foreman notes: phone lookup returns code/stage/due only + 'track_link' emails the real link; deals support "match":"Flat" (texture at the Flat price at that quantity) in the cart re-price.   // v56 9/18 Shane: find my orders by PHONE (read-only list; approve/pay still need the tokened link) - track&p=   // v55 9/18: tracker links -> https://track.thestickytrap.app/ (the tracker's own front door; forwards to /track/ on the app origin so push keeps working).   // v54 9/17 Shane: 'no deposits - art assessed free, agreed orders paid in full' - wording; Payment received email says so.   // v53 9/17 October promo: deals honor 'from', and a deal price is the better of band or deal (never stacked).   // v52 9/17: 'NUDGED <customer>' replies to the Jobs today email are picked up hourly (nudgedReplies_) so the reorder list clears itself.   // v51 9/17 bot editor: the hourly stall email (24 h proof / 72 h press) is OFF by default - the Daily Pulse 'Jobs today' email is the one stall list; set NUDGE_STALE=on to bring it back. v50 9/17 New Orders Intake (Shane): 'Quote sent' -> 'Invoice sent' (the invoice is the quote)   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';
 var ALERTS_OWNER_ONLY = true;   // v60 Shane 9/18: 'do not send any alerts to thestickytrap gmail for now ... send to fm holdings only' - flip to false to restore the shop inbox + NUDGE_TO
 var LEADS_TO = SHOP_EMAIL;   // v65: chat leads land in the shop inbox marked ATTN ERIN (Shane 9/21: nothing to erinnomids for now); every other alert stays owner-only
@@ -1033,11 +1033,15 @@ function sq_(path, method, body) {
   if (r.getResponseCode() >= 300) { var er = (j.errors && j.errors[0]) || {}; var e2 = new Error(er.code || ('http_' + r.getResponseCode())); e2.detail = er.detail || ''; throw e2; }
   return j;
 }
-function sqAuthorize_(code, cents, payment, email, note) {   // hold only; Square auto-cancels after delay_duration
+function sqAuthorize_(code, cents, payment, email, note) {
+  // v67 2026-09-22 (Shane): CHARGED, not held. Before this it was autocomplete:false + a 7-day hold that Square auto-cancelled,
+  // so a proof that needed design work could outlive the authorization and the customer had to re-enter their card. The money is
+  // taken when the order is placed; the proof still gates the PRINT, not the payment. Cancellations are refunded by hand in Square
+  // (what they paid less any design/pre-press/proofing already done) - there is deliberately no code path that refunds automatically.
   return sq_('/v2/payments', 'post', {
     idempotency_key: (code + ':' + Date.now()).slice(0, 45), source_id: payment.sourceId, verification_token: payment.verificationToken || undefined,
     amount_money: { amount: cents, currency: 'USD' }, location_id: PROP.getProperty('SQUARE_LOCATION_ID') || undefined,
-    autocomplete: false, delay_duration: 'P7D', delay_action: 'CANCEL', reference_id: code, note: note, buyer_email_address: email || undefined,
+    autocomplete: true, reference_id: code, note: note, buyer_email_address: email || undefined,
     accept_partial_authorization: false
   }).payment;
 }
@@ -1047,6 +1051,8 @@ function sqCapture_(paymentId, cents) {   // optional amount reduction first, th
 }
 function sqCancel_(paymentId) { return sq_('/v2/payments/' + paymentId + '/cancel', 'post', {}).payment; }
 function captureOnApproval_(sh, f, o) {   // called from approve_ (client) and orderStage_ 'approved' (console). NEVER anywhere else.
+  // v67: cards are charged up front, so there is normally nothing to capture here. This stays for orders taken under the old
+  // hold-then-capture flow (payment_status 'authorized') - those still settle on approval. New orders come in as 'captured'.
   if (!(o.payment_id && o.payment_status === 'authorized')) return;
   try { sqCapture_(o.payment_id, null); sh.getRange(f.i, ORDER_COLS.indexOf('payment_status') + 1).setValue('captured'); o.payment_status = 'captured'; }
   catch (e) { sh.getRange(f.i, ORDER_COLS.indexOf('payment_status') + 1).setValue('capture_failed'); o.payment_status = 'capture_failed';
@@ -1058,10 +1064,10 @@ function reauth_(b) {   // holds expire after 7 days: the customer re-enters the
   if (!(b.payment && b.payment.sourceId)) return { ok: false, error: 'no_card' };
   if (o.payment_id && o.payment_status === 'authorized') { try { sqCancel_(o.payment_id); } catch (e) {} }
   var cents = cardCents_(+o.total || 0, o.tax_exempt === 'yes', o.ship), pay;
-  try { pay = sqAuthorize_(o.code, cents, b.payment, o.email, 'Sticky Trap order ' + o.code + ' - re-authorized, charged on proof approval'); }
+  try { pay = sqAuthorize_(o.code, cents, b.payment, o.email, 'Sticky Trap order ' + o.code + ' - card re-run, charged at order'); }
   catch (e) { return { ok: false, error: /DECLINED|CVV|VERIFY|INVALID_CARD|CARD_/i.test(String(e.message)) ? 'card_declined' : 'payment_failed', detail: String(e.detail || e.message).slice(0, 120) }; }
   var c = ORDER_COLS.indexOf('payment_id') + 1;
-  sh.getRange(f.i, c, 1, 4).setValues([[pay.id, 'authorized', pay.amount_money.amount / 100, new Date()]]);
+  sh.getRange(f.i, c, 1, 4).setValues([[pay.id, pay.status === 'COMPLETED' ? 'captured' : 'authorized', pay.amount_money.amount / 100, new Date()]]);
   return { ok: true, code: o.code, url: trackUrl_(o), card_total: pay.amount_money.amount / 100 };
 }
 // v36 (App handoff 2026-09-15): billing-method mailer (Invoices _toolsilling_mailer.py). PIN-gated. Makes a Gmail DRAFT in the shop inbox
@@ -1165,7 +1171,8 @@ function orderPrefs_(b) {   // staff (pin) or the customer (token) sets 'both' |
 function stageMail_(o, stage, note) {
   if (!o.email || !STAGES[stage] || stage === 'cancelled') return false;
   var st = STAGES[stage], url = trackUrl_(o), who = o.company || o.name || '';
-  if (stage === 'received' && o.payment_status === 'authorized') st = { label: st.label, msg: st.msg + ' Your card is authorized and will be charged only when you approve the proof.' };   // v31
+  if (stage === 'received' && o.payment_status === 'captured') st = { label: st.label, msg: st.msg + ' Your card has been charged for this order. Your proof comes next - nothing prints until you approve it.' };   // v67
+  else if (stage === 'received' && o.payment_status === 'authorized') st = { label: st.label, msg: st.msg + ' Your card is authorized and will be charged when you approve the proof.' };   // pre-v67 orders only
   if (stage === 'approved' && o.payment_status === 'captured') st = { label: st.label, msg: 'Approved and paid - your order is queued for print.' };
   var btn = function (label, href) { return '<a href="' + href + '" style="display:inline-block;background:#FF1FA2;color:#fff;text-decoration:none;font-weight:800;padding:12px 20px;border-radius:24px;margin:14px 0">' + label + '</a>'; };
   var html = '<div style="font-family:Helvetica,Arial,sans-serif;max-width:560px;margin:0 auto;color:#111;font-size:15px;line-height:1.55">' +
@@ -1200,7 +1207,7 @@ function orderNew_(b) {
   if (b.payment && b.payment.sourceId) {
     var cents = cardCents_(cl ? cl.total : (+b.total || 0), !!b.payment.taxExempt, b.ship);
     if (Math.abs(cents - (+b.payment.amount || 0)) > 1) return { ok: false, error: 'price_mismatch', detail: 'card total' };
-    try { pay = sqAuthorize_(code, cents, b.payment, email, 'Sticky Trap order ' + code + ' - authorized, charged on proof approval'); }
+    try { pay = sqAuthorize_(code, cents, b.payment, email, 'Sticky Trap order ' + code + ' - charged at order'); }
     catch (e) { return { ok: false, error: /DECLINED|CVV|VERIFY|INVALID_CARD|CARD_/i.test(String(e.message)) ? 'card_declined' : 'payment_failed', detail: String(e.detail || e.message).slice(0, 120) }; }
   }
   var stage = STAGES[b.stage] && b.stage !== 'cancelled' ? b.stage : 'received', now = new Date(), token = Utilities.getUuid().replace(/-/g, '').slice(0, 12);
@@ -1210,7 +1217,7 @@ function orderNew_(b) {
   if (notifyPref === 'sms' && !normPhone_(b.phone)) notifyPref = 'both';
   var o = { code: code, created: now, name: name, company: company, email: email, phone: phoneN, items: itemsTxt, due: String(b.due || '').slice(0, 40), notify: notifyPref, uid: String(b.uid || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 40), rating: '',
             lines: cl ? JSON.stringify(cl.lines) : '', subtotal: cl ? cl.subtotal : '', total: cl ? cl.total : '', ship: String(b.ship || '').slice(0, 10), address: String(b.address || '').slice(0, 300), cust_notes: String(b.notes || '').slice(0, 600),
-            payment_id: pay ? pay.id : '', payment_status: pay ? 'authorized' : '', payment_amt: pay ? (pay.amount_money.amount / 100) : '', auth_ts: pay ? now : '', tax_exempt: b.payment && b.payment.taxExempt ? 'yes' : '',
+            payment_id: pay ? pay.id : '', payment_status: pay ? (pay.status === 'COMPLETED' ? 'captured' : 'authorized') : '', payment_amt: pay ? (pay.amount_money.amount / 100) : '', auth_ts: pay ? now : '', tax_exempt: b.payment && b.payment.taxExempt ? 'yes' : '',
             stage: stage, stage_ts: now, history: JSON.stringify([{ stage: stage, ts: now.getTime(), note: '' }]), token: token, monday_item: '', square_inv: String(b.square_inv || '').slice(0, 60), nudged_ts: '', notes: '', source: String(b.source || '').slice(0, 20), pay_url: /^https:\/\//.test(String(b.pay_url || '')) ? String(b.pay_url).slice(0, 300) : '' };
   sh.appendRow(ORDER_COLS.map(function (k) { return o[k]; }));
   if (idemKey) { try { CACHE.put(idemKey, code, 3600); } catch (e) {} }
@@ -1220,13 +1227,13 @@ function orderNew_(b) {
       var body = [(company || name) + (name && company ? ' (' + name + ')' : ''), email + (o.phone ? ' / ' + o.phone : ''), '',
         cl ? cl.lines.map(function (x) { return x.qty + ' x ' + x.p + ' - ' + x.m + ' / ' + x.f + ' @ ' + money_(x.unit) + ' = ' + money_(x.total) + (x.notes ? '  (' + x.notes + ')' : '') + (x.art ? '  art: ' + x.art : ''); }).join('\n') : o.items,
         '', 'Subtotal ' + (cl ? money_(cl.subtotal) : '-') + ' / order total ' + (cl ? money_(cl.total) : '-'),
-        'Card: ' + (pay ? 'AUTHORIZED ' + money_(pay.amount_money.amount / 100) + ' (charged on proof approval)' : 'none'),
+        'Card: ' + (pay ? 'CHARGED ' + money_(pay.amount_money.amount / 100) + ' at order' : 'none'),
         (o.ship === 'ship' ? 'SHIP to: ' + (o.address || '(no address)') : 'PICK UP'), o.cust_notes ? 'Notes: ' + o.cust_notes : '', o.due ? 'Wants it by: ' + o.due : '',
         '', 'Console: https://thestickytrap.app/console/?o=' + encodeURIComponent(code), 'Client view: ' + trackUrl_(o)].join('\n');
       GmailApp.sendEmail(notifyTo_(), 'NEW ORDER ' + code + ' - ' + (company || name), body, { name: 'Sticky Trap App', replyTo: email || SHOP_EMAIL });
     } catch (e) { mailErr_(e); }
   }
-  return { ok: true, code: code, token: token, url: trackUrl_(o), emailed: emailed, texted: nres.texted, total: cl ? cl.total : null, payment: pay ? 'authorized' : null, card_total: pay ? pay.amount_money.amount / 100 : null };
+  return { ok: true, code: code, token: token, url: trackUrl_(o), emailed: emailed, texted: nres.texted, total: cl ? cl.total : null, payment: pay ? (pay.status === 'COMPLETED' ? 'charged' : 'authorized') : null, card_total: pay ? pay.amount_money.amount / 100 : null };
 }
 function orderStage_(b) {
   if (!pinOk_(b.pin)) return { ok: false, error: 'bad_pin' };
