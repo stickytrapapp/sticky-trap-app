@@ -115,9 +115,8 @@ var D={"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"breaks":[[500,5],[7
 
   // customer block remembered per device
   // ---- Square Web Payments (step 3): public config from /data/square.json; no appId = card block off, order still places ----
-  var SQ=null, card=null, payments=null, sqReady=false, REAUTH=null;
-  var qs=new URLSearchParams(location.search); if(qs.get('reauth')&&qs.get('t')){ REAUTH={code:qs.get('reauth'),token:qs.get('t')}; }
-  function cardTotal(){ if(!SQ) return null; var base=total(); if(REAUTH&&REAUTH.total) base=REAUTH.total; var tax=$('taxex').checked?0:Math.round(base*(SQ.taxRate||0)*100)/100; var shipc=ship==='ship'?(SQ.shipEstimate||0):0; var pre=base+tax+shipc; var ct=Math.round(((pre+(SQ.feeFlat||0))/(SQ.feeDivisor||1))*100)/100; return {base:base,tax:tax,ship:shipc,card:ct}; }
+  var SQ=null, card=null, payments=null, sqReady=false;   /* 2026-09-22: the re-authorization mode is gone - cards are charged at order, nothing expires */
+  function cardTotal(){ if(!SQ) return null; var base=total(); var tax=$('taxex').checked?0:Math.round(base*(SQ.taxRate||0)*100)/100; var shipc=ship==='ship'?(SQ.shipEstimate||0):0; var pre=base+tax+shipc; var ct=Math.round(((pre+(SQ.feeFlat||0))/(SQ.feeDivisor||1))*100)/100; return {base:base,tax:tax,ship:shipc,card:ct}; }
   function renderCard(){ if(!SQ||!SQ.appId) return; var c=cardTotal(); if(!c) return; $('cardtot').textContent=money(c.card);
     $('cardnote').textContent='Order '+money(c.base)+($('taxex').checked?' + no tax (exempt)':' + MI tax '+money(c.tax))+(c.ship?' + shipping est. '+money(c.ship):'')+' + card processing. Shipping settles on the invoice; anything under the hold is released.'; }
   function payOff(){ $('payoff').classList.remove('hidden'); $('card').classList.add('hidden'); $('taxex').parentNode.classList.add('hidden'); $('cardtot').parentNode.classList.add('hidden'); $('cardnote').classList.add('hidden');
@@ -164,15 +163,13 @@ var D={"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"breaks":[[500,5],[7
     var tpUid=''; try{ tpUid=localStorage.getItem('tp_uid')||''; }catch(e){}   // 2026-09-15: Trap Points player id -> +300 when this order ships (awards)
     var body={ action:'order_new', idem:idem, uid:tpUid, name:name, company:$('company').value.trim(), email:email, phone:$('phone').value.trim(), items:items, due:due, source:'cart', stage:'received',
                lines:lines, subtotal:Math.round(sub()*100)/100, total:Math.round(total()*100)/100, ship:ship, address:ship==='ship'?$('addr').value.trim():'', notes:notes, payment:payment||null };
-    if(REAUTH){ body={ action:'reauth', code:REAUTH.code, token:REAUTH.token, payment:payment }; }
     // The order desk occasionally answers a POST with its plain GET page (no code) even though the order was created. Same idem key ->
     // a retry returns the existing order instead of a duplicate; a reply without a code is never treated as a confirmation.
     var send=function(){ return fetch(D.api,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)}).then(function(r){ return r.json(); }); };
-    send().then(function(j){ if(j&&j.ok&&!j.code&&!REAUTH){ return new Promise(function(res){ setTimeout(res,2500); }).then(send); } return j; }).then(function(j){
-      if(j&&j.ok&&!j.code&&!REAUTH){ status('The order desk did not confirm. If a confirmation email arrives in the next minute, your order is in - do not place it again. Otherwise retry in a moment or text 734 460 3845.','err'); setTimeout(function(){ $('go').disabled=false; },45000); return; }
+    send().then(function(j){ if(j&&j.ok&&!j.code){ return new Promise(function(res){ setTimeout(res,2500); }).then(send); } return j; }).then(function(j){
+      if(j&&j.ok&&!j.code){ status('The order desk did not confirm. If a confirmation email arrives in the next minute, your order is in - do not place it again. Otherwise retry in a moment or text 734 460 3845.','err'); setTimeout(function(){ $('go').disabled=false; },45000); return; }
       if(!j||!j.ok){ var e=(j&&j.error)||'error'; status(e==='card_declined'?'Your card was declined - try another card.':e==='payment_failed'?'The card could not be authorized ('+((j&&j.detail)||'')+'). Try again or text us.':e==='rate_limited'?'Too many orders from this email in an hour - text us at 734 460 3845 and we will take it by hand.':(e==='price_mismatch'?'Prices moved while you were browsing - reload the basket and try again.':'Could not place the order ('+e+'). Text us at 734 460 3845.'),'err'); $('go').disabled=false; return; }
-      var code=j.code||(REAUTH&&REAUTH.code), url=j.url||'';
-      if(REAUTH){ $('main').classList.add('hidden'); $('done').innerHTML='<h2>Card re-authorized</h2><div class="code">'+esc(code)+'</div><p class="note" style="font-size:13.5px;color:var(--paper)">Thanks - approving your proof charges this card.</p>'+(url?'<a class="btn" href="'+esc(url)+'">Back to your tracker &rarr;</a>':''); $('done').classList.remove('hidden'); return; }
+      var code=j.code, url=j.url||'';
       status('Order '+code+' placed. Sending your art...','');
       Promise.all(cart.map(function(l){ return (l.art&&!l.art.onFile)?artGet(l.art.key||l.k).then(function(f){ return f?readB64(f).then(function(b64){ return {name:l.art.name||f.name,mime:f.type||'application/octet-stream',b64:b64,size:f.size||0}; }):null; }):Promise.resolve(null); })).then(function(files){
         files=files.filter(Boolean); var mb=files.reduce(function(s,f){ return s+(f.size||0); },0)/1048576; var tooBig=mb>D.maxmb; if(tooBig) files=[];
@@ -195,13 +192,6 @@ var D={"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"breaks":[[500,5],[7
       status('No reply from the order desk. If a confirmation email arrives in the next minute, your order is in - do not place it again. Otherwise retry in a moment or text 734 460 3845.','err');
       setTimeout(function(){ $('go').disabled=false; },45000); });
   }
-
-  // re-auth mode: the tracker sent the customer here after a hold expired; the order's lines/total load, only the card step runs
-  if(REAUTH){ $('main').classList.remove('hidden'); $('empty').classList.add('hidden'); $('lines').innerHTML='<div class="note">Loading your order...</div>';
-    fetch(D.api+'?action=track&o='+encodeURIComponent(REAUTH.code)+'&t='+encodeURIComponent(REAUTH.token)+'&e=&_='+Date.now()).then(function(r){return r.json();}).then(function(j){
-      if(!j||!j.ok){ $('lines').innerHTML='<div class="note warn">Could not load that order. Open your tracker link and try again.</div>'; return; }
-      REAUTH.total=+j.total||0; $('lines').innerHTML='<div class="note" style="color:var(--paper)">Order <b>'+esc(REAUTH.code)+'</b> &middot; '+esc(j.items||'')+'</div>'; $('sub').textContent=money(REAUTH.total); $('tot').textContent=money(REAUTH.total); $('minrow').style.display='none';
-      if(j.name) $('name').value=j.name; if(j.email) $('email').value=j.email; $('go').textContent='Re-authorize card \u2192'; renderCard(); }).catch(function(){}); }
 })();
 </script>
 </body></html>
