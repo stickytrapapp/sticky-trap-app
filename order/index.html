@@ -72,7 +72,7 @@
     <label>Company <b>*</b></label>
     <select id="company" onchange="pickCompany()"><option value="">Choose…</option></select>
     <div id="newCust" class="hidden"><label>New customer name <b>*</b></label><input id="newName" placeholder="Company name as it should print"></div>
-    <div class="row"><div><label>Contact</label><input id="contact"></div><div><label>Phone</label><input id="phone" inputmode="tel" placeholder="734-555-1234" oninput="fmtPhone(this)"></div></div>
+    <div class="row"><div><label>Contact</label><input id="contact"></div><div><label>Phone <b>*</b></label><input id="phone" inputmode="tel" placeholder="734-555-1234" oninput="fmtPhone(this)"></div></div>
     <label>Email <b>*</b></label><input id="email" inputmode="email" placeholder="name@company.com"><div class="hint">This is how they get their tracker link and order updates. Leave it blank only for a walk-in — the job then lives in the staff console only.</div>
     <div class="row"><div><label>Second contact <span class="pill">optional</span></label><input id="contact2" placeholder="name"></div><div><label>Their phone</label><input id="phone2" inputmode="tel" placeholder="734-555-1234" oninput="fmtPhone(this)"></div></div>
     <label>Their email</label><input id="email2" inputmode="email" placeholder="second contact email">
@@ -344,6 +344,7 @@ function submit(){
   var company = isNew ? $('newName').value.trim() : v;
   if(!company){ alert('Pick the company (or type the new customer name).'); return; }
   if(!$('due').value){ alert('Order due date is required.'); return; }
+  if(!$('phone').value.trim()){ alert('Phone is required - every order starts with company, contact, phone and email.'); $('phone').focus(); return; }
   var reorders = []; document.querySelectorAll('#reorders .line').forEach(function(d){ var n = Number(d.querySelector('input').value || 0); if(n > 0) reorders.push({ title: d.dataset.title, qty: n }); });
   var newItems = []; document.querySelectorAll('#newItems .newline').forEach(function(d){ var n = Number(d.querySelector('.q').value || 0), nm = d.querySelector('.n').value.trim(); if(nm && n > 0) newItems.push({ name: nm, qty: n, material: d.querySelector('.m').value, vessel: d.querySelector('.v').value.trim(), texture: d.querySelector('.t').value, unit: d.querySelector('.p').value, white_ink: d.querySelector('.w').value, apply: d.querySelector('.ap').value }); });
   if(!reorders.length && !newItems.length && !$('designOnly').checked){ alert('Set a quantity on at least one item.'); return; }
