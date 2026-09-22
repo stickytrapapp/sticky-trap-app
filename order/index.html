@@ -2,14 +2,14 @@
 <html><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Sticky Trap - New Order</title><meta charset="utf-8"><title>Sticky Trap - New Order</title>
 <style>
-  :root{--bg:#000;--card:#111;--line:#2a2a2a;--ink:#fff;--muted:#9a9a9a;--pink:#FF1FA2;--ok:#2ecc71;--warn:#ffb020}
+  :root{--bg:#fff;--card:#fff;--line:#e2e2e6;--ink:#111;--muted:#6b6b76;--pink:#C2117E;--ok:#1a8f4c;--warn:#a86a00;--soft:#f6f6f8}   /* 9/22 Shane: white page, black lettering */
   *{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 -apple-system,Segoe UI,Roboto,Arial,sans-serif}
   .wrap{max-width:760px;margin:0 auto;padding:16px 14px 90px}
   h1{font-size:22px;margin:6px 0 2px;letter-spacing:.02em} .sub{color:var(--muted);font-size:13px;margin-bottom:14px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin:12px 0}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin:12px 0;box-shadow:0 1px 2px rgba(17,17,17,.05)}
   .card h2{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--pink);margin:0 0 10px}
   label{display:block;font-size:12px;color:var(--muted);margin:10px 0 4px} label b{color:var(--pink)}
-  input,select,textarea{width:100%;background:#000;color:var(--ink);border:1px solid #333;border-radius:8px;padding:11px 10px;font-size:16px}
+  input,select,textarea{width:100%;background:#fff;color:var(--ink);border:1px solid #c9c9d1;border-radius:8px;padding:11px 10px;font-size:16px}
   input:focus,select:focus,textarea:focus{outline:none;border-color:var(--pink)}
   textarea{min-height:64px;resize:vertical}
   .row{display:flex;gap:10px} .row>*{flex:1;min-width:0}
@@ -23,28 +23,39 @@
   .gmeta{font-size:12px;color:var(--muted);font-weight:400} .gqty{margin-left:auto;font-size:12px;color:var(--pink)}
   .grp .line{padding-left:18px}
   .mini{color:var(--pink);cursor:pointer;text-decoration:underline dotted;margin-left:4px}
-  .minibtn{float:right;background:#000;border:1px solid var(--pink);color:var(--pink);border-radius:999px;padding:5px 10px;font-size:12px;cursor:pointer;text-transform:none;letter-spacing:0}
+  .minibtn{float:right;background:#fff;border:1px solid var(--pink);color:var(--pink);border-radius:999px;padding:5px 10px;font-size:12px;cursor:pointer;text-transform:none;letter-spacing:0}
   .row3{display:grid;grid-template-columns:1fr 1fr 1.5fr;gap:8px} .lbl{display:block;font-size:12px;color:var(--muted);margin:4px 0}
   .chokebox{display:grid;grid-template-columns:48px 90px 48px;gap:8px;align-items:center} .chokebox input{text-align:center;font-size:18px;font-weight:700}
-  .stp{background:#000;border:1px solid #444;color:var(--ink);border-radius:10px;font-size:20px;padding:8px 0;cursor:pointer}
+  .stp{background:var(--soft);border:1px solid #c9c9d1;color:var(--ink);border-radius:10px;font-size:20px;padding:8px 0;cursor:pointer}
   .newline{display:grid;grid-template-columns:1fr;gap:6px;padding:10px 0;border-bottom:1px solid var(--line)}
   .newline .g{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+  .newline .nl1{display:grid;grid-template-columns:2fr 84px 1fr 40px;gap:6px}
+  .newline .nl2{display:grid;grid-template-columns:1fr 1.4fr 1fr 1fr 1fr;gap:6px}
+  .minus,.plus{border:1px solid #c9c9d1;background:#fff;color:var(--ink);border-radius:999px;width:40px;height:42px;font-size:22px;line-height:1;cursor:pointer}
+  .minus:hover{border-color:var(--pink);color:var(--pink)}
+  .plus{border-color:var(--pink);color:var(--pink);font-weight:700}
+  .addrow{display:flex;align-items:center;gap:10px;margin-top:10px}
+  @media(max-width:640px){ .newline .nl2{grid-template-columns:1fr 1fr} .newline .nl1{grid-template-columns:1fr 70px 40px} .newline .nl1 .p{grid-column:1/3} }
   .btn{display:inline-block;background:var(--pink);color:#fff;border:0;border-radius:10px;padding:13px 18px;font-size:16px;font-weight:700;cursor:pointer}
-  .btn.ghost{background:transparent;border:1px solid #444;color:var(--ink);font-weight:500}
+  .btn.ghost{background:#fff;border:1px solid #c9c9d1;color:var(--ink);font-weight:500}
   .btn:disabled{opacity:.5}
-  .bar{position:fixed;left:0;right:0;bottom:0;background:#000;border-top:1px solid var(--line);padding:10px 14px;display:flex;gap:10px;justify-content:space-between;align-items:center}
+  .bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);box-shadow:0 -2px 8px rgba(17,17,17,.06);padding:10px 14px;display:flex;gap:10px;justify-content:space-between;align-items:center}
   .tot{font-size:14px;color:var(--muted)} .tot b{color:var(--ink);font-size:18px}
   .hint{font-size:12px;color:var(--muted);margin-top:6px}
   .ok{color:var(--ok)} .warn{color:var(--warn)}
   .hidden{display:none}
-  .pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;background:#222;color:var(--muted);margin-left:6px}
+  .pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;background:var(--soft);border:1px solid var(--line);color:var(--muted);margin-left:6px}
   #gate{max-width:360px;margin:80px auto;text-align:center}
   .spin{color:var(--muted);font-size:14px}
   .chips{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 6px}
-  .chip{border:1px solid #444;border-radius:999px;padding:9px 14px;font-size:14px;color:var(--ink);background:#000;cursor:pointer;user-select:none}
+  .chip{border:1px solid #c9c9d1;border-radius:999px;padding:9px 14px;font-size:14px;color:var(--ink);background:#fff;cursor:pointer;user-select:none}
   .chip.on{background:var(--pink);border-color:var(--pink);color:#fff;font-weight:700}
   .chip.on::before{content:"✓  "}
   .row2{display:grid;grid-template-columns:2fr 1fr;gap:6px}
+  .dline{display:grid;grid-template-columns:1fr 100px 100px 110px;gap:8px;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+  .dline .dl{font-size:15px;font-weight:600}
+  .dline .damt{text-align:right;font-size:16px;font-weight:700}
+  @media(max-width:640px){ .dline{grid-template-columns:1fr 1fr} .dline .dl{grid-column:1/3} }
   </style></head>
 <body>
 <div id="gate" class="wrap">
@@ -78,7 +89,7 @@
     <h2>New items</h2>
     <div class="hint">Anything they've never ordered. Leave price blank to use the menu (or their history if the name matches).</div>
     <div id="newItems"></div>
-    <br><button class="btn ghost" onclick="addNewLine()">+ Add a new item</button>
+    <div class="addrow"><button type="button" class="plus" onclick="addNewLine()" title="Add a line">+</button><span class="hint" style="margin:0">add a line</span></div>
   </div>
 
   <div class="card">
@@ -100,10 +111,10 @@
       <div><label>Tax</label><select id="tax"><option>On file</option><option>6% MI</option><option>Exempt (3372 on file)</option></select></div>
     </div>
     <div class="row">
-      <div><label>Pre-press</label><select id="prepress" onchange="toggleCustom()"><option>On file</option><option>$8 per set</option><option>Waived</option><option>Custom amount</option></select></div>
-      <div><label>File Print Set Up <span id="setupCalc" class="muted"></span></label><div class="row2"><input id="setupMin" type="number" inputmode="numeric" placeholder="min (blank = on file, 0 = waived)" oninput="setupCalc()"><input id="setupRate" type="number" inputmode="decimal" value="75" title="$ per hour" oninput="setupCalc()"></div></div>
+      <div><label>Pre Press $8 <span id="ppCalc" class="muted"></span></label>
+        <input id="prepressCustom" type="number" step="0.01" inputmode="decimal" value="8" placeholder="8" oninput="ppCalc()"></div>
+      <div><label>&nbsp;</label><div class="hint" style="margin:0">Per set. Type your own number, <b>0</b> = waived, blank = the customer's terms on file.</div></div>
     </div>
-    <div id="customWrap" class="hidden"><label>Pre-press $ per set</label><input id="prepressCustom" type="number" step="0.01" inputmode="decimal"></div>
     <label style="margin-top:10px">Send with invoice <span class="pill">leave blank = we decide from the terms</span></label>
     <div class="chips" data-group="attach"><span class="chip" data-v="NDA">NDA</span><span class="chip" data-v="ACH form">ACH form</span><span class="chip" data-v="Tax form 3372">Tax form 3372</span><span class="chip" data-v="3rd party direct to print">3rd party direct to print</span><span class="chip" data-v="3rd party UV prints">3rd party UV prints</span></div>
   </div>
@@ -112,10 +123,16 @@
     <h2>Art &amp; design</h2>
     <div class="row">
       <div><label>Art status</label><select id="art"><option>Have art</option><option>Need new art</option><option>Update existing</option></select></div>
-      <div><label>Design hours @ $75</label><input id="designHrs" type="number" step="0.25" inputmode="decimal" placeholder="0"></div>
+      <div><label>&nbsp;</label><div class="hint" style="margin:0">Design bills as its own line on the invoice.</div></div>
+    </div>
+    <div class="dline">
+      <div class="dl">Design time</div>
+      <input id="designHrs" type="number" step="0.25" inputmode="decimal" placeholder="hours" oninput="designCalc()">
+      <input id="designRate" type="number" step="1" inputmode="decimal" value="75" title="$ per hour" oninput="designCalc()">
+      <div class="damt" id="designAmt">&mdash;</div>
     </div>
     <div class="row">
-      <div><label>Paid so far $ (no deposits - only if already paid)</label><input id="deposit" type="number" step="0.01" inputmode="decimal"></div>
+      <div><label>Deposit received $</label><input id="deposit" type="number" step="0.01" inputmode="decimal"></div>
       <div><label style="margin-top:22px"><input type="checkbox" id="designOnly" style="width:auto;margin-right:8px">Design only (nothing printed)</label></div>
     </div>
   </div>
@@ -127,12 +144,12 @@
     <label>Raised texture for the whole order <span class="pill">lines can override</span></label>
     <div class="chips" data-group="texture" data-one="1"><span class="chip" data-v="Flat">Flat</span><span class="chip" data-v="1">1 · Spot Gloss</span><span class="chip" data-v="2">2 · Standard</span><span class="chip" data-v="3">3 · Pro</span></div>
     <label>Layers &amp; services</label>
-    <div class="chips" data-group="opts"><span class="chip" data-v="White ink layer">White ink layer</span><span class="chip" data-v="We apply to jars">We apply to jars</span><span class="chip" data-v="Test print first">Test print first</span><span class="chip" data-v="Proof before printing">Proof before printing</span></div>
+    <div class="chips" data-group="opts"><span class="chip" data-v="White ink layer">White ink layer</span><span class="chip" data-v="We apply to jars">We apply to jars</span></div>
     <label>Choke <span class="pill">-10 to +10, 0 = none</span></label>
     <div class="chokebox"><button type="button" class="stp" onclick="chokeStep(-1)">&minus;</button><input type="number" id="chokeN" min="-10" max="10" step="1" value="0" inputmode="numeric" onchange="chokeClamp()"><button type="button" class="stp" onclick="chokeStep(1)">+</button></div>
     <label>Cut</label>
-    <div class="chips" data-group="cut" data-one="1"><span class="chip" data-v="Individual">Individual</span><span class="chip" data-v="On sheets">On sheets</span><span class="chip" data-v="Kiss-cut">Kiss-cut</span></div>
-    <label>Other press notes</label><textarea id="pressNotes" placeholder="anything else the press needs to know"></textarea>
+    <div class="chips" data-group="cut" data-one="1"><span class="chip" data-v="Individual">Individual</span><span class="chip" data-v="Kiss-cut">Kiss-cut</span><span class="chip" data-v="On sheets">On sheets</span></div>
+    <label>Anything else the Print Dep. needs to know</label><textarea id="pressNotes" placeholder="choke by eye, trim tight, run the holo first, hold for a sample&hellip;"></textarea>
   </div>
 
   <div class="card">
@@ -177,9 +194,9 @@ function catalogLoad(pin){
   }).catch(function(){ return api('GET', { action: 'catalog', pin: pin }); });
 }
 function $(id){ return document.getElementById(id); }
-function setupAmt() { var mn = parseFloat($('setupMin').value), rt = parseFloat($('setupRate').value || '75'); return isNaN(mn) ? null : Math.round(mn / 60 * rt * 100) / 100; }
-function setupLabel() { var a = setupAmt(); return a === null ? 'On file' : (a === 0 ? 'Waived' : 'On file'); }
-function setupCalc() { var a = setupAmt(); $('setupCalc').textContent = a === null ? '(on file)' : (a === 0 ? '- waived' : '= $' + a.toFixed(2) + ' (' + $('setupMin').value + ' min @ $' + (parseFloat($('setupRate').value) || 75) + '/hr)'); if (typeof total === 'function') total(); }
+// retired 9/22 (File Print Set Up came off the menu): function setupAmt() { var mn = parseFloat($('setupMin').value), rt = parseFloat($('setupRate').value || '75'); return isNaN(mn) ? null : Math.round(mn / 60 * rt * 100) / 100; }
+// retired 9/22 (File Print Set Up came off the menu): function setupLabel() { var a = setupAmt(); return a === null ? 'On file' : (a === 0 ? 'Waived' : 'On file'); }
+// retired 9/22 (File Print Set Up came off the menu): function setupCalc() { var a = setupAmt(); $('setupCalc').textContent = a === null ? '(on file)' : (a === 0 ? '- waived' : '= $' + a.toFixed(2) + ' (' + $('setupMin').value + ' min @ $' + (parseFloat($('setupRate').value) || 75) + '/hr)'); if (typeof total === 'function') total(); }
 function fmtPhone(el) { var d = el.value.replace(/\D/g, ''); if (d.length === 11 && d.charAt(0) === '1') d = d.slice(1); if (d.length > 10 || /[a-zA-Z]/.test(el.value)) return; el.value = d.length > 6 ? d.slice(0,3) + '-' + d.slice(3,6) + '-' + d.slice(6) : d.length > 3 ? d.slice(0,3) + '-' + d.slice(3) : d; }
 function money(x){ return '$' + (Math.round(x*100)/100).toFixed(2); }
 function unlock(){
@@ -190,7 +207,7 @@ function unlock(){
     $('cacheNote').textContent = CAT.customers.length + ' customers · ' + CAT.skus.length + ' items from invoice history';
     var sel = $('company'); sel.innerHTML = '<option value="">Choose…</option><option value="__new__">New Customer</option>';
     CAT.customers.forEach(function(c){ var o = document.createElement('option'); o.value = c.name; o.textContent = c.name; sel.appendChild(o); });
-    addNewLine();
+    addNewLine(); addNewLine(); addNewLine();   // 9/22 Shane: start with lines ready to fill
     try { localStorage.setItem('st_pin', PIN); } catch(e){}
   }).catch(function(e){ $('gateMsg').textContent = 'Error: ' + e.message; });
 }
@@ -204,7 +221,7 @@ function pickCompany(){
   var pay = (c && c.payment || '').toLowerCase();
   $('payment').value = c ? (c.pickup || /pick/.test(pay) ? 'Pay at pick-up' : /square/.test(pay) ? 'Square' : /ach|wire/.test(pay) ? 'ACH / Wire' : /cash/.test(pay) ? 'Cash' : 'On file') : 'Square';
   $('tax').value = c ? (/exempt/i.test(c.tax || '') ? 'Exempt (3372 on file)' : '6% MI') : '6% MI';
-  $('prepress').value = 'On file'; $('setupMin').value = c ? '' : '40'; $('setupRate').value = '75'; setupCalc();
+  $('prepressCustom').value = '8'; ppCalc();
   $('custNote').innerHTML = c ? ('Last invoice ' + (c.last_invoice || '—') + ' on ' + (c.last_date || '—') + ' · pays: ' + (c.payment || 'unknown')) : (isNew ? 'New customer: Square, 6% tax, $50 file set-up unless you change them.' : '');
   // reorder lines
   var box = $('reorders'); box.innerHTML = '';
@@ -238,12 +255,26 @@ function pickCompany(){
   totals();
 }
 function addNewLine(){
+  // 9/22 Shane: lines laid out like the work order (SKU / QTY / Material / Vessel / Texture / White ink / Apply),
+  // three ready on open, a minus on each row and a plus under the list.
   var d = document.createElement('div'); d.className = 'newline';
-  d.innerHTML = '<div class="g" style="grid-template-columns:2fr 1fr 1fr"><input placeholder="Item name" class="n"><input type="number" inputmode="numeric" min="0" placeholder="qty" class="q" oninput="totals()"><input type="number" step="0.01" inputmode="decimal" placeholder="price (blank = menu)" class="p" oninput="totals()"></div>'
-              + '<div class="g"><select class="m"><option value="">Material</option><option>White</option><option>Holo</option><option>Gold</option></select>'
+  d.innerHTML = '<div class="nl1"><input placeholder="Item name" class="n">'
+              + '<input type="number" inputmode="numeric" min="0" placeholder="qty" class="q" oninput="totals()">'
+              + '<input type="number" step="0.01" inputmode="decimal" placeholder="price (blank = menu)" class="p" oninput="totals()">'
+              + '<button type="button" class="minus" title="Remove this line" onclick="delNewLine(this)">−</button></div>'
+              + '<div class="nl2"><select class="m"><option value="">Material</option><option>White</option><option>Holo</option><option>Gold</option></select>'
               + '<input placeholder="Vessel / size (Miron 5 ml, 3&quot; Slap, 3x3.8)" class="v">'
-              + '<select class="t"><option value="">Texture</option><option value="Flat">Flat</option><option value="1">1 · Spot Gloss</option><option value="2">2 · Standard</option><option value="3">3 · Pro</option></select></div>';
+              + '<select class="t"><option value="">Texture</option><option value="Flat">Flat</option><option value="1">1 &middot; Spot Gloss</option><option value="2">2 &middot; Standard</option><option value="3">3 &middot; Pro</option></select>'
+              + '<select class="w"><option value="">White ink</option><option value="Y">White ink: Y</option><option value="N">White ink: N</option></select>'
+              + '<select class="ap"><option value="">Apply</option><option value="Y">Apply: Y</option><option value="N">Apply: N</option></select></div>';
   $('newItems').appendChild(d);
+  return d;
+}
+function delNewLine(b){
+  var rows = document.querySelectorAll('#newItems .newline');
+  if(rows.length <= 1){ var d = b.closest('.newline'); d.querySelectorAll('input').forEach(function(i){ i.value = ''; }); d.querySelectorAll('select').forEach(function(s){ s.value = ''; }); }
+  else { b.closest('.newline').remove(); }
+  totals();
 }
 document.querySelectorAll('.chips').forEach(function(g){ g.addEventListener('click', function(e){ var c = e.target.closest('.chip'); if(!c) return; if(g.dataset.one){ g.querySelectorAll('.chip').forEach(function(x){ if(x !== c) x.classList.remove('on'); }); } c.classList.toggle('on'); }); });
 function finishOrder(){ var g = Number($('glossN').value || 0), m = Number($('matteN').value || 0); var sel = $('finishTop'); sel.disabled = !(g > 0 && m > 0); if(sel.disabled) sel.value = ''; }
@@ -263,11 +294,11 @@ function asNewItem(a){   // 9/16 Shane: a size or material we have not printed f
 function resetForm(){   // 9/16 Shane: reset with an are-you-sure; keeps the PIN + catalog, clears everything typed
   if(!confirm('Clear the whole order and start over?')) return;
   $('company').value = ''; pickCompany();
-  document.querySelectorAll('#app input:not([type=hidden]), #app textarea').forEach(function(el){ if(el.type === 'checkbox'){ el.checked = false; } else if(el.id === 'setupRate'){ el.value = '75'; } else if(el.id === 'chokeN'){ el.value = '0'; } else { el.value = ''; } });
+  document.querySelectorAll('#app input:not([type=hidden]), #app textarea').forEach(function(el){ if(el.type === 'checkbox'){ el.checked = false; } else if(el.id === 'prepressCustom'){ el.value = '8'; } else if(el.id === 'designRate'){ el.value = '75'; } else if(el.id === 'chokeN'){ el.value = '0'; } else { el.value = ''; } });
   document.querySelectorAll('#app select').forEach(function(el){ el.selectedIndex = 0; });
   document.querySelectorAll('.chip.on').forEach(function(c){ c.classList.remove('on'); });
-  $('newItems').innerHTML = ''; addNewLine(); $('result').classList.add('hidden'); $('result').innerHTML = '';
-  $('submitBtn').disabled = false; $('submitBtn').textContent = 'Submit order'; finishOrder(); setupCalc(); totals(); window.scrollTo(0, 0);
+  $('newItems').innerHTML = ''; addNewLine(); addNewLine(); addNewLine(); $('result').classList.add('hidden'); $('result').innerHTML = '';
+  $('submitBtn').disabled = false; $('submitBtn').textContent = 'Submit order'; finishOrder(); ppCalc(); designCalc(); totals(); window.scrollTo(0, 0);
 }
 function openPicker(el){ try { if(el.showPicker) el.showPicker(); } catch(e){} }   // 9/16 Shane: tap anywhere on the date = calendar pops up
 function chips(group){ return [].map.call(document.querySelectorAll('.chips[data-group="' + group + '"] .chip.on'), function(c){ return c.dataset.v; }); }
@@ -282,7 +313,22 @@ function printSpecs(){
   var n = $('pressNotes').value.trim(); if(n) L.push('NOTES: ' + n);
   return L.join(String.fromCharCode(10));
 }
-function toggleCustom(){ $('customWrap').classList.toggle('hidden', $('prepress').value !== 'Custom amount'); }
+function designCalc(){   // 9/22 Shane: "the design time and price should be a separate line"
+  var h = parseFloat($('designHrs').value), r = parseFloat($('designRate').value || '75');
+  $('designAmt').textContent = (isNaN(h) || h <= 0) ? '—' : '$' + (Math.round(h * r * 100) / 100).toFixed(2);
+  if (typeof totals === 'function') totals();
+}
+function ppCalc(){   // 9/22 Shane: "rename print file set up to Pre Press $8 with the ability to put our own number in"
+  var v = $('prepressCustom').value.trim();
+  $('ppCalc').textContent = v === '' ? '(terms on file)' : (Number(v) === 0 ? '- waived' : (Number(v) === 8 ? '' : '= $' + Number(v).toFixed(2) + ' a set'));
+}
+function prepressLabel(){   // the intake board still takes the four labels; the number decides which
+  var v = $('prepressCustom').value.trim();
+  if (v === '') return 'On file';
+  if (Number(v) === 0) return 'Waived';
+  if (Number(v) === 8) return '$8 per set';
+  return 'Custom amount';
+}
 $('delivery').addEventListener('change', function(){ $('shipWrap').classList.toggle('hidden', this.value !== 'Ship'); });
 function totals(){
   var q = 0, a = 0, unknown = false;
@@ -299,12 +345,12 @@ function submit(){
   if(!company){ alert('Pick the company (or type the new customer name).'); return; }
   if(!$('due').value){ alert('Order due date is required.'); return; }
   var reorders = []; document.querySelectorAll('#reorders .line').forEach(function(d){ var n = Number(d.querySelector('input').value || 0); if(n > 0) reorders.push({ title: d.dataset.title, qty: n }); });
-  var newItems = []; document.querySelectorAll('#newItems .newline').forEach(function(d){ var n = Number(d.querySelector('.q').value || 0), nm = d.querySelector('.n').value.trim(); if(nm && n > 0) newItems.push({ name: nm, qty: n, material: d.querySelector('.m').value, vessel: d.querySelector('.v').value.trim(), texture: d.querySelector('.t').value, unit: d.querySelector('.p').value }); });
+  var newItems = []; document.querySelectorAll('#newItems .newline').forEach(function(d){ var n = Number(d.querySelector('.q').value || 0), nm = d.querySelector('.n').value.trim(); if(nm && n > 0) newItems.push({ name: nm, qty: n, material: d.querySelector('.m').value, vessel: d.querySelector('.v').value.trim(), texture: d.querySelector('.t').value, unit: d.querySelector('.p').value, white_ink: d.querySelector('.w').value, apply: d.querySelector('.ap').value }); });
   if(!reorders.length && !newItems.length && !$('designOnly').checked){ alert('Set a quantity on at least one item.'); return; }
   var payload = { pin: PIN, company: company, newCustomer: isNew, contact: $('contact').value.trim(), email: $('email').value.trim(), phone: $('phone').value.trim(), contact2: $('contact2').value.trim(), email2: $('email2').value.trim(), phone2: $('phone2').value.trim(),
     due: $('due').value, delivery: $('delivery').value, ship_cost: $('ship').value, rush: $('rush').value.trim(),
-    payment: $('payment').value, tax: $('tax').value, prepress: $('prepress').value, prepress_custom: $('prepressCustom').value, setup: setupLabel(), setup_min: $('setupMin').value.trim(), setup_rate: $('setupRate').value.trim(),
-    art_status: $('art').value, design_hrs: $('designHrs').value, deposit: $('deposit').value, design_only: $('designOnly').checked,
+    payment: $('payment').value, tax: $('tax').value, prepress: prepressLabel(), prepress_custom: $('prepressCustom').value.trim(), setup: 'On file', setup_min: '', setup_rate: '',
+    art_status: $('art').value, design_hrs: $('designHrs').value, design_rate: $('designRate').value.trim(), deposit: $('deposit').value, design_only: $('designOnly').checked,
     note: $('note').value.trim(), callouts: printSpecs(), attach: chips('attach'), reorders: reorders, newItems: newItems };
   $('submitBtn').disabled = true; $('submitBtn').textContent = 'Sending…';
   api('POST', payload).then(function(r){
