@@ -1997,7 +1997,7 @@
 
   if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}
   /* ---- Trap Points today line (2026-09-18): reads what the games already keep on this phone - tp_ledger (points), tp_streak, tp_daily (this
-          6-hour board), tp_goal (target prize) - and says the one thing that matters now. Prize costs mirror /game/ CAT (250 / 600 / 2,000 since 2026-09-22 - keep both in step). ---- */
+          daily board), tp_goal (target prize) - and says the one thing that matters now. Prize costs mirror /game/ CAT (250 / 600 / 2,000 since 2026-09-22 - keep both in step). ---- */
   (function(){ var el=document.getElementById('tpline'), tt=document.getElementById('tlT'), tc=document.getElementById('tlC'); if(!el) return;
     var PRIZES=[['12 slaps',250],['2 lighters',600],['1 embroidered hoodie',2000]];
     function rj(k,d){ try{ return JSON.parse(localStorage.getItem(k)||'null')||d; }catch(e){ return d; } }
@@ -2006,7 +2006,7 @@
       var bal=0, today=0, d0=new Date(); d0.setHours(0,0,0,0);
       led.forEach(function(e){ if(e.pts>0){ bal+=e.pts-(e.used||0); if(e.ts>=d0.getTime()) today+=e.pts; } });
       var played=led.length>0||!!localStorage.getItem('tp_handle');
-      var d=new Date(), slot=Math.floor((d.getTime()-d.getTimezoneOffset()*60000)/(6*3600e3)), boardDone=daily&&daily.day===slot&&daily.earned!=null;
+      var d=new Date(), slot=Math.floor((d.getTime()-d.getTimezoneOffset()*60000)/(24*3600e3)), boardDone=daily&&daily.day===slot&&daily.earned!=null;   // 2026-09-22: one board a DAY (was 6-hour slots) - must match /game/ SLOT_HOURS
       var dayN=Math.floor(Date.now()/864e5), sn=(streak.last===dayN||streak.last===dayN-1)?(streak.n||0):0;
       var pick=PRIZES.filter(function(x){return x[0]===goal;})[0]||PRIZES.filter(function(x){return bal<x[1];})[0]||PRIZES[PRIZES.length-1];
       var left=Math.max(0,pick[1]-bal);

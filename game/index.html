@@ -557,14 +557,15 @@
       <div class="board-wrap">
         <div class="board" id="board" aria-label="Daily shard puzzle"></div>
         <div class="combo-flash" id="combo"></div>
-        <div class="startgate" id="startGate"><button class="sf-primary" id="startBtn">▶ Start · 60s</button><div class="sg-sub" id="sgSub"></div></div>
+        <div class="startgate" id="startGate"><button class="sf-primary" id="startBtn">▶ Start the board</button><div class="sg-sub" id="sgSub"></div></div>
       </div>
 
       <div class="meters">
         <div class="meter"><div class="k">Score</div><div class="v cy" id="score">0</div></div>
-        <div class="meter"><div class="k">Time</div><div class="v go" id="time">60s</div></div>
+        <div class="meter"><div class="k">Tiles left</div><div class="v go" id="time">63</div></div>
       </div>
 
+      <div style="display:flex;justify-content:flex-end;margin:8px 0 0"><button type="button" id="undoBtn" style="padding:9px 16px;border-radius:11px;border:1px solid rgba(255,255,255,.14);background:#14141b;color:#fff;font:inherit;font-weight:800;font-size:13px;cursor:pointer">Undo (3)</button></div>
       <div class="goalwrap">
         <div class="goalrow"><span id="goallbl">Next star</span><span><b id="gcur">0</b> / <b id="parval">3,000</b></span></div>
         <div class="bar"><i id="goalbar"></i></div>
@@ -572,10 +573,11 @@
       <div class="rules">
         <b>How to play</b>
         <ol>
-          <li>Tap <b>2+ touching shards</b> of the same color to clear them.</li>
-          <li><b>Bigger groups score way more</b> — chain big ones for a combo. Time is scarce: only a 6+ group at max combo adds a second, 8 seconds a run at most.</li>
-          <li><b>60 seconds</b> a try, <b>3 tries</b> — best score counts.</li>
-          <li>A <b>new board every 6 hours</b> — same board for everyone, so the ladder is fair.</li>
+          <li>Tap <b>2+ touching shards</b> of the same color to clear them. <b>Nothing refills</b> — what you pop is gone.</li>
+          <li><b>Big groups are everything:</b> a group of 9 pays 49, nine pairs pay nothing. Save your biggest color for last.</li>
+          <li>No clock. <b>3 tries</b> on the same board, <b>3 undos</b> each — your best try counts.</li>
+          <li>Clear every tile for <b>+1,000</b>. Par is worked out for that exact board, so a hard board asks less.</li>
+          <li>A <b>new board every day</b> — same board for everyone, so the ladder is fair.</li>
         </ol>
       </div>
       <div class="promo-card" id="promoCard" hidden></div>
@@ -657,7 +659,7 @@
       <div class="card" style="padding:4px 14px">
         <div class="rw">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#12C4FF" stroke-width="1.7"><path d="M5 3l14 9-14 9z"/></svg></div>
-          <div class="tx"><b>Trap puzzle</b><small>New board every 6 hours <span class="pill cy">up to +15 a board</span></small></div>
+          <div class="tx"><b>Trap puzzle</b><small>A new board every day <span class="pill cy">up to +15 a board</span></small></div>
           <div class="earn-amt mid">+15</div>
         </div>
         <div class="rw">
@@ -854,35 +856,70 @@
   }
 
   // ---- daily challenge (timed, 3 tries, best counts) ----
-  var COLS=6, ROWS=7, COLORS=3, TIME=60, ATTEMPTS=3;
-  // 2026-09-22 star ladder, set from 400 simulated boards per skill level (best of 3 tries): a steady player lands ~3-4k, a quick one ~10k,
-  // an expert ~17k. Old ladder was 6,000 / 8,400 / 12,000 -> normal players scored NOTHING and fast tappers maxed it every time.
-  var STAR=[3000,9000,18000], PAR=STAR[0];   // PAR = 1 star = 'par to beat' in free play
+  // 2026-09-22 (Shane: 'i like the new one, make it the daily board'): the board is FINITE - nothing refills, so the score comes from the
+  // ORDER you clear, not how fast you tap. 7x9 = 63 tiles, 4 colours (3 clears itself, 5 strands ~15 tiles), pop 2+, (n-2)^2 a pop,
+  // clear the board +1,000. No clock. Par is solved for each board below, so a hard board asks less and an easy one asks more.
+  var COLS=7, ROWS=9, COLORS=4, ATTEMPTS=3, UNDOS=3;
+  var T=[0.50,0.75,0.95];   // 1 / 2 / 3 stars as a share of par
   var grid=[], board=document.getElementById('board');
   var dayNum=Math.floor(Date.now()/864e5);
-  // Boards live in 6-hour LOCAL slots (00/06/12/18): everyone gets the same board in a slot; a new one unlocks at the next boundary.
-  var SLOT_HOURS=6, TRAP_BASE=81956;   // TRAP_BASE keeps the Trap # sequence continuous from the daily era (#859 on 2026-09-08)
+  // 2026-09-22: ONE board a day again (6-hour slots suited the old arcade board; a puzzle wants a daily ritual and a ladder that means something).
+  var SLOT_HOURS=24, TRAP_BASE=19800;   // set 2026-09-22 so the Trap # carries on from the 6-hour era (#917 that day) instead of jumping back
   function slotNow(){ var d=new Date(); return Math.floor((d.getTime()-d.getTimezoneOffset()*60000)/(SLOT_HOURS*3600e3)); }
   var slotNum=slotNow(), trapNum=slotNum-TRAP_BASE;
-  var dseed=1, attempt=1, bestScore=0, dayScore=0, timeLeft=TIME, timerId=null, playing=false, dayDone=false, combo=0;
-  var bonusUsed=0;   // bonus seconds granted this attempt (cap 8)
+  var dseed=1, attempt=1, bestScore=0, dayScore=0, playing=false, dayDone=false;
+  var PAR=1, undos=UNDOS, moves=0, hist=[];   // hist = board snapshots for undo
   function drnd(){dseed=(dseed*1103515245+12345)&0x7fffffff; return dseed/0x7fffffff;}
   function rcolor(){return Math.floor(drnd()*COLORS);}
   var MODE='daily', FREE={day:0,bonus:0,seed:1}, FREE_CAP=5;
   try{ var _f=JSON.parse(localStorage.getItem('tp_free')||'null'); if(_f&&_f.day===Math.floor(Date.now()/864e5)) FREE=_f; }catch(e){}
   function saveFree(){ try{ localStorage.setItem('tp_free',JSON.stringify({day:Math.floor(Date.now()/864e5),bonus:FREE.bonus,seed:FREE.seed})); }catch(e){} }
-  function rebuildBoard(){
-    dseed= MODE==='free' ? (FREE.seed>>>0||12345) : ((slotNum*2654435761)>>>0 || 12345);
-    grid=[]; for(var r=0;r<ROWS;r++){grid.push([]); for(var c=0;c<COLS;c++)grid[r][c]=rcolor();}
-    draw();
+  function buildGrid(s){ dseed=(s>>>0)||12345; var g=[]; for(var r=0;r<ROWS;r++){ g.push([]); for(var c=0;c<COLS;c++) g[r][c]=rcolor(); } return g; }
+  function boardSeed(){ return MODE==='free' ? (FREE.seed>>>0||12345) : ((slotNum*2654435761)>>>0 || 12345); }
+  function rebuildBoard(){ var s=boardSeed(); grid=buildGrid(s); PAR=solvePar(s); moves=0; undos=UNDOS; hist=[]; draw(); }
+
+  // ---- scoring + the settle rule (tiles fall, then empty columns slide left) ----
+  function popScore(n){ return (n-2)*(n-2); }
+  function endBonus(n){ return n===0 ? 1000 : Math.max(0,500-n*25); }
+  function tilesLeft(g){ var n=0; for(var r=0;r<ROWS;r++) for(var c=0;c<COLS;c++) if(g[r][c]!==null) n++; return n; }
+  function groupsOf(g){ var seen={}, res=[];
+    for(var r=0;r<ROWS;r++) for(var c=0;c<COLS;c++){ if(g[r][c]===null||seen[r+','+c]) continue;
+      var gr=groupIn(g,r,c); for(var i=0;i<gr.length;i++) seen[gr[i][0]+','+gr[i][1]]=1; if(gr.length>=2) res.push(gr); }
+    return res; }
+  function groupIn(g,r,c){ var col=g[r][c]; if(col===null) return [];
+    var seen={}, st=[[r,c]], out=[];
+    while(st.length){ var q=st.pop(), k=q[0]+','+q[1]; if(seen[k]) continue; seen[k]=1;
+      if(q[0]<0||q[1]<0||q[0]>=ROWS||q[1]>=COLS) continue; if(g[q[0]][q[1]]!==col) continue;
+      out.push(q); st.push([q[0]+1,q[1]],[q[0]-1,q[1]],[q[0],q[1]+1],[q[0],q[1]-1]); }
+    return out; }
+  function settleGrid(g){
+    for(var c=0;c<COLS;c++){ var col=[]; for(var r=ROWS-1;r>=0;r--) if(g[r][c]!==null) col.push(g[r][c]);
+      for(var r2=ROWS-1,i=0;r2>=0;r2--,i++) g[r2][c]= i<col.length?col[i]:null; }
+    var w=0;
+    for(var c2=0;c2<COLS;c2++){ var empty=true; for(var r3=0;r3<ROWS;r3++) if(g[r3][c2]!==null) empty=false;
+      if(!empty){ if(w!==c2) for(var r4=0;r4<ROWS;r4++){ g[r4][w]=g[r4][c2]; g[r4][c2]=null; } w++; } } }
+
+  // ---- par for THIS board: play it out once with a heuristic (save the commonest colour for last) and 12 times at random, take the best.
+  //      One heuristic alone was too soft - random play beat it on 39% of boards. Everyone gets the same par because the board is the same.
+  function playout(s,mode){
+    var save=dseed, g=buildGrid(s), sc=0;
+    for(;;){ var gs=groupsOf(g); if(!gs.length) break; var pick;
+      if(mode==='rand'){ pick=gs[Math.floor(Math.random()*gs.length)]; }
+      else { var count={}; for(var r=0;r<ROWS;r++) for(var c=0;c<COLS;c++){ var v=g[r][c]; if(v!==null) count[v]=(count[v]||0)+1; }
+        var dom=Object.keys(count).sort(function(a,b){ return count[b]-count[a]; })[0];
+        var other=gs.filter(function(gr){ return String(g[gr[0][0]][gr[0][1]])!==dom; });
+        pick=(other.length?other:gs).sort(function(a,b){ return b.length-a.length; })[0]; }
+      sc+=popScore(pick.length); for(var i=0;i<pick.length;i++) g[pick[i][0]][pick[i][1]]=null; settleGrid(g); }
+    dseed=save; return sc+endBonus(tilesLeft(g));
   }
+  function solvePar(s){ var m=playout(s,'smart'); for(var i=0;i<12;i++) m=Math.max(m,playout(s,'rand')); return Math.max(1,m); }
   function riskCheck(){ var el=document.getElementById('riskNote'); if(!el) return; var d=Math.floor(Date.now()/864e5), h=new Date().getHours();
     var live=STREAK.last===d-1&&(STREAK.n||0)>=2&&!dayDone&&h>=17; el.hidden=!live; if(live) document.getElementById('riskN').textContent=STREAK.n; }
   window.__riskCheck=riskCheck;
   function initDaily(){
-    attempt=1; bestScore=0; dayScore=0; dayDone=false; timeLeft=TIME; bonusUsed=0; playing=false; combo=0;
+    attempt=1; bestScore=0; dayScore=0; dayDone=false; playing=false;
     var pn=document.getElementById('pnum'); if(pn)pn.textContent='#'+trapNum;
-    var pv=document.getElementById('parval'); if(pv)pv.textContent=fmt(STAR[0]);
+    var pv=document.getElementById('parval'); if(pv)pv.textContent=fmt(Math.round(PAR*T[0]));
     var _d=null; try{_d=JSON.parse(localStorage.getItem('tp_daily')||'null');}catch(e){}
     if(_d && _d.day===slotNum){ dayDone=true; bestScore=_d.best||0; }
     setTimeout(riskCheck,0);
@@ -890,26 +927,27 @@
   }
   function setStat(){
     document.getElementById('score').textContent=fmt(dayScore);
-    document.getElementById('time').textContent=timeLeft+'s';
+    var tl=document.getElementById('time'); if(tl) tl.textContent=tilesLeft(grid);
+    var ub=document.getElementById('undoBtn'); if(ub){ ub.textContent='Undo ('+undos+')'; ub.disabled=(!playing||undos<=0||!hist.length); }
     var a=document.getElementById('attN'); if(a)a.textContent=attempt;
     var best= MODE==='free' ? dayScore : Math.max(bestScore,dayScore);
     document.getElementById('gcur').textContent=fmt(best);
-    // the bar chases the next star you have not got yet (was: a flat par, so most players watched a bar that never moved past 60%)
-    var si=0; while(si<STAR.length&&best>=STAR[si]) si++;
+    // the bar chases the next star on THIS board (par is solved per board, so the target moves with the puzzle)
+    var ST=[PAR*T[0],PAR*T[1],PAR*T[2]], si=0; while(si<3&&best>=ST[si]) si++;
     var lbl=document.getElementById('goallbl'), pv2=document.getElementById('parval');
-    if(si>=STAR.length){ if(lbl)lbl.textContent='★★★ maxed'; if(pv2)pv2.textContent=fmt(STAR[STAR.length-1]);
+    if(si>=3){ if(lbl)lbl.textContent='★★★ all three'; if(pv2)pv2.textContent=fmt(Math.round(ST[2]));
       document.getElementById('goalbar').style.width='100%'; }
-    else { if(lbl)lbl.textContent=(si===0?'First star':si===1?'Second star':'Third star'); if(pv2)pv2.textContent=fmt(STAR[si]);
-      var from=si?STAR[si-1]:0; document.getElementById('goalbar').style.width=Math.min(100,(best-from)/(STAR[si]-from)*100)+'%'; }
+    else { if(lbl)lbl.textContent=(si===0?'First star':si===1?'Second star':'Third star'); if(pv2)pv2.textContent=fmt(Math.round(ST[si]));
+      var from=si?ST[si-1]:0; document.getElementById('goalbar').style.width=Math.max(0,Math.min(100,(best-from)/(ST[si]-from)*100))+'%'; }
   }
   function showGate(){
     var g=document.getElementById('startGate'); if(!g)return; g.classList.remove('hide');
     var btn=document.getElementById('startBtn'), sub=document.getElementById('sgSub');
-    if(MODE==='free'){ if(btn){btn.disabled=false; btn.classList.remove('done'); btn.textContent='\u25B6 Free play \u00b7 '+TIME+'s';}
-      if(sub) sub.textContent='Unlimited boards \u00b7 beat par for +1 point ('+FREE.bonus+'/'+FREE_CAP+' today) \u00b7 not ranked'; return; }
+    if(MODE==='free'){ if(btn){btn.disabled=false; btn.classList.remove('done'); btn.textContent='\u25B6 Free play \u00b7 new board';}
+      if(sub) sub.textContent='Unlimited boards \u00b7 clear one past the first star for +1 point ('+FREE.bonus+'/'+FREE_CAP+' today) \u00b7 not ranked'; return; }
     if(dayDone){ if(btn){btn.textContent='✓ Played this board'; btn.disabled=true; btn.classList.add('done'); } if(sub)sub.textContent=(bestScore>0?('Your score '+fmt(bestScore)+' · '):'')+'New board in '+nextIn()+' (Trap #'+(trapNum+1)+')'; return; }
     if(btn){btn.disabled=false; btn.classList.remove('done');}
-    if(btn)btn.textContent=(attempt===1?'▶ Start · '+TIME+'s':'▶ Play again · '+TIME+'s');
+    if(btn)btn.textContent=(attempt===1?'▶ Start the board':'▶ Try '+attempt+' of 3 · same board');
     if(sub)sub.textContent=(attempt===1?'3 tries — your best score counts.':('Best so far '+fmt(bestScore)+' · try '+attempt+' of 3'));
   }
   function showCombo(mult,id,bonus){ var el=document.getElementById(id||'combo'); if(!el)return;
@@ -922,43 +960,41 @@
     while(stack.length){var q=stack.pop(),k=q[0]+','+q[1]; if(seen[k])continue; seen[k]=1;
       if(q[0]<0||q[1]<0||q[0]>=ROWS||q[1]>=COLS)continue; if(grid[q[0]][q[1]]!==col)continue;
       out.push(q); stack.push([q[0]+1,q[1]],[q[0]-1,q[1]],[q[0],q[1]+1],[q[0],q[1]-1]);} return out; }
+  function snap(){ hist.push({g:grid.map(function(r){return r.slice();}),s:dayScore,m:moves}); if(hist.length>15) hist.shift(); }
   function onTap(){ if(!playing)return; var r=+this.dataset.r,c=+this.dataset.c; if(grid[r][c]===null)return;
     var g=group(r,c); if(g.length<2)return;
+    snap();
     g.forEach(function(q){var el=board.children[q[0]*COLS+q[1]]; if(el)el.classList.add('pop');});
-    var sz=g.length; if(sz>=4){combo=Math.min(4,combo+1);}else{combo=0;}
-    var mult=1+combo*0.5, gained=Math.round(sz*sz*mult);
-    // Shane 2026-09-15 ('make it harder to tack time on'): time only comes from a BIG group (6+) while the combo is maxed, +1 s each, and at most
-    // 8 bonus seconds per attempt; clock capped at TIME+8. (9/11 rule was any group at max combo, +2 s, cap TIME+15.)
-    var bonus=(combo>=4&&sz>=6&&bonusUsed<8)?1:0;
-    if(bonus){ timeLeft=Math.min(TIME+8,timeLeft+bonus); bonusUsed+=bonus; }
-    if(combo>=1)showCombo(mult,'combo',bonus);
-    setTimeout(function(){ g.forEach(function(q){grid[q[0]][q[1]]=null;}); collapse(); dayScore+=gained; setStat(); draw(); },140); }
-  function collapse(){ for(var c=0;c<COLS;c++){ var col=[]; for(var r=ROWS-1;r>=0;r--) if(grid[r][c]!==null)col.push(grid[r][c]);
-    for(var r2=ROWS-1,i=0;r2>=0;r2--,i++) grid[r2][c]= i<col.length?col[i]:rcolor(); } }
-  function startAttempt(){ if(playing||(MODE==='daily'&&dayDone))return; dayScore=0; combo=0; timeLeft=TIME; bonusUsed=0; playing=true;
+    var gained=popScore(g.length); moves++;
+    if(g.length>=5){ try{ showCombo(g.length,'combo',0); }catch(e){} }   // the flash now celebrates a BIG group, not a fast one
+    setTimeout(function(){ g.forEach(function(q){grid[q[0]][q[1]]=null;}); settleGrid(grid); dayScore+=gained; setStat(); draw();
+      if(!groupsOf(grid).length) endAttempt(); },140); }
+  function undo(){ if(!playing||!hist.length||undos<=0) return; var h=hist.pop(); grid=h.g; dayScore=h.s; moves=h.m; undos--; draw(); setStat(); }
+  window.__undo=undo;
+  function startAttempt(){ if(playing||(MODE==='daily'&&dayDone))return; dayScore=0; playing=true;
     try{ if(window.TPM){ TPM.mode('play'); TPM.sfx('go'); } }catch(e){}
     if(MODE==='daily'){ try{localStorage.setItem('tp_daily', JSON.stringify({day:slotNum, best:bestScore}));}catch(e){} }
     else { FREE.seed=(Math.random()*4294967295)>>>0; saveFree(); }
     rebuildBoard(); setStat();
-    var g=document.getElementById('startGate'); if(g)g.classList.add('hide');
-    clearInterval(timerId); timerId=setInterval(function(){ timeLeft--; if(timeLeft<0)timeLeft=0; setStat(); if(timeLeft>0&&timeLeft<=3){ try{ window.TPM&&TPM.sfx('tick'); }catch(e){} } if(timeLeft<=0) endAttempt(); },1000); }
-  function endFree(){ playing=false; clearInterval(timerId);
-    var beat=dayScore>=PAR, gave=false;
+    var g=document.getElementById('startGate'); if(g)g.classList.add('hide'); }
+  function endFree(){ playing=false;
+    var beat=dayScore>=PAR*T[0], gave=false;
     if(beat && FREE.bonus<FREE_CAP){ FREE.bonus++; saveFree(); earn(1,'Free play'); gave=true; }
-    toast(beat ? ('Beat par: '+fmt(dayScore)+(gave?' \u00b7 <b>+1 point</b>':' \u00b7 daily free-play bonus maxed')) : ('Free play: '+fmt(dayScore)+' \u00b7 par is '+fmt(PAR)));
+    toast(beat ? ('Board done: '+fmt(dayScore)+(gave?' \u00b7 <b>+1 point</b>':' \u00b7 daily free-play bonus maxed')) : ('Free play: '+fmt(dayScore)+' \u00b7 first star is '+fmt(Math.round(PAR*T[0]))));
     setStat(); showGate(); }
   function setMode(m){ if(playing) return; MODE=(m==='free')?'free':'daily';
     document.querySelectorAll('#modeSeg button').forEach(function(b){ b.classList.toggle('on', b.dataset.mode===MODE); });
     var t=document.getElementById('modeTitle'), su=document.getElementById('modeSub');
     if(MODE==='free'){ if(t) t.innerHTML='Free Play'; if(su) su.textContent='Unlimited boards \u00b7 practice \u00b7 not ranked'; }
     else { if(t) t.innerHTML='Daily Trap \u00b7 <span id="pnum">#'+trapNum+'</span><span class="x2" id="x2" hidden>2\u00d7 PTS</span>'; if(su) su.innerHTML='Attempt <span id="attN">'+attempt+'</span> of 3 \u00b7 one board'; applyPromoBadge(); }
-    dayScore=0; combo=0; timeLeft=TIME; bonusUsed=0; rebuildBoard(); setStat(); showGate(); }
+    dayScore=0; rebuildBoard(); setStat(); showGate(); }
   document.querySelectorAll('#modeSeg button').forEach(function(b){ b.addEventListener('click',function(){ setMode(b.dataset.mode); }); });
-  function endAttempt(){ try{ if(window.TPM){ TPM.sfx('over'); TPM.mode('rest'); } }catch(e){}   // time's up: sting, beat drops to the rest groove
-    if(MODE==='free'){ endFree(); return; } playing=false; clearInterval(timerId); if(dayScore>bestScore)bestScore=dayScore; try{localStorage.setItem('tp_daily', JSON.stringify({day:slotNum, best:bestScore}));}catch(e){}
+  function endAttempt(){ try{ if(window.TPM){ TPM.sfx('over'); TPM.mode('rest'); } }catch(e){}   // board out of moves: sting, beat drops to the rest groove
+    var leftN=tilesLeft(grid); dayScore+=endBonus(leftN); setStat();
+    if(MODE==='free'){ endFree(); return; } playing=false; if(dayScore>bestScore)bestScore=dayScore; try{localStorage.setItem('tp_daily', JSON.stringify({day:slotNum, best:bestScore}));}catch(e){}
     if(attempt<ATTEMPTS){ attempt++; dayScore=0; setStat(); showGate(); } else { finishDaily(); } }
   function finishDaily(){ dayDone=true;
-    var stars= bestScore>=STAR[2]?3 : bestScore>=STAR[1]?2 : bestScore>=STAR[0]?1 : 0;
+    var stars= bestScore>=PAR*T[2]?3 : bestScore>=PAR*T[1]?2 : bestScore>=PAR*T[0]?1 : 0;
     var today=dayNum; if(STREAK.last===today-1){ STREAK.n=(STREAK.n||0)+1; } else if(STREAK.last!==today){ STREAK.n=1; } STREAK.last=today;
     var streakBonus=STREAK.n>=2?5:0;
     var earned=((stars>=3?15:stars>=2?12:stars>=1?8:3)+streakBonus)*promoMult();
@@ -969,8 +1005,8 @@
     document.getElementById('rnum').textContent='Trap #'+trapNum;
     document.getElementById('rstars').textContent=starStr;
     document.getElementById('rscore').textContent=fmt(bestScore);
-    var diff=bestScore-PAR;
-    document.getElementById('rpar').textContent= diff>=0?('Beat par by '+fmt(diff)):('Missed par by '+fmt(-diff));
+    var diff=bestScore-Math.round(PAR);
+    document.getElementById('rpar').textContent= diff>=0?('Beat par by '+fmt(diff)):(fmt(-diff)+' short of par '+fmt(Math.round(PAR)));
     document.getElementById('rstreak').textContent='\uD83D\uDD25 '+STREAK.n;
     document.getElementById('rpts').textContent='+'+earned;
     document.getElementById('rrank').textContent=HIST.length;
@@ -1080,6 +1116,7 @@
     el.hidden=false; }
   fetch('../data/promos.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json();}).then(function(P){ PROMOS=P; ACTIVE=activePromos(P,'game'); applyPromoBadge(); renderPromo(); }).catch(function(){});
   var _startBtn=document.getElementById('startBtn'); if(_startBtn)_startBtn.addEventListener('click',startAttempt);
+  var _undoBtn=document.getElementById('undoBtn'); if(_undoBtn)_undoBtn.addEventListener('click',undo);   // 2026-09-22: 3 undos a try
   var _sb=document.getElementById('shareBtn');
   if(_sb)_sb.addEventListener('click',function(){
     var txt=handle+' — Trap #'+trapNum+' · '+fmt(bestScore)+' '+document.getElementById('rstars').textContent+'  thestickytrap.app/game';
@@ -1281,7 +1318,7 @@
     },1500);
   });
 
-  var DCOLS=6, DROWS=6, DMOVES=5, dg=[], dmoves=DMOVES, dscore=0, ddone=false;
+  var DCOLS=6, DROWS=6, DMOVES=5, dg=[], dmoves=DMOVES, dscore=0, ddone=false, combo=0;   // combo lives here now - the daily board dropped it with the clock (2026-09-22)
   function playDuelBoard(idx){
     curIdx=idx;
     document.getElementById('duelPlay').classList.add('open');
