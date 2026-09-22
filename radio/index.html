@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Sticky Trap Radio</title>
-<meta name="description" content="Six tracks out of the print shop. Written from the floor at The Sticky Trap, Ann Arbor. Explicit. 21+.">
+<title>Trapp Radio</title>
+<meta name="description" content="Trapp Radio - six tracks out of the print shop, written from the floor at The Sticky Trap in Ann Arbor. Explicit. 21+. Not for sale.">
 <meta name="theme-color" content="#0A0A0F">
 <link rel="icon" href="/icons/icon-192.png">
-<meta property="og:title" content="Sticky Trap Radio"><meta property="og:description" content="Six tracks out of the print shop. Explicit. 21+.">
-<meta property="og:image" content="https://thestickytrap.app/img/og.png"><meta property="og:url" content="https://thestickytrap.app/radio/">
-<meta name="twitter:card" content="summary_large_image">
+<meta property="og:title" content="Trapp Radio"><meta property="og:description" content="Six tracks out of the print shop. The Sticky Trap, Ann Arbor. Explicit. 21+.">
+<meta property="og:image" content="https://thestickytrap.app/img/trapp-radio-og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:url" content="https://thestickytrap.app/radio/">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://thestickytrap.app/img/trapp-radio-og.png">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&display=swap">
 <style>
@@ -75,7 +75,7 @@ html,body{margin:0;background:var(--ink);color:var(--paper);font-family:"Inter",
 <div class="gate" id="gate" hidden><div class="in">
   <div class="adv" style="display:inline-block"><b>EXPLICIT</b><small>LYRICS &middot; 21+</small></div>
   <h2>Are you 21 or over?</h2>
-  <p>Sticky Trap Radio is explicit and made for a 21+ audience.</p>
+  <p>Trapp Radio is explicit and made for a 21+ audience.</p>
   <button class="btn" id="yes" type="button" style="width:100%">Yes, I'm 21 or over</button>
   <button class="no" id="no" type="button">No &mdash; take me out</button>
 </div></div>
@@ -177,12 +177,12 @@ html,body{margin:0;background:var(--ink);color:var(--paper);font-family:"Inter",
   });
   try{ if('mediaSession' in navigator){ navigator.mediaSession.setActionHandler('nexttrack',function(){ load((cur+1)%CAT.length,true); });
     navigator.mediaSession.setActionHandler('previoustrack',function(){ load((cur-1+CAT.length)%CAT.length,true); }); } }catch(e){}
-  a.addEventListener('playing',function(){ try{ if('mediaSession' in navigator) navigator.mediaSession.metadata=new MediaMetadata({title:CAT[cur].n,artist:'The Sticky Trap',album:'Sticky Trap Radio'}); }catch(e){} });
+  a.addEventListener('playing',function(){ try{ if('mediaSession' in navigator) navigator.mediaSession.metadata=new MediaMetadata({title:CAT[cur].n,artist:'The Sticky Trap',album:'Trapp Radio'}); }catch(e){} });
 
   /* ---- share ---- */
   $('sharebtn').addEventListener('click',function(){
     var url='https://thestickytrap.app/radio/';
-    if(navigator.share){ navigator.share({title:'Sticky Trap Radio',text:'Six tracks out of the print shop.',url:url}).catch(function(){}); return; }
+    if(navigator.share){ navigator.share({title:'Trapp Radio',text:'Six tracks out of the print shop. The Sticky Trap.',url:url}).catch(function(){}); return; }
     var self=this;
     if(navigator.clipboard){ navigator.clipboard.writeText(url).then(function(){ self.textContent='Link copied'; setTimeout(function(){ self.textContent='Share the link'; },1800); }).catch(function(){}); }
   });

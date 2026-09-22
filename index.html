@@ -2331,7 +2331,7 @@
   function setVol(v){ if(gain) gain.gain.value=v; else if(a) a.volume=v; }
   function target(){ return ducked? VOL*DUCK : VOL; }
   function ui(){ try{ if(window.__msDraw) window.__msDraw(); }catch(e){} var on=mode!=='off'; b.classList.toggle('on',on); b.classList.toggle('paused', on && (userPaused || (!!a && a.paused) || (!!actx && actx.state!=='running'))); b.setAttribute('aria-pressed',on?'true':'false');
-    b.setAttribute('aria-label', on?'Music on (explicit) - open the player':'Music off'); b.title= on?'Sticky Trap Radio (explicit) - tap for the player, hold to skip':'Music (explicit) - tap for on'; }
+    b.setAttribute('aria-label', on?'Music on (explicit) - open the player':'Music off'); b.title= on?'Trapp Radio (explicit) - tap for the player, hold to skip':'Music (explicit) - tap for on'; }
   function fade(to,ms,then){ var x=el(); clearInterval(fadeT); var from=getVol(), t0=Date.now();
     fadeT=setInterval(function(){ var k=Math.min(1,(Date.now()-t0)/ms); setVol(from+(to-from)*k); if(k>=1){ clearInterval(fadeT); if(to===0) x.pause(); if(then) then(); } },50); }
   // 2026-09-18 (App review): on iPhone, audio routed through Web Audio obeys the ring/silent switch, so a muted phone heard nothing. A looping
@@ -2347,7 +2347,7 @@
     if(force||t.src!==lastNow){ lastNow=t.src; clearTimeout(nowT); nowT=setTimeout(function(){ if(a&&!a.paused&&trackOf(a)===t&&mode!=='off'){ try{ window.toast&&toast('♫ '+t.name); }catch(e){} } },700+wait); }
     if(wait){ setTimeout(function(){ if(trackOf(a)===t) meta(t); },wait); } else meta(t); }
   function meta(t){
-    try{ if('mediaSession' in navigator){ navigator.mediaSession.metadata=new MediaMetadata({title:t.name, artist:'The Sticky Trap', album:'Sticky Trap Radio',
+    try{ if('mediaSession' in navigator){ navigator.mediaSession.metadata=new MediaMetadata({title:t.name, artist:'The Sticky Trap', album:'Trapp Radio',
       artwork:[{src:abs('icons/icon-192.png'),sizes:'192x192',type:'image/png'},{src:abs('icons/icon-512.png'),sizes:'512x512',type:'image/png'}]}); navigator.mediaSession.playbackState='playing'; } }catch(e){} }
   // 2026-09-21 (Shane: 'a player with all the songs with names so people can skip but can also pick one'): play THIS track now.
   // Playing: fade the current one out over 250 ms, swap in the pick, fade up. Paused / not started: point the element at it and start().
@@ -2395,7 +2395,7 @@
   function buildSheet(){ if(sheet) return;
     shade=document.createElement('div'); shade.id='musicshade'; document.body.appendChild(shade);
     sheet=document.createElement('section'); sheet.id='musicsheet'; sheet.setAttribute('role','dialog'); sheet.setAttribute('aria-label','Music player'); sheet.setAttribute('aria-hidden','true');
-    sheet.innerHTML='<div class="ms-head"><div><div class="ms-title">Sticky Trap Radio</div></div><button type="button" class="ms-x" id="msx" aria-label="Close">Close</button></div>'+
+    sheet.innerHTML='<div class="ms-head"><div><div class="ms-title">Trapp Radio</div></div><button type="button" class="ms-x" id="msx" aria-label="Close">Close</button></div>'+
       '<div class="ms-now"><div class="k" id="msk">Now playing</div><div class="t" id="mst">&nbsp;</div></div>'+
       '<div class="ms-ctl"><button type="button" class="ms-btn main" id="msplay">Play</button><button type="button" class="ms-btn" id="msnext">Next &#9197;</button>'+
       '<div class="ms-modes"><button type="button" class="ms-chip" data-m="full">On</button><button type="button" class="ms-chip" data-m="off">Off</button></div></div>'+
