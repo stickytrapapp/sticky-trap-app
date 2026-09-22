@@ -1,6 +1,6 @@
 <!doctype html>
 <html><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Sticky Trap - New Order</title><meta charset="utf-8"><title>Sticky Trap - New Order</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Sticky Trap - Order Pad</title><meta charset="utf-8"><title>Sticky Trap - Order Pad</title>
 <style>
   :root{--bg:#fff;--card:#fff;--line:#e2e2e6;--ink:#111;--muted:#6b6b76;--pink:#C2117E;--ok:#1a8f4c;--warn:#a86a00;--soft:#f6f6f8}   /* 9/22 Shane: white page, black lettering */
   *{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 -apple-system,Segoe UI,Roboto,Arial,sans-serif}
@@ -65,13 +65,13 @@
   </style></head>
 <body>
 <div id="gate" class="wrap">
-  <h1>Sticky Trap</h1><div class="sub">New order</div>
+  <h1>Sticky Trap</h1><div class="sub">Order Pad</div>
   <div class="card"><label>Staff PIN</label><input id="pin" type="password" inputmode="numeric" autocomplete="off">
   <p class="hint" id="gateMsg"></p><br><button class="btn" onclick="unlock()">Open</button></div>
 </div>
 
 <div id="app" class="wrap hidden">
-  <h1>New order</h1><div class="sub" id="cacheNote">Loading customers and items…</div>
+  <h1>Order Pad</h1><div class="sub" id="cacheNote">Loading customers and items…</div>
   <div id="draftBar" class="draftbar hidden"><span id="draftMsg"></span><button type="button" class="btn ghost dbtn" onclick="restoreDraft()">Restore</button><button type="button" class="btn ghost dbtn" onclick="dropDraft(true)">Discard</button></div>
 
   <div class="card">
