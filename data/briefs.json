@@ -4,61 +4,59 @@
   "briefs": [
     {
       "date": "2026-09-22",
+      "title": "Milestone Meets Momentum: Michigan Tops $17B as DEA Rescheduling Nears a Verdict",
       "label": "Morning Brief",
-      "title": "Momentum Builds: Michigan Sales Cross $17B as National Psychedelics and Rescheduling Push Forward",
-      "top": "Michigan's legal market just topped $17 billion in lifetime sales and a gubernatorial hopeful is now campaigning on killing the 24% wholesale tax, giving operators real reasons for optimism even as regulators crack down hard on bad actors. Nationally, Compass Pathways' psilocybin program is racing toward an FDA decision and Alabama just dropped its last-ditch opposition to federal cannabis rescheduling, clearing another obstacle on the road to Schedule III.",
+      "top": "Michigan's legal cannabis market just crossed $17 billion in lifetime sales even as operators fight the 24% wholesale tax in court and at the ballot box. Nationally, the DEA's rescheduling hearing has wrapped and awaits a ruling while the FDA keeps fast-tracking psilocybin and MDMA-adjacent therapies toward market.",
       "local": [
         {
-          "text": "Michigan cannabis sales cross $17 billion lifetime",
-          "detail": "",
-          "text_full": "Michigan cannabis sales cross $17 billion lifetime — August alone generated roughly $259 million, pushing cumulative adult-use and medical sales above $17 billion and total state tax revenue past $2.66 billion since legalization.",
+          "text": "Michigan cannabis tops $17 billion lifetime sales — Michigan has now surpassed $17 billion in combined adult-use and medical marijuana sales, with the industry supporting 41,686 employees as of the end of August.",
           "source": "The Marijuana Herald",
           "url": "https://themarijuanaherald.com/2026/09/michigan-legal-marijuana-sales-surpass-17-billion/"
         },
         {
-          "text": "GOP governor candidate pledges to repeal wholesale tax",
-          "source": "The 'Gander",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092126/"
-        },
-        {
-          "text": "U.P. operator grows despite tax by splitting costs",
+          "text": "Bipartisan bill filed to kill the wholesale tax — A Republican state representative introduced House Bill 6224 to repeal the 24% wholesale tax, characterizing it as an unnecessary burden on the industry.",
           "source": "Cann.dev",
           "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
         },
         {
-          "text": "Metro Times crowns Michigan's best flower and dispensaries",
-          "source": "The 'Gander",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092126/"
+          "text": "Governor's race turns cannabis tax into a flashpoint — Genesee County Sheriff and Democratic gubernatorial candidate Chris Swanson came out strongly in opposition to the 24% cannabis tax, promising that, if elected, he would work to repeal the tax saying that it is “not fair and equitable”.",
+          "source": "Michigan Advance",
+          "url": "https://michiganadvance.com/2026/03/30/democratic-gubernatorial-hopeful-promises-to-repeal-cannabis-tax-key-to-whitmers-road-funding-plan/"
         },
         {
-          "text": "State drops record $2M fine, shuts Muha Meds maker",
-          "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/news/michigan-cannabis-regulators-impose-record-fine-revoke-permit-of-popular-product-maker-after-egregious-violations/618180/"
+          "text": "Second tax lawsuit pushes toward a September trial — The initial MiCIA lawsuit is heading to trial in September, and the industry has filed a new suit against the Michigan Treasury again claiming the wholesale tax is unconstitutional.",
+          "source": "WWMT",
+          "url": "https://wwmt.com/news/state/michigan-marijuana-industry-lawsuit-stop-wholesale-tax-legal-court-pot-weed-economy-business-wwmt"
+        },
+        {
+          "text": "U.P. operators split the tax burden with suppliers to survive — Higher Love closed five of its nine Upper Michigan locations, with company president Joni Moore attributing the closures entirely to the tax increase, while Rize has managed to sustain growth by negotiating cost-sharing arrangements with suppliers, splitting the tax burden rather than absorbing it alone.",
+          "source": "Cann.dev",
+          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
         }
       ],
       "national": [
         {
-          "text": "Alabama drops last opposition to federal rescheduling",
-          "source": "Cannabis Newsletter",
-          "url": "https://cannabisinsight420.substack.com/p/cannabis-newsletter-daily-roundup-5dd"
+          "text": "DEA rescheduling hearing wraps, ruling now pending — the DEA in July completed an 11-day administrative hearing on whether marijuana should broadly move from Schedule I to Schedule III, with final written arguments submitted in August and the case now awaiting a recommendation from the presiding judge.",
+          "source": "The Marijuana Herald",
+          "url": "https://themarijuanaherald.com/2026/09/whats-going-on-with-marijuana-rescheduling-where-the-federal-process-stands-and-what-happens-next/"
         },
         {
-          "text": "Compass Pathways posts strong Phase 3 psilocybin data",
-          "source": "Compass Pathways / SEC",
+          "text": "FDA fast-tracks a trio of psychedelic medicines — the FDA issued Commissioner's National Priority Vouchers to three psychedelic development programs: Compass Pathways' psilocybin for treatment-resistant depression, Usona Institute's psilocybin for major depressive disorder, and Transcend Therapeutics' methylone for PTSD, cutting review time to weeks.",
+          "source": "Journey Clinical",
+          "url": "https://www.journeyclinical.com/resources/psilocybin-timeline"
+        },
+        {
+          "text": "Compass Pathways' psilocybin clears a major depression hurdle — 39% of patients achieved a clinically meaningful response after two doses of psilocybin, an effect maintained for an average of six months, with almost 30% of responders reaching remission.",
+          "source": "Compass Pathways",
           "url": "https://ir.compasspathways.com/News--Events-/news/news-details/2026/Compass-Pathways-Announces-Six-Month-Data-from-Second-Phase-3-Trial-Confirming-Rapid-and-Durable-Profile/default.aspx"
         },
         {
-          "text": "FDA fast-tracks three psychedelic drug programs",
-          "source": "Medscape",
-          "url": "https://www.medscape.com/viewarticle/race-first-psychedelic-approval-whos-leading-2026a1000e0n"
+          "text": "Trulieve becomes first plant-touching stock on the NYSE — Trulieve Cannabis Corp. received approval to list on the New York Stock Exchange under ticker TRLV, executing a strategic corporate restructuring around a 100%-medical footprint following federal Schedule III reclassification.",
+          "source": "mg Magazine",
+          "url": "https://mgmagazine.com/business-strategy/finance-acquisitions-business-strategy/"
         },
         {
-          "text": "Majority of Americans now call cannabis 'not dangerous'",
-          "source": "Cannabis Newsletter",
-          "url": "https://cannabisinsight420.substack.com/p/cannabis-newsletter-daily-roundup-5dd"
-        },
-        {
-          "text": "California regulator says DEA silent on rescheduling rules",
+          "text": "States say DEA is stonewalling rescheduling guidance — California's cannabis regulator says the DEA hasn't shown any interest in providing guidance to states about the marijuana rescheduling move, while simultaneously requesting more information about California's medical program.",
           "source": "Marijuana Moment",
           "url": "https://www.marijuanamoment.net/dea-keeps-states-in-the-dark-about-cannabis-rescheduling-ca-official-says-newsletter-september-22-2026"
         }
