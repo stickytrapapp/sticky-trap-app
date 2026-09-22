@@ -73,7 +73,7 @@
     <select id="company" onchange="pickCompany()"><option value="">Choose…</option></select>
     <div id="newCust" class="hidden"><label>New customer name <b>*</b></label><input id="newName" placeholder="Company name as it should print"></div>
     <div class="row"><div><label>Contact</label><input id="contact"></div><div><label>Phone</label><input id="phone" inputmode="tel" placeholder="734-555-1234" oninput="fmtPhone(this)"></div></div>
-    <label>Email</label><input id="email" inputmode="email" placeholder="blank = console only, no client emails">
+    <label>Email <b>*</b></label><input id="email" inputmode="email" placeholder="name@company.com"><div class="hint">This is how they get their tracker link and order updates. Leave it blank only for a walk-in — the job then lives in the staff console only.</div>
     <div class="row"><div><label>Second contact <span class="pill">optional</span></label><input id="contact2" placeholder="name"></div><div><label>Their phone</label><input id="phone2" inputmode="tel" placeholder="734-555-1234" oninput="fmtPhone(this)"></div></div>
     <label>Their email</label><input id="email2" inputmode="email" placeholder="second contact email">
     <div id="custNote" class="hint"></div>
