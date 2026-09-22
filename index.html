@@ -110,10 +110,9 @@
   #musicb{position:relative;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:manipulation}   /* long-press = skip: no iOS callout / selection */
   #musicb.on{color:var(--cy)}
   #musicb.on::after{content:"";position:absolute;top:-2px;right:-3px;width:7px;height:7px;border-radius:50%;background:var(--cy);border:1.5px solid #fff;animation:pulse2 2s infinite}
-  #musicb.beats::after{background:#fff;border-color:var(--cy)}
   #musicb.on.paused{opacity:.55}#musicb.on.paused::after{animation:none;background:#fff;border-color:var(--cy)}   /* 9/21: paused from the lock screen - tap = play again */
   #musicb.nudge{animation:pulse2 1s infinite}
-  /* 2026-09-21 (Shane): a real player - tap the note = sheet with now-playing, play/pause, next, Full/Beats and the whole list to pick from */
+  /* 2026-09-21 (Shane): a real player - tap the note = sheet with now-playing, play/pause, next, On/Off and the whole album to pick from */
   #musicsheet{position:fixed;left:0;right:0;bottom:0;z-index:72;max-height:min(78vh,620px);max-height:min(78dvh,620px);display:flex;flex-direction:column;
     background:linear-gradient(180deg,#141414,#0b0722);border-top:1px solid var(--line);border-radius:18px 18px 0 0;box-shadow:0 -16px 40px rgba(0,0,0,.5);
     transform:translateY(105%);transition:transform .26s ease;padding-bottom:env(safe-area-inset-bottom)}
@@ -139,7 +138,6 @@
   .ms-row .nm{flex:1;font-weight:700}
   .ms-row .kd{font-size:11px;color:var(--muted);opacity:.7;border:1px solid var(--line);border-radius:999px;padding:3px 8px;flex:none}
   .ms-row.on .nm{color:var(--cy)} .ms-row.on .n{color:var(--cy);opacity:1}
-  .ms-row.dim{opacity:.45}
   @keyframes msbars{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
   .ms-eq{display:inline-flex;gap:2px;align-items:flex-end;height:12px;width:14px;flex:none}
   .ms-eq i{display:block;width:3px;height:12px;background:var(--cy);transform-origin:bottom;animation:msbars .9s infinite ease-in-out}
@@ -2240,9 +2238,10 @@
 </script>
 
 <script>
-/* ---- Music (v3, 2026-09-15; +Stay Trapping dubs x2 2026-09-16, riff instrumental + Full Speed 9/17, We Make Pros B2 removed 9/17, Understanding dropped 9/18, Twenty-Four added 9/18 (v4 take 2 at app-17b)): thirteen Suno tracks behind the top-bar note button. OFF by default and stays off until the person chooses;
-        one quiet "Music?" nudge after 30 s, once. Button cycles Off -> Full -> Beats only (9/17). Rule-based sequencing (vocal/beat alternate,
-        no same-family B-sides back to back, full cycle + no song within the last 40% of the pool since 9/17), random vocal opener, per-track trim (vocals a notch under beats),
+/* ---- Music (v4, 2026-09-22 - Shane: 'remove beats mode. have the playlist play like an album. song 1 - 6 no shuffle. make this the default even for first time users'):
+        the six-track album behind the top-bar note button. PLAYS IN ORDER, 1 -> 6 -> 1, no shuffle, no beats-only mode; ON by default for everyone who has
+        not turned it off (the first tap anywhere on the page starts it - browsers will not autoplay without a gesture), and 'off' is remembered.
+        Tap the note = the player sheet (pick any song); hold = skip. Per-track trim (vocals a notch under the instrumentals),
         per-track joins (9/18: short ramp-in, hard endings finish, decaying tails eased out), ducks under the chat panel, remembers position for 20 min, keeps playing in the background (9/17), fades when a game link is tapped;
         long-press the note = skip, lock-screen controls via Media Session, now-playing toast (9/17). ---- */
 (function(){
@@ -2261,41 +2260,22 @@
     {src:'audio/app-9.mp3',  name:'313',                  kind:'beat',  fam:'ra',  out:2.0},   // quiet 1.3 s decay at the end   // 2026-09-21 (Shane): Stay Trapping Riff (app-11) removed too - 'st' family is out of the app
     {src:'audio/app-17b.mp3', name:'Twenty-Four',         kind:'vocal', fam:'tf',  out:1.0, lead:0.5}    // 2026-09-18 (Shane): industrial rap, his lines vs the 24% tax; v4 take 2 = verse 2 twice, 'the hate is justified' intro (spoken, quiet -> short ramp-in)
   ];
-  var VOL=0.35, TRIM={vocal:0.86, beat:1}, DUCK=0.4;   // vocals sit a notch under the beats so lyrics don't fight the text on screen
-  var mode='off', a=null, A=[null,null], played=loadPlayed(), want=false, armed=false, fadeT=null, actx=null, gain=null, posT=0, ducked=false;
-  try{ var m0=localStorage.getItem('st_music'); mode=(m0==='1'||m0==='full')?'full':(m0==='beats'?'beats':'off'); }catch(e){}
+  var VOL=0.35, TRIM={vocal:0.86, beat:1}, DUCK=0.4;   // vocals sit a notch under the instrumentals so lyrics don't fight the text on screen
+  var mode='off', a=null, A=[null,null], want=false, armed=false, fadeT=null, actx=null, gain=null, posT=0, ducked=false;
+  // 2026-09-22: music is ON unless this person switched it off ('beats' from the old three-way button reads as on). Only an explicit 'off'/'0' keeps it quiet.
+  try{ var m0=localStorage.getItem('st_music'); mode=(m0==='off'||m0==='0')?'off':'full'; }catch(e){}
+  try{ localStorage.removeItem('st_music_played'); localStorage.removeItem('st_music_hist'); }catch(e){}   // the old shuffle-cycle keys; nothing reads them now
   want=mode!=='off';
-  function pool(){ return CAT.filter(function(t){ return mode==='beats'? t.kind==='beat' : true; }); }
+  function pool(){ return CAT; }   // 2026-09-22: one pool - Beats-only mode is gone
   function abs(u){ var l=document.createElement('a'); l.href=u; return l.href; }
   function trackOf(x){ var s=(x&&x.src)||''; for(var i=0;i<CAT.length;i++){ if(abs(CAT[i].src)===s) return CAT[i]; } return null; }
-  // Shane 2026-09-16 ('play each song at random before replaying a song' - it repeated the same 3): a SHUFFLE CYCLE that survives reloads.
-  // `played` = srcs heard in the current cycle, saved in localStorage st_music_played; a song cannot come back until every song in the
-  // pool has played once, then the cycle starts over (never the same song twice in a row). Picks still alternate vocal/beat and avoid
-  // the same family back to back when they can. Trap House Open opens the very first start only (Shane 9/21 'song 1'; We Make Pros 9/17-9/21).
-  function loadPlayed(){ try{ var v=JSON.parse(localStorage.getItem('st_music_played')||'[]'); if(Array.isArray(v)) return v; }catch(e){} return []; }
-  function savePlayed(){ try{ localStorage.setItem('st_music_played',JSON.stringify(played.slice(-40))); }catch(e){} }
-  // 2026-09-17 (Shane: 'they still repeat' after an hour): the cycle stays (every song once before any comes back) AND no song within the
-  // last K plays at any time (K = 40% of the pool: Full 13 -> 5, Beats 7 -> 3), so a song that closed one cycle cannot open the next. `hist` = last 40 plays in order (st_music_hist); `played` = this cycle's songs (st_music_played).
-  var hist=loadHist();
-  function loadHist(){ try{ var v=JSON.parse(localStorage.getItem('st_music_hist')||'[]'); if(Array.isArray(v)) return v; }catch(e){} return []; }
-  function mark(src,delay){ if(played.indexOf(src)<0) played.push(src); if(hist[hist.length-1]!==src) hist.push(src); hist=hist.slice(-40); savePlayed(); nowPlaying(src,false,delay||0);
-    try{ localStorage.setItem('st_music_hist',JSON.stringify(hist)); }catch(e){} }
-  function unplayed(prev){ var P=pool(), K=Math.max(1,Math.round(P.length*0.4));   // Full 13 -> 5, Beats 7 -> 3
-    var recent=hist.filter(function(s){ for(var i=0;i<P.length;i++){ if(P[i].src===s) return true; } return false; }).slice(-K);
-    var ok=function(t){ return recent.indexOf(t.src)<0 && (!prev||t.src!==prev.src); };   // never within the last K plays, never the same song twice running
-    var left=P.filter(function(t){ return played.indexOf(t.src)<0 && ok(t); });
-    if(!left.length){ played=prev?[prev.src]:[]; savePlayed(); left=P.filter(ok); }   // cycle done: start over, still fenced
-    if(!left.length) left=P.filter(function(t){ return !prev||t.src!==prev.src; });
-    return left; }
-  function pick(prev){
-    var P=pool(); if(!P.length) return null;
-    var c=unplayed(prev); if(!c.length) return P[0];
-    if(prev){ var alt=c.filter(function(t){ return t.kind!==prev.kind; }); if(alt.length) c=alt; var fam=c.filter(function(t){ return t.fam!==prev.fam; }); if(fam.length) c=fam; }
-    return c[Math.floor(Math.random()*c.length)]; }
-  function opener(){
-    var P=pool(); if(!P.length) return null; var c=unplayed(null);
-    var th=c.filter(function(t){ return t.fam==='th'&&t.kind==='vocal'; })[0]; if(th&&!hist.length) return th;   // first ever start -> Trap House Open (Shane 9/21 'song 1'; We Make Pros 9/17-9/21)
-    var v=c.filter(function(t){ return t.kind==='vocal'; }); var pool2=v.length?v:c; return pool2[Math.floor(Math.random()*pool2.length)]; }
+  // 2026-09-22 (Shane: 'have the playlist play like an album. song 1 - 6 no shuffle'): the catalogue IS the running order.
+  // Track 1 opens, each song hands to the next one down the list, the last one wraps back to the top. The shuffle cycle, the
+  // 40% fence and the vocal/beat alternation are gone (st_music_played / st_music_hist are cleared above and no longer written).
+  function idxOf(t){ for(var i=0;i<CAT.length;i++){ if(CAT[i]===t) return i; } return -1; }
+  function mark(src,delay){ nowPlaying(src,false,delay||0); }
+  function pick(prev){ if(!CAT.length) return null; var i=prev?idxOf(prev):-1; return CAT[(i+1)%CAT.length]; }   // what plays next: the next song in the list
+  function opener(){ return CAT[0]||null; }   // every start begins the album at song 1 unless a saved position picks it up mid-song
   // 2026-09-18 (Music, measured from each file's last 6 s): 8 of 13 end hard inside their final second, 5 decay. A long crossfade over a hard ending
   // chops the last hit and starts the quiet next intro under it. So: the next song starts `out` s before this one ends (hard ~1.0, decays 1.5-3.5, and only
   // those are eased out) and ramps in over its own `lead` (1.0; 0.5 for Twenty-Four's spoken open). Replaces the 4 s default + `tail` from earlier today.
@@ -2346,8 +2326,8 @@
   function getVol(){ return gain? gain.gain.value : (a?a.volume:0); }
   function setVol(v){ if(gain) gain.gain.value=v; else if(a) a.volume=v; }
   function target(){ return ducked? VOL*DUCK : VOL; }
-  function ui(){ try{ if(window.__msDraw) window.__msDraw(); }catch(e){} var on=mode!=='off'; b.classList.toggle('on',on); b.classList.toggle('beats',mode==='beats'); b.classList.toggle('paused', on && (userPaused || (!!a && a.paused) || (!!actx && actx.state!=='running'))); b.setAttribute('aria-pressed',on?'true':'false');
-    b.setAttribute('aria-label', mode==='full'?'Music on (explicit)': mode==='beats'?'Music: beats only':'Music off'); b.title= mode==='full'?'Music: full (explicit) - tap for beats only, hold to skip': mode==='beats'?'Music: beats only - tap for off, hold to skip': 'Music (explicit) - tap for on'; }
+  function ui(){ try{ if(window.__msDraw) window.__msDraw(); }catch(e){} var on=mode!=='off'; b.classList.toggle('on',on); b.classList.toggle('paused', on && (userPaused || (!!a && a.paused) || (!!actx && actx.state!=='running'))); b.setAttribute('aria-pressed',on?'true':'false');
+    b.setAttribute('aria-label', on?'Music on (explicit) - open the player':'Music off'); b.title= on?'Sticky Trap Radio (explicit) - tap for the player, hold to skip':'Music (explicit) - tap for on'; }
   function fade(to,ms,then){ var x=el(); clearInterval(fadeT); var from=getVol(), t0=Date.now();
     fadeT=setInterval(function(){ var k=Math.min(1,(Date.now()-t0)/ms); setVol(from+(to-from)*k); if(k>=1){ clearInterval(fadeT); if(to===0) x.pause(); if(then) then(); } },50); }
   // 2026-09-18 (App review): on iPhone, audio routed through Web Audio obeys the ring/silent switch, so a muted phone heard nothing. A looping
@@ -2363,12 +2343,12 @@
     if(force||t.src!==lastNow){ lastNow=t.src; clearTimeout(nowT); nowT=setTimeout(function(){ if(a&&!a.paused&&trackOf(a)===t&&mode!=='off'){ try{ window.toast&&toast('♫ '+t.name); }catch(e){} } },700+wait); }
     if(wait){ setTimeout(function(){ if(trackOf(a)===t) meta(t); },wait); } else meta(t); }
   function meta(t){
-    try{ if('mediaSession' in navigator){ navigator.mediaSession.metadata=new MediaMetadata({title:t.name, artist:'The Sticky Trap', album:t.kind==='beat'?'Beats':'Sticky Trap Radio',
+    try{ if('mediaSession' in navigator){ navigator.mediaSession.metadata=new MediaMetadata({title:t.name, artist:'The Sticky Trap', album:'Sticky Trap Radio',
       artwork:[{src:abs('icons/icon-192.png'),sizes:'192x192',type:'image/png'},{src:abs('icons/icon-512.png'),sizes:'512x512',type:'image/png'}]}); navigator.mediaSession.playbackState='playing'; } }catch(e){} }
   // 2026-09-21 (Shane: 'a player with all the songs with names so people can skip but can also pick one'): play THIS track now.
   // Playing: fade the current one out over 250 ms, swap in the pick, fade up. Paused / not started: point the element at it and start().
   function playTrack(t,src){ if(!t) return; hideNudge();
-    if(mode==='off'||(mode==='beats'&&t.kind!=='beat')){ mode='full'; want=true; try{ localStorage.setItem('st_music','1'); }catch(e){} }
+    if(mode==='off'){ mode='full'; want=true; try{ localStorage.setItem('st_music','1'); }catch(e){} }
     userPaused=false;
     try{ localStorage.removeItem('st_music_pos'); }catch(e){}   // a remembered position belongs to the song that was playing, not this pick
     var x=el();
@@ -2391,16 +2371,13 @@
       if(e && e.target && (b.contains(e.target)||(nudge&&nudge.contains(e.target)))) return;   // the tap IS the music control: let its handler decide
       if(want) start(); };
     document.addEventListener('pointerdown',once,true); document.addEventListener('keydown',once,true); }
-  function setMode(m,src){ var prev=mode; mode=m; want=mode!=='off'; try{ localStorage.setItem('st_music', mode==='full'?'1':mode); }catch(e){}
+  function setMode(m,src){ var prev=mode; mode=(m==='off')?'off':'full'; want=mode!=='off'; try{ localStorage.setItem('st_music', mode==='full'?'1':mode); }catch(e){}
     var t=trackOf(a);
     if(mode==='off'){ stop(); try{window.track&&window.track('music','off:'+(t?t.name:'')+(src?':'+src:''));}catch(e){} return; }
-    // switching between beats/full: if the current track no longer fits the pool, move on now (short crossfade); otherwise carry on
-    if(a&&!a.paused&&t&&pool().indexOf(t)<0){ var nxt=pick(t); if(nxt){ a._next=nxt; try{ a.currentTime=Math.max(0,a.duration-toEnd(t)); }catch(e){} } }
-    else if(a&&!a.paused&&a._next){ a._next=pick(t); prime(); }   // pool changed: re-pick what comes next
     if(!a||a.paused){ if(prev==='off'){ try{ localStorage.removeItem('st_music_pos'); }catch(e){} } start(); } else ui();
     try{window.track&&window.track('music',mode+(src?':'+src:''));}catch(e){} }
-  // 2026-09-17: first tap = FULL (the whole catalogue); Beats only is the second tap (staff demo mode). Before, the first tap gave Beats only and vocals never played.
-  var holdT=null, held=false;   // long-press the note = skip to the next song (9/17); a tap still cycles Off -> Full -> Beats only
+  // 2026-09-22: the note is on/off + the player sheet; there is no Beats-only mode any more.
+  var holdT=null, held=false;   // long-press the note = skip to the next song (9/17)
   b.addEventListener('pointerdown',function(){ held=false; clearTimeout(holdT); if(mode==='off') return; holdT=setTimeout(function(){ held=true; skip('hold'); try{ navigator.vibrate&&navigator.vibrate(15); }catch(e){} },550); });
   ['pointerup','pointerleave','pointercancel'].forEach(function(ev){ b.addEventListener(ev,function(){ clearTimeout(holdT); }); });
   b.addEventListener('contextmenu',function(e){ e.preventDefault(); });
@@ -2417,7 +2394,7 @@
     sheet.innerHTML='<div class="ms-head"><div><div class="ms-title">Sticky Trap Radio</div></div><button type="button" class="ms-x" id="msx" aria-label="Close">Close</button></div>'+
       '<div class="ms-now"><div class="k" id="msk">Now playing</div><div class="t" id="mst">&nbsp;</div></div>'+
       '<div class="ms-ctl"><button type="button" class="ms-btn main" id="msplay">Play</button><button type="button" class="ms-btn" id="msnext">Next &#9197;</button>'+
-      '<div class="ms-modes"><button type="button" class="ms-chip" data-m="full">Full</button><button type="button" class="ms-chip" data-m="beats">Beats</button><button type="button" class="ms-chip" data-m="off">Off</button></div></div>'+
+      '<div class="ms-modes"><button type="button" class="ms-chip" data-m="full">On</button><button type="button" class="ms-chip" data-m="off">Off</button></div></div>'+
       '<div class="ms-list" id="mslist"></div>';
     document.body.appendChild(sheet);
     var list=document.getElementById('mslist');
@@ -2440,7 +2417,7 @@
     document.getElementById('mst').textContent= (mode!=='off'&&t)?t.name:(mode==='off'?'Tap a song or Play':'-');
     document.getElementById('msplay').innerHTML= playing?'&#10074;&#10074; Pause':'&#9654; Play';
     sheet.querySelectorAll('.ms-chip').forEach(function(c){ c.classList.toggle('on',c.dataset.m===mode); });
-    sheet.querySelectorAll('.ms-row').forEach(function(r){ var tr=CAT[+r.dataset.i], on=!!(t&&tr===t&&mode!=='off'); r.classList.toggle('on',on); r.classList.toggle('dim',mode==='beats'&&tr.kind!=='beat');
+    sheet.querySelectorAll('.ms-row').forEach(function(r){ var tr=CAT[+r.dataset.i], on=!!(t&&tr===t&&mode!=='off'); r.classList.toggle('on',on);
       var eq=r.querySelector('.ms-eq'); if(on){ if(!eq){ eq=document.createElement('span'); eq.className='ms-eq'; eq.innerHTML='<i></i><i></i><i></i>'; r.insertBefore(eq,r.querySelector('.kd')); } eq.classList.toggle('paused',!playing); } else if(eq){ eq.remove(); } }); }
   var drawT=null;
   function openSheet(){ buildSheet(); sheet.classList.add('on'); shade.classList.add('on'); sheet.setAttribute('aria-hidden','false'); drawSheet(); clearInterval(drawT); drawT=setInterval(drawSheet,1000);
@@ -2463,7 +2440,7 @@
   document.addEventListener('click',function(e){ var l=e.target&&e.target.closest&&e.target.closest('a[href]'); if(l&&/\/(game|match|solitaire)\//.test(l.getAttribute('href')||'')&&a&&!a.paused) fade(0,300); },true);
   // 9/17: music keeps playing with the screen off / app in the background (was: fade out when hidden). Game links still fade it (above); coming back resumes a system-paused element.
   document.addEventListener('visibilitychange',function(){ if(!document.hidden){ if(actx&&actx.state!=='running'){ try{actx.resume();}catch(e){} } if(want&&a&&a.paused&&!userPaused) start(); } });
-  window.STMusic={ state:function(){ var t=trackOf(a); return {mode:mode, now:t?t.name:null, next:(a&&a._next)?a._next.name:null, played:played.length, master:(gain?+gain.gain.value.toFixed(2):null), ducked:ducked,
+  window.STMusic={ state:function(){ var t=trackOf(a); return {mode:mode, now:t?t.name:null, track:t?idxOf(t)+1:null, of:CAT.length, next:(a&&a._next)?a._next.name:null, master:(gain?+gain.gain.value.toFixed(2):null), ducked:ducked,
       tracks:A.map(function(x){ var tt=trackOf(x); return x?{name:tt?tt.name:null, paused:x.paused, t:+(x.currentTime||0).toFixed(1), dur:+(x.duration||0).toFixed(1), g:(x._g?+x._g.gain.value.toFixed(2):null), xf:!!x._xf}:null; }) }; },
     seekEnd:function(s){ if(a&&a.duration){ a.currentTime=Math.max(0,a.duration-(s||5)); } }, skip:function(){ skip('dbg'); }, set:function(m){ setMode(m,'dbg'); }, play:function(i){ playTrack(CAT[i],'dbg'); }, open:function(){ openSheet(); }, close:function(){ closeSheet(); }, nudge:function(){ try{localStorage.removeItem('st_music_nudged');}catch(e){} showNudge(); } };
   ui(); if(want){ arm(); ui(); }   // remembered state shows immediately; playback waits for the first tap (autoplay policy) - 9/21: the second ui() runs after arm() made the element, so the note shows DIMMED (on, not playing) until that tap
