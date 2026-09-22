@@ -205,7 +205,14 @@ function catalogLoad(pin){
   }).catch(function(){ return api('GET', { action: 'catalog', pin: pin }); });
 }
 function $(id){ return document.getElementById(id); }
-function fmtPhone(el) { var d = el.value.replace(/\D/g, ''); if (d.length === 11 && d.charAt(0) === '1') d = d.slice(1); if (d.length > 10 || /[a-zA-Z]/.test(el.value)) return; el.value = d.length > 6 ? d.slice(0,3) + '-' + d.slice(3,6) + '-' + d.slice(6) : d.length > 3 ? d.slice(0,3) + '-' + d.slice(3) : d; }
+function fmtPhone(el) {   // 9/22 debug: only format a real 10-digit number - a 7-digit one used to come out '555-012-3'
+  var d = el.value.replace(/\D/g, '');
+  if (d.length === 11 && d.charAt(0) === '1') d = d.slice(1);
+  if (d.length > 10 || /[a-zA-Z]/.test(el.value)) return;          // extensions / typed words: leave it alone
+  if (d.length === 10) { el.value = d.slice(0,3) + '-' + d.slice(3,6) + '-' + d.slice(6); return; }
+  if (d.length > 3) { el.value = d.slice(0,3) + '-' + d.slice(3); return; }        // mid-typing: 555-0123, no third group yet
+  el.value = d;
+}
 function money(x){ return '$' + (Math.round(x*100)/100).toFixed(2); }
 function unlock(){
   PIN = $('pin').value.trim(); $('gateMsg').textContent = 'Loading…';
