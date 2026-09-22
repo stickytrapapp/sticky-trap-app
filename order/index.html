@@ -43,6 +43,9 @@
   .plus{border-color:var(--pink);color:var(--pink);font-weight:700}
   @media(max-width:860px){ .newline .nlrow{grid-template-columns:1fr 62px 78px 36px} .newline .nlrow .m,.newline .nlrow .v,.newline .nlrow .t{grid-column:span 2} .newline .nlrow .w,.newline .nlrow .ap{grid-column:span 2} }
   .addrow{display:flex;align-items:center;gap:10px;margin-top:10px}
+  .openbtn{border:1px solid var(--pink);color:var(--pink);font-weight:700;white-space:nowrap}
+  .openbtn:hover{background:var(--pink);color:#fff}
+  #pastList .line{grid-template-columns:1fr 96px}
   @media(max-width:640px){ .newline .nl2{grid-template-columns:1fr 1fr} .newline .nl1{grid-template-columns:1fr 70px 40px} .newline .nl1 .p{grid-column:1/3} }
   .btn{display:inline-block;background:var(--pink);color:#fff;border:0;border-radius:10px;padding:13px 18px;font-size:16px;font-weight:700;cursor:pointer}
   .btn.ghost{background:#fff;border:1px solid #c9c9d1;color:var(--ink);font-weight:500}
@@ -181,7 +184,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-22d</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-22e</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -343,7 +346,7 @@ function renderPast(name){
                    + '<div class="meta">' + esc(o.date) + (o.due ? ' &middot; due ' + esc(o.due) : '') + ' &middot; ' + money(o.total)
                    + '<br>' + esc(what) + '</div>';
     var btn = document.createElement('button');
-    btn.type = 'button'; btn.className = 'btn ghost dbtn'; btn.textContent = 'Open';
+    btn.type = 'button'; btn.className = 'btn ghost dbtn openbtn'; btn.textContent = 'Open';
     btn.onclick = function(){ openPast(o.inv); };
     d.appendChild(left); d.appendChild(btn);
     box.appendChild(d);
@@ -358,8 +361,6 @@ function mdyToISO(s){
 function openPast(inv){
   var o = (CAT.orders || []).find(function(x){ return x.inv === inv; });
   if(!o) return;
-  var NL = String.fromCharCode(10);
-  if(!confirm('Open ' + inv + ' for editing?' + NL + NL + 'It fills this form with that order. When you send it, the invoice and work order are rebuilt and replace the files on its line in Monday.')) return;
   EDIT_OF = o;
   $('newItems').innerHTML = '';
   o.rows.forEach(function(r){
