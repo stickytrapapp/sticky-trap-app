@@ -5,6 +5,9 @@
   :root{--bg:#fff;--card:#fff;--line:#e2e2e6;--ink:#111;--muted:#6b6b76;--pink:#C2117E;--ok:#1a8f4c;--warn:#a86a00;--soft:#f6f6f8}   /* 9/22 Shane: white page, black lettering */
   *{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 -apple-system,Segoe UI,Roboto,Arial,sans-serif}
   .wrap{max-width:760px;margin:0 auto;padding:16px 14px 90px}
+  /* 9/22 Shane 'allignment is off': an item line needs ~900px, the 760px form gave it 704 and the row
+     ran past the card. On a desktop screen the form gets the room the line needs. */
+  @media(min-width:1080px){ .wrap{max-width:1040px} }
   h1{font-size:22px;margin:6px 0 2px;letter-spacing:.02em} .sub{color:var(--muted);font-size:13px;margin-bottom:14px}
   .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin:12px 0;box-shadow:0 1px 2px rgba(17,17,17,.05)}
   .card h2{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--pink);margin:0 0 10px}
@@ -29,7 +32,8 @@
   .stp{background:var(--soft);border:1px solid #c9c9d1;color:var(--ink);border-radius:10px;font-size:20px;padding:8px 0;cursor:pointer}
   .newline{display:grid;grid-template-columns:1fr;gap:6px;padding:10px 0;border-bottom:1px solid var(--line)}
   .newline .g{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
-  .newline .nlrow{display:grid;grid-template-columns:minmax(150px,2fr) 62px 78px 104px minmax(110px,1.2fr) 122px 84px 84px 36px;gap:6px;align-items:center}
+  .newline .nlrow{display:grid;grid-template-columns:minmax(0,2fr) 66px 84px minmax(0,1.1fr) minmax(0,1.25fr) minmax(0,1.25fr) minmax(0,.9fr) minmax(0,.9fr) 36px;gap:6px;align-items:center}
+  .newline .nlrow>*{min-width:0} .newline .nlrow input,.newline .nlrow select{width:100%}
   .newline input,.newline select{padding:9px 8px;font-size:15px}
   .newline .vcell{display:block;min-width:0}
   .newline .vcell select,.newline .vcell input{width:100%}
