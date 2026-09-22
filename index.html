@@ -84,14 +84,14 @@
   .promostrip .ps-t b{font-size:13.5px;font-weight:800;color:#fff;overflow:hidden;min-width:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.2}   /* 9/21: two lines, never cut mid-title */
   .promostrip .ps-t #psD{font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .promostrip .ps-t #psD:empty{display:none}   /* 9/21: an event with no detail line keeps the card tight */
-  .promostrip .ps-cta{flex:none;font-size:11px;font-weight:900;padding:7px 11px;border-radius:999px;border:0;color:#050505;background:linear-gradient(100deg,#FF1FA2,#12C4FF);cursor:pointer;font-family:inherit;white-space:nowrap;box-shadow:0 6px 14px -8px rgba(18,196,255,.8)}
+  .promostrip .ps-cta{flex:none;font-size:11px;font-weight:900;padding:7px 11px;border-radius:999px;border:1.5px solid #12C4FF;color:#050505;background:#fff;cursor:pointer;font-family:inherit;white-space:nowrap;box-shadow:0 0 0 3px rgba(18,196,255,.18),0 6px 14px -8px rgba(18,196,255,.9)}
   .promostrip .ps-cta::after{content:" \2192"}
   .promostrip .ps-x{flex:none;background:none;border:0;color:var(--muted);font-size:18px;line-height:1;padding:2px 4px;cursor:pointer}
   @media (max-width:360px){ .promostrip .ps-t #psD{display:none} }
   /* 2026-09-21 (Shane): no closing the promo; October wears a Halloween skin in the Trap palette - set by "theme":"halloween" on the event in promos.json */
   .promostrip .ps-x{display:none}
   .promostrip.locked{cursor:default}
-  .promostrip.locked .ps-cta{background:transparent;border:1px dashed var(--line-2);color:var(--mut);box-shadow:none;cursor:default;font-weight:700}
+  .promostrip.locked .ps-cta{background:transparent;border:1.5px solid rgba(18,196,255,.55);color:#fff;box-shadow:none;cursor:default;font-weight:800}
   .promostrip.hallow{background:radial-gradient(130% 160% at 0% 0%,rgba(255,122,0,.20),transparent 55%),radial-gradient(90% 120% at 100% 100%,rgba(138,43,226,.22),transparent 60%),linear-gradient(#0b0710,#0b0710) padding-box,linear-gradient(100deg,#FF7A00,#FF1FA2 50%,#8A2BE2) border-box;
     box-shadow:0 10px 28px -12px rgba(255,122,0,.65),0 0 0 1px rgba(255,255,255,.03) inset}
   .promostrip.hallow .ps-k{background:linear-gradient(100deg,#FF7A00,#FF1FA2);color:#0b0710}
@@ -2458,7 +2458,7 @@
   function ymd(d){ return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
   function isFirstWeekend(d){ var dow=d.getDay(), dm=d.getDate(); return (dow===6&&dm<=7)||(dow===0&&dm>=2&&dm<=8); }
   function activePromos(P){ var d=new Date(), out=[], t=ymd(d);
-    (P.events||[]).forEach(function(e){ if(e.surfaces&&e.surfaces.indexOf('app')<0) return; if(e.from&&t<e.from) return; if(e.to&&t>e.to) return; out.push({type:'event',id:e.id,k:e.kicker||'Happening',title:e.title,text:e.text,cta:e.cta,pri:3,theme:e.theme||'',cta_from:e.cta_from||'',sticky:!!e.sticky});   /* 2026-09-17: sticky = a month promo the X only hides for the week */ });
+    (P.events||[]).forEach(function(e){ if(e.surfaces&&e.surfaces.indexOf('app')<0) return; if(e.from&&t<e.from) return; if(e.to&&t>e.to) return; out.push({type:'event',id:e.id,k:e.kicker||'Happening',title:e.title,text:e.text,cta:e.cta,pri:3,theme:e.theme||'',cta_from:e.cta_from||'',_to:e.to||'',_km:e.kicker_live||'',sticky:!!e.sticky});   /* 2026-09-17: sticky = a month promo the X only hides for the week */ });
     if(P.double_points){ var r=P.double_points, on=r.rule==='first_weekend'?isFirstWeekend(d):(r.rule==='weekend'?(d.getDay()===0||d.getDay()===6):false);
       if(on) out.push({type:'double',id:'double-'+t.slice(0,7),k:'In the game today',title:r.label||'Double points',text:r.text||'',cta:{label:'Play',tab:'play'},pri:2}); }
     if(P.featured&&P.featured.items&&P.featured.items.length){ var wk=Math.floor(Date.now()/864e5/7), it=P.featured.items[wk%P.featured.items.length];
@@ -2471,6 +2471,12 @@
     // 2026-09-22 (Shane): an event can be shown before its prices switch on - `cta_from` in promos.json. Until that date the
     // card is a teaser: the button carries the date instead of a promise, the whole-card click is off, and it is not focusable.
     cur._locked = !!(cur.cta_from && ymd(new Date()) < cur.cta_from);
+    // 2026-09-22: the kicker used to be three hand-edits on a calendar (teaser -> running -> last week). It now
+    // writes itself from the event's own dates, so a missed edit cannot leave "Starts Oct 1" up on Oct 14.
+    if(cur.cta_from || cur._to){ var td=ymd(new Date()), start=cur.cta_from||'', end=cur._to||'';
+      if(start && td<start) cur.k='Starts '+niceDay(start);
+      else if(end){ var left=Math.round((new Date(end+'T12:00:00')-new Date(td+'T12:00:00'))/864e5);
+        cur.k = left<=0 ? 'Last day' : (left<=6 ? 'Last '+left+' days' : (cur._km||cur.k)); } }
     K.textContent=cur.k; T.textContent=cur.title; D.textContent=cur.text||''; C.textContent= cur._locked ? ((cur.cta&&cur.cta.soon)||'Opens '+niceDay(cur.cta_from)) : ((cur.cta&&cur.cta.label)||'See more');
     strip.classList.toggle('locked',cur._locked); strip.classList.toggle('hallow',cur.theme==='halloween');
     if(cur._locked){ strip.removeAttribute('role'); strip.removeAttribute('tabindex'); } else { strip.setAttribute('role','button'); strip.setAttribute('tabindex','0'); }
@@ -2479,7 +2485,9 @@
   function niceDay(iso){ var p=String(iso||'').split('-'); if(p.length!==3) return iso||'soon';
     return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+p[1]-1]+' '+(+p[2]); }
   function goPromo(){ if(!cur) return;
-    if(cur._locked){ try{window.track&&window.track('promo_early',cur.id);}catch(e){} return; }   // the offer is not live yet - nothing to open
+    if(cur._locked){ try{window.track&&window.track('promo_early',cur.id);}catch(e){}
+      try{ window.toast && toast((cur.cta&&cur.cta.soon)||('Opens '+niceDay(cur.cta_from))); }catch(e){}   // tapping a dead card should explain itself, not feel broken
+      return; }
     try{window.track&&window.track('promo_cta',cur.id);}catch(e){}
     if(cur.cta&&cur.cta.url){ if(/^https?:\/\/thestickytrap\.app\//.test(cur.cta.url)) location.href=cur.cta.url; else window.open(cur.cta.url,'_blank','noopener'); }   /* our own pages open in place; outside links in a new tab */
     else if(cur.cta&&cur.cta.tab&&window.go){ go(cur.cta.tab); } }
