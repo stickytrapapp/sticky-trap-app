@@ -31,6 +31,8 @@
   .newline .g{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
   .newline .nlrow{display:grid;grid-template-columns:minmax(150px,2fr) 62px 78px 104px minmax(110px,1.2fr) 122px 84px 84px 36px;gap:6px;align-items:center}
   .newline input,.newline select{padding:9px 8px;font-size:15px}
+  .newline .vcell{display:block;min-width:0}
+  .newline .vcell select,.newline .vcell input{width:100%}
   .minus,.plus{border:1px solid #c9c9d1;background:#fff;color:var(--ink);border-radius:999px;width:36px;height:38px;font-size:20px;line-height:1;cursor:pointer;padding:0}
   .minus:hover{border-color:var(--pink);color:var(--pink)}
   .plus{border-color:var(--pink);color:var(--pink);font-weight:700}
@@ -258,6 +260,24 @@ function pickCompany(){
   });
   totals();
 }
+// 9/22 Shane: "for vessel size add what is on the menu ... with a new plus add on" - the menu's own vessels,
+// spelled the way pricing_master spells them so the builder can price a new item straight off the menu.
+var VESSEL_LIST = ['3" Slap', '4" Slap', '4x5 Deli', 'o2 Standard', 'o2 Bucket', 'Pop Top', 'Tube 95 mm', 'Tube 65 mm',
+                   'Miron 5 ml (Puck)', 'Miron 100 ml', 'Miron 150 ml', 'Miron 250 ml', 'Miron 500 ml',
+                   'Tip Band', 'Bic Lighter'];
+var VESSELS = '<option value="">Vessel / size</option>'
+            + VESSEL_LIST.map(function(v){ return '<option>' + v + '</option>'; }).join('')
+            + '<option value="__other__">+ something else…</option>';
+function vesselPick(sel){
+  var cell = sel.parentNode, inp = cell.querySelector('.vother');
+  if(sel.value === '__other__'){ sel.classList.add('hidden'); inp.classList.remove('hidden'); inp.value = ''; inp.focus(); }
+  else { inp.value = sel.value; }
+}
+function vesselBack(inp){   // cleared the typed size? go back to the menu list
+  if(inp.value.trim()) return;
+  var cell = inp.parentNode, sel = cell.querySelector('.vsel');
+  inp.classList.add('hidden'); sel.classList.remove('hidden'); sel.value = '';
+}
 function addNewLine(){
   // 9/22 Shane "streamline the item material add items section": ONE row per item instead of two stacked rows -
   // name, qty, price, material, vessel, texture, white ink, apply, minus. Classes unchanged so submit() still reads them.
@@ -267,7 +287,10 @@ function addNewLine(){
               + '<input type="number" inputmode="numeric" min="0" placeholder="qty" class="q" oninput="totals()">'
               + '<input type="number" step="0.01" inputmode="decimal" placeholder="price" class="p" oninput="totals()">'
               + '<select class="m"><option value="">Material</option><option>White</option><option>Holo</option><option>Gold</option></select>'
-              + '<input placeholder="Vessel / size" class="v">'
+              + '<span class="vcell">'
+              +   '<select class="vsel" onchange="vesselPick(this)">' + VESSELS + '</select>'
+              +   '<input placeholder="type the size" class="v vother hidden" onblur="vesselBack(this)">'
+              + '</span>'
               + '<select class="t"><option value="">Texture</option><option value="Flat">Flat</option><option value="1">1 &middot; Spot Gloss</option><option value="2">2 &middot; Standard</option><option value="3">3 &middot; Pro</option></select>'
               + '<select class="w" title="White ink"><option value="">W ink</option><option value="Y">W: Y</option><option value="N">W: N</option></select>'
               + '<select class="ap" title="We apply to jars"><option value="">Apply</option><option value="Y">A: Y</option><option value="N">A: N</option></select>'
@@ -291,6 +314,8 @@ function asNewItem(a){   // 9/16 Shane: a size or material we have not printed f
   var d = a.closest('.line'); addNewLine(); var row = $('newItems').lastElementChild;
   row.querySelector('.n').value = d.dataset.sku; var mat = (d.dataset.material || '').toLowerCase();
   row.querySelector('.m').value = mat.indexOf('holo') >= 0 ? 'Holo' : mat.indexOf('gold') >= 0 ? 'Gold' : mat.indexOf('white') >= 0 ? 'White' : '';
+  // 9/22: the vessel cell is a menu dropdown now - open its 'something else' box so the new size can be typed
+  var _s = row.querySelector('.vsel'); _s.value = '__other__'; vesselPick(_s);
   row.querySelector('.v').placeholder = 'new size (was ' + (d.querySelector('.nm').textContent.split(' \u00b7 ')[0] || 'n/a') + ')'; row.scrollIntoView({block: 'center'}); row.querySelector('.v').focus();
 }
 function resetForm(){   // 9/16 Shane: reset with an are-you-sure; keeps the PIN + catalog, clears everything typed
