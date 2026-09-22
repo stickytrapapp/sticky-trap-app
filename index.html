@@ -1997,9 +1997,9 @@
 
   if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}
   /* ---- Trap Points today line (2026-09-18): reads what the games already keep on this phone - tp_ledger (points), tp_streak, tp_daily (this
-          6-hour board), tp_goal (target prize) - and says the one thing that matters now. Prize costs mirror /game/ CAT (800 / 1,400 / 5,000). ---- */
+          6-hour board), tp_goal (target prize) - and says the one thing that matters now. Prize costs mirror /game/ CAT (250 / 600 / 2,000 since 2026-09-22 - keep both in step). ---- */
   (function(){ var el=document.getElementById('tpline'), tt=document.getElementById('tlT'), tc=document.getElementById('tlC'); if(!el) return;
-    var PRIZES=[['12 slaps',800],['2 lighters',1400],['1 embroidered hoodie',5000]];
+    var PRIZES=[['12 slaps',250],['2 lighters',600],['1 embroidered hoodie',2000]];
     function rj(k,d){ try{ return JSON.parse(localStorage.getItem(k)||'null')||d; }catch(e){ return d; } }
     function fmt(n){ return (+n||0).toLocaleString('en-US'); }
     function paint(){ var led=rj('tp_ledger',[]), streak=rj('tp_streak',{}), daily=rj('tp_daily',{}), goal=localStorage.getItem('tp_goal')||'';
