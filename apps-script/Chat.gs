@@ -45,7 +45,7 @@
  */
 
 var PROP = PropertiesService.getScriptProperties();
-var CODE_VERSION = 65;   // v65 9/21 Shane: 'for the time being do not send anything to erinnomids - send it to thestickytrap gmail to her attention': chat leads -> owner inbox + thestickytrap@ with ATTN ERIN in the subject.   // v64 9/21 Shane 'leads to Erin too': chat leads (hand-off + lead_phone) go to the owner AND Erin; every other alert stays owner-only.   // v63 9/21 Shane: hand-off promise = 'Erin will text you back - usually within a business day' (email if no phone); ask for the cell first.   // v62 9/18 Shane 'stop sending notifications in the client list': no Monday bells from chat leads (card + update + owner email only).   // v61 9/18: where-is-my-order always offers the phone lookup at track.thestickytrap.app alongside code+email.   // v60 9/18 (Shane): every STAFF alert (new order, proof approved, changes, leads, referrals, NDA copies, card failures, digest) goes to the owner inbox ONLY until the flow bugs are fixed - see ALERTS_OWNER_ONLY   // v59 9/18 SECURITY: token_rotate (PIN) - fresh token on every open + recently archived order, current-stage email re-sent so links work; the tracker snapshots that leaked tokens are gone for good.   // v58 9/18: staff orders list carries track_url (the tokened client link) so the console can print the QR label.   // v57 9/18 foreman notes: phone lookup returns code/stage/due only + 'track_link' emails the real link; deals support "match":"Flat" (texture at the Flat price at that quantity) in the cart re-price.   // v56 9/18 Shane: find my orders by PHONE (read-only list; approve/pay still need the tokened link) - track&p=   // v55 9/18: tracker links -> https://track.thestickytrap.app/ (the tracker's own front door; forwards to /track/ on the app origin so push keeps working).   // v54 9/17 Shane: 'no deposits - art assessed free, agreed orders paid in full' - wording; Payment received email says so.   // v53 9/17 October promo: deals honor 'from', and a deal price is the better of band or deal (never stacked).   // v52 9/17: 'NUDGED <customer>' replies to the Jobs today email are picked up hourly (nudgedReplies_) so the reorder list clears itself.   // v51 9/17 bot editor: the hourly stall email (24 h proof / 72 h press) is OFF by default - the Daily Pulse 'Jobs today' email is the one stall list; set NUDGE_STALE=on to bring it back. v50 9/17 New Orders Intake (Shane): 'Quote sent' -> 'Invoice sent' (the invoice is the quote)   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
+var CODE_VERSION = 66;   // v66 9/22 Shane ('monday is just on hold while we restructure it'): MONDAY_HOLD - the bot stops writing to Monday. Chat leads still land in the leads sheet and the ATTN ERIN email; no card, no update. Flip MONDAY_HOLD to false (or set Script Property MONDAY_HOLD=off) when the restructure is done.   // v65 9/21 Shane: 'for the time being do not send anything to erinnomids - send it to thestickytrap gmail to her attention': chat leads -> owner inbox + thestickytrap@ with ATTN ERIN in the subject.   // v64 9/21 Shane 'leads to Erin too': chat leads (hand-off + lead_phone) go to the owner AND Erin; every other alert stays owner-only.   // v63 9/21 Shane: hand-off promise = 'Erin will text you back - usually within a business day' (email if no phone); ask for the cell first.   // v62 9/18 Shane 'stop sending notifications in the client list': no Monday bells from chat leads (card + update + owner email only).   // v61 9/18: where-is-my-order always offers the phone lookup at track.thestickytrap.app alongside code+email.   // v60 9/18 (Shane): every STAFF alert (new order, proof approved, changes, leads, referrals, NDA copies, card failures, digest) goes to the owner inbox ONLY until the flow bugs are fixed - see ALERTS_OWNER_ONLY   // v59 9/18 SECURITY: token_rotate (PIN) - fresh token on every open + recently archived order, current-stage email re-sent so links work; the tracker snapshots that leaked tokens are gone for good.   // v58 9/18: staff orders list carries track_url (the tokened client link) so the console can print the QR label.   // v57 9/18 foreman notes: phone lookup returns code/stage/due only + 'track_link' emails the real link; deals support "match":"Flat" (texture at the Flat price at that quantity) in the cart re-price.   // v56 9/18 Shane: find my orders by PHONE (read-only list; approve/pay still need the tokened link) - track&p=   // v55 9/18: tracker links -> https://track.thestickytrap.app/ (the tracker's own front door; forwards to /track/ on the app origin so push keeps working).   // v54 9/17 Shane: 'no deposits - art assessed free, agreed orders paid in full' - wording; Payment received email says so.   // v53 9/17 October promo: deals honor 'from', and a deal price is the better of band or deal (never stacked).   // v52 9/17: 'NUDGED <customer>' replies to the Jobs today email are picked up hourly (nudgedReplies_) so the reorder list clears itself.   // v51 9/17 bot editor: the hourly stall email (24 h proof / 72 h press) is OFF by default - the Daily Pulse 'Jobs today' email is the one stall list; set NUDGE_STALE=on to bring it back. v50 9/17 New Orders Intake (Shane): 'Quote sent' -> 'Invoice sent' (the invoice is the quote)   // bump with every paste; ?ping=1 reports it so the deployed version can be checked from outside
 var SHOP_EMAIL = PropertiesService.getScriptProperties().getProperty('SHOP_EMAIL') || 'thestickytrap@gmail.com';
 var ALERTS_OWNER_ONLY = true;   // v60 Shane 9/18: 'do not send any alerts to thestickytrap gmail for now ... send to fm holdings only' - flip to false to restore the shop inbox + NUDGE_TO
 var LEADS_TO = SHOP_EMAIL;   // v65: chat leads land in the shop inbox marked ATTN ERIN (Shane 9/21: nothing to erinnomids for now); every other alert stays owner-only
@@ -176,7 +176,7 @@ function doGet(e) {
     return out_({ ok: true, version: CODE_VERSION, key: !!PROP.getProperty('ANTHROPIC_API_KEY'), model: cfg_('MODEL'), kb: kb.length, prices: n, kb_url: cfg_('KB_URL'),
                   store: store.slice(0, 8), open_orders: open, store_error: storeErr, mail_error: PROP.getProperty('MAIL_LAST_ERROR') || '',
                   sms: smsReady_() ? 'ready' : 'no twilio', sms_error: PROP.getProperty('SMS_LAST_ERROR') || '', billing_draft: true,
-                  push: !!PROP.getProperty('FCM_PRIVATE_KEY'), awards: true,
+                  push: !!PROP.getProperty('FCM_PRIVATE_KEY'), awards: true, monday_hold: mondayHeld_(),   // v66: true = the bot writes nothing to Monday
                   cron_nudge: PROP.getProperty('CRON_LAST_nudge') || '', cron_week: PROP.getProperty('CRON_LAST_week') || '' });   // v48   // v27 store; v29 mail; v32 sms; v36 billing_draft; v44 push + awards
   }
   return out_({ ok: true, hint: 'POST {uid, tab, basket, messages:[{role,content}]}' });
@@ -457,6 +457,13 @@ function ask_(msgs, ctx) {
 }
 
 /* ---------- v25: hand-off leads (sheet + email + Monday) and baskets saved by email ---------- */
+// v66 2026-09-22 (Shane: 'monday is just on hold while we restructure it'). The 9/21 freeze was enforced by MONDAY_FREEZE=1 in tracker-config.txt, which only
+// gates the PC-side Python scripts - Apps Script never reads that file, so the chat bot kept creating lead cards straight through the freeze. This is the
+// Apps Script half of the same switch: while it is on, nothing here touches Monday. Leads are unaffected otherwise - sheet row + ATTN ERIN email as always.
+// To bring Monday back: set MONDAY_HOLD = false below (or add Script Property MONDAY_HOLD = off, no redeploy needed) and check the board/group ids still match
+// the new structure - LEADS_BOARD / LEADS_GROUP script properties override the defaults in mondayLead_.
+var MONDAY_HOLD = true;
+function mondayHeld_() { var p = PROP.getProperty('MONDAY_HOLD'); if (p) return !/^(off|0|false|no)$/i.test(p); return MONDAY_HOLD; }
 var HANDOFF_PROMISE = 'Erin will text you back - usually within a business day.';   // v63 Shane 9/21
 function promise_(contact) { return phoneOk_(contact) ? HANDOFF_PROMISE : 'Erin will email you back - usually within a business day.'; }
 var LEAD_COLS = ['ts', 'name', 'contact', 'want', 'trigger', 'summary', 'basket', 'channel', 'device_id', 'monday_item', 'emailed', 'routed'];
@@ -487,12 +494,12 @@ function leadIn_(inp, ctx) {
   var why = trig === 'over_1000' || sub >= ownerMin ? 'over $' + ownerMin + ' / over 1,000 pcs' : (trig === 'discount_or_match' ? 'price match or discount' : (trig === 'repeat_or_frustrated' ? 'complaint / frustrated customer' : ''));
   var toOwner = !!why;
   var mondayId = '', emailed = false;
-  if (!test) { try { mondayId = mondayLead_(name, contact, want, trig, summ, basket, toOwner, why); } catch (e) { mondayId = 'ERR ' + String(e).slice(0, 80); } }
+  if (!test && !mondayHeld_()) { try { mondayId = mondayLead_(name, contact, want, trig, summ, basket, toOwner, why); } catch (e) { mondayId = 'ERR ' + String(e).slice(0, 80); } }   // v66: no Monday while the board is being restructured
   try {
     var subj = (test ? '[TEST] ' : '') + 'ATTN ERIN - ' + (toOwner ? '[OWNER] ' : '') + 'App chat lead: ' + name + ' - ' + (want || trig);
     var body = ['New lead from the ' + (ctx.channel || 'app') + ' chat (' + Utilities.formatDate(when, Session.getScriptTimeZone(), 'EEE MMM d, h:mm a') + ')' + (toOwner ? '\nROUTED TO THE OWNER: ' + why + ' (Erin copied)' : ''), '',
       'Name: ' + name, 'Contact: ' + contact, 'Wants: ' + (want || '-'), 'Why handed off: ' + trig, '', 'Summary: ' + (summ || '-'), '', 'Basket: ' + basket,
-      mondayId && !/^ERR/.test(mondayId) ? 'Monday item: https://thestickytraps-team.monday.com/boards/8594864074/pulses/' + mondayId : (mondayId ? 'Monday: ' + mondayId : 'Monday: not created (MONDAY_TOKEN not set)'),
+      mondayId && !/^ERR/.test(mondayId) ? 'Monday item: https://thestickytraps-team.monday.com/boards/8594864074/pulses/' + mondayId : (mondayId ? 'Monday: ' + mondayId : (mondayHeld_() ? 'Monday: ON HOLD - no card created (board being restructured); this email and the leads sheet are the record' : 'Monday: not created (MONDAY_TOKEN not set)')),
       '', 'Promise made to the customer: ' + promise_(contact)].join('\n');
     var to = leadsTo_(); if (toOwner) { var ownerMail = PROP.getProperty('OWNER_EMAIL') || 'fmholdings.office@gmail.com'; if (to.indexOf(ownerMail) < 0) to += ',' + ownerMail; }   // v64: owner + Erin
     GmailApp.sendEmail(to, subj, body, { name: 'Sticky Trap App', replyTo: emailOk_(contact) ? contact : SHOP_EMAIL });
@@ -514,10 +521,11 @@ function leadPhone_(b) {   // v38: the hand-off card collected a cell number - a
   var name = rows[hit][1], want = rows[hit][3], contact = rows[hit][2], monday = rows[hit][9];
   var col = LEAD_COLS.indexOf('summary') + 1; sh.getRange(hit + 1, col).setValue(String(rows[hit][col - 1]) + ' | TEXT ME at ' + phone);
   try { GmailApp.sendEmail(leadsTo_(), 'ATTN ERIN - Lead wants a text: ' + name + ' ' + phone, name + ' (' + contact + ') asked to be texted when you reply. Cell: ' + phone + '\nWants: ' + want + (monday && !/^ERR/.test(String(monday)) ? '\nMonday: https://thestickytraps-team.monday.com/boards/8594864074/pulses/' + monday : ''), { name: 'Sticky Trap App' }); } catch (e) { mailErr_(e); }
-  try { if (monday && !/^ERR/.test(String(monday)) && PROP.getProperty('MONDAY_TOKEN')) mondayGql_(PROP.getProperty('MONDAY_TOKEN'), 'mutation ($i: ID!, $t: String!) { create_update (item_id: $i, body: $t) { id } }', { i: String(monday), t: 'Wants a TEXT when we reply: ' + phone }); } catch (e) {}
+  try { if (!mondayHeld_() && monday && !/^ERR/.test(String(monday)) && PROP.getProperty('MONDAY_TOKEN')) mondayGql_(PROP.getProperty('MONDAY_TOKEN'), 'mutation ($i: ID!, $t: String!) { create_update (item_id: $i, body: $t) { id } }', { i: String(monday), t: 'Wants a TEXT when we reply: ' + phone }); } catch (e) {}
   return { ok: true, phone: phone };
 }
 function mondayLead_(name, contact, want, trig, summ, basket, toOwner, why) {
+  if (mondayHeld_()) return '';   // v66
   var tok = PROP.getProperty('MONDAY_TOKEN');
   if (!tok) return '';
   var board = PROP.getProperty('LEADS_BOARD') || '8594864074', group = PROP.getProperty('LEADS_GROUP') || 'group_mm3cc2mz';   // main Board, 'Erin' group unless overridden
@@ -533,6 +541,7 @@ function mondayLead_(name, contact, want, trig, summ, basket, toOwner, why) {
   return String(id);
 }
 function mondayGql_(tok, query, vars) {
+  if (mondayHeld_()) return { data: null, held: true };   // v66: every Monday write in this file goes through here
   var res = UrlFetchApp.fetch('https://api.monday.com/v2', { method: 'post', contentType: 'application/json', headers: { Authorization: tok, 'API-Version': '2024-10' }, payload: JSON.stringify({ query: query, variables: vars || {} }), muteHttpExceptions: true });
   return JSON.parse(res.getContentText());
 }
