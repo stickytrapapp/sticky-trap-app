@@ -1,64 +1,64 @@
 {
-  "updated": "2026-09-21",
+  "updated": "2026-09-22",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-09-21",
+      "date": "2026-09-22",
       "label": "Morning Brief",
-      "title": "Momentum Building: Michigan Eyes Tax Relief as National Rescheduling and Psychedelics Wins Pile Up",
-      "top": "Michigan operators have real reasons for optimism this week — a $17 billion sales milestone, a GOP repeal push on the 24% wholesale tax, and a court win for a Jars Cannabis store — even as regulators flex enforcement muscle. Nationally, Alabama dropped its rescheduling opposition, a federal court upheld medical marijuana's Schedule III move, and Compass Pathways keeps its psilocybin NDA on track for a potential 2027 launch.",
+      "title": "Michigan Operators Find Daylight as Washington Turns the Tide on Cannabis and Psychedelics",
+      "top": "Michigan's cannabis scene keeps expanding — new Ann Arbor storefronts, a Chris Webber-backed $50M Corktown facility, and a governor's race where the GOP nominee just won the industry's formal endorsement on a tax-repeal pledge — even as the 24% wholesale tax fight finally heads to trial. Nationally, momentum is building fast: a record-breaking FDA psychedelics hearing, Eli Lilly's atai Beckley buy, fresh M&A from Cresco Labs and Vireo Growth, and a federal court win that keeps Schedule III protections intact for medical marijuana operators.",
       "local": [
         {
-          "text": "Michigan cannabis sales blow past $17 billion all-time",
-          "source": "The Marijuana Herald",
-          "url": "https://themarijuanaherald.com/2026/09/michigan-legal-marijuana-sales-surpass-17-billion/"
+          "text": "New Standard opens new Ann Arbor storefront — The dispensary held a Sept. 3-6 grand-opening weekend with giveaways and discounts for shoppers.",
+          "source": "ClickOnDetroit",
+          "url": "https://www.clickondetroit.com/topic/Dispensary/"
         },
         {
-          "text": "Industry group endorses tax-repeal candidate for governor",
-          "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/news/republican-gubernatorial-candidate-courts-michigan-cannabis-industry-vows-to-kill-new-24-mj-tax/618038"
+          "text": "Chris Webber launches $50M cannabis facility in Corktown — The NBA legend returned to Detroit to open his latest venture, a $50 million cannabis operation on 22nd Street.",
+          "source": "ClickOnDetroit",
+          "url": "https://www.clickondetroit.com/topic/Cannabis/"
         },
         {
-          "text": "Jars Cannabis gets Madison Heights surveillance camera removed",
-          "source": "The 'Gander / MichiGanja Report",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-091626/"
+          "text": "GOP governor nominee James locks in MiCIA endorsement — John James pledged to repeal or sharply reduce the 24% wholesale tax and won a formal endorsement from the Michigan Cannabis Industry Association.",
+          "source": "Postindustrial",
+          "url": "https://postindustrial.com/stories/michigan-marijuana-industry-group-endorses-gop-governor-candidate-who-pledged-to-cut-new-wholesale-tax/"
         },
         {
-          "text": "Republican lawmaker files bill to kill 24% wholesale tax",
-          "source": "cann.dev",
+          "text": "U.P. chain Rize grows by splitting the tax bite — The three-store Upper Michigan operator is sustaining growth by negotiating supplier cost-sharing deals instead of absorbing the 24% tax alone.",
+          "source": "Cann.dev",
           "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
         },
         {
-          "text": "State drops record fine, yanks permit over 'egregious' violations",
-          "source": "Cannabis Newsletter (Substack)",
-          "url": "https://cannabisinsight420.substack.com/p/cannabis-newsletter-daily-roundup-5dd"
+          "text": "Industry's original tax lawsuit finally reaches trial — MiCIA's first challenge to the 24% wholesale tax heads to trial this month, while a second suit argues the levy creates unconstitutional 'tax pyramiding' on consumers.",
+          "source": "WWMT / Spectrum News",
+          "url": "https://wwmt.com/news/state/michigan-marijuana-industry-lawsuit-stop-wholesale-tax-legal-court-pot-weed-economy-business-wwmt"
         }
       ],
       "national": [
         {
-          "text": "Alabama withdraws its opposition to federal rescheduling",
-          "source": "Cannabis Newsletter (Substack)",
-          "url": "https://cannabisinsight420.substack.com/p/cannabis-newsletter-daily-roundup-5dd"
+          "text": "FDA's psychedelics hearing draws 18,000 registrants — The historic Part 15 hearing on future therapeutic use of psychedelic drugs pulled over 18,000 registered attendees and roughly 80 speakers.",
+          "source": "Foley Hoag",
+          "url": "https://foleyhoag.com/news-and-insights/publications/alerts-and-updates/2026/september/fda-holds-landmark-public-hearing-on-the-future-therapeutic-use-of-psychedelic-drugs/"
         },
         {
-          "text": "Federal court upholds Schedule III move for medical marijuana",
+          "text": "Eli Lilly closes its atai Beckley psychedelics buy — The acquisition, approved by stockholders and closed Sept. 11, brings pipeline assets BPL-003, VLS-01 and EMP-01 under Lilly's development umbrella.",
+          "source": "Clinical Trial Vanguard",
+          "url": "https://www.clinicaltrialvanguard.com/article/psych-pulse/what-the-fdas-new-psychedelic-framework-actually-means-for-the-clinic/"
+        },
+        {
+          "text": "Cresco Labs closes $50M PharmaCann Penn acquisition — The deal hands Cresco 100% of PharmaCann Penn's equity for roughly $50 million, expanding its multistate footprint.",
+          "source": "Business Wire",
+          "url": "https://www.businesswire.com/newsroom/industry/natural/cannabis"
+        },
+        {
+          "text": "Vireo Growth's acquisition spree fuels 335% growth — Powered by recent buys, Vireo is closing deals for FLUENT, C21, Planet 13's operations and Cannabist assets across five more states.",
+          "source": "Cann.dev",
+          "url": "https://www.cann.dev/florida-cannabis-retail-september-2026/"
+        },
+        {
+          "text": "Court upholds rescheduling, rejects industry challenge — The D.C. Circuit left the medical marijuana Schedule III order in effect, ruling opponents hadn't shown they'd suffer irreparable harm.",
           "source": "Cannabis Business Times",
           "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order"
-        },
-        {
-          "text": "Compass Pathways' psilocybin NDA rolls forward toward 2027 launch",
-          "source": "Compass Pathways (IR)",
-          "url": "https://ir.compasspathways.com/News--Events-/news/news-details/2026/Compass-Pathways-Announces-Six-Month-Data-from-Second-Phase-3-Trial-Confirming-Rapid-and-Durable-Profile/default.aspx"
-        },
-        {
-          "text": "Curaleaf's $4-a-share Aurora bid signals cross-border consolidation",
-          "source": "cann.dev",
-          "url": "https://www.cann.dev/cannabis-ma-august-2026-curaleaf-vireo-consolidation/"
-        },
-        {
-          "text": "Cresco Labs lands $50M bank credit line on rescheduling bets",
-          "source": "Yahoo Finance",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/msos-hits-2026-high-cannabis-040610250.html"
         }
       ]
     }
