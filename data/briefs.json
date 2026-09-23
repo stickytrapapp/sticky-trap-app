@@ -5,60 +5,60 @@
     {
       "date": "2026-09-23",
       "label": "Morning Brief",
-      "title": "Tax Fight Becomes a Campaign Issue as Rescheduling Clears a Court Test",
-      "top": "Michigan operators got a jolt of political momentum this week as a gubernatorial candidate embraced repealing the 24% wholesale tax, while Detroit's cannabis culture scene threw a party for the state's best products. Nationally, a federal appeals court just upheld marijuana's Schedule III move and Compass Pathways' psilocybin data keeps building toward an FDA decision.",
+      "title": "Michigan Market Tops $17B as D.C. Inches Toward Schedule III",
+      "top": "Michigan's legal cannabis market just crossed $17 billion in lifetime sales and a new Ann Arbor storefront is opening even as the 24% wholesale tax fight heats up in the governor's race. Nationally, DEA's rescheduling transcript is public and Judge Julius's recommendation is expected any day, while FDA's psychedelic hearing and Compass Pathways' COMP360 progress keep momentum building toward 2027 approvals.",
       "local": [
         {
-          "text": "John James backs repealing wholesale tax — \"John James, the Republican candidate in Michigan's governor's race, said he supports repealing the state's 24% wholesale cannabis tax.\"",
-          "source": "Ganjapreneur",
-          "url": "https://ganjapreneur.com/michigan-republican-candidate-for-governor-endorses-repealing-wholesale-cannabis-tax/"
+          "text": "Michigan crosses $17 billion in lifetime sales — August alone generated roughly $259 million, pushing combined adult-use and medical sales past the milestone since legalization began.",
+          "source": "The Marijuana Herald",
+          "url": "https://themarijuanaherald.com/2026/09/michigan-legal-marijuana-sales-surpass-17-billion/"
         },
         {
-          "text": "Metro Times crowns 2026 cannabis award winners — \"The Detroit Metro Times staff picked their favorite Michigan flower, rosin, vapes, prerolls, edibles, and dispensaries of the year.\"",
-          "source": "The MichiGanja Report / Gander Newsroom",
+          "text": "Lume opens new Ann Arbor storefront — the Michigan-based chain's West Liberty Street location held a three-day grand opening with extended hours.",
+          "source": "ClickOnDetroit",
+          "url": "https://www.clickondetroit.com/topic/Marijuana_Dispensary/"
+        },
+        {
+          "text": "Governor hopeful pledges to kill the wholesale tax — Rep. John James, now backed by industry donors who wrote roughly $90,000 in checks, has promised to repeal the 24% levy if elected.",
+          "source": "Gander Newsroom",
           "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092126/"
         },
         {
-          "text": "Jars Cannabis beats a surveillance camera fight — \"Jars Cannabis wins removal of Madison Heights Flock camera.\"",
-          "source": "Cann.dev",
-          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
+          "text": "Sales stabilize after tax shock, pointing to a floor — after a rough January, monthly revenue climbed back to $255.4 million by March and held near $253.5 million through June.",
+          "source": "Headset",
+          "url": "https://www.headset.io/blog/michigans-24-wholesale-tax-what-the-data-shows-july-2026-update"
         },
         {
-          "text": "Fields Cannary preps Muskegon dispensary-restaurant hybrid — \"Fields Cannary, a Muskegon development, is targeting a fall opening for its retail cannabis dispensary, with a full-service restaurant to follow.\"",
-          "source": "Cann.dev",
-          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
-        },
-        {
-          "text": "Wholesale tax revenue trails projections, fueling repeal push — the 24% tax generated about $37 million in the second quarter of 2026 and roughly $34 million in the first—against an initial estimate of $105 million per quarter, giving operators and candidates like James a data point for rollback.",
-          "source": "The MichiGanja Report / Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-090826/"
+          "text": "Regulators shut down Muha Meds maker, open shelf space — the CRA revoked Michigan Investment 10's licenses and imposed a record $2 million fine after finding a surveillance camera pointed at a wall instead of the extraction room.",
+          "source": "MJBizDaily",
+          "url": "https://mjbizdaily.com/news/michigan-cannabis-regulators-impose-record-fine-revoke-permit-of-popular-product-maker-after-egregious-violations/618180/"
         }
       ],
       "national": [
         {
-          "text": "Court upholds medical marijuana's Schedule III move — \"Reclassification opponents filed a lawsuit to stop medical marijuana's change in schedule, but that challenge was rebuffed this week in federal court.\"",
-          "source": "Cannabis Business Times",
-          "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order"
+          "text": "DEA publishes rescheduling transcript, decision nears — the 2,533-page record of 11 days of testimony is now public as Judge Derek Julius weighs a Schedule III recommendation.",
+          "source": "MJBizDaily",
+          "url": "https://mjbizdaily.com/news/marijuana-rescheduling-decision-nears-as-dea-publishes-hearing-transcript/617621/"
         },
         {
-          "text": "Trulieve rings the NYSE bell as cannabis first — the company celebrated becoming the first U.S. plant-touching cannabis firm listed on a major exchange, reporting \"Trulieve generated $109 million in cash flow from operations in the first half of 2026, ending the second quarter with $325 million in cash.\"",
-          "source": "Yahoo Finance / PR Newswire",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/trulieve-ring-closing-bell-york-120000131.html"
+          "text": "Trump commutes federal marijuana sentences — the White House cut short a 30-year and a 10-year sentence, adding to a string of cannabis clemency actions.",
+          "source": "The Marijuana Herald",
+          "url": "https://themarijuanaherald.com/2026/09/daily-cannabis-news-brief-for-9-10-2026/"
         },
         {
-          "text": "FDA sets a forward path for psychedelic drugs — the agency's new framework signals a REMS-forward posture for future psychedelic approvals, meaning certified treatment centers and trained therapist dyads for MDMA and psilocybin therapies.",
-          "source": "Clinical Trial Vanguard",
-          "url": "https://www.clinicaltrialvanguard.com/article/psych-pulse/what-the-fdas-new-psychedelic-framework-actually-means-for-the-clinic/"
+          "text": "FDA holds landmark hearing on psychedelic medicine — the White Oak session gathered feedback on provider training, patient safety and access as part of implementing the administration's order to speed psychedelic drug review.",
+          "source": "Foley Hoag",
+          "url": "https://foleyhoag.com/news-and-insights/publications/alerts-and-updates/2026/september/fda-holds-landmark-public-hearing-on-the-future-therapeutic-use-of-psychedelic-drugs/"
         },
         {
-          "text": "Compass Pathways posts durable psilocybin depression data — the company's Phase 3 trial showed \"39% of patients achieving a clinically meaningful response after two doses of psilocybin\", an effect that held for months as it advances toward an FDA filing.",
-          "source": "Compass Pathways (Investor Relations)",
-          "url": "https://ir.compasspathways.com/News--Events-/news/news-details/2026/Compass-Pathways-Announces-Six-Month-Data-from-Second-Phase-3-Trial-Confirming-Rapid-and-Durable-Profile/default.aspx"
+          "text": "Compass Pathways closes in on psilocybin filing — COMP360 showed six-month durability in treatment-resistant depression, with a completed NDA submission targeted for Q4 2026 and launch eyed for early 2027.",
+          "source": "Clinical Trials Arena",
+          "url": "https://www.clinicaltrialsarena.com/news/fda-finalises-psychedelic-clinical-trial-guidance/"
         },
         {
-          "text": "DEA leaves states waiting on rescheduling rules — California's cannabis regulator said the agency hasn't shown \"any sort of interest\" in guiding states through the Schedule III transition, even as it presses California for more program details.",
-          "source": "Marijuana Moment",
-          "url": "https://www.marijuanamoment.net/dea-keeps-states-in-the-dark-about-cannabis-rescheduling-ca-official-says-newsletter-september-22-2026"
+          "text": "MSO consolidation keeps rolling with Vireo-Planet 13 tie-up — Vireo Growth signed a merger agreement for Planet 13 Holdings, adding to a wave of deals reshaping the multistate operator landscape.",
+          "source": "cann.dev",
+          "url": "https://www.cann.dev/cannabis-september-2026-state-launches-market-shifts/"
         }
       ]
     }
