@@ -1102,7 +1102,9 @@
   function monthKey(d){ var x=new Date(d*864e5); return x.getUTCFullYear()+'-'+('0'+(x.getUTCMonth()+1)).slice(-2); }
   function postScore(){
     if(!bestScore) return;
-    var body=JSON.stringify({action:'score',uid:UID,handle:handle,day:dayNum,best:bestScore,slot:slotNum,stars:(HIST.filter(function(h){return h.day===slotNum;})[0]||{}).stars||0});
+    // 2026-09-23: only the live site feeds the ladder. Local test runs were posting real rows (TESTER, TRAPGOD...) that then outranked players.
+    if(location.hostname!=='thestickytrap.app'){ try{ console.log('[lb] local run - score not posted'); }catch(e){} return; }
+    var body=JSON.stringify({action:'score',uid:UID,handle:handle,day:dayNum,best:bestScore,slot:slotNum,par:Math.round(PAR),scoring:'finite-v2',stars:(HIST.filter(function(h){return h.day===slotNum;})[0]||{}).stars||0});
     fetch(LB_API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:body}).then(function(r){return r.json();}).then(function(){ lbCache=null; loadRanks(); }).catch(function(){});
   }
   var lbCache=null, lbAt=0, LB_PERIOD='week';
