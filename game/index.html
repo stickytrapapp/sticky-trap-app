@@ -92,7 +92,7 @@
   .daily .rst{margin-left:auto;font-family:var(--fmono);font-size:12px;color:var(--cyan)}
 
   /* game board */
-  .board{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;touch-action:manipulation}
+  .board{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;touch-action:manipulation}   /* 7 wide since the finite board (2026-09-22); #dboard overrides inline */
   .tile{aspect-ratio:1;border:none;padding:0;border-radius:8px;cursor:pointer;position:relative;
     transition:transform .12s ease, opacity .18s ease;outline:none}
   .tile::after{content:"";position:absolute;inset:22%;transform:rotate(45deg);border-radius:3px;
@@ -878,7 +878,9 @@
   function saveFree(){ try{ localStorage.setItem('tp_free',JSON.stringify({day:Math.floor(Date.now()/864e5),bonus:FREE.bonus,seed:FREE.seed})); }catch(e){} }
   function buildGrid(s){ dseed=(s>>>0)||12345; var g=[]; for(var r=0;r<ROWS;r++){ g.push([]); for(var c=0;c<COLS;c++) g[r][c]=rcolor(); } return g; }
   function boardSeed(){ return MODE==='free' ? (FREE.seed>>>0||12345) : ((slotNum*2654435761)>>>0 || 12345); }
-  function rebuildBoard(){ var s=boardSeed(); grid=buildGrid(s); PAR=solvePar(s); moves=0; undos=UNDOS; hist=[]; draw(); }
+  function rebuildBoard(){ var s=boardSeed(); grid=buildGrid(s); PAR=solvePar(s); moves=0; undos=UNDOS; hist=[];
+    board.style.gridTemplateColumns='repeat('+COLS+',1fr)';   // keep the CSS grid tied to COLS - a 6-column grid with a 7-wide board scrambles every tap
+    draw(); }
 
   // ---- scoring + the settle rule (tiles fall, then empty columns slide left) ----
   function popScore(n){ return (n-2)*(n-2); }
