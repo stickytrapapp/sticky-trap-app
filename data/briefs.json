@@ -1,64 +1,64 @@
 {
-  "updated": "2026-09-22",
+  "updated": "2026-09-23",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-09-22",
+      "date": "2026-09-23",
       "label": "Morning Brief",
-      "title": "Michigan Tops $17B as Repeal Push Builds; Nationally, Rescheduling and Psilocybin Momentum Grow",
-      "top": "Michigan's legal market just crossed $17 billion in lifetime sales even as the 24% wholesale tax squeezes margins — and a growing repeal coalition, including a gubernatorial candidate, is now making the tax a 2026 campaign issue. Nationally, cannabis rescheduling keeps clearing procedural hurdles while Compass Pathways' psilocybin therapy nears its FDA finish line, giving operators real reasons for optimism heading into Q4.",
+      "title": "Tax Underwater, Momentum Overhead: Michigan Weed Eyes Relief as Feds Edge Toward Rescheduling",
+      "top": "Michigan's 24% wholesale tax is collecting a fraction of what Lansing projected, adding fuel to a gubernatorial candidate's repeal pledge, while home-state chain JARS keeps expanding out west. Nationally, the FDA is racing to approve psychedelic therapies and a federal court just upheld medical marijuana's Schedule III status, even as the broader DEA rescheduling decision remains in limbo.",
       "local": [
         {
-          "text": "Michigan crosses $17 billion in lifetime cannabis sales — the state's combined adult-use and medical market hit the milestone even amid this year's tax headwinds.",
-          "source": "The Marijuana Herald",
-          "url": "https://themarijuanaherald.com/2026/09/michigan-legal-marijuana-sales-surpass-17-billion/"
+          "text": "JARS Cannabis expands into largest Arizona chain — JARS Cannabis, the Michigan-based chain, announced a deal to acquire Sonoran Roots and its eight Ponderosa brand dispensaries, which will soon make JARS the largest dispensary chain in Arizona.",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-083126/"
         },
         {
-          "text": "Gubernatorial hopeful pledges to kill the 24% wholesale tax — Rep. John James has taken roughly $90,000 from cannabis executives and now says he'll repeal the tax if elected governor.",
-          "source": "The 'Gander",
+          "text": "Menominee petition could add four dispensaries — A pending petition drive could lead to four more dispensaries in the city of Menominee, raising the local cap from nine to 13 stores, with organizers saying they turned in more than enough signatures for the November ballot.",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-091626/"
+        },
+        {
+          "text": "Metro Times crowns Michigan's best flower and shops — The Detroit Metro Times staff picked their favorite Michigan flower, rosin, vapes, prerolls, edibles, and dispensaries of the year.",
+          "source": "Gander Newsroom / Detroit Metro Times",
           "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092126/"
         },
         {
-          "text": "Rize keeps growing where rivals shut down — the U.P. chain is splitting the wholesale tax burden with suppliers instead of absorbing it alone, even as Higher Love closed five of its nine locations under the same tax.",
-          "source": "Cann.dev",
-          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
+          "text": "Wholesale tax revenue running far below forecast — Michigan's 24% wholesale marijuana tax is still only bringing in a fraction of what state officials projected, generating about $37 million in the second quarter of 2026 and roughly $34 million in the first, against an initial estimate of $105 million per quarter.",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-090826/"
         },
         {
-          "text": "Jars Cannabis wins surveillance fight in Madison Heights — the 54-store chain got a parking-lot-facing police camera removed after negotiating with the city.",
-          "source": "Cann.dev",
-          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
-        },
-        {
-          "text": "State drops record $2M fine on Muha Meds maker — regulators revoked Michigan Investment 10's processor license over 'egregious violations,' clearing the field for compliant competitors.",
-          "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/news/michigan-cannabis-regulators-impose-record-fine-revoke-permit-of-popular-product-maker-after-egregious-violations/618180/"
+          "text": "GOP nominee vows to repeal 24% tax — John James, the Republican candidate in Michigan's governor's race, said he supports repealing the state's 24% wholesale cannabis tax, telling donors he wants to \"repeal or sharply reduce\" the levy.",
+          "source": "Ganjapreneur",
+          "url": "https://ganjapreneur.com/michigan-republican-candidate-for-governor-endorses-repealing-wholesale-cannabis-tax/"
         }
       ],
       "national": [
         {
-          "text": "Alabama drops its rescheduling opposition — the state's health department resolved its legal objections, removing one of the last formal holdouts against moving cannabis to Schedule III.",
-          "source": "Cannabis Newsletter",
-          "url": "https://cannabisinsight420.substack.com/p/cannabis-newsletter-daily-roundup-5dd"
+          "text": "FDA fast-tracks psilocybin and PTSD drug reviews — The FDA issued national priority vouchers to three companies studying psilocybin for treatment-resistant depression and major depressive disorder, plus methylone, a drug similar to MDMA, for PTSD.",
+          "source": "CNN",
+          "url": "https://www.cnn.com/2026/04/24/health/fda-psychedelic-drugs-priority-vouchers"
         },
         {
-          "text": "Compass Pathways nears the finish line on psilocybin — the company expects to complete its rolling FDA application for COMP360 in Q4 and still targets a 2027 commercial launch.",
-          "source": "MarketBeat",
-          "url": "https://www.marketbeat.com/instant-alerts/event-compass-pathways-eyes-2027-comp360-launch-as-fda-filing-nears-2026-09-22/"
+          "text": "Court upholds medical marijuana's Schedule III move — Reclassification opponents' lawsuit to stop medical marijuana's change in schedule was rebuffed this month in federal court, as the D.C. Circuit left the rescheduling order in effect, holding that opponents hadn't shown likely success.",
+          "source": "Cannabis Business Times",
+          "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order"
         },
         {
-          "text": "Curaleaf goes cross-border with $1.5B Aurora bid — the MSO's takeover offer signals major operators are betting on rescheduling-driven confidence to pursue Canadian consolidation.",
+          "text": "Trulieve makes history with NYSE listing — Trulieve Cannabis Corp. received approval to list on the New York Stock Exchange, paving its path to the major exchange by restructuring to maintain a 100-percent medical footprint following federal Schedule III reclassification.",
+          "source": "mg Magazine",
+          "url": "https://mgmagazine.com/business-strategy/finance-acquisitions-business-strategy/"
+        },
+        {
+          "text": "Curaleaf bids $4 a share for Aurora — August 2026 cannabis M&A moved into a different weight class, with Curaleaf announcing a US$4 per share takeover bid for Aurora Cannabis on August 10.",
           "source": "Cann.dev",
-          "url": "https://www.cann.dev/cannabis-ma-august-2026-curaleaf-vireo-consolidation/"
+          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
         },
         {
-          "text": "Vireo Growth's buying spree keeps expanding — the MSO added an $88.5M New York cultivation complex and a $40M ag-supply company in the same week.",
-          "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/news/vireo-growths-latest-deals-see-cannabis-mso-expand-to-real-estate-agribusiness/616202"
-        },
-        {
-          "text": "States say DEA is slow-walking rescheduling guidance — California's cannabis director says the agency shows no interest in helping states implement the policy shift.",
-          "source": "Marijuana Moment",
-          "url": "https://www.marijuanamoment.net/dea-keeps-states-in-the-dark-about-cannabis-rescheduling-ca-official-says-newsletter-september-22-2026"
+          "text": "DEA hearing wraps, decision on rescheduling still pending — In its own final brief the DEA argued marijuana no longer meets the statutory criteria for Schedule I, though practitioners tracking the docket place a final answer somewhere in late 2026 or 2027.",
+          "source": "Impact Wealth",
+          "url": "https://impactwealth.org/cannabis-rescheduling-in-2026-what-changed-what-didnt-and-what-it-means-at-the-counter/"
         }
       ]
     }
