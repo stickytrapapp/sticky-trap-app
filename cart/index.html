@@ -19,7 +19,7 @@ h1{margin:0 0 10px;font-size:22px}.k{font-size:10.5px;font-weight:800;letter-spa
 .ln .nt{font-size:12px;color:var(--muted);font-style:italic;margin-top:3px}
 .q{display:flex;align-items:center;gap:6px;margin-top:8px}.q button{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--paper);font:inherit;font-weight:900;cursor:pointer}.q input{width:64px;padding:6px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--paper);font:inherit;font-weight:800;text-align:center}
 .q .u{font-size:12px;color:var(--muted);margin-left:4px}
-.rt{text-align:right}.rt b{font-size:15px;font-variant-numeric:tabular-nums}.rm{display:block;margin:8px 0 0 auto;background:none;border:0;color:var(--muted);font:inherit;font-size:11.5px;text-decoration:underline;cursor:pointer;padding:0}
+.rt{text-align:right}.rt b{font-size:15px;font-variant-numeric:tabular-nums}.rm{display:block;margin:6px 0 0 auto;background:none;border:0;color:var(--muted);font:inherit;font-size:11.5px;text-decoration:underline;cursor:pointer;padding:7px 2px}   /* 2026-09-23: was a 15 px tap target */
 .sum{font-size:13.5px}.sum .r{display:flex;justify-content:space-between;padding:6px 0;border-top:1px solid var(--line)}.sum .r:first-child{border-top:0}.sum .r.tot{font-size:17px;font-weight:900;border-top:2px solid var(--line);margin-top:4px}.sum .r span:last-child{font-variant-numeric:tabular-nums}
 .note{font-size:12px;color:var(--muted);line-height:1.5;margin:8px 0 0}.note.warn{color:var(--warn)}
 input,textarea{width:100%;padding:11px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--paper);font:inherit;font-size:15px}textarea{min-height:60px;resize:vertical}
@@ -145,6 +145,8 @@ var D={"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"breaks":[[500,5],[7
   function lineText(l){ return fmt(l.qty)+'x '+l.p+' - '+l.m+' / '+l.f+' @ '+money(unit(l))+' = '+money(unit(l)*l.qty)+(l.notes?' ('+l.notes+')':''); }
 
   $('go').addEventListener('click',function(){
+    // 2026-09-23: a local run must never create a real order or touch a real card - test the checkout on thestickytrap.app.
+    if(location.hostname!=='thestickytrap.app'){ status('Local run - nothing submitted. Test the checkout on thestickytrap.app.','err'); return; }
     var email=$('email').value.trim(), name=$('name').value.trim();
     if(!cart.length){ status('Your basket is empty.','err'); return; }
     var badArt=cart.filter(function(l){ return l.art&&l.art.pre&&l.art.pre.level==='bad'; }); if(badArt.length){ status('The art on '+badArt[0].p+' is too small to print - replace it on the configure page, or remove the file.','err'); return; }
