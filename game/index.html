@@ -473,6 +473,18 @@
   .startgate .sf-primary{max-width:210px;margin:0}
   .startgate .sf-primary.done,.startgate .sf-primary:disabled{opacity:1;background:rgba(255,255,255,.10);color:#c9c4d8;box-shadow:none;filter:none;cursor:default}
   .sg-sub{font-size:12.5px;color:var(--fg);line-height:1.4;max-width:24ch}
+  /* 2026-09-23 (Shane: one board a day, so the tab must not go dead after it): what to do with the rest of the day */
+  .donenext{width:100%;max-width:290px;margin-top:4px;display:flex;flex-direction:column;gap:7px}
+  .donenext[hidden]{display:none}
+  .donenext .dn-t{font-family:var(--fdisp);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mut);margin-bottom:1px}
+  .dn-row{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border-radius:12px;text-align:left;cursor:pointer;
+    border:1px solid rgba(255,255,255,.12);background:linear-gradient(180deg,rgba(28,28,36,.96),rgba(16,16,22,.96));color:var(--fg);font:inherit}
+  .dn-row:active{transform:translateY(1px)}
+  .dn-row .dn-i{flex:none;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12px;font-weight:900;color:#050505;background:var(--grad)}
+  .dn-row .dn-x{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+  .dn-row b{font-size:13.5px;font-weight:800}
+  .dn-row small{font-size:11px;color:var(--mut);line-height:1.25}
+  .dn-row .dn-go{flex:none;color:var(--cyan);font-weight:900}
   .ne{z-index:66}
   .ne-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center}
   .ne-eyebrow{font-family:var(--fdisp);font-weight:600;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--mut)}
@@ -560,7 +572,15 @@
       <div class="board-wrap">
         <div class="board" id="board" aria-label="Daily shard puzzle"></div>
         <div class="combo-flash" id="combo"></div>
-        <div class="startgate" id="startGate"><button class="sf-primary" id="startBtn">▶ Start the board</button><div class="sg-sub" id="sgSub"></div></div>
+        <div class="startgate" id="startGate"><button class="sf-primary" id="startBtn">▶ Start the board</button><div class="sg-sub" id="sgSub"></div>
+          <div class="donenext" id="doneNext" hidden>
+            <div class="dn-t">Keep earning today</div>
+            <button type="button" class="dn-row" id="dnFree"><span class="dn-i">▶</span><span class="dn-x"><b>Free play</b><small id="dnFreeSub">Fresh board, not ranked · +1 point a clear</small></span><span class="dn-go">→</span></button>
+            <button type="button" class="dn-row" id="dnVerify"><span class="dn-i">◈</span><span class="dn-x"><b>Verify your brand</b><small>One-off · +500 points</small></span><span class="dn-go">→</span></button>
+            <button type="button" class="dn-row" id="dnRefer"><span class="dn-i">✦</span><span class="dn-x"><b>Refer a brand</b><small>+500 when they order</small></span><span class="dn-go">→</span></button>
+            <button type="button" class="dn-row" id="dnShop"><span class="dn-i">◆</span><span class="dn-x"><b id="dnShopT">See what you're close to</b><small id="dnShopSub">Your goal in Rewards</small></span><span class="dn-go">→</span></button>
+          </div>
+        </div>
       </div>
 
       <div class="meters">
@@ -945,12 +965,32 @@
     else { if(lbl)lbl.textContent=(si===0?'First star':si===1?'Second star':'Third star'); if(pv2)pv2.textContent=fmt(Math.round(ST[si]));
       var from=si?ST[si-1]:0; document.getElementById('goalbar').style.width=Math.max(0,Math.min(100,(best-from)/(ST[si]-from)*100))+'%'; }
   }
+  /* 2026-09-23: one ranked board a day would leave the Play tab dead until tomorrow. When the daily is done the gate offers
+     what still pays - free play, and the Earn actions that are worth real money to the shop (verify, refer) - plus the goal. */
+  function showDoneNext(on){
+    var d=document.getElementById('doneNext'); if(!d) return;
+    if(!on || MODE!=='daily'){ d.hidden=true; return; }
+    var fs=document.getElementById('dnFreeSub');
+    if(fs) fs.textContent= FREE.bonus>=FREE_CAP ? 'Fresh board, not ranked · today’s bonus is maxed' : ('Fresh board, not ranked · +1 point a clear ('+FREE.bonus+'/'+FREE_CAP+' today)');
+    try{ var it=CAT[goalIdx()], left=Math.max(0,it.c-balance);
+      document.getElementById('dnShopT').textContent= left>0 ? fmt(left)+' to go for '+it.n : it.n+' is ready to claim';
+      document.getElementById('dnShopSub').textContent= left>0 ? 'Your goal in Rewards' : 'Claim it in Rewards'; }catch(e){}
+    d.hidden=false;
+  }
+  (function(){
+    function tab(n){ var b=document.querySelector('.tab[data-t="'+n+'"]'); if(b) b.click(); }
+    var f=document.getElementById('dnFree'); if(f) f.addEventListener('click',function(){ setMode('free'); setTimeout(startAttempt,60); });
+    var v=document.getElementById('dnVerify'); if(v) v.addEventListener('click',function(){ tab('earn'); setTimeout(function(){ var b=document.getElementById('verifyBtn'); if(b) b.click(); },160); });
+    var r=document.getElementById('dnRefer'); if(r) r.addEventListener('click',function(){ tab('earn'); setTimeout(function(){ var b=document.getElementById('refBtn'); if(b) b.click(); },160); });
+    var s=document.getElementById('dnShop'); if(s) s.addEventListener('click',function(){ tab('rewards'); });
+  })();
   function showGate(){
     var g=document.getElementById('startGate'); if(!g)return; g.classList.remove('hide');
+    showDoneNext(false);   // only a finished DAILY shows the 'keep earning' block; free play and a fresh board never do
     var btn=document.getElementById('startBtn'), sub=document.getElementById('sgSub');
     if(MODE==='free'){ if(btn){btn.disabled=false; btn.classList.remove('done'); btn.textContent='\u25B6 Free play \u00b7 new board';}
       if(sub) sub.textContent='Unlimited boards \u00b7 clear one past the first star for +1 point ('+FREE.bonus+'/'+FREE_CAP+' today) \u00b7 not ranked'; return; }
-    if(dayDone){ if(btn){btn.textContent='✓ Played this board'; btn.disabled=true; btn.classList.add('done'); } if(sub)sub.textContent=(bestScore>0?('Your score '+fmt(bestScore)+' · '):'')+'New board in '+nextIn()+' (Trap #'+(trapNum+1)+')'; return; }
+    if(dayDone){ if(btn){btn.textContent='✓ Played this board'; btn.disabled=true; btn.classList.add('done'); } if(sub)sub.textContent=(bestScore>0?('Your score '+fmt(bestScore)+' · '):'')+'New board in '+nextIn()+' (Trap #'+(trapNum+1)+')'; showDoneNext(true); return; }
     if(btn){btn.disabled=false; btn.classList.remove('done');}
     if(btn)btn.textContent=(attempt===1?'▶ Start the board':'▶ Try '+attempt+' of 3 · same board');
     if(sub)sub.textContent=(attempt===1?'3 tries — your best score counts.':('Best so far '+fmt(bestScore)+' · try '+attempt+' of 3'));
