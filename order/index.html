@@ -184,7 +184,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-22f</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-23a</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -337,7 +337,8 @@ function renderPast(name){
   $('pastCard').classList.toggle('hidden', !list.length);
   box.innerHTML = '';
   list.forEach(function(o, i){
-    var what = o.rows.map(function(r){ return r.qty + ' x ' + r.sku; }).join(' · ');
+    var what = o.rows.length ? o.rows.map(function(r){ return r.qty + ' x ' + r.sku; }).join(' · ')
+                            : 'design / service only — no printed lines on it';
     if(what.length > 120) what = what.slice(0, 120) + '…';
     var d = document.createElement('div'); d.className = 'line';
     var left = document.createElement('div');
@@ -379,12 +380,14 @@ function openPast(inv){
     }
   });
   if(!o.rows.length) addNewLine();
-  if(o.due) $('due').value = mdyToISO(o.due);
+  var iso = o.due ? mdyToISO(o.due) : '', today = new Date().toISOString().slice(0, 10), stale = iso && iso < today;
+  $('due').value = stale ? '' : iso;
   if(o.delivery) $('delivery').value = /ship/i.test(o.delivery) ? 'Ship' : /deliver/i.test(o.delivery) ? 'Deliver' : 'Pick Up';
   var sent = (o.status === 'Sent' || o.status === 'Paid');
   $('editMsg').innerHTML = 'Editing <b>' + esc(o.inv) + '</b> (' + esc(o.date) + ')'
     + (sent ? ' — this one has already gone out, so the edit is built as a <b>revision (R2)</b>. Cancel and reissue the Square invoice when you are ready.'
             : ' — sending replaces the invoice and work order on its line in Monday.');
+  if(stale) $('editMsg').innerHTML += ' <b>Its due date (' + esc(o.due) + ') has passed — set a new one.</b>';
   $('editBar').classList.remove('hidden');
   $('pastCard').classList.add('hidden');
   window.scrollTo(0, 0);
