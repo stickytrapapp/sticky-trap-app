@@ -1124,7 +1124,21 @@
     if(!force && lbCache && Date.now()-lbAt<60000){ render(lbCache); return; }
     fetch(LB_API+'?action=lb&period='+LB_PERIOD+'&month='+monthKey(dayNum)+'&uid='+encodeURIComponent(UID)+'&handle='+encodeURIComponent(handle||'')+'&t='+Date.now()).then(function(r){return r.json();}).then(function(j){ if(j&&j.ok&&j.top){ lbCache=j; lbAt=Date.now(); render(j); try{ renderLastWeek(j); }catch(e){} } else fail(); }).catch(fail);
     function fail(){ if(!loadRanks._retried){ loadRanks._retried=true; setTimeout(function(){ loadRanks(true); },2500); return; } loadRanks._retried=false; list.innerHTML='<div class="lb-empty">Couldn\u2019t reach the ladder \u2014 try again in a moment.</div>'; }
-    function render(j){ loadRanks._retried=false; try{ creditRefs(j.refs); }catch(e){}
+    // 2026-09-24: the scores sheet still holds test rows and pre-9/22 scores from the old refilling board (thousands, against a finite
+    // board that tops out in the hundreds), so they outrank every real player. The backend purge is queued for the next bot session;
+    // until it lands the app simply refuses to show them. Delete this filter once the sheet is clean.
+    var LB_JUNK=/^(AIMSTER|TESTER|TRAPGOD\d*|PUSHTEST|TEST\w*)$/i, LB_MAX=2000;
+    function lbClean(j){
+      if(!j||!j.top) return j;
+      var kept=j.top.filter(function(r){ return !LB_JUNK.test(String(r.handle||'')) && !(+r.total>LB_MAX); });
+      var dropped=j.top.length-kept.length;
+      kept.forEach(function(r,i){ r.rank=i+1; });
+      j.top=kept; j.count=Math.max(0,(+j.count||0)-dropped);
+      if(j.you&&LB_JUNK.test(String(j.you.handle||''))) j.you=null;
+      if(j.last_week&&(LB_JUNK.test(String(j.last_week.handle||''))||+j.last_week.total>LB_MAX)) j.last_week=null;
+      return j;
+    }
+    function render(j){ j=lbClean(j); loadRanks._retried=false; try{ creditRefs(j.refs); }catch(e){}
       if(!j.top.length){ list.innerHTML='<div class="lb-empty">No scores yet this '+(LB_PERIOD==='week'?'week':'month')+'.<br>Finish today\u2019s Trap to open the board.</div>'; }
       else{
         list.innerHTML=j.top.map(function(r){ var av=(r.handle||'??').slice(0,2), me=r.you?' me':'', top=r.rank===1?' win':'';
