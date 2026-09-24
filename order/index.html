@@ -18,6 +18,10 @@
   .row{display:flex;gap:10px} .row>*{flex:1;min-width:0}
   .line{display:grid;grid-template-columns:1fr 84px;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
   .line:last-child{border-bottom:0}
+  .fin{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin-top:6px;font-size:12px;color:var(--muted)}
+  .fin label{display:inline-flex;gap:4px;align-items:center;margin:0;font-size:12px;font-weight:400}
+  .fin input{width:52px;padding:5px 4px;text-align:center;font-size:14px} .fin select{padding:5px 4px;font-size:13px;width:auto}
+  .fin .rh{font-style:italic} .newline .fin{margin-top:0}
   .line .nm{font-size:15px} .line .meta{font-size:12px;color:var(--muted)}
   .line input[type=number]{text-align:center;padding:9px 6px}
   .grp{border-bottom:1px solid var(--line)} .grp:last-child{border-bottom:0}
@@ -165,8 +169,8 @@
 
   <div class="card">
     <h2>Print specs <span class="pill">work order only</span></h2>
-    <label>Finish layers <span class="pill">passes per layer &middot; which one sits on top</span></label>
-    <div class="row3"><div><span class="lbl">Gloss passes</span><input type="number" id="glossN" min="0" max="64" inputmode="numeric" placeholder="0" oninput="finishOrder()"></div><div><span class="lbl">Matte passes</span><input type="number" id="matteN" min="0" max="64" inputmode="numeric" placeholder="0" oninput="finishOrder()"></div><div><span class="lbl">On top</span><select id="finishTop"><option value="">&mdash;</option><option value="Gloss">Gloss over matte</option><option value="Matte">Matte over gloss</option></select></div></div>
+    <label>Finish for the whole order <span class="pill">each line can override &middot; blank = the SKU's recipe</span></label>
+    <div class="row3"><div><span class="lbl">Gloss passes</span><input type="number" id="glossN" min="0" max="64" inputmode="numeric" placeholder="–" oninput="finishOrder()"></div><div><span class="lbl">Matte passes</span><input type="number" id="matteN" min="0" max="64" inputmode="numeric" placeholder="–" oninput="finishOrder()"></div><div><span class="lbl">On top</span><select id="finishTop"><option value="">&mdash;</option><option value="Gloss">Gloss over matte</option><option value="Matte">Matte over gloss</option></select></div></div>
     <label>Raised texture for the whole order <span class="pill">lines can override</span></label>
     <div class="chips" data-group="texture" data-one="1"><span class="chip" data-v="Flat">Flat</span><span class="chip" data-v="1">1 · Spot Gloss</span><span class="chip" data-v="2">2 · Standard</span><span class="chip" data-v="3">3 · Pro</span></div>
     <label>Layers &amp; services</label>
@@ -184,7 +188,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-23a</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-24a</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -254,7 +258,7 @@ function pickCompany(){
   $('payment').value = c ? (c.pickup || /pick/.test(pay) ? 'Pay at pick-up' : /square/.test(pay) ? 'Square' : /ach|wire/.test(pay) ? 'ACH / Wire' : /cash/.test(pay) ? 'Cash' : 'On file') : 'Square';
   $('tax').value = c ? (/exempt/i.test(c.tax || '') ? 'Exempt (3372 on file)' : '6% MI') : '6% MI';
   $('prepressCustom').value = '8'; ppCalc();
-  $('custNote').innerHTML = c ? ('Last invoice ' + (c.last_invoice || '—') + ' on ' + (c.last_date || '—') + ' · pays: ' + (c.payment || 'unknown')) : (isNew ? 'New customer: Square, 6% tax, $50 file set-up unless you change them.' : '');
+  $('custNote').innerHTML = c ? ('Last invoice ' + (c.last_invoice || '—') + ' on ' + (c.last_date || '—') + ' · pays: ' + (c.payment || 'unknown')) : (isNew ? 'New customer: Square, 6% tax, pre-press $8 a set unless you change them.' : '');
   // reorder lines
   if(EDIT_OF && EDIT_OF.customer !== v) stopEditing(false);
   renderPast(v);
@@ -279,14 +283,58 @@ function pickCompany(){
       var rest = s.sku.indexOf(g + ' - ') === 0 ? s.sku.slice(g.length + 3) : s.sku;
       var shown = (s.vessel ? s.vessel + ' \u00b7 ' : '') + rest;   // 9/16 Shane: size first - the GG4 5 ml / 150 ml mix-up
       var d = document.createElement('div'); d.className = 'line';
-      d.innerHTML = '<div><div class="nm">' + esc(shown) + '</div><div class="meta">' + esc([s.material, s.raised === 'Y' ? 'raised' : ''].filter(Boolean).join(' · ')) + ' · ' + money(s.unit) + ' · last ' + s.qty + ' on ' + esc(s.last_date) + ' <a class="mini" onclick="asNewItem(this)">other size / material</a></div></div>'
+      d.innerHTML = '<div><div class="nm">' + esc(shown) + '</div><div class="meta">' + esc([s.material, s.raised === 'Y' ? 'raised' : ''].filter(Boolean).join(' · ')) + ' · ' + money(s.unit) + ' · last ' + s.qty + ' on ' + esc(s.last_date) + ' <a class="mini" onclick="asNewItem(this)">other size / material</a></div>' + finHTML(s, true) + '</div>'
                   + '<input type="number" inputmode="numeric" min="0" placeholder="qty" data-i="' + i + '" oninput="totals()">';
-      d.dataset.title = s.title; d.dataset.unit = s.unit; d.dataset.sku = s.sku; d.dataset.material = s.material || ''; d.dataset.lastInv = s.last_invoice || ''; d.dataset.lastQty = s.qty || 0; det.appendChild(d);
+      d.dataset.title = s.title; d.dataset.unit = s.unit; d.dataset.sku = s.sku; d.dataset.vessel = s.vessel || ''; d.dataset.material = s.material || ''; d.dataset.lastInv = s.last_invoice || ''; d.dataset.lastQty = s.qty || 0; det.appendChild(d);
+      finPrefill(d.querySelector('.fin'), s);
     });
     box.appendChild(det);
   });
   totals();
 }
+// ---- Finish PER LINE (9/24 Shane: "the gloss type and order needs to be by the line as each sku may be different") ----
+// Every line carries its own gloss passes / matte passes / which sits on top. Blank = the whole-order default, and if
+// that is blank too, the SKU's stored recipe fills it on the work order. A recipe that says how many passes prefills
+// the line; one that is free text ('2 layers on the logo') shows as a hint. Sent as LINE FINISH call-out lines.
+function finHTML(s, hidden){
+  var rh = s && (s.gloss || s.coat_order) ? 'recipe: ' + [s.gloss, s.coat_order].filter(function(x){ return x && x !== 'None'; }).join(' · ') : '';
+  return '<div class="fin' + (hidden ? ' hidden' : '') + '"><label>Gloss <input type="number" min="0" max="64" inputmode="numeric" class="fg" placeholder="–"></label>'
+       + '<label>Matte <input type="number" min="0" max="64" inputmode="numeric" class="fm" placeholder="–"></label>'
+       + '<label>On top <select class="ft" disabled><option value="">—</option><option value="Gloss">gloss</option><option value="Matte">matte</option></select></label>'
+       + (rh && rh !== 'recipe: ' ? '<span class="rh">' + esc(rh) + '</span>' : '') + '</div>';
+}
+function parseRecipe(gloss, coat){
+  var t = String(gloss || '') + ' ' + String(coat || '');
+  var g = t.match(/(\d+)\s*(?:x\s*)?gloss/i), m = t.match(/(\d+)\s*(?:x\s*)?matte/i), top = t.match(/(gloss|matte)\s+on\s+top/i);
+  if(!g && !m) return null;
+  return { g: g ? Number(g[1]) : 0, m: m ? Number(m[1]) : 0, t: top ? top[1].charAt(0).toUpperCase() + top[1].slice(1).toLowerCase() : '' };
+}
+function finSet(box, f){
+  if(!box || !f) return;
+  box.querySelector('.fg').value = f.g === '' || f.g == null ? '' : f.g;
+  box.querySelector('.fm').value = f.m === '' || f.m == null ? '' : f.m;
+  finLine(box); if(f.t && !box.querySelector('.ft').disabled) box.querySelector('.ft').value = f.t;
+}
+function finPrefill(box, s){ var f = s ? parseRecipe(s.gloss, s.coat_order) : null; if(f) finSet(box, f); }
+function finLine(box){   // 'on top' only means something when both layers are there
+  var g = Number(box.querySelector('.fg').value || 0), m = Number(box.querySelector('.fm').value || 0), sel = box.querySelector('.ft');
+  sel.disabled = !(g > 0 && m > 0); if(sel.disabled) sel.value = '';
+}
+function finOf(box){   // this line's finish, falling back to the whole-order default; null = leave it to the recipe
+  var g = box.querySelector('.fg').value, m = box.querySelector('.fm').value, t = box.querySelector('.ft').value;
+  if(g === '' && m === ''){ g = $('glossN').value; m = $('matteN').value; t = $('finishTop').value; }
+  if(g === '' && m === '') return null;
+  g = Math.max(0, Math.min(64, Math.round(Number(g || 0)))); m = Math.max(0, Math.min(64, Math.round(Number(m || 0))));
+  return { g: g, m: m, t: (g > 0 && m > 0) ? t : '' };
+}
+function finLineText(key, f){
+  return 'LINE FINISH: ' + key + ' = GLOSS ' + f.g + ' / MATTE ' + f.m + (f.t ? ' / ' + f.t.toUpperCase() + ' ON TOP' : '');
+}
+function recipeFor(cust, sku, vessel){
+  var low = function(x){ return String(x || '').toLowerCase().trim(); };
+  return (CAT && CAT.skus || []).find(function(k){ return k.customer === cust && low(k.sku) === low(sku) && (!vessel || low(k.vessel) === low(vessel)); }) || null;
+}
+document.addEventListener('input', function(e){ var b = e.target.closest && e.target.closest('.fin'); if(b && (e.target.classList.contains('fg') || e.target.classList.contains('fm'))) finLine(b); });
 // 9/22 Shane: "for vessel size add what is on the menu ... with a new plus add on" - the menu's own vessels,
 // spelled the way pricing_master spells them so the builder can price a new item straight off the menu.
 var VESSEL_LIST = ['3" Slap', '4" Slap', '4x5 Deli', 'o2 Standard', 'o2 Bucket', 'Pop Top', 'Tube 95 mm', 'Tube 65 mm',
@@ -321,7 +369,8 @@ function addNewLine(){
               + '<select class="t"><option value="">Texture</option><option value="Flat">Flat</option><option value="1">1 &middot; Spot Gloss</option><option value="2">2 &middot; Standard</option><option value="3">3 &middot; Pro</option></select>'
               + '<select class="w" title="White ink"><option value="">W ink</option><option value="Y">W: Y</option><option value="N">W: N</option></select>'
               + '<select class="ap" title="We apply to jars"><option value="">Apply</option><option value="Y">A: Y</option><option value="N">A: N</option></select>'
-              + '<button type="button" class="minus" title="Remove this line" onclick="delNewLine(this)">−</button></div>';
+              + '<button type="button" class="minus" title="Remove this line" onclick="delNewLine(this)">−</button></div>'
+              + finHTML(null, false);
   $('newItems').appendChild(d);
   return d;
 }
@@ -378,6 +427,9 @@ function openPast(inv){
       if(sel.value !== r.vessel){ sel.classList.add('hidden'); inp.classList.remove('hidden'); }
       inp.value = r.vessel;
     }
+    // 9/24: the line's own finish if the old order carried one, else that SKU's recipe
+    var f = parseRecipe(r.gloss, r.coat_order), rec = recipeFor(o.customer, r.sku, r.vessel);
+    if(f) finSet(d.querySelector('.fin'), f); else finPrefill(d.querySelector('.fin'), rec);
   });
   if(!o.rows.length) addNewLine();
   var iso = o.due ? mdyToISO(o.due) : '', today = new Date().toISOString().slice(0, 10), stale = iso && iso < today;
@@ -417,6 +469,7 @@ function asNewItem(a){   // 9/16 Shane: a size or material we have not printed f
   row.querySelector('.m').value = mat.indexOf('holo') >= 0 ? 'Holo' : mat.indexOf('gold') >= 0 ? 'Gold' : mat.indexOf('white') >= 0 ? 'White' : '';
   // 9/22: the vessel cell is a menu dropdown now - open its 'something else' box so the new size can be typed
   var _s = row.querySelector('.vsel'); _s.value = '__other__'; vesselPick(_s);
+  var _src = d.querySelector('.fin'); if(_src){ finSet(row.querySelector('.fin'), { g: _src.querySelector('.fg').value, m: _src.querySelector('.fm').value, t: _src.querySelector('.ft').value }); }
   row.querySelector('.v').placeholder = 'new size (was ' + (d.querySelector('.nm').textContent.split(' \u00b7 ')[0] || 'n/a') + ')'; row.scrollIntoView({block: 'center'}); row.querySelector('.v').focus();
 }
 function resetForm(){   // 9/16 Shane: reset with an are-you-sure; keeps the PIN + catalog, clears everything typed
@@ -434,7 +487,7 @@ function chips(group){ return [].map.call(document.querySelectorAll('.chips[data
 function printSpecs(){
   var L = [];
   var g = Number($('glossN').value || 0), m = Number($('matteN').value || 0), top = $('finishTop').value;
-  if(g > 0 || m > 0){ L.push('FINISH: GLOSS ' + g + ' / MATTE ' + m + (g > 0 && m > 0 && top ? ' / ' + top.toUpperCase() + ' ON TOP' : '')); }
+  // 9/24: the whole-order finish is now the DEFAULT for each line (finOf) and travels as LINE FINISH lines - no order-wide FINISH line
   var t = chips('texture')[0]; if(t) L.push('TEXTURE: ' + t);
   chips('opts').forEach(function(o){ L.push(o.toUpperCase()); });
   var ck = $('chokeN').value; if(ck !== ''){ ck = Math.max(-10, Math.min(10, Number(ck))); L.push('CHOKE: ' + (ck > 0 ? '+' : '') + ck); }
@@ -468,9 +521,9 @@ function prepressLabel(){   // the intake board still takes the four labels; the
 $('delivery').addEventListener('change', function(){ $('shipWrap').classList.toggle('hidden', this.value !== 'Ship'); });
 function totals(){
   var q = 0, a = 0, unknown = false;
-  document.querySelectorAll('#reorders .line').forEach(function(d){ var n = Number(d.querySelector('input').value || 0); if(n > 0){ q += n; a += n * Number(d.dataset.unit || 0); } });
+  document.querySelectorAll('#reorders .line').forEach(function(d){ var n = Number(d.querySelector('input[data-i]').value || 0); if(n > 0){ q += n; a += n * Number(d.dataset.unit || 0); } var fb = d.querySelector('.fin'); if(fb) fb.classList.toggle('hidden', !(n > 0)); });
   document.querySelectorAll('#newItems .newline').forEach(function(d){ var n = Number(d.querySelector('.q').value || 0), p = d.querySelector('.p').value; if(n > 0){ q += n; if(p) a += n * Number(p); else unknown = true; } });
-  document.querySelectorAll('#reorders .grp').forEach(function(g){ var n = 0; g.querySelectorAll('input').forEach(function(x){ n += Number(x.value || 0); }); var el = g.querySelector('.gqty'); if(el) el.textContent = n ? n + ' pcs' : ''; });
+  document.querySelectorAll('#reorders .grp').forEach(function(g){ var n = 0; g.querySelectorAll('input[data-i]').forEach(function(x){ n += Number(x.value || 0); }); var el = g.querySelector('.gqty'); if(el) el.textContent = n ? n + ' pcs' : ''; });
   $('totQty').textContent = q; $('totAmt').textContent = money(a) + (unknown ? '+' : '');
   if($('terms') && $('terms').value.indexOf('Half') === 0) termsPick();
   $('totNote').textContent = unknown ? 'some new items priced by the builder' : 'before pre-press & tax';
@@ -484,18 +537,20 @@ var DFIELDS = ['newName','contact','email','phone','contact2','email2','phone2',
                'payment','tax','prepressCustom','terms','art','designHrs','designRate','deposit','note',
                'glossN','matteN','finishTop','chokeN','pressNotes'];
 function draftSnap(){
-  var reorders = {};
+  var reorders = {}, fins = {};
   document.querySelectorAll('#reorders .line').forEach(function(d){
-    var n = Number(d.querySelector('input').value || 0); if(n > 0) reorders[d.dataset.title] = n; });
+    var n = Number(d.querySelector('input[data-i]').value || 0); if(n > 0) reorders[d.dataset.title] = n;
+    var fb = d.querySelector('.fin'); if(fb && (fb.querySelector('.fg').value !== '' || fb.querySelector('.fm').value !== '')) fins[d.dataset.title] = { g: fb.querySelector('.fg').value, m: fb.querySelector('.fm').value, t: fb.querySelector('.ft').value }; });
   var items = [];
   document.querySelectorAll('#newItems .newline').forEach(function(d){
     var o = { n: d.querySelector('.n').value, q: d.querySelector('.q').value, p: d.querySelector('.p').value,
               m: d.querySelector('.m').value, v: d.querySelector('.v').value, t: d.querySelector('.t').value,
-              w: d.querySelector('.w').value, ap: d.querySelector('.ap').value };
+              w: d.querySelector('.w').value, ap: d.querySelector('.ap').value,
+              fg: d.querySelector('.fg').value, fm: d.querySelector('.fm').value, ft: d.querySelector('.ft').value };
     if(o.n || o.q || o.v) items.push(o); });
   var f = {}; DFIELDS.forEach(function(id){ if($(id)) f[id] = $(id).value; });
   var ch = {}; document.querySelectorAll('.chips').forEach(function(g){ ch[g.dataset.group] = chips(g.dataset.group); });
-  return { company: $('company').value, designOnly: $('designOnly').checked, f: f, chips: ch, reorders: reorders, items: items };
+  return { company: $('company').value, designOnly: $('designOnly').checked, f: f, chips: ch, reorders: reorders, fins: fins, items: items };
 }
 function saveDraft(){
   if(!CAT || !$('company').value) return;
@@ -528,13 +583,15 @@ function restoreDraft(){
   $('designOnly').checked = !!d.designOnly;
   document.querySelectorAll('#reorders .line').forEach(function(el){
     var q = d.reorders && d.reorders[el.dataset.title];
-    if(q){ el.querySelector('input').value = q; var det = el.closest('details'); if(det) det.open = true; } });
+    if(q){ el.querySelector('input[data-i]').value = q; var det = el.closest('details'); if(det) det.open = true; }
+    var ff = d.fins && d.fins[el.dataset.title]; if(ff) finSet(el.querySelector('.fin'), ff); });
   $('newItems').innerHTML = '';
   (d.items || []).forEach(function(o){
     var row = addNewLine();
     row.querySelector('.n').value = o.n || ''; row.querySelector('.q').value = o.q || ''; row.querySelector('.p').value = o.p || '';
     row.querySelector('.m').value = o.m || ''; row.querySelector('.t').value = o.t || '';
     row.querySelector('.w').value = o.w || ''; row.querySelector('.ap').value = o.ap || '';
+    if(o.fg || o.fm) finSet(row.querySelector('.fin'), { g: o.fg, m: o.fm, t: o.ft });
     if(o.v){
       var sel = row.querySelector('.vsel');
       if(VESSEL_LIST.indexOf(o.v) >= 0){ sel.value = o.v; vesselPick(sel); }
@@ -558,14 +615,14 @@ function submit(){
   if(!company){ alert('Pick the company (or type the new customer name).'); return; }
   if(!$('due').value){ alert('Order due date is required.'); return; }
   if(!$('phone').value.trim()){ alert('Phone is required - every order starts with company, contact, phone and email.'); $('phone').focus(); return; }
-  var reorders = []; document.querySelectorAll('#reorders .line').forEach(function(d){ var n = Number(d.querySelector('input').value || 0); if(n > 0) reorders.push({ title: d.dataset.title, qty: n }); });
-  var newItems = []; document.querySelectorAll('#newItems .newline').forEach(function(d){ var n = Number(d.querySelector('.q').value || 0), nm = d.querySelector('.n').value.trim(); if(nm && n > 0) newItems.push({ name: nm, qty: n, material: d.querySelector('.m').value, vessel: d.querySelector('.v').value.trim(), texture: d.querySelector('.t').value, unit: d.querySelector('.p').value, white_ink: d.querySelector('.w').value, apply: d.querySelector('.ap').value }); });
+  var reorders = [], lineFin = []; document.querySelectorAll('#reorders .line').forEach(function(d){ var n = Number(d.querySelector('input[data-i]').value || 0); if(n > 0){ reorders.push({ title: d.dataset.title, qty: n }); var f = finOf(d.querySelector('.fin')); if(f) lineFin.push(finLineText(d.dataset.sku + (d.dataset.vessel ? ' @ ' + d.dataset.vessel : ''), f)); } });
+  var newItems = []; document.querySelectorAll('#newItems .newline').forEach(function(d){ var n = Number(d.querySelector('.q').value || 0), nm = d.querySelector('.n').value.trim(); if(nm && n > 0){ newItems.push({ name: nm, qty: n, material: d.querySelector('.m').value, vessel: d.querySelector('.v').value.trim(), texture: d.querySelector('.t').value, unit: d.querySelector('.p').value, white_ink: d.querySelector('.w').value, apply: d.querySelector('.ap').value }); var f = finOf(d.querySelector('.fin')); var vv = d.querySelector('.v').value.trim(); if(f) lineFin.push(finLineText(nm + (vv ? ' @ ' + vv : ''), f)); } });
   if(!reorders.length && !newItems.length && !$('designOnly').checked){ alert('Set a quantity on at least one item.'); return; }
   var payload = { pin: PIN, company: company, newCustomer: isNew, contact: $('contact').value.trim(), email: $('email').value.trim(), phone: $('phone').value.trim(), contact2: $('contact2').value.trim(), email2: $('email2').value.trim(), phone2: $('phone2').value.trim(),
     due: $('due').value, delivery: $('delivery').value, ship_cost: $('ship').value, rush: $('rush').value.trim(),
     payment: $('payment').value, tax: $('tax').value, prepress: prepressLabel(), prepress_custom: $('prepressCustom').value.trim(), setup: 'On file', setup_min: '', setup_rate: '',
     terms: $('terms').value, art_status: $('art').value, design_hrs: $('designHrs').value, design_rate: $('designRate').value.trim(), deposit: $('deposit').value, design_only: $('designOnly').checked,
-    note: $('note').value.trim(), callouts: printSpecs(), attach: chips('attach'), reorders: reorders, newItems: newItems,
+    note: $('note').value.trim(), callouts: [printSpecs()].concat(lineFin).filter(Boolean).join(String.fromCharCode(10)), attach: chips('attach'), reorders: reorders, newItems: newItems,
     edit_of: EDIT_OF ? EDIT_OF.inv : '' };   // 9/22: editing a past order - the builder rebuilds that invoice instead of making a new one
   $('submitBtn').disabled = true; $('submitBtn').textContent = 'Sending…';
   api('POST', payload).then(function(r){
