@@ -85,7 +85,7 @@
 <div id="app" class="wrap hidden">
   <h1>Order Pad</h1><div class="sub" id="cacheNote">Loading customers and items…</div>
   <div id="editBar" class="draftbar hidden" style="border-color:var(--pink)"><span id="editMsg"></span><button type="button" class="btn ghost dbtn" onclick="stopEditing(true)">Start fresh instead</button></div>
-  <div id="draftBar" class="draftbar hidden"><span id="draftMsg"></span><button type="button" class="btn ghost dbtn" onclick="restoreDraft()">Restore</button><button type="button" class="btn ghost dbtn" onclick="dropDraft(true)">Discard</button></div>
+  <div id="draftBar" class="draftbar hidden"><span id="draftMsg"></span><button type="button" class="btn ghost dbtn" onclick="restoreDraft()">Restore</button><button type="button" class="btn ghost dbtn" onclick="discardDraft()">Discard</button></div>
 
   <div class="card">
     <h2>Customer</h2>
@@ -169,10 +169,6 @@
 
   <div class="card">
     <h2>Print specs <span class="pill">work order only</span></h2>
-    <label>Layers &amp; services</label>
-    <div class="chips" data-group="opts"><span class="chip" data-v="White ink layer">White ink layer</span><span class="chip" data-v="We apply to jars">We apply to jars</span></div>
-    <label>Choke <span class="pill">-10 to +10, 0 = none</span></label>
-    <div class="chokebox"><button type="button" class="stp" onclick="chokeStep(-1)">&minus;</button><input type="number" id="chokeN" min="-10" max="10" step="1" value="0" inputmode="numeric" onchange="chokeClamp()"><button type="button" class="stp" onclick="chokeStep(1)">+</button></div>
     <label>Cut</label>
     <div class="chips" data-group="cut" data-one="1"><span class="chip" data-v="Individual">Individual</span><span class="chip" data-v="Kiss-cut">Kiss-cut</span><span class="chip" data-v="On sheets">On sheets</span></div>
     <label>Anything else the Print Dep. needs to know</label><textarea id="pressNotes" placeholder="choke by eye, trim tight, run the holo first, hold for a sample&hellip;"></textarea>
@@ -184,7 +180,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-24b</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-24d</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -238,7 +234,7 @@ function unlock(){
     $('cacheNote').textContent = CAT.customers.length + ' customers · ' + CAT.skus.length + ' items from invoice history';
     var sel = $('company'); sel.innerHTML = '<option value="">Choose…</option><option value="__new__">New Customer</option>';
     CAT.customers.forEach(function(c){ var o = document.createElement('option'); o.value = c.name; o.textContent = c.name; sel.appendChild(o); });
-    addNewLine(); addNewLine();   // 9/22: two lines ready to fill, + adds more
+    addNewLine(); addNewLine(); addNewLine(); addNewLine();   // 9/24 Shane 'make it 4 lines' (was two), + adds more
     offerDraft();
     try { localStorage.setItem('st_pin', PIN); } catch(e){}
   }).catch(function(e){ $('gateMsg').textContent = 'Error: ' + e.message; });
@@ -297,6 +293,7 @@ function finHTML(s, hidden){
   return '<div class="fin' + (hidden ? ' hidden' : '') + '"><label>Gloss <input type="number" min="0" max="64" inputmode="numeric" class="fg" placeholder="–"></label>'
        + '<label>Matte <input type="number" min="0" max="64" inputmode="numeric" class="fm" placeholder="–"></label>'
        + '<label>On top <select class="ft" disabled><option value="">—</option><option value="Gloss">gloss</option><option value="Matte">matte</option></select></label>'
+       + '<label>Choke <input type="number" min="-10" max="10" step="1" inputmode="numeric" class="fc" placeholder="–" title="-10 to +10, blank = none"></label>'
        + (rh && rh !== 'recipe: ' ? '<span class="rh">' + esc(rh) + '</span>' : '') + '</div>';
 }
 function parseRecipe(gloss, coat){
@@ -309,6 +306,7 @@ function finSet(box, f){
   if(!box || !f) return;
   box.querySelector('.fg').value = f.g === '' || f.g == null ? '' : f.g;
   box.querySelector('.fm').value = f.m === '' || f.m == null ? '' : f.m;
+  if(box.querySelector('.fc')) box.querySelector('.fc').value = f.c === '' || f.c == null ? '' : f.c;
   finLine(box); if(f.t && !box.querySelector('.ft').disabled) box.querySelector('.ft').value = f.t;
 }
 function finPrefill(box, s){ var f = s ? parseRecipe(s.gloss, s.coat_order) : null; if(f) finSet(box, f); }
@@ -317,14 +315,19 @@ function finLine(box){   // 'on top' only means something when both layers are t
   sel.disabled = !(g > 0 && m > 0); if(sel.disabled) sel.value = '';
 }
 function finOf(box){   // this line's finish; null = leave it to the SKU's recipe
-  var g = box.querySelector('.fg').value, m = box.querySelector('.fm').value, t = box.querySelector('.ft').value;
+  var g = box.querySelector('.fg').value, m = box.querySelector('.fm').value, t = box.querySelector('.ft').value, c = box.querySelector('.fc').value;
   // 9/24 Shane: the whole-order finish is gone ('it is a duplicate') - a blank line is left to the SKU's recipe
-  if(g === '' && m === '') return null;
-  g = Math.max(0, Math.min(64, Math.round(Number(g || 0)))); m = Math.max(0, Math.min(64, Math.round(Number(m || 0))));
-  return { g: g, m: m, t: (g > 0 && m > 0) ? t : '' };
+  if(g === '' && m === '' && c === '') return null;
+  var out = { g: '', m: '', t: '', c: '' };
+  if(g !== '' || m !== ''){ out.g = Math.max(0, Math.min(64, Math.round(Number(g || 0)))); out.m = Math.max(0, Math.min(64, Math.round(Number(m || 0)))); out.t = (out.g > 0 && out.m > 0) ? t : ''; }
+  if(c !== '') out.c = Math.max(-10, Math.min(10, Math.round(Number(c) || 0)));
+  return out;
 }
 function finLineText(key, f){
-  return 'LINE FINISH: ' + key + ' = GLOSS ' + f.g + ' / MATTE ' + f.m + (f.t ? ' / ' + f.t.toUpperCase() + ' ON TOP' : '');
+  var p = [];
+  if(f.g !== '') p.push('GLOSS ' + f.g + ' / MATTE ' + f.m + (f.t ? ' / ' + f.t.toUpperCase() + ' ON TOP' : ''));
+  if(f.c !== '') p.push('CHOKE ' + (f.c > 0 ? '+' : '') + f.c);
+  return 'LINE FINISH: ' + key + ' = ' + p.join(' / ');
 }
 function recipeFor(cust, sku, vessel){
   var low = function(x){ return String(x || '').toLowerCase().trim(); };
@@ -444,7 +447,7 @@ function openPast(inv){
 function stopEditing(clearLines){
   EDIT_OF = null;
   $('editBar').classList.add('hidden');
-  if(clearLines){ $('newItems').innerHTML = ''; addNewLine(); addNewLine(); totals(); }
+  if(clearLines){ $('newItems').innerHTML = ''; addNewLine(); addNewLine(); addNewLine(); addNewLine(); totals(); }
   renderPast($('company').value);
 }
 function delNewLine(b){
@@ -455,8 +458,8 @@ function delNewLine(b){
 }
 document.querySelectorAll('.chips').forEach(function(g){ g.addEventListener('click', function(e){ var c = e.target.closest('.chip'); if(!c) return; if(g.dataset.one){ g.querySelectorAll('.chip').forEach(function(x){ if(x !== c) x.classList.remove('on'); }); } c.classList.toggle('on'); }); });
 function finishOrder(){}   // 9/24: whole-order finish removed; kept as a no-op for the callers
-function chokeClamp(){ var el = $('chokeN'); var v = el.value === '' ? 0 : Math.max(-10, Math.min(10, Math.round(Number(el.value) || 0))); el.value = v; }
-function chokeStep(d){ var el = $('chokeN'); el.value = Math.max(-10, Math.min(10, (Number(el.value) || 0) + d)); }
+function chokeClamp(){}   // 9/24: choke is per line now
+function chokeStep(){}
 // sameAsLast() removed 9/22 (Shane: "almost no one orders the same thing twice in a row") - the reorder list
 // still shows every past SKU with its last price; the staff type the quantities they actually want.
 function asNewItem(a){   // 9/16 Shane: a size or material we have not printed for them yet -> New items row, prefilled
@@ -465,17 +468,17 @@ function asNewItem(a){   // 9/16 Shane: a size or material we have not printed f
   row.querySelector('.m').value = mat.indexOf('holo') >= 0 ? 'Holo' : mat.indexOf('gold') >= 0 ? 'Gold' : mat.indexOf('white') >= 0 ? 'White' : '';
   // 9/22: the vessel cell is a menu dropdown now - open its 'something else' box so the new size can be typed
   var _s = row.querySelector('.vsel'); _s.value = '__other__'; vesselPick(_s);
-  var _src = d.querySelector('.fin'); if(_src){ finSet(row.querySelector('.fin'), { g: _src.querySelector('.fg').value, m: _src.querySelector('.fm').value, t: _src.querySelector('.ft').value }); }
+  var _src = d.querySelector('.fin'); if(_src){ finSet(row.querySelector('.fin'), { g: _src.querySelector('.fg').value, m: _src.querySelector('.fm').value, t: _src.querySelector('.ft').value, c: _src.querySelector('.fc').value }); }
   row.querySelector('.v').placeholder = 'new size (was ' + (d.querySelector('.nm').textContent.split(' \u00b7 ')[0] || 'n/a') + ')'; row.scrollIntoView({block: 'center'}); row.querySelector('.v').focus();
 }
-function resetForm(){   // 9/16 Shane: reset with an are-you-sure; keeps the PIN + catalog, clears everything typed
+function resetForm(noAsk){   // 9/16 Shane: reset with an are-you-sure; keeps the PIN + catalog, clears everything typed
   dropDraft(true);
-  if(!confirm('Clear the whole order and start over?')) return;
+  if(!noAsk && !confirm('Clear the whole order and start over?')) return;
   $('company').value = ''; pickCompany();
   document.querySelectorAll('#app input:not([type=hidden]), #app textarea').forEach(function(el){ if(el.type === 'checkbox'){ el.checked = false; } else if(el.id === 'prepressCustom'){ el.value = '8'; } else if(el.id === 'designRate'){ el.value = '75'; } else if(el.id === 'chokeN'){ el.value = '0'; } else { el.value = ''; } });
   document.querySelectorAll('#app select').forEach(function(el){ el.selectedIndex = 0; });
   document.querySelectorAll('.chip.on').forEach(function(c){ c.classList.remove('on'); });
-  $('newItems').innerHTML = ''; addNewLine(); addNewLine(); $('result').classList.add('hidden'); $('result').innerHTML = '';
+  $('newItems').innerHTML = ''; addNewLine(); addNewLine(); addNewLine(); addNewLine(); $('result').classList.add('hidden'); $('result').innerHTML = '';
   $('submitBtn').disabled = false; $('submitBtn').textContent = 'Submit order'; finishOrder(); ppCalc(); designCalc(); termsPick(); totals(); window.scrollTo(0, 0);
 }
 function openPicker(el){ try { if(el.showPicker) el.showPicker(); } catch(e){} }   // 9/16 Shane: tap anywhere on the date = calendar pops up
@@ -484,8 +487,8 @@ function printSpecs(){
   var L = [];
   // 9/24: the whole-order finish is now the DEFAULT for each line (finOf) and travels as LINE FINISH lines - no order-wide FINISH line
   // 9/24 Shane: whole-order texture removed - texture is per line (new items) or the SKU's own (reorders)
-  chips('opts').forEach(function(o){ L.push(o.toUpperCase()); });
-  var ck = $('chokeN').value; if(ck !== ''){ ck = Math.max(-10, Math.min(10, Number(ck))); L.push('CHOKE: ' + (ck > 0 ? '+' : '') + ck); }
+  // 9/24 Shane: whole-order 'White ink layer' / 'We apply to jars' removed - W ink and Apply are set per line
+  // 9/24 Shane 'add choke to each line': the order-wide CHOKE line is gone - it rides on each LINE FINISH
   var cu = chips('cut')[0]; if(cu) L.push('CUT: ' + cu);
   var n = $('pressNotes').value.trim(); if(n) L.push('NOTES: ' + n);
   return L.join(String.fromCharCode(10));
@@ -530,18 +533,18 @@ function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c
 var DKEY = 'st_order_draft', dtimer = null;
 var DFIELDS = ['newName','contact','email','phone','contact2','email2','phone2','due','delivery','ship','rush',
                'payment','tax','prepressCustom','terms','art','designHrs','designRate','deposit','note',
-               'chokeN','pressNotes'];
+               'pressNotes'];
 function draftSnap(){
   var reorders = {}, fins = {};
   document.querySelectorAll('#reorders .line').forEach(function(d){
     var n = Number(d.querySelector('input[data-i]').value || 0); if(n > 0) reorders[d.dataset.title] = n;
-    var fb = d.querySelector('.fin'); if(fb && (fb.querySelector('.fg').value !== '' || fb.querySelector('.fm').value !== '')) fins[d.dataset.title] = { g: fb.querySelector('.fg').value, m: fb.querySelector('.fm').value, t: fb.querySelector('.ft').value }; });
+    var fb = d.querySelector('.fin'); if(fb && (fb.querySelector('.fg').value !== '' || fb.querySelector('.fm').value !== '' || fb.querySelector('.fc').value !== '')) fins[d.dataset.title] = { g: fb.querySelector('.fg').value, m: fb.querySelector('.fm').value, t: fb.querySelector('.ft').value, c: fb.querySelector('.fc').value }; });
   var items = [];
   document.querySelectorAll('#newItems .newline').forEach(function(d){
     var o = { n: d.querySelector('.n').value, q: d.querySelector('.q').value, p: d.querySelector('.p').value,
               m: d.querySelector('.m').value, v: d.querySelector('.v').value, t: d.querySelector('.t').value,
               w: d.querySelector('.w').value, ap: d.querySelector('.ap').value,
-              fg: d.querySelector('.fg').value, fm: d.querySelector('.fm').value, ft: d.querySelector('.ft').value };
+              fg: d.querySelector('.fg').value, fm: d.querySelector('.fm').value, ft: d.querySelector('.ft').value, fc: d.querySelector('.fc').value };
     if(o.n || o.q || o.v) items.push(o); });
   var f = {}; DFIELDS.forEach(function(id){ if($(id)) f[id] = $(id).value; });
   var ch = {}; document.querySelectorAll('.chips').forEach(function(g){ ch[g.dataset.group] = chips(g.dataset.group); });
@@ -556,6 +559,11 @@ function saveDraft(){
       var s = $('saveTag'); if(s) s.textContent = 'saved ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
     } catch(e){}
   }, 500);
+}
+function discardDraft(){   // 9/24 Shane 'the discard did not remove the 517 draft': dropping the saved copy left the order on
+  // screen, so the next keystroke (or a save already queued) wrote it straight back. Discard = cancel the queued save,
+  // drop the copy, clear the form without asking.
+  clearTimeout(dtimer); dropDraft(true); if($('company').value) resetForm(true); clearTimeout(dtimer); dropDraft(true);
 }
 function dropDraft(hide){ try { localStorage.removeItem(DKEY); } catch(e){} if(hide) $('draftBar').classList.add('hidden'); }
 function offerDraft(){
@@ -586,14 +594,14 @@ function restoreDraft(){
     row.querySelector('.n').value = o.n || ''; row.querySelector('.q').value = o.q || ''; row.querySelector('.p').value = o.p || '';
     row.querySelector('.m').value = o.m || ''; row.querySelector('.t').value = o.t || '';
     row.querySelector('.w').value = o.w || ''; row.querySelector('.ap').value = o.ap || '';
-    if(o.fg || o.fm) finSet(row.querySelector('.fin'), { g: o.fg, m: o.fm, t: o.ft });
+    if(o.fg || o.fm || o.fc) finSet(row.querySelector('.fin'), { g: o.fg, m: o.fm, t: o.ft, c: o.fc });
     if(o.v){
       var sel = row.querySelector('.vsel');
       if(VESSEL_LIST.indexOf(o.v) >= 0){ sel.value = o.v; vesselPick(sel); }
       else { sel.value = '__other__'; vesselPick(sel); row.querySelector('.v').value = o.v; }
     }
   });
-  if(!document.querySelectorAll('#newItems .newline').length){ addNewLine(); addNewLine(); }
+  if(!document.querySelectorAll('#newItems .newline').length){ addNewLine(); addNewLine(); addNewLine(); addNewLine(); }
   Object.keys(d.chips || {}).forEach(function(g){
     var want = d.chips[g] || [];
     document.querySelectorAll('.chips[data-group="' + g + '"] .chip').forEach(function(c){
