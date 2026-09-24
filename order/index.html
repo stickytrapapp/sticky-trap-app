@@ -85,7 +85,7 @@
 <div id="app" class="wrap hidden">
   <h1>Order Pad</h1><div class="sub" id="cacheNote">Loading customers and items…</div>
   <div id="editBar" class="draftbar hidden" style="border-color:var(--pink)"><span id="editMsg"></span><button type="button" class="btn ghost dbtn" onclick="stopEditing(true)">Start fresh instead</button></div>
-  <div id="draftBar" class="draftbar hidden"><span id="draftMsg"></span><button type="button" class="btn ghost dbtn" onclick="restoreDraft()">Restore</button><button type="button" class="btn ghost dbtn" onclick="discardDraft()">Discard</button></div>
+  <div id="draftBar" class="draftbar hidden" style="flex-direction:column;align-items:stretch"></div>
 
   <div class="card">
     <h2>Customer</h2>
@@ -180,7 +180,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-24e</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-24f</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -245,6 +245,12 @@ function pickCompany(){
   var c = CAT.customers.find(function(x){ return x.name === v; });
   $('contact').value = c ? (c.contact || '') : ''; $('email').value = c ? (c.email || '') : ''; $('phone').value = c ? (c.phone || '') : '';
   $('contact2').value = c ? (c.contact2 || '') : ''; $('email2').value = c ? (c.email2 || '') : ''; $('phone2').value = c ? (c.phone2 || '') : '';   // 9/16 Shane: second contact, prefilled from the client card
+  // 9/24: the public catalog no longer carries contacts - ask the Apps Script for THIS client's (PIN-checked). Fills blanks only.
+  if(c && typeof api === 'function'){ var _nm = c.name; api('GET', { action: 'contact', pin: PIN, name: _nm }).then(function(r){
+    if(!r || !r.ok || $('company').value !== _nm) return;
+    if(!$('contact').value) $('contact').value = r.contact || ''; if(!$('email').value) $('email').value = r.email || '';
+    if(!$('phone').value && r.phone){ $('phone').value = r.phone; fmtPhone($('phone')); }
+  }).catch(function(){}); }
   // terms from history
   var pay = (c && c.payment || '').toLowerCase();
   $('payment').value = c ? (c.pickup || /pick/.test(pay) ? 'Pay at pick-up' : /square/.test(pay) ? 'Square' : /ach|wire/.test(pay) ? 'ACH / Wire' : /cash/.test(pay) ? 'Cash' : 'On file') : 'Square';
@@ -517,10 +523,22 @@ function prepressLabel(){   // the intake board still takes the four labels; the
   return 'Custom amount';
 }
 $('delivery').addEventListener('change', function(){ $('shipWrap').classList.toggle('hidden', this.value !== 'Ship'); });
+// 9/24 (Shane 'do all'): the menu ladder rides in the catalog (CAT.menu, from pricing_master - the same numbers the
+// builder uses), so a new item with vessel + material + texture shows its price now instead of 'priced by the builder'.
+function menuPrice(vessel, material, texture){
+  var M = CAT && CAT.menu; if(!M || !vessel || !material) return null;
+  var lvl = { 'Flat': 0, '1': 1, '2': 2, '3': 3 }[texture]; if(lvl === undefined) lvl = 2;   // builder default = Standard
+  var mat = { 'White': 'White', 'Holo': 'Holo BF', 'Gold': 'Gold' }[material];
+  var table = /lighter/i.test(vessel) ? M.lighter : (M.access || {})[vessel];
+  var row = table && mat && table[mat]; return row && row[lvl] != null ? Number(row[lvl]) : null;
+}
 function totals(){
   var q = 0, a = 0, unknown = false;
   document.querySelectorAll('#reorders .line').forEach(function(d){ var n = Number(d.querySelector('input[data-i]').value || 0); if(n > 0){ q += n; a += n * Number(d.dataset.unit || 0); } var fb = d.querySelector('.fin'); if(fb) fb.classList.toggle('hidden', !(n > 0)); });
-  document.querySelectorAll('#newItems .newline').forEach(function(d){ var n = Number(d.querySelector('.q').value || 0), p = d.querySelector('.p').value; if(n > 0){ q += n; if(p) a += n * Number(p); else unknown = true; } });
+  document.querySelectorAll('#newItems .newline').forEach(function(d){ var n = Number(d.querySelector('.q').value || 0), p = d.querySelector('.p').value;
+    var mp = menuPrice(d.querySelector('.v').value.trim(), d.querySelector('.m').value, d.querySelector('.t').value);
+    d.querySelector('.p').placeholder = mp != null ? 'menu ' + money(mp) : 'price';
+    if(n > 0){ q += n; if(p) a += n * Number(p); else if(mp != null) a += n * mp; else unknown = true; } });
   document.querySelectorAll('#reorders .grp').forEach(function(g){ var n = 0; g.querySelectorAll('input[data-i]').forEach(function(x){ n += Number(x.value || 0); }); var el = g.querySelector('.gqty'); if(el) el.textContent = n ? n + ' pcs' : ''; });
   $('totQty').textContent = q; $('totAmt').textContent = money(a) + (unknown ? '+' : '');
   if($('terms') && $('terms').value.indexOf('Half') === 0) termsPick();
@@ -530,7 +548,17 @@ function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c
 // ---- AUTOSAVE (9/22 Shane: "yes to an autosave") -------------------------------------------------
 // Everything typed is kept in THIS browser under st_order_draft and offered back after a reload or a
 // closed tab. Cleared when the order sends, or by Discard / Start over. It never leaves the device.
-var DKEY = 'st_order_draft', dtimer = null;
+// 9/24 (Shane 'do all'): ONE DRAFT PER CLIENT. A single slot meant picking any client and typing overwrote the saved
+// order (the 517 draft). Drafts live under st_order_drafts = { key: {t, d} }; the bar lists every one under 7 days.
+var DKEY = 'st_order_drafts', OLDKEY = 'st_order_draft', dtimer = null;
+function draftKey(company, newName){ return company === '__new__' ? '__new__:' + String(newName || '').trim().toLowerCase() : company; }
+function loadDrafts(){
+  var all = {}; try { all = JSON.parse(localStorage.getItem(DKEY) || '{}') || {}; } catch(e){ all = {}; }
+  try { var old = JSON.parse(localStorage.getItem(OLDKEY) || 'null'); if(old && old.d && old.d.company){ var ok_ = draftKey(old.d.company, old.d.f && old.d.f.newName); if(!all[ok_]) all[ok_] = old; storeDrafts(all); } localStorage.removeItem(OLDKEY); } catch(e){}   // move the old single slot over - and SAVE it
+  Object.keys(all).forEach(function(k){ if(!all[k] || !all[k].d || Date.now() - all[k].t > 7 * 864e5) delete all[k]; });
+  return all;
+}
+function storeDrafts(all){ try { localStorage.setItem(DKEY, JSON.stringify(all)); } catch(e){} }
 var DFIELDS = ['newName','contact','email','phone','contact2','email2','phone2','due','delivery','ship','rush',
                'payment','tax','prepressCustom','terms','art','designHrs','designRate','deposit','note',
                'pressNotes'];
@@ -555,30 +583,39 @@ function saveDraft(){
   clearTimeout(dtimer);
   dtimer = setTimeout(function(){
     try {
-      localStorage.setItem(DKEY, JSON.stringify({ t: Date.now(), d: draftSnap() }));
+      var all = loadDrafts(), snap = draftSnap();
+      all[draftKey(snap.company, snap.f && snap.f.newName)] = { t: Date.now(), d: snap }; storeDrafts(all);
       var s = $('saveTag'); if(s) s.textContent = 'saved ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
     } catch(e){}
   }, 500);
 }
-function discardDraft(){   // 9/24 Shane 'the discard did not remove the 517 draft': dropping the saved copy left the order on
-  // screen, so the next keystroke (or a save already queued) wrote it straight back. Discard = cancel the queued save,
-  // drop the copy, clear the form without asking.
-  clearTimeout(dtimer); dropDraft(true); if($('company').value) resetForm(true); clearTimeout(dtimer); dropDraft(true);
+function discardDraft(k){   // 9/24: Discard = cancel the queued save, drop THAT client's draft, and clear the form if it is showing
+  clearTimeout(dtimer);
+  var all = loadDrafts(), showing = draftKey($('company').value, $('newName') && $('newName').value);
+  delete all[k]; storeDrafts(all);
+  if($('company').value && showing === k){ resetForm(true); clearTimeout(dtimer); all = loadDrafts(); delete all[k]; storeDrafts(all); }
+  offerDraft();
 }
-function dropDraft(hide){ try { localStorage.removeItem(DKEY); } catch(e){} if(hide) $('draftBar').classList.add('hidden'); }
+function dropDraft(hide){   // the order on screen was sent / reset: forget its draft
+  var all = loadDrafts(); delete all[draftKey($('company').value, $('newName') && $('newName').value)]; storeDrafts(all);
+  if(hide) offerDraft();
+}
 function offerDraft(){
-  var raw; try { raw = localStorage.getItem(DKEY); } catch(e){ return; }
-  if(!raw) return;
-  var j; try { j = JSON.parse(raw); } catch(e){ return dropDraft(); }
-  if(!j || !j.d || !j.d.company) return dropDraft();
-  if(Date.now() - j.t > 7 * 864e5) return dropDraft();
-  var who = j.d.company === '__new__' ? ((j.d.f && j.d.f.newName) || 'a new customer') : j.d.company;
-  $('draftMsg').innerHTML = 'Unfinished order for <b>' + esc(who) + '</b> from ' +
-      new Date(j.t).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
-  $('draftBar').classList.remove('hidden');
+  var all = loadDrafts(), keys = Object.keys(all).sort(function(a, b){ return all[b].t - all[a].t; });
+  var bar = $('draftBar'); bar.innerHTML = '';
+  if(!keys.length){ bar.classList.add('hidden'); return; }
+  keys.forEach(function(k){
+    var j = all[k], who = j.d.company === '__new__' ? ((j.d.f && j.d.f.newName) || 'a new customer') : j.d.company;
+    var row = document.createElement('div'); row.style.cssText = 'display:flex;align-items:center;gap:10px;flex-wrap:wrap';
+    row.innerHTML = '<span style="flex:1">Unfinished order for <b>' + esc(who) + '</b> from ' + esc(new Date(j.t).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })) + '</span>';
+    var r = document.createElement('button'); r.type = 'button'; r.className = 'btn ghost dbtn'; r.textContent = 'Restore'; r.onclick = function(){ restoreDraft(k); };
+    var x = document.createElement('button'); x.type = 'button'; x.className = 'btn ghost dbtn'; x.textContent = 'Discard'; x.onclick = function(){ discardDraft(k); };
+    row.appendChild(r); row.appendChild(x); bar.appendChild(row);
+  });
+  bar.classList.remove('hidden');
 }
-function restoreDraft(){
-  var j; try { j = JSON.parse(localStorage.getItem(DKEY)); } catch(e){ return; }
+function restoreDraft(k){
+  var all = loadDrafts(), j = all[k];
   if(!j || !j.d) return;
   var d = j.d;
   $('company').value = d.company; pickCompany();
@@ -606,7 +643,7 @@ function restoreDraft(){
     var want = d.chips[g] || [];
     document.querySelectorAll('.chips[data-group="' + g + '"] .chip').forEach(function(c){
       c.classList.toggle('on', want.indexOf(c.dataset.v) >= 0); }); });
-  $('draftBar').classList.add('hidden');
+  offerDraft();
   finishOrder(); ppCalc(); designCalc(); termsPick(); totals();
 }
 document.addEventListener('input', function(e){ if(e.target.closest && e.target.closest('#app')) saveDraft(); });
@@ -621,17 +658,22 @@ function submit(){
   var reorders = [], lineFin = []; document.querySelectorAll('#reorders .line').forEach(function(d){ var n = Number(d.querySelector('input[data-i]').value || 0); if(n > 0){ reorders.push({ title: d.dataset.title, qty: n }); var f = finOf(d.querySelector('.fin')); if(f) lineFin.push(finLineText(d.dataset.sku + (d.dataset.vessel ? ' @ ' + d.dataset.vessel : ''), f)); } });
   var newItems = []; document.querySelectorAll('#newItems .newline').forEach(function(d){ var n = Number(d.querySelector('.q').value || 0), nm = d.querySelector('.n').value.trim(); if(nm && n > 0){ newItems.push({ name: nm, qty: n, material: d.querySelector('.m').value, vessel: d.querySelector('.v').value.trim(), texture: d.querySelector('.t').value, unit: d.querySelector('.p').value, white_ink: d.querySelector('.w').value, apply: d.querySelector('.ap').value }); var f = finOf(d.querySelector('.fin')); var vv = d.querySelector('.v').value.trim(); if(f) lineFin.push(finLineText(nm + (vv ? ' @ ' + vv : ''), f)); } });
   if(!reorders.length && !newItems.length && !$('designOnly').checked){ alert('Set a quantity on at least one item.'); return; }
+  // 9/24: a new item with no price the builder can find stops at 'Needs info' - say so before it is sent
+  var hist = (CAT && CAT.skus || []).filter(function(k){ return k.customer === company; }).map(function(k){ return String(k.sku).toLowerCase(); });
+  var noPrice = newItems.filter(function(o){ return !o.unit && menuPrice(o.vessel, o.material, o.texture) == null && hist.indexOf(String(o.name).toLowerCase()) < 0; }).map(function(o){ return o.name; });
+  if(noPrice.length && !confirm('No price for: ' + noPrice.join(', ') + '.\nAdd a price, or pick a vessel + material on the menu - otherwise the builder stops at Needs info.\n\nSend anyway?')) return;
   var payload = { pin: PIN, company: company, newCustomer: isNew, contact: $('contact').value.trim(), email: $('email').value.trim(), phone: $('phone').value.trim(), contact2: $('contact2').value.trim(), email2: $('email2').value.trim(), phone2: $('phone2').value.trim(),
     due: $('due').value, delivery: $('delivery').value, ship_cost: $('ship').value, rush: $('rush').value.trim(),
     payment: $('payment').value, tax: $('tax').value, prepress: prepressLabel(), prepress_custom: $('prepressCustom').value.trim(), setup: 'On file', setup_min: '', setup_rate: '',
     terms: $('terms').value, art_status: $('art').value, design_hrs: $('designHrs').value, design_rate: $('designRate').value.trim(), deposit: $('deposit').value, design_only: $('designOnly').checked,
     note: $('note').value.trim(), callouts: [printSpecs()].concat(lineFin).filter(Boolean).join(String.fromCharCode(10)), attach: chips('attach'), reorders: reorders, newItems: newItems,
-    edit_of: EDIT_OF ? EDIT_OF.inv : '' };   // 9/22: editing a past order - the builder rebuilds that invoice instead of making a new one
+    edit_of: EDIT_OF ? EDIT_OF.inv : '' };
+  newItems.forEach(function(o){ if(!o.unit){ var mp = menuPrice(o.vessel, o.material, o.texture); if(mp != null) o.unit = mp; } });   // the price shown is the price sent   // 9/22: editing a past order - the builder rebuilds that invoice instead of making a new one
   $('submitBtn').disabled = true; $('submitBtn').textContent = 'Sending…';
   api('POST', payload).then(function(r){
     $('submitBtn').disabled = false; $('submitBtn').textContent = 'Submit order';
     var box = $('result'); box.classList.remove('hidden');
-    if(r.ok){ dropDraft(true); box.innerHTML = '<h2 class="ok">' + (EDIT_OF ? 'Edit sent' : 'Order sent') + '</h2><p>' + esc(company) + (EDIT_OF ? ' — edits to <b>' + esc(EDIT_OF.inv) + '</b> are' : ' is') + ' on the intake board as <b>Ready to build</b>. The builder makes the invoice and work order next; Shane approves before anything goes to the customer.</p><p class="hint"><a href="' + r.url + '" target="_blank" style="color:#fff">Open in Monday</a></p><br><button class="btn ghost" onclick="location.reload()">Start another order</button>'; window.scrollTo(0, document.body.scrollHeight); }
+    if(r.ok){ dropDraft(true); box.innerHTML = '<h2 class="ok">' + (EDIT_OF ? 'Edit sent' : 'Order sent') + '</h2><p>' + esc(company) + (EDIT_OF ? ' — edits to <b>' + esc(EDIT_OF.inv) + '</b> are' : ' is') + ' on the intake board as <b>Ready to build</b>. The builder makes the invoice and work order next; Shane approves before anything goes to the customer.</p><p class="hint"><a href="' + r.url + '" target="_blank" style="color:var(--pink)">Open in Monday</a></p><br><button class="btn ghost" onclick="location.reload()">Start another order</button>'; window.scrollTo(0, document.body.scrollHeight); }
     else { box.innerHTML = '<h2 class="warn">Not sent</h2><p>' + esc(r.error) + '</p>'; }
   }).catch(function(e){ $('submitBtn').disabled = false; $('submitBtn').textContent = 'Submit order'; alert('Error: ' + e.message); });
 }
