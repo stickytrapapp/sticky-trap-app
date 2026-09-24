@@ -1,64 +1,64 @@
 {
-  "updated": "2026-09-23",
+  "updated": "2026-09-24",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-09-23",
+      "date": "2026-09-24",
       "label": "Morning Brief",
-      "title": "Michigan Market Tops $17B as D.C. Inches Toward Schedule III",
-      "top": "Michigan's legal cannabis market just crossed $17 billion in lifetime sales and a new Ann Arbor storefront is opening even as the 24% wholesale tax fight heats up in the governor's race. Nationally, DEA's rescheduling transcript is public and Judge Julius's recommendation is expected any day, while FDA's psychedelic hearing and Compass Pathways' COMP360 progress keep momentum building toward 2027 approvals.",
+      "title": "Michigan Operators Get a Legal Fast-Track and a Governor's Race Ally, While National Cannabis and Psychedelics Momentum Builds",
+      "top": "Michigan's fight over the 24% wholesale tax is finally moving toward resolution, with the state Supreme Court fast-tracking the case and a leading gubernatorial candidate pledging repeal. Nationally, courts and the DEA itself are reinforcing the rescheduling shift while Compass Pathways' psilocybin program keeps hitting milestones toward FDA approval.",
       "local": [
         {
-          "text": "Michigan crosses $17 billion in lifetime sales — August alone generated roughly $259 million, pushing combined adult-use and medical sales past the milestone since legalization began.",
-          "source": "The Marijuana Herald",
-          "url": "https://themarijuanaherald.com/2026/09/michigan-legal-marijuana-sales-surpass-17-billion/"
+          "text": "MiCIA endorses GOP's John James for tax repeal — The Michigan Cannabis Industry Association officially endorsed Republican gubernatorial candidate John James, citing his commitment to repealing the controversial 24% wholesale tax imposed on marijuana businesses last year.",
+          "source": "Postindustrial",
+          "url": "https://postindustrial.com/stories/michigan-marijuana-industry-group-endorses-gop-governor-candidate-who-pledged-to-cut-new-wholesale-tax/"
         },
         {
-          "text": "Lume opens new Ann Arbor storefront — the Michigan-based chain's West Liberty Street location held a three-day grand opening with extended hours.",
-          "source": "ClickOnDetroit",
-          "url": "https://www.clickondetroit.com/topic/Marijuana_Dispensary/"
+          "text": "Michigan Supreme Court fast-tracks wholesale-tax case — The Michigan Supreme Court recently stepped in, ordering an expedited review to settle the matter quickly due to the high stakes for the industry.",
+          "source": "Distru",
+          "url": "https://www.distru.com/cannabis-blog/michigan-cannabis-tax-wholesale-guide"
         },
         {
-          "text": "Governor hopeful pledges to kill the wholesale tax — Rep. John James, now backed by industry donors who wrote roughly $90,000 in checks, has promised to repeal the 24% levy if elected.",
-          "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092126/"
+          "text": "Bipartisan bill takes aim at the wholesale tax — The 24% wholesale tax is driving closures, spurring an HB 6224 repeal push in Lansing.",
+          "source": "cann.dev",
+          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
         },
         {
-          "text": "Sales stabilize after tax shock, pointing to a floor — after a rough January, monthly revenue climbed back to $255.4 million by March and held near $253.5 million through June.",
+          "text": "Muskegon dispensary-restaurant targets fall opening — Fields Cannary is targeting a fall opening for its retail cannabis dispensary, with a full-service restaurant to follow, pushing the hospitality-forward format further than most Michigan dispensaries have gone.",
+          "source": "cann.dev",
+          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
+        },
+        {
+          "text": "Michigan holds onto No. 2 market status — The state posted $263.5 million in August sales and moved over 30.4 million units, proof that demand keeps volume strong even as dollar totals soften.",
           "source": "Headset",
-          "url": "https://www.headset.io/blog/michigans-24-wholesale-tax-what-the-data-shows-july-2026-update"
-        },
-        {
-          "text": "Regulators shut down Muha Meds maker, open shelf space — the CRA revoked Michigan Investment 10's licenses and imposed a record $2 million fine after finding a surveillance camera pointed at a wall instead of the extraction room.",
-          "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/news/michigan-cannabis-regulators-impose-record-fine-revoke-permit-of-popular-product-maker-after-egregious-violations/618180/"
+          "url": "https://www.headset.io/markets/michigan"
         }
       ],
       "national": [
         {
-          "text": "DEA publishes rescheduling transcript, decision nears — the 2,533-page record of 11 days of testimony is now public as Judge Derek Julius weighs a Schedule III recommendation.",
-          "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/news/marijuana-rescheduling-decision-nears-as-dea-publishes-hearing-transcript/617621/"
+          "text": "Federal court upholds medical marijuana's Schedule III move — The D.C. Circuit rejected a challenge from rescheduling opponents on Sept. 9, leaving the DOJ's order reclassifying state-licensed medical marijuana in effect.",
+          "source": "Cannabis Business Times",
+          "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order"
         },
         {
-          "text": "Trump commutes federal marijuana sentences — the White House cut short a 30-year and a 10-year sentence, adding to a string of cannabis clemency actions.",
-          "source": "The Marijuana Herald",
-          "url": "https://themarijuanaherald.com/2026/09/daily-cannabis-news-brief-for-9-10-2026/"
+          "text": "DEA itself argues weed no longer fits Schedule I — In its own final brief, the DEA argued marijuana no longer meets the statutory criteria for Schedule I, with a recommendation from the hearing judge still pending.",
+          "source": "Impact Wealth",
+          "url": "https://impactwealth.org/cannabis-rescheduling-in-2026-what-changed-what-didnt-and-what-it-means-at-the-counter/"
         },
         {
-          "text": "FDA holds landmark hearing on psychedelic medicine — the White Oak session gathered feedback on provider training, patient safety and access as part of implementing the administration's order to speed psychedelic drug review.",
-          "source": "Foley Hoag",
-          "url": "https://foleyhoag.com/news-and-insights/publications/alerts-and-updates/2026/september/fda-holds-landmark-public-hearing-on-the-future-therapeutic-use-of-psychedelic-drugs/"
+          "text": "Compass Pathways touts durable data, soaring stock — The company highlighted durable Phase III data and a broad commercial build-out at an industry summit, with shares delivering a 193% return over the past year.",
+          "source": "Investing.com",
+          "url": "https://za.investing.com/news/stock-market-news/compass-pathways-at-td-cowen-summit-launch-prep-meets-regulatory-risk-93CH-4475306"
         },
         {
-          "text": "Compass Pathways closes in on psilocybin filing — COMP360 showed six-month durability in treatment-resistant depression, with a completed NDA submission targeted for Q4 2026 and launch eyed for early 2027.",
-          "source": "Clinical Trials Arena",
-          "url": "https://www.clinicaltrialsarena.com/news/fda-finalises-psychedelic-clinical-trial-guidance/"
+          "text": "States say DEA is stonewalling on rescheduling rollout — California's cannabis regulator said the DEA hasn't shown any interest in providing states guidance on the rescheduling move, even as it seeks more information on the state's medical program.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/dea-keeps-states-in-the-dark-about-cannabis-rescheduling-ca-official-says-newsletter-september-22-2026"
         },
         {
-          "text": "MSO consolidation keeps rolling with Vireo-Planet 13 tie-up — Vireo Growth signed a merger agreement for Planet 13 Holdings, adding to a wave of deals reshaping the multistate operator landscape.",
-          "source": "cann.dev",
-          "url": "https://www.cann.dev/cannabis-september-2026-state-launches-market-shifts/"
+          "text": "Compass lines up training partner ahead of FDA call — Compass Pathways selected Fluence to design post-approval provider training for COMP360, signaling industry focus on workforce readiness ahead of a potential FDA approval.",
+          "source": "MindMedicineLaw",
+          "url": "https://mindmedicinelaw.com/briefing/compass-pathways-taps-fluence-for-comp360-psilocybin-provider-training-20260910-40734"
         }
       ]
     }
