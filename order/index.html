@@ -169,10 +169,6 @@
 
   <div class="card">
     <h2>Print specs <span class="pill">work order only</span></h2>
-    <label>Finish for the whole order <span class="pill">each line can override &middot; blank = the SKU's recipe</span></label>
-    <div class="row3"><div><span class="lbl">Gloss passes</span><input type="number" id="glossN" min="0" max="64" inputmode="numeric" placeholder="–" oninput="finishOrder()"></div><div><span class="lbl">Matte passes</span><input type="number" id="matteN" min="0" max="64" inputmode="numeric" placeholder="–" oninput="finishOrder()"></div><div><span class="lbl">On top</span><select id="finishTop"><option value="">&mdash;</option><option value="Gloss">Gloss over matte</option><option value="Matte">Matte over gloss</option></select></div></div>
-    <label>Raised texture for the whole order <span class="pill">lines can override</span></label>
-    <div class="chips" data-group="texture" data-one="1"><span class="chip" data-v="Flat">Flat</span><span class="chip" data-v="1">1 · Spot Gloss</span><span class="chip" data-v="2">2 · Standard</span><span class="chip" data-v="3">3 · Pro</span></div>
     <label>Layers &amp; services</label>
     <div class="chips" data-group="opts"><span class="chip" data-v="White ink layer">White ink layer</span><span class="chip" data-v="We apply to jars">We apply to jars</span></div>
     <label>Choke <span class="pill">-10 to +10, 0 = none</span></label>
@@ -188,7 +184,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-24a</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-24b</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -293,8 +289,8 @@ function pickCompany(){
   totals();
 }
 // ---- Finish PER LINE (9/24 Shane: "the gloss type and order needs to be by the line as each sku may be different") ----
-// Every line carries its own gloss passes / matte passes / which sits on top. Blank = the whole-order default, and if
-// that is blank too, the SKU's stored recipe fills it on the work order. A recipe that says how many passes prefills
+// Every line carries its own gloss passes / matte passes / which sits on top. Blank = the SKU's stored recipe fills it
+// on the work order. A recipe that says how many passes prefills
 // the line; one that is free text ('2 layers on the logo') shows as a hint. Sent as LINE FINISH call-out lines.
 function finHTML(s, hidden){
   var rh = s && (s.gloss || s.coat_order) ? 'recipe: ' + [s.gloss, s.coat_order].filter(function(x){ return x && x !== 'None'; }).join(' · ') : '';
@@ -320,9 +316,9 @@ function finLine(box){   // 'on top' only means something when both layers are t
   var g = Number(box.querySelector('.fg').value || 0), m = Number(box.querySelector('.fm').value || 0), sel = box.querySelector('.ft');
   sel.disabled = !(g > 0 && m > 0); if(sel.disabled) sel.value = '';
 }
-function finOf(box){   // this line's finish, falling back to the whole-order default; null = leave it to the recipe
+function finOf(box){   // this line's finish; null = leave it to the SKU's recipe
   var g = box.querySelector('.fg').value, m = box.querySelector('.fm').value, t = box.querySelector('.ft').value;
-  if(g === '' && m === ''){ g = $('glossN').value; m = $('matteN').value; t = $('finishTop').value; }
+  // 9/24 Shane: the whole-order finish is gone ('it is a duplicate') - a blank line is left to the SKU's recipe
   if(g === '' && m === '') return null;
   g = Math.max(0, Math.min(64, Math.round(Number(g || 0)))); m = Math.max(0, Math.min(64, Math.round(Number(m || 0))));
   return { g: g, m: m, t: (g > 0 && m > 0) ? t : '' };
@@ -458,7 +454,7 @@ function delNewLine(b){
   totals();
 }
 document.querySelectorAll('.chips').forEach(function(g){ g.addEventListener('click', function(e){ var c = e.target.closest('.chip'); if(!c) return; if(g.dataset.one){ g.querySelectorAll('.chip').forEach(function(x){ if(x !== c) x.classList.remove('on'); }); } c.classList.toggle('on'); }); });
-function finishOrder(){ var g = Number($('glossN').value || 0), m = Number($('matteN').value || 0); var sel = $('finishTop'); sel.disabled = !(g > 0 && m > 0); if(sel.disabled) sel.value = ''; }
+function finishOrder(){}   // 9/24: whole-order finish removed; kept as a no-op for the callers
 function chokeClamp(){ var el = $('chokeN'); var v = el.value === '' ? 0 : Math.max(-10, Math.min(10, Math.round(Number(el.value) || 0))); el.value = v; }
 function chokeStep(d){ var el = $('chokeN'); el.value = Math.max(-10, Math.min(10, (Number(el.value) || 0) + d)); }
 // sameAsLast() removed 9/22 (Shane: "almost no one orders the same thing twice in a row") - the reorder list
@@ -486,9 +482,8 @@ function openPicker(el){ try { if(el.showPicker) el.showPicker(); } catch(e){} }
 function chips(group){ return [].map.call(document.querySelectorAll('.chips[data-group="' + group + '"] .chip.on'), function(c){ return c.dataset.v; }); }
 function printSpecs(){
   var L = [];
-  var g = Number($('glossN').value || 0), m = Number($('matteN').value || 0), top = $('finishTop').value;
   // 9/24: the whole-order finish is now the DEFAULT for each line (finOf) and travels as LINE FINISH lines - no order-wide FINISH line
-  var t = chips('texture')[0]; if(t) L.push('TEXTURE: ' + t);
+  // 9/24 Shane: whole-order texture removed - texture is per line (new items) or the SKU's own (reorders)
   chips('opts').forEach(function(o){ L.push(o.toUpperCase()); });
   var ck = $('chokeN').value; if(ck !== ''){ ck = Math.max(-10, Math.min(10, Number(ck))); L.push('CHOKE: ' + (ck > 0 ? '+' : '') + ck); }
   var cu = chips('cut')[0]; if(cu) L.push('CUT: ' + cu);
@@ -535,7 +530,7 @@ function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c
 var DKEY = 'st_order_draft', dtimer = null;
 var DFIELDS = ['newName','contact','email','phone','contact2','email2','phone2','due','delivery','ship','rush',
                'payment','tax','prepressCustom','terms','art','designHrs','designRate','deposit','note',
-               'glossN','matteN','finishTop','chokeN','pressNotes'];
+               'chokeN','pressNotes'];
 function draftSnap(){
   var reorders = {}, fins = {};
   document.querySelectorAll('#reorders .line').forEach(function(d){
