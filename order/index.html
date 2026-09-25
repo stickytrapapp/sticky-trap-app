@@ -159,7 +159,8 @@
     </div>
     <div class="row">
       <div><label>Terms</label><select id="terms" onchange="termsPick()"><option value="Paid in full">Paid in full</option><option value="Half down, half upon delivery">Half down, half upon delivery</option></select></div>
-      <div><label style="margin-top:22px"><input type="checkbox" id="designOnly" style="width:auto;margin-right:8px">Design only (nothing printed)</label></div>
+      <div><label>Order type</label><select id="orderType" onchange="orderTypePick()"><option value="Print">Print</option><option value="Design">Design</option><option value="Print and design">Print and design</option></select>
+        <input type="checkbox" id="designOnly" class="hidden"></div>
     </div>
     <div class="row" id="depWrap" style="display:none">
       <div><label>Amount taken now $ <span class="muted" id="depHint"></span></label><input id="deposit" type="number" step="0.01" inputmode="decimal" placeholder="half of the order"></div>
@@ -180,7 +181,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25c</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25d</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -504,8 +505,12 @@ function printSpecs(){
   // 9/24 Shane 'add choke to each line': the order-wide CHOKE line is gone - it rides on each LINE FINISH
   var cu = chips('cut')[0]; if(cu) L.push('CUT: ' + cu);
   var n = $('pressNotes').value.trim(); if(n) L.push('NOTES: ' + n);
+  if($('orderType')) L.push('ORDER TYPE: ' + $('orderType').value);
   return L.join(String.fromCharCode(10));
 }
+// 9/25 Shane: "need the option on the pad: print. design. print and design". Design = the old 'Design only' tick
+// (nothing printed, no work order); the choice rides to the builder as an ORDER TYPE call-out and fills Job Type on Monday.
+function orderTypePick(){ $('designOnly').checked = ($('orderType').value === 'Design'); }
 function termsPick(){   // 9/22 Shane: terms = paid in full, or half down / half on delivery
   var half = $('terms').value.indexOf('Half') === 0;
   $('depWrap').style.display = half ? '' : 'none';
@@ -568,7 +573,7 @@ function loadDrafts(){
 function storeDrafts(all){ try { localStorage.setItem(DKEY, JSON.stringify(all)); } catch(e){} }
 var DFIELDS = ['newName','contact','email','phone','contact2','email2','phone2','due','delivery','ship','rush',
                'payment','tax','prepressCustom','terms','art','designHrs','designRate','deposit','note',
-               'pressNotes'];
+               'pressNotes','orderType'];
 function draftSnap(){
   var reorders = {}, fins = {};
   document.querySelectorAll('#reorders .line').forEach(function(d){
@@ -627,7 +632,7 @@ function restoreDraft(k){
   var d = j.d;
   $('company').value = d.company; pickCompany();
   DFIELDS.forEach(function(id){ if($(id) && d.f && d.f[id] !== undefined) $(id).value = d.f[id]; });
-  $('designOnly').checked = !!d.designOnly;
+  $('designOnly').checked = !!d.designOnly; if(d.f && d.f.orderType) $('orderType').value = d.f.orderType; else if(d.designOnly) $('orderType').value = 'Design'; orderTypePick();
   document.querySelectorAll('#reorders .line').forEach(function(el){
     var q = d.reorders && d.reorders[el.dataset.title];
     if(q){ el.querySelector('input[data-i]').value = q; var det = el.closest('details'); if(det) det.open = true; }
