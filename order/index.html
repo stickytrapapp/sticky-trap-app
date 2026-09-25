@@ -170,20 +170,15 @@
     </div>
   </div>
 
-  <div class="card">
-    <h2>Print specs</h2>
-    <!-- 9/25 Shane: the 'Press settings' label was redundant under Print specs - removed -->
-    <!-- 9/25 Shane: order-level white / matte / gloss / choke removed - the item lines carry them -->
-    <label>Anything else the Print Dep. needs to know</label><textarea id="pressNotes" placeholder="choke by eye, trim tight, run the holo first, hold for a sample&hellip;"></textarea>
-  </div>
+  <!-- 9/25 Shane: Print specs section deleted - everything the press needs is on each item line -->
 
   <div class="card">
     <h2>Notes</h2>
-    <label>Customer note (prints on the invoice)</label><textarea id="note"></textarea>
+    <label>Client note <span class="pill">prints on the client's invoice</span></label><div class="hint" style="margin:0 0 6px">For the client to read. Not design notes, not press notes.</div><textarea id="note" placeholder="thanks for the order, pick up at the front desk&hellip;"></textarea>
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25t</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25u</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -308,7 +303,8 @@ function pickCompany(){
 function finHTML(s, hidden){
   return '<div class="fin' + (hidden ? ' hidden' : '') + '">'
        + '<label style="flex:2 1 320px">Print Instructions <textarea class="fpi" rows="1" placeholder="exactly what the press should run" spellcheck="false" style="width:100%;min-height:34px;padding:6px 8px;font-size:14px"></textarea></label>'
-       + (s ? '<label style="flex:0 1 150px">Cut <select class="cu" style="width:100%"><option value="">&mdash;</option><option>Individual</option><option>Kiss-cut</option><option>On sheets</option></select></label>' : '')   // reorders: cut in the line box
+       + (s ? '<label style="flex:0 1 150px">Cut <select class="cu" style="width:100%"><option value="">&mdash;</option><option>Individual</option><option>Kiss-cut</option><option>On sheets</option></select></label>'
+              + '<label style="flex:0 1 130px">White ink <select class="w" style="width:100%"><option value="N">No white</option><option value="Y">White ink</option></select></label>' : '')   // reorders: cut + white ink in the line box
        + '<label style="flex:1 1 220px">File name <input class="ffn" placeholder="exactly as the file is named" autocomplete="off" autocapitalize="off" spellcheck="false" style="width:100%;text-align:left"></label>'
        + '</div>';
 }
@@ -318,18 +314,23 @@ function finSet(box, f){
   if(f.pi !== undefined && f.pi !== null) box.querySelector('.fpi').value = f.pi;
   if(f.fn !== undefined && f.fn !== null) box.querySelector('.ffn').value = f.fn;
   if(f.cu !== undefined && f.cu !== null && box.querySelector('.cu')) box.querySelector('.cu').value = f.cu;
+  if(f.w !== undefined && box.querySelector('.w') && !box.querySelector('.w').disabled) box.querySelector('.w').value = f.w === 'Y' ? 'Y' : 'N';
 }
+// reorders say their white ink every time, so the Pad's choice (default No white) beats the SKU's history
+function whiteLine(key, line){ var w = line && line.querySelector('.fin .w'); return w ? 'LINE WHITE: ' + JSON.stringify({ k: key, w: w.value === 'Y' ? 'Y' : 'N' }) : null; }
 function cutLine(key, line){ var c = line && line.querySelector('.cu'); return c && c.value ? 'LINE CUT: ' + JSON.stringify({ k: key, c: c.value }) : null; }
 function finPrefill(){}
 function finLine(){}
-function whiteLock(){}
+function whiteLock(d){   // 9/25: a reorder on White material can't take white ink - its box stays at No white, locked
+  var w = d && d.querySelector('.fin .w'); if(!w) return;
+  if(/white/i.test(d.dataset.material || '')){ w.value = 'N'; w.disabled = true; w.title = 'White material never takes white ink'; } }
 // 9/25: white material never takes white ink - picking White Vinyl sets the line's white ink to Off and locks it
 function whiteCheck(el){ var d = el.closest('.newline'); if(!d) return; var w = d.querySelector('.w'), wv = d.querySelector('.m').value === 'White Vinyl';
   if(wv) w.value = 'N'; w.disabled = wv; w.title = wv ? 'White Vinyl never takes white ink' : 'White ink (under the CMYK)'; }
 function finOf(box){
   if(!box) return null;
-  var pi = box.querySelector('.fpi').value, fn = box.querySelector('.ffn').value, cb = box.querySelector('.cu'), cu = cb ? cb.value : '';
-  return (pi === '' && fn === '' && cu === '') ? null : { pi: pi, fn: fn, cu: cu };
+  var pi = box.querySelector('.fpi').value, fn = box.querySelector('.ffn').value, cb = box.querySelector('.cu'), cu = cb ? cb.value : '', wb = box.querySelector('.w'), w = wb && wb.value === 'Y' ? 'Y' : '';
+  return (pi === '' && fn === '' && cu === '' && w === '') ? null : { pi: pi, fn: fn, cu: cu, w: w };
 }
 function fileLine(key, box){ var v = box ? box.querySelector('.ffn').value : ''; return v === '' ? null : 'LINE FILE: ' + JSON.stringify({ k: key, f: v }); }
 function finLineText(key, f){ return (f && f.pi !== '') ? 'LINE PRINT: ' + JSON.stringify({ k: key, t: f.pi }) : null; }
@@ -475,7 +476,7 @@ function asNewItem(a){   // 9/16 Shane: a size or material we have not printed f
   row.querySelector('.m').value = mat.indexOf('holo') >= 0 ? 'Holographic' : mat.indexOf('gold') >= 0 ? 'Gold' : mat.indexOf('white') >= 0 ? 'White Vinyl' : mat.indexOf('clear') >= 0 ? 'Clear' : '';
   // 9/22: the vessel cell is a menu dropdown now - open its 'something else' box so the new size can be typed
   var _s = row.querySelector('.vsel'); _s.value = '__other__'; vesselPick(_s);
-  var _src = d.querySelector('.fin'); if(_src){ var _f = finOf(_src) || {}; finSet(row.querySelector('.fin'), _f); if(_f.cu) row.querySelector('.cu').value = _f.cu; }
+  var _src = d.querySelector('.fin'); if(_src){ var _f = finOf(_src) || {}; finSet(row.querySelector('.fin'), _f); if(_f.cu) row.querySelector('.cu').value = _f.cu; if(_f.w) row.querySelector('.w').value = _f.w; whiteCheck(row.querySelector('.m')); }
   row.querySelector('.v').placeholder = 'new size (was ' + (d.querySelector('.nm').textContent.split(' \u00b7 ')[0] || 'n/a') + ')'; row.scrollIntoView({block: 'center'}); row.querySelector('.v').focus();
 }
 function resetForm(noAsk){   // 9/16 Shane: reset with an are-you-sure; keeps the PIN + catalog, clears everything typed
@@ -501,7 +502,7 @@ function printSpecs(){
   // 9/24 Shane: whole-order 'White ink layer' / 'We apply to jars' removed - W ink and Apply are set per line
   // 9/24 Shane 'add choke to each line': the order-wide CHOKE line is gone - it rides on each LINE FINISH
   // 9/25: cut is per line now (LINE CUT)
-  var n = $('pressNotes').value.trim(); if(n) L.push('NOTES: ' + n);
+  var n = $('pressNotes') ? $('pressNotes').value.trim() : ''; if(n) L.push('NOTES: ' + n);   // box removed 9/25; kept for old drafts
   if($('orderType')) L.push('ORDER TYPE: ' + $('orderType').value);
   // 9/25 Shane: white / matte / gloss / choke are per line now (each item's Print Instructions) - no ORDER PRESS line
   return L.join(String.fromCharCode(10));
@@ -755,7 +756,7 @@ function submit(){
   if(!company){ alert('Pick the company (or type the new customer name).'); return; }
   if(!$('due').value){ alert('Order due date is required.'); return; }
   if(!$('phone').value.trim()){ alert('Phone is required - every order starts with company, contact, phone and email.'); $('phone').focus(); return; }
-  var reorders = [], lineFin = []; document.querySelectorAll('#reorders .line').forEach(function(d){ var n = Number(d.querySelector('input[data-i]').value || 0); if(n > 0){ reorders.push({ title: d.dataset.title, qty: n }); var f = finOf(d.querySelector('.fin')); var _k = d.dataset.sku + (d.dataset.vessel ? ' @ ' + d.dataset.vessel : ''); if(f) lineFin.push(finLineText(_k, f)); var _fl = fileLine(_k, d.querySelector('.fin')); if(_fl) lineFin.push(_fl); var _cl = cutLine(_k, d); if(_cl) lineFin.push(_cl); } });
+  var reorders = [], lineFin = []; document.querySelectorAll('#reorders .line').forEach(function(d){ var n = Number(d.querySelector('input[data-i]').value || 0); if(n > 0){ reorders.push({ title: d.dataset.title, qty: n }); var f = finOf(d.querySelector('.fin')); var _k = d.dataset.sku + (d.dataset.vessel ? ' @ ' + d.dataset.vessel : ''); if(f) lineFin.push(finLineText(_k, f)); var _fl = fileLine(_k, d.querySelector('.fin')); if(_fl) lineFin.push(_fl); var _cl = cutLine(_k, d); if(_cl) lineFin.push(_cl); var _wl = whiteLine(_k, d); if(_wl) lineFin.push(_wl); } });
   var newItems = []; document.querySelectorAll('#newItems .newline').forEach(function(d){ var n = Number(d.querySelector('.q').value || 0), nm = d.querySelector('.n').value.trim(); if(nm && n > 0){ newItems.push({ name: nm, qty: n, material: d.querySelector('.m').value, vessel: d.querySelector('.v').value.trim(), texture: d.querySelector('.t').value, unit: d.querySelector('.p').value, white_ink: d.querySelector('.m').value === 'White Vinyl' ? 'N' : d.querySelector('.w').value, apply: d.querySelector('.ap').value }); var f = finOf(d.querySelector('.fin')); var vv = d.querySelector('.v').value.trim(); var _k2 = nm + (vv ? ' @ ' + vv : ''); if(f) lineFin.push(finLineText(_k2, f)); var _fl2 = fileLine(_k2, d.querySelector('.fin')); if(_fl2) lineFin.push(_fl2); var _cl2 = cutLine(_k2, d); if(_cl2) lineFin.push(_cl2); } });
   if(!reorders.length && !newItems.length && !$('designOnly').checked){ alert('Set a quantity on at least one item.'); return; }
   // 9/24: a new item with no price the builder can find stops at 'Needs info' - say so before it is sent
