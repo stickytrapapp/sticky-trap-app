@@ -181,7 +181,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25e</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25g</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -324,8 +324,7 @@ function finSet(box, f){
   finLine(box);
 }
 function finPrefill(box, s){
-  var f = s ? parseRecipe(s.gloss, s.coat_order) : null; if(f) finSet(box, f);
-  if(s && (s.white_ink === 'Y' || s.white_ink === 'N')) box.querySelector('.fw').value = s.white_ink;
+  // 9/25 Shane: "leave it blank rather than guess" - the saved recipe only shows as a hint beside the line
 }
 function finLine(box){ box.querySelector('.fc').classList.toggle('hidden', box.querySelector('.fco').value !== 'on'); }
 // 9/25 Shane: "white material and white ink are never the same" - a White-material line cannot take white ink
@@ -389,7 +388,7 @@ function addNewLine(){
               +   '<select class="vsel" onchange="vesselPick(this)">' + VESSELS + '</select>'
               +   '<input placeholder="type the size" class="v vother hidden" onblur="vesselBack(this)">'
               + '</span>'
-              + '<select class="t"><option value="">Texture</option><option value="Flat">Flat</option><option value="1">1 &middot; Spot Gloss</option><option value="2">2 &middot; Standard</option><option value="3">3 &middot; Pro</option></select>'
+              + '<select class="t"><option value="">Texture</option><option value="Flat">0 &middot; Flat</option><option value="1">1 &middot; Spot Gloss UV</option><option value="2">2 &middot; Standard</option><option value="3">3 &middot; Pro</option><option value="4">4 &middot; Ridge</option><option value="5">5 &middot; Summit</option><option value="6">6 &middot; Peak</option><option value="7">7 &middot; Apex</option><option value="8">8 &middot; Zenith</option></select>'
               + '<select class="ap" title="We apply to jars"><option value="">Apply</option><option value="Y">A: Y</option><option value="N">A: N</option></select>'
               + '<button type="button" class="minus" title="Remove this line" onclick="delNewLine(this)">−</button></div>'
               + finHTML(null, false);
