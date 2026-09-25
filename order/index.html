@@ -188,7 +188,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25k</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25l</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -438,7 +438,7 @@ function openPast(inv){
             : ' — sending replaces the invoice and work order on its line in Monday.');
   if(stale) $('editMsg').innerHTML += ' <b>Its due date (' + esc(o.due) + ') has passed — set a new one.</b>';
   $('editBar').classList.remove('hidden');
-  $('pastCard').classList.add('hidden');
+  // 9/25 Shane ('pull up last orders gone'): the Past orders list stays up while editing, so another order is one tap away
   window.scrollTo(0, 0);
   totals(); saveDraft();
 }
