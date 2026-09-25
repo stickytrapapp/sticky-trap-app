@@ -36,16 +36,17 @@
   .stp{background:var(--soft);border:1px solid #c9c9d1;color:var(--ink);border-radius:10px;font-size:20px;padding:8px 0;cursor:pointer}
   .newline{display:grid;grid-template-columns:1fr;gap:6px;padding:10px 0;border-bottom:1px solid var(--line)}
   .newline .g{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
-  .newline .nlrow{display:grid;grid-template-columns:minmax(0,2fr) 66px 84px minmax(0,1.1fr) minmax(0,1.25fr) minmax(0,1fr) minmax(0,1.25fr) minmax(0,1.2fr) minmax(0,.9fr) 36px;gap:6px;align-items:center}
+  .newline .nlrow{display:grid;grid-template-columns:minmax(0,2fr) 66px 84px minmax(0,1.1fr) minmax(0,1.25fr) minmax(0,1fr) minmax(0,1.25fr) minmax(0,1.2fr) minmax(0,.9fr) 36px;gap:6px;align-items:end}
   .newline .nlrow>*{min-width:0} .newline .nlrow input,.newline .nlrow select{width:100%;min-width:0}
   .newline,.newline .nlrow{max-width:100%} #newItems{overflow-x:hidden}
   .newline input,.newline select{padding:9px 8px;font-size:15px}
   .newline .vcell{display:block;min-width:0}
+  .newline .lcell{display:block;min-width:0} .newline .lcell .lt{display:block;font-size:11px;color:var(--muted);margin:0 0 2px;white-space:nowrap}
   .newline .vcell select,.newline .vcell input{width:100%}
   .minus,.plus{border:1px solid #c9c9d1;background:#fff;color:var(--ink);border-radius:999px;width:36px;height:38px;font-size:20px;line-height:1;cursor:pointer;padding:0}
   .minus:hover{border-color:var(--pink);color:var(--pink)}
   .plus{border-color:var(--pink);color:var(--pink);font-weight:700}
-  @media(max-width:999px){ .newline .nlrow{grid-template-columns:1fr 62px 78px 36px} .newline .nlrow .m,.newline .nlrow .vcell,.newline .nlrow .t{grid-column:span 2} .newline .nlrow .w,.newline .nlrow .ap,.newline .nlrow .cu{grid-column:span 2} }
+  @media(max-width:999px){ .newline .nlrow{grid-template-columns:1fr 62px 78px 36px} .newline .nlrow .m,.newline .nlrow .vcell,.newline .nlrow .t{grid-column:span 2} .newline .nlrow .lcell,.newline .nlrow .cu{grid-column:span 2} }
   .addrow{display:flex;align-items:center;gap:10px;margin-top:10px}
   .btn.ghost.openbtn{border:1px solid var(--pink);color:var(--pink);font-weight:700;white-space:nowrap}
   .btn.ghost.openbtn:hover{background:var(--pink);color:#fff}
@@ -179,7 +180,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25w</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25x</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -305,8 +306,8 @@ function finHTML(s, hidden){
   return '<div class="fin' + (hidden ? ' hidden' : '') + '">'
        + '<label style="flex:2 1 320px">Print Instructions <textarea class="fpi" rows="1" placeholder="exactly what the press should run" spellcheck="false" style="width:100%;min-height:34px;padding:6px 8px;font-size:14px"></textarea></label>'
        + (s ? '<label style="flex:0 1 150px">Cut <select class="cu" style="width:100%"><option value="">&mdash;</option><option>Individual</option><option>Kiss-cut</option><option>On sheets</option></select></label>'
-              + '<label style="flex:0 1 130px">White ink <select class="w" style="width:100%"><option value="N">No white</option><option value="Y">White ink</option></select></label>'
-              + '<label style="flex:0 1 130px">Apply <select class="ap" style="width:100%"><option value="N">Apply: No</option><option value="Y">Apply: Yes</option></select></label>' : '')   // reorders: cut + white ink + apply in the line box
+              + '<label style="flex:0 1 130px">White ink <select class="w" style="width:100%"><option value="N">No</option><option value="Y">Yes</option></select></label>'
+              + '<label style="flex:0 1 130px">Apply <select class="ap" style="width:100%"><option value="N">No</option><option value="Y">Yes</option></select></label>' : '')   // reorders: cut + white ink + apply in the line box
        + '<label style="flex:1 1 220px">File name <input class="ffn" placeholder="exactly as the file is named" autocomplete="off" autocapitalize="off" spellcheck="false" style="width:100%;text-align:left"></label>'
        + '</div>';
 }
@@ -376,8 +377,8 @@ function addNewLine(){
               + '</span>'
               + '<select class="cu" title="Cut"><option value="">Cut</option><option>Individual</option><option>Kiss-cut</option><option>On sheets</option></select>'   // 9/25 Shane: cut per line, between vessel size and texture
               + '<select class="t"><option value="">Texture</option><option value="Flat">0 &middot; Flat</option><option value="1">1 &middot; Spot Gloss UV</option><option value="2">2 &middot; Standard</option><option value="3">3 &middot; Pro</option><option value="4">4 &middot; Ridge</option><option value="5">5 &middot; Summit</option><option value="6">6 &middot; Peak</option><option value="7">7 &middot; Apex</option><option value="8">8 &middot; Zenith</option></select>'
-              + '<select class="w" title="White ink (under the CMYK)" onchange="whiteCheck(this)"><option value="N">No white</option><option value="Y">White ink</option></select>'   // 9/25 Shane
-              + '<select class="ap" title="We apply the labels to the jars"><option value="N">Apply: No</option><option value="Y">Apply: Yes</option></select>'
+              + '<span class="lcell"><span class="lt">White ink</span><select class="w" title="White ink (under the CMYK)" onchange="whiteCheck(this)"><option value="N">No</option><option value="Y">Yes</option></select></span>'   // 9/25 Shane
+              + '<span class="lcell"><span class="lt">Apply</span><select class="ap" title="We apply the labels to the jars"><option value="N">No</option><option value="Y">Yes</option></select></span>'
               + '<button type="button" class="minus" title="Remove this line" onclick="delNewLine(this)">−</button></div>'
               + finHTML(null, false);
   $('newItems').appendChild(d);
