@@ -36,7 +36,7 @@
   .stp{background:var(--soft);border:1px solid #c9c9d1;color:var(--ink);border-radius:10px;font-size:20px;padding:8px 0;cursor:pointer}
   .newline{display:grid;grid-template-columns:1fr;gap:6px;padding:10px 0;border-bottom:1px solid var(--line)}
   .newline .g{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
-  .newline .nlrow{display:grid;grid-template-columns:minmax(0,2fr) 66px 84px minmax(0,1.1fr) minmax(0,1.25fr) minmax(0,1.25fr) minmax(0,.9fr) 36px;gap:6px;align-items:center}
+  .newline .nlrow{display:grid;grid-template-columns:minmax(0,2fr) 66px 84px minmax(0,1.1fr) minmax(0,1.25fr) minmax(0,1fr) minmax(0,1.25fr) minmax(0,.9fr) 36px;gap:6px;align-items:center}
   .newline .nlrow>*{min-width:0} .newline .nlrow input,.newline .nlrow select{width:100%;min-width:0}
   .newline,.newline .nlrow{max-width:100%} #newItems{overflow-x:hidden}
   .newline input,.newline select{padding:9px 8px;font-size:15px}
@@ -45,7 +45,7 @@
   .minus,.plus{border:1px solid #c9c9d1;background:#fff;color:var(--ink);border-radius:999px;width:36px;height:38px;font-size:20px;line-height:1;cursor:pointer;padding:0}
   .minus:hover{border-color:var(--pink);color:var(--pink)}
   .plus{border-color:var(--pink);color:var(--pink);font-weight:700}
-  @media(max-width:860px){ .newline .nlrow{grid-template-columns:1fr 62px 78px 36px} .newline .nlrow .m,.newline .nlrow .v,.newline .nlrow .t{grid-column:span 2} .newline .nlrow .w,.newline .nlrow .ap{grid-column:span 2} }
+  @media(max-width:860px){ .newline .nlrow{grid-template-columns:1fr 62px 78px 36px} .newline .nlrow .m,.newline .nlrow .vcell,.newline .nlrow .t{grid-column:span 2} .newline .nlrow .w,.newline .nlrow .ap,.newline .nlrow .cu{grid-column:span 2} }
   .addrow{display:flex;align-items:center;gap:10px;margin-top:10px}
   .btn.ghost.openbtn{border:1px solid var(--pink);color:var(--pink);font-weight:700;white-space:nowrap}
   .btn.ghost.openbtn:hover{background:var(--pink);color:#fff}
@@ -78,7 +78,8 @@
 <body>
 <div id="gate" class="wrap">
   <h1>Sticky Trap</h1><div class="sub">Order Pad</div>
-  <div class="card"><label>Staff PIN</label><input id="pin" type="password" inputmode="numeric" autocomplete="off">
+  <div class="card"><label>Your name</label><input id="who" autocomplete="off" placeholder="first name" style="margin-bottom:10px">
+  <label>Staff PIN</label><input id="pin" type="password" inputmode="numeric" autocomplete="off">
   <p class="hint" id="gateMsg"></p><br><button class="btn" onclick="unlock()">Open</button></div>
 </div>
 
@@ -90,7 +91,7 @@
   <div class="card">
     <h2>Customer</h2>
     <label>Company <b>*</b></label>
-    <select id="company" onchange="pickCompany()"><option value="">Choose…</option></select>
+    <select id="company" onchange="pickCompany(); draftCheck()"><option value="">Choose…</option></select>
     <div id="newCust" class="hidden"><label>New customer name <b>*</b></label><input id="newName" placeholder="Company name as it should print"></div>
     <div class="row"><div><label>Contact</label><input id="contact"></div><div><label>Phone <b>*</b></label><input id="phone" inputmode="tel" placeholder="734-555-1234" oninput="fmtPhone(this)"></div></div>
     <label>Email <b>*</b></label><input id="email" inputmode="email" placeholder="name@company.com"><div class="hint">This is how they get their tracker link and order updates. Leave it blank only for a walk-in — the job then lives in the staff console only.</div>
@@ -170,15 +171,13 @@
 
   <div class="card">
     <h2>Print specs <span class="pill">prints on the invoice + work order</span></h2>
-    <label>Press settings <span class="pill">work order Print Details only &middot; blank = nothing printed</span></label>
+    <!-- 9/25 Shane: the 'Press settings' label was redundant under Print specs - removed -->
     <div class="row3" style="grid-template-columns:1fr 1fr 1fr 1.4fr">
       <div><span class="lbl">White ink</span><select id="psWhite"><option value="">No</option><option value="Yes">Yes</option></select></div>
       <div><span class="lbl">Matte</span><input type="number" id="psMatte" min="0" max="64" inputmode="numeric" placeholder="–"></div>
       <div><span class="lbl">Gloss</span><input type="number" id="psGloss" min="0" max="64" inputmode="numeric" placeholder="–"></div>
       <div><span class="lbl">Choke instructions</span><div style="display:flex;gap:6px"><select id="psChokeOn" onchange="$('psChoke').classList.toggle('hidden', this.value !== 'on')" style="width:auto"><option value="">off</option><option value="on">on</option></select><input type="number" id="psChoke" class="hidden" min="-10" max="10" step="1" value="0" inputmode="numeric"></div></div>
     </div>
-    <label>Cut</label>
-    <div class="chips" data-group="cut" data-one="1"><span class="chip" data-v="Individual">Individual</span><span class="chip" data-v="Kiss-cut">Kiss-cut</span><span class="chip" data-v="On sheets">On sheets</span></div>
     <label>Anything else the Print Dep. needs to know</label><textarea id="pressNotes" placeholder="choke by eye, trim tight, run the holo first, hold for a sample&hellip;"></textarea>
   </div>
 
@@ -188,7 +187,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25l</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25n</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -235,6 +234,8 @@ function fmtPhone(el) {   // 9/22 debug: only format a real 10-digit number - a 
 }
 function money(x){ return '$' + (Math.round(x*100)/100).toFixed(2); }
 function unlock(){
+  var _who = $('who').value.trim(); if(!_who){ $('gateMsg').textContent = 'Type your name - the Unfinished list shows who started each order.'; $('who').focus(); return; }
+  try { localStorage.setItem('st_who', _who); } catch(e){}
   PIN = $('pin').value.trim(); $('gateMsg').textContent = 'Loading…';
   catalogLoad(PIN).then(function(r){
     if(!r.ok){ $('gateMsg').textContent = 'Wrong PIN'; return; }
@@ -243,7 +244,7 @@ function unlock(){
     var sel = $('company'); sel.innerHTML = '<option value="">Choose…</option><option value="__new__">New Customer</option>';
     CAT.customers.forEach(function(c){ var o = document.createElement('option'); o.value = c.name; o.textContent = c.name; sel.appendChild(o); });
     addNewLine(); addNewLine(); addNewLine(); addNewLine();   // 9/24 Shane 'make it 4 lines' (was two), + adds more
-    offerDraft();
+    offerDraft(); syncDrafts();
     try { localStorage.setItem('st_pin', PIN); } catch(e){}
   }).catch(function(e){ $('gateMsg').textContent = 'Error: ' + e.message; });
 }
@@ -311,6 +312,7 @@ function pickCompany(){
 function finHTML(s, hidden){
   return '<div class="fin' + (hidden ? ' hidden' : '') + '">'
        + '<label style="flex:2 1 320px">Print Instructions <textarea class="fpi" rows="1" placeholder="exactly what the press should run" spellcheck="false" style="width:100%;min-height:34px;padding:6px 8px;font-size:14px"></textarea></label>'
+       + (s ? '<label style="flex:0 1 150px">Cut <select class="cu" style="width:100%"><option value="">&mdash;</option><option>Individual</option><option>Kiss-cut</option><option>On sheets</option></select></label>' : '')   // reorders: cut in the line box
        + '<label style="flex:1 1 220px">File name <input class="ffn" placeholder="exactly as the file is named" autocomplete="off" autocapitalize="off" spellcheck="false" style="width:100%;text-align:left"></label>'
        + '</div>';
 }
@@ -319,14 +321,16 @@ function finSet(box, f){
   if(!box || !f) return;
   if(f.pi !== undefined && f.pi !== null) box.querySelector('.fpi').value = f.pi;
   if(f.fn !== undefined && f.fn !== null) box.querySelector('.ffn').value = f.fn;
+  if(f.cu !== undefined && f.cu !== null && box.querySelector('.cu')) box.querySelector('.cu').value = f.cu;
 }
+function cutLine(key, line){ var c = line && line.querySelector('.cu'); return c && c.value ? 'LINE CUT: ' + JSON.stringify({ k: key, c: c.value }) : null; }
 function finPrefill(){}
 function finLine(){}
 function whiteLock(){}
 function finOf(box){
   if(!box) return null;
-  var pi = box.querySelector('.fpi').value, fn = box.querySelector('.ffn').value;
-  return (pi === '' && fn === '') ? null : { pi: pi, fn: fn };
+  var pi = box.querySelector('.fpi').value, fn = box.querySelector('.ffn').value, cb = box.querySelector('.cu'), cu = cb ? cb.value : '';
+  return (pi === '' && fn === '' && cu === '') ? null : { pi: pi, fn: fn, cu: cu };
 }
 function fileLine(key, box){ var v = box ? box.querySelector('.ffn').value : ''; return v === '' ? null : 'LINE FILE: ' + JSON.stringify({ k: key, f: v }); }
 function finLineText(key, f){ return (f && f.pi !== '') ? 'LINE PRINT: ' + JSON.stringify({ k: key, t: f.pi }) : null; }
@@ -366,6 +370,7 @@ function addNewLine(){
               +   '<select class="vsel" onchange="vesselPick(this)">' + VESSELS + '</select>'
               +   '<input placeholder="type the size" class="v vother hidden" onblur="vesselBack(this)">'
               + '</span>'
+              + '<select class="cu" title="Cut"><option value="">Cut</option><option>Individual</option><option>Kiss-cut</option><option>On sheets</option></select>'   // 9/25 Shane: cut per line, between vessel size and texture
               + '<select class="t"><option value="">Texture</option><option value="Flat">0 &middot; Flat</option><option value="1">1 &middot; Spot Gloss UV</option><option value="2">2 &middot; Standard</option><option value="3">3 &middot; Pro</option><option value="4">4 &middot; Ridge</option><option value="5">5 &middot; Summit</option><option value="6">6 &middot; Peak</option><option value="7">7 &middot; Apex</option><option value="8">8 &middot; Zenith</option></select>'
               + '<select class="ap" title="We apply to jars"><option value="">Apply</option><option value="Y">A: Y</option><option value="N">A: N</option></select>'
               + '<button type="button" class="minus" title="Remove this line" onclick="delNewLine(this)">−</button></div>'
@@ -432,15 +437,18 @@ function openPast(inv){
   var iso = o.due ? mdyToISO(o.due) : '', today = new Date().toISOString().slice(0, 10), stale = iso && iso < today;
   $('due').value = stale ? '' : iso;
   if(o.delivery) $('delivery').value = /ship/i.test(o.delivery) ? 'Ship' : /deliver/i.test(o.delivery) ? 'Deliver' : 'Pick Up';
+  showEditBar(o, stale);
+  // 9/25 Shane ('pull up last orders gone'): the Past orders list stays up while editing, so another order is one tap away
+  window.scrollTo(0, 0);
+  totals(); saveDraft();
+}
+function showEditBar(o, stale){
   var sent = (o.status === 'Sent' || o.status === 'Paid');
   $('editMsg').innerHTML = 'Editing <b>' + esc(o.inv) + '</b> (' + esc(o.date) + ')'
     + (sent ? ' — this one has already gone out, so the edit is built as a <b>revision (R2)</b>. Cancel and reissue the Square invoice when you are ready.'
             : ' — sending replaces the invoice and work order on its line in Monday.');
   if(stale) $('editMsg').innerHTML += ' <b>Its due date (' + esc(o.due) + ') has passed — set a new one.</b>';
   $('editBar').classList.remove('hidden');
-  // 9/25 Shane ('pull up last orders gone'): the Past orders list stays up while editing, so another order is one tap away
-  window.scrollTo(0, 0);
-  totals(); saveDraft();
 }
 function stopEditing(clearLines){
   EDIT_OF = null;
@@ -466,18 +474,22 @@ function asNewItem(a){   // 9/16 Shane: a size or material we have not printed f
   row.querySelector('.m').value = mat.indexOf('holo') >= 0 ? 'Holographic' : mat.indexOf('gold') >= 0 ? 'Gold' : mat.indexOf('white') >= 0 ? 'White Vinyl' : mat.indexOf('clear') >= 0 ? 'Clear' : '';
   // 9/22: the vessel cell is a menu dropdown now - open its 'something else' box so the new size can be typed
   var _s = row.querySelector('.vsel'); _s.value = '__other__'; vesselPick(_s);
-  var _src = d.querySelector('.fin'); if(_src){ finSet(row.querySelector('.fin'), finOf(_src) || {}); }
+  var _src = d.querySelector('.fin'); if(_src){ var _f = finOf(_src) || {}; finSet(row.querySelector('.fin'), _f); if(_f.cu) row.querySelector('.cu').value = _f.cu; }
   row.querySelector('.v').placeholder = 'new size (was ' + (d.querySelector('.nm').textContent.split(' \u00b7 ')[0] || 'n/a') + ')'; row.scrollIntoView({block: 'center'}); row.querySelector('.v').focus();
 }
 function resetForm(noAsk){   // 9/16 Shane: reset with an are-you-sure; keeps the PIN + catalog, clears everything typed
-  dropDraft(true);
-  if(!noAsk && !confirm('Clear the whole order and start over?')) return;
+  if(!noAsk && !confirm('Clear the whole order and start over?' + (CUR_DRAFT ? '\nIts draft is deleted - undo for 30 days from the Unfinished list.' : ''))) return;
+  clearTimeout(dtimer);
+  if(CUR_DRAFT){ var _id = CUR_DRAFT, _all = loadDrafts(); delete _all[_id]; storeDrafts(_all); CUR_DRAFT = null;
+    if(typeof api === 'function') api('POST', { action: 'draft_delete', pin: PIN, id: _id, who: me() }).then(syncDrafts).catch(function(){}); }
+  NOSAVE = true;
   $('company').value = ''; pickCompany();
   document.querySelectorAll('#app input:not([type=hidden]), #app textarea').forEach(function(el){ if(el.type === 'checkbox'){ el.checked = false; } else if(el.id === 'prepressCustom'){ el.value = '8'; } else if(el.id === 'designRate'){ el.value = '75'; } else if(el.id === 'chokeN'){ el.value = '0'; } else { el.value = ''; } });
   document.querySelectorAll('#app select').forEach(function(el){ el.selectedIndex = 0; });
   document.querySelectorAll('.chip.on').forEach(function(c){ c.classList.remove('on'); });
   $('newItems').innerHTML = ''; addNewLine(); addNewLine(); addNewLine(); addNewLine(); $('result').classList.add('hidden'); $('result').innerHTML = '';
   $('submitBtn').disabled = false; $('submitBtn').textContent = 'Submit order'; finishOrder(); ppCalc(); designCalc(); termsPick(); totals(); window.scrollTo(0, 0);
+  NOSAVE = false; CUR_DRAFT = null; offerDraft();
 }
 function openPicker(el){ try { if(el.showPicker) el.showPicker(); } catch(e){} }   // 9/16 Shane: tap anywhere on the date = calendar pops up
 function chips(group){ return [].map.call(document.querySelectorAll('.chips[data-group="' + group + '"] .chip.on'), function(c){ return c.dataset.v; }); }
@@ -487,7 +499,7 @@ function printSpecs(){
   // 9/24 Shane: whole-order texture removed - texture is per line (new items) or the SKU's own (reorders)
   // 9/24 Shane: whole-order 'White ink layer' / 'We apply to jars' removed - W ink and Apply are set per line
   // 9/24 Shane 'add choke to each line': the order-wide CHOKE line is gone - it rides on each LINE FINISH
-  var cu = chips('cut')[0]; if(cu) L.push('CUT: ' + cu);
+  // 9/25: cut is per line now (LINE CUT)
   var n = $('pressNotes').value.trim(); if(n) L.push('NOTES: ' + n);
   if($('orderType')) L.push('ORDER TYPE: ' + $('orderType').value);
   // 9/25 Shane: white ink yes/no, matte number, gloss number, choke -> the work order's Print Details box. Only what
@@ -548,17 +560,23 @@ function totals(){
   $('totNote').textContent = unknown ? 'some new items priced by the builder' : 'before pre-press & tax';
 }
 function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
-// ---- AUTOSAVE (9/22 Shane: "yes to an autosave") -------------------------------------------------
-// Everything typed is kept in THIS browser under st_order_draft and offered back after a reload or a
-// closed tab. Cleared when the order sends, or by Discard / Start over. It never leaves the device.
-// 9/24 (Shane 'do all'): ONE DRAFT PER CLIENT. A single slot meant picking any client and typing overwrote the saved
-// order (the 517 draft). Drafts live under st_order_drafts = { key: {t, d} }; the bar lists every one under 7 days.
-var DKEY = 'st_order_drafts', OLDKEY = 'st_order_draft', dtimer = null;
-function draftKey(company, newName){ return company === '__new__' ? '__new__:' + String(newName || '').trim().toLowerCase() : company; }
+// ---- DRAFTS (9/22 autosave; 9/25 Shane: "that draft needs be remembered and able to pull back up to either finish and
+// publish or delete") -------------------------------------------------------------------------------------------------
+// Every unfinished order is saved to the Pad's backend so the whole team sees it on any device: the Unfinished list up
+// top, each with who started it, when, and the total so far - Resume or Delete. This browser keeps a copy too, so an
+// order typed with no signal is not lost; it goes up at the next save. Sending the order takes it off the list.
+// Delete asks once and can be undone for 30 days. Two people on one draft: the last save wins, and opening a draft
+// someone else saved in the last 15 min says so first.
+var DKEY = 'st_order_drafts2', OLDKEYS = ['st_order_drafts', 'st_order_draft'], dtimer = null, CUR_DRAFT = null, NOSAVE = false, SRV = null;
+function me(){ try { return localStorage.getItem('st_who') || ''; } catch(e){ return ''; } }
+function newDraftId(){ return 'd' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
 function loadDrafts(){
   var all = {}; try { all = JSON.parse(localStorage.getItem(DKEY) || '{}') || {}; } catch(e){ all = {}; }
-  try { var old = JSON.parse(localStorage.getItem(OLDKEY) || 'null'); if(old && old.d && old.d.company){ var ok_ = draftKey(old.d.company, old.d.f && old.d.f.newName); if(!all[ok_]) all[ok_] = old; storeDrafts(all); } localStorage.removeItem(OLDKEY); } catch(e){}   // move the old single slot over - and SAVE it
-  Object.keys(all).forEach(function(k){ if(!all[k] || !all[k].d || Date.now() - all[k].t > 7 * 864e5) delete all[k]; });
+  // the drafts this browser kept before 9/25 move over as not-yet-shared drafts (they go up on the next sync)
+  OLDKEYS.forEach(function(ok, i){ try { var raw = JSON.parse(localStorage.getItem(ok) || 'null'); if(!raw) return;
+    var list = i === 1 ? [raw] : Object.keys(raw).map(function(k){ return raw[k]; });
+    list.forEach(function(j){ if(j && j.d && j.d.company) all[newDraftId()] = { t: j.t || Date.now(), d: j.d, who: me(), up: false }; });
+    localStorage.setItem(DKEY, JSON.stringify(all)); localStorage.removeItem(ok); } catch(e){} });
   return all;
 }
 function storeDrafts(all){ try { localStorage.setItem(DKEY, JSON.stringify(all)); } catch(e){} }
@@ -575,59 +593,144 @@ function draftSnap(){
     var o = { n: d.querySelector('.n').value, q: d.querySelector('.q').value, p: d.querySelector('.p').value,
               m: d.querySelector('.m').value, v: d.querySelector('.v').value, t: d.querySelector('.t').value,
               ap: d.querySelector('.ap').value,
-              pi: d.querySelector('.fpi').value, fn: d.querySelector('.ffn').value };
+              pi: d.querySelector('.fpi').value, fn: d.querySelector('.ffn').value, cu: d.querySelector('.cu').value };
     if(o.n || o.q || o.v) items.push(o); });
   var f = {}; DFIELDS.forEach(function(id){ if($(id)) f[id] = $(id).value; });
   var ch = {}; document.querySelectorAll('.chips').forEach(function(g){ ch[g.dataset.group] = chips(g.dataset.group); });
-  return { company: $('company').value, designOnly: $('designOnly').checked, f: f, chips: ch, reorders: reorders, fins: fins, items: items };
+  return { company: $('company').value, designOnly: $('designOnly').checked, f: f, chips: ch, reorders: reorders, fins: fins, items: items,
+           edit: EDIT_OF ? EDIT_OF.inv : '' };   // an edit of a past order stays an edit when it is resumed
 }
+function snapHasWork(s){   // picking a client and looking is not a draft - a quantity, an item, a note or a due date is
+  return Object.keys(s.reorders || {}).length || (s.items || []).some(function(o){ return o.n || o.q; }) || s.edit || s.designOnly
+      || ['note','pressNotes','due','rush','deposit','designHrs'].some(function(k){ return s.f && s.f[k]; });
+}
+function draftWho(s){ return s.company === '__new__' ? ((s.f && s.f.newName) || 'a new customer') : s.company; }
 function saveDraft(){
-  if(!CAT || !$('company').value) return;
+  if(!CAT || !$('company').value || NOSAVE) return;
   clearTimeout(dtimer);
   dtimer = setTimeout(function(){
+    if(NOSAVE) return;
     try {
-      var all = loadDrafts(), snap = draftSnap();
-      all[draftKey(snap.company, snap.f && snap.f.newName)] = { t: Date.now(), d: snap }; storeDrafts(all);
-      var s = $('saveTag'); if(s) s.textContent = 'saved ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+      var snap = draftSnap(); if(!snapHasWork(snap) && !CUR_DRAFT) return;
+      if(!CUR_DRAFT) CUR_DRAFT = newDraftId();
+      var id = CUR_DRAFT, all = loadDrafts(), tot = $('totAmt') ? $('totAmt').textContent : '';
+      all[id] = { t: Date.now(), d: snap, who: me(), tot: tot, up: false }; storeDrafts(all);
+      var s = $('saveTag'); if(s) s.textContent = 'saving…';
+      pushDraft(id, all[id]).then(function(r){
+        var s = $('saveTag'); if(!s || CUR_DRAFT !== id) return;
+        var tm = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+        if(r && r.ok) s.textContent = 'saved ' + tm;
+        else if(r && r.gone){   // deleted or sent on another device while this one was open - keep the work as a new draft
+          CUR_DRAFT = null; s.textContent = 'that draft was ' + r.gone + (r.by ? ' by ' + r.by : '') + ' - saving this as a new one'; saveDraft();
+        } else s.textContent = 'saved on this device only ' + tm + ' (no connection) - it goes up on the next save';
+      });
     } catch(e){}
-  }, 500);
+  }, 1500);
 }
-function discardDraft(k){   // 9/24: Discard = cancel the queued save, drop THAT client's draft, and clear the form if it is showing
-  clearTimeout(dtimer);
-  var all = loadDrafts(), showing = draftKey($('company').value, $('newName') && $('newName').value);
-  delete all[k]; storeDrafts(all);
-  if($('company').value && showing === k){ resetForm(true); clearTimeout(dtimer); all = loadDrafts(); delete all[k]; storeDrafts(all); }
-  offerDraft();
+function pushDraft(id, j){   // -> {ok} | {gone} | null (offline). Marks the local copy as shared when it lands.
+  if(typeof api !== 'function') return Promise.resolve(null);
+  return api('POST', { action: 'draft_save', pin: PIN, id: id, who: j.who || me(), company: draftWho(j.d), tot: j.tot || '', snap: j.d }).then(function(r){
+    var all = loadDrafts();
+    if(r && r.ok && all[id] && all[id].t === j.t){ all[id].up = true; storeDrafts(all); }
+    if(r && r.gone){ delete all[id]; storeDrafts(all); }
+    return r;
+  }).catch(function(){ return null; });
 }
-function dropDraft(hide){   // the order on screen was sent / reset: forget its draft
-  var all = loadDrafts(); delete all[draftKey($('company').value, $('newName') && $('newName').value)]; storeDrafts(all);
-  if(hide) offerDraft();
+function syncDrafts(){   // pull the shared list; send up anything this browser kept offline; forget copies sent/deleted elsewhere
+  if(typeof api !== 'function'){ offerDraft(); return Promise.resolve(); }
+  return api('GET', { action: 'drafts', pin: PIN }).then(function(r){
+    if(!r || !r.ok) return;
+    SRV = {}; (r.drafts || []).forEach(function(x){ SRV[x.id] = x; });
+    var all = loadDrafts(), ups = [];
+    Object.keys(all).forEach(function(k){
+      var s = SRV[k];
+      if(s && s.st !== 'open'){ if(k !== CUR_DRAFT) delete all[k]; }
+      else if(s && all[k].up && s.t >= all[k].t) { if(k !== CUR_DRAFT) delete all[k]; }   // the shared copy is newer or the same
+      else if(!all[k].up) ups.push(k);
+    });
+    storeDrafts(all);
+    return Promise.all(ups.map(function(k){ return pushDraft(k, all[k]); })).then(function(){ if(ups.length) return api('GET', { action: 'drafts', pin: PIN }).then(function(r2){ if(r2 && r2.ok){ SRV = {}; r2.drafts.forEach(function(x){ SRV[x.id] = x; }); } }); });
+  }).catch(function(){}).then(offerDraft);
 }
+function draftRows(){   // open drafts: shared ones + any still only on this browser
+  var rows = {}, all = loadDrafts();
+  Object.keys(SRV || {}).forEach(function(k){ var s = SRV[k]; if(s.st === 'open') rows[k] = { id: k, company: s.company, who: s.who, t: s.t, tot: s.tot, local: false }; });
+  Object.keys(all).forEach(function(k){ var j = all[k]; if(SRV && SRV[k] && SRV[k].st !== 'open') return;
+    if(!rows[k] || j.t > rows[k].t) rows[k] = { id: k, company: draftWho(j.d), who: j.who, t: j.t, tot: j.tot, local: !j.up }; });
+  return Object.keys(rows).map(function(k){ return rows[k]; }).sort(function(a, b){ return b.t - a.t; });
+}
+function ago(t){ var m = Math.round((Date.now() - t) / 60000); return m < 1 ? 'just now' : m < 60 ? m + ' min ago' : m < 1440 ? Math.round(m / 60) + ' hr ago' : Math.round(m / 1440) + (m < 2880 ? ' day ago' : ' days ago'); }
 function offerDraft(){
-  var all = loadDrafts(), onScreen = $('company').value ? draftKey($('company').value, $('newName') && $('newName').value) : null;
-  var keys = Object.keys(all).filter(function(k){ return k !== onScreen; }).sort(function(a, b){ return all[b].t - all[a].t; });   // the client on screen is not offered back to itself
   var bar = $('draftBar'); bar.innerHTML = '';
-  if(!keys.length){ bar.classList.add('hidden'); return; }
-  keys.forEach(function(k){
-    var j = all[k], who = j.d.company === '__new__' ? ((j.d.f && j.d.f.newName) || 'a new customer') : j.d.company;
+  var rows = draftRows().filter(function(x){ return x.id !== CUR_DRAFT; });   // the one on screen is not offered back to itself
+  var gone = Object.keys(SRV || {}).map(function(k){ return SRV[k]; }).filter(function(s){ return s.st === 'deleted'; }).sort(function(a, b){ return b.dt - a.dt; });
+  if(!rows.length && !gone.length){ bar.classList.add('hidden'); return; }
+  if(rows.length){ var h = document.createElement('div'); h.innerHTML = '<b>Unfinished orders</b> <span class="hint">(' + rows.length + ')</span>'; bar.appendChild(h); }
+  rows.forEach(function(x){
     var row = document.createElement('div'); row.style.cssText = 'display:flex;align-items:center;gap:10px;flex-wrap:wrap';
-    row.innerHTML = '<span style="flex:1">Unfinished order for <b>' + esc(who) + '</b> from ' + esc(new Date(j.t).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })) + '</span>';
-    var r = document.createElement('button'); r.type = 'button'; r.className = 'btn ghost dbtn'; r.textContent = 'Restore'; r.onclick = function(){ restoreDraft(k); };
-    var x = document.createElement('button'); x.type = 'button'; x.className = 'btn ghost dbtn'; x.textContent = 'Discard'; x.onclick = function(){ discardDraft(k); };
-    row.appendChild(r); row.appendChild(x); bar.appendChild(row);
+    row.innerHTML = '<span style="flex:1"><b>' + esc(x.company) + '</b>' + (x.tot && x.tot !== '$0' ? ' · ' + esc(x.tot) : '')
+      + '<br><span class="hint">' + esc(x.who || 'someone') + ' · ' + esc(new Date(x.t).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })) + ' (' + ago(x.t) + ')'
+      + (x.local ? ' · <b>on this device only</b> - goes up when there is signal' : '') + '</span></span>';
+    var r = document.createElement('button'); r.type = 'button'; r.className = 'btn ghost dbtn'; r.textContent = 'Resume'; r.onclick = function(){ restoreDraft(x.id); };
+    var d = document.createElement('button'); d.type = 'button'; d.className = 'btn ghost dbtn'; d.textContent = 'Delete'; d.onclick = function(){ discardDraft(x.id, x.company); };
+    row.appendChild(r); row.appendChild(d); bar.appendChild(row);
   });
+  if(gone.length){
+    var det = document.createElement('details'); det.innerHTML = '<summary class="hint" style="cursor:pointer">Deleted in the last 30 days (' + gone.length + ') - undo</summary>';
+    gone.forEach(function(s){
+      var row = document.createElement('div'); row.style.cssText = 'display:flex;align-items:center;gap:10px;margin-top:6px';
+      row.innerHTML = '<span style="flex:1" class="hint"><b>' + esc(s.company) + '</b> · deleted ' + ago(s.dt) + (s.by ? ' by ' + esc(s.by) : '') + '</span>';
+      var u = document.createElement('button'); u.type = 'button'; u.className = 'btn ghost dbtn'; u.textContent = 'Undo';
+      u.onclick = function(){ api('POST', { action: 'draft_undo', pin: PIN, id: s.id, who: me() }).then(function(r){ if(!r || !r.ok) alert('Could not undo: ' + ((r && r.error) || 'no connection')); syncDrafts(); }).catch(function(){ alert('No connection - try again.'); }); };
+      row.appendChild(u); det.appendChild(row);
+    });
+    bar.appendChild(det);
+  }
   bar.classList.remove('hidden');
 }
-function restoreDraft(k){
-  var all = loadDrafts(), j = all[k];
-  if(!j || !j.d) return;
-  var d = j.d;
+function discardDraft(id, name){   // 9/25: one confirm - it may be someone else's work. Soft: undo for 30 days.
+  if(!confirm('Delete the unfinished order for ' + (name || 'this client') + '?\nYou can undo this for 30 days.')) return;
+  clearTimeout(dtimer);
+  var all = loadDrafts(); delete all[id]; storeDrafts(all);
+  if(id === CUR_DRAFT){ CUR_DRAFT = null; resetForm(true); }
+  if(SRV && SRV[id]) SRV[id].st = 'deleted', SRV[id].dt = Date.now(), SRV[id].by = me();
+  offerDraft();
+  if(typeof api === 'function') api('POST', { action: 'draft_delete', pin: PIN, id: id, who: me() }).then(syncDrafts).catch(function(){});
+}
+function dropDraft(){   // the order on screen was sent: its draft is done (the backend marks it sent with the order)
+  if(CUR_DRAFT){ var all = loadDrafts(); delete all[CUR_DRAFT]; storeDrafts(all); if(SRV && SRV[CUR_DRAFT]) SRV[CUR_DRAFT].st = 'sent'; }
+  CUR_DRAFT = null; offerDraft();
+}
+function restoreDraft(id){
+  var s = SRV && SRV[id], loc = loadDrafts()[id];
+  if(s && s.who && s.who !== me() && Date.now() - s.t < 15 * 60000
+     && !confirm(s.who + ' was working on this ' + ago(s.t) + '. Open it anyway?\nIf you both keep typing, the last save wins.')) return;
+  NOSAVE = true;
+  $('draftBar').insertAdjacentHTML('afterbegin', '<div class="hint"><b>Opening ' + esc((s && s.company) || (loc && draftWho(loc.d)) || 'the draft') + '…</b></div>');   // a shared draft takes a few seconds to come down
+  function apply(d){ try { applySnap(d); CUR_DRAFT = id; } finally { NOSAVE = false; } offerDraft(); window.scrollTo(0, 0); }
+  if(s && (!loc || s.t >= loc.t) && typeof api === 'function'){
+    api('GET', { action: 'draft', pin: PIN, id: id }).then(function(r){
+      if(r && r.ok && r.snap) apply(r.snap); else if(loc) apply(loc.d); else { NOSAVE = false; alert('Could not open that draft: ' + ((r && r.error) || 'no connection')); syncDrafts(); }
+    }).catch(function(){ if(loc) apply(loc.d); else { NOSAVE = false; alert('No connection - try again.'); } });
+  } else if(loc) apply(loc.d);
+  else NOSAVE = false;
+}
+function draftCheck(){   // a client picked by hand: an unfinished order for them? Continue it, or start another.
+  CUR_DRAFT = null;
+  var v = $('company').value; if(!v || v === '__new__') { offerDraft(); return; }
+  var hit = draftRows().filter(function(x){ return x.company === v; })[0];
+  if(hit && confirm('There is an unfinished order for ' + v + ' (' + (hit.who || 'someone') + ', ' + ago(hit.t) + (hit.tot && hit.tot !== '$0' ? ', ' + hit.tot : '') + ').\n\nOK = continue it\nCancel = start another order'))
+    restoreDraft(hit.id);
+  else offerDraft();
+}
+function applySnap(d){
   $('company').value = d.company; pickCompany();
   DFIELDS.forEach(function(id){ if($(id) && d.f && d.f[id] !== undefined) $(id).value = d.f[id]; });
   $('designOnly').checked = !!d.designOnly; if(d.f && d.f.orderType) $('orderType').value = d.f.orderType; else if(d.designOnly) $('orderType').value = 'Design'; orderTypePick();
   document.querySelectorAll('#reorders .line').forEach(function(el){
     var q = d.reorders && d.reorders[el.dataset.title];
-    if(q){ el.querySelector('input[data-i]').value = q; var det = el.closest('details'); if(det) det.open = true; }
+    el.querySelector('input[data-i]').value = q || '';
+    if(q){ var det = el.closest('details'); if(det) det.open = true; }
     var ff = d.fins && d.fins[el.dataset.title]; if(ff) finSet(el.querySelector('.fin'), ff); });
   $('newItems').innerHTML = '';
   (d.items || []).forEach(function(o){
@@ -635,7 +738,7 @@ function restoreDraft(k){
     row.querySelector('.n').value = o.n || ''; row.querySelector('.q').value = o.q || ''; row.querySelector('.p').value = o.p || '';
     row.querySelector('.m').value = o.m || ''; row.querySelector('.t').value = o.t || '';
     row.querySelector('.ap').value = o.ap || '';
-    finSet(row.querySelector('.fin'), { pi: o.pi, fn: o.fn });
+    finSet(row.querySelector('.fin'), { pi: o.pi, fn: o.fn }); row.querySelector('.cu').value = o.cu || '';
     if(o.v){
       var sel = row.querySelector('.vsel');
       if(VESSEL_LIST.indexOf(o.v) >= 0){ sel.value = o.v; vesselPick(sel); }
@@ -643,11 +746,14 @@ function restoreDraft(k){
     }
   });
   if(!document.querySelectorAll('#newItems .newline').length){ addNewLine(); addNewLine(); addNewLine(); addNewLine(); }
+  document.querySelectorAll('.chip.on').forEach(function(c){ c.classList.remove('on'); });
   Object.keys(d.chips || {}).forEach(function(g){
     var want = d.chips[g] || [];
     document.querySelectorAll('.chips[data-group="' + g + '"] .chip').forEach(function(c){
       c.classList.toggle('on', want.indexOf(c.dataset.v) >= 0); }); });
-  offerDraft(); $('psChoke').classList.toggle('hidden', $('psChokeOn').value !== 'on');
+  var eo = d.edit && (CAT.orders || []).find(function(x){ return x.inv === d.edit; });
+  if(eo){ EDIT_OF = eo; showEditBar(eo); }
+  $('psChoke').classList.toggle('hidden', $('psChokeOn').value !== 'on');
   finishOrder(); ppCalc(); designCalc(); termsPick(); totals();
 }
 document.addEventListener('input', function(e){ if(e.target.closest && e.target.closest('#app')) saveDraft(); });
@@ -659,8 +765,8 @@ function submit(){
   if(!company){ alert('Pick the company (or type the new customer name).'); return; }
   if(!$('due').value){ alert('Order due date is required.'); return; }
   if(!$('phone').value.trim()){ alert('Phone is required - every order starts with company, contact, phone and email.'); $('phone').focus(); return; }
-  var reorders = [], lineFin = []; document.querySelectorAll('#reorders .line').forEach(function(d){ var n = Number(d.querySelector('input[data-i]').value || 0); if(n > 0){ reorders.push({ title: d.dataset.title, qty: n }); var f = finOf(d.querySelector('.fin')); var _k = d.dataset.sku + (d.dataset.vessel ? ' @ ' + d.dataset.vessel : ''); if(f) lineFin.push(finLineText(_k, f)); var _fl = fileLine(_k, d.querySelector('.fin')); if(_fl) lineFin.push(_fl); } });
-  var newItems = []; document.querySelectorAll('#newItems .newline').forEach(function(d){ var n = Number(d.querySelector('.q').value || 0), nm = d.querySelector('.n').value.trim(); if(nm && n > 0){ newItems.push({ name: nm, qty: n, material: d.querySelector('.m').value, vessel: d.querySelector('.v').value.trim(), texture: d.querySelector('.t').value, unit: d.querySelector('.p').value, white_ink: '', apply: d.querySelector('.ap').value }); var f = finOf(d.querySelector('.fin')); var vv = d.querySelector('.v').value.trim(); var _k2 = nm + (vv ? ' @ ' + vv : ''); if(f) lineFin.push(finLineText(_k2, f)); var _fl2 = fileLine(_k2, d.querySelector('.fin')); if(_fl2) lineFin.push(_fl2); } });
+  var reorders = [], lineFin = []; document.querySelectorAll('#reorders .line').forEach(function(d){ var n = Number(d.querySelector('input[data-i]').value || 0); if(n > 0){ reorders.push({ title: d.dataset.title, qty: n }); var f = finOf(d.querySelector('.fin')); var _k = d.dataset.sku + (d.dataset.vessel ? ' @ ' + d.dataset.vessel : ''); if(f) lineFin.push(finLineText(_k, f)); var _fl = fileLine(_k, d.querySelector('.fin')); if(_fl) lineFin.push(_fl); var _cl = cutLine(_k, d); if(_cl) lineFin.push(_cl); } });
+  var newItems = []; document.querySelectorAll('#newItems .newline').forEach(function(d){ var n = Number(d.querySelector('.q').value || 0), nm = d.querySelector('.n').value.trim(); if(nm && n > 0){ newItems.push({ name: nm, qty: n, material: d.querySelector('.m').value, vessel: d.querySelector('.v').value.trim(), texture: d.querySelector('.t').value, unit: d.querySelector('.p').value, white_ink: '', apply: d.querySelector('.ap').value }); var f = finOf(d.querySelector('.fin')); var vv = d.querySelector('.v').value.trim(); var _k2 = nm + (vv ? ' @ ' + vv : ''); if(f) lineFin.push(finLineText(_k2, f)); var _fl2 = fileLine(_k2, d.querySelector('.fin')); if(_fl2) lineFin.push(_fl2); var _cl2 = cutLine(_k2, d); if(_cl2) lineFin.push(_cl2); } });
   if(!reorders.length && !newItems.length && !$('designOnly').checked){ alert('Set a quantity on at least one item.'); return; }
   // 9/24: a new item with no price the builder can find stops at 'Needs info' - say so before it is sent
   var hist = (CAT && CAT.skus || []).filter(function(k){ return k.customer === company; }).map(function(k){ return String(k.sku).toLowerCase(); });
@@ -671,7 +777,7 @@ function submit(){
     payment: $('payment').value, tax: $('tax').value, prepress: prepressLabel(), prepress_custom: $('prepressCustom').value.trim(),
     terms: $('terms').value, art_status: $('art').value, design_hrs: $('designHrs').value, design_rate: $('designRate').value.trim(), deposit: $('deposit').value, design_only: $('designOnly').checked,
     note: $('note').value.trim(), callouts: [printSpecs()].concat(lineFin).filter(Boolean).join(String.fromCharCode(10)), attach: chips('attach'), reorders: reorders, newItems: newItems,
-    edit_of: EDIT_OF ? EDIT_OF.inv : '' };
+    edit_of: EDIT_OF ? EDIT_OF.inv : '', draft_id: CUR_DRAFT || '', who: me() };
   newItems.forEach(function(o){ if(!o.unit){ var mp = menuPrice(o.vessel, o.material, o.texture); if(mp != null) o.unit = mp; } });   // the price shown is the price sent
   // 9/25: the same order sent twice (a retry, a double tap) must not become two orders - the id is made from its content
   (function(){ var j = JSON.stringify(Object.assign({}, payload, { pin: '' })), h = 5381; for(var i = 0; i < j.length; i++){ h = ((h << 5) + h + j.charCodeAt(i)) | 0; }
@@ -680,11 +786,14 @@ function submit(){
   api('POST', payload).then(function(r){
     $('submitBtn').disabled = false; $('submitBtn').textContent = 'Submit order';
     var box = $('result'); box.classList.remove('hidden');
-    if(r.ok){ dropDraft(true); box.innerHTML = '<h2 class="ok">' + (EDIT_OF ? 'Edit sent' : 'Order sent') + '</h2><p>' + esc(company) + (EDIT_OF ? ' — edits to <b>' + esc(EDIT_OF.inv) + '</b> are' : ' is') + ' on the intake board as <b>Ready to build</b>. The builder makes the invoice and work order next; Shane approves before anything goes to the customer.</p><p class="hint"><a href="' + r.url + '" target="_blank" style="color:var(--pink)">Open in Monday</a></p><br><button class="btn ghost" onclick="location.reload()">Start another order</button>'; window.scrollTo(0, document.body.scrollHeight); }
+    if(r.ok){ clearTimeout(dtimer); NOSAVE = true; dropDraft(); box.innerHTML = '<h2 class="ok">' + (EDIT_OF ? 'Edit sent' : 'Order sent') + '</h2><p>' + esc(company) + (EDIT_OF ? ' — edits to <b>' + esc(EDIT_OF.inv) + '</b> are' : ' is') + ' on the intake board as <b>Ready to build</b>. The builder makes the invoice and work order next; Shane approves before anything goes to the customer.</p><p class="hint"><a href="' + r.url + '" target="_blank" style="color:var(--pink)">Open in Monday</a></p><br><button class="btn ghost" onclick="location.reload()">Start another order</button>'; window.scrollTo(0, document.body.scrollHeight); }
     else { box.innerHTML = '<h2 class="warn">Not sent</h2><p>' + esc(r.error) + '</p>'; }
   }).catch(function(e){ $('submitBtn').disabled = false; $('submitBtn').textContent = 'Submit order'; alert('The Pad could not confirm this order was saved (' + e.message + ').\n\nIt may already be in Monday - check the intake board (or ask Shane) before sending it again. Sending the SAME order again is safe: it will not make a second copy.'); });
 }
 try { var _d = new Date(); $('due').min = _d.getFullYear() + '-' + ('0' + (_d.getMonth() + 1)).slice(-2) + '-' + ('0' + _d.getDate()).slice(-2); } catch(e){}
 try { var p = localStorage.getItem('st_pin'); if(p){ $('pin').value = p; } } catch(e){}
+try { $('who').value = localStorage.getItem('st_who') || ''; } catch(e){}
+// 9/25: coming back to the Pad (another tab, phone unlocked) refreshes the Unfinished list - at most every 30 s
+var _lastSync = 0; document.addEventListener('visibilitychange', function(){ if(!document.hidden && CAT && Date.now() - _lastSync > 30000){ _lastSync = Date.now(); syncDrafts(); } });
 </script>
 </body></html>
