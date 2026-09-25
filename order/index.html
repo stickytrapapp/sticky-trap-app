@@ -181,7 +181,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25g</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25h</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -306,6 +306,7 @@ function finHTML(s, hidden){
        + '<label>Gloss <input type="number" min="0" max="64" inputmode="numeric" class="fg" placeholder="–"></label>'
        + '<label>Choke <select class="fco"><option value="">off</option><option value="on">on</option></select>'
        +   '<input type="number" min="-10" max="10" step="1" inputmode="numeric" class="fc hidden" value="0" title="-10 to +10"></label>'
+       + '<label style="flex:1 1 220px">File name <input class="ffn" placeholder="exactly as the file is named" autocomplete="off" autocapitalize="off" spellcheck="false" style="width:100%;text-align:left"></label>'
        + (rh && rh !== 'recipe: ' ? '<span class="rh">' + esc(rh) + '</span>' : '') + '</div>';
 }
 function parseRecipe(gloss, coat){
@@ -321,6 +322,7 @@ function finSet(box, f){
   if(f.w !== undefined && f.w !== null) box.querySelector('.fw').value = f.w;
   var on = f.c !== '' && f.c != null && f.c !== undefined;
   box.querySelector('.fco').value = on ? 'on' : ''; box.querySelector('.fc').value = on ? f.c : 0;
+  if(f.fn !== undefined && f.fn !== null) box.querySelector('.ffn').value = f.fn;
   finLine(box);
 }
 function finPrefill(box, s){
@@ -345,6 +347,9 @@ function finOf(box){   // this line's print recipe; null = leave it all to the S
   if(c !== '') out.c = Math.max(-10, Math.min(10, Math.round(Number(c) || 0)));
   return out;
 }
+// 9/25 Shane: "need a place in the sku to put the file name. strong rule. whatever is put in this box copy and paste
+// exactly" - production sheet only. JSON keeps every character (quotes, slashes, spaces) intact end to end.
+function fileLine(key, box){ var v = box ? box.querySelector('.ffn').value : ''; return v === '' ? null : 'LINE FILE: ' + JSON.stringify({ k: key, f: v }); }
 function finLineText(key, f){
   var p = [];
   if(f.w) p.push('WHITE ' + f.w);
@@ -586,13 +591,13 @@ function draftSnap(){
   var reorders = {}, fins = {};
   document.querySelectorAll('#reorders .line').forEach(function(d){
     var n = Number(d.querySelector('input[data-i]').value || 0); if(n > 0) reorders[d.dataset.title] = n;
-    var fb = d.querySelector('.fin'); var _fo = fb && finOf(fb); if(_fo) fins[d.dataset.title] = _fo; });
+    var fb = d.querySelector('.fin'); var _fo = fb && finOf(fb); if(fb && fb.querySelector('.ffn').value !== ''){ _fo = _fo || {}; _fo.fn = fb.querySelector('.ffn').value; } if(_fo) fins[d.dataset.title] = _fo; });
   var items = [];
   document.querySelectorAll('#newItems .newline').forEach(function(d){
     var o = { n: d.querySelector('.n').value, q: d.querySelector('.q').value, p: d.querySelector('.p').value,
               m: d.querySelector('.m').value, v: d.querySelector('.v').value, t: d.querySelector('.t').value,
               w: d.querySelector('.fw').value, ap: d.querySelector('.ap').value,
-              fg: d.querySelector('.fg').value, fm: d.querySelector('.fm').value, fc: d.querySelector('.fco').value === 'on' ? d.querySelector('.fc').value : '' };
+              fg: d.querySelector('.fg').value, fm: d.querySelector('.fm').value, fc: d.querySelector('.fco').value === 'on' ? d.querySelector('.fc').value : '', fn: d.querySelector('.ffn').value };
     if(o.n || o.q || o.v) items.push(o); });
   var f = {}; DFIELDS.forEach(function(id){ if($(id)) f[id] = $(id).value; });
   var ch = {}; document.querySelectorAll('.chips').forEach(function(g){ ch[g.dataset.group] = chips(g.dataset.group); });
@@ -651,7 +656,7 @@ function restoreDraft(k){
     row.querySelector('.n').value = o.n || ''; row.querySelector('.q').value = o.q || ''; row.querySelector('.p').value = o.p || '';
     row.querySelector('.m').value = o.m || ''; row.querySelector('.t').value = o.t || '';
     row.querySelector('.ap').value = o.ap || '';
-    finSet(row.querySelector('.fin'), { g: o.fg, m: o.fm, w: o.w || '', c: o.fc });
+    finSet(row.querySelector('.fin'), { g: o.fg, m: o.fm, w: o.w || '', c: o.fc, fn: o.fn });
     if(o.v){
       var sel = row.querySelector('.vsel');
       if(VESSEL_LIST.indexOf(o.v) >= 0){ sel.value = o.v; vesselPick(sel); }
@@ -675,8 +680,8 @@ function submit(){
   if(!company){ alert('Pick the company (or type the new customer name).'); return; }
   if(!$('due').value){ alert('Order due date is required.'); return; }
   if(!$('phone').value.trim()){ alert('Phone is required - every order starts with company, contact, phone and email.'); $('phone').focus(); return; }
-  var reorders = [], lineFin = []; document.querySelectorAll('#reorders .line').forEach(function(d){ var n = Number(d.querySelector('input[data-i]').value || 0); if(n > 0){ reorders.push({ title: d.dataset.title, qty: n }); var f = finOf(d.querySelector('.fin')); if(f) lineFin.push(finLineText(d.dataset.sku + (d.dataset.vessel ? ' @ ' + d.dataset.vessel : ''), f)); } });
-  var newItems = []; document.querySelectorAll('#newItems .newline').forEach(function(d){ var n = Number(d.querySelector('.q').value || 0), nm = d.querySelector('.n').value.trim(); if(nm && n > 0){ newItems.push({ name: nm, qty: n, material: d.querySelector('.m').value, vessel: d.querySelector('.v').value.trim(), texture: d.querySelector('.t').value, unit: d.querySelector('.p').value, white_ink: d.querySelector('.fw').value, apply: d.querySelector('.ap').value }); var f = finOf(d.querySelector('.fin')); var vv = d.querySelector('.v').value.trim(); if(f) lineFin.push(finLineText(nm + (vv ? ' @ ' + vv : ''), f)); } });
+  var reorders = [], lineFin = []; document.querySelectorAll('#reorders .line').forEach(function(d){ var n = Number(d.querySelector('input[data-i]').value || 0); if(n > 0){ reorders.push({ title: d.dataset.title, qty: n }); var f = finOf(d.querySelector('.fin')); var _k = d.dataset.sku + (d.dataset.vessel ? ' @ ' + d.dataset.vessel : ''); if(f) lineFin.push(finLineText(_k, f)); var _fl = fileLine(_k, d.querySelector('.fin')); if(_fl) lineFin.push(_fl); } });
+  var newItems = []; document.querySelectorAll('#newItems .newline').forEach(function(d){ var n = Number(d.querySelector('.q').value || 0), nm = d.querySelector('.n').value.trim(); if(nm && n > 0){ newItems.push({ name: nm, qty: n, material: d.querySelector('.m').value, vessel: d.querySelector('.v').value.trim(), texture: d.querySelector('.t').value, unit: d.querySelector('.p').value, white_ink: d.querySelector('.fw').value, apply: d.querySelector('.ap').value }); var f = finOf(d.querySelector('.fin')); var vv = d.querySelector('.v').value.trim(); var _k2 = nm + (vv ? ' @ ' + vv : ''); if(f) lineFin.push(finLineText(_k2, f)); var _fl2 = fileLine(_k2, d.querySelector('.fin')); if(_fl2) lineFin.push(_fl2); } });
   if(!reorders.length && !newItems.length && !$('designOnly').checked){ alert('Set a quantity on at least one item.'); return; }
   // 9/24: a new item with no price the builder can find stops at 'Needs info' - say so before it is sent
   var hist = (CAT && CAT.skus || []).filter(function(k){ return k.customer === company; }).map(function(k){ return String(k.sku).toLowerCase(); });
