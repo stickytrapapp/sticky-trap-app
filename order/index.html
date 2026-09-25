@@ -84,6 +84,7 @@
 </div>
 
 <div id="app" class="wrap hidden">
+  <button type="button" class="minibtn" style="margin-top:6px" onclick="resetForm()" title="Clear everything typed and delete this order's draft">Reset</button>
   <h1>Order Pad</h1><div class="sub" id="cacheNote">Loading customers and items…</div>
   <div id="editBar" class="draftbar hidden" style="border-color:var(--pink)"><span id="editMsg"></span><button type="button" class="btn ghost dbtn" onclick="stopEditing(true)">Start fresh instead</button></div>
   <div id="draftBar" class="draftbar hidden" style="flex-direction:column;align-items:stretch"></div>
@@ -178,12 +179,12 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25u</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25v</div>
 </div>
 
 <div class="bar hidden" id="bar">
   <div class="tot"><b id="totQty">0</b> prints · est. <b id="totAmt">$0</b><div class="hint" id="totNote">before pre-press &amp; tax</div><div class="savetag" id="saveTag"></div></div>
-  <div style="display:flex;gap:8px;align-items:center"><button type="button" class="minibtn" style="float:none" onclick="resetForm()">Reset</button><button class="btn" id="submitBtn" onclick="submit()">Submit order</button></div>
+  <div style="display:flex;gap:8px;align-items:center"><button type="button" class="btn ghost" id="saveBtn" onclick="saveDraftNow()">Save draft</button><button class="btn" id="submitBtn" onclick="submit()">Submit order</button></div>
 </div>
 
 <script>
@@ -480,7 +481,7 @@ function asNewItem(a){   // 9/16 Shane: a size or material we have not printed f
   row.querySelector('.v').placeholder = 'new size (was ' + (d.querySelector('.nm').textContent.split(' \u00b7 ')[0] || 'n/a') + ')'; row.scrollIntoView({block: 'center'}); row.querySelector('.v').focus();
 }
 function resetForm(noAsk){   // 9/16 Shane: reset with an are-you-sure; keeps the PIN + catalog, clears everything typed
-  if(!noAsk && !confirm('Clear the whole order and start over?' + (CUR_DRAFT ? '\nIts draft is deleted too.' : ''))) return;
+  if(!noAsk && !confirm('Are you sure you want to reset?\n\nEverything typed on this order is cleared' + (CUR_DRAFT ? ' and its saved draft is deleted' : '') + '. This is the same as deleting it.')) return;
   clearTimeout(dtimer);
   if(CUR_DRAFT){ var _id = CUR_DRAFT, _all = loadDrafts(); delete _all[_id]; storeDrafts(_all); CUR_DRAFT = null;
     if(typeof api === 'function') api('POST', { action: 'draft_delete', pin: PIN, id: _id, who: me() }).then(syncDrafts).catch(function(){}); }
@@ -622,6 +623,22 @@ function saveDraft(){
       });
     } catch(e){}
   }, 1500);
+}
+function saveDraftNow(){   // 9/25 Shane: a Save draft button next to Submit - save it and free the Pad for the next order
+  if(!CAT || !$('company').value){ alert('Pick the client first - a draft is saved under the client.'); return; }
+  var snap = draftSnap(); if(!snapHasWork(snap)){ alert('Nothing to save yet - add a quantity, an item or a note.'); return; }
+  clearTimeout(dtimer); if(!CUR_DRAFT) CUR_DRAFT = newDraftId();
+  var id = CUR_DRAFT, all = loadDrafts(), who = draftWho(snap), b = $('saveBtn');
+  all[id] = { t: Date.now(), d: snap, who: me(), tot: $('totAmt') ? $('totAmt').textContent : '', up: false }; storeDrafts(all);
+  b.disabled = true; b.textContent = 'Saving…';
+  pushDraft(id, all[id]).then(function(r){
+    b.disabled = false; b.textContent = 'Save draft';
+    var where = (r && r.ok) ? 'It is under Unfinished orders on every device, and comes up again when you pick ' + who + '.'
+                            : 'No connection - it is saved on this device and goes up to the team next time there is signal.';
+    CUR_DRAFT = null; resetForm(true);   // CUR_DRAFT cleared first, so the reset keeps the draft
+    alert('Draft saved for ' + who + '.\n' + where);
+    syncDrafts();
+  });
 }
 function pushDraft(id, j){   // -> {ok} | {gone} | null (offline). Marks the local copy as shared when it lands.
   if(typeof api !== 'function') return Promise.resolve(null);
