@@ -130,7 +130,8 @@
     </div>
     <div class="row">
       <div id="shipWrap" class="hidden"><label>Shipping $</label><input id="ship" type="number" step="0.01" inputmode="decimal"></div>
-      <div><label>Rush / partial dates</label><input id="rush" placeholder="e.g. lighters by Sat, rest Wed"></div>
+      <div><label>Rush</label><select id="rushLevel" onchange="totals()"><option value="">No rush</option><option value="24">Within 24 hours (+40%)</option><option value="48">Within 48 hours (+30%)</option></select></div>
+      <div><label>Partial dates</label><input id="rush" placeholder="e.g. lighters by Sat, rest Wed"></div>
     </div>
   </div>
 
@@ -180,7 +181,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25x</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25y</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -509,6 +510,7 @@ function printSpecs(){
   // 9/25: cut is per line now (LINE CUT)
   var n = $('pressNotes') ? $('pressNotes').value.trim() : ''; if(n) L.push('NOTES: ' + n);   // box removed 9/25; kept for old drafts
   if($('orderType')) L.push('ORDER TYPE: ' + $('orderType').value);
+  if($('rushLevel') && $('rushLevel').value) L.push('ORDER RUSH: ' + $('rushLevel').value);   // 24 or 48 - the builder adds the rush line
   // 9/25 Shane: white / matte / gloss / choke are per line now (each item's Print Instructions) - no ORDER PRESS line
   return L.join(String.fromCharCode(10));
 }
@@ -548,6 +550,7 @@ function menuPrice(vessel, material, texture){
   var table = /lighter/i.test(vessel) ? M.lighter : (M.access || {})[vessel];
   var row = table && mat && table[mat]; return row && row[lvl] != null ? Number(row[lvl]) : null;
 }
+var RUSH_PCT = { '24': 0.40, '48': 0.30 };   // 9/25 Shane: within 24 h = +40%, within 48 h = +30%, on the total before tax
 function totals(){
   var q = 0, a = 0, unknown = false;
   document.querySelectorAll('#reorders .line').forEach(function(d){ var n = Number(d.querySelector('input[data-i]').value || 0); if(n > 0){ q += n; a += n * Number(d.dataset.unit || 0); } var fb = d.querySelector('.fin'); if(fb) fb.classList.toggle('hidden', !(n > 0)); });
@@ -556,9 +559,10 @@ function totals(){
     d.querySelector('.p').placeholder = mp != null ? 'menu ' + money(mp) : 'price';
     if(n > 0){ q += n; if(p) a += n * Number(p); else if(mp != null) a += n * mp; else unknown = true; } });
   document.querySelectorAll('#reorders .grp').forEach(function(g){ var n = 0; g.querySelectorAll('input[data-i]').forEach(function(x){ n += Number(x.value || 0); }); var el = g.querySelector('.gqty'); if(el) el.textContent = n ? n + ' pcs' : ''; });
+  var _rp = RUSH_PCT[$('rushLevel') ? $('rushLevel').value : ''] || 0; if(_rp) a = a * (1 + _rp);   // 9/25 Shane: rush % on the total before tax
   $('totQty').textContent = q; $('totAmt').textContent = money(a) + (unknown ? '+' : '');
   if($('terms') && $('terms').value.indexOf('Half') === 0) termsPick();
-  $('totNote').textContent = unknown ? 'some new items priced by the builder' : 'before pre-press & tax';
+  $('totNote').textContent = (unknown ? 'some new items priced by the builder' : 'before pre-press & tax') + (_rp ? ' · incl. ' + Math.round(_rp * 100) + '% rush' : '');
 }
 function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
 // ---- DRAFTS (9/22 autosave; 9/25 Shane: "that draft needs be remembered and able to pull back up to either finish and
@@ -581,7 +585,7 @@ function loadDrafts(){
   return all;
 }
 function storeDrafts(all){ try { localStorage.setItem(DKEY, JSON.stringify(all)); } catch(e){} }
-var DFIELDS = ['newName','contact','email','phone','contact2','email2','phone2','due','delivery','ship','rush',
+var DFIELDS = ['newName','contact','email','phone','contact2','email2','phone2','due','delivery','ship','rush','rushLevel',
                'payment','tax','prepressCustom','terms','art','designHrs','designRate','deposit','note',
                'pressNotes','orderType'];
 function draftSnap(){
