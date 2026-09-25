@@ -154,8 +154,8 @@
     </div>
     <div class="dline">
       <div class="dl">Design time</div>
-      <input id="designHrs" type="number" step="0.25" inputmode="decimal" placeholder="hours" oninput="designCalc()">
-      <input id="designRate" type="number" step="1" inputmode="decimal" value="75" title="$ per hour" oninput="designCalc()">
+      <input id="designHrs" type="number" min="0" step="0.25" inputmode="decimal" placeholder="hours" oninput="if(this.value !== '' && Number(this.value) < 0) this.value = '0'; designCalc()">
+      <select id="designRate" title="$ per hour" onchange="designCalc()"><option value="75">$75</option><option value="100">$100</option><option value="150">$150</option></select>   <!-- 9/25 Shane: three set rates -->
       <div class="damt" id="designAmt">&mdash;</div>
     </div>
     <div class="row">
@@ -182,7 +182,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25q</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25r</div>
 </div>
 
 <div class="bar hidden" id="bar">
