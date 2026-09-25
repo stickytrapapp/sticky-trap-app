@@ -36,7 +36,7 @@
   .stp{background:var(--soft);border:1px solid #c9c9d1;color:var(--ink);border-radius:10px;font-size:20px;padding:8px 0;cursor:pointer}
   .newline{display:grid;grid-template-columns:1fr;gap:6px;padding:10px 0;border-bottom:1px solid var(--line)}
   .newline .g{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
-  .newline .nlrow{display:grid;grid-template-columns:minmax(0,2fr) 66px 84px minmax(0,1.1fr) minmax(0,1.25fr) minmax(0,1fr) minmax(0,1.25fr) minmax(0,.9fr) 36px;gap:6px;align-items:center}
+  .newline .nlrow{display:grid;grid-template-columns:minmax(0,2fr) 66px 84px minmax(0,1.1fr) minmax(0,1.25fr) minmax(0,1fr) minmax(0,1.25fr) minmax(0,1.2fr) minmax(0,.9fr) 36px;gap:6px;align-items:center}
   .newline .nlrow>*{min-width:0} .newline .nlrow input,.newline .nlrow select{width:100%;min-width:0}
   .newline,.newline .nlrow{max-width:100%} #newItems{overflow-x:hidden}
   .newline input,.newline select{padding:9px 8px;font-size:15px}
@@ -45,7 +45,7 @@
   .minus,.plus{border:1px solid #c9c9d1;background:#fff;color:var(--ink);border-radius:999px;width:36px;height:38px;font-size:20px;line-height:1;cursor:pointer;padding:0}
   .minus:hover{border-color:var(--pink);color:var(--pink)}
   .plus{border-color:var(--pink);color:var(--pink);font-weight:700}
-  @media(max-width:860px){ .newline .nlrow{grid-template-columns:1fr 62px 78px 36px} .newline .nlrow .m,.newline .nlrow .vcell,.newline .nlrow .t{grid-column:span 2} .newline .nlrow .w,.newline .nlrow .ap,.newline .nlrow .cu{grid-column:span 2} }
+  @media(max-width:999px){ .newline .nlrow{grid-template-columns:1fr 62px 78px 36px} .newline .nlrow .m,.newline .nlrow .vcell,.newline .nlrow .t{grid-column:span 2} .newline .nlrow .w,.newline .nlrow .ap,.newline .nlrow .cu{grid-column:span 2} }
   .addrow{display:flex;align-items:center;gap:10px;margin-top:10px}
   .btn.ghost.openbtn{border:1px solid var(--pink);color:var(--pink);font-weight:700;white-space:nowrap}
   .btn.ghost.openbtn:hover{background:var(--pink);color:#fff}
@@ -183,7 +183,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25s</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25t</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -323,6 +323,9 @@ function cutLine(key, line){ var c = line && line.querySelector('.cu'); return c
 function finPrefill(){}
 function finLine(){}
 function whiteLock(){}
+// 9/25: white material never takes white ink - picking White Vinyl sets the line's white ink to Off and locks it
+function whiteCheck(el){ var d = el.closest('.newline'); if(!d) return; var w = d.querySelector('.w'), wv = d.querySelector('.m').value === 'White Vinyl';
+  if(wv) w.value = 'N'; w.disabled = wv; w.title = wv ? 'White Vinyl never takes white ink' : 'White ink (under the CMYK)'; }
 function finOf(box){
   if(!box) return null;
   var pi = box.querySelector('.fpi').value, fn = box.querySelector('.ffn').value, cb = box.querySelector('.cu'), cu = cb ? cb.value : '';
@@ -361,13 +364,14 @@ function addNewLine(){
               + '<input placeholder="Item name" class="n">'
               + '<input type="number" inputmode="numeric" min="0" placeholder="qty" class="q" oninput="totals()">'
               + '<input type="number" step="0.01" inputmode="decimal" placeholder="price" class="p" oninput="totals()">'
-              + '<select class="m"><option value="">Material</option><option>White Vinyl</option><option>Holographic</option><option>Gold</option><option>Clear</option></select>'
+              + '<select class="m" onchange="whiteCheck(this)"><option value="">Material</option><option>White Vinyl</option><option>Holographic</option><option>Gold</option><option>Clear</option></select>'
               + '<span class="vcell">'
               +   '<select class="vsel" onchange="vesselPick(this)">' + VESSELS + '</select>'
               +   '<input placeholder="type the size" class="v vother hidden" onblur="vesselBack(this)">'
               + '</span>'
               + '<select class="cu" title="Cut"><option value="">Cut</option><option>Individual</option><option>Kiss-cut</option><option>On sheets</option></select>'   // 9/25 Shane: cut per line, between vessel size and texture
               + '<select class="t"><option value="">Texture</option><option value="Flat">0 &middot; Flat</option><option value="1">1 &middot; Spot Gloss UV</option><option value="2">2 &middot; Standard</option><option value="3">3 &middot; Pro</option><option value="4">4 &middot; Ridge</option><option value="5">5 &middot; Summit</option><option value="6">6 &middot; Peak</option><option value="7">7 &middot; Apex</option><option value="8">8 &middot; Zenith</option></select>'
+              + '<select class="w" title="White ink (under the CMYK)" onchange="whiteCheck(this)"><option value="N">No white</option><option value="Y">White ink</option></select>'   // 9/25 Shane
               + '<select class="ap" title="We apply to jars"><option value="">Apply</option><option value="Y">A: Y</option><option value="N">A: N</option></select>'
               + '<button type="button" class="minus" title="Remove this line" onclick="delNewLine(this)">−</button></div>'
               + finHTML(null, false);
@@ -420,6 +424,7 @@ function openPast(inv){
     if(r.unit) d.querySelector('.p').value = r.unit;
     if(r.material) d.querySelector('.m').value = r.material;
     if(r.raised) d.querySelector('.t').value = r.raised;
+    if(String(r.white_ink || '').toUpperCase().charAt(0) === 'Y') d.querySelector('.w').value = 'Y'; whiteCheck(d.querySelector('.m'));
     var cell = d.querySelector('.vcell'), sel = cell.querySelector('.vsel'), inp = cell.querySelector('.vother');
     if(r.vessel){
       sel.value = r.vessel;
@@ -582,7 +587,7 @@ function draftSnap(){
   document.querySelectorAll('#newItems .newline').forEach(function(d){
     var o = { n: d.querySelector('.n').value, q: d.querySelector('.q').value, p: d.querySelector('.p').value,
               m: d.querySelector('.m').value, v: d.querySelector('.v').value, t: d.querySelector('.t').value,
-              ap: d.querySelector('.ap').value,
+              ap: d.querySelector('.ap').value, w: d.querySelector('.w').value,
               pi: d.querySelector('.fpi').value, fn: d.querySelector('.ffn').value, cu: d.querySelector('.cu').value };
     if(o.n || o.q || o.v) items.push(o); });
   var f = {}; DFIELDS.forEach(function(id){ if($(id)) f[id] = $(id).value; });
@@ -723,7 +728,7 @@ function applySnap(d){
     var row = addNewLine();
     row.querySelector('.n').value = o.n || ''; row.querySelector('.q').value = o.q || ''; row.querySelector('.p').value = o.p || '';
     row.querySelector('.m').value = o.m || ''; row.querySelector('.t').value = o.t || '';
-    row.querySelector('.ap').value = o.ap || '';
+    row.querySelector('.ap').value = o.ap || ''; row.querySelector('.w').value = o.w === 'Y' ? 'Y' : 'N'; whiteCheck(row.querySelector('.m'));
     finSet(row.querySelector('.fin'), { pi: o.pi, fn: o.fn }); row.querySelector('.cu').value = o.cu || '';
     if(o.v){
       var sel = row.querySelector('.vsel');
@@ -751,7 +756,7 @@ function submit(){
   if(!$('due').value){ alert('Order due date is required.'); return; }
   if(!$('phone').value.trim()){ alert('Phone is required - every order starts with company, contact, phone and email.'); $('phone').focus(); return; }
   var reorders = [], lineFin = []; document.querySelectorAll('#reorders .line').forEach(function(d){ var n = Number(d.querySelector('input[data-i]').value || 0); if(n > 0){ reorders.push({ title: d.dataset.title, qty: n }); var f = finOf(d.querySelector('.fin')); var _k = d.dataset.sku + (d.dataset.vessel ? ' @ ' + d.dataset.vessel : ''); if(f) lineFin.push(finLineText(_k, f)); var _fl = fileLine(_k, d.querySelector('.fin')); if(_fl) lineFin.push(_fl); var _cl = cutLine(_k, d); if(_cl) lineFin.push(_cl); } });
-  var newItems = []; document.querySelectorAll('#newItems .newline').forEach(function(d){ var n = Number(d.querySelector('.q').value || 0), nm = d.querySelector('.n').value.trim(); if(nm && n > 0){ newItems.push({ name: nm, qty: n, material: d.querySelector('.m').value, vessel: d.querySelector('.v').value.trim(), texture: d.querySelector('.t').value, unit: d.querySelector('.p').value, white_ink: '', apply: d.querySelector('.ap').value }); var f = finOf(d.querySelector('.fin')); var vv = d.querySelector('.v').value.trim(); var _k2 = nm + (vv ? ' @ ' + vv : ''); if(f) lineFin.push(finLineText(_k2, f)); var _fl2 = fileLine(_k2, d.querySelector('.fin')); if(_fl2) lineFin.push(_fl2); var _cl2 = cutLine(_k2, d); if(_cl2) lineFin.push(_cl2); } });
+  var newItems = []; document.querySelectorAll('#newItems .newline').forEach(function(d){ var n = Number(d.querySelector('.q').value || 0), nm = d.querySelector('.n').value.trim(); if(nm && n > 0){ newItems.push({ name: nm, qty: n, material: d.querySelector('.m').value, vessel: d.querySelector('.v').value.trim(), texture: d.querySelector('.t').value, unit: d.querySelector('.p').value, white_ink: d.querySelector('.m').value === 'White Vinyl' ? 'N' : d.querySelector('.w').value, apply: d.querySelector('.ap').value }); var f = finOf(d.querySelector('.fin')); var vv = d.querySelector('.v').value.trim(); var _k2 = nm + (vv ? ' @ ' + vv : ''); if(f) lineFin.push(finLineText(_k2, f)); var _fl2 = fileLine(_k2, d.querySelector('.fin')); if(_fl2) lineFin.push(_fl2); var _cl2 = cutLine(_k2, d); if(_cl2) lineFin.push(_cl2); } });
   if(!reorders.length && !newItems.length && !$('designOnly').checked){ alert('Set a quantity on at least one item.'); return; }
   // 9/24: a new item with no price the builder can find stops at 'Needs info' - say so before it is sent
   var hist = (CAT && CAT.skus || []).filter(function(k){ return k.customer === company; }).map(function(k){ return String(k.sku).toLowerCase(); });
