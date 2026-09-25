@@ -170,6 +170,13 @@
 
   <div class="card">
     <h2>Print specs <span class="pill">prints on the invoice + work order</span></h2>
+    <label>Press settings <span class="pill">work order Print Details only &middot; blank = nothing printed</span></label>
+    <div class="row3" style="grid-template-columns:1fr 1fr 1fr 1.4fr">
+      <div><span class="lbl">White ink</span><select id="psWhite"><option value="">No</option><option value="Yes">Yes</option></select></div>
+      <div><span class="lbl">Matte</span><input type="number" id="psMatte" min="0" max="64" inputmode="numeric" placeholder="–"></div>
+      <div><span class="lbl">Gloss</span><input type="number" id="psGloss" min="0" max="64" inputmode="numeric" placeholder="–"></div>
+      <div><span class="lbl">Choke instructions</span><div style="display:flex;gap:6px"><select id="psChokeOn" onchange="$('psChoke').classList.toggle('hidden', this.value !== 'on')" style="width:auto"><option value="">off</option><option value="on">on</option></select><input type="number" id="psChoke" class="hidden" min="-10" max="10" step="1" value="0" inputmode="numeric"></div></div>
+    </div>
     <label>Cut</label>
     <div class="chips" data-group="cut" data-one="1"><span class="chip" data-v="Individual">Individual</span><span class="chip" data-v="Kiss-cut">Kiss-cut</span><span class="chip" data-v="On sheets">On sheets</span></div>
     <label>Anything else the Print Dep. needs to know</label><textarea id="pressNotes" placeholder="choke by eye, trim tight, run the holo first, hold for a sample&hellip;"></textarea>
@@ -181,7 +188,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25i</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25j</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -483,6 +490,13 @@ function printSpecs(){
   var cu = chips('cut')[0]; if(cu) L.push('CUT: ' + cu);
   var n = $('pressNotes').value.trim(); if(n) L.push('NOTES: ' + n);
   if($('orderType')) L.push('ORDER TYPE: ' + $('orderType').value);
+  // 9/25 Shane: white ink yes/no, matte number, gloss number, choke -> the work order's Print Details box. Only what
+  // was set travels: white 'No', matte/gloss 0 or blank and choke 'off' print nothing.
+  var ps = {}; if($('psWhite').value === 'Yes') ps.white = 'Yes';
+  var _m = Number($('psMatte').value || 0), _g = Number($('psGloss').value || 0);
+  if(_m > 0) ps.matte = String(Math.round(_m)); if(_g > 0) ps.gloss = String(Math.round(_g));
+  if($('psChokeOn').value === 'on'){ var _c = Math.max(-10, Math.min(10, Math.round(Number($('psChoke').value) || 0))); ps.choke = (_c > 0 ? '+' : '') + _c; }
+  if(Object.keys(ps).length) L.push('ORDER PRESS: ' + JSON.stringify(ps));
   return L.join(String.fromCharCode(10));
 }
 // 9/25 Shane: "need the option on the pad: print. design. print and design". Design = the old 'Design only' tick
@@ -550,7 +564,7 @@ function loadDrafts(){
 function storeDrafts(all){ try { localStorage.setItem(DKEY, JSON.stringify(all)); } catch(e){} }
 var DFIELDS = ['newName','contact','email','phone','contact2','email2','phone2','due','delivery','ship','rush',
                'payment','tax','prepressCustom','terms','art','designHrs','designRate','deposit','note',
-               'pressNotes','orderType'];
+               'pressNotes','orderType','psWhite','psMatte','psGloss','psChokeOn','psChoke'];
 function draftSnap(){
   var reorders = {}, fins = {};
   document.querySelectorAll('#reorders .line').forEach(function(d){
@@ -632,7 +646,7 @@ function restoreDraft(k){
     var want = d.chips[g] || [];
     document.querySelectorAll('.chips[data-group="' + g + '"] .chip').forEach(function(c){
       c.classList.toggle('on', want.indexOf(c.dataset.v) >= 0); }); });
-  offerDraft();
+  offerDraft(); $('psChoke').classList.toggle('hidden', $('psChokeOn').value !== 'on');
   finishOrder(); ppCalc(); designCalc(); termsPick(); totals();
 }
 document.addEventListener('input', function(e){ if(e.target.closest && e.target.closest('#app')) saveDraft(); });
