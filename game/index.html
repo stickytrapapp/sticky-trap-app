@@ -1122,7 +1122,15 @@
     var list=document.getElementById('lbList'), st=document.getElementById('stRank'), ys=document.getElementById('youStand'), yg=document.getElementById('youGap'), nd=document.getElementById('stNudge'), note=document.getElementById('lbNote');
     if(!list) return;
     if(!force && lbCache && Date.now()-lbAt<60000){ render(lbCache); return; }
-    fetch(LB_API+'?action=lb&period='+LB_PERIOD+'&month='+monthKey(dayNum)+'&uid='+encodeURIComponent(UID)+'&handle='+encodeURIComponent(handle||'')+'&t='+Date.now()).then(function(r){return r.json();}).then(function(j){ if(j&&j.ok&&j.top){ lbCache=j; lbAt=Date.now(); render(j); try{ renderLastWeek(j); }catch(e){} } else fail(); }).catch(fail);
+    // 2026-09-25: a cold Apps Script host can take a minute to answer, and this used to sit on 'Loading the ladder...' for ever with no
+    // way out. Give it 9 s, then fall into the same retry/fallback path as any other failure.
+    var ctrl=(typeof AbortController!=='undefined')?new AbortController():null;
+    var budget=loadRanks._retried?20000:9000;   // first try is quick; the retry gives a genuinely cold host time to wake
+    var killer=setTimeout(function(){ try{ ctrl&&ctrl.abort(); }catch(e){} },budget);
+    fetch(LB_API+'?action=lb&period='+LB_PERIOD+'&month='+monthKey(dayNum)+'&uid='+encodeURIComponent(UID)+'&handle='+encodeURIComponent(handle||'')+'&t='+Date.now(), ctrl?{signal:ctrl.signal}:undefined)
+      .then(function(r){ clearTimeout(killer); return r.json(); })
+      .then(function(j){ if(j&&j.ok&&j.top){ lbCache=j; lbAt=Date.now(); render(j); try{ renderLastWeek(j); }catch(e){} } else fail(); })
+      .catch(function(e){ clearTimeout(killer); fail(); });
     function fail(){ if(!loadRanks._retried){ loadRanks._retried=true; setTimeout(function(){ loadRanks(true); },2500); return; } loadRanks._retried=false; list.innerHTML='<div class="lb-empty">Couldn\u2019t reach the ladder \u2014 try again in a moment.</div>'; }
     // 2026-09-24: the scores sheet still holds test rows and pre-9/22 scores from the old refilling board (thousands, against a finite
     // board that tops out in the hundreds), so they outrank every real player. The backend purge is queued for the next bot session;
