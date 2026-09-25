@@ -5,60 +5,71 @@
     {
       "date": "2026-09-25",
       "label": "Morning Brief",
-      "title": "Michigan Crosses $17B as National Rescheduling and Psilocybin Cases Build Steam",
-      "top": "Michigan's legal market just topped $17 billion in lifetime sales and Ann Arbor keeps adding storefronts, even as the fight over the 24% wholesale tax spills into the governor's race. Nationally, the DEA's own rescheduling brief argues cannabis no longer belongs in Schedule I while Compass Pathways pushes its psilocybin therapy toward a 2027 launch — real momentum for operators willing to play the long game.",
+      "title": "Michigan Bets on Tax Relief While National Cannabis and Psychedelics Hit New Highs",
+      "top": "Michigan operators are turning the governor's race and local wins into real leverage against the 24% wholesale tax, with new dispensary formats and cap expansions showing the market still has room to grow. Nationally, psychedelics are sprinting toward FDA approval and Big Pharma dollars while cannabis rescheduling clears another courtroom hurdle and a major brand lands on the NYSE.",
       "local": [
         {
-          "text": "Michigan crosses $17 billion in lifetime sales — August alone added roughly $259 million, and the state's cumulative adult-use and medical haul has generated an estimated $2.66 billion in taxes.",
-          "source": "The Marijuana Herald",
-          "url": "https://themarijuanaherald.com/2026/09/michigan-legal-marijuana-sales-surpass-17-billion/"
-        },
-        {
-          "text": "Lume opens new Ann Arbor storefront — the Michigan-based chain debuted its 2247 W. Liberty Street location with a three-day grand opening running 9 a.m. to 9 p.m.",
-          "source": "ClickOnDetroit",
-          "url": "https://www.clickondetroit.com/topic/Marijuana_Dispensary/"
-        },
-        {
-          "text": "GOP governor candidate vows to repeal the wholesale tax — John James has pledged to kill or slash the 24% levy after industry executives backed his campaign with roughly $90,000 in contributions.",
+          "text": "Menominee petition could add four dispensaries",
+          "detail": "",
           "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092126/"
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-091626/",
+          "text_full": "Menominee petition could add four dispensaries — Organizers say they turned in more than enough signatures to put a measure on the November ballot raising the city's cap from nine stores to 13."
         },
         {
-          "text": "Market stabilizes after January's tax shock — sales climbed back to $255.4 million by March and held near $253.5 million through June, with cultivators absorbing most of the wholesale tax hit rather than consumers.",
-          "source": "Headset",
-          "url": "https://www.headset.io/blog/michigans-24-wholesale-tax-what-the-data-shows-july-2026-update"
+          "text": "Muskegon's Fields Cannary targets fall opening",
+          "source": "cann.dev",
+          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/",
+          "text_full": "Muskegon's Fields Cannary targets fall opening — The hospitality-forward dispensary-and-restaurant buildout pushes the retail format further than most Michigan stores have gone."
         },
         {
-          "text": "State drops record fine on a vape manufacturer — regulators hit a popular brand with the biggest penalty in Michigan cannabis history, a signal enforcement is tightening the field for compliant operators.",
+          "text": "Jars Cannabis wins fight over surveillance camera",
+          "source": "cann.dev",
+          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/",
+          "text_full": "Jars Cannabis wins fight over surveillance camera — The retailer got a Flock license-plate camera removed outside its Madison Heights location, a rare operator win on enforcement optics."
+        },
+        {
+          "text": "Industry cash bets on a path to tax repeal",
           "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092126/"
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092126/",
+          "text_full": "Industry cash bets on a path to tax repeal — Michigan cannabis executives wrote roughly $90,000 in checks backing GOP governor nominee John James, who has pledged to repeal the state's 24% wholesale tax."
+        },
+        {
+          "text": "CRA's August report gives operators a compliance roadmap",
+          "source": "MITechNews",
+          "url": "https://mitechnews.com/news/michigan-cannabis-regulators-cite-tracking-sales-and-operating-violations-in-august-report/",
+          "text_full": "CRA's August report gives operators a compliance roadmap — Metrc tracking issues topped the state's 21 disciplinary cases for August, spotlighting exactly where operators can tighten up before Q4 audits."
         }
       ],
       "national": [
         {
-          "text": "DEA's own filing says weed doesn't belong in Schedule I — in its final post-hearing brief the agency argued marijuana no longer meets the statutory criteria for Schedule I, with a judge's recommendation now pending.",
-          "source": "Impact Wealth",
-          "url": "https://impactwealth.org/cannabis-rescheduling-in-2026-what-changed-what-didnt-and-what-it-means-at-the-counter/"
+          "text": "Compass Pathways lands FDA priority voucher, eyes 2027 launch",
+          "source": "Compass Pathways / Yahoo Finance",
+          "url": "https://finance.yahoo.com/healthcare/articles/compass-pathways-eyes-2027-comp360-190217987.html",
+          "text_full": "Compass Pathways lands FDA priority voucher, eyes 2027 launch — The FDA granted a rolling NDA review and a Commissioner's National Priority Voucher for COMP360 psilocybin, with executives targeting a first-half 2027 launch for treatment-resistant depression."
         },
         {
-          "text": "Compass Pathways posts durable six-month psilocybin data — 39% of COMP006 patients hit a clinically meaningful response after two doses, an effect that held for about six months, with a rolling NDA submission underway.",
-          "source": "Compass Pathways (BusinessWire)",
-          "url": "https://ir.compasspathways.com/News--Events-/news/news-details/2026/Compass-Pathways-Announces-Six-Month-Data-from-Second-Phase-3-Trial-Confirming-Rapid-and-Durable-Profile/default.aspx"
+          "text": "Eli Lilly closes major psychedelics acquisition",
+          "source": "Clinical Trial Vanguard",
+          "url": "https://www.clinicaltrialvanguard.com/article/psych-pulse/what-the-fdas-new-psychedelic-framework-actually-means-for-the-clinic/",
+          "text_full": "Eli Lilly closes major psychedelics acquisition — Lilly's buyout of atai's Beckley Psytech assets closed this month, bringing psychedelic candidates BPL-003, VLS-01 and EMP-01 under a Big Pharma pipeline."
         },
         {
-          "text": "FDA fast-tracks COMP360 toward 2027 launch — Compass says it holds breakthrough therapy designation and expects a National Priority Voucher, with a draft label already under agency review.",
-          "source": "Yahoo Finance",
-          "url": "https://finance.yahoo.com/healthcare/articles/compass-pathways-eyes-2027-comp360-190217987.html"
+          "text": "DEA rescheduling survives another court challenge",
+          "source": "Cannabis Business Times",
+          "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order",
+          "text_full": "DEA rescheduling survives another court challenge — The D.C. Circuit left medical marijuana's Schedule III reclassification in effect, rejecting opponents' bid to halt it while their lawsuit proceeds."
         },
         {
-          "text": "Vireo Growth scales up with Planet 13 buy — the all-stock merger will leave Vireo operating roughly 265 retail stores and dispensaries across 15 states, cementing it as one of the largest U.S. operators.",
-          "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/news/cannabis-mso-vireo-growth-to-acquire-planet-13-in-all-stock-deal/617152/"
+          "text": "Trulieve becomes first plant-touching brand on NYSE",
+          "source": "mg Magazine",
+          "url": "https://mgmagazine.com/business-strategy/finance-acquisitions-business-strategy/",
+          "text_full": "Trulieve becomes first plant-touching brand on NYSE — The multistate operator restructured around a 100% medical footprint to secure its historic listing under ticker TRLV following federal Schedule III reclassification."
         },
         {
-          "text": "States still waiting on rescheduling guidance — California's cannabis regulator says the DEA has shown \"any sort of interest\" in helping states implement the Trump administration's marijuana move, leaving operators in limbo until a final ruling lands.",
-          "source": "Marijuana Moment",
-          "url": "https://www.marijuanamoment.net/dea-keeps-states-in-the-dark-about-cannabis-rescheduling-ca-official-says-newsletter-september-22-2026"
+          "text": "Curaleaf tables takeover bid for Aurora Cannabis",
+          "source": "Cannamonitor",
+          "url": "https://cannamonitor.com/deal-tracker/",
+          "text_full": "Curaleaf tables takeover bid for Aurora Cannabis — The industry's most active dealmaker moved on Aurora in August, signaling another round of consolidation among the biggest global cannabis players."
         }
       ]
     }
