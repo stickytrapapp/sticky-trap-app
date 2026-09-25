@@ -5,71 +5,60 @@
     {
       "date": "2026-09-25",
       "label": "Morning Brief",
-      "title": "Michigan Bets on Tax Relief While National Cannabis and Psychedelics Hit New Highs",
-      "top": "Michigan operators are turning the governor's race and local wins into real leverage against the 24% wholesale tax, with new dispensary formats and cap expansions showing the market still has room to grow. Nationally, psychedelics are sprinting toward FDA approval and Big Pharma dollars while cannabis rescheduling clears another courtroom hurdle and a major brand lands on the NYSE.",
+      "title": "Tax Pressure, Bigger Wins: Michigan Brands Expand as Federal Cannabis & Psychedelic Policy Advances",
+      "top": "Michigan operators are finding real daylight even as the 24% wholesale tax bites — a homegrown brand is scaling nationally, prices are stabilizing, and both governor's-race candidates are now talking relief. Nationally, courts and the FDA keep pushing cannabis and psychedelic policy forward, from a preserved medical rescheduling win to Trulieve's NYSE debut and Compass Pathways gearing up for a psilocybin launch.",
       "local": [
         {
-          "text": "Menominee petition could add four dispensaries",
-          "detail": "",
-          "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-091626/",
-          "text_full": "Menominee petition could add four dispensaries — Organizers say they turned in more than enough signatures to put a measure on the November ballot raising the city's cap from nine stores to 13."
+          "text": "Michigan-born JARS Cannabis scales up out west — The East Detroit-founded chain is acquiring Sonoran Roots' eight Ponderosa dispensaries, creating a 27-store network that becomes Arizona's largest cannabis retailer.",
+          "source": "Tucson Weekly",
+          "url": "https://www.tucsonweekly.com/newsopinion/cannabis/new-style-jars-cannabis-has-acquired-sonoran-roots-in-new-integration/"
         },
         {
-          "text": "Muskegon's Fields Cannary targets fall opening",
+          "text": "GOP nominee courts the cannabis vote on tax relief — John James has pledged to repeal or sharply cut Michigan's 24% wholesale tax and picked up the state cannabis industry's endorsement, while Democrat Jocelyn Benson takes a wait-and-see stance.",
+          "source": "Mondaq / The Week in Weed",
+          "url": "https://www.mondaq.com/unitedstates/fiscal-monetary-policy/1847320/the-week-in-weed-september-18-2026"
+        },
+        {
+          "text": "Muskegon's Fields Cannary preps a dispensary-restaurant hybrid — The hospitality-forward buildout is targeting a fall opening, pushing Michigan's retail format further than most stores in the state have gone.",
           "source": "cann.dev",
-          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/",
-          "text_full": "Muskegon's Fields Cannary targets fall opening — The hospitality-forward dispensary-and-restaurant buildout pushes the retail format further than most Michigan stores have gone."
+          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
         },
         {
-          "text": "Jars Cannabis wins fight over surveillance camera",
-          "source": "cann.dev",
-          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/",
-          "text_full": "Jars Cannabis wins fight over surveillance camera — The retailer got a Flock license-plate camera removed outside its Madison Heights location, a rare operator win on enforcement optics."
+          "text": "Flower prices stop climbing after tax-driven spike — The average ounce dipped to $59 in April from $62 in March, a sign the market is adjusting to the new levy rather than collapsing under it.",
+          "source": "The 'Gander",
+          "url": "https://gandernewsroom.com/news/cannabis/8-quick-hits-of-cannabis-news-from-across-michigan-17/"
         },
         {
-          "text": "Industry cash bets on a path to tax repeal",
-          "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092126/",
-          "text_full": "Industry cash bets on a path to tax repeal — Michigan cannabis executives wrote roughly $90,000 in checks backing GOP governor nominee John James, who has pledged to repeal the state's 24% wholesale tax."
-        },
-        {
-          "text": "CRA's August report gives operators a compliance roadmap",
-          "source": "MITechNews",
-          "url": "https://mitechnews.com/news/michigan-cannabis-regulators-cite-tracking-sales-and-operating-violations-in-august-report/",
-          "text_full": "CRA's August report gives operators a compliance roadmap — Metrc tracking issues topped the state's 21 disciplinary cases for August, spotlighting exactly where operators can tighten up before Q4 audits."
+          "text": "New dispensary blooms in downtown Ann Arbor — Blue Sky Cannabis Co. quietly opened next to Spores Cafe, adding fresh competition and foot traffic to the city's core.",
+          "source": "The 'Gander",
+          "url": "https://gandernewsroom.com/news/cannabis/8-quick-hits-of-cannabis-news-from-across-michigan-17/"
         }
       ],
       "national": [
         {
-          "text": "Compass Pathways lands FDA priority voucher, eyes 2027 launch",
-          "source": "Compass Pathways / Yahoo Finance",
-          "url": "https://finance.yahoo.com/healthcare/articles/compass-pathways-eyes-2027-comp360-190217987.html",
-          "text_full": "Compass Pathways lands FDA priority voucher, eyes 2027 launch — The FDA granted a rolling NDA review and a Commissioner's National Priority Voucher for COMP360 psilocybin, with executives targeting a first-half 2027 launch for treatment-resistant depression."
+          "text": "Compass preps workforce for psilocybin's market debut — The company tapped therapy-training firm Fluence to build standardized provider education ahead of a potential FDA approval for its COMP360 psilocybin therapy.",
+          "source": "Mind Medicine Law",
+          "url": "https://mindmedicinelaw.com/briefing/compass-pathways-taps-fluence-for-comp360-psilocybin-provider-training-20260910-40734"
         },
         {
-          "text": "Eli Lilly closes major psychedelics acquisition",
-          "source": "Clinical Trial Vanguard",
-          "url": "https://www.clinicaltrialvanguard.com/article/psych-pulse/what-the-fdas-new-psychedelic-framework-actually-means-for-the-clinic/",
-          "text_full": "Eli Lilly closes major psychedelics acquisition — Lilly's buyout of atai's Beckley Psytech assets closed this month, bringing psychedelic candidates BPL-003, VLS-01 and EMP-01 under a Big Pharma pipeline."
+          "text": "FDA finalizes the rulebook for psychedelic drug trials — New guidance covers psilocybin, LSD and MDMA study design and paired with a September public hearing on therapeutic use.",
+          "source": "Tech Times",
+          "url": "https://www.techtimes.com/articles/320454/20260714/fda-finalizes-psychedelic-trial-rules-unblinding-problem-gets-official-answer.htm"
         },
         {
-          "text": "DEA rescheduling survives another court challenge",
-          "source": "Cannabis Business Times",
-          "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order",
-          "text_full": "DEA rescheduling survives another court challenge — The D.C. Circuit left medical marijuana's Schedule III reclassification in effect, rejecting opponents' bid to halt it while their lawsuit proceeds."
+          "text": "Federal court keeps medical marijuana's Schedule III move intact — The D.C. Circuit declined to stay the reclassification, meaning medical cannabis stays Schedule III while opponents' lawsuit plays out.",
+          "source": "Mondaq / The Week in Weed",
+          "url": "https://www.mondaq.com/unitedstates/fiscal-monetary-policy/1847320/the-week-in-weed-september-18-2026"
         },
         {
-          "text": "Trulieve becomes first plant-touching brand on NYSE",
+          "text": "Trulieve lands on the NYSE in a historic first — The multistate operator restructured into a 100% medical footprint to complete the major-exchange listing under ticker TRLV following federal Schedule III reclassification.",
           "source": "mg Magazine",
-          "url": "https://mgmagazine.com/business-strategy/finance-acquisitions-business-strategy/",
-          "text_full": "Trulieve becomes first plant-touching brand on NYSE — The multistate operator restructured around a 100% medical footprint to secure its historic listing under ticker TRLV following federal Schedule III reclassification."
+          "url": "https://mgmagazine.com/business-strategy/finance-acquisitions-business-strategy/"
         },
         {
-          "text": "Curaleaf tables takeover bid for Aurora Cannabis",
-          "source": "Cannamonitor",
-          "url": "https://cannamonitor.com/deal-tracker/",
-          "text_full": "Curaleaf tables takeover bid for Aurora Cannabis — The industry's most active dealmaker moved on Aurora in August, signaling another round of consolidation among the biggest global cannabis players."
+          "text": "DEA's own brief says weed doesn't belong in Schedule I — The administrative judge still hasn't ruled after 11 days of hearings, but the agency's post-hearing filing concluded cannabis no longer meets the statutory criteria for the top tier.",
+          "source": "Impact Wealth",
+          "url": "https://impactwealth.org/cannabis-rescheduling-in-2026-what-changed-what-didnt-and-what-it-means-at-the-counter/"
         }
       ]
     }
