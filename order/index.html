@@ -58,7 +58,7 @@
   .tot{font-size:14px;color:var(--muted)} .tot b{color:var(--ink);font-size:18px}
   .hint{font-size:12px;color:var(--muted);margin-top:6px}
   .ok{color:var(--ok)} .warn{color:var(--warn)}
-  .hidden{display:none}
+  .hidden{display:none !important}   /* 9/25: .draftbar (below) was overriding it - empty bars showed */
   .pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;background:var(--soft);border:1px solid var(--line);color:var(--muted);margin-left:6px}
   #gate{max-width:360px;margin:80px auto;text-align:center}
   .spin{color:var(--muted);font-size:14px}
@@ -188,7 +188,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25j</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25k</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -604,7 +604,8 @@ function dropDraft(hide){   // the order on screen was sent / reset: forget its 
   if(hide) offerDraft();
 }
 function offerDraft(){
-  var all = loadDrafts(), keys = Object.keys(all).sort(function(a, b){ return all[b].t - all[a].t; });
+  var all = loadDrafts(), onScreen = $('company').value ? draftKey($('company').value, $('newName') && $('newName').value) : null;
+  var keys = Object.keys(all).filter(function(k){ return k !== onScreen; }).sort(function(a, b){ return all[b].t - all[a].t; });   // the client on screen is not offered back to itself
   var bar = $('draftBar'); bar.innerHTML = '';
   if(!keys.length){ bar.classList.add('hidden'); return; }
   keys.forEach(function(k){
