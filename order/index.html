@@ -180,7 +180,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25a</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25b</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -199,7 +199,7 @@ function api(method, data){
   else { opts.headers = { 'Content-Type': 'text/plain;charset=utf-8' }; opts.body = JSON.stringify(data); }
   var tries = 0;
   function go(){ tries++; var o = Object.assign({}, opts); var ctl = ('AbortController' in window) ? new AbortController() : null; if(ctl){ o.signal = ctl.signal; setTimeout(function(){ ctl.abort(); }, 25000); } return fetch(url, o).then(function(r){ if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-    .catch(function(e){ if(tries < 3 && method === 'GET'){ return new Promise(function(res){ setTimeout(res, 1500); }).then(go); } throw e; }); }
+    .catch(function(e){ if(tries < 3 && (method === 'GET' || (data && data.idem))){ return new Promise(function(res){ setTimeout(res, 1500); }).then(go); } throw e; }); }
   return go();   // Google's redirect can 404 on a slow call - retry a read up to 3x
 }
 // catalog.json next to this page = the catalog encrypted with the staff PIN (make_catalog_file.py). Decrypt here;
@@ -668,14 +668,17 @@ function submit(){
     terms: $('terms').value, art_status: $('art').value, design_hrs: $('designHrs').value, design_rate: $('designRate').value.trim(), deposit: $('deposit').value, design_only: $('designOnly').checked,
     note: $('note').value.trim(), callouts: [printSpecs()].concat(lineFin).filter(Boolean).join(String.fromCharCode(10)), attach: chips('attach'), reorders: reorders, newItems: newItems,
     edit_of: EDIT_OF ? EDIT_OF.inv : '' };
-  newItems.forEach(function(o){ if(!o.unit){ var mp = menuPrice(o.vessel, o.material, o.texture); if(mp != null) o.unit = mp; } });   // the price shown is the price sent   // 9/22: editing a past order - the builder rebuilds that invoice instead of making a new one
+  newItems.forEach(function(o){ if(!o.unit){ var mp = menuPrice(o.vessel, o.material, o.texture); if(mp != null) o.unit = mp; } });   // the price shown is the price sent
+  // 9/25: the same order sent twice (a retry, a double tap) must not become two orders - the id is made from its content
+  (function(){ var j = JSON.stringify(Object.assign({}, payload, { pin: '' })), h = 5381; for(var i = 0; i < j.length; i++){ h = ((h << 5) + h + j.charCodeAt(i)) | 0; }
+    payload.idem = 'p' + (h >>> 0).toString(36) + j.length.toString(36); })();   // 9/22: editing a past order - the builder rebuilds that invoice instead of making a new one
   $('submitBtn').disabled = true; $('submitBtn').textContent = 'Sending…';
   api('POST', payload).then(function(r){
     $('submitBtn').disabled = false; $('submitBtn').textContent = 'Submit order';
     var box = $('result'); box.classList.remove('hidden');
     if(r.ok){ dropDraft(true); box.innerHTML = '<h2 class="ok">' + (EDIT_OF ? 'Edit sent' : 'Order sent') + '</h2><p>' + esc(company) + (EDIT_OF ? ' — edits to <b>' + esc(EDIT_OF.inv) + '</b> are' : ' is') + ' on the intake board as <b>Ready to build</b>. The builder makes the invoice and work order next; Shane approves before anything goes to the customer.</p><p class="hint"><a href="' + r.url + '" target="_blank" style="color:var(--pink)">Open in Monday</a></p><br><button class="btn ghost" onclick="location.reload()">Start another order</button>'; window.scrollTo(0, document.body.scrollHeight); }
     else { box.innerHTML = '<h2 class="warn">Not sent</h2><p>' + esc(r.error) + '</p>'; }
-  }).catch(function(e){ $('submitBtn').disabled = false; $('submitBtn').textContent = 'Submit order'; alert('Error: ' + e.message); });
+  }).catch(function(e){ $('submitBtn').disabled = false; $('submitBtn').textContent = 'Submit order'; alert('The Pad could not confirm this order was saved (' + e.message + ').\n\nIt may already be in Monday - check the intake board (or ask Shane) before sending it again. Sending the SAME order again is safe: it will not make a second copy.'); });
 }
 try { var _d = new Date(); $('due').min = _d.getFullYear() + '-' + ('0' + (_d.getMonth() + 1)).slice(-2) + '-' + ('0' + _d.getDate()).slice(-2); } catch(e){}
 try { var p = localStorage.getItem('st_pin'); if(p){ $('pin').value = p; } } catch(e){}
