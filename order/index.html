@@ -181,7 +181,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25d</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25e</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -285,7 +285,7 @@ function pickCompany(){
       d.innerHTML = '<div><div class="nm">' + esc(shown) + '</div><div class="meta">' + esc([s.material, s.raised === 'Y' ? 'raised' : ''].filter(Boolean).join(' · ')) + ' · ' + money(s.unit) + ' · last ' + s.qty + ' on ' + esc(s.last_date) + ' <a class="mini" onclick="asNewItem(this)">other size / material</a></div>' + finHTML(s, true) + '</div>'
                   + '<input type="number" inputmode="numeric" min="0" placeholder="qty" data-i="' + i + '" oninput="totals()">';
       d.dataset.title = s.title; d.dataset.unit = s.unit; d.dataset.sku = s.sku; d.dataset.vessel = s.vessel || ''; d.dataset.material = s.material || ''; d.dataset.lastInv = s.last_invoice || ''; d.dataset.lastQty = s.qty || 0; det.appendChild(d);
-      finPrefill(d.querySelector('.fin'), s);
+      finPrefill(d.querySelector('.fin'), s); whiteLock(d);
     });
     box.appendChild(det);
   });
@@ -328,6 +328,15 @@ function finPrefill(box, s){
   if(s && (s.white_ink === 'Y' || s.white_ink === 'N')) box.querySelector('.fw').value = s.white_ink;
 }
 function finLine(box){ box.querySelector('.fc').classList.toggle('hidden', box.querySelector('.fco').value !== 'on'); }
+// 9/25 Shane: "white material and white ink are never the same" - a White-material line cannot take white ink
+function whiteLock(line){
+  if(!line) return; var fw = line.querySelector('.fw'); if(!fw) return;
+  var m = line.querySelector('.m') ? line.querySelector('.m').value : (line.dataset.material || '');
+  var white = /^white$/i.test(String(m).trim());
+  if(white){ if(fw.value !== 'N') fw.dataset.auto = '1'; fw.value = 'N'; fw.disabled = true; fw.title = 'White material never takes white ink'; }
+  else { if(fw.disabled && fw.dataset.auto){ fw.value = ''; delete fw.dataset.auto; } fw.disabled = false; fw.title = 'White under the CMYK'; }
+}
+document.addEventListener('change', function(e){ if(e.target.classList && e.target.classList.contains('m')) whiteLock(e.target.closest('.newline')); });
 function finOf(box){   // this line's print recipe; null = leave it all to the SKU's stored recipe
   var g = box.querySelector('.fg').value, m = box.querySelector('.fm').value, w = box.querySelector('.fw').value;
   var c = box.querySelector('.fco').value === 'on' ? box.querySelector('.fc').value : '';
