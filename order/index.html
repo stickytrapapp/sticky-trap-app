@@ -181,7 +181,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25h</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25i</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -298,65 +298,31 @@ function pickCompany(){
 // 9/25 Shane: "white ... matte and number. gloss and number. gloss never goes before matte. white always goes under
 // cmyk. have choke instructions have an off. if on then they can set setting". So the row reads in print order and
 // there is no 'on top' choice any more: White (under the CMYK) -> Matte passes -> Gloss passes (always on top) -> Choke.
+// 9/25 Shane: "this box is copy and paste exactly, no guessing or added info from you. what is entered here on the pad
+// goes in place of white matte gloss on the production form ... its name is Print Instructions". One box per line, plus
+// the File name box - both travel as JSON so every character arrives as typed. No recipe prefill, no hints.
 function finHTML(s, hidden){
-  var rh = s && (s.gloss || s.coat_order) ? 'recipe: ' + [s.gloss, s.coat_order].filter(function(x){ return x && x !== 'None'; }).join(' · ') : '';
   return '<div class="fin' + (hidden ? ' hidden' : '') + '">'
-       + '<label>White <select class="fw" title="White under the CMYK"><option value="">–</option><option value="Y">yes</option><option value="N">no</option></select></label>'
-       + '<label>Matte <input type="number" min="0" max="64" inputmode="numeric" class="fm" placeholder="–"></label>'
-       + '<label>Gloss <input type="number" min="0" max="64" inputmode="numeric" class="fg" placeholder="–"></label>'
-       + '<label>Choke <select class="fco"><option value="">off</option><option value="on">on</option></select>'
-       +   '<input type="number" min="-10" max="10" step="1" inputmode="numeric" class="fc hidden" value="0" title="-10 to +10"></label>'
+       + '<label style="flex:2 1 320px">Print Instructions <textarea class="fpi" rows="1" placeholder="exactly what the press should run" spellcheck="false" style="width:100%;min-height:34px;padding:6px 8px;font-size:14px"></textarea></label>'
        + '<label style="flex:1 1 220px">File name <input class="ffn" placeholder="exactly as the file is named" autocomplete="off" autocapitalize="off" spellcheck="false" style="width:100%;text-align:left"></label>'
-       + (rh && rh !== 'recipe: ' ? '<span class="rh">' + esc(rh) + '</span>' : '') + '</div>';
+       + '</div>';
 }
-function parseRecipe(gloss, coat){
-  var t = String(gloss || '') + ' ' + String(coat || '');
-  var g = t.match(/(\d+)\s*(?:x\s*)?gloss/i), m = t.match(/(\d+)\s*(?:x\s*)?matte/i);
-  if(!g && !m) return null;
-  return { g: g ? Number(g[1]) : 0, m: m ? Number(m[1]) : 0 };
-}
+function parseRecipe(){ return null; }
 function finSet(box, f){
   if(!box || !f) return;
-  box.querySelector('.fg').value = f.g === '' || f.g == null ? '' : f.g;
-  box.querySelector('.fm').value = f.m === '' || f.m == null ? '' : f.m;
-  if(f.w !== undefined && f.w !== null) box.querySelector('.fw').value = f.w;
-  var on = f.c !== '' && f.c != null && f.c !== undefined;
-  box.querySelector('.fco').value = on ? 'on' : ''; box.querySelector('.fc').value = on ? f.c : 0;
+  if(f.pi !== undefined && f.pi !== null) box.querySelector('.fpi').value = f.pi;
   if(f.fn !== undefined && f.fn !== null) box.querySelector('.ffn').value = f.fn;
-  finLine(box);
 }
-function finPrefill(box, s){
-  // 9/25 Shane: "leave it blank rather than guess" - the saved recipe only shows as a hint beside the line
+function finPrefill(){}
+function finLine(){}
+function whiteLock(){}
+function finOf(box){
+  if(!box) return null;
+  var pi = box.querySelector('.fpi').value, fn = box.querySelector('.ffn').value;
+  return (pi === '' && fn === '') ? null : { pi: pi, fn: fn };
 }
-function finLine(box){ box.querySelector('.fc').classList.toggle('hidden', box.querySelector('.fco').value !== 'on'); }
-// 9/25 Shane: "white material and white ink are never the same" - a White-material line cannot take white ink
-function whiteLock(line){
-  if(!line) return; var fw = line.querySelector('.fw'); if(!fw) return;
-  var m = line.querySelector('.m') ? line.querySelector('.m').value : (line.dataset.material || '');
-  var white = /^white$/i.test(String(m).trim());
-  if(white){ if(fw.value !== 'N') fw.dataset.auto = '1'; fw.value = 'N'; fw.disabled = true; fw.title = 'White material never takes white ink'; }
-  else { if(fw.disabled && fw.dataset.auto){ fw.value = ''; delete fw.dataset.auto; } fw.disabled = false; fw.title = 'White under the CMYK'; }
-}
-document.addEventListener('change', function(e){ if(e.target.classList && e.target.classList.contains('m')) whiteLock(e.target.closest('.newline')); });
-function finOf(box){   // this line's print recipe; null = leave it all to the SKU's stored recipe
-  var g = box.querySelector('.fg').value, m = box.querySelector('.fm').value, w = box.querySelector('.fw').value;
-  var c = box.querySelector('.fco').value === 'on' ? box.querySelector('.fc').value : '';
-  if(g === '' && m === '' && w === '' && c === '') return null;
-  var out = { g: '', m: '', w: w, c: '' };
-  if(g !== '' || m !== ''){ out.g = Math.max(0, Math.min(64, Math.round(Number(g || 0)))); out.m = Math.max(0, Math.min(64, Math.round(Number(m || 0)))); }
-  if(c !== '') out.c = Math.max(-10, Math.min(10, Math.round(Number(c) || 0)));
-  return out;
-}
-// 9/25 Shane: "need a place in the sku to put the file name. strong rule. whatever is put in this box copy and paste
-// exactly" - production sheet only. JSON keeps every character (quotes, slashes, spaces) intact end to end.
 function fileLine(key, box){ var v = box ? box.querySelector('.ffn').value : ''; return v === '' ? null : 'LINE FILE: ' + JSON.stringify({ k: key, f: v }); }
-function finLineText(key, f){
-  var p = [];
-  if(f.w) p.push('WHITE ' + f.w);
-  if(f.g !== '') p.push('MATTE ' + f.m + ' / GLOSS ' + f.g);
-  if(f.c !== '') p.push('CHOKE ' + (f.c > 0 ? '+' : '') + f.c);
-  return 'LINE FINISH: ' + key + ' = ' + p.join(' / ');
-}
+function finLineText(key, f){ return (f && f.pi !== '') ? 'LINE PRINT: ' + JSON.stringify({ k: key, t: f.pi }) : null; }
 function recipeFor(cust, sku, vessel){
   var low = function(x){ return String(x || '').toLowerCase().trim(); };
   return (CAT && CAT.skus || []).find(function(k){ return k.customer === cust && low(k.sku) === low(sku) && (!vessel || low(k.vessel) === low(vessel)); }) || null;
@@ -388,7 +354,7 @@ function addNewLine(){
               + '<input placeholder="Item name" class="n">'
               + '<input type="number" inputmode="numeric" min="0" placeholder="qty" class="q" oninput="totals()">'
               + '<input type="number" step="0.01" inputmode="decimal" placeholder="price" class="p" oninput="totals()">'
-              + '<select class="m"><option value="">Material</option><option>White</option><option>Holo</option><option>Gold</option></select>'
+              + '<select class="m"><option value="">Material</option><option>White Vinyl</option><option>Holographic</option><option>Gold</option><option>Clear</option></select>'
               + '<span class="vcell">'
               +   '<select class="vsel" onchange="vesselPick(this)">' + VESSELS + '</select>'
               +   '<input placeholder="type the size" class="v vother hidden" onblur="vesselBack(this)">'
@@ -446,7 +412,6 @@ function openPast(inv){
     if(r.unit) d.querySelector('.p').value = r.unit;
     if(r.material) d.querySelector('.m').value = r.material;
     if(r.raised) d.querySelector('.t').value = r.raised;
-    if(r.white) d.querySelector('.fw').value = r.white;
     var cell = d.querySelector('.vcell'), sel = cell.querySelector('.vsel'), inp = cell.querySelector('.vother');
     if(r.vessel){
       sel.value = r.vessel;
@@ -454,8 +419,7 @@ function openPast(inv){
       inp.value = r.vessel;
     }
     // 9/24: the line's own finish if the old order carried one, else that SKU's recipe
-    var f = parseRecipe(r.gloss, r.coat_order), rec = recipeFor(o.customer, r.sku, r.vessel);
-    if(f) finSet(d.querySelector('.fin'), f); else finPrefill(d.querySelector('.fin'), rec);
+    finSet(d.querySelector('.fin'), { pi: r.print_instructions || '', fn: r.file_name || '' });   // the order's own entries only
   });
   if(!o.rows.length) addNewLine();
   var iso = o.due ? mdyToISO(o.due) : '', today = new Date().toISOString().slice(0, 10), stale = iso && iso < today;
@@ -492,7 +456,7 @@ function chokeStep(){}
 function asNewItem(a){   // 9/16 Shane: a size or material we have not printed for them yet -> New items row, prefilled
   var d = a.closest('.line'); addNewLine(); var row = $('newItems').lastElementChild;
   row.querySelector('.n').value = d.dataset.sku; var mat = (d.dataset.material || '').toLowerCase();
-  row.querySelector('.m').value = mat.indexOf('holo') >= 0 ? 'Holo' : mat.indexOf('gold') >= 0 ? 'Gold' : mat.indexOf('white') >= 0 ? 'White' : '';
+  row.querySelector('.m').value = mat.indexOf('holo') >= 0 ? 'Holographic' : mat.indexOf('gold') >= 0 ? 'Gold' : mat.indexOf('white') >= 0 ? 'White Vinyl' : mat.indexOf('clear') >= 0 ? 'Clear' : '';
   // 9/22: the vessel cell is a menu dropdown now - open its 'something else' box so the new size can be typed
   var _s = row.querySelector('.vsel'); _s.value = '__other__'; vesselPick(_s);
   var _src = d.querySelector('.fin'); if(_src){ finSet(row.querySelector('.fin'), finOf(_src) || {}); }
@@ -553,7 +517,7 @@ $('delivery').addEventListener('change', function(){ $('shipWrap').classList.tog
 function menuPrice(vessel, material, texture){
   var M = CAT && CAT.menu; if(!M || !vessel || !material) return null;
   var lvl = { 'Flat': 0, '1': 1, '2': 2, '3': 3 }[texture]; if(lvl === undefined) lvl = 2;   // builder default = Standard
-  var mat = { 'White': 'White', 'Holo': 'Holo BF', 'Gold': 'Gold' }[material];
+  var mat = { 'White Vinyl': 'White', 'Holographic': 'Holo BF', 'Gold': 'Gold' }[material];   // Clear: no menu price
   var table = /lighter/i.test(vessel) ? M.lighter : (M.access || {})[vessel];
   var row = table && mat && table[mat]; return row && row[lvl] != null ? Number(row[lvl]) : null;
 }
@@ -596,8 +560,8 @@ function draftSnap(){
   document.querySelectorAll('#newItems .newline').forEach(function(d){
     var o = { n: d.querySelector('.n').value, q: d.querySelector('.q').value, p: d.querySelector('.p').value,
               m: d.querySelector('.m').value, v: d.querySelector('.v').value, t: d.querySelector('.t').value,
-              w: d.querySelector('.fw').value, ap: d.querySelector('.ap').value,
-              fg: d.querySelector('.fg').value, fm: d.querySelector('.fm').value, fc: d.querySelector('.fco').value === 'on' ? d.querySelector('.fc').value : '', fn: d.querySelector('.ffn').value };
+              ap: d.querySelector('.ap').value,
+              pi: d.querySelector('.fpi').value, fn: d.querySelector('.ffn').value };
     if(o.n || o.q || o.v) items.push(o); });
   var f = {}; DFIELDS.forEach(function(id){ if($(id)) f[id] = $(id).value; });
   var ch = {}; document.querySelectorAll('.chips').forEach(function(g){ ch[g.dataset.group] = chips(g.dataset.group); });
@@ -656,7 +620,7 @@ function restoreDraft(k){
     row.querySelector('.n').value = o.n || ''; row.querySelector('.q').value = o.q || ''; row.querySelector('.p').value = o.p || '';
     row.querySelector('.m').value = o.m || ''; row.querySelector('.t').value = o.t || '';
     row.querySelector('.ap').value = o.ap || '';
-    finSet(row.querySelector('.fin'), { g: o.fg, m: o.fm, w: o.w || '', c: o.fc, fn: o.fn });
+    finSet(row.querySelector('.fin'), { pi: o.pi, fn: o.fn });
     if(o.v){
       var sel = row.querySelector('.vsel');
       if(VESSEL_LIST.indexOf(o.v) >= 0){ sel.value = o.v; vesselPick(sel); }
@@ -681,7 +645,7 @@ function submit(){
   if(!$('due').value){ alert('Order due date is required.'); return; }
   if(!$('phone').value.trim()){ alert('Phone is required - every order starts with company, contact, phone and email.'); $('phone').focus(); return; }
   var reorders = [], lineFin = []; document.querySelectorAll('#reorders .line').forEach(function(d){ var n = Number(d.querySelector('input[data-i]').value || 0); if(n > 0){ reorders.push({ title: d.dataset.title, qty: n }); var f = finOf(d.querySelector('.fin')); var _k = d.dataset.sku + (d.dataset.vessel ? ' @ ' + d.dataset.vessel : ''); if(f) lineFin.push(finLineText(_k, f)); var _fl = fileLine(_k, d.querySelector('.fin')); if(_fl) lineFin.push(_fl); } });
-  var newItems = []; document.querySelectorAll('#newItems .newline').forEach(function(d){ var n = Number(d.querySelector('.q').value || 0), nm = d.querySelector('.n').value.trim(); if(nm && n > 0){ newItems.push({ name: nm, qty: n, material: d.querySelector('.m').value, vessel: d.querySelector('.v').value.trim(), texture: d.querySelector('.t').value, unit: d.querySelector('.p').value, white_ink: d.querySelector('.fw').value, apply: d.querySelector('.ap').value }); var f = finOf(d.querySelector('.fin')); var vv = d.querySelector('.v').value.trim(); var _k2 = nm + (vv ? ' @ ' + vv : ''); if(f) lineFin.push(finLineText(_k2, f)); var _fl2 = fileLine(_k2, d.querySelector('.fin')); if(_fl2) lineFin.push(_fl2); } });
+  var newItems = []; document.querySelectorAll('#newItems .newline').forEach(function(d){ var n = Number(d.querySelector('.q').value || 0), nm = d.querySelector('.n').value.trim(); if(nm && n > 0){ newItems.push({ name: nm, qty: n, material: d.querySelector('.m').value, vessel: d.querySelector('.v').value.trim(), texture: d.querySelector('.t').value, unit: d.querySelector('.p').value, white_ink: '', apply: d.querySelector('.ap').value }); var f = finOf(d.querySelector('.fin')); var vv = d.querySelector('.v').value.trim(); var _k2 = nm + (vv ? ' @ ' + vv : ''); if(f) lineFin.push(finLineText(_k2, f)); var _fl2 = fileLine(_k2, d.querySelector('.fin')); if(_fl2) lineFin.push(_fl2); } });
   if(!reorders.length && !newItems.length && !$('designOnly').checked){ alert('Set a quantity on at least one item.'); return; }
   // 9/24: a new item with no price the builder can find stops at 'Needs info' - say so before it is sent
   var hist = (CAT && CAT.skus || []).filter(function(k){ return k.customer === company; }).map(function(k){ return String(k.sku).toLowerCase(); });
