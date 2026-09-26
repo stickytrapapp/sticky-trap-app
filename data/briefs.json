@@ -5,60 +5,80 @@
     {
       "date": "2026-09-26",
       "label": "Morning Brief",
-      "title": "Michigan Tops $17B in Weed Sales as National Rescheduling and Psychedelic Wins Stack Up",
-      "top": "Michigan's cannabis market just crossed a historic $17 billion in lifetime sales and a gubernatorial front-runner is now campaigning on killing the 24% wholesale tax — real signs the pain point has a political off-ramp. Nationally, Compass Pathways just cleared its second Phase 3 hurdle for psilocybin, DEA rescheduling cleared another procedural checkpoint, and MSOs are consolidating at scale, all pointing toward a friendlier federal landscape ahead.",
+      "title": "Michigan Brands Push Outward as D.C. Clears a Path for Psychedelics and Rescheduling",
+      "top": "Michigan operators are finding growth outside the state's tax squeeze — JARS is now Arizona's biggest chain and a national gummy brand just landed on local shelves — while both gubernatorial campaigns face real pressure to roll back the 24% wholesale tax. Nationally, momentum keeps building: a federal court just upheld medical marijuana's move to Schedule III, the FDA is actively shaping a psychedelics approval pathway, and Compass Pathways is racing toward a possible 2027 psilocybin launch.",
       "local": [
         {
-          "text": "Michigan cannabis sales cross $17 billion lifetime",
-          "source": "The Marijuana Herald",
-          "url": "https://themarijuanaherald.com/2026/09/daily-cannabis-news-brief-for-9-15-2026/"
+          "text": "Troy-based JARS becomes Arizona's largest dispensary chain",
+          "detail": "JARS Cannabis, the Michigan chain, announced a deal to acquire Sonoran Roots and its eight Ponderosa dispensaries, making it Arizona's biggest retailer.",
+          "text_full": "Troy-based JARS becomes Arizona's largest dispensary chain — JARS Cannabis, the Michigan chain, announced a deal to acquire Sonoran Roots and its eight Ponderosa dispensaries, making it Arizona's biggest retailer.",
+          "source": "The 'Gander (MichiGanja Report)",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-083126/"
         },
         {
-          "text": "Gov. candidate James pledges to repeal wholesale tax",
-          "source": "Mondaq (The Week In Weed)",
-          "url": "https://www.mondaq.com/unitedstates/fiscal-monetary-policy/1847320/the-week-in-weed-september-18-2026"
+          "text": "Grön's bestselling gummies hit Michigan shelves",
+          "detail": "Wyld-owned edibles brand Grön rolled its 'Pearls' gummies into Pure Options, High Profile and Lume as part of a four-state expansion.",
+          "text_full": "Grön's bestselling gummies hit Michigan shelves — Wyld-owned edibles brand Grön rolled its 'Pearls' gummies into Pure Options, High Profile and Lume as part of a four-state expansion.",
+          "source": "The 'Gander (MichiGanja Report)",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-090826/"
         },
         {
-          "text": "Menominee petition could add four dispensary licenses",
-          "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-091626/"
+          "text": "Common Citizen locks in new Eastpointe storefront",
+          "detail": "A court-approved deal gives Common Citizen until Dec. 1 to finish buildout and open its newest dispensary in Eastpointe.",
+          "text_full": "Common Citizen locks in new Eastpointe storefront — A court-approved deal gives Common Citizen until Dec. 1 to finish buildout and open its newest dispensary in Eastpointe.",
+          "source": "The 'Gander (MichiGanja Report)",
+          "url": "https://gandernewsroom.com/news/cannabis/6-quick-hits-of-cannabis-news-from-across-michigan-26/"
         },
         {
-          "text": "Market stabilizes months after tax shock hit",
-          "source": "Headset",
-          "url": "https://www.headset.io/blog/michigans-24-wholesale-tax-what-the-data-shows-july-2026-update"
+          "text": "GOP nominee's tax-repeal pledge wins industry's backing",
+          "detail": "MiCIA formally endorsed Republican John James over his vow to kill the 24% wholesale tax, calling him 'the clear choice for the cannabis industry.'",
+          "text_full": "GOP nominee's tax-repeal pledge wins industry's backing — MiCIA formally endorsed Republican John James over his vow to kill the 24% wholesale tax, calling him 'the clear choice for the cannabis industry.'",
+          "source": "Postindustrial",
+          "url": "https://postindustrial.com/stories/michigan-marijuana-industry-group-endorses-gop-governor-candidate-who-pledged-to-cut-new-wholesale-tax/"
         },
         {
-          "text": "Industry presses courts, Lansing for wholesale-tax relief",
-          "source": "Michigan Public",
-          "url": "https://www.michiganpublic.org/politics-government/2026-03-30/cannabis-industry-files-new-legal-challenge-to-michigans-24-marijuana-wholesale-tax"
+          "text": "Wholesale tax badly missing revenue targets, fueling repeal push",
+          "detail": "The 24% levy brought in only about $37 million in Q2 versus a projected $105 million per quarter, ammunition both campaigns are now using to argue for rollback.",
+          "text_full": "Wholesale tax badly missing revenue targets, fueling repeal push — The 24% levy brought in only about $37 million in Q2 versus a projected $105 million per quarter, ammunition both campaigns are now using to argue for rollback.",
+          "source": "The 'Gander (MichiGanja Report)",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-090826/"
         }
       ],
       "national": [
         {
-          "text": "Compass Pathways clears second Phase 3 psilocybin trial",
-          "source": "Compass Pathways / European Biotechnology",
-          "url": "https://ir.compasspathways.com/News--Events-/news/news-details/2026/Compass-Pathways-Announces-Six-Month-Data-from-Second-Phase-3-Trial-Confirming-Rapid-and-Durable-Profile/default.aspx"
+          "text": "FDA hearing signals real path for psilocybin, methylone",
+          "detail": "FDA officials told a White Oak hearing there's 'growing interest and active research' on psychedelics for serious mental health conditions, weighing rules for future approved use.",
+          "text_full": "FDA hearing signals real path for psilocybin, methylone — FDA officials told a White Oak hearing there's 'growing interest and active research' on psychedelics for serious mental health conditions, weighing rules for future approved use.",
+          "source": "Washington Times",
+          "url": "https://www.washingtontimes.com/news/2026/sep/14/psychedelic-treatments-move-closer-mainstream-fda/"
         },
         {
-          "text": "DEA rescheduling clears another procedural checkpoint",
-          "source": "CannIntel",
-          "url": "https://cannintel.com/laws/dea-cannabis-rescheduling-hits-key-milestone-august-2026"
+          "text": "Compass Pathways targets first-half 2027 psilocybin launch",
+          "detail": "Compass is submitting a rolling NDA for COMP360, boosted by a National Priority Voucher that could cut FDA review time to just 1-2 months.",
+          "text_full": "Compass Pathways targets first-half 2027 psilocybin launch — Compass is submitting a rolling NDA for COMP360, boosted by a National Priority Voucher that could cut FDA review time to just 1-2 months.",
+          "source": "Compass Pathways (Q2 2026 release)",
+          "url": "https://www.sec.gov/Archives/edgar/data/0001816590/000181659026000059/q22026pressrelease.htm"
         },
         {
-          "text": "FDA builds formal pathway for psychedelic drug approvals",
-          "source": "TechTimes",
-          "url": "https://www.techtimes.com/articles/320454/20260714/fda-finalizes-psychedelic-trial-rules-unblinding-problem-gets-official-answer.htm"
+          "text": "Federal court rejects bid to block marijuana's Schedule III move",
+          "detail": "The D.C. Circuit left the medical marijuana rescheduling order in effect, ruling opponents hadn't proven their case.",
+          "text_full": "Federal court rejects bid to block marijuana's Schedule III move — The D.C. Circuit left the medical marijuana rescheduling order in effect, ruling opponents hadn't proven their case.",
+          "source": "Cannabis Business Times",
+          "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order"
         },
         {
-          "text": "Vireo Growth's buying spree hits 265 stores nationwide",
-          "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/news/cannabis-mso-vireo-growth-to-acquire-planet-13-in-all-stock-deal/617152/"
+          "text": "Congress buys hemp industry a one-month reprieve",
+          "detail": "Trump signed a bill pushing the federal hemp THC ban from Nov. 12 to Dec. 11, giving Congress more time to write guardrails instead of an outright ban.",
+          "text_full": "Congress buys hemp industry a one-month reprieve — Trump signed a bill pushing the federal hemp THC ban from Nov. 12 to Dec. 11, giving Congress more time to write guardrails instead of an outright ban.",
+          "source": "The 'Gander (MichiGanja Report)",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-090826/"
         },
         {
-          "text": "Court keeps medical cannabis at Schedule III for now",
-          "source": "Mondaq (The Week In Weed)",
-          "url": "https://www.mondaq.com/unitedstates/fiscal-monetary-policy/1847320/the-week-in-weed-september-18-2026"
+          "text": "MSO consolidation deals keep landing despite tight margins",
+          "detail": "Cannabist's court-supervised exits, including its Ohio and Delaware operations, are setting fresh distressed-asset benchmarks as buyers like Holistic Industries move in.",
+          "text_full": "MSO consolidation deals keep landing despite tight margins — Cannabist's court-supervised exits, including its Ohio and Delaware operations, are setting fresh distressed-asset benchmarks as buyers like Holistic Industries move in.",
+          "source": "Cann.dev",
+          "url": "https://www.cann.dev/cannabis-ma-april-2026-distressed-exits-consolidation/"
         }
       ]
     }
