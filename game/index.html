@@ -1107,15 +1107,17 @@
     // 2026-09-24: the scores sheet still holds test rows and pre-9/22 scores from the old refilling board (thousands, against a finite
     // board that tops out in the hundreds), so they outrank every real player. The backend purge is queued for the next bot session;
     // until it lands the app simply refuses to show them. Delete this filter once the sheet is clean.
-    var LB_JUNK=/^(AIMSTER|TESTER|TRAPGOD\d*|PUSHTEST|TEST\w*)$/i, LB_MAX=2000;
+    // 2026-09-27: the old score cap (2000, 'no finite board can score that') would now hide every real player - the timed
+    // board is back and one good try is 3,000-18,000. Handles are the only thing left that separates the test rows from brands.
+    var LB_JUNK=/^(AIMSTER|TESTER|TRAPGOD\d*|PUSHTEST|TEST\w*)$/i;
     function lbClean(j){
       if(!j||!j.top) return j;
-      var kept=j.top.filter(function(r){ return !LB_JUNK.test(String(r.handle||'')) && !(+r.total>LB_MAX); });
+      var kept=j.top.filter(function(r){ return !LB_JUNK.test(String(r.handle||'')); });
       var dropped=j.top.length-kept.length;
       kept.forEach(function(r,i){ r.rank=i+1; });
       j.top=kept; j.count=Math.max(0,(+j.count||0)-dropped);
       if(j.you&&LB_JUNK.test(String(j.you.handle||''))) j.you=null;
-      if(j.last_week&&(LB_JUNK.test(String(j.last_week.handle||''))||+j.last_week.total>LB_MAX)) j.last_week=null;
+      if(j.last_week&&LB_JUNK.test(String(j.last_week.handle||''))) j.last_week=null;
       return j;
     }
     function render(j){ j=lbClean(j); loadRanks._retried=false; try{ creditRefs(j.refs); }catch(e){}
