@@ -5,60 +5,60 @@
     {
       "date": "2026-09-27",
       "label": "Morning Brief",
-      "title": "Michigan Tops $17B in Sales as Tax Relief Gains Traction; DEA and Psilocybin Momentum Build Nationally",
-      "top": "Michigan's cannabis market just crossed $17 billion in lifetime sales even as operators fight the 24% wholesale tax — and for the first time, a leading gubernatorial candidate is putting real money and a repeal pledge behind relief. Nationally, rescheduling cleared another court hurdle, Compass Pathways' psilocybin drug got a fast-track FDA voucher, and MDMA therapy is back in front of regulators, signaling the psychedelics wave is far from over.",
+      "title": "Governor's Race Turns on Cannabis Tax Repeal as Rescheduling and Psychedelics Momentum Build Nationally",
+      "top": "Michigan's cannabis fight just became the defining issue of the governor's race, with GOP nominee John James pledging to kill the 24% wholesale tax and courting industry cash — even as sales data shows the market stabilizing and new stores keep opening. Nationally, DEA rescheduling is clearing courtroom hurdles, MSOs are striking billion-dollar deals, and psychedelics just got a green light from the FDA that could put psilocybin on pharmacy shelves within a year.",
       "local": [
         {
-          "text": "Michigan cracks $17 billion in lifetime sales — August alone generated roughly $259 million, pushing cumulative adult-use and medical sales past the milestone despite tax headwinds.",
+          "text": "James pledges to repeal 24% wholesale tax",
+          "source": "Bridge Michigan",
+          "url": "https://bridgemi.com/michigan-government/john-james-pitches-marijuana-tax-repeal-courts-industry-donors/"
+        },
+        {
+          "text": "Cannabis industry group officially backs James for governor",
+          "source": "Postindustrial",
+          "url": "https://postindustrial.com/stories/michigan-marijuana-industry-group-endorses-gop-governor-candidate-who-pledged-to-cut-new-wholesale-tax/"
+        },
+        {
+          "text": "House of Dank opens 12th Michigan store in Ann Arbor",
+          "source": "House of Dank",
+          "url": "https://shophod.com/event/h-o-d-ann-arbor-opens/"
+        },
+        {
+          "text": "Michigan sales top $17 billion since legalization launched",
           "source": "The Marijuana Herald",
           "url": "https://themarijuanaherald.com/2026/09/daily-cannabis-news-brief-for-9-15-2026/"
         },
         {
-          "text": "Jars Cannabis beats back surveillance mandate — after the chain blocked a court-ordered Flock camera in Madison Heights, the city backed down and the camera came down pending council approval.",
-          "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/news/michigan-cannabis-store-wins-fight-over-flock-camera/617491/"
-        },
-        {
-          "text": "GOP nominee pledges wholesale tax repeal — John James collected roughly $90,000 from industry executives and Michigan Cannabis Industry Association backing after vowing to repeal or slash the 24% levy.",
-          "source": "The 'Gander / MichiGanja Report",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092126/"
-        },
-        {
-          "text": "Retail-only dispensaries gain edge over growers — as cultivation margins shrink under the wholesale tax, non-vertically-integrated retailers are picking up a competitive advantage over grow-heavy operators.",
-          "source": "Lansing City Pulse",
-          "url": "https://www.lansingcitypulse.com/stories/customers-may-not-have-noticed-the-downturn-in-michigans-marijuana-market,187259"
-        },
-        {
-          "text": "Industry presses unconstitutional-tax argument in court — MCIA's new lawsuit says the 24% wholesale tax creates illegal tax pyramiding beyond the 6% constitutional cap, teeing up potential relief.",
-          "source": "Michigan Public Radio",
-          "url": "https://www.michiganpublic.org/politics-government/2026-03-30/cannabis-industry-files-new-legal-challenge-to-michigans-24-marijuana-wholesale-tax"
+          "text": "Appeals court tosses $32M award against Curaleaf-linked buyer",
+          "source": "The 'Gander",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-091626/"
         }
       ],
       "national": [
         {
-          "text": "Medical cannabis rescheduling survives court challenge — the D.C. Circuit declined to stay the Schedule III move, keeping medical marijuana's new status intact while opponents' suit plays out.",
-          "source": "Mondaq / The Week in Weed",
+          "text": "DC Circuit refuses to block Schedule III marijuana status",
+          "source": "Mondaq / The Week In Weed",
           "url": "https://www.mondaq.com/unitedstates/fiscal-monetary-policy/1847320/the-week-in-weed-september-18-2026"
         },
         {
-          "text": "FDA fast-tracks Compass Pathways' psilocybin drug — COMP360 won a National Priority Voucher that could shrink review time to just 1-2 months, with NDA completion on track for Q4.",
-          "source": "Compass Pathways (SEC 8-K)",
-          "url": "https://www.sec.gov/Archives/edgar/data/0001816590/000181659026000059/q22026pressrelease.htm"
+          "text": "Curaleaf launches $1.5B cross-border bid for Aurora Cannabis",
+          "source": "cann.dev",
+          "url": "https://www.cann.dev/cannabis-ma-august-2026-curaleaf-vireo-consolidation/"
         },
         {
-          "text": "MDMA therapy resubmitted for FDA review — rebranded Resilient Pharmaceuticals (formerly Lykos) has filed a new drug application for MDMA-assisted PTSD therapy, reviving a shelved 2024 bid.",
-          "source": "MAPS",
-          "url": "https://maps.org/2026/08/10/maps-responds-to-report-of-progress-for-mdma-assisted-therapy-for-ptsd-with-fda/"
-        },
-        {
-          "text": "CLAIM Act targets cannabis insurance gap — the bill takes aim at the federal-state conflict blocking insurers from serving cannabis businesses even after rescheduling.",
+          "text": "Vireo Growth to acquire Planet 13, adding 36 dispensaries",
           "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/"
+          "url": "https://mjbizdaily.com/news/cannabis-mso-vireo-growth-to-acquire-planet-13-in-all-stock-deal/617152/"
         },
         {
-          "text": "Court tosses $31.8M verdict against Curaleaf — the Sixth Circuit ruled a Michigan grower's cannabis supply contract was federally illegal, wiping out the jury award and underscoring the need for airtight deal structuring.",
-          "source": "The 'Gander / MichiGanja Report",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-091626/"
+          "text": "Compass Pathways psilocybin nears FDA finish line for Q4",
+          "source": "BioSpace",
+          "url": "https://www.biospace.com/drug-development/deep-dive-psychedelics-back-on-fdas-doorstep"
+        },
+        {
+          "text": "FDA finalizes psychedelic trial rules, sets public hearing",
+          "source": "Tech Times",
+          "url": "https://www.techtimes.com/articles/320454/20260714/fda-finalizes-psychedelic-trial-rules-unblinding-problem-gets-official-answer.htm"
         }
       ]
     }
