@@ -96,6 +96,7 @@
     <label>Company <b>*</b></label>
     <select id="company" onchange="pickCompany(); draftCheck()"><option value="">Choose…</option></select>
     <div id="clientDraft" class="draftbar hidden" style="margin-top:8px;border-color:var(--pink)"></div>
+    <div id="liveBar" class="draftbar hidden" style="margin-top:8px;flex-direction:column;align-items:stretch"></div>
     <div id="newCust" class="hidden"><label>New customer name <b>*</b></label><input id="newName" placeholder="Company name as it should print"></div>
     <div class="row"><div><label>Contact</label><input id="contact"></div><div><label>Phone <b>*</b></label><input id="phone" inputmode="tel" placeholder="734-555-1234" oninput="fmtPhone(this)"></div></div>
     <label>Email <b>*</b></label><input id="email" inputmode="email" placeholder="name@company.com"><div class="hint">This is how they get their tracker link and order updates. Leave it blank only for a walk-in — the job then lives in the staff console only.</div>
@@ -182,7 +183,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-28h</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-28i</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -481,8 +482,67 @@ function openPast(inv){   // 9/28 Shane: 'yes make the change' - a past order is
   totals(); saveDraft();
 }
 function showEditBar(o){
+  $('editBar').querySelector('button').textContent = 'Clear the copied lines';
   $('editMsg').innerHTML = 'Copied from <b>' + esc(o.inv) + '</b> (' + esc(o.date) + ') — this builds a <b>new invoice</b>. Check the quantities, set the due date. '
     + '<b>' + esc(o.inv) + '</b> itself is not touched.';
+  $('editBar').classList.remove('hidden');
+}
+// ---- LIVE ORDERS (9/28 Shane) ---------------------------------------------------------------------------------------
+// "only live orders on the invoicing tracking are able to be pulled up ... look by inv number ... once they are closed and
+// or cleared ... they are removed from this option." Read fresh from Orders Tracking (Active Orders) when a client is
+// picked. Edit = before production and not paid. Sent but not paid: cancel the Square invoice, the edit builds an R2
+// with its own new Square draft. A never-sent Square draft is replaced automatically.
+function liveCheck(v){
+  var box = $('liveBar'); box.classList.add('hidden'); box.innerHTML = '';
+  if(!v || v === '__new__' || typeof api !== 'function') return;
+  api('GET', { action: 'live', pin: PIN, name: v }).then(function(r){
+    if($('company').value !== v || !r || !r.ok || !(r.orders || []).length) return;
+    var h = document.createElement('div'); h.innerHTML = '<b>Live orders</b> <span class="hint">on Orders Tracking - edit one that is not paid or printing yet</span>'; box.appendChild(h);
+    r.orders.forEach(function(o){
+      var row = document.createElement('div'); row.style.cssText = 'display:flex;align-items:center;gap:10px;flex-wrap:wrap';
+      row.innerHTML = '<span style="flex:1"><b>' + esc(o.inv) + '</b> · ' + esc(o.status || 'no status') + (o.total ? ' · ' + money(Number(o.total)) : '') + (o.due ? ' · due ' + esc(o.due) : '')
+        + (o.editable ? '' : ' <span class="hint">- ' + esc(o.why) + ', changes go to Shane</span>') + '</span>';
+      if(o.editable){ var b = document.createElement('button'); b.type = 'button'; b.className = 'btn ghost dbtn'; b.textContent = 'Edit'; b.onclick = function(){ editLive(o); }; row.appendChild(b); }
+      box.appendChild(row);
+    });
+    box.classList.remove('hidden');
+  }).catch(function(){});
+}
+function editLive(lo){
+  var o = (CAT.orders || []).find(function(x){ return x.inv === lo.inv; });
+  if(!o){ alert(lo.inv + ' is not in the Pad yet (it refreshes a minute after each build). Try again shortly, or ask Shane.'); return; }
+  if(!confirm('Edit ' + lo.inv + '?\n\nSending replaces its invoice and work order' + (lo.sent ? '.\n\nIt was already SENT: cancel the Square invoice first (it is not paid), then send - the corrected one is built as a revision with a new Square draft.' : '. If it has a Square draft, the draft is replaced too.'))) return;
+  EDIT_OF = o; EDIT_OF._live = lo;
+  var low = function(x){ return String(x || '').toLowerCase().trim(); };
+  var lines = [].slice.call(document.querySelectorAll('#reorders .line'));
+  lines.forEach(function(l){ l.querySelector('input[data-i]').value = ''; });
+  $('newItems').innerHTML = ''; var added = 0;
+  o.rows.forEach(function(r){
+    var set = { pi: r.pi || '', fn: r.fn || '', cu: r.cu || '', w: r.w === 'Y' ? 'Y' : 'N', ap: r.ap === 'Y' ? 'Y' : 'N', mt: r.mt || '', gl: r.gl || '' };
+    var hit = lines.filter(function(l){ return low(l.dataset.sku) === low(r.sku) && (!r.vessel || !l.dataset.vessel || low(l.dataset.vessel) === low(r.vessel)); })[0];
+    if(hit){ hit.querySelector('input[data-i]').value = r.qty; var det = hit.closest('details'); if(det) det.open = true; var fb = hit.querySelector('.fin'); fb.classList.remove('hidden'); finSet(fb, set); whiteLock(hit); return; }
+    var d = addNewLine(); added++;
+    d.querySelector('.n').value = r.sku; d.querySelector('.q').value = r.qty;
+    if(r.unit) d.querySelector('.p').value = r.unit;
+    if(r.material) d.querySelector('.m').value = r.material;
+    if(r.lv !== undefined && r.lv !== null && r.lv !== '') d.querySelector('.t').value = Number(r.lv) === 0 ? 'Flat' : String(r.lv);
+    d.querySelector('.cu').value = set.cu; d.querySelector('.w').value = set.w; d.querySelector('.ap').value = set.ap; d.querySelector('.mt').value = set.mt; d.querySelector('.gl').value = set.gl;
+    finSet(d.querySelector('.fin'), { pi: set.pi, fn: set.fn });
+    var cell = d.querySelector('.vcell'), sel = cell.querySelector('.vsel'), inp = cell.querySelector('.vother');
+    if(r.vessel){ sel.value = r.vessel; if(sel.value !== r.vessel){ sel.classList.add('hidden'); inp.classList.remove('hidden'); } inp.value = r.vessel; }
+    whiteCheck(d.querySelector('.m'));
+  });
+  while(added < 4){ addNewLine(); added++; }
+  var iso = lo.due || (o.due ? mdyToISO(o.due) : ''); $('due').value = iso;
+  if(o.delivery) $('delivery').value = /ship/i.test(o.delivery) ? 'Ship' : /deliver/i.test(o.delivery) ? 'Deliver' : 'Pick Up';
+  showEditingBar();
+  window.scrollTo(0, 0); totals(); saveDraft();
+}
+function showEditingBar(){
+  var lo = EDIT_OF && EDIT_OF._live;
+  $('editMsg').innerHTML = 'Editing <b>' + esc(EDIT_OF.inv) + '</b>' + (lo && lo.status ? ' (' + esc(lo.status) + ')' : '') + ' — sending replaces its invoice and work order'
+    + (lo && lo.sent ? '. <b>It was already sent: cancel the Square invoice first</b> - the corrected one is a revision with a new Square draft.' : '; a Square draft is replaced too.');
+  $('editBar').querySelector('button').textContent = 'Stop editing';
   $('editBar').classList.remove('hidden');
 }
 function stopEditing(clearLines){
@@ -524,7 +584,7 @@ function resetForm(noAsk){   // 9/16 Shane: reset with an are-you-sure; keeps th
   document.querySelectorAll('.chip.on').forEach(function(c){ c.classList.remove('on'); });
   $('newItems').innerHTML = ''; addNewLine(); addNewLine(); addNewLine(); addNewLine(); $('result').classList.add('hidden'); $('result').innerHTML = '';
   $('submitBtn').disabled = false; $('submitBtn').textContent = 'Submit order'; finishOrder(); ppCalc(); designCalc(); termsPick(); totals(); window.scrollTo(0, 0);
-  stdNote(); NOSAVE = false; CUR_DRAFT = null; clientDraftHide(); offerDraft();
+  stdNote(); NOSAVE = false; CUR_DRAFT = null; clientDraftHide(); offerDraft(); EDIT_OF = null; $('editBar').classList.add('hidden'); $('liveBar').classList.add('hidden'); $('liveBar').innerHTML = '';
 }
 function openPicker(el){ try { if(el.showPicker) el.showPicker(); } catch(e){} }   // 9/16 Shane: tap anywhere on the date = calendar pops up
 function chips(group){ return [].map.call(document.querySelectorAll('.chips[data-group="' + group + '"] .chip.on'), function(c){ return c.dataset.v; }); }
@@ -537,6 +597,7 @@ function printSpecs(){
   // 9/25: cut is per line now (LINE CUT)
   var n = $('pressNotes') ? $('pressNotes').value.trim() : ''; if(n) L.push('NOTES: ' + n);   // box removed 9/25; kept for old drafts
   if($('orderType')) L.push('ORDER TYPE: ' + $('orderType').value);
+  if(me()) L.push('ORDER BY: ' + me());
   if($('rushLevel') && $('rushLevel').value) L.push('ORDER RUSH: ' + $('rushLevel').value);   // 24 or 48 - the builder adds the rush line
   // 9/25 Shane: white / matte / gloss / choke are per line now (each item's Print Instructions) - no ORDER PRESS line
   return L.join(String.fromCharCode(10));
@@ -753,7 +814,7 @@ function restoreDraft(id){
   else NOSAVE = false;
 }
 function hideSent(){ if($('sentBar')) $('sentBar').classList.add('hidden'); }
-function draftCheck(){ hideSent();   // 9/25 Shane: pick the client -> their recent draft is offered right there: finish it or delete it
+function draftCheck(){ hideSent(); liveCheck($('company').value);   // 9/25 Shane: pick the client -> their recent draft is offered right there: finish it or delete it
   CUR_DRAFT = null;
   var v = $('company').value, box = $('clientDraft'); box.classList.add('hidden'); box.innerHTML = '';
   if(!v || v === '__new__'){ offerDraft(); return; }
@@ -797,7 +858,13 @@ function applySnap(d){
     document.querySelectorAll('.chips[data-group="' + g + '"] .chip').forEach(function(c){
       c.classList.toggle('on', want.indexOf(c.dataset.v) >= 0); }); });
   var eo = d.edit && (CAT.orders || []).find(function(x){ return x.inv === d.edit; });
-  // 9/28: an old draft that was an edit comes back as a plain new order - the Pad never edits an invoice
+  if(d.edit && typeof api === 'function'){   // 9/28: a draft of an edit only edits if that order is STILL live + editable
+    api('GET', { action: 'live', pin: PIN, name: d.company }).then(function(r){
+      var lo = r && r.ok && (r.orders || []).find(function(x){ return x.inv === d.edit; }), o = (CAT.orders || []).find(function(x){ return x.inv === d.edit; });
+      if(lo && lo.editable && o){ EDIT_OF = o; EDIT_OF._live = lo; showEditingBar(); }
+      else { $('editMsg').innerHTML = 'This draft was an edit of <b>' + esc(d.edit) + '</b>, which can no longer be edited (' + esc(lo ? lo.why : 'not live') + ') - sending it makes a <b>new</b> order.'; $('editBar').classList.remove('hidden'); }
+    }).catch(function(){});
+  }
   finishOrder(); ppCalc(); designCalc(); termsPick(); totals();
 }
 document.addEventListener('input', function(e){ if(e.target.closest && e.target.closest('#app')) saveDraft(); });
@@ -827,7 +894,7 @@ function submit(){
     payment: $('payment').value, tax: $('tax').value, prepress: prepressLabel(), prepress_custom: $('prepressCustom').value.trim(),
     terms: $('terms').value, art_status: $('art').value, design_hrs: $('designHrs').value, design_rate: $('designRate').value.trim(), deposit: $('deposit').value, design_only: $('designOnly').checked,
     note: $('note').value.trim(), callouts: [printSpecs()].concat(lineFin).filter(Boolean).join(String.fromCharCode(10)), attach: chips('attach'), reorders: reorders, newItems: newItems,
-    edit_of: '', draft_id: CUR_DRAFT || '', who: me() };   // 9/28 Shane: the Pad never edits an existing invoice
+    edit_of: (EDIT_OF && EDIT_OF._live) ? EDIT_OF.inv : '', draft_id: CUR_DRAFT || '', who: me() };   // 9/28 Shane: only a LIVE order (not paid / printing) is ever edited
   newItems.forEach(function(o){ if(!o.unit){ var mp = menuPrice(o.vessel, o.material, o.texture); if(mp != null) o.unit = mp; } });   // the price shown is the price sent
   // 9/25: the same order sent twice (a retry, a double tap) must not become two orders - the id is made from its content
   (function(){ var j = JSON.stringify(Object.assign({}, payload, { pin: '' })), h = 5381; for(var i = 0; i < j.length; i++){ h = ((h << 5) + h + j.charCodeAt(i)) | 0; }
@@ -839,7 +906,7 @@ function submit(){
     if(r.ok){   // 9/28 Shane: once submitted, back to a fresh page - the confirmation sits at the top, the form is clean
       clearTimeout(dtimer); dropDraft();
       var _due = $('due').value ? new Date($('due').value + 'T12:00:00').toLocaleDateString([], { month: 'numeric', day: 'numeric' }) : '';
-      var _msg = '<span style="flex:1"><b>Order sent: ' + esc(company) + '</b>' + (_due ? ' · due ' + esc(_due) : '') + ' · est. ' + esc($('totAmt').textContent)
+      var _msg = '<span style="flex:1"><b>' + (EDIT_OF && EDIT_OF._live ? 'Edit sent: ' + esc(EDIT_OF.inv) : 'Order sent: ' + esc(company)) + '</b>' + (_due ? ' · due ' + esc(_due) : '') + ' · est. ' + esc($('totAmt').textContent)
                + '<br><span class="hint">The invoice and work order land in Monday in about 3 minutes.</span></span>'
                + '<a class="btn ghost dbtn" href="' + r.url + '" target="_blank">Open in Monday</a>'
                + '<button type="button" class="btn ghost dbtn" onclick="hideSent()">OK</button>';
