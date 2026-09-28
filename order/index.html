@@ -88,6 +88,7 @@
   <button type="button" class="minibtn" style="margin-top:6px" onclick="resetForm()" title="Clear everything typed and delete this order's draft">Reset</button>
   <h1>Order Pad</h1><div class="sub" id="cacheNote">Loading customers and items…</div>
   <div id="editBar" class="draftbar hidden" style="border-color:var(--pink)"><span id="editMsg"></span><button type="button" class="btn ghost dbtn" onclick="stopEditing(true)">Clear the copied lines</button></div>
+  <div id="sentBar" class="draftbar hidden" style="border-color:#1a7f37;background:#eaf6ec"></div>
   <div id="draftBar" class="draftbar hidden" style="flex-direction:column;align-items:stretch"></div>
 
   <div class="card">
@@ -181,7 +182,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-28a</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-28b</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -728,7 +729,8 @@ function restoreDraft(id){
   } else if(loc) apply(loc.d);
   else NOSAVE = false;
 }
-function draftCheck(){   // 9/25 Shane: pick the client -> their recent draft is offered right there: finish it or delete it
+function hideSent(){ if($('sentBar')) $('sentBar').classList.add('hidden'); }
+function draftCheck(){ hideSent();   // 9/25 Shane: pick the client -> their recent draft is offered right there: finish it or delete it
   CUR_DRAFT = null;
   var v = $('company').value, box = $('clientDraft'); box.classList.add('hidden'); box.innerHTML = '';
   if(!v || v === '__new__'){ offerDraft(); return; }
@@ -805,7 +807,15 @@ function submit(){
   api('POST', payload).then(function(r){
     $('submitBtn').disabled = false; $('submitBtn').textContent = 'Submit order';
     var box = $('result'); box.classList.remove('hidden');
-    if(r.ok){ clearTimeout(dtimer); NOSAVE = true; dropDraft(); box.innerHTML = '<h2 class="ok">' + (EDIT_OF ? 'Edit sent' : 'Order sent') + '</h2><p>' + esc(company) + (EDIT_OF ? ' — edits to <b>' + esc(EDIT_OF.inv) + '</b> are' : ' is') + ' on the intake board as <b>Ready to build</b>. The builder makes the invoice and work order next; Shane approves before anything goes to the customer.</p><p class="hint"><a href="' + r.url + '" target="_blank" style="color:var(--pink)">Open in Monday</a></p><br><button class="btn ghost" onclick="location.reload()">Start another order</button>'; window.scrollTo(0, document.body.scrollHeight); }
+    if(r.ok){   // 9/28 Shane: once submitted, back to a fresh page - the confirmation sits at the top, the form is clean
+      clearTimeout(dtimer); dropDraft();
+      var _due = $('due').value ? new Date($('due').value + 'T12:00:00').toLocaleDateString([], { month: 'numeric', day: 'numeric' }) : '';
+      var _msg = '<span style="flex:1"><b>Order sent: ' + esc(company) + '</b>' + (_due ? ' · due ' + esc(_due) : '') + ' · est. ' + esc($('totAmt').textContent)
+               + '<br><span class="hint">On the intake board as Ready to build - the builder makes the invoice and work order next.</span></span>'
+               + '<a class="btn ghost dbtn" href="' + r.url + '" target="_blank">Open in Monday</a>'
+               + '<button type="button" class="btn ghost dbtn" onclick="hideSent()">OK</button>';
+      resetForm(true); box.classList.add('hidden'); box.innerHTML = '';
+      $('sentBar').innerHTML = _msg; $('sentBar').classList.remove('hidden'); window.scrollTo(0, 0); }
     else { box.innerHTML = '<h2 class="warn">Not sent</h2><p>' + esc(r.error) + '</p>'; }
   }).catch(function(e){ $('submitBtn').disabled = false; $('submitBtn').textContent = 'Submit order'; alert('The Pad could not confirm this order was saved (' + e.message + ').\n\nIt may already be in Monday - check the intake board (or ask Shane) before sending it again. Sending the SAME order again is safe: it will not make a second copy.'); });
 }
