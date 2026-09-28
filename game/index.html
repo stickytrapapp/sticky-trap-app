@@ -85,14 +85,14 @@
 
   /* daily banner */
   .daily{display:flex;align-items:center;gap:10px;background:linear-gradient(120deg,rgba(255,31,162,.16),rgba(18,196,255,.10));
-    border:1px solid var(--line-2);border-radius:14px;padding:11px 13px;margin:10px 0 14px}
+    border:1px solid var(--line-2);border-radius:14px;padding:8px 13px;margin:8px 0 10px}
   .daily .dot{width:9px;height:9px;border-radius:50%;background:var(--mag);box-shadow:0 0 10px var(--mag);flex:none}
   .daily b{font-family:var(--fdisp);font-size:13px;letter-spacing:.04em}
   .daily small{display:block;color:var(--mut);font-size:11px;margin-top:1px}
   .daily .rst{margin-left:auto;font-family:var(--fmono);font-size:12px;color:var(--cyan)}
 
   /* game board */
-  .board{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;touch-action:manipulation}   /* 6 wide again with the timed board (2026-09-27); the JS writes this from COLS too */
+  .board{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;touch-action:manipulation;margin:0 auto}   /* 6 wide again with the timed board (2026-09-27); the JS writes this from COLS, and fitBoard() caps the width */
   .tile{aspect-ratio:1;border:none;padding:0;border-radius:8px;cursor:pointer;position:relative;
     transition:transform .12s ease, opacity .18s ease;outline:none}
   .tile::after{content:"";position:absolute;inset:22%;transform:rotate(45deg);border-radius:3px;
@@ -105,15 +105,12 @@
   .tile.pop{transform:scale(.2);opacity:0}
   .tile.sel{transform:scale(.9)}
 
-  .meters{display:flex;gap:10px;margin-top:14px}
-  .meter{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+  .meters{display:flex;gap:10px;margin-top:10px}
+  .meter{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:7px 12px}
   .meter .k{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--mut)}
-  .meter .v{font-family:var(--fmono);font-weight:700;font-size:19px;margin-top:3px}
+  .meter .v{font-family:var(--fmono);font-weight:700;font-size:18px;margin-top:2px}
   .meter .v.cy{color:var(--cyan)} .meter .v.go{color:var(--gold)}
 
-  .goalwrap{margin-top:12px}
-  .goalrow{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:var(--mut);margin-bottom:6px}
-  .goalrow b{color:var(--fg);font-family:var(--fmono)}
   .bar{height:9px;border-radius:999px;background:var(--panel-2);border:1px solid var(--line);overflow:hidden}
   .bar>i{display:block;height:100%;width:0;background:var(--grad);border-radius:999px;transition:width .45s cubic-bezier(.2,.9,.2,1)}
   .cap-note{margin-top:9px;font-size:11.5px;color:var(--mut-2);text-align:center}
@@ -395,10 +392,12 @@
     background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
   .res-par{font-size:12.5px;color:var(--good);margin-top:7px}
   .res-mile{margin:10px auto 0;display:inline-block;padding:6px 12px;border-radius:999px;background:rgba(255,31,162,.14);border:1px solid rgba(255,31,162,.5);color:#fff;font-size:12.5px;font-weight:700}
-  .goalstrip{display:flex;align-items:center;gap:8px;width:100%;margin:8px 0 0;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--mut);font:inherit;font-size:11.5px;cursor:pointer;text-align:left}
+  .goalstrip{display:flex;align-items:center;gap:8px;width:100%;margin:6px 0 0;padding:7px 10px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--mut);font:inherit;font-size:11.5px;cursor:pointer;text-align:left}
   .goalstrip b{color:var(--fg);font-family:var(--fmono)}.goalstrip .gs-l{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .goalstrip .gs-bar{flex:0 0 64px;height:6px;border-radius:999px;background:var(--panel-2);border:1px solid var(--line);overflow:hidden}.goalstrip .gs-bar i{display:block;height:100%;width:0;background:var(--grad);border-radius:999px}
   .goalstrip .gs-pct{font-family:var(--fdisp);font-weight:700;font-size:12px;color:var(--fg)}
+  .goalstrip .gs-pct .st-on{color:var(--gold)}
+  .goalstrip .gs-pct .st-off{color:var(--fg);opacity:.22}
   .risk{margin:8px 0 0;padding:8px 10px;border-radius:10px;background:rgba(255,31,162,.10);border:1px solid rgba(255,31,162,.45);color:#fff;font-size:12px;line-height:1.4}.risk b{font-family:var(--fmono)}
   .res-stats{display:flex;gap:8px;margin:16px 0}
   .res-stats>div{flex:1;background:var(--panel-2);border:1px solid var(--line);border-radius:11px;padding:9px 6px}
@@ -524,8 +523,8 @@
   .goal.done{border-color:var(--good)}.goal.done .g-pct{background:none;color:var(--good);-webkit-text-fill-color:var(--good)}
   .rw .tag.goal-tag{background:rgba(18,196,255,.14);color:var(--cy)}
   .pill.soon{color:var(--mut);border-color:var(--line-2)}
-  .modeseg{display:flex;gap:6px;margin:0 0 10px;padding:4px;border-radius:12px;background:var(--panel-2);border:1px solid var(--line)}
-  .modeseg button{flex:1;border:0;border-radius:9px;padding:8px 6px;background:transparent;color:var(--mut);font-family:var(--fdisp);font-weight:700;font-size:12px;letter-spacing:.04em;cursor:pointer}
+  .modeseg{display:flex;gap:6px;margin:0 0 8px;padding:3px;border-radius:12px;background:var(--panel-2);border:1px solid var(--line)}
+  .modeseg button{flex:1;border:0;border-radius:9px;padding:6px 6px;background:transparent;color:var(--mut);font-family:var(--fdisp);font-weight:700;font-size:12px;letter-spacing:.04em;cursor:pointer}
   .modeseg button.on{background:var(--grad);color:#0a0a0f}
   .modeseg button small{display:block;font-family:var(--fbody);font-weight:500;font-size:10px;letter-spacing:0;opacity:.85}
   .promo-card{margin:12px 0 0;padding:12px 14px;border-radius:14px;border:1px solid rgba(234,184,75,.45);background:linear-gradient(100deg,rgba(234,184,75,.14),rgba(255,31,162,.08));display:flex;gap:10px;align-items:center}
@@ -591,10 +590,6 @@
         <div class="meter"><div class="k">Time</div><div class="v go" id="time">60s</div></div>
       </div>
 
-      <div class="goalwrap">
-        <div class="goalrow"><span id="goallbl">Next star</span><span><b id="gcur">0</b> / <b id="parval">3,000</b></span></div>
-        <div class="bar"><i id="goalbar"></i></div>
-      </div>
       <div class="rules">
         <b>How to play</b>
         <ol>
@@ -842,6 +837,7 @@
     var id=t.dataset.t;
     screens.forEach(function(s){s.classList.toggle('on', s.id===id)});
     document.querySelector('.screens').scrollTop=0;
+    if(id==='play'){ try{ fitBoard(); }catch(e){} }   // the board can only be measured while its tab is showing
   })});
 
   // ---- points ----
@@ -886,6 +882,25 @@
   // an expert ~17k. Old ladder was 6,000 / 8,400 / 12,000 -> normal players scored NOTHING and fast tappers maxed it every time.
   var STAR=[3000,9000,18000], PAR=STAR[0];   // PAR = 1 star = 'par to beat' in free play
   var grid=[], board=document.getElementById('board');
+  var GAP=6;   // must match .board gap
+  // 2026-09-27: keep the star bar ON SCREEN. The board used to take the full width, which pushed the star row under the
+  // bottom tab bar on a 375x812 phone - the player spent the whole 60 s with no idea which star they were chasing.
+  // Here the board takes what is LEFT after the meters and the star row, so those stay visible on any phone.
+  function fitBoard(){
+    try{
+      var sc=document.querySelector('.screens'), wrap=board.parentElement, meters=document.querySelector('.meters');
+      if(!sc||!wrap||!meters||!wrap.clientWidth) return;          // hidden tab: nothing to measure
+      var top=wrap.getBoundingClientRect().top - sc.getBoundingClientRect().top;
+      var below=meters.offsetHeight + 24;                         // the meters' margin + a little breathing room
+      var tile=Math.floor((sc.clientHeight - top - below - (ROWS-1)*GAP)/ROWS);
+      var byWidth=Math.floor((wrap.clientWidth-(COLS-1)*GAP)/COLS);
+      tile=Math.max(34, Math.min(tile, byWidth, 56));             // 34 = still a tap target, 56 = no need to go bigger
+      board.style.maxWidth=(tile*COLS+(COLS-1)*GAP)+'px';
+    }catch(e){}
+  }
+  var _fitT=null;
+  window.addEventListener('resize',function(){ clearTimeout(_fitT); _fitT=setTimeout(fitBoard,120); });
+  window.addEventListener('orientationchange',function(){ setTimeout(fitBoard,300); });
   var dayNum=Math.floor(Date.now()/864e5);
   // ONE board a LOCAL day, same board for everyone (Shane 2026-09-23 'ok do 1'). The prizes in Rewards are priced off one board a day -
   // going back to 6-hour slots roughly quadruples the earn rate, so the shelf has to be repriced in the same change.
@@ -903,7 +918,7 @@
     dseed= MODE==='free' ? (FREE.seed>>>0||12345) : ((slotNum*2654435761)>>>0 || 12345);
     grid=[]; for(var r=0;r<ROWS;r++){grid.push([]); for(var c=0;c<COLS;c++)grid[r][c]=rcolor();}
     board.style.gridTemplateColumns='repeat('+COLS+',1fr)';   // never let the CSS grid and COLS drift apart again
-    draw();
+    fitBoard(); draw();
   }
   function riskCheck(){ var el=document.getElementById('riskNote'); if(!el) return; var d=Math.floor(Date.now()/864e5), h=new Date().getHours();
     var live=STREAK.last===d-1&&(STREAK.n||0)>=2&&!dayDone&&h>=17; el.hidden=!live; if(live) document.getElementById('riskN').textContent=STREAK.n; }
@@ -911,25 +926,38 @@
   function initDaily(){
     attempt=1; bestScore=0; dayScore=0; dayDone=false; timeLeft=TIME; bonusUsed=0; playing=false; combo=0;
     var pn=document.getElementById('pnum'); if(pn)pn.textContent='#'+trapNum;
-    var pv=document.getElementById('parval'); if(pv)pv.textContent=fmt(STAR[0]);
     var _d=null; try{_d=JSON.parse(localStorage.getItem('tp_daily')||'null');}catch(e){}
     if(_d && _d.day===slotNum){ dayDone=true; bestScore=_d.best||0; }
     setTimeout(riskCheck,0);
     rebuildBoard(); setStat(); showGate();
   }
+  // 2026-09-27: the strip above the board carries the star chase WHILE a try is running and the prize goal the rest of
+  // the time. Both callers go through here so neither has to know how the other left the markup.
+  function paintStrip(html, pct, txt){
+    var gs=document.getElementById('goalStrip'); if(!gs) return;
+    gs.hidden=false;
+    var l=gs.querySelector('.gs-l'); if(l) l.innerHTML=html;
+    var b=document.getElementById('gsBar'); if(b) b.style.width=pct+'%';
+    var p=document.getElementById('gsPct'); if(p) p.innerHTML=txt;   // the star chase passes markup (lit vs unlit stars)
+  }
   function setStat(){
     document.getElementById('score').textContent=fmt(dayScore);
     document.getElementById('time').textContent=timeLeft+'s';
     var a=document.getElementById('attN'); if(a)a.textContent=attempt;
+    var ni=document.getElementById('newin');
+    if(ni){ if(playing){ ni.textContent=timeLeft+'s'; ni.style.color= timeLeft<=10 ? 'var(--gold)' : ''; }
+            else { ni.style.color=''; try{ ni.textContent=nextIn(); }catch(e){} } }
+    if(!playing) return;   // between tries the strip belongs to the prize goal (renderGoal)
     var best= MODE==='free' ? dayScore : Math.max(bestScore,dayScore);
-    document.getElementById('gcur').textContent=fmt(best);
     // the bar chases the next star you have not got yet (was: a flat par, so most players watched a bar that never moved past 60%)
     var si=0; while(si<STAR.length&&best>=STAR[si]) si++;
-    var lbl=document.getElementById('goallbl'), pv2=document.getElementById('parval');
-    if(si>=STAR.length){ if(lbl)lbl.textContent='★★★ maxed'; if(pv2)pv2.textContent=fmt(STAR[STAR.length-1]);
-      document.getElementById('goalbar').style.width='100%'; }
-    else { if(lbl)lbl.textContent=(si===0?'First star':si===1?'Second star':'Third star'); if(pv2)pv2.textContent=fmt(STAR[si]);
-      var from=si?STAR[si-1]:0; document.getElementById('goalbar').style.width=Math.min(100,(best-from)/(STAR[si]-from)*100)+'%'; }
+    // the bar measures the CURRENT star band, so a percent next to '3,592 / 9,000' read like a contradiction (10% beside 40%).
+    // The right-hand slot shows the stars banked instead - the percentage is what the bar is already saying.
+    // filled stars throughout, the ones not won yet dimmed: a hollow \u2606 renders almost identically to \u2605 in this face
+    var got=''; for(var s=0;s<3;s++) got+='<span class="'+(s<si?'st-on':'st-off')+'">\u2605</span>';
+    if(si>=STAR.length){ paintStrip('<b>All three stars</b> \u00b7 <b>'+fmt(best)+'</b>', 100, got); return; }
+    var from=si?STAR[si-1]:0, p=Math.min(100,Math.round((best-from)/(STAR[si]-from)*100));
+    paintStrip((si===0?'First':si===1?'Second':'Third')+' star \u00b7 <b>'+fmt(best)+'</b> / '+fmt(STAR[si]), p, got);
   }
   /* 2026-09-23: one ranked board a day would leave the Play tab dead until tomorrow. When the daily is done the gate offers
      what still pays - free play, and the Earn actions that are worth real money to the shop (verify, refer) - plus the goal. */
@@ -952,6 +980,7 @@
   })();
   function showGate(){
     var g=document.getElementById('startGate'); if(!g)return; g.classList.remove('hide');
+    try{ window.__renderGoal&&window.__renderGoal(); }catch(e){}   // the try is over - the strip goes back to the prize goal
     showDoneNext(false);   // only a finished DAILY shows the 'keep earning' block
     var btn=document.getElementById('startBtn'), sub=document.getElementById('sgSub');
     if(MODE==='free'){ if(btn){btn.disabled=false; btn.classList.remove('done'); btn.textContent='\u25B6 Free play \u00b7 '+TIME+'s';}
@@ -1170,7 +1199,7 @@
   function nextIn(){ var d=new Date(), nowL=d.getTime()-d.getTimezoneOffset()*60000, endL=(Math.floor(nowL/(SLOT_HOURS*3600e3))+1)*SLOT_HOURS*3600e3, ms=Math.max(0,endL-nowL);
     var hr=Math.floor(ms/36e5), mn=Math.floor(ms%36e5/6e4); return (hr?hr+'h ':'')+mn+'m'; }
   function tickNew(){ var t=nextIn();
-    var a=document.getElementById('newin'); if(a)a.textContent=t; var b2=document.getElementById('rnewin'); if(b2)b2.textContent=t;
+    var a=document.getElementById('newin'); if(a&&!playing)a.textContent=t;   // during a try this slot is the countdown clock (setStat) var b2=document.getElementById('rnewin'); if(b2)b2.textContent=t;
     if(slotNow()!==slotNum && !playing){ slotNum=slotNow(); trapNum=slotNum-TRAP_BASE; if(MODE==='daily') initDaily(); }   // the board rolled over while the page was open
   }
   tickNew(); setInterval(tickNew,30000);
@@ -1265,7 +1294,7 @@
       '<div class="bar"><i style="width:'+pct+'%"></i></div>'+
       '<div class="g-foot"><span>'+(left>0?'<b>'+fmt(left)+'</b> to go · about <b>'+days+'</b> day'+(days===1?'':'s')+' at your pace':'<b>Ready.</b> Claim it below.')+'</span><button type="button" id="goalChange">Change</button></div>';
     var hint=document.getElementById('goalHint'); if(hint) hint.textContent=left>0?'every session moves the bar':'you did it';
-    var gs=document.getElementById('goalStrip'); if(gs){ gs.hidden=false; document.getElementById('gsLeft').textContent=left>0?fmt(left):'0'; document.getElementById('gsName').textContent=it.n; document.getElementById('gsBar').style.width=pct+'%'; document.getElementById('gsPct').textContent=left>0?pct+'%':'ready';
+    var gs=document.getElementById('goalStrip'); if(gs){ paintStrip('\u25c8 <b>'+(left>0?fmt(left):'0')+'</b> to go for <b>'+it.n+'</b>', pct, left>0?pct+'%':'ready');
       if(!gs._wired){ gs._wired=true; gs.addEventListener('click',function(){ document.querySelector('.tab[data-t="rewards"]').click(); }); } }
     el.querySelector('#goalChange').addEventListener('click',function(){ var n=(i+1)%CAT.length; setGoal(n); });
   }
