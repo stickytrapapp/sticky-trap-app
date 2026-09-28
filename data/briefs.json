@@ -1,64 +1,64 @@
 {
-  "updated": "2026-09-27",
+  "updated": "2026-09-28",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-09-27",
+      "date": "2026-09-28",
       "label": "Morning Brief",
-      "title": "Tax Fight Turns Political as Rescheduling and Psilocybin Data Light Up the Map",
-      "top": "Michigan operators are turning frustration over the 24% wholesale tax into leverage, with the GOP gubernatorial nominee now courting the industry's vote while new stores keep opening in Ann Arbor and Detroit. Nationally, Schedule III momentum and blockbuster psilocybin trial data are pulling capital and optimism back into plant-medicine markets.",
+      "title": "Michigan Cannabis Steadies as Federal Tailwinds Build",
+      "top": "Michigan's cannabis market is finding its footing after the 24% wholesale tax shock, with sales stabilizing, new stores opening, and a gubernatorial candidate now courting the industry with a repeal pledge. Nationally, courts just kept cannabis at Schedule III, Big Pharma is pouring billions into psychedelics, and MSOs are chasing cross-border deals — real momentum for operators to plan around.",
       "local": [
         {
-          "text": "GOP nominee courts cannabis industry with tax-cut pledge — MiCIA endorsed John James after he vowed to repeal the 24% wholesale tax and slash the excise rate from 10% to 5%, giving operators a real electoral path to relief this November.",
-          "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/news/republican-gubernatorial-candidate-courts-michigan-cannabis-industry-vows-to-kill-new-24-mj-tax/618038"
+          "text": "House of Dank opens 12th Michigan store in Ann Arbor — the Detroit-born chain is opening its 12th House of Dank location in Ann Arbor at 2730 Jackson Ave.",
+          "source": "House of Dank",
+          "url": "https://shophod.com/event/h-o-d-ann-arbor-opens/"
         },
         {
-          "text": "Michigan sold more weed than ever in 2025 — Retailers moved more product than any year since adult-use launch, proof demand keeps climbing even as the new wholesale tax squeezes margins.",
-          "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/news/new-24-wholesale-tax-continues-to-punish-michigan-cannabis/614903/"
+          "text": "Michigan cannabis sales top $17 billion since launch — Michigan has surpassed $17 billion in combined adult-use and medical marijuana sales since regulated sales began, with August generating approximately $259.09 million, pushing cumulative adult-use sales above $15.41 billion and medical sales above $1.63 billion.",
+          "source": "The Marijuana Herald",
+          "url": "https://themarijuanaherald.com/2026/09/daily-cannabis-news-brief-for-9-15-2026/"
         },
         {
-          "text": "Ann Arbor and Detroit keep adding storefronts — New Standard's Ann Arbor location and C3 Industries' High Profile Cannabis Detroit debut show operators are still betting on Southeast Michigan expansion.",
-          "source": "ClickOnDetroit",
-          "url": "https://www.clickondetroit.com/topic/Dispensary/"
+          "text": "Sales stabilize months after the 24% wholesale tax hit — by March, sales had climbed back to $255.4 million and held relatively steady through June at $253.5 million, per Headset data.",
+          "source": "Headset",
+          "url": "https://www.headset.io/blog/michigans-24-wholesale-tax-what-the-data-shows-july-2026-update"
         },
         {
-          "text": "Wholesale-tax trial date locked in for this fall — MiCIA's original constitutional challenge heads to trial in September even as a second lawsuit and a bipartisan repeal bill keep the pressure on Lansing.",
-          "source": "WWMT/UpNorthLive",
-          "url": "https://upnorthlive.com/news/michigan-politics/michigan-marijuana-industry-files-another-lawsuit-stop-wholesale-tax-legal-court-pot-weed-economy-business-wwmt"
+          "text": "GOP nominee vows to kill the wholesale tax — Republican John James is proposing to \"repeal or sharply reduce\" Michigan's new 24% wholesale tax on marijuana and courting industry donors as he competes to be Michigan's next governor.",
+          "source": "Bridge Michigan",
+          "url": "https://bridgemi.com/michigan-government/john-james-pitches-marijuana-tax-repeal-courts-industry-donors/"
         },
         {
-          "text": "Menominee could add four new dispensary licenses — A petition drive would raise the city's cap from nine stores to 13, opening fresh retail slots for operators eyeing the U.P.",
-          "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-091626/"
+          "text": "Jars Cannabis wins surveillance-camera fight in Madison Heights — the retail chain reached an agreement with city authorities to remove a Flock surveillance camera aimed at the store's parking lot entrance, and the camera came down pending City Council approval.",
+          "source": "MJBizDaily / cann.dev",
+          "url": "https://mjbizdaily.com/news/michigan-cannabis-store-wins-fight-over-flock-camera/617491/"
         }
       ],
       "national": [
         {
-          "text": "Schedule III process clears another procedural checkpoint — DEA's rescheduling review advanced in August with an NPRM expected before year-end, a shift that would gut 280E and cut effective tax rates from 60% toward the mid-20s for operators.",
-          "source": "CannIntel",
-          "url": "https://cannintel.com/laws/dea-cannabis-rescheduling-hits-key-milestone-august-2026"
+          "text": "Court keeps medical cannabis locked in at Schedule III — the D.C. Circuit Court declined to stay the rescheduling of medical marijuana, meaning it will remain Schedule III while a lawsuit from anti-marijuana groups proceeds.",
+          "source": "Mondaq / The Week In Weed",
+          "url": "https://www.mondaq.com/unitedstates/fiscal-monetary-policy/1847320/the-week-in-weed-september-18-2026"
         },
         {
-          "text": "Compass Pathways' psilocybin holds up at six months — COMP360 showed durable, clinically meaningful response in a second Phase 3 trial, keeping the company on track for an early-2027 commercial launch.",
-          "source": "Compass Pathways",
-          "url": "https://ir.compasspathways.com/News--Events-/news/news-details/2026/Compass-Pathways-Announces-Six-Month-Data-from-Second-Phase-3-Trial-Confirming-Rapid-and-Durable-Profile/default.aspx"
+          "text": "Compass Pathways closes in on an FDA decision — the company is in the midst of a rolling submission to the FDA for its psilocybin candidate COMP360, with analysts anticipating a possible approval by year end.",
+          "source": "BioSpace",
+          "url": "https://www.biospace.com/drug-development/deep-dive-psychedelics-back-on-fdas-doorstep"
         },
         {
-          "text": "Rescheduling is fueling a fresh M&A wave — Tilray's acquisition of the UK's Lyphe Group and Organigram's closed buyout of Germany's Sanity Group show North American operators racing into medical markets post-Schedule III.",
-          "source": "Business of Cannabis",
-          "url": "https://businessofcannabis.com/has-rescheduling-accelerated-the-cannabis-ma-wave/"
+          "text": "Eli Lilly bets big on psychedelics — the pharma giant provided \"the ultimate validation for the space this summer with the $3.8 billion acquisition of AtaiBeckley\".",
+          "source": "BioSpace",
+          "url": "https://www.biospace.com/drug-development/deep-dive-psychedelics-back-on-fdas-doorstep"
         },
         {
-          "text": "Teen cannabis use hits a record low, CDC data shows — The 2025 Youth Risk Behavior Survey found high-schooler use at its lowest point since tracking began, undercutting a favorite argument against legalization.",
-          "source": "CANNABIS Newsletter",
-          "url": "https://cannabisinsight420.substack.com/p/cannabis-newsletter-daily-roundup-e05"
+          "text": "Curaleaf chases cross-border MSO merger with Aurora — Curaleaf's US$4-per-share takeover bid, a 45% premium creating $1.5 billion-plus in pro forma revenue, signals major MSOs are now thinking cross-border.",
+          "source": "cann.dev",
+          "url": "https://www.cann.dev/cannabis-ma-august-2026-curaleaf-vireo-consolidation/"
         },
         {
-          "text": "Hemp businesses get a short runway on the looming ban — Congress granted a one-month reprieve on the intoxicating-hemp crackdown, buying operators time to adjust even as they push for clearer permanent rules.",
-          "source": "Cannabis Business Times",
-          "url": "https://www.cannabisbusinesstimes.com/"
+          "text": "Psychedelic sector pushes forward past Lykos shakeup — Lykos Therapeutics' CEO Amy Emerson stepped down following the FDA's MDMA rejection, but Compass Pathways and Definium Therapeutics are now leading the next wave of filings.",
+          "source": "pharmaphorum / BioSpace",
+          "url": "https://pharmaphorum.com/news/lykos-ceo-steps-down-after-mdma-rejected-fda"
         }
       ]
     }
