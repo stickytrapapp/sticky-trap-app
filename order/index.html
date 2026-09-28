@@ -36,7 +36,7 @@
   .stp{background:var(--soft);border:1px solid #c9c9d1;color:var(--ink);border-radius:10px;font-size:20px;padding:8px 0;cursor:pointer}
   .newline{display:grid;grid-template-columns:1fr;gap:6px;padding:10px 0;border-bottom:1px solid var(--line)}
   .newline .g{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
-  .newline .nlrow{display:grid;grid-template-columns:minmax(0,2fr) 66px 84px minmax(0,1.1fr) minmax(0,1.25fr) minmax(0,1fr) minmax(0,1.25fr) minmax(0,1.2fr) minmax(0,.9fr) 36px;gap:6px;align-items:end}
+  .newline .nlrow{display:grid;grid-template-columns:minmax(0,2fr) 66px 84px minmax(0,1.1fr) minmax(0,1.25fr) minmax(0,1fr) minmax(0,1.25fr) 58px 58px minmax(0,1fr) minmax(0,.9fr) 36px;gap:6px;align-items:end}
   .newline .nlrow>*{min-width:0} .newline .nlrow input,.newline .nlrow select{width:100%;min-width:0}
   .newline,.newline .nlrow{max-width:100%} #newItems{overflow-x:hidden}
   .newline input,.newline select{padding:9px 8px;font-size:15px}
@@ -182,7 +182,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-28g</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-28h</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -313,6 +313,8 @@ function finHTML(s, hidden){
   return '<div class="fin' + (hidden ? ' hidden' : '') + '">'
        + '<label style="flex:2 1 320px">Print Instructions <textarea class="fpi" rows="1" placeholder="exactly what the press should run" spellcheck="false" style="width:100%;min-height:34px;padding:6px 8px;font-size:14px"></textarea></label>'
        + (s ? '<label style="flex:0 1 150px">Cut <select class="cu" style="width:100%"><option value="">&mdash;</option><option>Contour cut</option><option>Die cut</option><option>On sheets</option></select></label>'
+              + '<label style="flex:0 1 96px">Matte <select class="mt" style="width:100%"><option value="">&mdash;</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option></select></label>'
+              + '<label style="flex:0 1 96px">Gloss <select class="gl" style="width:100%"><option value="">&mdash;</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option></select></label>'
               + '<label style="flex:0 1 130px">White ink <select class="w" style="width:100%"><option value="N">No</option><option value="Y">Yes</option></select></label>'
               + '<label style="flex:0 1 130px">Apply <select class="ap" style="width:100%"><option value="N">No</option><option value="Y">Yes</option></select></label>' : '')   // reorders: cut + white ink + apply in the line box
        + '<label style="flex:1 1 220px">File name <input class="ffn" placeholder="exactly as the file is named" autocomplete="off" autocapitalize="off" spellcheck="false" style="width:100%;text-align:left"></label>'
@@ -326,17 +328,25 @@ function finSet(box, f){
   if(f.cu !== undefined && f.cu !== null && box.querySelector('.cu')) box.querySelector('.cu').value = f.cu === 'Kiss-cut' ? 'Die cut' : f.cu === 'Individual' ? 'Contour cut' : f.cu;   // 9/28 Shane: Kiss-cut renamed Die cut
   if(f.w !== undefined && box.querySelector('.w') && !box.querySelector('.w').disabled) box.querySelector('.w').value = f.w === 'Y' ? 'Y' : 'N';
   if(f.ap !== undefined && box.querySelector('.ap')) box.querySelector('.ap').value = f.ap === 'Y' ? 'Y' : 'N';
+  if(f.mt !== undefined && box.querySelector('.mt')) box.querySelector('.mt').value = f.mt || '';
+  if(f.gl !== undefined && box.querySelector('.gl')) box.querySelector('.gl').value = f.gl || '';
 }
 // reorders say their white ink every time, so the Pad's choice (default No white) beats the SKU's history
+function layersLine(key, line){   // 9/28 Shane: matte + gloss layer counts per line - production sheet only
+  var m = line && line.querySelector('.mt'), g = line && line.querySelector('.gl'), o = {};
+  if(m && m.value) o.m = m.value; if(g && g.value) o.g = g.value;
+  return (o.m || o.g) ? 'LINE LAYERS: ' + JSON.stringify(Object.assign({ k: key }, o)) : null; }
 function applyLine(key, line){ var a = line && line.querySelector('.fin .ap'); return a ? 'LINE APPLY: ' + JSON.stringify({ k: key, a: a.value === 'Y' ? 'Y' : 'N' }) : null; }
 function whiteLine(key, line){ var w = line && line.querySelector('.fin .w'); return w ? 'LINE WHITE: ' + JSON.stringify({ k: key, w: w.value === 'Y' ? 'Y' : 'N' }) : null; }
 function cutLine(key, line){ var c = line && line.querySelector('.cu'); return c && c.value ? 'LINE CUT: ' + JSON.stringify({ k: key, c: c.value }) : null; }
 function finPrefill(box, s){   // 9/28 Shane: reprints carry their print instructions - copied exactly from the SKU's last order
-  if(!box || !s || !(s.pi || s.fn)) return;
+  if(!box || !s || !(s.pi || s.fn || s.mt || s.gl)) return;
   if(s.pi) box.querySelector('.fpi').value = s.pi;
   if(s.fn) box.querySelector('.ffn').value = s.fn;
+  if(s.mt && box.querySelector('.mt')) box.querySelector('.mt').value = s.mt;
+  if(s.gl && box.querySelector('.gl')) box.querySelector('.gl').value = s.gl;
   var h = document.createElement('div'); h.className = 'hint'; h.style.cssText = 'flex-basis:100%;margin:0';
-  h.textContent = 'Print instructions + file name from ' + (s.pi_from || 'the last order') + ' - check them, edit if this run is different.';
+  h.textContent = 'Print set-up from ' + (s.pi_from || 'the last order') + ' - check it, edit if this run is different.';
   box.appendChild(h);
 }
 function finLine(){}
@@ -348,8 +358,8 @@ function whiteCheck(el){ var d = el.closest('.newline'); if(!d) return; var w = 
   if(wv) w.value = 'N'; w.disabled = wv; w.title = wv ? 'White Vinyl never takes white ink' : 'White ink (under the CMYK)'; }
 function finOf(box){
   if(!box) return null;
-  var pi = box.querySelector('.fpi').value, fn = box.querySelector('.ffn').value, cb = box.querySelector('.cu'), cu = cb ? cb.value : '', wb = box.querySelector('.w'), w = wb && wb.value === 'Y' ? 'Y' : '', ab = box.querySelector('.ap'), ap = ab && ab.value === 'Y' ? 'Y' : '';
-  return (pi === '' && fn === '' && cu === '' && w === '' && ap === '') ? null : { pi: pi, fn: fn, cu: cu, w: w, ap: ap };
+  var pi = box.querySelector('.fpi').value, fn = box.querySelector('.ffn').value, cb = box.querySelector('.cu'), cu = cb ? cb.value : '', wb = box.querySelector('.w'), w = wb && wb.value === 'Y' ? 'Y' : '', ab = box.querySelector('.ap'), ap = ab && ab.value === 'Y' ? 'Y' : '', mb = box.querySelector('.mt'), gb = box.querySelector('.gl'), mt = mb ? mb.value : '', gl = gb ? gb.value : '';
+  return (pi === '' && fn === '' && cu === '' && w === '' && ap === '' && mt === '' && gl === '') ? null : { pi: pi, fn: fn, cu: cu, w: w, ap: ap, mt: mt, gl: gl };
 }
 function fileLine(key, box){ var v = box ? box.querySelector('.ffn').value : ''; return v === '' ? null : 'LINE FILE: ' + JSON.stringify({ k: key, f: v }); }
 function finLineText(key, f){ return (f && f.pi !== '') ? 'LINE PRINT: ' + JSON.stringify({ k: key, t: f.pi }) : null; }
@@ -391,6 +401,8 @@ function addNewLine(){
               + '</span>'
               + '<select class="cu" title="Cut"><option value="">Cut</option><option>Contour cut</option><option>Die cut</option><option>On sheets</option></select>'   // 9/25 Shane: cut per line, between vessel size and texture
               + '<select class="t"><option value="">Texture</option><option value="Flat">0 &middot; Flat</option><option value="1">1 &middot; Spot Gloss UV</option><option value="2">2 &middot; Standard</option><option value="3">3 &middot; Pro</option><option value="4">4 &middot; Ridge</option><option value="5">5 &middot; Summit</option><option value="6">6 &middot; Peak</option><option value="7">7 &middot; Apex</option><option value="8">8 &middot; Zenith</option></select>'
+              + '<span class="lcell"><span class="lt">Matte</span><select class="mt" title="Matte layers - production sheet only"><option value="">&mdash;</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option></select></span>'   // 9/28 Shane: in-house only
+              + '<span class="lcell"><span class="lt">Gloss</span><select class="gl" title="Gloss layers - production sheet only"><option value="">&mdash;</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option></select></span>'
               + '<span class="lcell"><span class="lt">White ink</span><select class="w" title="White ink (under the CMYK)" onchange="whiteCheck(this)"><option value="N">No</option><option value="Y">Yes</option></select></span>'   // 9/25 Shane
               + '<span class="lcell"><span class="lt">Apply</span><select class="ap" title="We apply the labels to the jars"><option value="N">No</option><option value="Y">Yes</option></select></span>'
               + '<button type="button" class="minus" title="Remove this line" onclick="delNewLine(this)">−</button></div>'
@@ -612,7 +624,7 @@ function draftSnap(){
   document.querySelectorAll('#newItems .newline').forEach(function(d){
     var o = { n: d.querySelector('.n').value, q: d.querySelector('.q').value, p: d.querySelector('.p').value,
               m: d.querySelector('.m').value, v: d.querySelector('.v').value, t: d.querySelector('.t').value,
-              ap: d.querySelector('.ap').value, w: d.querySelector('.w').value,
+              ap: d.querySelector('.ap').value, w: d.querySelector('.w').value, mt: d.querySelector('.mt').value, gl: d.querySelector('.gl').value,
               pi: d.querySelector('.fpi').value, fn: d.querySelector('.ffn').value, cu: d.querySelector('.cu').value };
     if(o.n || o.q || o.v) items.push(o); });
   var f = {}; DFIELDS.forEach(function(id){ if($(id)) f[id] = $(id).value; });
@@ -770,7 +782,7 @@ function applySnap(d){
     var row = addNewLine();
     row.querySelector('.n').value = o.n || ''; row.querySelector('.q').value = o.q || ''; row.querySelector('.p').value = o.p || '';
     row.querySelector('.m').value = o.m || ''; row.querySelector('.t').value = o.t || '';
-    row.querySelector('.ap').value = o.ap === 'Y' ? 'Y' : 'N'; row.querySelector('.w').value = o.w === 'Y' ? 'Y' : 'N'; whiteCheck(row.querySelector('.m'));
+    row.querySelector('.ap').value = o.ap === 'Y' ? 'Y' : 'N'; row.querySelector('.mt').value = o.mt || ''; row.querySelector('.gl').value = o.gl || ''; row.querySelector('.w').value = o.w === 'Y' ? 'Y' : 'N'; whiteCheck(row.querySelector('.m'));
     finSet(row.querySelector('.fin'), { pi: o.pi, fn: o.fn }); row.querySelector('.cu').value = o.cu === 'Kiss-cut' ? 'Die cut' : o.cu === 'Individual' ? 'Contour cut' : (o.cu || '');
     if(o.v){
       var sel = row.querySelector('.vsel');
@@ -797,8 +809,8 @@ function submit(){
   if(!company){ alert('Pick the company (or type the new customer name).'); return; }
   if(!$('due').value){ alert('Order due date is required.'); return; }
   if(!$('phone').value.trim()){ alert('Phone is required - every order starts with company, contact, phone and email.'); $('phone').focus(); return; }
-  var reorders = [], lineFin = []; document.querySelectorAll('#reorders .line').forEach(function(d){ var n = Number(d.querySelector('input[data-i]').value || 0); if(n > 0){ reorders.push({ title: d.dataset.title, qty: n }); var f = finOf(d.querySelector('.fin')); var _k = d.dataset.sku + (d.dataset.vessel ? ' @ ' + d.dataset.vessel : ''); if(f) lineFin.push(finLineText(_k, f)); var _fl = fileLine(_k, d.querySelector('.fin')); if(_fl) lineFin.push(_fl); var _cl = cutLine(_k, d); if(_cl) lineFin.push(_cl); var _wl = whiteLine(_k, d); if(_wl) lineFin.push(_wl); var _al = applyLine(_k, d); if(_al) lineFin.push(_al); } });
-  var newItems = []; document.querySelectorAll('#newItems .newline').forEach(function(d){ var n = Number(d.querySelector('.q').value || 0), nm = d.querySelector('.n').value.trim(); if(nm && n > 0){ newItems.push({ name: nm, qty: n, material: d.querySelector('.m').value, vessel: d.querySelector('.v').value.trim(), texture: d.querySelector('.t').value, unit: d.querySelector('.p').value, white_ink: d.querySelector('.m').value === 'White Vinyl' ? 'N' : d.querySelector('.w').value, apply: d.querySelector('.ap').value }); var f = finOf(d.querySelector('.fin')); var vv = d.querySelector('.v').value.trim(); var _k2 = nm + (vv ? ' @ ' + vv : ''); if(f) lineFin.push(finLineText(_k2, f)); var _fl2 = fileLine(_k2, d.querySelector('.fin')); if(_fl2) lineFin.push(_fl2); var _cl2 = cutLine(_k2, d); if(_cl2) lineFin.push(_cl2); } });
+  var reorders = [], lineFin = []; document.querySelectorAll('#reorders .line').forEach(function(d){ var n = Number(d.querySelector('input[data-i]').value || 0); if(n > 0){ reorders.push({ title: d.dataset.title, qty: n }); var f = finOf(d.querySelector('.fin')); var _k = d.dataset.sku + (d.dataset.vessel ? ' @ ' + d.dataset.vessel : ''); if(f) lineFin.push(finLineText(_k, f)); var _fl = fileLine(_k, d.querySelector('.fin')); if(_fl) lineFin.push(_fl); var _cl = cutLine(_k, d); if(_cl) lineFin.push(_cl); var _wl = whiteLine(_k, d); if(_wl) lineFin.push(_wl); var _al = applyLine(_k, d); if(_al) lineFin.push(_al); var _ll = layersLine(_k, d); if(_ll) lineFin.push(_ll); } });
+  var newItems = []; document.querySelectorAll('#newItems .newline').forEach(function(d){ var n = Number(d.querySelector('.q').value || 0), nm = d.querySelector('.n').value.trim(); if(nm && n > 0){ newItems.push({ name: nm, qty: n, material: d.querySelector('.m').value, vessel: d.querySelector('.v').value.trim(), texture: d.querySelector('.t').value, unit: d.querySelector('.p').value, white_ink: d.querySelector('.m').value === 'White Vinyl' ? 'N' : d.querySelector('.w').value, apply: d.querySelector('.ap').value }); var f = finOf(d.querySelector('.fin')); var vv = d.querySelector('.v').value.trim(); var _k2 = nm + (vv ? ' @ ' + vv : ''); if(f) lineFin.push(finLineText(_k2, f)); var _fl2 = fileLine(_k2, d.querySelector('.fin')); if(_fl2) lineFin.push(_fl2); var _cl2 = cutLine(_k2, d); if(_cl2) lineFin.push(_cl2); var _ll2 = layersLine(_k2, d); if(_ll2) lineFin.push(_ll2); } });
   if(!reorders.length && !newItems.length && !$('designOnly').checked){ alert('Set a quantity on at least one item.'); return; }
   // 9/28 (an order went out with no print instructions): text typed under a line with no item name or qty
   // would be dropped - stop and say so instead
