@@ -182,7 +182,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-28e</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-28f</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -815,7 +815,7 @@ function submit(){
       clearTimeout(dtimer); dropDraft();
       var _due = $('due').value ? new Date($('due').value + 'T12:00:00').toLocaleDateString([], { month: 'numeric', day: 'numeric' }) : '';
       var _msg = '<span style="flex:1"><b>Order sent: ' + esc(company) + '</b>' + (_due ? ' · due ' + esc(_due) : '') + ' · est. ' + esc($('totAmt').textContent)
-               + '<br><span class="hint">On the intake board as Ready to build - the builder makes the invoice and work order next.</span></span>'
+               + '<br><span class="hint">The invoice and work order land in Monday in about 3 minutes.</span></span>'
                + '<a class="btn ghost dbtn" href="' + r.url + '" target="_blank">Open in Monday</a>'
                + '<button type="button" class="btn ghost dbtn" onclick="hideSent()">OK</button>';
       resetForm(true); box.classList.add('hidden'); box.innerHTML = '';
