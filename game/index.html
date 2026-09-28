@@ -392,6 +392,26 @@
     background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
   .res-par{font-size:12.5px;color:var(--good);margin-top:7px}
   .res-mile{margin:10px auto 0;display:inline-block;padding:6px 12px;border-radius:999px;background:rgba(255,31,162,.14);border:1px solid rgba(255,31,162,.5);color:#fff;font-size:12.5px;font-weight:700}
+  /* ---- Your brand: the logo we print on their prize (2026-09-27) ---- */
+  .brandcard{padding:14px}
+  .bc-row{display:flex;align-items:center;gap:12px}
+  .bc-thumb{width:58px;height:58px;border-radius:12px;flex:none;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .bc-thumb img{max-width:100%;max-height:100%;display:block}
+  .bc-thumb.empty{background:var(--panel-2);border:1px dashed var(--line-2);color:var(--mut-2);font-size:20px}
+  .bc-tx{flex:1;min-width:0}
+  .bc-tx b{display:block;font-family:var(--fdisp);font-size:14px}
+  .bc-tx small{display:block;color:var(--mut);font-size:11.5px;margin-top:2px;overflow-wrap:anywhere}
+  .bc-btns{display:flex;gap:8px;margin-top:12px}
+  .bc-btns button{flex:1;padding:11px 10px;border-radius:11px;border:1px solid rgba(255,255,255,.14);background:#14141b;color:#fff;font:inherit;font-weight:800;font-size:13px;cursor:pointer}
+  .bc-btns button.go{background:var(--grad);color:#0a0a0f;border:0}
+  .bc-note{font-size:11px;color:var(--mut-2);margin-top:10px}
+  .bc-pill{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:999px;margin-top:5px}
+  .bc-pill.ok{background:rgba(18,196,255,.16);color:var(--cyan)}
+  .bc-pill.warn{background:rgba(234,184,75,.18);color:var(--gold)}
+  .bc-pill.bad{background:rgba(255,31,162,.18);color:var(--mag)}
+  .g-mock{margin:-2px 0 12px;border-radius:14px;overflow:hidden;background:#0b0b10;border:1px solid var(--line)}
+  .g-mock img{display:block;width:100%}
+  .g-mock .cap{font-size:11px;color:var(--mut-2);padding:7px 10px;border-top:1px solid var(--line)}
   .goalstrip{display:flex;align-items:center;gap:8px;width:100%;margin:6px 0 0;padding:7px 10px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--mut);font:inherit;font-size:11.5px;cursor:pointer;text-align:left}
   .goalstrip b{color:var(--fg);font-family:var(--fmono)}.goalstrip .gs-l{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .goalstrip .gs-bar{flex:0 0 64px;height:6px;border-radius:999px;background:var(--panel-2);border:1px solid var(--line);overflow:hidden}.goalstrip .gs-bar i{display:block;height:100%;width:0;background:var(--grad);border-radius:999px}
@@ -648,6 +668,10 @@
         <div class="expnote" id="expNote" hidden></div>
         <button class="scanbtn" id="verifyOpen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg> Verify your brand — order code + email</button>
       </div>
+
+      <div class="sec-h"><h3>Your brand</h3><span id="brandHint">the art we print</span></div>
+      <div class="card brandcard" id="brandCard"></div>
+      <input type="file" id="brandFile" hidden accept=".png,.jpg,.jpeg,.webp,.svg,.pdf,.ai,.eps,.tif,.tiff,.psd,image/*,application/pdf,application/postscript,image/svg+xml">
 
       <div class="sec-h"><h3>Your goal</h3><span id="goalHint">every session moves the bar</span></div>
       <div class="card goal" id="goalCard"></div>
@@ -1294,7 +1318,9 @@
   (function(){ var vb=document.getElementById('verifyBtn'), box=document.getElementById('verifyBox'), go=document.getElementById('vGo'), msg=document.getElementById('vMsg');
     if(vb) vb.addEventListener('click',function(){ box.hidden=!box.hidden; if(!box.hidden) document.getElementById('vCode').focus(); });
     if(go) go.addEventListener('click',function(){ var code=document.getElementById('vCode').value.trim().toUpperCase(), em=document.getElementById('vEmail').value.trim(); if(!code||!em){ msg.textContent='Both boxes, please.'; return; } msg.textContent='Checking…';
-      awardPost('verify',{code:code,email:em},go,msg).then(function(ok){ if(ok){ verified=true; try{ localStorage.setItem('tp_verified','1'); }catch(e){} updateTier(); renderShop(); } }); });
+      awardPost('verify',{code:code,email:em},go,msg).then(function(ok){ if(ok){ verified=true;
+        try{ localStorage.setItem('tp_verified','1'); localStorage.setItem('tp_email',em); }catch(e){}   // the shop already has this address; it rides along with the art
+        updateTier(); renderShop(); brandRender(); } }); });
     var rb=document.getElementById('reviewBtn'); if(rb) rb.addEventListener('click',function(){
       if(!rb._opened){ rb._opened=true; window.open('https://www.google.com/maps/search/?api=1&query=The+Sticky+Trap+Ann+Arbor+MI','_blank'); rb.querySelector('.tx small').innerHTML='Wrote it? <b style="color:var(--fg)">Tap again: I left it</b> · we spot-check <span id="reviewState"></span>'; return; }
       awardPost('review',{},rb,null).then(function(ok){ if(ok) rb.querySelector('.tx small').innerHTML='Thank you. <span class="pill cy">done</span>'; }); });
@@ -1309,11 +1335,192 @@
   function pace(){ var cut=Date.now()-14*864e5, sum=0, first=Date.now(); LEDGER.forEach(function(e){ if(e.pts>0&&e.ts>=cut){ sum+=e.pts; if(e.ts<first) first=e.ts; } });
     var days=Math.max(1,Math.min(14,Math.ceil((Date.now()-first)/864e5))); return sum>0?Math.max(5,sum/days):20; }
   function goalLine(){ var it=CAT[goalIdx()], left=Math.max(0,it.c-balance); return left>0 ? fmt(left)+' to go for '+it.n : it.n+' is ready to claim'; }
+  // ================= Your brand: one logo on file, per player (2026-09-27) =================
+  // The prize is THEIR branded goods, so a claim with no artwork stalls in someone's texts. A logo on file means the
+  // claim can go to press - and it earns its place on the screen before that by putting their art on the goal card.
+  // Upload path is the basket's, unchanged: base64 -> the Code.gs hub (Drive + shop email), 20 MB cap, email fallback.
+  function LIVE(){ return location.hostname==='thestickytrap.app'; }   // 2026-09-27: nothing local reaches the shop's Drive or inbox
+  var BRAND_MAXMB=20, BRAND=null;
+  try{ BRAND=JSON.parse(localStorage.getItem('tp_brand')||'null'); }catch(e){ BRAND=null; }
+  function brandSave(){ try{ BRAND?localStorage.setItem('tp_brand',JSON.stringify(BRAND)):localStorage.removeItem('tp_brand'); }catch(e){} }
+
+  // the basket's own store, so a brand logo and order art live in one place
+  var _bdb=null;
+  function bdb(){ if(_bdb) return _bdb; _bdb=new Promise(function(res,rej){ var r=indexedDB.open('st_art',1);
+      r.onupgradeneeded=function(){ var d=r.result; if(!d.objectStoreNames.contains('files')) d.createObjectStore('files'); };
+      r.onsuccess=function(){res(r.result);}; r.onerror=function(){rej(r.error);}; }); return _bdb; }
+  function brandKey(){ return 'brand:'+UID; }
+  function brandPut(f){ return bdb().then(function(d){ return new Promise(function(res,rej){ var tx=d.transaction('files','readwrite');
+      tx.objectStore('files').put(f,brandKey()); tx.oncomplete=function(){res(true);}; tx.onerror=function(){rej(tx.error);}; }); }); }
+  function brandGet(){ return bdb().then(function(d){ return new Promise(function(res){ var q=d.transaction('files','readonly').objectStore('files').get(brandKey());
+      q.onsuccess=function(){res(q.result||null);}; q.onerror=function(){res(null);}; }); }).catch(function(){ return null; }); }
+  function brandDel(){ return bdb().then(function(d){ return new Promise(function(res){ var tx=d.transaction('files','readwrite');
+      tx.objectStore('files').delete(brandKey()); tx.oncomplete=function(){res(true);}; tx.onerror=function(){res(false);}; }); }).catch(function(){ return false; }); }
+  function b64(f){ return new Promise(function(res,rej){ var r=new FileReader(); r.onload=function(){ res(String(r.result).split(',')[1]||''); }; r.onerror=rej; r.readAsDataURL(f); }); }
+
+  // preflight: the same three verdicts the basket and the bot already give, and it never blocks an upload
+  function brandPre(file){
+    return new Promise(function(res){
+      var ext=(file.name.split('.').pop()||'').toLowerCase();
+      if(/^(ai|eps|svg|pdf)$/.test(ext)) return res({vector:true,level:'ok',dpi:0,alpha:true,thumb:'',
+        say:ext.toUpperCase()+' \u00b7 vector, prints clean at any size'});
+      if(!/^(png|jpe?g|webp|gif|bmp)$/.test(ext)) return res({vector:false,level:'warn',dpi:0,alpha:false,thumb:'',
+        say:ext.toUpperCase()+' \u00b7 we can work with it, we will confirm at proof'});
+      var url=URL.createObjectURL(file), img=new Image();
+      img.onload=function(){
+        var w=img.naturalWidth, h=img.naturalHeight, dpi3=Math.round(Math.max(w,h)/3);   // a 3" slap is the biggest thing we print small art on
+        var c=document.createElement('canvas'), s=220/Math.max(w,h);
+        c.width=Math.max(1,Math.round(w*s)); c.height=Math.max(1,Math.round(h*s));
+        var x=c.getContext('2d'); x.drawImage(img,0,0,c.width,c.height);
+        var alpha=false; try{ var d=x.getImageData(0,0,c.width,c.height).data;
+          for(var i=3;i<d.length;i+=4*7){ if(d[i]<250){ alpha=true; break; } } }catch(e){}
+        var thumb=''; try{ thumb=c.toDataURL(alpha?'image/png':'image/jpeg',0.82); }catch(e){}
+        URL.revokeObjectURL(url);
+        var level= dpi3>=300?'ok' : dpi3>=150?'warn':'bad';
+        var say= level==='ok' ? (w+'\u00d7'+h+' px \u00b7 print ready up to 3"')
+               : level==='warn' ? (w+'\u00d7'+h+' px \u00b7 usable small, we will tidy it at proof')
+               : (w+'\u00d7'+h+' px \u00b7 too small for print - send a bigger export or the vector');
+        res({vector:false,level:level,dpi:dpi3,alpha:alpha,thumb:thumb,say:say});
+      };
+      img.onerror=function(){ URL.revokeObjectURL(url); res({vector:false,level:'warn',dpi:0,alpha:false,thumb:'',say:'we could not open it here - the shop will check it'}); };
+      img.src=url;
+    });
+  }
+
+  // ---- the die-cut render (Shane 2026-09-27, over a photo composite): their logo on the product's own shape and stock.
+  // The logo always sits on white or garment stock INSIDE the shape, never straight on the dark card - otherwise we would
+  // be showing a white logo on black, which is not a thing we print.
+  var MOCK={ slaps:{shape:'sticker',stock:'#ffffff',pad:.13}, lighters:{shape:'sleeve',stock:'#ffffff',pad:.12}, hoodie:{shape:'hoodie',stock:'#23232b',pad:.06} };
+  function rr(x,c,y,w,h,r){ x.beginPath(); x.moveTo(c+r,y); x.arcTo(c+w,y,c+w,y+h,r); x.arcTo(c+w,y+h,c,y+h,r); x.arcTo(c,y+h,c,y,r); x.arcTo(c,y,c+w,y,r); x.closePath(); }
+  function brandMock(imgKey,W,H){
+    if(!BRAND||!BRAND.thumb) return Promise.resolve('');
+    var m=MOCK[imgKey]||MOCK.slaps;
+    return new Promise(function(res){
+      var img=new Image();
+      img.onload=function(){
+        var c=document.createElement('canvas'); c.width=W; c.height=H; var x=c.getContext('2d');
+        x.fillStyle='#0b0b10'; x.fillRect(0,0,W,H);
+        var box;
+        if(m.shape==='sticker'){
+          var s=Math.min(W,H)*.88, sx=(W-s)/2, sy=(H-s)/2;
+          x.fillStyle=m.stock; rr(x,sx,sy,s,s,s*.22); x.fill();
+          x.strokeStyle='#FF1FA2'; x.lineWidth=2; x.setLineDash([6,4]);
+          rr(x,sx+4,sy+4,s-8,s-8,s*.20); x.stroke(); x.setLineDash([]);
+          box={x:sx,y:sy,w:s,h:s};
+        } else if(m.shape==='sleeve'){
+          var lw=Math.min(W,H)*.46, lh=H*.90, lx=(W-lw)/2, ly=(H-lh)/2;
+          x.fillStyle='#15151c'; rr(x,lx-6,ly-6,lw+12,lh+12,10); x.fill();          // the lighter under the wrap
+          x.fillStyle=m.stock; x.fillRect(lx,ly+lh*.14,lw,lh*.66);                   // the printed sleeve
+          x.strokeStyle='rgba(0,0,0,.18)'; x.lineWidth=1;
+          x.beginPath(); x.moveTo(lx,ly+lh*.14); x.lineTo(lx+lw,ly+lh*.14); x.moveTo(lx,ly+lh*.80); x.lineTo(lx+lw,ly+lh*.80); x.stroke();
+          box={x:lx,y:ly+lh*.14,w:lw,h:lh*.66};
+        } else {
+          var bw=Math.min(W,H)*.98, bh=bw*.82, bx=(W-bw)/2, by=(H-bh)/2+H*.03;
+          x.fillStyle=m.stock;
+          x.beginPath(); x.ellipse(bx+bw*.50,by+bh*.06,bw*.21,bh*.15,0,Math.PI,0); x.fill();   // the hood, behind the shoulders
+          rr(x,bx+bw*.16,by,bw*.68,bh,bw*.10); x.fill();                             // body
+          rr(x,bx,by+bh*.06,bw*.20,bh*.52,bw*.07); x.fill();                          // sleeves
+          rr(x,bx+bw*.80,by+bh*.06,bw*.20,bh*.52,bw*.07); x.fill();
+          x.fillStyle='#0b0b10'; x.beginPath(); x.ellipse(bx+bw*.50,by+bh*.02,bw*.13,bh*.07,0,0,Math.PI*2); x.fill();   // neck
+          box={x:bx+bw*.31,y:by+bh*.20,w:bw*.38,h:bh*.26};                            // chest: a real embroidery patch is wide and shallow
+        }
+        var pad=Math.min(box.w,box.h)*m.pad, aw=box.w-pad*2, ah=box.h-pad*2;   // inset off the SHORT side, or a wide box loses its middle
+        var k=Math.min(aw/img.naturalWidth, ah/img.naturalHeight);                    // contain: a logo is never cropped
+        var dw=img.naturalWidth*k, dh=img.naturalHeight*k;
+        x.drawImage(img, box.x+(box.w-dw)/2, box.y+(box.h-dh)/2, dw, dh);
+        try{ res(c.toDataURL('image/png')); }catch(e){ res(''); }
+      };
+      img.onerror=function(){ res(''); };
+      img.src=BRAND.thumb;
+    });
+  }
+
+  function brandRender(){
+    var el=document.getElementById('brandCard'); if(!el) return;
+    var hint=document.getElementById('brandHint');
+    if(!verified){
+      if(hint) hint.textContent='verify first';
+      el.innerHTML='<div class="bc-row"><div class="bc-thumb empty">\u25c8</div><div class="bc-tx"><b>Put your logo on these</b>'+
+        '<small>Verify your brand first \u2014 it pays <b style="color:var(--fg)">+500</b> and keeps the art queue real.</small></div></div>'+
+        '<div class="bc-btns"><button type="button" class="go" id="bcVerify">Verify your brand \u2192</button></div>';
+      var v=document.getElementById('bcVerify');
+      if(v) v.addEventListener('click',function(){ var tb=document.querySelector('.tab[data-t="earn"]'); if(tb) tb.click();
+        setTimeout(function(){ var b=document.getElementById('verifyBtn'); if(b) b.click(); },160); });
+      return;
+    }
+    if(hint) hint.textContent= BRAND?'on file':'so we can print it';
+    if(!BRAND){
+      el.innerHTML='<div class="bc-row"><div class="bc-thumb empty">+</div><div class="bc-tx"><b>Add your logo</b>'+
+        '<small>PNG, JPG or vector (AI, EPS, PDF, SVG). We check it free and keep it on file for your prize run.</small></div></div>'+
+        '<div class="bc-btns"><button type="button" class="go" id="bcAdd">Choose a file</button></div>'+
+        '<div class="bc-note">Send art you have the right to print.</div>';
+      var a=document.getElementById('bcAdd'); if(a) a.addEventListener('click',function(){ document.getElementById('brandFile').click(); });
+      return;
+    }
+    if(BRAND.busy){
+      el.innerHTML='<div class="bc-row"><div class="bc-thumb empty">\u2026</div><div class="bc-tx"><b>Sending to the shop</b><small>'+String(BRAND.name||'').slice(0,50)+'</small></div></div>';
+      return;
+    }
+    var pill= BRAND.level==='bad' ? '<span class="bc-pill bad">needs a bigger file</span>'
+            : BRAND.level==='warn' ? '<span class="bc-pill warn">we will tidy it</span>'
+            : '<span class="bc-pill ok">print ready</span>';
+    var thumb= BRAND.thumb ? '<img alt="" src="'+BRAND.thumb+'">' : '\u25c8';
+    el.innerHTML='<div class="bc-row"><div class="bc-thumb'+(BRAND.thumb?'':' empty')+'">'+thumb+'</div>'+
+      '<div class="bc-tx"><b>'+String(BRAND.name||'your logo').slice(0,42)+'</b><small>'+(BRAND.say||'')+'</small>'+pill+'</div></div>'+
+      (BRAND.tooBig?'<div class="bc-note" style="color:var(--gold)">Over '+BRAND_MAXMB+' MB, so it did not send. Email it to thestickytrap@gmail.com with your handle '+(handle||'')+'.</div>':'')+
+      '<div class="bc-btns"><button type="button" id="bcReplace">Replace</button><button type="button" id="bcRemove">Remove</button></div>'+
+      '<div class="bc-note">On file for your prize run. We never post it anywhere.</div>';
+    document.getElementById('bcReplace').addEventListener('click',function(){ document.getElementById('brandFile').click(); });
+    document.getElementById('bcRemove').addEventListener('click',function(){ BRAND=null; brandSave(); brandDel(); brandRender(); renderGoal(); toast('Logo removed.'); });
+  }
+
+  function brandUpload(file,pre){
+    var mb=(file.size||0)/1048576;
+    if(mb>BRAND_MAXMB){ BRAND.tooBig=true; BRAND.busy=false; brandSave(); brandRender(); return; }
+    if(!LIVE()){ BRAND.busy=false; BRAND.sent=Date.now(); BRAND.local=true; brandSave(); brandRender();
+      try{ console.log('[brand] local run - art not sent to the shop'); }catch(e){} return; }
+    b64(file).then(function(data){
+      var details='BRAND ART on file from Trap Points (the game)\nHandle: '+(handle||'?')+'\nFile: '+file.name+' ('+Math.round(file.size/1024)+' KB)\n'+
+        'Preflight: '+(pre.say||'')+(pre.vector?' [vector]':'')+(pre.alpha?' [transparent background]':'')+
+        '\nHold this for their prize run - it is not an order.';
+      var em=''; try{ em=localStorage.getItem('tp_email')||''; }catch(e){}
+      return fetch(CLAIM_API,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body:JSON.stringify({action:'quote',name:'BRAND ART: '+(handle||'player'),email:em,phone:'',details:details,basket:'',
+          files:[{name:file.name,mime:file.type||'application/octet-stream',b64:data}]})});
+    }).then(function(){ BRAND.busy=false; BRAND.sent=Date.now(); brandSave(); brandRender(); toast('Logo saved \u2014 we have it for your run.'); })
+      .catch(function(){ BRAND.busy=false; BRAND.failed=true; brandSave(); brandRender(); toast('Could not send it just now \u2014 it is saved on this phone, try Replace later.'); });
+  }
+
+  (function(){
+    var fi=document.getElementById('brandFile'); if(!fi) return;
+    fi.addEventListener('change',function(){
+      var f=fi.files&&fi.files[0]; fi.value=''; if(!f) return;
+      brandPre(f).then(function(pre){
+        BRAND={name:f.name,size:f.size,mime:f.type||'',thumb:pre.thumb||'',level:pre.level,say:pre.say,vector:!!pre.vector,alpha:!!pre.alpha,busy:true};
+        brandSave(); brandRender();
+        brandPut(f).catch(function(){});
+        brandUpload(f,pre);
+        renderGoal();
+        try{ window.track&&window.track('brand_art',f.name.slice(0,40)); }catch(e){}
+      });
+    });
+  })();
+
   function renderGoal(){ var el=document.getElementById('goalCard'); if(!el) return; var i=goalIdx(), it=CAT[i], left=Math.max(0,it.c-balance), pct=Math.min(100,Math.round(balance/it.c*100)), days=Math.ceil(left/pace());
     el.classList.toggle('done',left===0);
     el.innerHTML='<div class="g-top"><div class="thumb">'+(THUMB[it.img]||ICONS[it.t]||ICONS.Merch)+'</div><div class="g-tx"><b>'+it.n+'</b><small>'+it.d+' · ◈ '+fmt(it.c)+'</small></div><div class="g-pct">'+pct+'%</div></div>'+
       '<div class="bar"><i style="width:'+pct+'%"></i></div>'+
       '<div class="g-foot"><span>'+(left>0?'<b>'+fmt(left)+'</b> to go · about <b>'+days+'</b> day'+(days===1?'':'s')+' at your pace':'<b>Ready.</b> Claim it below.')+'</span><button type="button" id="goalChange">Change</button></div>';
+    // their logo on the thing they are saving for - the reason to add art before they can afford anything
+    renderGoal._n=(renderGoal._n||0)+1; var _n=renderGoal._n;
+    if(BRAND&&BRAND.thumb){ brandMock(it.img,560,300).then(function(src){ if(!src||renderGoal._n!==_n) return;
+        var g=document.getElementById('goalCard'); if(!g||goalIdx()!==i) return;
+        var old=g.querySelector('.g-mock'); if(old) old.remove();
+        var m=document.createElement('div'); m.className='g-mock';
+        m.innerHTML='<img alt="Your logo on '+it.n+'" src="'+src+'"><div class="cap">Your art on '+it.n+' · '+(left>0?fmt(left)+' to go':'ready to claim')+'</div>';
+        g.insertBefore(m,g.firstChild); }); }
+    else if(verified){ var nudge=document.createElement('div'); nudge.className='bc-note'; nudge.style.marginTop='8px';
+      nudge.textContent='Add your logo above to see it on the '+it.n.replace(/^\d+\s*/,'')+'.'; el.appendChild(nudge); }
     var hint=document.getElementById('goalHint'); if(hint) hint.textContent=left>0?'every session moves the bar':'you did it';
     var gs=document.getElementById('goalStrip'); if(gs){ paintStrip('\u25c8 <b>'+(left>0?fmt(left):'0')+'</b> to go for <b>'+it.n+'</b>', pct, left>0?pct+'%':'ready');
       if(!gs._wired){ gs._wired=true; gs.addEventListener('click',function(){ document.querySelector('.tab[data-t="rewards"]').click(); }); } }
@@ -1321,6 +1528,7 @@
   }
   window.__renderGoal=renderGoal;
   renderGoal();
+  brandRender();   // the slot renders its own state: locked until verified, then empty / on file
   var sheet=document.getElementById('redeemSheet'), sheetCard=document.getElementById('sheetCard');
   // Redeem = a real CLAIM: we capture the brand + contact, email it to the shop (main backend, same path as
   // quote requests), take the points off the ledger and show it as pending until the shop reaches out.
@@ -1335,6 +1543,8 @@
       '<input class="claim-in" id="cBrand" maxlength="60" placeholder="Brand / shop name" value="'+(LASTC.brand||'').replace(/"/g,'&quot;')+'">'+
       '<input class="claim-in" id="cEmail" type="email" maxlength="120" placeholder="Email" value="'+(LASTC.email||'').replace(/"/g,'&quot;')+'">'+
       '<input class="claim-in" id="cPhone" type="tel" maxlength="30" placeholder="Phone (optional)" value="'+(LASTC.phone||'').replace(/"/g,'&quot;')+'">'+
+      (BRAND?('<div class="sheet-row"><span>Your art</span><b style="color:var(--cyan)">'+String(BRAND.name||'on file').slice(0,26)+'</b></div>')
+            :('<div class="bc-note" style="margin:2px 0 8px">No logo on file yet — add one under <b>Your brand</b> and we can start the run without chasing you for art.</div>'))+
       '<div class="claim-err" id="cErr"></div>'+
       '<div class="sheet-row"><span>Cost</span><b>◈ '+fmt(it.c)+'</b></div>'+
       '<div class="sheet-row"><span>Balance after</span><b>◈ '+fmt(after)+'</b></div>'+(it.bonus?'<div class="sheet-row"><span>Bonus</span><b style="color:var(--gold)">'+it.bonus+'</b></div>':'')+
@@ -1351,7 +1561,15 @@
       var claim={ts:Date.now(),n:it.n,c:it.c,brand:brand,email:email,status:'pending',bonus:bonus,handle:handle};
       CLAIMS.push(claim); spend(it.c,'Claim: '+it.n);
       var details='PRIZE CLAIM from Trap Points (the game)\nHandle: '+handle+'\nPrize: '+it.n+' ('+it.d+') — '+fmt(it.c)+' pts'+(bonus?'\nBONUS HIT: '+it.bonus:'')+'\nBalance after: '+fmt(balance)+'\nVerified brand: '+(verified?'yes':'no')+'\nDays played: '+HIST.length+' · streak '+streakNow();
-      try{ fetch(CLAIM_API,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'quote',name:'PRIZE CLAIM: '+brand+' ('+handle+')',email:email,phone:phone,details:details,basket:'',files:[]})}).catch(function(){}); }catch(e){}
+      // 2026-09-27: the logo rides WITH the claim, which is the whole point of holding one - no chasing art afterwards
+      (BRAND?brandGet():Promise.resolve(null)).then(function(f){
+        return (f&&(f.size||0)/1048576<=BRAND_MAXMB) ? b64(f).then(function(d){ return [{name:f.name||BRAND.name,mime:f.type||'application/octet-stream',b64:d}]; }) : [];
+      }).catch(function(){ return []; }).then(function(files){
+        var det=details+(BRAND ? ('\nART ON FILE: '+BRAND.name+(files.length?' (attached)':' (sent earlier - look for "BRAND ART: '+handle+'")')+' \u00b7 preflight: '+(BRAND.say||''))
+                               : '\nNO ART ON FILE - ask them for it before pressing.');
+        if(!LIVE()){ try{ console.log('[claim] local run - not sent to the shop'); }catch(e){} return; }
+        try{ fetch(CLAIM_API,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'quote',name:'PRIZE CLAIM: '+brand+' ('+handle+')',email:email,phone:phone,details:det,basket:'',files:files})}).catch(function(){}); }catch(e){}
+      });
       sheet.classList.remove('open'); renderShop();
       if(bonus){ toast('🎁 Bonus hit! <b>'+it.n+'</b> <b>+ a 2nd</b> — claimed. We\'ll reach out to '+email+'.'); }
       else { toast('Claimed <b>'+it.n+'</b> — we\'ll reach out to '+email+' to set up your run.'); }
