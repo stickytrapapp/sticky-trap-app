@@ -523,6 +523,9 @@
   .goal.done{border-color:var(--good)}.goal.done .g-pct{background:none;color:var(--good);-webkit-text-fill-color:var(--good)}
   .rw .tag.goal-tag{background:rgba(18,196,255,.14);color:var(--cy)}
   .pill.soon{color:var(--mut);border-color:var(--line-2)}
+  /* 2026-09-27: a try in progress sheds the chrome it cannot use, so Score/Time stay above the tab bar on a short phone */
+  #play.hideseg .modeseg{display:none}
+  #play.compact .daily{display:none}
   .modeseg{display:flex;gap:6px;margin:0 0 8px;padding:3px;border-radius:12px;background:var(--panel-2);border:1px solid var(--line)}
   .modeseg button{flex:1;border:0;border-radius:9px;padding:6px 6px;background:transparent;color:var(--mut);font-family:var(--fdisp);font-weight:700;font-size:12px;letter-spacing:.04em;cursor:pointer}
   .modeseg button.on{background:var(--grad);color:#0a0a0f}
@@ -886,15 +889,29 @@
   // 2026-09-27: keep the star bar ON SCREEN. The board used to take the full width, which pushed the star row under the
   // bottom tab bar on a 375x812 phone - the player spent the whole 60 s with no idea which star they were chasing.
   // Here the board takes what is LEFT after the meters and the star row, so those stay visible on any phone.
+  var MIN_TILE=34, MAX_TILE=56;   // 34 = still a tap target, 56 = no reason to grow past it
   function fitBoard(){
     try{
-      var sc=document.querySelector('.screens'), wrap=board.parentElement, meters=document.querySelector('.meters');
-      if(!sc||!wrap||!meters||!wrap.clientWidth) return;          // hidden tab: nothing to measure
-      var top=wrap.getBoundingClientRect().top - sc.getBoundingClientRect().top;
-      var below=meters.offsetHeight + 24;                         // the meters' margin + a little breathing room
-      var tile=Math.floor((sc.clientHeight - top - below - (ROWS-1)*GAP)/ROWS);
+      var sc=document.querySelector('.screens'), wrap=board.parentElement, meters=document.querySelector('.meters'),
+          play=document.getElementById('play');
+      if(!sc||!wrap||!meters||!play||!wrap.clientWidth) return;   // hidden tab: nothing to measure
+      function measure(){
+        var top=wrap.getBoundingClientRect().top - sc.getBoundingClientRect().top;
+        return Math.floor((sc.clientHeight - top - (meters.offsetHeight+24) - (ROWS-1)*GAP)/ROWS);
+      }
+      var tile;
+      play.classList.remove('hideseg','compact');
+      tile=measure();
+      if(playing && tile<MIN_TILE){
+        // squeezed: first drop the mode switch (setMode refuses to switch mid-try, so it is a dead control right now)
+        play.classList.add('hideseg'); tile=measure();
+        if(tile<MIN_TILE){
+          // still squeezed: the Daily strip goes too, and the star strip takes over its clock (see setStat)
+          play.classList.add('compact'); tile=measure();
+        }
+      }
       var byWidth=Math.floor((wrap.clientWidth-(COLS-1)*GAP)/COLS);
-      tile=Math.max(34, Math.min(tile, byWidth, 56));             // 34 = still a tap target, 56 = no need to go bigger
+      tile=Math.max(MIN_TILE, Math.min(tile, byWidth, MAX_TILE));
       board.style.maxWidth=(tile*COLS+(COLS-1)*GAP)+'px';
     }catch(e){}
   }
@@ -955,6 +972,8 @@
     // The right-hand slot shows the stars banked instead - the percentage is what the bar is already saying.
     // filled stars throughout, the ones not won yet dimmed: a hollow \u2606 renders almost identically to \u2605 in this face
     var got=''; for(var s=0;s<3;s++) got+='<span class="'+(s<si?'st-on':'st-off')+'">\u2605</span>';
+    // compact = the Daily strip (and its clock) is hidden, so the clock takes this slot; the stars are on the result card anyway
+    if(document.getElementById('play').classList.contains('compact')) got='<span class="st-on">'+timeLeft+'s</span>';
     if(si>=STAR.length){ paintStrip('<b>All three stars</b> \u00b7 <b>'+fmt(best)+'</b>', 100, got); return; }
     var from=si?STAR[si-1]:0, p=Math.min(100,Math.round((best-from)/(STAR[si]-from)*100));
     paintStrip((si===0?'First':si===1?'Second':'Third')+' star \u00b7 <b>'+fmt(best)+'</b> / '+fmt(STAR[si]), p, got);
@@ -980,7 +999,9 @@
   })();
   function showGate(){
     var g=document.getElementById('startGate'); if(!g)return; g.classList.remove('hide');
-    try{ window.__renderGoal&&window.__renderGoal(); }catch(e){}   // the try is over - the strip goes back to the prize goal
+    document.getElementById('play').classList.remove('hideseg','compact');   // the try is over - the chrome comes back
+    try{ fitBoard(); }catch(e){}
+    try{ window.__renderGoal&&window.__renderGoal(); }catch(e){}   // ...and the strip goes back to the prize goal
     showDoneNext(false);   // only a finished DAILY shows the 'keep earning' block
     var btn=document.getElementById('startBtn'), sub=document.getElementById('sgSub');
     if(MODE==='free'){ if(btn){btn.disabled=false; btn.classList.remove('done'); btn.textContent='\u25B6 Free play \u00b7 '+TIME+'s';}
