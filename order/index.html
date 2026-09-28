@@ -87,7 +87,7 @@
 <div id="app" class="wrap hidden">
   <button type="button" class="minibtn" style="margin-top:6px" onclick="resetForm()" title="Clear everything typed and delete this order's draft">Reset</button>
   <h1>Order Pad</h1><div class="sub" id="cacheNote">Loading customers and items…</div>
-  <div id="editBar" class="draftbar hidden" style="border-color:var(--pink)"><span id="editMsg"></span><button type="button" class="btn ghost dbtn" onclick="stopEditing(true)">Start fresh instead</button></div>
+  <div id="editBar" class="draftbar hidden" style="border-color:var(--pink)"><span id="editMsg"></span><button type="button" class="btn ghost dbtn" onclick="stopEditing(true)">Clear the copied lines</button></div>
   <div id="draftBar" class="draftbar hidden" style="flex-direction:column;align-items:stretch"></div>
 
   <div class="card">
@@ -105,7 +105,7 @@
 
   <div class="card hidden" id="pastCard">
     <h2>Past orders <span class="pill" id="pastCount"></span></h2>
-    <div class="hint">Something need changing? Open the order, edit it, send it. The invoice and work order are rebuilt and replace the files on its line in Monday.</div>
+    <div class="hint">Reorder copies an order's lines into a new order - it builds as a new invoice. Changes to an invoice that was already made go to Shane.</div>
     <div id="pastList"></div>
   </div>
 
@@ -181,7 +181,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-25z</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-28a</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -412,7 +412,7 @@ function renderPast(name){
                    + '<div class="meta">' + esc(o.date) + (o.due ? ' &middot; due ' + esc(o.due) : '') + ' &middot; ' + money(o.total)
                    + '<br>' + esc(what) + '</div>';
     var btn = document.createElement('button');
-    btn.type = 'button'; btn.className = 'btn ghost dbtn openbtn'; btn.textContent = 'Open';
+    btn.type = 'button'; btn.className = 'btn ghost dbtn openbtn'; btn.textContent = 'Reorder';
     btn.onclick = function(){ openPast(o.inv); };
     d.appendChild(left); d.appendChild(btn);
     box.appendChild(d);
@@ -424,43 +424,41 @@ function mdyToISO(s){
   var y = Number(m[3]); if(y < 100) y += 2000;
   return y + '-' + ('0' + m[1]).slice(-2) + '-' + ('0' + m[2]).slice(-2);
 }
-function openPast(inv){
+function openPast(inv){   // 9/28 Shane: 'yes make the change' - a past order is a template for a NEW order, never an edit
   var o = (CAT.orders || []).find(function(x){ return x.inv === inv; });
   if(!o) return;
-  EDIT_OF = o;
-  $('newItems').innerHTML = '';
+  EDIT_OF = null;
+  var low = function(x){ return String(x || '').toLowerCase().trim(); };
+  var lines = [].slice.call(document.querySelectorAll('#reorders .line'));
+  $('newItems').innerHTML = ''; var added = 0;
   o.rows.forEach(function(r){
-    var d = addNewLine();
+    // the same SKU (and size) on the client's reorder list takes the quantity - it keeps its own price and history
+    var hit = lines.filter(function(l){ return low(l.dataset.sku) === low(r.sku) && (!r.vessel || !l.dataset.vessel || low(l.dataset.vessel) === low(r.vessel)); })[0];
+    if(hit){ hit.querySelector('input[data-i]').value = r.qty; var det = hit.closest('details'); if(det) det.open = true; hit.querySelector('.fin').classList.remove('hidden'); return; }
+    var d = addNewLine(); added++;
     d.querySelector('.n').value = r.sku;
     d.querySelector('.q').value = r.qty;
     if(r.unit) d.querySelector('.p').value = r.unit;
     if(r.material) d.querySelector('.m').value = r.material;
     if(r.raised) d.querySelector('.t').value = r.raised;
-    if(String(r.white_ink || '').toUpperCase().charAt(0) === 'Y') d.querySelector('.w').value = 'Y'; whiteCheck(d.querySelector('.m'));
+    whiteCheck(d.querySelector('.m'));
     var cell = d.querySelector('.vcell'), sel = cell.querySelector('.vsel'), inp = cell.querySelector('.vother');
     if(r.vessel){
       sel.value = r.vessel;
       if(sel.value !== r.vessel){ sel.classList.add('hidden'); inp.classList.remove('hidden'); }
       inp.value = r.vessel;
     }
-    // 9/24: the line's own finish if the old order carried one, else that SKU's recipe
-    finSet(d.querySelector('.fin'), { pi: r.print_instructions || '', fn: r.file_name || '' });   // the order's own entries only
   });
-  if(!o.rows.length) addNewLine();
-  var iso = o.due ? mdyToISO(o.due) : '', today = new Date().toISOString().slice(0, 10), stale = iso && iso < today;
-  $('due').value = stale ? '' : iso;
+  while(added < 4){ addNewLine(); added++; }
+  $('due').value = '';   // a new order needs its own due date
   if(o.delivery) $('delivery').value = /ship/i.test(o.delivery) ? 'Ship' : /deliver/i.test(o.delivery) ? 'Deliver' : 'Pick Up';
-  showEditBar(o, stale);
-  // 9/25 Shane ('pull up last orders gone'): the Past orders list stays up while editing, so another order is one tap away
+  showEditBar(o);
   window.scrollTo(0, 0);
   totals(); saveDraft();
 }
-function showEditBar(o, stale){
-  var sent = (o.status === 'Sent' || o.status === 'Paid');
-  $('editMsg').innerHTML = 'Editing <b>' + esc(o.inv) + '</b> (' + esc(o.date) + ')'
-    + (sent ? ' — this one has already gone out, so the edit is built as a <b>revision (R2)</b>. Cancel and reissue the Square invoice when you are ready.'
-            : ' — sending replaces the invoice and work order on its line in Monday.');
-  if(stale) $('editMsg').innerHTML += ' <b>Its due date (' + esc(o.due) + ') has passed — set a new one.</b>';
+function showEditBar(o){
+  $('editMsg').innerHTML = 'Copied from <b>' + esc(o.inv) + '</b> (' + esc(o.date) + ') — this builds a <b>new invoice</b>. Check the quantities, set the due date. '
+    + '<b>' + esc(o.inv) + '</b> itself is not touched.';
   $('editBar').classList.remove('hidden');
 }
 function stopEditing(clearLines){
@@ -774,7 +772,7 @@ function applySnap(d){
     document.querySelectorAll('.chips[data-group="' + g + '"] .chip').forEach(function(c){
       c.classList.toggle('on', want.indexOf(c.dataset.v) >= 0); }); });
   var eo = d.edit && (CAT.orders || []).find(function(x){ return x.inv === d.edit; });
-  if(eo){ EDIT_OF = eo; showEditBar(eo); }
+  // 9/28: an old draft that was an edit comes back as a plain new order - the Pad never edits an invoice
   finishOrder(); ppCalc(); designCalc(); termsPick(); totals();
 }
 document.addEventListener('input', function(e){ if(e.target.closest && e.target.closest('#app')) saveDraft(); });
@@ -798,7 +796,7 @@ function submit(){
     payment: $('payment').value, tax: $('tax').value, prepress: prepressLabel(), prepress_custom: $('prepressCustom').value.trim(),
     terms: $('terms').value, art_status: $('art').value, design_hrs: $('designHrs').value, design_rate: $('designRate').value.trim(), deposit: $('deposit').value, design_only: $('designOnly').checked,
     note: $('note').value.trim(), callouts: [printSpecs()].concat(lineFin).filter(Boolean).join(String.fromCharCode(10)), attach: chips('attach'), reorders: reorders, newItems: newItems,
-    edit_of: EDIT_OF ? EDIT_OF.inv : '', draft_id: CUR_DRAFT || '', who: me() };
+    edit_of: '', draft_id: CUR_DRAFT || '', who: me() };   // 9/28 Shane: the Pad never edits an existing invoice
   newItems.forEach(function(o){ if(!o.unit){ var mp = menuPrice(o.vessel, o.material, o.texture); if(mp != null) o.unit = mp; } });   // the price shown is the price sent
   // 9/25: the same order sent twice (a retry, a double tap) must not become two orders - the id is made from its content
   (function(){ var j = JSON.stringify(Object.assign({}, payload, { pin: '' })), h = 5381; for(var i = 0; i < j.length; i++){ h = ((h << 5) + h + j.charCodeAt(i)) | 0; }
