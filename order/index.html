@@ -182,7 +182,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-28b</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-28c</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -397,7 +397,11 @@ function pastFor(name){
   return (CAT && CAT.orders || []).filter(function(o){ return o.customer === name; })
     .sort(function(a,b){ return a.iso < b.iso ? 1 : a.iso > b.iso ? -1 : 0; });
 }
-function renderPast(name){
+function renderPast(name){   // 9/28 Shane: 'pulling previous invoices is not helpful, but all previous skus is' - the
+  // Past orders card is off; the Previously ordered SKU list carries every SKU with its last price + qty.
+  $('pastCard').classList.add('hidden'); $('pastList').innerHTML = ''; return;
+}
+function renderPastOld(name){
   var box = $('pastList'), list = name ? pastFor(name) : [];
   $('pastCount').textContent = list.length ? list.length + ' on file' : '';
   $('pastCard').classList.toggle('hidden', !list.length);
