@@ -182,7 +182,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-28d</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-28e</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -312,7 +312,7 @@ function pickCompany(){
 function finHTML(s, hidden){
   return '<div class="fin' + (hidden ? ' hidden' : '') + '">'
        + '<label style="flex:2 1 320px">Print Instructions <textarea class="fpi" rows="1" placeholder="exactly what the press should run" spellcheck="false" style="width:100%;min-height:34px;padding:6px 8px;font-size:14px"></textarea></label>'
-       + (s ? '<label style="flex:0 1 150px">Cut <select class="cu" style="width:100%"><option value="">&mdash;</option><option>Individual</option><option>Die cut</option><option>On sheets</option></select></label>'
+       + (s ? '<label style="flex:0 1 150px">Cut <select class="cu" style="width:100%"><option value="">&mdash;</option><option>Contour cut</option><option>Die cut</option><option>On sheets</option></select></label>'
               + '<label style="flex:0 1 130px">White ink <select class="w" style="width:100%"><option value="N">No</option><option value="Y">Yes</option></select></label>'
               + '<label style="flex:0 1 130px">Apply <select class="ap" style="width:100%"><option value="N">No</option><option value="Y">Yes</option></select></label>' : '')   // reorders: cut + white ink + apply in the line box
        + '<label style="flex:1 1 220px">File name <input class="ffn" placeholder="exactly as the file is named" autocomplete="off" autocapitalize="off" spellcheck="false" style="width:100%;text-align:left"></label>'
@@ -323,7 +323,7 @@ function finSet(box, f){
   if(!box || !f) return;
   if(f.pi !== undefined && f.pi !== null) box.querySelector('.fpi').value = f.pi;
   if(f.fn !== undefined && f.fn !== null) box.querySelector('.ffn').value = f.fn;
-  if(f.cu !== undefined && f.cu !== null && box.querySelector('.cu')) box.querySelector('.cu').value = f.cu === 'Kiss-cut' ? 'Die cut' : f.cu;   // 9/28 Shane: Kiss-cut renamed Die cut
+  if(f.cu !== undefined && f.cu !== null && box.querySelector('.cu')) box.querySelector('.cu').value = f.cu === 'Kiss-cut' ? 'Die cut' : f.cu === 'Individual' ? 'Contour cut' : f.cu;   // 9/28 Shane: Kiss-cut renamed Die cut
   if(f.w !== undefined && box.querySelector('.w') && !box.querySelector('.w').disabled) box.querySelector('.w').value = f.w === 'Y' ? 'Y' : 'N';
   if(f.ap !== undefined && box.querySelector('.ap')) box.querySelector('.ap').value = f.ap === 'Y' ? 'Y' : 'N';
 }
@@ -382,7 +382,7 @@ function addNewLine(){
               +   '<select class="vsel" onchange="vesselPick(this)">' + VESSELS + '</select>'
               +   '<input placeholder="type the size" class="v vother hidden" onblur="vesselBack(this)">'
               + '</span>'
-              + '<select class="cu" title="Cut"><option value="">Cut</option><option>Individual</option><option>Die cut</option><option>On sheets</option></select>'   // 9/25 Shane: cut per line, between vessel size and texture
+              + '<select class="cu" title="Cut"><option value="">Cut</option><option>Contour cut</option><option>Die cut</option><option>On sheets</option></select>'   // 9/25 Shane: cut per line, between vessel size and texture
               + '<select class="t"><option value="">Texture</option><option value="Flat">0 &middot; Flat</option><option value="1">1 &middot; Spot Gloss UV</option><option value="2">2 &middot; Standard</option><option value="3">3 &middot; Pro</option><option value="4">4 &middot; Ridge</option><option value="5">5 &middot; Summit</option><option value="6">6 &middot; Peak</option><option value="7">7 &middot; Apex</option><option value="8">8 &middot; Zenith</option></select>'
               + '<span class="lcell"><span class="lt">White ink</span><select class="w" title="White ink (under the CMYK)" onchange="whiteCheck(this)"><option value="N">No</option><option value="Y">Yes</option></select></span>'   // 9/25 Shane
               + '<span class="lcell"><span class="lt">Apply</span><select class="ap" title="We apply the labels to the jars"><option value="N">No</option><option value="Y">Yes</option></select></span>'
@@ -764,7 +764,7 @@ function applySnap(d){
     row.querySelector('.n').value = o.n || ''; row.querySelector('.q').value = o.q || ''; row.querySelector('.p').value = o.p || '';
     row.querySelector('.m').value = o.m || ''; row.querySelector('.t').value = o.t || '';
     row.querySelector('.ap').value = o.ap === 'Y' ? 'Y' : 'N'; row.querySelector('.w').value = o.w === 'Y' ? 'Y' : 'N'; whiteCheck(row.querySelector('.m'));
-    finSet(row.querySelector('.fin'), { pi: o.pi, fn: o.fn }); row.querySelector('.cu').value = o.cu === 'Kiss-cut' ? 'Die cut' : (o.cu || '');
+    finSet(row.querySelector('.fin'), { pi: o.pi, fn: o.fn }); row.querySelector('.cu').value = o.cu === 'Kiss-cut' ? 'Die cut' : o.cu === 'Individual' ? 'Contour cut' : (o.cu || '');
     if(o.v){
       var sel = row.querySelector('.vsel');
       if(VESSEL_LIST.indexOf(o.v) >= 0){ sel.value = o.v; vesselPick(sel); }
