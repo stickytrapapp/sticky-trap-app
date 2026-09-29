@@ -156,7 +156,7 @@
   <div class="card">
     <h2>Art &amp; design</h2>
     <div class="row">
-      <div><label>Art status</label><select id="art"><option>Have art</option><option>Need new art</option><option>Update existing</option></select></div>
+      <div><label>Art status</label><select id="art" onchange="totals()"><option>Have art</option><option>Need new art</option><option>Update existing</option></select></div>
       <div><label>&nbsp;</label><div class="hint" style="margin:0">Design bills as its own line on the invoice.</div></div>
     </div>
     <div class="dline">
@@ -167,7 +167,7 @@
     </div>
     <div class="row">
       <div><label>Terms</label><select id="terms" onchange="termsPick()"><option value="Paid in full">Paid in full</option><option value="Half down, half upon delivery">Half down, half upon delivery</option></select></div>
-      <div><label>Order type</label><select id="orderType" onchange="orderTypePick()"><option value="Print">Print</option><option value="Design">Design</option><option value="Print and design">Print and design</option></select>
+      <div><label>Order type</label><select id="orderType" onchange="this.dataset.touched = '1'; orderTypePick()"><option value="Reprint" selected>Reprint (no changes)</option><option value="Print">Print</option><option value="Design">Design</option><option value="Print and design">Print and design</option></select>
         <input type="checkbox" id="designOnly" class="hidden"></div>
     </div>
     <div class="row" id="depWrap" style="display:none">
@@ -184,7 +184,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-29f</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-29g</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -553,6 +553,7 @@ function editLive(lo, silent){
   if(o.pay) $('payment').value = o.pay;
   if(o.prepress !== undefined && o.prepress !== '') $('prepressCustom').value = o.prepress;
   if(o.note !== undefined) $('note').value = o.note;
+  if(o.jt){ $('orderType').value = o.jt; $('orderType').dataset.touched = '1'; orderTypePick(); }   // the order's own type
   ppCalc(); termsPick();
   showEditingBar();
   window.scrollTo(0, 0); totals(); editBaseline();
@@ -669,7 +670,7 @@ function resetForm(noAsk){   // 9/16 Shane: reset with an are-you-sure; keeps th
   document.querySelectorAll('.chip.on').forEach(function(c){ c.classList.remove('on'); });
   $('newItems').innerHTML = ''; addNewLine(); addNewLine(); addNewLine(); addNewLine(); $('result').classList.add('hidden'); $('result').innerHTML = '';
   $('submitBtn').disabled = false; $('submitBtn').textContent = 'Submit order'; finishOrder(); ppCalc(); designCalc(); termsPick(); totals(); window.scrollTo(0, 0);
-  stdNote(); NOSAVE = false; CUR_DRAFT = null; clientDraftHide(); offerDraft(); EDIT_OF = null; EDIT_PENDING = ''; $('editBar').classList.add('hidden'); $('liveBar').classList.add('hidden'); $('liveBar').innerHTML = '';
+  stdNote(); delete $('orderType').dataset.touched; NOSAVE = false; CUR_DRAFT = null; clientDraftHide(); offerDraft(); EDIT_OF = null; EDIT_PENDING = ''; $('editBar').classList.add('hidden'); $('liveBar').classList.add('hidden'); $('liveBar').innerHTML = '';
 }
 function openPicker(el){ try { if(el.showPicker) el.showPicker(); } catch(e){} }   // 9/16 Shane: tap anywhere on the date = calendar pops up
 function chips(group){ return [].map.call(document.querySelectorAll('.chips[data-group="' + group + '"] .chip.on'), function(c){ return c.dataset.v; }); }
@@ -694,6 +695,16 @@ function printSpecs(){
 }
 // 9/25 Shane: "need the option on the pad: print. design. print and design". Design = the old 'Design only' tick
 // (nothing printed, no work order); the choice rides to the builder as an ORDER TYPE call-out and fills Job Type on Monday.
+// 9/29 Shane ('yes add reprint to order type' / 'reprint is always yes until we click no'): Reprint (no changes) is the
+// default and goes straight to the print room at Paid. The Pad only moves off it when the order plainly is not one (a new
+// item -> Print; design hours or art to make -> Print and design), and never once the order type is picked by hand.
+function reprintAuto(){
+  var ot = $('orderType'); if(!ot || ot.dataset.touched) return;
+  var ne = [].some.call(document.querySelectorAll('#newItems .newline'), function(d){ return d.querySelector('.n').value.trim() && Number(d.querySelector('.q').value || 0) > 0; });
+  var dz = Number($('designHrs').value || 0) > 0 || /^(need|update)/i.test($('art').value);
+  var want = dz ? 'Print and design' : ne ? 'Print' : 'Reprint';   // 9/29 Shane: 'reprint is always yes until we click no'
+  if(ot.value !== want){ ot.value = want; orderTypePick(); }
+}
 function orderTypePick(){ $('designOnly').checked = ($('orderType').value === 'Design'); }
 function termsPick(){   // 9/22 Shane: terms = paid in full, or half down / half on delivery
   var half = $('terms').value.indexOf('Half') === 0;
@@ -740,6 +751,7 @@ function totals(){
   var _rp = RUSH_PCT[$('rushLevel') ? $('rushLevel').value : ''] || 0; if(_rp) a = a * (1 + _rp);   // 9/25 Shane: rush % on the total before tax
   $('totQty').textContent = q; $('totAmt').textContent = money(a) + (unknown ? '+' : '');
   if($('terms') && $('terms').value.indexOf('Half') === 0) termsPick();
+  reprintAuto();
   $('totNote').textContent = (unknown ? 'some new items priced by the builder' : 'before pre-press & tax') + (_rp ? ' · incl. ' + Math.round(_rp * 100) + '% rush' : '');
 }
 function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
@@ -923,7 +935,7 @@ function clientDraftHide(){ var b = $('clientDraft'); if(b){ b.classList.add('hi
 function applySnap(d){
   $('company').value = d.company; pickCompany();
   DFIELDS.forEach(function(id){ if($(id) && d.f && d.f[id] !== undefined) $(id).value = d.f[id]; });
-  $('designOnly').checked = !!d.designOnly; if(d.f && d.f.orderType) $('orderType').value = d.f.orderType; else if(d.designOnly) $('orderType').value = 'Design'; orderTypePick();
+  $('designOnly').checked = !!d.designOnly; if(d.f && d.f.orderType){ $('orderType').value = d.f.orderType; $('orderType').dataset.touched = '1'; } else if(d.designOnly) $('orderType').value = 'Design'; orderTypePick();
   document.querySelectorAll('#reorders .line').forEach(function(el){
     var q = d.reorders && d.reorders[el.dataset.title];
     el.querySelector('input[data-i]').value = q || '';
