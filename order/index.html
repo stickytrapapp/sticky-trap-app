@@ -184,7 +184,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-29h</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-29i</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -380,7 +380,7 @@ document.addEventListener('change', function(e){ var b = e.target.closest && e.t
 // spelled the way pricing_master spells them so the builder can price a new item straight off the menu.
 var VESSEL_LIST = ['3" Slap', '4" Slap', '4x5 Deli', 'o2 Standard', 'o2 Bucket', 'Pop Top', 'Tube 95 mm', 'Tube 65 mm',
                    'Miron 5 ml (Puck)', 'Miron 100 ml', 'Miron 150 ml', 'Miron 250 ml', 'Miron 500 ml',
-                   'Tip Band', 'Lighter Wrap (Bic)', 'Lighter + Wrap, applied'];   // 9/29 Shane: wrap only / we supply the lighter + apply
+                   'Tip Band', 'Lighter Wrap (Bic)', 'Lighter + Wrap, applied', 'Lighter + Wrap, applied (Blackout)'];   // 9/29 Shane: wrap only / we supply the lighter + apply
 var VESSELS = '<option value="">Vessel / size</option>'
             + VESSEL_LIST.map(function(v){ return '<option>' + v + '</option>'; }).join('')
             + '<option value="__other__">+ something else…</option>';
@@ -740,7 +740,8 @@ function menuPrice(vessel, material, texture){
   var table = /lighter/i.test(vessel) ? M.lighter : (M.access || {})[vessel];
   var row = table && mat && table[mat]; if(!(row && row[lvl] != null)) return null;
   // 9/29: 'Lighter + Wrap, applied' = the wrap price + the lighter-and-application add-on (pricing_master LIGHTER lighter_app)
-  return Number(row[lvl]) + (/applied/i.test(vessel) && M.lighter_app ? Number(M.lighter_app) : 0);
+  return Number(row[lvl]) + (/applied/i.test(vessel) && M.lighter_app ? Number(M.lighter_app) : 0)
+       + (/blackout/i.test(vessel) && M.blackout_up ? Number(M.blackout_up) : 0);   // 9/29 Shane: Blackout Edition lighter
 }
 var RUSH_PCT = { '24': 0.40, '48': 0.30 };   // 9/25 Shane: within 24 h = +40%, within 48 h = +30%, on the total before tax
 function totals(){
