@@ -1157,8 +1157,14 @@
   (function(){ var seg=document.getElementById('lbSeg'); if(!seg) return; seg.querySelectorAll('button').forEach(function(b){ b.addEventListener('click',function(){ seg.querySelectorAll('button').forEach(function(x){ x.classList.toggle('on',x===b); }); LB_PERIOD=b.dataset.p; lbCache=null;
     var ey=document.getElementById('lbEyebrow'); if(ey) ey.textContent=LB_PERIOD==='week'?'This week’s prize':'This month’s drop';
     var hero=document.querySelector('.drop-hero'); if(hero) hero.hidden=(LB_PERIOD==='week'); tickClock(); loadRanks(true); }); }); var hero=document.querySelector('.drop-hero'); if(hero) hero.hidden=true; })();
+  function isoWeekKey(d){ var t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));
+    t.setUTCDate(t.getUTCDate()+4-(t.getUTCDay()||7)); var y0=new Date(Date.UTC(t.getUTCFullYear(),0,1));
+    return t.getUTCFullYear()+'-W'+('0'+Math.ceil((((t-y0)/864e5)+1)/7)).slice(-2); }
   function renderLastWeek(j){ var el=document.getElementById('lastWeek'); if(!el) return; var lw=j.last_week;
     if(LB_PERIOD!=='week'){ el.hidden=true; return; }
+    // 2026-09-29: the backend's last_week was still stamped 2026-W38 in W40, so a fortnight-old winner sat there with an
+    // unclaimed prize. Only the week that actually just ended gets a banner; anything older is treated as no winner yet.
+    if(lw&&lw.week){ var prev=isoWeekKey(new Date(Date.now()-7*864e5)); if(lw.week!==prev) lw=null; }
     var head='<div class="sec-h" style="margin:0 0 6px"><h3>This week</h3><span>'+(j.prize||'12 branded slaps')+' to #1 · ends Sunday</span></div>';
     if(!lw){ el.hidden=false; el.innerHTML=head+'<div class="sub">First winner is crowned Monday. Top the ladder by Sunday night and a run of your own branded slaps is yours.</div>'; return; }
     var mine=!!lw.you_won||(handle&&lw.handle===handle);
@@ -1196,12 +1202,13 @@
       if(stale&&stale.j){ var n=document.getElementById('lbStale'); if(n){ n.hidden=false;
           n.textContent='Could not refresh just now \u2014 this is the board from '+(new Date(stale.ts)).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})+'.'; } return; }
       list.innerHTML='<div class="lb-empty">Couldn\u2019t reach the ladder \u2014 try again in a moment.</div>'; }
-    // 2026-09-24: the scores sheet still holds test rows and pre-9/22 scores from the old refilling board (thousands, against a finite
-    // board that tops out in the hundreds), so they outrank every real player. The backend purge is queued for the next bot session;
-    // until it lands the app simply refuses to show them. Delete this filter once the sheet is clean.
-    // 2026-09-27: the old score cap (2000, 'no finite board can score that') would now hide every real player - the timed
-    // board is back and one good try is 3,000-18,000. Handles are the only thing left that separates the test rows from brands.
-    var LB_JUNK=/^(AIMSTER|TESTER|TRAPGOD\d*|PUSHTEST|TEST\w*)$/i;
+    // 2026-09-24: the scores sheet still holds rows my own local testing posted, and they outranked real players. The backend
+    // purge is still queued for whoever picks up Chat.gs; until it lands the app refuses to show them. Delete this once the sheet is clean.
+    // 2026-09-27: a score cap came out - the timed board is back and one good try is 3,000-18,000, so a number can no longer tell
+    // a test row from a brand.
+    // 2026-09-29: AIMSTER came out too. Shane confirms a real player - 46,518 over two days this week on the live site - and the
+    // filter was hiding the only brand on the ladder, so the tab read 'No scores yet this week' to everyone.
+    var LB_JUNK=/^(TESTER|TRAPGOD\d*|PUSHTEST|TEST\w*)$/i;
     function lbClean(j){
       if(!j||!j.top) return j;
       var kept=j.top.filter(function(r){ return !LB_JUNK.test(String(r.handle||'')); });
