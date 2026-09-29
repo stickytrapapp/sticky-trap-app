@@ -184,7 +184,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-29j</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-29k</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -1002,6 +1002,10 @@ function submit(){
   if(noPrice.length && !confirm('No price for: ' + noPrice.join(', ') + '.\nAdd a price, or pick a vessel + material on the menu - otherwise the builder stops at Needs info.\n\nSend anyway?')) return;
   var _flatNo = [].filter.call(document.querySelectorAll('#newItems .newline'), function(d){ return d.querySelector('.pm').value === 'flat' && d.querySelector('.n').value.trim() && Number(d.querySelector('.q').value || 0) > 0 && d.querySelector('.p').value === ''; });
   if(_flatNo.length){ alert('A flat-total line has no total: ' + _flatNo[0].querySelector('.n').value + '. Type the line total in its price box.'); _flatNo[0].querySelector('.p').focus(); return; }   // 9/29
+  reprintAuto();   // 9/29: re-check the order type at Send (a box filled without a keystroke never ran it)
+  // 9/29 Shane: art to make with no design hours - say what will happen before it goes (it used to stop at Needs info)
+  if(/^(need|update)/i.test($('art').value) && !(Number($('designHrs').value || 0) > 0)
+     && !confirm('Art status is "' + $('art').value + '" but no design hours are entered.\n\nOK = bill it as "Design Time - hours TBD" (the hours get filled in later)\nCancel = go back and enter the hours')){ $('designHrs').focus(); return; }
   EDIT_SCOPE_SENT = '';
   if(EDIT_PENDING && !(EDIT_OF && EDIT_OF._live)){   // 9/29 review: never let an unconfirmed edit-draft go out as a second order by accident
     if(!confirm('This draft was an edit of ' + EDIT_PENDING + ', and the Pad has not confirmed it can still be edited.\n\nOK = send it as a NEW order (a new invoice)\nCancel = wait, or reopen ' + EDIT_PENDING + ' from Live orders')) return;
