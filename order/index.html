@@ -59,7 +59,8 @@
   .tot{font-size:14px;color:var(--muted)} .tot b{color:var(--ink);font-size:18px}
   .hint{font-size:12px;color:var(--muted);margin-top:6px}
   .ok{color:var(--ok)} .warn{color:var(--warn)}
-  .hidden{display:none !important}   /* 9/25: .draftbar (below) was overriding it - empty bars showed */
+  .hidden{display:none !important}
+  .chg{outline:2px solid #f2c200 !important;outline-offset:1px}   /* 9/29: a box changed in an edit */   /* 9/25: .draftbar (below) was overriding it - empty bars showed */
   .pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;background:var(--soft);border:1px solid var(--line);color:var(--muted);margin-left:6px}
   #gate{max-width:360px;margin:80px auto;text-align:center}
   .spin{color:var(--muted);font-size:14px}
@@ -87,7 +88,7 @@
 <div id="app" class="wrap hidden">
   <button type="button" class="minibtn" style="margin-top:6px" onclick="resetForm()" title="Clear everything typed and delete this order's draft">Reset</button>
   <h1>Order Pad</h1><div class="sub" id="cacheNote">Loading customers and items…</div>
-  <div id="editBar" class="draftbar hidden" style="border-color:var(--pink)"><span id="editMsg"></span><button type="button" class="btn ghost dbtn" onclick="stopEditing(true)">Clear the copied lines</button></div>
+  <div id="editBar" class="draftbar hidden" style="border-color:var(--pink)"><span id="editMsg" style="flex:1"></span><button type="button" class="btn ghost dbtn" id="putBackBtn" onclick="putItBack()">Put it back</button><button type="button" class="btn ghost dbtn" id="stopEditBtn" onclick="stopEditing(true)">Start fresh instead</button><div id="editChanges" style="flex-basis:100%"></div></div>
   <div id="sentBar" class="draftbar hidden" style="border-color:#1a7f37;background:#eaf6ec"></div>
   <div id="draftBar" class="draftbar hidden" style="flex-direction:column;align-items:stretch"></div>
 
@@ -183,7 +184,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-28i</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-29a</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -192,7 +193,7 @@
 </div>
 
 <script>
-var CAT = null, PIN = '', LINES = [], EDIT_OF = null;
+var CAT = null, PIN = '', LINES = [], EDIT_OF = null, EDIT_SCOPE_SENT = '';
 // 9/25 Shane: a standard note to clients, editable per order. The wording lives in Order Intake\client_note.txt -
 // make_order_page.py drops it in here. Change the file, rebuild, push: every new order starts with the new text.
 var STD_NOTE = "Thanks for the order. Look over everything on this invoice. We print exactly what's here. Questions or changes, call or text (734) 460-3845.";
@@ -482,7 +483,7 @@ function openPast(inv){   // 9/28 Shane: 'yes make the change' - a past order is
   totals(); saveDraft();
 }
 function showEditBar(o){
-  $('editBar').querySelector('button').textContent = 'Clear the copied lines';
+  $('stopEditBtn').textContent = 'Clear the copied lines'; $('putBackBtn').classList.add('hidden');
   $('editMsg').innerHTML = 'Copied from <b>' + esc(o.inv) + '</b> (' + esc(o.date) + ') — this builds a <b>new invoice</b>. Check the quantities, set the due date. '
     + '<b>' + esc(o.inv) + '</b> itself is not touched.';
   $('editBar').classList.remove('hidden');
@@ -497,21 +498,22 @@ function liveCheck(v){
   if(!v || v === '__new__' || typeof api !== 'function') return;
   api('GET', { action: 'live', pin: PIN, name: v }).then(function(r){
     if($('company').value !== v || !r || !r.ok || !(r.orders || []).length) return;
-    var h = document.createElement('div'); h.innerHTML = '<b>Live orders</b> <span class="hint">on Orders Tracking - edit one that is not paid or printing yet</span>'; box.appendChild(h);
+    var h = document.createElement('div'); h.innerHTML = '<b>Live orders</b> <span class="hint">on Orders Tracking</span>'; box.appendChild(h);
     r.orders.forEach(function(o){
       var row = document.createElement('div'); row.style.cssText = 'display:flex;align-items:center;gap:10px;flex-wrap:wrap';
       row.innerHTML = '<span style="flex:1"><b>' + esc(o.inv) + '</b> · ' + esc(o.status || 'no status') + (o.total ? ' · ' + money(Number(o.total)) : '') + (o.due ? ' · due ' + esc(o.due) : '')
-        + (o.editable ? '' : ' <span class="hint">- ' + esc(o.why) + ', changes go to Shane</span>') + '</span>';
-      if(o.editable){ var b = document.createElement('button'); b.type = 'button'; b.className = 'btn ghost dbtn'; b.textContent = 'Edit'; b.onclick = function(){ editLive(o); }; row.appendChild(b); }
+        + (!o.editable ? ' <span class="hint">- ' + esc(o.why) + ', changes go to Shane</span>' : o.prodOnly ? ' <span class="hint">- ' + esc(o.why) + ': production sheet edits only</span>' : '') + '</span>';
+      if(o.editable){ var b = document.createElement('button'); b.type = 'button'; b.className = 'btn ghost dbtn'; b.textContent = o.prodOnly ? 'Edit sheet' : 'Edit'; b.onclick = function(){ editLive(o); }; row.appendChild(b); }
       box.appendChild(row);
     });
     box.classList.remove('hidden');
   }).catch(function(){});
 }
-function editLive(lo){
+function editLive(lo, silent){
   var o = (CAT.orders || []).find(function(x){ return x.inv === lo.inv; });
   if(!o){ alert(lo.inv + ' is not in the Pad yet (it refreshes a minute after each build). Try again shortly, or ask Shane.'); return; }
-  if(!confirm('Edit ' + lo.inv + '?\n\nSending replaces its invoice and work order' + (lo.sent ? '.\n\nIt was already SENT: cancel the Square invoice first (it is not paid), then send - the corrected one is built as a revision with a new Square draft.' : '. If it has a Square draft, the draft is replaced too.'))) return;
+  if(!silent && !confirm('Edit ' + lo.inv + '?\n\n' + (lo.prodOnly ? 'It is ' + lo.why + ', so only its PRODUCTION SHEET can change (print instructions, file name, white ink, apply, matte, gloss).'
+        : 'Change what you need - the Pad works out whether that is the production sheet, the invoice, or both.' + (lo.sent ? '\n\nIt was already SENT: if the invoice changes, cancel the Square invoice first.' : '')))) return;
   EDIT_OF = o; EDIT_OF._live = lo;
   var low = function(x){ return String(x || '').toLowerCase().trim(); };
   var lines = [].slice.call(document.querySelectorAll('#reorders .line'));
@@ -536,17 +538,78 @@ function editLive(lo){
   var iso = lo.due || (o.due ? mdyToISO(o.due) : ''); $('due').value = iso;
   if(o.delivery) $('delivery').value = /ship/i.test(o.delivery) ? 'Ship' : /deliver/i.test(o.delivery) ? 'Deliver' : 'Pick Up';
   showEditingBar();
-  window.scrollTo(0, 0); totals(); saveDraft();
+  window.scrollTo(0, 0); totals(); editBaseline();
 }
 function showEditingBar(){
   var lo = EDIT_OF && EDIT_OF._live;
-  $('editMsg').innerHTML = 'Editing <b>' + esc(EDIT_OF.inv) + '</b>' + (lo && lo.status ? ' (' + esc(lo.status) + ')' : '') + ' — sending replaces its invoice and work order'
-    + (lo && lo.sent ? '. <b>It was already sent: cancel the Square invoice first</b> - the corrected one is a revision with a new Square draft.' : '; a Square draft is replaced too.');
-  $('editBar').querySelector('button').textContent = 'Stop editing';
+  $('editMsg').innerHTML = 'Editing <b>' + esc(EDIT_OF.inv) + '</b>' + (lo && lo.status ? ' (' + esc(lo.status) + ')' : '')
+    + (lo && lo.prodOnly ? ' — <b>production sheet only</b> (it is ' + esc(lo.why) + ')' : ' — changed boxes are outlined; Send says what it will update')
+    + (lo && lo.sent && !lo.prodOnly ? '. If the invoice changes, <b>cancel the Square invoice first</b>.' : '.');
+  $('stopEditBtn').textContent = 'Stop editing'; $('putBackBtn').classList.remove('hidden');
   $('editBar').classList.remove('hidden');
 }
+// ---- EDIT SCOPE (9/29 Shane: "i like auto detect but also want to account for usability") ---------------------------
+// What an edit touches is worked out from what was actually changed - never picked by hand:
+//   sheet   = only in-house boxes (print instructions, file name, white ink, apply, matte, gloss) -> production sheet only
+//   invoice = only money / client wording (price, client note, shipping, tax, payment, rush, deposit, pre-press, design)
+//   both    = anything both documents carry (an item, qty, material, vessel, texture, cut, due date, delivery)
+// Every box remembers its value when Edit loads the order; a changed box is outlined, listed in the bar, and the Send
+// button says what it will update. 'Put it back' reloads the order as it was.
+var SCOPE_SHEET = ['fpi', 'ffn', 'w', 'ap', 'mt', 'gl'];
+var SCOPE_INV_IDS = ['note', 'ship', 'tax', 'payment', 'rushLevel', 'deposit', 'prepressCustom', 'designHrs', 'designRate', 'terms', 'contact', 'email', 'phone', 'contact2', 'email2', 'phone2', 'art'];
+var FIELD_NAME = { fpi: 'Print instructions', ffn: 'File name', w: 'White ink', ap: 'Apply', mt: 'Matte', gl: 'Gloss', p: 'Price', q: 'Qty', n: 'Item', m: 'Material',
+                   vsel: 'Vessel', v: 'Vessel', t: 'Texture', cu: 'Cut', due: 'Due date', delivery: 'Delivery', note: 'Client note', ship: 'Shipping', tax: 'Tax',
+                   payment: 'Payment', rushLevel: 'Rush', deposit: 'Deposit', prepressCustom: 'Pre-press', designHrs: 'Design hours', designRate: 'Design rate', terms: 'Terms',
+                   contact: 'Contact', email: 'Email', phone: 'Phone', contact2: 'Second contact', email2: 'Their email', phone2: 'Their phone', art: 'Art status', orderType: 'Order type' };
+function editFields(){ return [].slice.call(document.querySelectorAll('#app input:not([type=hidden]):not(#who), #app select:not(#company), #app textarea')); }
+function editBaseline(){ editFields().forEach(function(el){ el.dataset.base = el.type === 'checkbox' ? String(el.checked) : el.value; el.classList.remove('chg'); }); editRefresh(); }
+function fieldKey(el){
+  var c = [].filter.call(el.classList, function(x){ return FIELD_NAME[x]; })[0];
+  return c || el.id || (el.dataset.i !== undefined ? 'q' : '');
+}
+function fieldScope(k){ return SCOPE_SHEET.indexOf(k) >= 0 ? 'sheet' : (SCOPE_INV_IDS.indexOf(k) >= 0 || k === 'p') ? 'invoice' : 'both'; }
+function lineName(el){
+  var l = el.closest('.line'), nl = el.closest('.newline');
+  if(l) return l.dataset.sku;
+  if(nl) return nl.querySelector('.n').value || nl.querySelector('.n').dataset.base || 'new line';
+  return '';
+}
+function editChanges(){
+  var out = [];
+  editFields().forEach(function(el){
+    if(el.dataset.base === undefined) return;
+    var now = el.type === 'checkbox' ? String(el.checked) : el.value;
+    var ch = now !== el.dataset.base; el.classList.toggle('chg', ch);
+    if(!ch) return;
+    var k = fieldKey(el); if(!k || (k === 'v' && el.classList.contains('hidden'))) return;   // the hidden size box mirrors the vessel pick
+    var nm = lineName(el), show = function(v){ return v === '' ? '(blank)' : v === 'N' ? 'No' : v === 'Y' ? 'Yes' : String(v).slice(0, 40); };
+    out.push({ scope: fieldScope(k), text: (nm ? nm + ': ' : '') + (FIELD_NAME[k] || k) + ' ' + show(el.dataset.base) + ' → ' + show(now) });
+  });
+  return out;
+}
+function editScope(ch){
+  if(!ch.length) return '';
+  var s = {}; ch.forEach(function(c){ s[c.scope] = 1; });
+  return s.both || (s.sheet && s.invoice) ? 'both' : s.sheet ? 'sheet' : 'invoice';
+}
+var SCOPE_LABEL = { sheet: 'Update production sheet', invoice: 'Update invoice', both: 'Update invoice + production sheet' };
+function editRefresh(){
+  var box = $('editChanges'), btn = $('submitBtn');
+  if(!(EDIT_OF && EDIT_OF._live)){ if(box) box.innerHTML = ''; return; }
+  var ch = editChanges(), sc = editScope(ch), lo = EDIT_OF._live, blocked = lo.prodOnly && sc && sc !== 'sheet';
+  box.innerHTML = !ch.length ? '<span class="hint">No changes yet - change a box and it is listed here.</span>'
+    : '<b>' + (blocked ? 'Not allowed: ' : 'This edit updates: ') + (sc === 'sheet' ? 'the production sheet only' : sc === 'invoice' ? 'the invoice only' : 'the invoice and the production sheet') + '</b>'
+      + (blocked ? ' <span style="color:#b00020">- ' + esc(EDIT_OF.inv) + ' is ' + esc(lo.why) + ', so only production sheet boxes can change. Put the others back.</span>' : '')
+      + '<br>' + ch.slice(0, 12).map(function(c){ return '<span class="hint">&bull; ' + esc(c.text) + ' <i>(' + (c.scope === 'sheet' ? 'sheet' : c.scope === 'invoice' ? 'invoice' : 'both') + ')</i></span>'; }).join('<br>')
+      + (ch.length > 12 ? '<br><span class="hint">+ ' + (ch.length - 12) + ' more</span>' : '');
+  btn.textContent = !ch.length ? 'No changes yet' : blocked ? 'Not allowed' : SCOPE_LABEL[sc];
+  btn.disabled = !ch.length || blocked;
+}
+function putItBack(){ if(EDIT_OF && EDIT_OF._live) editLive(EDIT_OF._live, true); }
 function stopEditing(clearLines){
   EDIT_OF = null;
+  editFields().forEach(function(el){ delete el.dataset.base; el.classList.remove('chg'); }); if($('editChanges')) $('editChanges').innerHTML = '';
+  $('submitBtn').disabled = false; $('submitBtn').textContent = 'Submit order';
   $('editBar').classList.add('hidden');
   if(clearLines){ $('newItems').innerHTML = ''; addNewLine(); addNewLine(); addNewLine(); addNewLine(); totals(); }
   renderPast($('company').value);
@@ -598,6 +661,7 @@ function printSpecs(){
   var n = $('pressNotes') ? $('pressNotes').value.trim() : ''; if(n) L.push('NOTES: ' + n);   // box removed 9/25; kept for old drafts
   if($('orderType')) L.push('ORDER TYPE: ' + $('orderType').value);
   if(me()) L.push('ORDER BY: ' + me());
+  if(EDIT_SCOPE_SENT) L.push('EDIT SCOPE: ' + EDIT_SCOPE_SENT);   // 9/29: prod | inv | both
   if($('rushLevel') && $('rushLevel').value) L.push('ORDER RUSH: ' + $('rushLevel').value);   // 24 or 48 - the builder adds the rush line
   // 9/25 Shane: white / matte / gloss / choke are per line now (each item's Print Instructions) - no ORDER PRESS line
   return L.join(String.fromCharCode(10));
@@ -867,8 +931,8 @@ function applySnap(d){
   }
   finishOrder(); ppCalc(); designCalc(); termsPick(); totals();
 }
-document.addEventListener('input', function(e){ if(e.target.closest && e.target.closest('#app')) saveDraft(); });
-document.addEventListener('change', function(e){ if(e.target.closest && e.target.closest('#app')) saveDraft(); });
+document.addEventListener('input', function(e){ if(e.target.closest && e.target.closest('#app')){ saveDraft(); if(EDIT_OF && EDIT_OF._live) editRefresh(); } });
+document.addEventListener('change', function(e){ if(e.target.closest && e.target.closest('#app')){ saveDraft(); if(EDIT_OF && EDIT_OF._live) editRefresh(); } });
 document.addEventListener('click', function(e){ if(e.target.closest && (e.target.closest('#app .chip') || e.target.closest('#app .minus') || e.target.closest('#app .plus'))) saveDraft(); });
 function submit(){
   var v = $('company').value, isNew = v === '__new__';
@@ -889,6 +953,17 @@ function submit(){
   var hist = (CAT && CAT.skus || []).filter(function(k){ return k.customer === company; }).map(function(k){ return String(k.sku).toLowerCase(); });
   var noPrice = newItems.filter(function(o){ return !o.unit && menuPrice(o.vessel, o.material, o.texture) == null && hist.indexOf(String(o.name).toLowerCase()) < 0; }).map(function(o){ return o.name; });
   if(noPrice.length && !confirm('No price for: ' + noPrice.join(', ') + '.\nAdd a price, or pick a vessel + material on the menu - otherwise the builder stops at Needs info.\n\nSend anyway?')) return;
+  EDIT_SCOPE_SENT = '';
+  if(EDIT_OF && EDIT_OF._live){   // 9/29: the edit's reach is worked out from what changed - and said out loud before it goes
+    var _ch = editChanges(), _sc = editScope(_ch), _lo = EDIT_OF._live;
+    if(!_sc){ alert('Nothing has changed on ' + EDIT_OF.inv + ' yet.'); return; }
+    if(_lo.prodOnly && _sc !== 'sheet'){ alert(EDIT_OF.inv + ' is ' + _lo.why + ' - only production sheet boxes can change. Use Put it back, or change only print instructions, file name, white ink, apply, matte or gloss.'); return; }
+    var _msgs = { sheet: 'Updating the PRODUCTION SHEET only.\nThe client\'s invoice, total and Square are not touched.',
+                  invoice: 'Updating the INVOICE only.\nThe production sheet stays as it is.' + (_lo.total ? ' The client\'s total was ' + money(Number(_lo.total)) + ' and is recalculated.' : ''),
+                  both: 'Updating the INVOICE and the PRODUCTION SHEET.' + (_lo.total ? '\nThe client\'s total was ' + money(Number(_lo.total)) + ' and is recalculated.' : '') };
+    if(!confirm(_msgs[_sc] + (_sc !== 'sheet' && _lo.sent ? '\n\nThis invoice was SENT - cancel it in Square first.' : '') + '\n\nChanges:\n' + _ch.slice(0, 8).map(function(c){ return '- ' + c.text; }).join('\n'))) return;
+    EDIT_SCOPE_SENT = _sc === 'sheet' ? 'prod' : _sc === 'invoice' ? 'inv' : 'both';
+  }
   var payload = { pin: PIN, company: company, newCustomer: isNew, contact: $('contact').value.trim(), email: $('email').value.trim(), phone: $('phone').value.trim(), contact2: $('contact2').value.trim(), email2: $('email2').value.trim(), phone2: $('phone2').value.trim(),
     due: $('due').value, delivery: $('delivery').value, ship_cost: $('ship').value, rush: $('rush').value.trim(),
     payment: $('payment').value, tax: $('tax').value, prepress: prepressLabel(), prepress_custom: $('prepressCustom').value.trim(),
