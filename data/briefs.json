@@ -5,60 +5,60 @@
     {
       "date": "2026-09-29",
       "label": "Morning Brief",
-      "title": "Trophies, Deals and a Court Win: Cannabis Momentum Builds From Pontiac to D.C.",
-      "top": "Michigan's cannabis scene closed out the week with hardware, headlines and a governor's race that's suddenly all about tax relief, even as the 24% wholesale tax keeps squeezing margins. Nationally, the mood is bullish: a federal court just protected marijuana rescheduling, Eli Lilly bought its way into psychedelics, and the first FDA-approved psilocybin drug is inching toward a 2027 launch.",
+      "title": "Michigan Growers Rack Up Trophies While D.C. and Lansing Both Bend Toward Relief",
+      "top": "Michigan's cultivators just took home the state's biggest cannabis trophies and posted a record sales year even as the 24% wholesale tax squeezes margins — and now a gubernatorial candidate is courting the industry with a repeal pledge. Nationally, psychedelics cleared a major FDA milestone and cannabis M&A is heating up, while medical marijuana's Schedule III move survived a court challenge — real momentum for operators willing to read past the tax headlines.",
       "local": [
         {
-          "text": "Mitten Canna, Hytek crowned Michigan's cannabis champs — Mitten Canna Co.'s Toad Venom took best overall flower and Hytek's Oishii Piña won best overall rosin at the fifth annual Zalympix, announced at the Crofoot in Pontiac.",
+          "text": "Mitten Canna Co. and Hytek sweep Michigan's 'Grammys of Cannabis'",
           "source": "Detroit Metro Times",
           "url": "https://www.metrotimes.com/weed-2/michigans-best-flower-and-live-rosin-crowned-at-2026-zalympix/"
         },
         {
-          "text": "Jars Cannabis clears a path in Madison Heights — the 54-store chain reached a deal to remove a Flock surveillance camera that had been aimed at its parking lot, closing out a lingering condition from a 2022 licensing lawsuit settlement.",
-          "source": "cann.dev",
-          "url": "https://www.cann.dev/michigan-cannabis-wholesale-tax-2026-2/"
+          "text": "Michigan consumers keep buying despite price chaos",
+          "source": "Crain's Detroit Business",
+          "url": "https://www.crainsdetroit.com/cannabis/michigan-sold-more-weed-ever-2025"
         },
         {
-          "text": "Tax relief becomes a 2026 campaign flashpoint — State Sen. Jeff Irwin is warning the industry not to trust GOP gubernatorial candidate John James, whom top cannabis executives recently endorsed over his pledge to cut the 24% wholesale weed tax.",
-          "source": "The Gander",
+          "text": "GOP nominee John James pledges to kill the 24% tax",
+          "source": "Hoodline",
+          "url": "https://hoodline.com/2026/09/john-james-woos-michigan-weed-donors-with-vow-to-kill-24-pot-tax/"
+        },
+        {
+          "text": "Brands roll out Halloween drops as Q4 push begins",
+          "source": "Gander Newsroom",
           "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092826/"
         },
         {
-          "text": "Menominee voters could add four dispensary licenses — a ballot measure this week asks whether to raise the city's cap from nine stores to 13, a year after the original cap touched off a wave of licensing lawsuits.",
-          "source": "The Gander",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092826/"
-        },
-        {
-          "text": "Distressed cannabis real estate is going cheap — at least 50 Michigan cannabis properties are now listed for sale or lease, with brokers reporting deals closing at 20 to 30 cents on the dollar, an opening for well-capitalized operators to expand.",
-          "source": "The Gander (via Crain's Detroit Business)",
+          "text": "50+ grow facilities up for sale at 20-30 cents on the dollar",
+          "source": "Gander Newsroom",
           "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092826/"
         }
       ],
       "national": [
         {
-          "text": "Federal court keeps marijuana rescheduling on track — the D.C. Circuit rejected a challenge to the medical-marijuana Schedule III shift on Sept. 9, leaving the reclassification in effect as the DEA's broader recreational rescheduling case remains pending.",
+          "text": "Curaleaf fires $270M shot at Aurora as Vireo chases 270 doors",
+          "source": "Cann.dev",
+          "url": "https://www.cann.dev/cannabis-ma-september-2026-curaleaf-vireo-consolidation/"
+        },
+        {
+          "text": "FDA's landmark hearing draws 18,000 registrants on psychedelics",
+          "source": "Foley Hoag",
+          "url": "https://foleyhoag.com/news-and-insights/publications/alerts-and-updates/2026/september/fda-holds-landmark-public-hearing-on-the-future-therapeutic-use-of-psychedelic-drugs/"
+        },
+        {
+          "text": "Eli Lilly closes AtaiBeckley buy, inherits psilocybin pipeline",
+          "source": "Clinical Trial Vanguard",
+          "url": "https://www.clinicaltrialvanguard.com/article/psych-pulse/what-the-fdas-new-psychedelic-framework-actually-means-for-the-clinic/"
+        },
+        {
+          "text": "Appeals court leaves medical marijuana's Schedule III move intact",
           "source": "Cannabis Business Times",
           "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15834706/where-are-we-on-cannabis-rescheduling-its-been-months-since-the-us-attorney-generals-april-2026-order"
         },
         {
-          "text": "FDA lays groundwork for psychedelic drug approvals — the agency's new September framework reshapes trial design and safety requirements for psilocybin and MDMA therapies, building on its Sept. 14 public hearing on psychedelic medicine.",
-          "source": "Clinical Trial Vanguard",
-          "url": "https://www.clinicaltrialvanguard.com/article/psych-pulse/what-the-fdas-new-psychedelic-framework-actually-means-for-the-clinic/"
-        },
-        {
-          "text": "First psilocybin drug nears the finish line — Compass Pathways expects to complete its rolling FDA submission for COMP360 in Q4, with a potential U.S. launch in the first half of 2027, after landing a Commissioner's National Priority Voucher.",
-          "source": "Yahoo Finance / Compass Pathways",
-          "url": "https://finance.yahoo.com/healthcare/articles/compass-pathways-eyes-2027-comp360-190217987.html"
-        },
-        {
-          "text": "Eli Lilly buys its way into psychedelics — Lilly's acquisition of atai/Beckley assets, bringing BPL-003, VLS-01 and EMP-01 into its pipeline, closed Sept. 11, marking big pharma's arrival in the sector.",
-          "source": "Clinical Trial Vanguard",
-          "url": "https://www.clinicaltrialvanguard.com/article/psych-pulse/what-the-fdas-new-psychedelic-framework-actually-means-for-the-clinic/"
-        },
-        {
-          "text": "Cannabis MSOs keep consolidating — Vireo Growth's all-stock deal for Planet 13 adds 36 dispensaries and pushes the combined company toward roughly 265 stores across 15 states, one of the largest retail footprints in the U.S.",
-          "source": "Yahoo Finance",
-          "url": "https://finance.yahoo.com/healthcare/articles/weekly-roundup-cannabis-sector-psychedelic-222628320.html"
+          "text": "Broader rescheduling hearing wraps, recommendation due late 2026",
+          "source": "Recovered.org",
+          "url": "https://recovered.org/blog/federal-cannabis-rescheduling-hearings-conclude"
         }
       ]
     }
