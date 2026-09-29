@@ -184,7 +184,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-29i</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-29j</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -413,7 +413,7 @@ function addNewLine(){
               + '<select class="t"><option value="">Texture</option><option value="Flat">0 &middot; Flat</option><option value="1">1 &middot; Spot Gloss UV</option><option value="2">2 &middot; Standard</option><option value="3">3 &middot; Pro</option><option value="4">4 &middot; Ridge</option><option value="5">5 &middot; Summit</option><option value="6">6 &middot; Peak</option><option value="7">7 &middot; Apex</option><option value="8">8 &middot; Zenith</option></select>'
               + '<span class="lcell"><span class="lt">Matte</span><select class="mt" title="Matte layers - production sheet only"><option value="">&mdash;</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option></select></span>'   // 9/28 Shane: in-house only
               + '<span class="lcell"><span class="lt">Gloss</span><select class="gl" title="Gloss layers - production sheet only"><option value="">&mdash;</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option></select></span>'
-              + '<span class="lcell"><span class="lt">White ink</span><select class="w" title="White ink (under the CMYK)" onchange="whiteCheck(this)"><option value="N">No</option><option value="Y">Yes</option></select></span>'   // 9/25 Shane
+              + '<span class="lcell"><span class="lt">White ink</span><select class="w" title="White ink (under the CMYK)" onchange="whiteCheck(this); totals()"><option value="N">No</option><option value="Y">Yes</option></select></span>'   // 9/25 Shane
               + '<span class="lcell"><span class="lt">Apply</span><select class="ap" title="We apply the labels to the jars"><option value="N">No</option><option value="Y">Yes</option></select></span>'
               + '<button type="button" class="minus" title="Remove this line" onclick="delNewLine(this)">−</button></div>'
               + finHTML(null, false);
@@ -733,7 +733,7 @@ function prepressLabel(){   // the intake board still takes the four labels; the
 $('delivery').addEventListener('change', function(){ $('shipWrap').classList.toggle('hidden', this.value !== 'Ship'); });
 // 9/24 (Shane 'do all'): the menu ladder rides in the catalog (CAT.menu, from pricing_master - the same numbers the
 // builder uses), so a new item with vessel + material + texture shows its price now instead of 'priced by the builder'.
-function menuPrice(vessel, material, texture){
+function menuPrice(vessel, material, texture, white){
   var M = CAT && CAT.menu; if(!M || !vessel || !material) return null;
   var lvl = { 'Flat': 0, '1': 1, '2': 2, '3': 3 }[texture]; if(lvl === undefined) lvl = 2;   // builder default = Standard
   var mat = { 'White Vinyl': 'White', 'Holographic': 'Holo BF', 'Gold': 'Gold' }[material];   // Clear: no menu price
@@ -741,14 +741,15 @@ function menuPrice(vessel, material, texture){
   var row = table && mat && table[mat]; if(!(row && row[lvl] != null)) return null;
   // 9/29: 'Lighter + Wrap, applied' = the wrap price + the lighter-and-application add-on (pricing_master LIGHTER lighter_app)
   return Number(row[lvl]) + (/applied/i.test(vessel) && M.lighter_app ? Number(M.lighter_app) : 0)
-       + (/blackout/i.test(vessel) && M.blackout_up ? Number(M.blackout_up) : 0);   // 9/29 Shane: Blackout Edition lighter
+       + (/blackout/i.test(vessel) && M.blackout_up ? Number(M.blackout_up) : 0)   // 9/29 Shane: Blackout Edition lighter
+       + (/lighter/i.test(vessel) && mat === 'Holo BF' && white ? Number(M.lighter_white || 0.45) : 0);   // 9/29 Shane: '.45' white ink on holo
 }
 var RUSH_PCT = { '24': 0.40, '48': 0.30 };   // 9/25 Shane: within 24 h = +40%, within 48 h = +30%, on the total before tax
 function totals(){
   var q = 0, a = 0, unknown = false;
   document.querySelectorAll('#reorders .line').forEach(function(d){ var n = Number(d.querySelector('input[data-i]').value || 0); if(n > 0){ q += n; a += n * Number(d.dataset.unit || 0); } var fb = d.querySelector('.fin'); if(fb) fb.classList.toggle('hidden', !(n > 0)); });
   document.querySelectorAll('#newItems .newline').forEach(function(d){ var n = Number(d.querySelector('.q').value || 0), p = d.querySelector('.p').value;
-    var mp = menuPrice(d.querySelector('.v').value.trim(), d.querySelector('.m').value, d.querySelector('.t').value), _flat = d.querySelector('.pm').value === 'flat';
+    var mp = menuPrice(d.querySelector('.v').value.trim(), d.querySelector('.m').value, d.querySelector('.t').value, d.querySelector('.w').value === 'Y'), _flat = d.querySelector('.pm').value === 'flat';
     d.querySelector('.p').placeholder = _flat ? 'line total $' : mp != null ? 'menu ' + money(mp) : 'price';
     if(n > 0){ q += n; if(_flat){ if(p) a += Number(p); else unknown = true; } else if(p) a += n * Number(p); else if(mp != null) a += n * mp; else unknown = true; } });
   document.querySelectorAll('#reorders .grp').forEach(function(g){ var n = 0; g.querySelectorAll('input[data-i]').forEach(function(x){ n += Number(x.value || 0); }); var el = g.querySelector('.gqty'); if(el) el.textContent = n ? n + ' pcs' : ''; });
@@ -997,7 +998,7 @@ function submit(){
   if(_orph.length){ alert('Print Instructions or a File name is typed on a line with no item name or quantity - it would not be sent.\n\nPut it on the line of the item it belongs to (each item has its own box right under it), or clear it.'); _orph[0].scrollIntoView({block: 'center'}); _orph[0].querySelector('.fpi').focus(); return; }
   // 9/24: a new item with no price the builder can find stops at 'Needs info' - say so before it is sent
   var hist = (CAT && CAT.skus || []).filter(function(k){ return k.customer === company; }).map(function(k){ return String(k.sku).toLowerCase(); });
-  var noPrice = newItems.filter(function(o){ return o.flat === null && !o.unit && menuPrice(o.vessel, o.material, o.texture) == null && hist.indexOf(String(o.name).toLowerCase()) < 0; }).map(function(o){ return o.name; });
+  var noPrice = newItems.filter(function(o){ return o.flat === null && !o.unit && menuPrice(o.vessel, o.material, o.texture, o.white_ink === 'Y') == null && hist.indexOf(String(o.name).toLowerCase()) < 0; }).map(function(o){ return o.name; });
   if(noPrice.length && !confirm('No price for: ' + noPrice.join(', ') + '.\nAdd a price, or pick a vessel + material on the menu - otherwise the builder stops at Needs info.\n\nSend anyway?')) return;
   var _flatNo = [].filter.call(document.querySelectorAll('#newItems .newline'), function(d){ return d.querySelector('.pm').value === 'flat' && d.querySelector('.n').value.trim() && Number(d.querySelector('.q').value || 0) > 0 && d.querySelector('.p').value === ''; });
   if(_flatNo.length){ alert('A flat-total line has no total: ' + _flatNo[0].querySelector('.n').value + '. Type the line total in its price box.'); _flatNo[0].querySelector('.p').focus(); return; }   // 9/29
@@ -1022,7 +1023,7 @@ function submit(){
     terms: $('terms').value, art_status: $('art').value, design_hrs: $('designHrs').value, design_rate: $('designRate').value.trim(), deposit: $('deposit').value, design_only: $('designOnly').checked,
     note: $('note').value.trim(), callouts: [printSpecs()].concat(lineFin).filter(Boolean).join(String.fromCharCode(10)), attach: chips('attach'), reorders: reorders, newItems: newItems,
     edit_of: (EDIT_OF && EDIT_OF._live) ? EDIT_OF.inv : '', draft_id: CUR_DRAFT || '', who: me() };   // 9/28 Shane: only a LIVE order (not paid / printing) is ever edited
-  newItems.forEach(function(o){ if(!o.unit){ var mp = menuPrice(o.vessel, o.material, o.texture); if(mp != null) o.unit = mp; } });   // the price shown is the price sent
+  newItems.forEach(function(o){ if(!o.unit){ var mp = menuPrice(o.vessel, o.material, o.texture, o.white_ink === 'Y'); if(mp != null) o.unit = mp; } });   // the price shown is the price sent
   // 9/25: the same order sent twice (a retry, a double tap) must not become two orders - the id is made from its content
   (function(){ var j = JSON.stringify(Object.assign({}, payload, { pin: '' })), h = 5381; for(var i = 0; i < j.length; i++){ h = ((h << 5) + h + j.charCodeAt(i)) | 0; }
     payload.idem = 'p' + (h >>> 0).toString(36) + j.length.toString(36); })();   // 9/22: editing a past order - the builder rebuilds that invoice instead of making a new one
