@@ -36,7 +36,7 @@
   .stp{background:var(--soft);border:1px solid #c9c9d1;color:var(--ink);border-radius:10px;font-size:20px;padding:8px 0;cursor:pointer}
   .newline{display:grid;grid-template-columns:1fr;gap:6px;padding:10px 0;border-bottom:1px solid var(--line)}
   .newline .g{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
-  .newline .nlrow{display:grid;grid-template-columns:minmax(0,2fr) 66px 84px minmax(0,1.1fr) minmax(0,1.25fr) minmax(0,1fr) minmax(0,1.25fr) 58px 58px minmax(0,1fr) minmax(0,.9fr) 36px;gap:6px;align-items:end}
+  .newline .nlrow{display:grid;grid-template-columns:minmax(0,2fr) 66px 84px 76px minmax(0,1.1fr) minmax(0,1.25fr) minmax(0,1fr) minmax(0,1.25fr) 58px 58px minmax(0,1fr) minmax(0,.9fr) 36px;gap:6px;align-items:end}
   .newline .nlrow>*{min-width:0} .newline .nlrow input,.newline .nlrow select{width:100%;min-width:0}
   .newline,.newline .nlrow{max-width:100%} #newItems{overflow-x:hidden}
   .newline input,.newline select{padding:9px 8px;font-size:15px}
@@ -46,7 +46,7 @@
   .minus,.plus{border:1px solid #c9c9d1;background:#fff;color:var(--ink);border-radius:999px;width:36px;height:38px;font-size:20px;line-height:1;cursor:pointer;padding:0}
   .minus:hover{border-color:var(--pink);color:var(--pink)}
   .plus{border-color:var(--pink);color:var(--pink);font-weight:700}
-  @media(max-width:999px){ .newline .nlrow{grid-template-columns:1fr 62px 78px 36px} .newline .nlrow .m,.newline .nlrow .vcell,.newline .nlrow .t{grid-column:span 2} .newline .nlrow .lcell,.newline .nlrow .cu{grid-column:span 2} }
+  @media(max-width:999px){ .newline .nlrow{grid-template-columns:1fr 62px 78px 70px} .newline .nlrow .m,.newline .nlrow .vcell,.newline .nlrow .t{grid-column:span 2} .newline .nlrow .lcell,.newline .nlrow .cu{grid-column:span 2} }
   .addrow{display:flex;align-items:center;gap:10px;margin-top:10px}
   .btn.ghost.openbtn{border:1px solid var(--pink);color:var(--pink);font-weight:700;white-space:nowrap}
   .btn.ghost.openbtn:hover{background:var(--pink);color:#fff}
@@ -184,7 +184,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-29e</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-29f</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -402,6 +402,7 @@ function addNewLine(){
               + '<input placeholder="Item name" class="n">'
               + '<input type="number" inputmode="numeric" min="0" placeholder="qty" class="q" oninput="totals()">'
               + '<input type="number" step="0.01" inputmode="decimal" placeholder="price" class="p" oninput="totals()">'
+              + '<select class="pm" title="Each = qty x price. Flat total = one price for the whole line, any qty." onchange="totals()"><option value="">each</option><option value="flat">flat</option></select>'   // 9/29 Shane
               + '<select class="m" onchange="whiteCheck(this)"><option value="">Material</option><option>White Vinyl</option><option>Holographic</option><option>Gold</option><option>Clear</option></select>'
               + '<span class="vcell">'
               +   '<select class="vsel" onchange="vesselPick(this)">' + VESSELS + '</select>'
@@ -466,7 +467,7 @@ function openPast(inv){   // 9/28 Shane: 'yes make the change' - a past order is
   $('newItems').innerHTML = ''; var added = 0;
   o.rows.forEach(function(r){
     // the same SKU (and size) on the client's reorder list takes the quantity - it keeps its own price and history
-    var hit = lines.filter(function(l){ return low(l.dataset.sku) === low(r.sku) && (!r.vessel || !l.dataset.vessel || low(l.dataset.vessel) === low(r.vessel)); })[0];
+    var hit = r.ft ? null : lines.filter(function(l){ return low(l.dataset.sku) === low(r.sku) && (!r.vessel || !l.dataset.vessel || low(l.dataset.vessel) === low(r.vessel)); })[0];
     if(hit){ hit.querySelector('input[data-i]').value = r.qty; var det = hit.closest('details'); if(det) det.open = true; hit.querySelector('.fin').classList.remove('hidden'); return; }
     var d = addNewLine(); added++;
     d.querySelector('.n').value = r.sku;
@@ -528,11 +529,11 @@ function editLive(lo, silent){
   $('newItems').innerHTML = ''; var added = 0;
   o.rows.forEach(function(r){
     var set = { pi: r.pi || '', fn: r.fn || '', cu: r.cu || '', w: r.w === 'Y' ? 'Y' : 'N', ap: r.ap === 'Y' ? 'Y' : 'N', mt: r.mt || '', gl: r.gl || '' };
-    var hit = lines.filter(function(l){ return low(l.dataset.sku) === low(r.sku) && (!r.vessel || !l.dataset.vessel || low(l.dataset.vessel) === low(r.vessel)); })[0];
+    var hit = r.ft ? null : lines.filter(function(l){ return low(l.dataset.sku) === low(r.sku) && (!r.vessel || !l.dataset.vessel || low(l.dataset.vessel) === low(r.vessel)); })[0];
     if(hit){ hit.querySelector('input[data-i]').value = r.qty; var det = hit.closest('details'); if(det) det.open = true; var fb = hit.querySelector('.fin'); fb.classList.remove('hidden'); finSet(fb, set); whiteLock(hit); return; }
     var d = addNewLine(); added++;
     d.querySelector('.n').value = r.sku; d.querySelector('.q').value = r.qty;
-    if(r.unit) d.querySelector('.p').value = r.unit;
+    if(r.ft){ d.querySelector('.pm').value = 'flat'; d.querySelector('.p').value = r.ft; } else if(r.unit) d.querySelector('.p').value = r.unit;
     if(r.material) d.querySelector('.m').value = r.material;
     if(r.lv !== undefined && r.lv !== null && r.lv !== '') d.querySelector('.t').value = Number(r.lv) === 0 ? 'Flat' : String(r.lv);
     d.querySelector('.cu').value = set.cu; d.querySelector('.w').value = set.w; d.querySelector('.ap').value = set.ap; d.querySelector('.mt').value = set.mt; d.querySelector('.gl').value = set.gl;
@@ -573,7 +574,7 @@ function showEditingBar(){
 // button says what it will update. 'Put it back' reloads the order as it was.
 var SCOPE_SHEET = ['fpi', 'ffn', 'w', 'ap', 'mt', 'gl'];
 var SCOPE_INV_IDS = ['note', 'ship', 'tax', 'payment', 'rushLevel', 'deposit', 'prepressCustom', 'designHrs', 'designRate', 'terms', 'contact', 'email', 'phone', 'contact2', 'email2', 'phone2', 'art'];
-var FIELD_NAME = { fpi: 'Print instructions', ffn: 'File name', w: 'White ink', ap: 'Apply', mt: 'Matte', gl: 'Gloss', p: 'Price', q: 'Qty', n: 'Item', m: 'Material',
+var FIELD_NAME = { pm: 'Price mode', fpi: 'Print instructions', ffn: 'File name', w: 'White ink', ap: 'Apply', mt: 'Matte', gl: 'Gloss', p: 'Price', q: 'Qty', n: 'Item', m: 'Material',
                    vsel: 'Vessel', v: 'Vessel', t: 'Texture', cu: 'Cut', due: 'Due date', delivery: 'Delivery', note: 'Client note', ship: 'Shipping', tax: 'Tax',
                    payment: 'Payment', rushLevel: 'Rush', deposit: 'Deposit', prepressCustom: 'Pre-press', designHrs: 'Design hours', designRate: 'Design rate', terms: 'Terms',
                    contact: 'Contact', email: 'Email', phone: 'Phone', contact2: 'Second contact', email2: 'Their email', phone2: 'Their phone', art: 'Art status', orderType: 'Order type' };
@@ -583,7 +584,7 @@ function fieldKey(el){
   var c = [].filter.call(el.classList, function(x){ return FIELD_NAME[x]; })[0];
   return c || el.id || (el.dataset.i !== undefined ? 'q' : '');
 }
-function fieldScope(k){ return SCOPE_SHEET.indexOf(k) >= 0 ? 'sheet' : (SCOPE_INV_IDS.indexOf(k) >= 0 || k === 'p') ? 'invoice' : 'both'; }
+function fieldScope(k){ return SCOPE_SHEET.indexOf(k) >= 0 ? 'sheet' : (SCOPE_INV_IDS.indexOf(k) >= 0 || k === 'p' || k === 'pm') ? 'invoice' : 'both'; }
 function lineName(el){
   var l = el.closest('.line'), nl = el.closest('.newline');
   if(l) return l.dataset.sku;
@@ -732,9 +733,9 @@ function totals(){
   var q = 0, a = 0, unknown = false;
   document.querySelectorAll('#reorders .line').forEach(function(d){ var n = Number(d.querySelector('input[data-i]').value || 0); if(n > 0){ q += n; a += n * Number(d.dataset.unit || 0); } var fb = d.querySelector('.fin'); if(fb) fb.classList.toggle('hidden', !(n > 0)); });
   document.querySelectorAll('#newItems .newline').forEach(function(d){ var n = Number(d.querySelector('.q').value || 0), p = d.querySelector('.p').value;
-    var mp = menuPrice(d.querySelector('.v').value.trim(), d.querySelector('.m').value, d.querySelector('.t').value);
-    d.querySelector('.p').placeholder = mp != null ? 'menu ' + money(mp) : 'price';
-    if(n > 0){ q += n; if(p) a += n * Number(p); else if(mp != null) a += n * mp; else unknown = true; } });
+    var mp = menuPrice(d.querySelector('.v').value.trim(), d.querySelector('.m').value, d.querySelector('.t').value), _flat = d.querySelector('.pm').value === 'flat';
+    d.querySelector('.p').placeholder = _flat ? 'line total $' : mp != null ? 'menu ' + money(mp) : 'price';
+    if(n > 0){ q += n; if(_flat){ if(p) a += Number(p); else unknown = true; } else if(p) a += n * Number(p); else if(mp != null) a += n * mp; else unknown = true; } });
   document.querySelectorAll('#reorders .grp').forEach(function(g){ var n = 0; g.querySelectorAll('input[data-i]').forEach(function(x){ n += Number(x.value || 0); }); var el = g.querySelector('.gqty'); if(el) el.textContent = n ? n + ' pcs' : ''; });
   var _rp = RUSH_PCT[$('rushLevel') ? $('rushLevel').value : ''] || 0; if(_rp) a = a * (1 + _rp);   // 9/25 Shane: rush % on the total before tax
   $('totQty').textContent = q; $('totAmt').textContent = money(a) + (unknown ? '+' : '');
@@ -772,7 +773,7 @@ function draftSnap(){
     var fb = d.querySelector('.fin'); var _fo = fb && finOf(fb); if(fb && fb.querySelector('.ffn').value !== ''){ _fo = _fo || {}; _fo.fn = fb.querySelector('.ffn').value; } if(_fo) fins[d.dataset.title] = _fo; });
   var items = [];
   document.querySelectorAll('#newItems .newline').forEach(function(d){
-    var o = { n: d.querySelector('.n').value, q: d.querySelector('.q').value, p: d.querySelector('.p').value,
+    var o = { n: d.querySelector('.n').value, q: d.querySelector('.q').value, p: d.querySelector('.p').value, pm: d.querySelector('.pm').value,
               m: d.querySelector('.m').value, v: d.querySelector('.v').value, t: d.querySelector('.t').value,
               ap: d.querySelector('.ap').value, w: d.querySelector('.w').value, mt: d.querySelector('.mt').value, gl: d.querySelector('.gl').value,
               pi: d.querySelector('.fpi').value, fn: d.querySelector('.ffn').value, cu: d.querySelector('.cu').value };
@@ -931,7 +932,7 @@ function applySnap(d){
   $('newItems').innerHTML = '';
   (d.items || []).forEach(function(o){
     var row = addNewLine();
-    row.querySelector('.n').value = o.n || ''; row.querySelector('.q').value = o.q || ''; row.querySelector('.p').value = o.p || '';
+    row.querySelector('.n').value = o.n || ''; row.querySelector('.q').value = o.q || ''; row.querySelector('.p').value = o.p || ''; row.querySelector('.pm').value = o.pm || '';
     row.querySelector('.m').value = o.m || ''; row.querySelector('.t').value = o.t || '';
     row.querySelector('.ap').value = o.ap === 'Y' ? 'Y' : 'N'; row.querySelector('.mt').value = o.mt || ''; row.querySelector('.gl').value = o.gl || ''; row.querySelector('.w').value = o.w === 'Y' ? 'Y' : 'N'; whiteCheck(row.querySelector('.m'));
     finSet(row.querySelector('.fin'), { pi: o.pi, fn: o.fn }); row.querySelector('.cu').value = o.cu === 'Kiss-cut' ? 'Die cut' : o.cu === 'Individual' ? 'Contour cut' : (o.cu || '');
@@ -970,7 +971,7 @@ function submit(){
   if(!$('due').value){ alert('Order due date is required.'); return; }
   if(!$('phone').value.trim()){ alert('Phone is required - every order starts with company, contact, phone and email.'); $('phone').focus(); return; }
   var reorders = [], lineFin = []; document.querySelectorAll('#reorders .line').forEach(function(d){ var n = Number(d.querySelector('input[data-i]').value || 0); if(n > 0){ reorders.push({ title: d.dataset.title, qty: n }); var f = finOf(d.querySelector('.fin')); var _k = d.dataset.sku + (d.dataset.vessel ? ' @ ' + d.dataset.vessel : ''); if(f) lineFin.push(finLineText(_k, f)); var _fl = fileLine(_k, d.querySelector('.fin')); if(_fl) lineFin.push(_fl); var _cl = cutLine(_k, d); if(_cl) lineFin.push(_cl); var _wl = whiteLine(_k, d); if(_wl) lineFin.push(_wl); var _al = applyLine(_k, d); if(_al) lineFin.push(_al); var _ll = layersLine(_k, d); if(_ll) lineFin.push(_ll); } });
-  var newItems = []; document.querySelectorAll('#newItems .newline').forEach(function(d){ var n = Number(d.querySelector('.q').value || 0), nm = d.querySelector('.n').value.trim(); if(nm && n > 0){ newItems.push({ name: nm, qty: n, material: d.querySelector('.m').value, vessel: d.querySelector('.v').value.trim(), texture: d.querySelector('.t').value, unit: d.querySelector('.p').value, white_ink: d.querySelector('.m').value === 'White Vinyl' ? 'N' : d.querySelector('.w').value, apply: d.querySelector('.ap').value }); var f = finOf(d.querySelector('.fin')); var vv = d.querySelector('.v').value.trim(); var _k2 = nm + (vv ? ' @ ' + vv : ''); if(f) lineFin.push(finLineText(_k2, f)); var _fl2 = fileLine(_k2, d.querySelector('.fin')); if(_fl2) lineFin.push(_fl2); var _cl2 = cutLine(_k2, d); if(_cl2) lineFin.push(_cl2); var _ll2 = layersLine(_k2, d); if(_ll2) lineFin.push(_ll2); } });
+  var newItems = []; document.querySelectorAll('#newItems .newline').forEach(function(d){ var n = Number(d.querySelector('.q').value || 0), nm = d.querySelector('.n').value.trim(); if(nm && n > 0){ newItems.push({ name: nm, qty: n, material: d.querySelector('.m').value, vessel: d.querySelector('.v').value.trim(), texture: d.querySelector('.t').value, unit: d.querySelector('.pm').value === 'flat' && d.querySelector('.p').value ? Math.round(Number(d.querySelector('.p').value) / n * 10000) / 10000 : d.querySelector('.p').value, flat: d.querySelector('.pm').value === 'flat' && d.querySelector('.p').value !== '' ? Number(d.querySelector('.p').value) : null, white_ink: d.querySelector('.m').value === 'White Vinyl' ? 'N' : d.querySelector('.w').value, apply: d.querySelector('.ap').value }); var f = finOf(d.querySelector('.fin')); var vv = d.querySelector('.v').value.trim(); var _k2 = nm + (vv ? ' @ ' + vv : ''); if(f) lineFin.push(finLineText(_k2, f)); var _fl2 = fileLine(_k2, d.querySelector('.fin')); if(_fl2) lineFin.push(_fl2); var _cl2 = cutLine(_k2, d); if(_cl2) lineFin.push(_cl2); var _ll2 = layersLine(_k2, d); if(_ll2) lineFin.push(_ll2); var _nf = newItems[newItems.length - 1]; if(_nf && _nf.flat !== null) lineFin.push('LINE FLAT: ' + JSON.stringify({ k: _k2, t: _nf.flat })); } });
   if(!reorders.length && !newItems.length && !$('designOnly').checked){ alert('Set a quantity on at least one item.'); return; }
   // 9/28 (an order went out with no print instructions): text typed under a line with no item name or qty
   // would be dropped - stop and say so instead
@@ -980,8 +981,10 @@ function submit(){
   if(_orph.length){ alert('Print Instructions or a File name is typed on a line with no item name or quantity - it would not be sent.\n\nPut it on the line of the item it belongs to (each item has its own box right under it), or clear it.'); _orph[0].scrollIntoView({block: 'center'}); _orph[0].querySelector('.fpi').focus(); return; }
   // 9/24: a new item with no price the builder can find stops at 'Needs info' - say so before it is sent
   var hist = (CAT && CAT.skus || []).filter(function(k){ return k.customer === company; }).map(function(k){ return String(k.sku).toLowerCase(); });
-  var noPrice = newItems.filter(function(o){ return !o.unit && menuPrice(o.vessel, o.material, o.texture) == null && hist.indexOf(String(o.name).toLowerCase()) < 0; }).map(function(o){ return o.name; });
+  var noPrice = newItems.filter(function(o){ return o.flat === null && !o.unit && menuPrice(o.vessel, o.material, o.texture) == null && hist.indexOf(String(o.name).toLowerCase()) < 0; }).map(function(o){ return o.name; });
   if(noPrice.length && !confirm('No price for: ' + noPrice.join(', ') + '.\nAdd a price, or pick a vessel + material on the menu - otherwise the builder stops at Needs info.\n\nSend anyway?')) return;
+  var _flatNo = [].filter.call(document.querySelectorAll('#newItems .newline'), function(d){ return d.querySelector('.pm').value === 'flat' && d.querySelector('.n').value.trim() && Number(d.querySelector('.q').value || 0) > 0 && d.querySelector('.p').value === ''; });
+  if(_flatNo.length){ alert('A flat-total line has no total: ' + _flatNo[0].querySelector('.n').value + '. Type the line total in its price box.'); _flatNo[0].querySelector('.p').focus(); return; }   // 9/29
   EDIT_SCOPE_SENT = '';
   if(EDIT_PENDING && !(EDIT_OF && EDIT_OF._live)){   // 9/29 review: never let an unconfirmed edit-draft go out as a second order by accident
     if(!confirm('This draft was an edit of ' + EDIT_PENDING + ', and the Pad has not confirmed it can still be edited.\n\nOK = send it as a NEW order (a new invoice)\nCancel = wait, or reopen ' + EDIT_PENDING + ' from Live orders')) return;
