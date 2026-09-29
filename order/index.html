@@ -184,7 +184,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-29c</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-29d</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -206,8 +206,14 @@ function api(method, data){
   if(method === 'GET'){ url += '?' + new URLSearchParams(data).toString(); }
   else { opts.headers = { 'Content-Type': 'text/plain;charset=utf-8' }; opts.body = JSON.stringify(data); }
   var tries = 0;
-  function go(){ tries++; var o = Object.assign({}, opts); var ctl = ('AbortController' in window) ? new AbortController() : null; if(ctl){ o.signal = ctl.signal; setTimeout(function(){ ctl.abort(); }, 25000); } return fetch(url, o).then(function(r){ if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-    .catch(function(e){ if(tries < 3 && (method === 'GET' || (data && data.idem))){ return new Promise(function(res){ setTimeout(res, 1500); }).then(go); } throw e; }); }
+  // 9/29: a send gets 60 s (it does more than a read); if it still times out, ask the backend whether that exact order
+  // arrived before calling it failed - Google often saves the order and only the reply is lost
+  var isSend = method === 'POST' && data && data.idem && !data.action, wait = isSend ? 60000 : 25000;
+  function go(){ tries++; var o = Object.assign({}, opts); var ctl = ('AbortController' in window) ? new AbortController() : null; if(ctl){ o.signal = ctl.signal; setTimeout(function(){ ctl.abort(); }, wait); } return fetch(url, o).then(function(r){ if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .catch(function(e){ if(tries < (isSend ? 2 : 3) && (method === 'GET' || (data && data.idem))){ return new Promise(function(res){ setTimeout(res, 1500); }).then(go); }
+      if(isSend){ return fetch(API + '?' + new URLSearchParams({ action: 'sent', pin: data.pin, idem: data.idem }).toString(), { redirect: 'follow' })
+        .then(function(r){ return r.json(); }).then(function(r){ if(r && r.ok) return r; throw e; }, function(){ throw e; }); }
+      throw e; }); }
   return go();   // Google's redirect can 404 on a slow call - retry a read up to 3x
 }
 // catalog.json next to this page = the catalog encrypted with the staff PIN (make_catalog_file.py). Decrypt here;
