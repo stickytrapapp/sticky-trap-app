@@ -184,7 +184,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-29b</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-29c</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -538,6 +538,15 @@ function editLive(lo, silent){
   while(added < 4){ addNewLine(); added++; }
   var iso = lo.due || (o.due ? mdyToISO(o.due) : ''); $('due').value = iso;
   if(o.delivery) $('delivery').value = /ship/i.test(o.delivery) ? 'Ship' : /deliver/i.test(o.delivery) ? 'Deliver' : 'Pick Up';
+  // 9/29 review: the order's own details, so what is on screen is what was invoiced
+  $('shipWrap').classList.toggle('hidden', $('delivery').value !== 'Ship');
+  $('ship').value = (o.ship === '' || o.ship === undefined || o.ship === null) ? '' : o.ship;
+  if($('rushLevel')) $('rushLevel').value = o.rush || '';
+  if(o.tax) $('tax').value = o.tax === 'exempt' ? 'Exempt (3372 on file)' : '6% MI';
+  if(o.pay) $('payment').value = o.pay;
+  if(o.prepress !== undefined && o.prepress !== '') $('prepressCustom').value = o.prepress;
+  if(o.note !== undefined) $('note').value = o.note;
+  ppCalc(); termsPick();
   showEditingBar();
   window.scrollTo(0, 0); totals(); editBaseline();
 }
@@ -578,6 +587,7 @@ function lineName(el){
 var EDIT_REMOVED = [];
 function editChanges(){
   var out = EDIT_REMOVED.map(function(n){ return { scope: 'both', text: n + ': line removed' }; });
+  if(EDIT_OF && EDIT_OF._fromDraft) out.push({ scope: 'both', text: 'resumed from a draft - the invoice and production sheet are rebuilt from what is on screen' });
   editFields().forEach(function(el){
     if(el.dataset.base === undefined) return;
     var now = el.type === 'checkbox' ? String(el.checked) : el.value;
@@ -585,10 +595,11 @@ function editChanges(){
     if(!ch) return;
     var k = fieldKey(el); if(!k || (k === 'v' && el.classList.contains('hidden'))) return;   // the hidden size box mirrors the vessel pick
     var nm = lineName(el), show = function(v){ return v === '' ? '(blank)' : v === 'N' ? 'No' : v === 'Y' ? 'Yes' : String(v).slice(0, 40); };
-    out.push({ scope: fieldScope(k), text: (nm ? nm + ': ' : '') + (FIELD_NAME[k] || k) + ' ' + show(el.dataset.base) + ' → ' + show(now) });
+    out.push({ key: k, line: !!(el.closest('.line') || el.closest('.newline')), scope: fieldScope(k), text: (nm ? nm + ': ' : '') + (FIELD_NAME[k] || k) + ' ' + show(el.dataset.base) + ' → ' + show(now) });
   });
   return out;
 }
+var EDIT_PENDING = '';   // 9/29 review: a resumed draft that was an edit, still waiting for its live check
 function editScope(ch){
   if(!ch.length) return '';
   var s = {}; ch.forEach(function(c){ s[c.scope] = 1; });
@@ -651,7 +662,7 @@ function resetForm(noAsk){   // 9/16 Shane: reset with an are-you-sure; keeps th
   document.querySelectorAll('.chip.on').forEach(function(c){ c.classList.remove('on'); });
   $('newItems').innerHTML = ''; addNewLine(); addNewLine(); addNewLine(); addNewLine(); $('result').classList.add('hidden'); $('result').innerHTML = '';
   $('submitBtn').disabled = false; $('submitBtn').textContent = 'Submit order'; finishOrder(); ppCalc(); designCalc(); termsPick(); totals(); window.scrollTo(0, 0);
-  stdNote(); NOSAVE = false; CUR_DRAFT = null; clientDraftHide(); offerDraft(); EDIT_OF = null; $('editBar').classList.add('hidden'); $('liveBar').classList.add('hidden'); $('liveBar').innerHTML = '';
+  stdNote(); NOSAVE = false; CUR_DRAFT = null; clientDraftHide(); offerDraft(); EDIT_OF = null; EDIT_PENDING = ''; $('editBar').classList.add('hidden'); $('liveBar').classList.add('hidden'); $('liveBar').innerHTML = '';
 }
 function openPicker(el){ try { if(el.showPicker) el.showPicker(); } catch(e){} }   // 9/16 Shane: tap anywhere on the date = calendar pops up
 function chips(group){ return [].map.call(document.querySelectorAll('.chips[data-group="' + group + '"] .chip.on'), function(c){ return c.dataset.v; }); }
@@ -666,6 +677,10 @@ function printSpecs(){
   if($('orderType')) L.push('ORDER TYPE: ' + $('orderType').value);
   if(me()) L.push('ORDER BY: ' + me());
   if(EDIT_SCOPE_SENT) L.push('EDIT SCOPE: ' + EDIT_SCOPE_SENT);   // 9/29: prod | inv | both
+  if(EDIT_SCOPE_SENT && !(EDIT_OF && EDIT_OF._fromDraft)){   // 9/29 review: order-level boxes the editor changed
+    var _ok = {}; editChanges().forEach(function(c){ if(!c.line && c.key) _ok[c.key] = 1; });
+    L.push('EDIT CHANGED: ' + Object.keys(_ok).join(','));
+  }
   if($('rushLevel') && $('rushLevel').value) L.push('ORDER RUSH: ' + $('rushLevel').value);   // 24 or 48 - the builder adds the rush line
   // 9/25 Shane: white / matte / gloss / choke are per line now (each item's Print Instructions) - no ORDER PRESS line
   return L.join(String.fromCharCode(10));
@@ -823,6 +838,7 @@ function syncDrafts(){   // pull the shared list; send up anything this browser 
       var s = SRV[k];
       if(s && s.st !== 'open'){ if(k !== CUR_DRAFT) delete all[k]; }
       else if(s && all[k].up && s.t >= all[k].t) { if(k !== CUR_DRAFT) delete all[k]; }   // the shared copy is newer or the same
+      else if(!s && all[k].up){ if(k !== CUR_DRAFT) delete all[k]; }   // 9/29 review: uploaded before, gone from the server now = finished; never re-upload it
       else if(!all[k].up) ups.push(k);
     });
     storeDrafts(all);
@@ -926,12 +942,15 @@ function applySnap(d){
     document.querySelectorAll('.chips[data-group="' + g + '"] .chip').forEach(function(c){
       c.classList.toggle('on', want.indexOf(c.dataset.v) >= 0); }); });
   var eo = d.edit && (CAT.orders || []).find(function(x){ return x.inv === d.edit; });
-  if(d.edit && typeof api === 'function'){   // 9/28: a draft of an edit only edits if that order is STILL live + editable
-    api('GET', { action: 'live', pin: PIN, name: d.company }).then(function(r){
+  EDIT_PENDING = d.edit || '';
+  if(d.edit){   // 9/28: a draft of an edit only edits if that order is STILL live + editable (checked fresh)
+    var _fail = function(why){ $('editMsg').innerHTML = 'This draft was an edit of <b>' + esc(d.edit) + '</b> - ' + why; $('editBar').classList.remove('hidden'); };
+    if(typeof api !== 'function') _fail('it cannot be checked here. Reopen it from Live orders.');
+    else api('GET', { action: 'live', pin: PIN, name: d.company }).then(function(r){
       var lo = r && r.ok && (r.orders || []).find(function(x){ return x.inv === d.edit; }), o = (CAT.orders || []).find(function(x){ return x.inv === d.edit; });
-      if(lo && lo.editable && o){ EDIT_OF = o; EDIT_OF._live = lo; showEditingBar(); }
-      else { $('editMsg').innerHTML = 'This draft was an edit of <b>' + esc(d.edit) + '</b>, which can no longer be edited (' + esc(lo ? lo.why : 'not live') + ') - sending it makes a <b>new</b> order.'; $('editBar').classList.remove('hidden'); }
-    }).catch(function(){});
+      if(lo && lo.editable && o && !(lo.prodOnly)){ EDIT_OF = o; EDIT_OF._live = lo; EDIT_OF._fromDraft = true; EDIT_PENDING = ''; showEditingBar(); editRefresh(); }
+      else { EDIT_PENDING = ''; _fail('it can no longer be edited from a draft (' + esc(lo ? (lo.why || 'in production') : 'not live') + '). Sending it makes a <b>new</b> order - or reopen it from Live orders.'); }
+    }).catch(function(){ _fail('the Pad could not check it (no connection). Try again, or reopen it from Live orders.'); });
   }
   finishOrder(); ppCalc(); designCalc(); termsPick(); totals();
 }
@@ -958,6 +977,10 @@ function submit(){
   var noPrice = newItems.filter(function(o){ return !o.unit && menuPrice(o.vessel, o.material, o.texture) == null && hist.indexOf(String(o.name).toLowerCase()) < 0; }).map(function(o){ return o.name; });
   if(noPrice.length && !confirm('No price for: ' + noPrice.join(', ') + '.\nAdd a price, or pick a vessel + material on the menu - otherwise the builder stops at Needs info.\n\nSend anyway?')) return;
   EDIT_SCOPE_SENT = '';
+  if(EDIT_PENDING && !(EDIT_OF && EDIT_OF._live)){   // 9/29 review: never let an unconfirmed edit-draft go out as a second order by accident
+    if(!confirm('This draft was an edit of ' + EDIT_PENDING + ', and the Pad has not confirmed it can still be edited.\n\nOK = send it as a NEW order (a new invoice)\nCancel = wait, or reopen ' + EDIT_PENDING + ' from Live orders')) return;
+    EDIT_PENDING = '';
+  }
   if(EDIT_OF && EDIT_OF._live){   // 9/29: the edit's reach is worked out from what changed - and said out loud before it goes
     var _ch = editChanges(), _sc = editScope(_ch), _lo = EDIT_OF._live;
     if(!_sc){ alert('Nothing has changed on ' + EDIT_OF.inv + ' yet.'); return; }
