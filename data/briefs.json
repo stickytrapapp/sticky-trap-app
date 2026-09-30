@@ -5,61 +5,70 @@
     {
       "date": "2026-09-30",
       "label": "Morning Brief",
-      "title": "Doors Open, Deals Close: Michigan Storefronts Expand as National M&A and Psilocybin Momentum Build",
-      "top": "Michigan operators are opening new doors and betting on tax relief at the ballot box even as the 24% wholesale tax bites, while nationally Curaleaf's $270M Aurora bid and Compass Pathways' on-track FDA filing show real capital and science moving the industry forward. The DEA hit a procedural speed bump on rescheduling, but pressure from the White House and a booming state tax base keep the bigger trend pointed up.",
+      "title": "Zalympix Glow-Up Meets DEA Speed Bump: Michigan Cannabis Keeps Winning While D.C. Untangles Rescheduling",
+      "top": "Michigan's cultivators just took home the state's top cannabis honors and distressed real estate is creating rock-bottom entry points for expansion, even as the 24% wholesale tax keeps generating political heat and a fresh gubernatorial tax-cut pledge. Nationally, Compass Pathways' psilocybin program is barreling toward a possible late-2026 FDA approval and Eli Lilly just closed a major psychedelics acquisition, while a DEA rescheduling pause is framed by insiders as a process fix, not a dead end.",
       "local": [
         {
-          "text": "New Standard opens new Ann Arbor storefront",
-          "source": "ClickOnDetroit",
-          "url": "https://www.clickondetroit.com/topic/Dispensary/",
-          "text_note": ""
+          "text": "Mitten Canna Co. and Hytek sweep Zalympix",
+          "detail": "Mitten Canna Co.'s Toad Venom won best overall flower and Hytek's Oishii Piña took best overall live rosin at Michigan's 'Grammys of Cannabis' awards night at the Crofoot in Pontiac.",
+          "source": "Detroit Metro Times",
+          "url": "https://www.metrotimes.com/weed-2/michigans-best-flower-and-live-rosin-crowned-at-2026-zalympix/"
         },
         {
-          "text": "Zalympix crowns fresh batch of Michigan winners",
-          "source": "Gander Newsroom (MichiGanja Report)",
+          "text": "Sixth Circuit wipes out $31.8M Curaleaf judgment",
+          "detail": "Federal appeals judges reportedly voided a $31.8 million cannabis contract judgment against Curaleaf subsidiaries, a rare courtroom win for a major Michigan operator this month.",
+          "source": "cann.dev",
+          "url": "https://www.cann.dev/michigan-cannabis-enforcement-september-2026/"
+        },
+        {
+          "text": "Distressed cannabis real estate is a buyer's market",
+          "detail": "At least 50 Michigan cannabis properties are now up for sale or lease with brokers pricing deals at 20 to 30 cents on the dollar, opening cheap expansion room for well-capitalized operators.",
+          "source": "The MichiGanja Report / Gander Newsroom",
           "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092826"
         },
         {
-          "text": "50-plus cannabis properties now up for grabs",
-          "source": "Gander Newsroom (MichiGanja Report / Crain's Detroit)",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092826"
+          "text": "Gubernatorial candidate pledges to cut wholesale tax",
+          "detail": "GOP candidate John James has pledged to slash Michigan's 24% wholesale weed tax and picked up endorsements from top cannabis executives, though Sen. Jeff Irwin is urging the industry to be skeptical of the promise.",
+          "source": "The MichiGanja Report / Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092826/"
         },
         {
-          "text": "Governor's race turns into referendum on 24% tax",
-          "source": "Gander Newsroom (MichiGanja Report)",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092826"
-        },
-        {
-          "text": "MiCIA sounds alarm, keeps fighting wholesale tax",
+          "text": "MiCIA escalates fight against 24% wholesale tax",
+          "detail": "Michigan Cannabis Industry Association spokesperson Robin Schneider says two members died by suicide in the past month as the industry struggles under the new tax, intensifying pressure on Lansing for relief.",
           "source": "MIRS News",
           "url": "https://home.mirs.news/post/cannabis-group-says-two-members-died-by-suicide-as-industry-struggles"
         }
       ],
       "national": [
         {
-          "text": "Compass Pathways keeps psilocybin NDA on track for Q4",
-          "source": "Compass Pathways (SEC 8-K)",
-          "url": "https://www.sec.gov/Archives/edgar/data/0001816590/000181659026000059/q22026pressrelease.htm"
+          "text": "Compass Pathways psilocybin nears historic FDA approval",
+          "detail": "COMP360 has produced durable 26-week Phase 3 data and a rolling NDA submission on track for completion in Q4 2026, putting the first classic psychedelic therapy on pace for FDA approval by late 2026 or early 2027.",
+          "source": "Medical Daily",
+          "url": "https://www.medicaldaily.com/psilocybin-fda-approval-2026-compass-pathways-comp360-treatment-resistant-depression-475822"
         },
         {
-          "text": "Curaleaf presses $270M hostile bid for Aurora Cannabis",
-          "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/news/us-marijuana-mso-curaleaf-plots-272-million-hostile-takeover-of-aurora-cannabis/617360/"
+          "text": "Eli Lilly closes major psychedelics acquisition",
+          "detail": "Lilly's acquisition of atai Beckley assets closed September 11, bringing BPL-003, VLS-01 and EMP-01 under a pharma giant's umbrella just days after the FDA published its new psychedelic drug framework.",
+          "source": "Clinical Trial Vanguard",
+          "url": "https://www.clinicaltrialvanguard.com/article/psych-pulse/what-the-fdas-new-psychedelic-framework-actually-means-for-the-clinic/"
         },
         {
-          "text": "Vireo Growth expands footprint with Cannabist asset buy",
-          "source": "Vireo Growth (SEC 8-K)",
-          "url": "https://www.sec.gov/Archives/edgar/data/0001771706/000110465926086256/tm2621146d1_ex99-1.htm"
-        },
-        {
-          "text": "States banked $15B-plus in weed taxes over 5 years",
-          "source": "Marijuana Moment",
-          "url": "https://www.marijuanamoment.net/dea-keeps-states-in-the-dark-about-cannabis-rescheduling-ca-official-says-newsletter-september-22-2026"
-        },
-        {
-          "text": "DEA judge pauses rescheduling hearing over GAO report",
+          "text": "DEA hits pause on rescheduling to fix the process",
+          "detail": "A DEA judge stayed the marijuana rescheduling hearing after a GAO report found 'gaps' in federal scheduling procedures, setting an October 13 deadline for the government's response rather than killing the effort.",
           "source": "Marijuana Moment",
           "url": "https://www.marijuanamoment.net/dea-judge-pauses-marijuana-rescheduling-hearing-as-opponents-highlight-government-report-detailing-gaps-in-federal-processes/"
+        },
+        {
+          "text": "States banked $3.55 billion in cannabis taxes",
+          "detail": "The U.S. Census Bureau reports states and D.C. collected an estimated $3.55 billion in cannabis excise taxes between July 2025 and June 2026 as legal markets keep expanding.",
+          "source": "Fox 2 Detroit",
+          "url": "https://www.fox2detroit.com/tag/cannabis"
+        },
+        {
+          "text": "Medical cannabis legitimacy keeps climbing nationally",
+          "detail": "New American College of Physicians studies count nearly 4 million registered medical marijuana patients, at least 35,000 authorized clinicians and almost 110,000 caregivers, even as teen use hits a 30-year low.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/dea-judge-grants-cannabis-opponents-request-to-pause-rescheduling-hearing-newsletter-september-30-2026"
         }
       ]
     }
