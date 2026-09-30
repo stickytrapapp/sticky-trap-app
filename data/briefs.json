@@ -1,64 +1,64 @@
 {
-  "updated": "2026-09-29",
+  "updated": "2026-09-30",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-09-29",
+      "date": "2026-09-30",
       "label": "Morning Brief",
-      "title": "Michigan Cannabis Wins in the Courtroom and on the Judges' Table While National Deal-Making and Psychedelics Surge",
-      "top": "Michigan operators notch real wins this week — a Sixth Circuit reversal wiping out a $31.8M judgment, a new dispensary-cap vote on the ballot, and top-shelf Michigan flower crowned at the 'Grammys of Cannabis' — even as the fight over the 24% wholesale tax now runs straight through the governor's race. Nationally, Curaleaf's bold bid for Aurora Cannabis and Vireo's dispensary-buying spree show MSOs are back on offense, while Compass Pathways and the FDA push psychedelic medicine closer to market.",
+      "title": "Storefronts Rising, Deals Stacking: Michigan Growth Meets National Cannabis Momentum",
+      "top": "Michigan operators keep opening doors and eyeing tax relief even as the wholesale-tax fight grinds toward a September trial, while nationally the cannabis and psychedelics sectors are stacking M&A, expansion, and regulatory momentum. A DEA hiccup on rescheduling is real, but it's one speed bump in an otherwise forward-moving week for the industry.",
       "local": [
         {
-          "text": "Michigan flower takes top honors at 2026 Zalympix — Mitten Canna Co.'s Toad Venom won best overall flower and Detroit's Hytek topped the rosin category with Oishii Piña at the state's 'Grammys of Cannabis' in Pontiac.",
-          "source": "Detroit Metro Times",
-          "url": "https://www.metrotimes.com/weed-2/michigans-best-flower-and-live-rosin-crowned-at-2026-zalympix/"
+          "text": "New Standard throws open its Ann Arbor doors — the operator kicked off a grand-opening weekend with giveaways and discounts to pull in fresh foot traffic.",
+          "source": "ClickOnDetroit",
+          "url": "https://www.clickondetroit.com/topic/Cannabis/"
         },
         {
-          "text": "Michigan cannabis sales cross $17 billion since legalization — cumulative adult-use and medical sales have generated an estimated $2.66 billion in state taxes, with August alone adding $259 million in demand.",
+          "text": "Bloom City Club expands into Ypsilanti — the Ann Arbor-based operator opened a new Ypsilanti storefront and lined up cannabis-themed events running all October.",
+          "source": "ClickOnDetroit",
+          "url": "https://www.clickondetroit.com/topic/Cannabis/"
+        },
+        {
+          "text": "Bad Axe could become Michigan's newest market — voters there may soon decide whether to lift a dispensary ban the city has maintained since 2019, opening a fresh retail opportunity.",
           "source": "The Marijuana Herald",
-          "url": "https://themarijuanaherald.com/2026/09/michigan-legal-marijuana-sales-surpass-17-billion/"
+          "url": "https://themarijuanaherald.com/2026/08/marijuana-and-the-2026-election-ballot-measures-and-governors-races-to-watch/"
         },
         {
-          "text": "Appeals court erases $31.8M cannabis judgment tied to Curaleaf — the Sixth Circuit reportedly voided the contract-dispute award, clearing a major liability off the books for one of the state's biggest operators.",
-          "source": "cann.dev",
-          "url": "https://www.cann.dev/michigan-cannabis-enforcement-september-2026/"
+          "text": "GOP nominee vows to slash the 24% wholesale tax — John James pledged to repeal or sharply reduce Michigan's cannabis wholesale tax if he wins the governor's race this November.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/michigan-gop-governor-candidate-pledges-huge-tax-cut-for-marijuana-industry-along-with-crackdown-on-hemp-products"
         },
         {
-          "text": "Menominee could add four new dispensary licenses this fall — voters decide Nov. 3 on raising the city's cap from 9 to 13 after a judge cleared the ballot measure for the general election.",
-          "source": "cann.dev",
-          "url": "https://www.cann.dev/michigan-cannabis-enforcement-september-2026/"
-        },
-        {
-          "text": "Industry group bets on a governor who'll kill the wholesale tax — MiCIA endorsed Republican John James over his pledge to repeal the 24% levy, giving operators a concrete political path toward relief.",
-          "source": "Postindustrial",
-          "url": "https://postindustrial.com/stories/michigan-marijuana-industry-group-endorses-gop-governor-candidate-who-pledged-to-cut-new-wholesale-tax/"
+          "text": "MiCIA's original tax lawsuit heads to trial this month — the industry group's founding case against the 24% wholesale tax was slated for a September trial, keeping a rollback path alive.",
+          "source": "WWMT",
+          "url": "https://wwmt.com/news/state/michigan-marijuana-industry-lawsuit-stop-wholesale-tax-legal-court-pot-weed-economy-business-wwmt"
         }
       ],
       "national": [
         {
-          "text": "Curaleaf goes big with a $270M bid for Aurora Cannabis — the MSO's unsolicited cross-border offer topped out near $5/share, signaling renewed appetite for consolidation despite the board's rejection.",
-          "source": "cann.dev",
+          "text": "DEA pumps the brakes on rescheduling review — a DEA administrative law judge paused the marijuana rescheduling hearing after a GAO report flagged process gaps, giving the agency until Oct. 13 to respond.",
+          "source": "DB Recovery Resources",
+          "url": "https://www.dbrecoveryresources.com/2026/09/dea-marijuana-rescheduling-on-hold/"
+        },
+        {
+          "text": "Curaleaf fires off $270M hostile bid for Aurora — it's the first hostile cross-border cannabis takeover since 2019, though Aurora's board has so far unanimously rejected the offer.",
+          "source": "Cann.dev",
           "url": "https://www.cann.dev/cannabis-ma-september-2026-curaleaf-vireo-consolidation/"
         },
         {
-          "text": "Vireo Growth's buying spree targets roughly 270 dispensary doors — new deals with FLUENT and C21, plus a merger with Planet 13, push the fast-rising MSO deeper into Florida and Nevada.",
-          "source": "cann.dev",
+          "text": "Vireo Growth races toward 270 dispensaries — the multi-state operator is on pace to overtake Trulieve and Curaleaf in store count after a September acquisition spree spanning Florida, Nevada and California.",
+          "source": "Cann.dev",
           "url": "https://www.cann.dev/cannabis-ma-september-2026-curaleaf-vireo-consolidation/"
         },
         {
-          "text": "Compass Pathways closes in on its FDA filing for psilocybin therapy — the company is nearing completion of its rolling NDA for COMP360 in treatment-resistant depression, targeting a U.S. launch in 2027.",
-          "source": "Yahoo Finance",
-          "url": "https://finance.yahoo.com/healthcare/articles/compass-pathways-eyes-2027-comp360-190217987.html"
+          "text": "Trulieve locks up exclusive Connected licensing deal — the multi-state giant announced a master licensing agreement with Connected covering both Florida and Texas.",
+          "source": "Cannabis Business Times",
+          "url": "https://www.cannabisbusinesstimes.com/"
         },
         {
-          "text": "FDA holds a landmark hearing on psychedelic medicine's future — regulators convened public testimony on the potential future therapeutic use of psychedelic drugs, a step advocates see as building toward broader approval pathways.",
-          "source": "Journey Clinical",
-          "url": "https://www.journeyclinical.com/resources/psilocybin-timeline"
-        },
-        {
-          "text": "Federal legalization bill picks up its 18th Senate co-sponsor — bipartisan momentum keeps building in Congress even as DEA's broader Schedule III rulemaking grinds through its own hearing process.",
-          "source": "The Marijuana Herald",
-          "url": "https://themarijuanaherald.com/2026/09/daily-cannabis-news-brief-for-9-15-2026/"
+          "text": "FDA hearing pushes psilocybin and methylone toward the clinic — regulators solicited public input on supervised therapeutic use, a step toward greenlighting the psychedelic compound and its MDMA-like cousin.",
+          "source": "The Washington Times",
+          "url": "https://www.washingtontimes.com/news/2026/sep/14/psychedelic-treatments-move-closer-mainstream-fda/"
         }
       ]
     }
