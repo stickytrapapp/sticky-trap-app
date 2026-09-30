@@ -5,60 +5,61 @@
     {
       "date": "2026-09-30",
       "label": "Morning Brief",
-      "title": "Storefronts Rising, Deals Stacking: Michigan Growth Meets National Cannabis Momentum",
-      "top": "Michigan operators keep opening doors and eyeing tax relief even as the wholesale-tax fight grinds toward a September trial, while nationally the cannabis and psychedelics sectors are stacking M&A, expansion, and regulatory momentum. A DEA hiccup on rescheduling is real, but it's one speed bump in an otherwise forward-moving week for the industry.",
+      "title": "Doors Open, Deals Close: Michigan Storefronts Expand as National M&A and Psilocybin Momentum Build",
+      "top": "Michigan operators are opening new doors and betting on tax relief at the ballot box even as the 24% wholesale tax bites, while nationally Curaleaf's $270M Aurora bid and Compass Pathways' on-track FDA filing show real capital and science moving the industry forward. The DEA hit a procedural speed bump on rescheduling, but pressure from the White House and a booming state tax base keep the bigger trend pointed up.",
       "local": [
         {
-          "text": "New Standard throws open its Ann Arbor doors — the operator kicked off a grand-opening weekend with giveaways and discounts to pull in fresh foot traffic.",
+          "text": "New Standard opens new Ann Arbor storefront",
           "source": "ClickOnDetroit",
-          "url": "https://www.clickondetroit.com/topic/Cannabis/"
+          "url": "https://www.clickondetroit.com/topic/Dispensary/",
+          "text_note": ""
         },
         {
-          "text": "Bloom City Club expands into Ypsilanti — the Ann Arbor-based operator opened a new Ypsilanti storefront and lined up cannabis-themed events running all October.",
-          "source": "ClickOnDetroit",
-          "url": "https://www.clickondetroit.com/topic/Cannabis/"
+          "text": "Zalympix crowns fresh batch of Michigan winners",
+          "source": "Gander Newsroom (MichiGanja Report)",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092826"
         },
         {
-          "text": "Bad Axe could become Michigan's newest market — voters there may soon decide whether to lift a dispensary ban the city has maintained since 2019, opening a fresh retail opportunity.",
-          "source": "The Marijuana Herald",
-          "url": "https://themarijuanaherald.com/2026/08/marijuana-and-the-2026-election-ballot-measures-and-governors-races-to-watch/"
+          "text": "50-plus cannabis properties now up for grabs",
+          "source": "Gander Newsroom (MichiGanja Report / Crain's Detroit)",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092826"
         },
         {
-          "text": "GOP nominee vows to slash the 24% wholesale tax — John James pledged to repeal or sharply reduce Michigan's cannabis wholesale tax if he wins the governor's race this November.",
-          "source": "Marijuana Moment",
-          "url": "https://www.marijuanamoment.net/michigan-gop-governor-candidate-pledges-huge-tax-cut-for-marijuana-industry-along-with-crackdown-on-hemp-products"
+          "text": "Governor's race turns into referendum on 24% tax",
+          "source": "Gander Newsroom (MichiGanja Report)",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092826"
         },
         {
-          "text": "MiCIA's original tax lawsuit heads to trial this month — the industry group's founding case against the 24% wholesale tax was slated for a September trial, keeping a rollback path alive.",
-          "source": "WWMT",
-          "url": "https://wwmt.com/news/state/michigan-marijuana-industry-lawsuit-stop-wholesale-tax-legal-court-pot-weed-economy-business-wwmt"
+          "text": "MiCIA sounds alarm, keeps fighting wholesale tax",
+          "source": "MIRS News",
+          "url": "https://home.mirs.news/post/cannabis-group-says-two-members-died-by-suicide-as-industry-struggles"
         }
       ],
       "national": [
         {
-          "text": "DEA pumps the brakes on rescheduling review — a DEA administrative law judge paused the marijuana rescheduling hearing after a GAO report flagged process gaps, giving the agency until Oct. 13 to respond.",
-          "source": "DB Recovery Resources",
-          "url": "https://www.dbrecoveryresources.com/2026/09/dea-marijuana-rescheduling-on-hold/"
+          "text": "Compass Pathways keeps psilocybin NDA on track for Q4",
+          "source": "Compass Pathways (SEC 8-K)",
+          "url": "https://www.sec.gov/Archives/edgar/data/0001816590/000181659026000059/q22026pressrelease.htm"
         },
         {
-          "text": "Curaleaf fires off $270M hostile bid for Aurora — it's the first hostile cross-border cannabis takeover since 2019, though Aurora's board has so far unanimously rejected the offer.",
-          "source": "Cann.dev",
-          "url": "https://www.cann.dev/cannabis-ma-september-2026-curaleaf-vireo-consolidation/"
+          "text": "Curaleaf presses $270M hostile bid for Aurora Cannabis",
+          "source": "MJBizDaily",
+          "url": "https://mjbizdaily.com/news/us-marijuana-mso-curaleaf-plots-272-million-hostile-takeover-of-aurora-cannabis/617360/"
         },
         {
-          "text": "Vireo Growth races toward 270 dispensaries — the multi-state operator is on pace to overtake Trulieve and Curaleaf in store count after a September acquisition spree spanning Florida, Nevada and California.",
-          "source": "Cann.dev",
-          "url": "https://www.cann.dev/cannabis-ma-september-2026-curaleaf-vireo-consolidation/"
+          "text": "Vireo Growth expands footprint with Cannabist asset buy",
+          "source": "Vireo Growth (SEC 8-K)",
+          "url": "https://www.sec.gov/Archives/edgar/data/0001771706/000110465926086256/tm2621146d1_ex99-1.htm"
         },
         {
-          "text": "Trulieve locks up exclusive Connected licensing deal — the multi-state giant announced a master licensing agreement with Connected covering both Florida and Texas.",
-          "source": "Cannabis Business Times",
-          "url": "https://www.cannabisbusinesstimes.com/"
+          "text": "States banked $15B-plus in weed taxes over 5 years",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/dea-keeps-states-in-the-dark-about-cannabis-rescheduling-ca-official-says-newsletter-september-22-2026"
         },
         {
-          "text": "FDA hearing pushes psilocybin and methylone toward the clinic — regulators solicited public input on supervised therapeutic use, a step toward greenlighting the psychedelic compound and its MDMA-like cousin.",
-          "source": "The Washington Times",
-          "url": "https://www.washingtontimes.com/news/2026/sep/14/psychedelic-treatments-move-closer-mainstream-fda/"
+          "text": "DEA judge pauses rescheduling hearing over GAO report",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/dea-judge-pauses-marijuana-rescheduling-hearing-as-opponents-highlight-government-report-detailing-gaps-in-federal-processes/"
         }
       ]
     }
