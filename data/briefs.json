@@ -1,66 +1,64 @@
 {
-  "updated": "2026-09-30",
+  "updated": "2026-10-01",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-09-30",
+      "date": "2026-10-01",
+      "title": "Tax-Relief Momentum Builds in Michigan While Rescheduling and Psilocybin Push Forward Nationally",
       "label": "Morning Brief",
-      "title": "Tax Pain, Election Hope: Michigan Operators Eye Relief as National Deals & Psilocybin Momentum Build",
-      "top": "Michigan's cannabis industry is leaning into the 2026 governor's race and courtroom fights for relief from its 24% wholesale tax, even as Zalympix crowns new statewide champions and distressed farm assets open the door for well-capitalized buyers. Nationally, a DEA rescheduling pause is just a speed bump next to accelerating MSO consolidation and a psilocybin therapy racing toward a 2027 FDA decision.",
+      "top": "Michigan operators are getting real signals of relief — a GOP gubernatorial nominee's tax-repeal pledge now has industry backing, new stores are opening from tribal land to Ann Arbor, and Michigan's rock-bottom prices are pulling customers from Ohio and Illinois. Nationally, Compass Pathways is staffing up for a 2027 psilocybin launch and the DEA's rescheduling pause is a procedural speed bump, not a dead end, while MSO consolidation keeps accelerating.",
       "local": [
         {
-          "text": "Cannabis executives bet on John James for relief",
-          "detail": "",
-          "text_full": "Cannabis executives bet on John James for relief — Michigan's top cannabis executives have endorsed GOP gubernatorial candidate John James over his pledge to cut the state's 24% wholesale weed tax, per state Sen. Jeff Irwin's warning to the industry.",
-          "source": "MichiGanja Report / Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092826"
+          "text": "Hempire Collective opens on Saginaw Chippewa tribal land",
+          "source": "cann.dev",
+          "url": "https://cann.dev/michigan-cannabis-enforcement-september-2026"
         },
         {
-          "text": "Mitten Canna Co. and Hytek crowned at Zalympix",
-          "source": "Detroit Metro Times",
-          "url": "https://www.metrotimes.com/weed-2/michigans-best-flower-and-live-rosin-crowned-at-2026-zalympix/"
+          "text": "Menominee voters could add four more dispensary slots",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092826/"
         },
         {
-          "text": "Distressed farms create entry point for buyers",
-          "source": "MichiGanja Report / Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092826"
+          "text": "Brands roll out boosted Halloween drops statewide",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/michigan-cannabis-halloween-2026/"
         },
         {
-          "text": "MiCIA sounds alarm as tax toll mounts",
-          "source": "MIRS.news",
-          "url": "https://home.mirs.news/post/cannabis-group-says-two-members-died-by-suicide-as-industry-struggles"
+          "text": "Michigan is now the Midwest's bargain weed aisle",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092826/"
         },
         {
-          "text": "State regulator tightens compliance, protects legal market",
-          "source": "Michigan LARA",
-          "url": "https://michigan.gov/lara/news-releases/2026/09/25/press-release-cannabis-regulatory-agency-releases-disciplinary-action-report"
+          "text": "GOP nominee's tax-repeal vow wins industry endorsement",
+          "source": "Ganjapreneur",
+          "url": "https://ganjapreneur.com/michigan-republican-candidate-for-governor-endorses-repealing-wholesale-cannabis-tax/"
         }
       ],
       "national": [
         {
-          "text": "DEA rescheduling hits a pause, not a dead end",
-          "source": "Law360 / MJBizDaily",
-          "url": "https://mjbizdaily.com/news/new-delay-for-federal-marijuana-rescheduling-as-flaws-in-process-parsed/618388"
+          "text": "DEA pause slows rescheduling but medical order stands",
+          "source": "Cannabis Business Times",
+          "url": "https://cannabisbusinesstimes.com/cannabis-rescheduling/news/15836261/dea-judge-halts-cannabis-rescheduling-process-may-reopen-hearing-record"
         },
         {
-          "text": "Curaleaf fires hostile $270M bid for Aurora",
-          "source": "Cann.dev",
-          "url": "https://www.cann.dev/cannabis-ma-september-2026-curaleaf-vireo-consolidation/"
+          "text": "Compass Pathways staffs up for 2027 psilocybin launch",
+          "source": "Yahoo Finance",
+          "url": "https://finance.yahoo.com/healthcare/articles/compass-pathways-appoints-kelley-boucher-103000653.html"
         },
         {
-          "text": "Vireo Growth races to become top U.S. MSO",
-          "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/news/cannabis-mso-vireo-growth-to-acquire-planet-13-in-all-stock-deal/617152/"
-        },
-        {
-          "text": "Compass Pathways nears historic psilocybin approval",
+          "text": "Psilocybin hits primary endpoint in third Phase 3 trial",
           "source": "Psychiatric Times",
-          "url": "https://psychiatrictimes.com/view/psychedelics-as-a-catalyst-for-change-the-evolving-competitive-landscape-in-depression"
+          "url": "https://www.psychiatrictimes.com/view/comp360-psilocybin-for-treatment-resistant-depression-achieves-primary-endpoint-in-phase-3-trial"
         },
         {
-          "text": "Massachusetts voters reject rolling back legalization",
-          "source": "Marijuana Moment",
-          "url": "https://www.marijuanamoment.net/dea-judge-grants-cannabis-opponents-request-to-pause-rescheduling-hearing-newsletter-september-30-2026"
+          "text": "Psychedelic CEOs pitch HHS on treatment-resistant depression",
+          "source": "The Hill",
+          "url": "https://thehill.com/policy/healthcare/6119302-maha-summit-corporate-takeaways"
+        },
+        {
+          "text": "Curaleaf's $4/share Aurora bid signals cross-border consolidation",
+          "source": "cann.dev",
+          "url": "https://www.cann.dev/cannabis-ma-august-2026-curaleaf-vireo-consolidation/"
         }
       ]
     }
