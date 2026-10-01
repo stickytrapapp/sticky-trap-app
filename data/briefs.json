@@ -5,60 +5,60 @@
     {
       "date": "2026-10-01",
       "label": "Morning Brief",
-      "title": "Michigan Weed Goes National While D.C. Stalls — Psilocybin Keeps Climbing",
-      "top": "A Troy-built chain just became Arizona's biggest dispensary network, proof Michigan operators are punching above their weight even as the 24% wholesale tax squeezes margins at home — and a real repeal path is forming heading into November. Nationally, Compass Pathways edges closer to the first-ever FDA psilocybin approval and M&A dealmaking is heating up, even as a DEA judge hits pause on rescheduling yet again.",
+      "title": "Michigan Crowns Its Best Buds While National Psychedelics Momentum Builds",
+      "top": "Michigan's cannabis scene keeps finding bright spots — from Zalympix gold medals to a new Ypsilanti storefront and a gubernatorial candidate courting industry dollars with a tax-repeal pledge — even as regulators tighten enforcement and the wholesale tax fight rolls on. Nationally, psychedelics had a banner week with a well-received FDA hearing and fresh NDA momentum, while cannabis rescheduling hit a procedural pause rather than a real setback.",
       "local": [
         {
-          "text": "Michigan-born JARS becomes Arizona's biggest chain — JARS Cannabis, headquartered in Troy, signed a deal to acquire Sonoran Roots and its eight Ponderosa dispensaries, creating a 27-store network and the state's largest cannabis retailer.",
-          "source": "Cannabis Business Times",
-          "url": "https://www.cannabisbusinesstimes.com/us-states/arizona/news/15833457/jars-cannabis-sonoran-roots-join-forces-to-create-arizonas-largest-cannabis-retail-network"
+          "text": "Mitten Canna Co. and Hytek crowned at Zalympix 2026 — Mitten Canna Co.'s Toad Venom and Hytek's Oishii Piña took the top flower and rosin prizes at Michigan's 'Grammys of Cannabis.'",
+          "source": "Detroit Metro Times",
+          "url": "https://www.metrotimes.com/weed-2/michigans-best-flower-and-live-rosin-crowned-at-2026-zalympix/"
         },
         {
-          "text": "Demand holds steady despite the new tax — Dispensary sales dipped only slightly in 2026, with the real driver being oversupply-driven price drops rather than the 24% wholesale tax, since operators are still sitting on roughly two years of flower inventory.",
-          "source": "Cannabis Business Times",
-          "url": "https://www.cannabisbusinesstimes.com/us-states/michigan/news/15819825/michigan-cannabis-prices-remain-down-demand-steady-in-2026-despite-new-tax"
+          "text": "Bloom City Club expands footprint into Ypsilanti — the Ann Arbor-rooted retailer opened a new Ypsilanti dispensary and is running cannabis-themed events through October to celebrate.",
+          "source": "ClickOnDetroit",
+          "url": "https://www.clickondetroit.com/topic/Cannabis/"
         },
         {
-          "text": "Operators get a real shot at tax relief — The Michigan Cannabis Industry Association endorsed GOP gubernatorial nominee John James after he pledged to repeal or sharply cut the 24% wholesale tax he says \"drives up prices\" and helps illegal operators.",
-          "source": "Postindustrial",
-          "url": "https://postindustrial.com/stories/michigan-marijuana-industry-group-endorses-gop-governor-candidate-who-pledged-to-cut-new-wholesale-tax/"
-        },
-        {
-          "text": "Halloween season fuels fresh product drops — Michigan brands are rolling out seasonal SKUs like Armada Cannabis's 50 mg THC apple cider blends and live-rosin ciders to capture fall foot traffic.",
+          "text": "Gubernatorial hopeful courts industry with tax-repeal vow — Michigan's top cannabis executives have thrown roughly $90,000 behind GOP candidate John James after he pledged to repeal the state's 24% wholesale tax.",
           "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/michigan-cannabis-halloween-2026/"
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092126/"
         },
         {
-          "text": "Closures continue, but a workaround is emerging — Higher Love closed five of its nine U.P. dispensaries citing the wholesale tax, while fellow U.P. operator Rize kept growing by splitting the tax burden through negotiated supplier cost-sharing deals.",
-          "source": "Cannabis Business Times",
-          "url": "https://www.cannabisbusinesstimes.com/us-states/michigan/news/15832095/michigan-cannabis-retailer-closing-5-dispensaries-citing-new-tax-burden"
+          "text": "Michigan still the Midwest's best deal on flower — the average ounce runs about $60 here versus $150–$220 in Ohio and Illinois, pulling in cross-border shoppers and pushing small border-town stores past Detroit in sales.",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092826/"
+        },
+        {
+          "text": "CRA enforcement protects legit operators from bad actors — regulators handed out back-to-back record-tying $2 million fines, including one against a grower caught shipping dirt and mulch labeled as marijuana flower.",
+          "source": "MITechNews",
+          "url": "https://mitechnews.com/news/michigan-cra-revokes-20-marijuana-grow-licenses-issues-record-tying-2-million-fine"
         }
       ],
       "national": [
         {
-          "text": "Compass Pathways inches toward a historic first — COMP360's Phase 3 COMP006 trial hit its primary endpoint with durable 26-week data, keeping the psilocybin drug on pace to potentially become the first FDA-approved classic psychedelic medicine as soon as late 2026.",
-          "source": "Psychiatric Times / STAT",
-          "url": "https://www.psychiatrictimes.com/view/comp360-psilocybin-for-treatment-resistant-depression-achieves-primary-endpoint-in-phase-3-trial"
+          "text": "FDA's psychedelic hearing draws upbeat reviews — speakers at a late-September FDA hearing on psychedelic therapy were described as overwhelmingly positive, with business owners, therapists and researchers outlining real progress on access and training.",
+          "source": "TalkingDrugs",
+          "url": "https://talkingdrugs.org/fda-hearing-on-psychedelics-concerns-but-overwhelmingly-positive"
         },
         {
-          "text": "DEA stalls again, but its own lawyers back Schedule III — A judge paused marijuana rescheduling hearings to weigh a new GAO report, with the government's response due Oct. 13, even as DEA's own filing continues urging the judge to \"expeditiously recommend\" moving cannabis to Schedule III.",
-          "source": "NORML / Marijuana Moment",
+          "text": "Compass and Definium gear up for approval filings — with Lykos' 2024 rejection in the rearview, Compass Pathways and Definium Therapeutics are leading what one analyst calls a potentially huge year for the psychedelics field.",
+          "source": "BioSpace",
+          "url": "https://www.biospace.com/drug-development/deep-dive-psychedelics-back-on-fdas-doorstep"
+        },
+        {
+          "text": "FDA publishes new regulatory framework for psychedelics — the agency's framework, published in the New England Journal of Medicine, reshapes trial design and access rules for psilocybin and MDMA therapies going forward.",
+          "source": "Clinical Trial Vanguard",
+          "url": "https://www.clinicaltrialvanguard.com/article/psych-pulse/what-the-fdas-new-psychedelic-framework-actually-means-for-the-clinic/"
+        },
+        {
+          "text": "Curaleaf pushes cross-border consolidation with Aurora bid — Curaleaf launched a $4-per-share takeover offer for Aurora Cannabis, a 45% premium that would create a combined company with $1.5 billion-plus in pro forma revenue.",
+          "source": "Cann.dev",
+          "url": "https://www.cann.dev/cannabis-ma-august-2026-curaleaf-vireo-consolidation/"
+        },
+        {
+          "text": "DEA rescheduling hits a procedural pause, not a reversal — a DEA judge stayed the marijuana rescheduling hearing to weigh a new GAO report, but April's separate medical-cannabis order remains unaffected and the government must respond by Oct. 13.",
+          "source": "NORML",
           "url": "https://norml.org/news/2026/10/01/administrative-law-judge-temporarily-stays-cannabis-rescheduling-proceedings"
-        },
-        {
-          "text": "Aggressive dealmaking is paying off for MSOs — Vireo Growth's buying spree, including its acquisition of Hawthorne Gardening from Scotts Miracle-Gro, helped drive revenue up more than 250% year-over-year.",
-          "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/news/cannabis-mso-vireo-growths-aggressive-strategy-paying-off/615083/"
-        },
-        {
-          "text": "Big MSOs push into Texas's growing medical market — Cresco Labs and Green Thumb Industries both entered Texas as its medical cannabis program expands, part of a broader buildout that's bringing the state to 15 vertically integrated operators.",
-          "source": "Yahoo Finance",
-          "url": "https://finance.yahoo.com/sectors/healthcare/articles/weekly-roundup-cannabis-sector-psychedelic-143910444.html"
-        },
-        {
-          "text": "Three psychedelic programs get an FDA fast lane — The FDA issued Commissioner's National Priority Vouchers to Compass Pathways' psilocybin program, Usona Institute's psilocybin program for depression, and Transcend Therapeutics' methylone for PTSD, compressing review timelines across the sector.",
-          "source": "Psychedelic Beacon",
-          "url": "https://psychedelicbeacon.com/blog/psilocybin-fda-approval-tracker"
         }
       ]
     }
