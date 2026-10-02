@@ -4,61 +4,61 @@
   "briefs": [
     {
       "date": "2026-10-02",
+      "title": "Sales Hit $17B, a Governor Candidate Vows Tax Repeal, and Psilocybin Edges Toward FDA Filing",
       "label": "Morning Brief",
-      "title": "Awards, Acquisitions & a Pause on Rescheduling: The Industry Keeps Moving Forward",
-      "top": "Michigan operators are racking up craft-cannabis accolades and political promises of tax relief even as regulators swing a hard enforcement hammer on bad actors. Nationally, Compass Pathways edges toward a historic psilocybin approval and MSOs keep consolidating, while a DEA judge's procedural pause on rescheduling is a speed bump, not a dead end.",
+      "top": "Michigan operators have real tailwinds this week — record cumulative sales, a fresh tribal-land dispensary launch, and a gubernatorial candidate campaigning on killing the 24% wholesale tax. Nationally, a DEA pause on rescheduling is a speed bump, not a dead end, while Compass Pathways' psilocybin program and a wave of cannabis M&A keep the bigger trendlines pointed up.",
       "local": [
         {
-          "text": "Ann Arbor, Lansing brands sweep Best of Detroit weed awards — Information Entropy's converted-church dispensary and Hey! Captain's freeze-dried, nug-shaped edibles took top 2026 honors for craftsmanship and creativity.",
-          "source": "Detroit Metro Times",
-          "url": "https://www.metrotimes.com/topic/best-of-detroit/best-of-detroit-2026-staff-picks-weed/"
+          "text": "Hempire Collective opens first tribal-land dispensary — The family-owned operator cut the ribbon on its newest Mt. Pleasant store on Saginaw Chippewa tribal land, a new retail frontier that required AG-level sign-off to pull off.",
+          "source": "Cann.dev",
+          "url": "https://www.cann.dev/michigan-cannabis-enforcement-september-2026/"
         },
         {
-          "text": "Governor's race brings real shot at tax repeal — cannabis execs wrote ~$90K in checks backing GOP candidate John James, who's pledged to kill the 24% wholesale tax if elected.",
+          "text": "Michigan cannabis sales cross $17 billion lifetime — The CRA's latest monthly report shows combined adult-use and medical sales have surpassed $17 billion since legalization, generating an estimated $2.66 billion in state taxes.",
+          "source": "The Marijuana Herald",
+          "url": "https://themarijuanaherald.com/2026/09/michigan-legal-marijuana-sales-surpass-17-billion/"
+        },
+        {
+          "text": "Michigan brands roll out Halloween seasonal drops — Local cannabis companies are leaning into product innovation with themed fall releases as Q4 competition heats up.",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092826/"
+        },
+        {
+          "text": "Gov. candidate James pledges to repeal 24% tax — Backed by roughly $90,000 in industry checks, GOP candidate John James has pledged to repeal the wholesale tax if elected, giving operators a political path to relief.",
           "source": "Gander Newsroom",
           "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092126/"
         },
         {
-          "text": "Sen. Irwin urges industry caution on James's tax pledge — the Ann Arbor Democrat told Marijuana Moment that James hasn't backed cannabis reform in Congress despite now courting industry votes.",
-          "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092826/"
-        },
-        {
-          "text": "Menominee voters may open 4 new dispensary slots — a ballot measure this week asks to raise the city's store cap from 9 to 13, a fresh licensing opportunity up north.",
-          "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092826/"
-        },
-        {
-          "text": "CRA drops record-tying $2M fine, pulls 20 licenses — regulators nailed a Clare grower for shipping dirt and mulch instead of flower, a cleanup move that protects compliant operators' market standing.",
-          "source": "MITechNews",
-          "url": "https://mitechnews.com/news/michigan-cra-revokes-20-marijuana-grow-licenses-issues-record-tying-2-million-fine"
+          "text": "Tax lawsuit advances toward trial as CRA cracks down — A judge let MiCIA's challenge to the 24% wholesale tax proceed toward trial, even as regulators hit a major vape producer with a record $2 million fine — both signs the state is sorting out winners under the new rules.",
+          "source": "Michigan Cannabis News / Cann.dev",
+          "url": "https://michigancannabis.org/news"
         }
       ],
       "national": [
         {
-          "text": "Compass Pathways nears psilocybin NDA finish line — the company is targeting Q4 2026 to complete its rolling submission for COMP360 in treatment-resistant depression, with a possible H1 2027 launch.",
+          "text": "DEA rescheduling hits a pause, not a dead end — A DEA administrative law judge stayed the marijuana rescheduling hearing to weigh a new GAO report, but the completed hearing record stands and the government must respond by Oct. 13.",
+          "source": "Vicente LLP",
+          "url": "https://vicentellp.com/insights/dea-judge-pauses-marijuana-rescheduling-gao-report/"
+        },
+        {
+          "text": "Compass Pathways nears FDA filing for psilocybin drug — COMP360 hit statistically significant results in back-to-back Phase 3 trials, and with a rolling NDA review and National Priority Voucher in hand, the company is targeting a Q4 submission.",
           "source": "Journey Clinical",
           "url": "https://www.journeyclinical.com/resources/psilocybin-timeline"
         },
         {
-          "text": "White House order pours $50M into psychedelic research — the 2026 executive order pushes FDA to fast-track psychedelic reviews and directs DEA to cut research barriers, with ibogaine a top priority.",
-          "source": "Journey Clinical",
-          "url": "https://www.journeyclinical.com/resources/psilocybin-timeline"
+          "text": "MAHA Summit spotlights psychedelic medicine's momentum — HHS and FDA officials joined Compass Pathways' CEO and other psychedelic executives to discuss psilocybin's potential for the 4 million Americans with treatment-resistant depression.",
+          "source": "The Hill",
+          "url": "https://thehill.com/policy/healthcare/6119302-maha-summit-corporate-takeaways"
         },
         {
-          "text": "Verano readies Virginia for adult-use launch — the Chicago MSO is remodeling stores ahead of a July rollout, building on its $90M buy of Cannabist's Virginia operations.",
-          "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/news/how-cannabis-mso-verano-is-preparing-for-a-major-new-market/618307"
+          "text": "Vireo Growth to acquire Planet 13 in landmark MSO deal — The all-stock transaction adds 36 dispensaries, three cultivation facilities and a consumption lounge license to Vireo's expanding multistate portfolio.",
+          "source": "Yahoo Finance",
+          "url": "https://finance.yahoo.com/healthcare/articles/weekly-roundup-cannabis-sector-psychedelic-222628320.html"
         },
         {
-          "text": "DEA rescheduling hits a procedural pause, not a reversal — the chief judge stayed proceedings Sept. 29 over a new GAO report, with a government response due Oct. 13 before the case resumes.",
-          "source": "Marijuana Moment",
-          "url": "https://www.marijuanamoment.net/dea-judge-pauses-marijuana-rescheduling-hearing-as-opponents-highlight-government-report-detailing-gaps-in-federal-processes/"
-        },
-        {
-          "text": "Bipartisan lawmakers press White House for Schedule III clarity — four House members sent a letter to Trump and cabinet officials seeking guidance on the federal medical-cannabis framework.",
-          "source": "Cannabis Business Times",
-          "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15836261/dea-judge-halts-cannabis-rescheduling-process-may-reopen-hearing-record"
+          "text": "RWB expands into Germany with HEAL Europe buy — The company closed its majority acquisition of HEAL Europe Holdings, entering the German medical cannabis market after repositioning its Canadian platform.",
+          "source": "StratCann",
+          "url": "https://stratcann.com/news/rwb-closes-majority-acquisition-of-heal-europe-holdings-entering-german-medical-cannabis-market"
         }
       ]
     }
