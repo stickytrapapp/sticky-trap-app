@@ -1,64 +1,64 @@
 {
-  "updated": "2026-10-01",
+  "updated": "2026-10-02",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-10-01",
+      "date": "2026-10-02",
       "label": "Morning Brief",
-      "title": "Michigan Weathers the Weed Tax While National Cannabis & Psychedelics Momentum Builds",
-      "top": "Michigan's cannabis market keeps finding ways around its 24% wholesale tax — new storefronts, a live legal challenge, and a toss-up governor's race that could still bring relief. Nationally, a DEA procedural pause on rescheduling shares the news cycle with real momentum: Trulieve's NYSE debut, a $1.5B Apollo bet on cannabis trade shows, and psilocybin edging toward a historic FDA approval.",
+      "title": "Michigan's 'Dirt-for-Flower' Fine Rattles Growers as National Psychedelics Momentum Builds",
+      "top": "Michigan's cannabis market absorbed its biggest-ever regulatory gut-punch this week: a $2 million fine and 20 revoked grower licenses after a Clare processor shipped dirt and mulch labeled as marijuana flower, even as the state's 24% wholesale tax pushes prices to the lowest in the nation and drives more closures. Nationally, psychedelics kept building momentum — Compass Pathways confirmed durable 26-week Phase 3 results for its depression therapy, Portland moved to deprioritize psilocybin enforcement, and a bipartisan congressional caucus pressed the FDA to speed reviews — while a federal appeals ruling continues to narrow cannabis's interstate-commerce prospects.",
       "local": [
         {
-          "text": "Menominee eyes four more dispensary licenses — A citizen petition drive qualified for the November ballot to raise the city's dispensary cap from nine to 13, opening fresh retail opportunity in the Upper Peninsula.",
+          "text": "Michigan revokes 20 grower licenses, fines processor $2M for shipping dirt as 'flower' — The CRA shut down GP Holdings LLC (Millie Montana Industries) after finding packages manifested as marijuana flower actually contained dirt, mulch, shake, kief, and plant waste — the state's largest-ever cannabis fine.",
+          "source": "MJBizDaily",
+          "url": "https://mjbizdaily.com/news/michigan-fines-shuts-down-cannabis-grower-for-shipping-dirt-labeled-as-flower/618392"
+        },
+        {
+          "text": "Tax pressure keeps squeezing Detroit shops — Detroit dispensary owner Stuart Carter (Utopia Gardens) is among operators warning that the 24% wholesale tax is accelerating closures and layoffs across Michigan's cannabis market.",
+          "source": "Detroit Metro Times",
+          "url": "https://www.metrotimes.com/weed-2/michigans-cannabis-market-shrinks-as-new-tax-threatens-more-closures-layoffs/"
+        },
+        {
+          "text": "Menominee's dispensary-cap vote set for Nov. 3 — The ballot measure to raise the city's dispensary limit from nine to 13 licenses now has a confirmed election date, giving Upper Peninsula operators a concrete timeline for potential expansion.",
           "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-091626/"
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092826/"
         },
         {
-          "text": "Henry Ford Health lands $1M cannabis research grant — A researcher there secured federal funding to help pregnant Michiganders cut back on cannabis, adding the state to the list driving clinical science on the plant.",
-          "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-091626/"
+          "text": "Michigan cements status as the nation's cheapest legal weed — Oversupply has pushed average flower prices to roughly $60 an ounce, turning border towns like Monroe Township and New Buffalo into magnets for Ohio and Illinois shoppers chasing lower prices.",
+          "source": "Bridge Michigan",
+          "url": "https://bridgemi.com/business-watch/ohio-helps-make-michigan-no-1-weed-sales-perhaps-not-long/"
         },
         {
-          "text": "Ann Arbor keeps adding storefronts as brands compete — Michigan-based Lume Cannabis Co. is opening its newest Ann Arbor location at 2247 W. Liberty Street, joining a crowded but still-growing local retail scene.",
-          "source": "ClickOnDetroit",
-          "url": "https://www.clickondetroit.com/topic/Cannabis/"
-        },
-        {
-          "text": "Tax lawsuit still alive, could force relief — The Michigan Cannabis Industry Association's second legal challenge argues the 24% wholesale tax unconstitutionally exceeds the state's 6% sales-tax cap, keeping relief in play for operators.",
-          "source": "WKAR",
-          "url": "https://www.wkar.org/wkar-news/2026-03-30/cannabis-industry-files-new-legal-challenge-to-michigans-24-marijuana-wholesale-tax"
-        },
-        {
-          "text": "Prices stay low, demand steady despite new tax — Oversupply has kept Michigan dispensary prices competitive and sales volume resilient even as the 24% wholesale tax took hold, per Cannabis Business Times.",
-          "source": "Cannabis Business Times",
-          "url": "https://www.cannabisbusinesstimes.com/us-states/michigan/news/15819825/michigan-cannabis-prices-remain-down-demand-steady-in-2026-despite-new-tax"
+          "text": "Fourth-quarter wholesale tax period begins — Oct. 1 marks the start of Q4 (Oct. 1–Dec. 31) under the 24% wholesale marihuana tax, with payments due Jan. 20, as Treasury guidance continues to evolve amid industry confusion over collection.",
+          "source": "Michigan Department of Treasury",
+          "url": "https://www.michigan.gov/taxes/business-taxes/wholesale-marihuana-tax/faq"
         }
       ],
       "national": [
         {
-          "text": "DEA pauses rescheduling hearing, doesn't kill it — Chief Judge Derek Julius paused the Schedule III review to weigh a GAO report on scheduling gaps, but the stay sets no end date and leaves April's medical-cannabis reclassification intact.",
-          "source": "mg Magazine",
-          "url": "https://mgmagazine.com/cannabis-news/dea-cannabis-rescheduling-review-paused/"
+          "text": "Compass Pathways confirms durable psilocybin benefit at six months — The second Phase 3 trial (COMP006) of COMP360 showed a well-tolerated safety profile and responses sustained roughly six months after treatment for depression, bolstering the case for a possible 2027 FDA filing.",
+          "source": "PharmaTimes",
+          "url": "https://pharmatimes.com/?p=104774"
         },
         {
-          "text": "Trulieve wins approval for NYSE listing — The MSO completed a medical-only restructuring to maintain its Schedule III footprint and will begin trading under ticker TRLV, a milestone for plant-touching operators.",
-          "source": "mg Magazine",
-          "url": "https://mgmagazine.com/business-strategy/finance-acquisitions-business-strategy/"
+          "text": "Portland moves to deprioritize psilocybin enforcement — City councilors advanced a Psychedelic Health and Safety Code making police enforcement of personal natural-psychedelic use one of the city's lowest priorities, while leaving trafficking and impaired-driving laws untouched.",
+          "source": "KATU",
+          "url": "https://katu.com/news/local/portland-city-councilors-propose-easing-police-enforcement-of-low-level-psychedelic-offenses-psilocybin-legal-resources-harm-reduction"
         },
         {
-          "text": "Apollo Global bets $1.5B on cannabis trade shows — The private equity giant is acquiring MJBizCon parent Emerald Holding and trade-show producer Questex, signaling institutional confidence in the sector's infrastructure.",
-          "source": "mg Magazine",
-          "url": "https://mgmagazine.com/business-strategy/finance-acquisitions-business-strategy/"
+          "text": "Johns Hopkins study: cannabis is the top self-care tool for PMS and PMDD — A survey of over 700 people found 30% used cannabis to manage premenstrual mood symptoms (51.5% among those with PMDD), in the first study to also track psychedelic use across the menstrual cycle.",
+          "source": "Journal of Women's Health (via Citedrive)",
+          "url": "https://www.citedrive.com/en/discovery/cannabis-psychedelics-and-other-substance-use-to-manage-premenstrual-symptoms-a-survey-study/"
         },
         {
-          "text": "Compass Pathways builds out team for 2027 launch — The psilocybin drugmaker hired a new chief people officer to help guide COMP360 toward a planned first-half 2027 rollout pending FDA approval.",
-          "source": "StockTitan",
-          "url": "https://stocktitan.net/news/CMPS/compass-pathways-appoints-kelley-boucher-as-chief-people-j4lhjiohgh0g.html"
+          "text": "Interstate cannabis commerce hopes keep dimming — An Oregon wholesaler dropped its lawsuit challenging the state's cannabis export ban, citing the Ninth Circuit's Peridot Tree ruling that the dormant Commerce Clause doesn't protect marijuana activity under federal prohibition.",
+          "source": "Cannabis Business Times",
+          "url": "https://www.cannabisbusinesstimes.com/us-states/oregon/news/15828153/oregon-cannabis-wholesaler-withdraws-challenge-to-interstate-commerce"
         },
         {
-          "text": "Oregon's psilocybin program shows lasting, safe results — A new OHSU-backed study found low rates of harm and durable benefits among adults using the state's regulated psilocybin services, bolstering the case for broader access.",
-          "source": "OHSU News",
-          "url": "https://news.ohsu.edu/2026/08/19/study-finds-sustained-benefit-for-people-using-oregon-psilocybin-services"
+          "text": "Bipartisan caucus presses FDA to speed psychedelic therapy reviews — Reps. Lou Correa and Jack Bergman, co-chairs of the congressional PATH Caucus, led 30 members of Congress urging FDA Commissioner Makary to accelerate evaluation of psychedelic-assisted therapies for serious mental illness.",
+          "source": "Office of Rep. Lou Correa",
+          "url": "https://correa.house.gov/news/press-releases/correa-bergman-lead-call-to-expedite-review-of-psychedelic-therapy"
         }
       ]
     }
