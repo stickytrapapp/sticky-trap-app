@@ -4,61 +4,61 @@
   "briefs": [
     {
       "date": "2026-10-02",
-      "title": "Sales Hit $17B, a Governor Candidate Vows Tax Repeal, and Psilocybin Edges Toward FDA Filing",
       "label": "Morning Brief",
-      "top": "Michigan operators have real tailwinds this week — record cumulative sales, a fresh tribal-land dispensary launch, and a gubernatorial candidate campaigning on killing the 24% wholesale tax. Nationally, a DEA pause on rescheduling is a speed bump, not a dead end, while Compass Pathways' psilocybin program and a wave of cannabis M&A keep the bigger trendlines pointed up.",
+      "title": "Michigan Weed Keeps Moving, Psychedelics Keep Winning",
+      "top": "Michigan operators are grinding through the 24% wholesale tax with steady demand, fresh store openings, and a growing political coalition for repeal — while nationally, psilocybin's path to FDA approval keeps strengthening even as the DEA rescheduling hearing hits a procedural speed bump. Bottom line: the fundamentals (sales, product pipeline, investor interest) are still pointing up on both fronts.",
       "local": [
         {
-          "text": "Hempire Collective opens first tribal-land dispensary — The family-owned operator cut the ribbon on its newest Mt. Pleasant store on Saginaw Chippewa tribal land, a new retail frontier that required AG-level sign-off to pull off.",
-          "source": "Cann.dev",
-          "url": "https://www.cann.dev/michigan-cannabis-enforcement-september-2026/"
+          "text": "Lume opens new Ann Arbor storefront — Michigan-based Lume Cannabis Co. launched its Ann Arbor location at 2247 W. Liberty Street with a grand-opening weekend, adding fresh retail footprint in the Tree Town market.",
+          "source": "ClickOnDetroit",
+          "url": "https://www.clickondetroit.com/topic/Marijuana_Dispensary/"
         },
         {
-          "text": "Michigan cannabis sales cross $17 billion lifetime — The CRA's latest monthly report shows combined adult-use and medical sales have surpassed $17 billion since legalization, generating an estimated $2.66 billion in state taxes.",
-          "source": "The Marijuana Herald",
-          "url": "https://themarijuanaherald.com/2026/09/michigan-legal-marijuana-sales-surpass-17-billion/"
-        },
-        {
-          "text": "Michigan brands roll out Halloween seasonal drops — Local cannabis companies are leaning into product innovation with themed fall releases as Q4 competition heats up.",
+          "text": "Wholesale tax collections running far below forecast — the 24% wholesale tax generated only about $37 million in Q2 2026 and $34 million in Q1, against a projected $105 million per quarter, giving repeal advocates fresh ammunition.",
           "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092826/"
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-090826/"
         },
         {
-          "text": "Gov. candidate James pledges to repeal 24% tax — Backed by roughly $90,000 in industry checks, GOP candidate John James has pledged to repeal the wholesale tax if elected, giving operators a political path to relief.",
-          "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092126/"
+          "text": "Flower prices stay near record lows, demand holds steady — Michigan licensees are largely absorbing the new 24% wholesale tax themselves rather than passing it to shoppers, keeping the state's famously cheap prices intact for now.",
+          "source": "Cannabis Business Times",
+          "url": "https://www.cannabisbusinesstimes.com/us-states/michigan/news/15819825/michigan-cannabis-prices-remain-down-demand-steady-in-2026-despite-new-tax"
         },
         {
-          "text": "Tax lawsuit advances toward trial as CRA cracks down — A judge let MiCIA's challenge to the 24% wholesale tax proceed toward trial, even as regulators hit a major vape producer with a record $2 million fine — both signs the state is sorting out winners under the new rules.",
-          "source": "Michigan Cannabis News / Cann.dev",
-          "url": "https://michigancannabis.org/news"
+          "text": "Second industry lawsuit keeps tax fight alive — MiCIA's new suit argues the stacked 24% wholesale levy functions as an unconstitutional sales tax on top of the existing 10% excise and 6% sales tax, keeping legal pressure on Lansing.",
+          "source": "WKAR",
+          "url": "https://www.wkar.org/wkar-news/2026-03-30/cannabis-industry-files-new-legal-challenge-to-michigans-24-marijuana-wholesale-tax"
+        },
+        {
+          "text": "Governor's race opens a repeal lane for operators — Democratic candidate Chris Swanson publicly pledged to repeal the cannabis wholesale tax while still funding roads, signaling the tax fight is now a live 2026 campaign issue ahead of the Benson-James general.",
+          "source": "Michigan Advance",
+          "url": "https://michiganadvance.com/2026/03/30/democratic-gubernatorial-hopeful-promises-to-repeal-cannabis-tax-key-to-whitmers-road-funding-plan/"
         }
       ],
       "national": [
         {
-          "text": "DEA rescheduling hits a pause, not a dead end — A DEA administrative law judge stayed the marijuana rescheduling hearing to weigh a new GAO report, but the completed hearing record stands and the government must respond by Oct. 13.",
+          "text": "Compass Pathways psilocybin nears the finish line — after two positive Phase 3 trials, CEO Kabir Nath says the company is preparing an NDA submission in Q4 2026 and is \"closer than ever\" to an entirely new mental-health treatment.",
+          "source": "StockTitan",
+          "url": "https://stocktitan.net/news/CMPS/compass-pathways-appoints-kelley-boucher-as-chief-people-j4lhjiohgh0g.html"
+        },
+        {
+          "text": "FDA fast-tracks three psychedelic therapies — Compass Pathways, Usona Institute, and Transcend Therapeutics all received National Priority Vouchers in April, putting psilocybin and an MDMA-like compound on an accelerated 1-2 month review track with a decision possible by late 2026.",
+          "source": "Medical Daily",
+          "url": "https://www.medicaldaily.com/psilocybin-fda-priority-review-2026-compass-pathways-depression-ptsd-approval-475666"
+        },
+        {
+          "text": "Compass builds out leadership for 2027 launch — the company appointed a new Chief People Officer specifically to help guide the planned commercial rollout of COMP360 psilocybin, targeted for first-half 2027 pending approval.",
+          "source": "StockTitan",
+          "url": "https://stocktitan.net/news/CMPS/compass-pathways-appoints-kelley-boucher-as-chief-people-j4lhjiohgh0g.html"
+        },
+        {
+          "text": "DEA rescheduling hits a pause, not a dead end — Chief Judge Derek Julius stayed the marijuana rescheduling hearing to weigh a new GAO report, but the stay doesn't touch April's order already placing FDA-approved and state-licensed medical cannabis in Schedule III, and responses are due Oct. 13.",
           "source": "Vicente LLP",
           "url": "https://vicentellp.com/insights/dea-judge-pauses-marijuana-rescheduling-gao-report/"
         },
         {
-          "text": "Compass Pathways nears FDA filing for psilocybin drug — COMP360 hit statistically significant results in back-to-back Phase 3 trials, and with a rolling NDA review and National Priority Voucher in hand, the company is targeting a Q4 submission.",
-          "source": "Journey Clinical",
-          "url": "https://www.journeyclinical.com/resources/psilocybin-timeline"
-        },
-        {
-          "text": "MAHA Summit spotlights psychedelic medicine's momentum — HHS and FDA officials joined Compass Pathways' CEO and other psychedelic executives to discuss psilocybin's potential for the 4 million Americans with treatment-resistant depression.",
-          "source": "The Hill",
-          "url": "https://thehill.com/policy/healthcare/6119302-maha-summit-corporate-takeaways"
-        },
-        {
-          "text": "Vireo Growth to acquire Planet 13 in landmark MSO deal — The all-stock transaction adds 36 dispensaries, three cultivation facilities and a consumption lounge license to Vireo's expanding multistate portfolio.",
-          "source": "Yahoo Finance",
-          "url": "https://finance.yahoo.com/healthcare/articles/weekly-roundup-cannabis-sector-psychedelic-222628320.html"
-        },
-        {
-          "text": "RWB expands into Germany with HEAL Europe buy — The company closed its majority acquisition of HEAL Europe Holdings, entering the German medical cannabis market after repositioning its Canadian platform.",
-          "source": "StratCann",
-          "url": "https://stratcann.com/news/rwb-closes-majority-acquisition-of-heal-europe-holdings-entering-german-medical-cannabis-market"
+          "text": "Tilray posts record quarter despite rescheduling jitters — shares hit a 52-week low on the DEA pause, but Tilray's most recent quarter notched record revenue and profit on international sales and BrewDog growth, with another revenue increase expected next week.",
+          "source": "Seeking Alpha",
+          "url": "https://seekingalpha.com/article/4951525-tilray-stock-hits-new-52-week-low-dea-pauses-cannabis-rescheduling-hearing"
         }
       ]
     }
