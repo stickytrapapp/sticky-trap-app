@@ -1,74 +1,64 @@
 {
-  "updated": "2026-10-03",
+  "updated": "2026-10-04",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-10-03",
+      "date": "2026-10-04",
+      "title": "New Storefronts, New Hope: Michigan Operators Push Forward as National Rescheduling Odds Climb",
       "label": "Morning Brief",
-      "title": "Michigan Crowns Its Best Flower While D.C. Inches Toward Rescheduling",
-      "top": "Michigan's cannabis scene had plenty to celebrate this week — awards, a new Ypsilanti storefront, and a gubernatorial candidate courting the industry's vote on tax relief — even as regulators keep tightening the screws on bad actors. Nationally, Wall Street is getting more bullish on rescheduling odds and MSOs are consolidating fast, even with the DEA's own timeline hitting a procedural speed bump.",
+      "top": "Michigan's retail footprint keeps growing — new Ypsilanti, Ann Arbor and organic-certified storefronts opened this week even as operators wait on tax relief and a court ruling. Nationally, Compass Pathways' psilocybin pill is tracking toward a 2027 approval and investor sentiment on rescheduling is climbing, even as a DEA judge hit pause on the Schedule III hearing.",
       "local": [
         {
-          "text": "Mitten Canna, Hytek sweep 2026 Zalympix awards",
-          "source": "Detroit Metro Times",
-          "url": "https://www.metrotimes.com/weed-2/michigans-best-flower-and-live-rosin-crowned-at-2026-zalympix/",
-          "detail": "Mitten Canna Co.'s Toad Venom won best overall flower and Hytek's Oishii Piña took best live rosin at the state's 'Grammys of Cannabis.'"
-        },
-        {
-          "text": "Bloom City Club opens new Ypsilanti storefront",
+          "text": "Bloom City Club expands into Ypsilanti — The Ann Arbor-based retailer opened a new Ypsilanti location and is celebrating with cannabis-themed events throughout October.",
           "source": "ClickOnDetroit",
-          "url": "https://www.clickondetroit.com/topic/Cannabis/",
-          "detail": "The Ann Arbor-rooted retailer is celebrating its new Ypsilanti location with a full month of cannabis-themed events."
+          "url": "https://www.clickondetroit.com/topic/Cannabis/"
         },
         {
-          "text": "John James pledges to repeal 24% wholesale tax",
-          "source": "The MichiGanja Report (Gander Newsroom)",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092826/",
-          "detail": "Michigan's top cannabis executives have endorsed the GOP governor candidate over his promise to cut the state's 24% wholesale weed tax."
+          "text": "Cloud Cannabis set to open Ann Arbor doors Oct. 19 — Co-founded by a former Detroit police officer who credits cannabis with his recovery, the shop at 1760 Plymouth Rd will offer curbside pickup and individualized budtender recommendations.",
+          "source": "ClickOnDetroit",
+          "url": "https://www.clickondetroit.com/topic/Cannabis/"
         },
         {
-          "text": "Bargain Michigan weed pulls shoppers across state lines",
-          "source": "The MichiGanja Report (Gander Newsroom)",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092826/",
-          "detail": "With ounces running about $60 versus $150–$220 in Ohio and Illinois, small border-town dispensaries are now outselling Detroit shops."
+          "text": "Apothecare debuts as Michigan's first certified-organic brand — The new Ann Arbor dispensary is Certified Kind and features 100% organic flower, concentrates and edibles, giving operators a fresh premium angle in a crowded market.",
+          "source": "ClickOnDetroit",
+          "url": "https://www.clickondetroit.com/topic/Cannabis/"
         },
         {
-          "text": "Regulators drop record $2M fine, pull 20 licenses",
-          "source": "Ganjapreneur / MITechNews",
-          "url": "https://ganjapreneur.com/michigan-revokes-20-medical-cannabis-cultivation-licenses-from-grower",
-          "detail": "The CRA revoked a Clare grower's licenses after it shipped packages of dirt and mulch instead of flower, the second matching $2M penalty in two weeks as the agency cleans up the market."
+          "text": "Consumer demand holds steady despite the new wholesale tax — Flower prices stayed near all-time lows in early 2026 while licensed retailers absorbed the 24% levy in Michigan's hyper-competitive, oversupplied marketplace.",
+          "source": "Cannabis Business Times",
+          "url": "https://www.cannabisbusinesstimes.com/us-states/michigan/news/15819825/michigan-cannabis-prices-remain-down-demand-steady-in-2026-despite-new-tax"
+        },
+        {
+          "text": "Momentum builds for tax relief on three fronts — The wholesale tax generated only about $34 million against a $105 million quarterly target, a second constitutional lawsuit is moving through the Court of Claims, and gubernatorial candidate Chris Swanson has publicly pledged to repeal it.",
+          "source": "WILX / WKAR / Michigan Advance",
+          "url": "https://michiganadvance.com/2026/03/30/democratic-gubernatorial-hopeful-promises-to-repeal-cannabis-tax-key-to-whitmers-road-funding-plan/"
         }
       ],
       "national": [
         {
-          "text": "DEA pauses rescheduling hearing, sets Oct. 13 deadline",
-          "source": "NORML",
-          "url": "https://norml.org/news/2026/10/01/administrative-law-judge-temporarily-stays-cannabis-rescheduling-proceedings/",
-          "detail": "The DEA's chief administrative law judge stayed the marijuana rescheduling proceeding to weigh a new GAO report, ordering the government to respond by October 13."
+          "text": "Compass Pathways' psilocybin pill tracks toward 2027 approval — COMP360 posted positive 26-week durability data in a nearly 600-patient Phase 3 trial and holds an FDA priority review voucher for treatment-resistant depression.",
+          "source": "SEC Filing / Psychiatric Times",
+          "url": "https://www.sec.gov/Archives/edgar/data/0001816590/000181659026000047/cmps-20260707.htm"
         },
         {
-          "text": "Investors grow more bullish on rescheduling odds",
+          "text": "Investor bullishness on rescheduling jumps — A new survey found marijuana investors assign 65% odds to federal rescheduling within six months, with nearly half saying they're more bullish on multistate operators than six months ago.",
           "source": "The Marijuana Herald",
-          "url": "https://themarijuanaherald.com/2026/10/daily-cannabis-news-brief-for-10-2-2026",
-          "detail": "A new survey found marijuana investors assign 65% odds to federal rescheduling within six months, with nearly half more bullish on MSOs than six months ago."
+          "url": "https://themarijuanaherald.com/2026/10/daily-cannabis-news-brief-for-10-2-2026"
         },
         {
-          "text": "Curaleaf's $270M hostile bid targets Aurora Cannabis",
-          "source": "cann.dev",
-          "url": "https://www.cann.dev/cannabis-ma-september-2026-curaleaf-vireo-consolidation/",
-          "detail": "The MSO launched an unsolicited cross-border takeover offer for the Canadian producer at roughly US$270 million as consolidation accelerates."
+          "text": "Curaleaf presses ahead on Aurora Cannabis takeover — The multistate operator's acquisition bid, formally commenced in August, ranks among the most consequential cannabis M&A moves this year as consolidation accelerates.",
+          "source": "Cann.dev",
+          "url": "https://www.cann.dev/cannabis-ma-august-2026-curaleaf-vireo-consolidation/"
         },
         {
-          "text": "Vireo Growth scales fast via Eaze, Glass House deals",
-          "source": "cann.dev",
-          "url": "https://www.cann.dev/cannabis-ma-september-2026-curaleaf-vireo-consolidation/",
-          "detail": "Vireo completed its Eaze merger for California delivery infrastructure and struck a dispensary joint venture with Glass House Brands, adding multi-channel reach."
+          "text": "Bipartisan lawmakers press White House for Schedule III clarity — A bipartisan quartet of House members sent a letter to President Trump and cabinet officials seeking guidance on the federal medical-cannabis framework.",
+          "source": "Cannabis Business Times",
+          "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15836261/dea-judge-halts-cannabis-rescheduling-process-may-reopen-hearing-record"
         },
         {
-          "text": "Compass Pathways partners with VA on psilocybin trial",
-          "source": "Compass Pathways",
-          "url": "https://ir.compasspathways.com/News--Events-/news/news-details/2026/Compass-Pathways-Working-with-U-S--Department-of-Veterans-Affairs-for-Investigational-Study-of-Psilocybin/default.aspx",
-          "detail": "The biotech is donating its COMP360 psilocybin treatment for a VA-backed study targeting treatment-resistant depression and PTSD in veterans."
+          "text": "DEA rescheduling hearing pauses, with answers due Oct. 13 — A DEA administrative law judge stayed the Schedule III proceeding to weigh a new GAO report on scheduling-process gaps, giving the government two weeks to respond.",
+          "source": "Vicente LLP / NORML",
+          "url": "https://vicentellp.com/insights/dea-judge-pauses-marijuana-rescheduling-gao-report/"
         }
       ]
     }
