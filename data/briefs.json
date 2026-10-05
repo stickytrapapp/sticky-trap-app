@@ -5,71 +5,60 @@
     {
       "date": "2026-10-05",
       "label": "Morning Brief",
-      "title": "Michigan Weed Chains Go National While D.C. Hits Pause on Rescheduling",
-      "top": "Michigan operators are finding growth paths — JARS is expanding into Arizona, Ann Arbor's Bloom City Club just opened in Ypsilanti, and a gubernatorial candidate is now courting industry cash to kill the 24% wholesale tax. Nationally, Compass Pathways' psilocybin data keeps the psychedelic pipeline hot even as a DEA judge hits pause on marijuana rescheduling pending an Oct. 13 response deadline.",
+      "title": "Michigan Rides High on Sales Records as National Deals and Psychedelics Momentum Build",
+      "top": "Michigan cements itself as the per-capita cannabis sales leader in the U.S. and crosses $17 billion all-time, even as the industry keeps fighting the 24% wholesale tax in court and at the ballot box. Nationally, Curaleaf's sweetened bid for Aurora Cannabis and Compass Pathways' march toward an FDA filing show capital and innovation still flowing despite a temporary pause in the DEA's rescheduling review.",
       "local": [
         {
-          "text": "JARS Cannabis buys its way into Arizona's top spot",
-          "detail": "",
+          "text": "Michigan tops the nation in per-capita weed sales — New 2026 analysis ranks Michigan first among recreational states on a per-resident basis, ahead of New Mexico, Montana and Massachusetts.",
+          "source": "The Marijuana Herald",
+          "url": "https://themarijuanaherald.com/2026/09/michigan-leads-u-s-in-per-capita-marijuana-sales-in-2026-new-mexico-montana-and-massachusetts-follow/"
+        },
+        {
+          "text": "State market blows past $17 billion all-time — Combined medical and adult-use sales have now generated an estimated $2.66 billion in state excise and sales taxes since legalization.",
+          "source": "The Marijuana Herald",
+          "url": "https://themarijuanaherald.com/2026/09/michigan-legal-marijuana-sales-surpass-17-billion/"
+        },
+        {
+          "text": "GOP governor hopeful courts cannabis industry with tax-cut vow — Republican nominee John James has promised to repeal or sharply cut the 24% wholesale tax, and the state's top cannabis executives have rallied behind him.",
+          "source": "MJBizDaily",
+          "url": "https://mjbizdaily.com/news/republican-gubernatorial-candidate-courts-michigan-cannabis-industry-vows-to-kill-new-24-mj-tax/618038"
+        },
+        {
+          "text": "Bad Axe voters set to end local dispensary ban — A citizen-initiated ballot measure this November would let up to two marijuana businesses open in the Thumb-region city for the first time since its 2019 prohibition.",
+          "source": "The Marijuana Herald",
+          "url": "https://themarijuanaherald.com/2026/08/marijuana-and-the-2026-election-ballot-measures-and-governors-races-to-watch/"
+        },
+        {
+          "text": "Industry celebrates top brands at Zalympix even as tax fight grinds on — A fresh batch of Zalympix award winners landed the same week cannabis executives doubled down on political endorsements tied to repealing the 24% wholesale tax.",
           "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-083126/",
-          "text_full": "JARS Cannabis buys its way into Arizona's top spot — The Michigan-based chain announced a deal to acquire Sonoran Roots and its eight Ponderosa dispensaries, soon making JARS the largest dispensary chain in Arizona."
-        },
-        {
-          "text": "Bloom City Club expands footprint with Ypsilanti store",
-          "source": "ClickOnDetroit",
-          "url": "https://www.clickondetroit.com/topic/Cannabis/",
-          "text_full": "Bloom City Club expands footprint with Ypsilanti store — Ann Arbor's Bloom City Club opened a new Ypsilanti location and is celebrating with cannabis-themed events throughout October."
-        },
-        {
-          "text": "Michigan brands roll out boozy-strength Halloween drops",
-          "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/michigan-cannabis-halloween-2026/",
-          "text_full": "Michigan brands roll out boozy-strength Halloween drops — Armada Cannabis debuted a 50mg THC \"Phillip Noir\" blood orange-cranberry cider and a 50mg live-rosin cider collab with Apex Solventless for the season."
-        },
-        {
-          "text": "Gubernatorial hopeful courts industry cash on tax repeal",
-          "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092126/",
-          "text_full": "Gubernatorial hopeful courts industry cash on tax repeal — Republican U.S. Rep. John James has pledged to repeal the state's 24% wholesale tax after cannabis executives wrote roughly $90,000 in checks backing his campaign."
-        },
-        {
-          "text": "Regulators level the field with record $2M fine",
-          "source": "Fox 2 Detroit",
-          "url": "https://www.fox2detroit.com/news/michigan-revokes-20-marijuana-grower-licenses-companys-egregious-conduct",
-          "text_full": "Regulators level the field with record $2M fine — The state revoked 20 grower licenses and fined Clare-based GP Holdings (Millie Montana Industries) $2 million after it shipped dirt and mulch labeled as marijuana flower, clearing a bad actor out of an oversupplied market."
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092826"
         }
       ],
       "national": [
         {
-          "text": "DEA rescheduling hits a speed bump, not a dead end",
+          "text": "Curaleaf sweetens its bid to acquire Aurora Cannabis — The enhanced offer now implies $5 per Aurora share and would create a cannabis company operating across 17 countries with over $1.5 billion in trailing revenue.",
+          "source": "Newswire",
+          "url": "https://newswire.ca/news-releases/curaleaf-enhances-offer-to-acquire-aurora-cannabis-854378511.html"
+        },
+        {
+          "text": "Compass Pathways nears the finish line on psilocybin therapy — The company is still targeting a Q4 2026 FDA filing for COMP360, which could become the first classic psychedelic medicine ever approved in the U.S.",
+          "source": "BioPharma Dive",
+          "url": "https://www.biopharmadive.com/news/compass-trial-data-fda-application-psilocybin-psychedelics/812332/"
+        },
+        {
+          "text": "DEA rescheduling hits a procedural pause, not a reversal — A judge stayed the Schedule III hearing to weigh a new GAO report, but the pause doesn't touch the earlier order already protecting state-licensed medical marijuana businesses.",
           "source": "Vicente LLP",
-          "url": "https://vicentellp.com/insights/dea-judge-pauses-marijuana-rescheduling-gao-report/",
-          "text_full": "DEA rescheduling hits a speed bump, not a dead end — A DEA judge stayed the Schedule III hearing to weigh a GAO report, but the government must respond by Oct. 13 and the pause doesn't affect the April order on state medical and FDA-approved products."
+          "url": "https://vicentellp.com/insights/dea-judge-pauses-marijuana-rescheduling-gao-report/"
         },
         {
-          "text": "Compass Pathways' psilocybin posts durable 6-month wins",
-          "source": "Compass Pathways",
-          "url": "https://ir.compasspathways.com/News--Events-/news/news-details/2026/Compass-Pathways-Announces-Six-Month-Data-from-Second-Phase-3-Trial-Confirming-Rapid-and-Durable-Profile/default.aspx",
-          "text_full": "Compass Pathways' psilocybin posts durable 6-month wins — The company's second Phase 3 trial in nearly 600 patients confirmed COMP360's rapid onset and durable response, with the company targeting a Q4 2026 FDA submission."
+          "text": "Vireo Growth becomes the nation's No. 2 dispensary network — Its acquisition of Cannabist assets across Colorado, Illinois, Massachusetts, New Jersey and West Virginia pushes the operator's footprint to 15 states.",
+          "source": "SEC Filing (Vireo Growth)",
+          "url": "https://www.sec.gov/Archives/edgar/data/0001771706/000110465926086256/tm2621146d1_ex99-1.htm"
         },
         {
-          "text": "MDMA therapy heads back to FDA with new delivery model",
-          "source": "Acuity News",
-          "url": "https://acuity.news/regulation/mdma-couples-therapy-dyadic-psychedelic-treatment-models-2026",
-          "text_full": "MDMA therapy heads back to FDA with new delivery model — An MDMA application is back before the FDA alongside Oregon's published psilocybin-services outcomes data, pushing providers toward scalable dyadic and group treatment formats."
-        },
-        {
-          "text": "Major MSOs post strong growth heading into Q4",
-          "source": "MarijuanaStocks",
-          "url": "https://pluang.com/en/news-feed/3-saham-kannabis-yang-perlu-diperhatikan-menjelang-september",
-          "text_full": "Major MSOs post strong growth heading into Q4 — Cresco Labs closed a $50 million Pennsylvania acquisition on $173 million Q2 revenue, while Trulieve expanded its Florida dispensary network and began trading on the NYSE with $271 million in Q2 revenue."
-        },
-        {
-          "text": "U.S. vape brand Rove plants a flag in Canada",
+          "text": "Big Tobacco doubles down on cannabis as a growth bet — Organigram's largest shareholder, British American Tobacco, called cannabis a long-term opportunity under its 'Beyond Nicotine' roadmap to 2035.",
           "source": "StratCann",
-          "url": "https://stratcann.com/news/week-in-weed-october-3-2026",
-          "text_full": "U.S. vape brand Rove plants a flag in Canada — Rove announced its official entry into the Canadian market starting with Ontario, with plans to expand into additional provinces in coming months."
+          "url": "https://stratcann.com/news/week-in-weed-october-3-2026"
         }
       ]
     }
