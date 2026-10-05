@@ -1,4 +1,4 @@
-THE STICKY TRAP -- CHAT KNOWLEDGE BASE (auto-generated 2026-09-24 from the live app by Price Engine/make_chat_kb.py; do not hand-edit -- house facts live in Price Engine/chat-facts.txt)
+THE STICKY TRAP -- CHAT KNOWLEDGE BASE (auto-generated 2026-10-05 from the live app by Price Engine/make_chat_kb.py; do not hand-edit -- house facts live in Price Engine/chat-facts.txt)
 
 == About The Sticky Trap ==
 The Sticky Trap is a design house and in-house print shop in Ann Arbor, Michigan: branding, custom art, stickers, labels, promotionals and merch. Motto: "Let's Stick Together."
@@ -38,7 +38,7 @@ We ship anywhere in the US. Shipping is a flat rate added at checkout on your in
 Shipping goes USPS Priority, Monday to Friday, about 2 days in transit; another carrier or service level is available on request.
 Pick-up is at 4750 Venture Dr, Suite 101, Ann Arbor, Monday to Friday 10am-5pm. Text 734 460 3845 before you come so it is ready at the counter.
 Pay by ACH, card through Square, or cash. We do not take deposits: art assessment is free, and once the order is agreed it is paid in full before we print. App card orders are charged at the moment the order is placed, not on proof approval; cancel before press and we refund less any design, pre-press or proofing already done. Design work is a custom quote.
-Card payments through Square carry the processing fee. ACH is a flat $10 bank fee. Cash has no fee or surcharge. We do not accept checks.
+Menu prices already include card processing, so new clients pay the same price by card, ACH or cash - no fee. Existing accounts keep their account pricing: card payments through Square carry the processing fee and ACH is a flat $10 bank fee. Cash has no fee or surcharge. We do not accept checks.
 Michigan sales tax is charged unless you give us a resale certificate; tax-exempt accounts are set up once and stay that way.
 Files: vector (AI, EPS, PDF, SVG) preferred; PNG at 300 dpi is fine. Every file is assessed for free before anything is quoted. Pre-press and design work are custom quoted after we see the art.
 You get a digital proof by email and on your order page: first a screen proof of the art, then a photo of the actual test print - you approve on the order page. Two rounds of revisions are free. Changes after you approve are quoted.
@@ -50,7 +50,6 @@ If you cannot see a proof clearly, tell us: we are happy to retake photos or vid
 Shipping damage is handled through a USPS claim.
 We work with anyone who wants to use our services, cannabis or not. We brand you.
 Jar label prices on the menu (Miron and Chubby) are per set: one lid label and one wrap label for each jar at that price. Do not split a lid and a wrap into two lines.
-October only (Oct 1-31): on o2 Standard cart wraps you pay one texture level down - Spot Gloss UV at the Flat price, Standard Embossing at the Spot Gloss price, Pro at the Standard Embossing price. White vinyl: gloss $0.45, embossing $0.55, Pro $0.65. Holographic: gloss $0.55, embossing $0.60, Pro $0.70 (add $0.25 a piece for white ink under the holo at any level). 250 pieces or more, when you order in the app (Menu > o2 Standard > pick a texture > build it). Phone and email orders are list price. The volume breaks still apply on top of the October price - at 1,000 pieces white Pro works out to $0.59 a piece and holographic Pro to $0.63.
 We keep your approved files, so a reorder is quick: reorder from your order page or Menu > Reorder in the app. Pre-press / set-up is assessed per design once we see the art - what it costs depends on the job, so never tell a customer whether a reorder will or will not carry set-up. It comes with their quote. What you CAN say is that we keep the approved files, so a reorder is quicker than the first run.
 Before you approve the proof, tap Request changes on your order page - two rounds are free. After approval it is a new job.
 Where is my order: the order page link is in the order email and texts. If they do not have the link or the code, send them to track.thestickytrap.app to enter their phone number - it lists their orders and can email the link. Do not make them hunt for a code first.
@@ -131,65 +130,65 @@ Format: material: finish $price (HoloBrite $price where offered).
 
 [Slaps] Die-cut stickers. Pick either cut for the same price: Square Backer (on a square sheet) or Contour Cut (trimmed to the art's outline).
 ### 3" Slap
-  White Vinyl: Flat $0.45 | Spot Gloss UV $0.55 | Standard Embossing $0.85 | Pro $1.20
-  Holographic: Flat $0.75 (HoloBrite $1.05) | Spot Gloss UV $0.85 (HoloBrite $1.15) | Standard Embossing $1.15 (HoloBrite $1.45) | Pro $1.35 (HoloBrite $1.65)
-  Gold: Flat $0.95 (HoloBrite $1.25) | Spot Gloss UV $1.05 (HoloBrite $1.35) | Standard Embossing $1.35 (HoloBrite $1.65) | Pro $1.55 (HoloBrite $1.85)
+  White Vinyl: Flat $0.50 | Spot Gloss UV $0.60 | Standard Embossing $0.90 | Pro $1.25
+  Holographic: Flat $0.80 (HoloBrite $1.10) | Spot Gloss UV $0.90 (HoloBrite $1.20) | Standard Embossing $1.20 (HoloBrite $1.50) | Pro $1.40 (HoloBrite $1.70)
+  Gold: Flat $1.00 (HoloBrite $1.30) | Spot Gloss UV $1.10 (HoloBrite $1.40) | Standard Embossing $1.40 (HoloBrite $1.70) | Pro $1.60 (HoloBrite $1.95)
 ### 4" Slap
-  White Vinyl: Flat $0.75 | Spot Gloss UV $0.90 | Standard Embossing $1.25 | Pro $1.60
-  Holographic: Flat $1.30 (HoloBrite $1.70) | Spot Gloss UV $1.40 (HoloBrite $1.80) | Standard Embossing $1.75 (HoloBrite $2.15) | Pro $2.00 (HoloBrite $2.40)
-  Gold: Flat $1.60 (HoloBrite $2.00) | Spot Gloss UV $1.70 (HoloBrite $2.10) | Standard Embossing $2.05 (HoloBrite $2.45) | Pro $2.30 (HoloBrite $2.70)
+  White Vinyl: Flat $0.80 | Spot Gloss UV $0.95 | Standard Embossing $1.30 | Pro $1.65
+  Holographic: Flat $1.35 (HoloBrite $1.80) | Spot Gloss UV $1.45 (HoloBrite $1.90) | Standard Embossing $1.85 (HoloBrite $2.25) | Pro $2.10 (HoloBrite $2.50)
+  Gold: Flat $1.65 (HoloBrite $2.10) | Spot Gloss UV $1.80 (HoloBrite $2.20) | Standard Embossing $2.15 (HoloBrite $2.55) | Pro $2.40 (HoloBrite $2.80)
 
 [Deli Labels] 4 x 5 inch deli-style labels.
 ### 4x5 Deli
-  White Vinyl: Flat $1.15 | Spot Gloss UV $2.05 | Standard Embossing $3.25 | Pro $4.40
-  Holographic: Flat $1.80 (HoloBrite $2.40) | Spot Gloss UV $2.70 (HoloBrite $3.30) | Standard Embossing $3.90 (HoloBrite $4.50) | Pro $5.05 (HoloBrite $5.65)
-  Gold: Flat $2.15 (HoloBrite $2.75) | Spot Gloss UV $3.05 (HoloBrite $3.65) | Standard Embossing $4.25 (HoloBrite $4.85) | Pro $5.40 (HoloBrite $6.00)
+  White Vinyl: Flat $1.20 | Spot Gloss UV $2.15 | Standard Embossing $3.35 | Pro $4.55
+  Holographic: Flat $1.90 (HoloBrite $2.50) | Spot Gloss UV $2.80 (HoloBrite $3.40) | Standard Embossing $4.05 (HoloBrite $4.65) | Pro $5.25 (HoloBrite $5.85)
+  Gold: Flat $2.25 (HoloBrite $2.85) | Spot Gloss UV $3.15 (HoloBrite $3.80) | Standard Embossing $4.40 (HoloBrite $5.00) | Pro $5.60 (HoloBrite $6.20)
 
 [Vape & Tube Wraps] Wraps for o2-style vape carts (Standard and the larger Bucket), pop-top containers, and 95 mm / 65 mm pre-roll tubes.
 ### o2 Standard
-  White Vinyl: Flat $0.45 | Spot Gloss UV $0.55 | Standard Embossing $0.65 | Pro $0.75
-  Holographic: Flat $0.55 (HoloBrite $0.80) | Spot Gloss UV $0.60 (HoloBrite $0.85) | Standard Embossing $0.70 (HoloBrite $0.95) | Pro $0.80 (HoloBrite $1.05)
-  Gold: Flat $0.65 (HoloBrite $0.90) | Spot Gloss UV $0.70 (HoloBrite $0.95) | Standard Embossing $0.80 (HoloBrite $1.05) | Pro $0.90 (HoloBrite $1.15)
+  White Vinyl: Flat $0.50 | Spot Gloss UV $0.60 | Standard Embossing $0.70 | Pro $0.80
+  Holographic: Flat $0.60 (HoloBrite $0.85) | Spot Gloss UV $0.65 (HoloBrite $0.90) | Standard Embossing $0.75 (HoloBrite $1.00) | Pro $0.85 (HoloBrite $1.10)
+  Gold: Flat $0.70 (HoloBrite $0.95) | Spot Gloss UV $0.75 (HoloBrite $1.00) | Standard Embossing $0.85 (HoloBrite $1.10) | Pro $0.95 (HoloBrite $1.20)
 ### o2 Bucket
-  White Vinyl: Flat $0.50 | Spot Gloss UV $0.65 | Standard Embossing $0.75 | Pro $0.85
-  Holographic: Flat $0.65 (HoloBrite $0.95) | Spot Gloss UV $0.70 (HoloBrite $1.00) | Standard Embossing $0.80 (HoloBrite $1.10) | Pro $0.90 (HoloBrite $1.20)
-  Gold: Flat $0.75 (HoloBrite $1.05) | Spot Gloss UV $0.80 (HoloBrite $1.10) | Standard Embossing $0.90 (HoloBrite $1.20) | Pro $1.00 (HoloBrite $1.30)
+  White Vinyl: Flat $0.55 | Spot Gloss UV $0.70 | Standard Embossing $0.80 | Pro $0.90
+  Holographic: Flat $0.70 (HoloBrite $1.00) | Spot Gloss UV $0.75 (HoloBrite $1.05) | Standard Embossing $0.85 (HoloBrite $1.15) | Pro $0.95 (HoloBrite $1.25)
+  Gold: Flat $0.80 (HoloBrite $1.10) | Spot Gloss UV $0.85 (HoloBrite $1.15) | Standard Embossing $0.95 (HoloBrite $1.25) | Pro $1.05 (HoloBrite $1.35)
 ### Pop Top
-  White Vinyl: Flat $0.75 | Spot Gloss UV $1.15 | Standard Embossing $1.35 | Pro $1.55
-  Holographic: Flat $1.15 (HoloBrite $1.45) | Spot Gloss UV $1.30 (HoloBrite $1.60) | Standard Embossing $1.75 (HoloBrite $2.05) | Pro $2.10 (HoloBrite $2.40)
-  Gold: Flat $1.45 (HoloBrite $1.75) | Spot Gloss UV $1.60 (HoloBrite $1.90) | Standard Embossing $2.05 (HoloBrite $2.35) | Pro $2.40 (HoloBrite $2.70)
+  White Vinyl: Flat $0.80 | Spot Gloss UV $1.20 | Standard Embossing $1.40 | Pro $1.60
+  Holographic: Flat $1.20 (HoloBrite $1.50) | Spot Gloss UV $1.35 (HoloBrite $1.65) | Standard Embossing $1.85 (HoloBrite $2.15) | Pro $2.20 (HoloBrite $2.50)
+  Gold: Flat $1.50 (HoloBrite $1.85) | Spot Gloss UV $1.65 (HoloBrite $2.00) | Standard Embossing $2.15 (HoloBrite $2.45) | Pro $2.50 (HoloBrite $2.80)
 ### Tube 95 mm
-  White Vinyl: Flat $1.00 | Spot Gloss UV $1.25 | Standard Embossing $1.80 | Pro $2.30
-  Holographic: Flat $1.50 (HoloBrite $2.20) | Spot Gloss UV $1.75 (HoloBrite $2.45) | Standard Embossing $2.30 (HoloBrite $3.00) | Pro $2.80 (HoloBrite $3.50)
-  Gold: Flat $1.80 (HoloBrite $2.50) | Spot Gloss UV $2.05 (HoloBrite $2.75) | Standard Embossing $2.60 (HoloBrite $3.30) | Pro $3.10 (HoloBrite $3.80)
+  White Vinyl: Flat $1.05 | Spot Gloss UV $1.30 | Standard Embossing $1.90 | Pro $2.40
+  Holographic: Flat $1.55 (HoloBrite $2.30) | Spot Gloss UV $1.85 (HoloBrite $2.55) | Standard Embossing $2.40 (HoloBrite $3.10) | Pro $2.90 (HoloBrite $3.65)
+  Gold: Flat $1.90 (HoloBrite $2.60) | Spot Gloss UV $2.15 (HoloBrite $2.85) | Standard Embossing $2.70 (HoloBrite $3.40) | Pro $3.20 (HoloBrite $3.95)
 ### Tube 65 mm
-  White Vinyl: Flat $0.70 | Spot Gloss UV $0.80 | Standard Embossing $1.05 | Pro $1.35
-  Holographic: Flat $1.00 (HoloBrite $1.50) | Spot Gloss UV $1.10 (HoloBrite $1.60) | Standard Embossing $1.35 (HoloBrite $1.85) | Pro $1.65 (HoloBrite $2.15)
-  Gold: Flat $1.25 (HoloBrite $1.75) | Spot Gloss UV $1.35 (HoloBrite $1.85) | Standard Embossing $1.60 (HoloBrite $2.10) | Pro $1.90 (HoloBrite $2.40)
+  White Vinyl: Flat $0.75 | Spot Gloss UV $0.85 | Standard Embossing $1.10 | Pro $1.40
+  Holographic: Flat $1.05 (HoloBrite $1.55) | Spot Gloss UV $1.15 (HoloBrite $1.65) | Standard Embossing $1.40 (HoloBrite $1.95) | Pro $1.70 (HoloBrite $2.25)
+  Gold: Flat $1.30 (HoloBrite $1.85) | Spot Gloss UV $1.40 (HoloBrite $1.95) | Standard Embossing $1.65 (HoloBrite $2.20) | Pro $2.00 (HoloBrite $2.50)
 
 [Miron Jar Labels] Labels for Miron violet-glass jars, priced by jar size.
 ### Miron 5 ml (Puck)
-  White Vinyl: Flat $0.55 | Spot Gloss UV $0.70 | Standard Embossing $0.85 | Pro $1.00
-  Holographic: Flat $0.95 (HoloBrite $1.20) | Spot Gloss UV $1.10 (HoloBrite $1.35) | Standard Embossing $1.25 (HoloBrite $1.50) | Pro $1.40 (HoloBrite $1.65)
-  Gold: Flat $1.15 (HoloBrite $1.40) | Spot Gloss UV $1.30 (HoloBrite $1.55) | Standard Embossing $1.45 (HoloBrite $1.70) | Pro $1.60 (HoloBrite $1.85)
+  White Vinyl: Flat $0.60 | Spot Gloss UV $0.75 | Standard Embossing $0.90 | Pro $1.05
+  Holographic: Flat $1.00 (HoloBrite $1.25) | Spot Gloss UV $1.15 (HoloBrite $1.40) | Standard Embossing $1.30 (HoloBrite $1.55) | Pro $1.45 (HoloBrite $1.70)
+  Gold: Flat $1.20 (HoloBrite $1.45) | Spot Gloss UV $1.35 (HoloBrite $1.60) | Standard Embossing $1.50 (HoloBrite $1.80) | Pro $1.65 (HoloBrite $1.95)
 ### Miron 100 ml
-  White Vinyl: Flat $1.35 | Spot Gloss UV $1.90 | Standard Embossing $2.50 | Pro $3.10
-  Holographic: Flat $1.80 (HoloBrite $2.45) | Spot Gloss UV $2.35 (HoloBrite $3.00) | Standard Embossing $2.90 (HoloBrite $3.55) | Pro $3.45 (HoloBrite $4.10)
-  Gold: Flat $2.10 (HoloBrite $2.75) | Spot Gloss UV $2.65 (HoloBrite $3.30) | Standard Embossing $3.20 (HoloBrite $3.85) | Pro $3.75 (HoloBrite $4.40)
+  White Vinyl: Flat $1.40 | Spot Gloss UV $2.00 | Standard Embossing $2.60 | Pro $3.20
+  Holographic: Flat $1.90 (HoloBrite $2.55) | Spot Gloss UV $2.45 (HoloBrite $3.10) | Standard Embossing $3.00 (HoloBrite $3.70) | Pro $3.60 (HoloBrite $4.25)
+  Gold: Flat $2.20 (HoloBrite $2.85) | Spot Gloss UV $2.75 (HoloBrite $3.40) | Standard Embossing $3.30 (HoloBrite $4.00) | Pro $3.90 (HoloBrite $4.55)
 ### Miron 150 ml
-  White Vinyl: Flat $1.60 | Spot Gloss UV $2.25 | Standard Embossing $2.90 | Pro $3.60
-  Holographic: Flat $2.10 (HoloBrite $2.65) | Spot Gloss UV $2.65 (HoloBrite $3.20) | Standard Embossing $3.20 (HoloBrite $3.75) | Pro $3.75 (HoloBrite $4.30)
-  Gold: Flat $2.50 (HoloBrite $3.05) | Spot Gloss UV $3.05 (HoloBrite $3.60) | Standard Embossing $3.60 (HoloBrite $4.15) | Pro $4.15 (HoloBrite $4.70)
+  White Vinyl: Flat $1.65 | Spot Gloss UV $2.35 | Standard Embossing $3.00 | Pro $3.75
+  Holographic: Flat $2.20 (HoloBrite $2.75) | Spot Gloss UV $2.75 (HoloBrite $3.30) | Standard Embossing $3.30 (HoloBrite $3.90) | Pro $3.90 (HoloBrite $4.45)
+  Gold: Flat $2.60 (HoloBrite $3.15) | Spot Gloss UV $3.15 (HoloBrite $3.75) | Standard Embossing $3.75 (HoloBrite $4.30) | Pro $4.30 (HoloBrite $4.85)
 ### Miron 250 ml
-  White Vinyl: Flat $1.90 | Spot Gloss UV $2.80 | Standard Embossing $3.70 | Pro $4.55
-  Holographic: Flat $2.90 (HoloBrite $3.70) | Spot Gloss UV $3.90 (HoloBrite $4.70) | Standard Embossing $4.90 (HoloBrite $5.70) | Pro $5.90 (HoloBrite $6.70)
-  Gold: Flat $3.45 (HoloBrite $4.25) | Spot Gloss UV $4.45 (HoloBrite $5.25) | Standard Embossing $5.45 (HoloBrite $6.25) | Pro $6.45 (HoloBrite $7.25)
+  White Vinyl: Flat $2.00 | Spot Gloss UV $2.90 | Standard Embossing $3.85 | Pro $4.70
+  Holographic: Flat $3.00 (HoloBrite $3.85) | Spot Gloss UV $4.05 (HoloBrite $4.85) | Standard Embossing $5.05 (HoloBrite $5.90) | Pro $6.10 (HoloBrite $6.95)
+  Gold: Flat $3.60 (HoloBrite $4.40) | Spot Gloss UV $4.60 (HoloBrite $5.45) | Standard Embossing $5.65 (HoloBrite $6.45) | Pro $6.65 (HoloBrite $7.50)
 ### Miron 500 ml
-  White Vinyl: Flat $4.65 | Spot Gloss UV $5.05 | Standard Embossing $5.40 | Pro $5.75
-  Holographic: Flat $5.30 (HoloBrite $6.80) | Spot Gloss UV $5.95 (HoloBrite $7.45) | Standard Embossing $6.55 (HoloBrite $8.05) | Pro $7.20 (HoloBrite $8.70)
-  Gold: Flat $6.30 (HoloBrite $7.80) | Spot Gloss UV $6.95 (HoloBrite $8.45) | Standard Embossing $7.55 (HoloBrite $9.05) | Pro $8.20 (HoloBrite $9.70)
+  White Vinyl: Flat $4.80 | Spot Gloss UV $5.25 | Standard Embossing $5.60 | Pro $5.95
+  Holographic: Flat $5.50 (HoloBrite $7.05) | Spot Gloss UV $6.15 (HoloBrite $7.70) | Standard Embossing $6.75 (HoloBrite $8.30) | Pro $7.45 (HoloBrite $9.00)
+  Gold: Flat $6.50 (HoloBrite $8.05) | Spot Gloss UV $7.20 (HoloBrite $8.75) | Standard Embossing $7.80 (HoloBrite $9.35) | Pro $8.45 (HoloBrite $10.00)
 
 [Tip Bands] Small bands for pre-roll tips and tamper tabs; Spot Gloss qualifies by art and band size, not automatic.
 ### Tip Band
-  White Vinyl: Flat $0.25 | Spot Gloss UV $0.35
-  Holographic: Flat $0.30 | Spot Gloss UV $0.40
+  White Vinyl: Flat $0.26 | Spot Gloss UV $0.37
+  Holographic: Flat $0.31 | Spot Gloss UV $0.42

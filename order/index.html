@@ -273,7 +273,7 @@ function pickCompany(){
   $('payment').value = c ? (c.pickup || /pick/.test(pay) ? 'Pay at pick-up' : /square/.test(pay) ? 'Square' : /ach|wire/.test(pay) ? 'ACH / Wire' : /cash/.test(pay) ? 'Cash' : 'On file') : 'Square';
   $('tax').value = c ? (/exempt/i.test(c.tax || '') ? 'Exempt (3372 on file)' : '6% MI') : '6% MI';
   $('prepressCustom').value = '8'; ppCalc();
-  $('custNote').innerHTML = c ? ('Last invoice ' + (c.last_invoice || '—') + ' on ' + (c.last_date || '—') + ' · pays: ' + (c.payment || 'unknown')) : (isNew ? 'New customer: Square, 6% tax, pre-press $8 a set unless you change them.' : '');
+  $('custNote').innerHTML = c ? ('Last invoice ' + (c.last_invoice || '—') + ' on ' + (c.last_date || '—') + ' · pays: ' + (c.payment || 'unknown')) : (isNew ? (CAT && CAT.menu && CAT.menu['new'] ? 'New customer: menu prices include the card fee - no Square Fee, no ACH fee. 6% tax, pre-press $8 a set. (If they were invoiced before, the builder uses their account prices.)' : 'New customer: Square, 6% tax, pre-press $8 a set unless you change them.') : '');
   // reorder lines
   if(EDIT_OF && EDIT_OF.customer !== v) stopEditing(false);
   renderPast(v);
@@ -735,6 +735,7 @@ $('delivery').addEventListener('change', function(){ $('shipWrap').classList.tog
 // builder uses), so a new item with vessel + material + texture shows its price now instead of 'priced by the builder'.
 function menuPrice(vessel, material, texture, white){
   var M = CAT && CAT.menu; if(!M || !vessel || !material) return null;
+  if(M['new'] && $('company').value === '__new__') M = M['new'];   // 10/5 Shane: a NEW client's menu carries the card fee (the builder re-checks the client list)
   var lvl = { 'Flat': 0, '1': 1, '2': 2, '3': 3 }[texture]; if(lvl === undefined) lvl = 2;   // builder default = Standard
   var mat = { 'White Vinyl': 'White', 'Holographic': 'Holo BF', 'Gold': 'Gold' }[material];   // Clear: no menu price
   var table = /lighter/i.test(vessel) ? M.lighter : (M.access || {})[vessel];
