@@ -1,64 +1,64 @@
 {
-  "updated": "2026-10-04",
+  "updated": "2026-10-05",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-10-04",
+      "date": "2026-10-05",
       "label": "Morning Brief",
-      "title": "Michigan Flexes Despite the Tax Squeeze as National Cannabis Momentum Builds",
-      "top": "Michigan's cannabis culture is still winning awards and holding demand even as the 24% wholesale tax bites, with a gubernatorial candidate now promising relief and cheap real estate opening doors for expansion. Nationally, rescheduling hit a procedural speed bump, but Wall Street uplistings, M&A, and FDA psychedelic breakthroughs keep the sector's momentum pointed up.",
+      "title": "Michigan Regulators Crack Down on Bad Actors as November Ballots Could Expand Access",
+      "top": "Michigan's CRA keeps tightening enforcement — pulling Muha Meds Ypsilanti's license over influencer vape giveaways — even as two cities head to the Nov. 3 ballot on allowing more dispensaries and a new storefront opens near the Ohio border. Nationally, New York cannabis sales are on pace for a record year, a Colorado vape recall raises safety flags, and psychedelics keep advancing on two fronts: a fresh MAPS training partnership and a second positive Phase 3 readout for Definium's LSD anxiety drug.",
       "local": [
         {
-          "text": "Hytek, Mitten Canna crowned Zalympix champions — Detroit-based Hytek's Oishii Piña took best overall live rosin while Mitten Canna Co.'s Toad Venom won best overall flower at Michigan's 2026 'Grammys of Cannabis.'",
-          "source": "Detroit Metro Times",
-          "url": "https://www.metrotimes.com/weed-2/michigans-best-flower-and-live-rosin-crowned-at-2026-zalympix/"
+          "text": "CRA pulls Muha Meds Ypsilanti's license, fines it $251,250 — Regulators found the retailer funneled hundreds of vape cartridges to two social-media influencers by splitting orders to dodge oversale limits, among seven rule violations in a final order signed Oct. 1.",
+          "source": "Crain's Detroit Business",
+          "url": "https://www.crainsdetroit.com/cannabis/cdb-muha-meda-ypsilanti-license-20261001/"
         },
         {
-          "text": "Gubernatorial candidate pledges to repeal wholesale tax — Republican John James, backed by roughly $90,000 in industry donations, has promised to cut Michigan's 24% wholesale tax if elected.",
-          "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092126/"
+          "text": "Menominee voters to decide on more dispensaries Nov. 3 — A judge cleared a ballot measure that would raise the city's marijuana retailer cap from 9 to 13 licenses.",
+          "source": "Upper Michigan's Source",
+          "url": "https://www.uppermichiganssource.com/2026/09/22/november-vote-could-increase-marijuana-dispensaries/"
         },
         {
-          "text": "Demand holds steady despite the new 24% levy — Flower prices remain near all-time lows at Michigan dispensaries, and the feared post-tax sales collapse has not materialized two months into 2026.",
+          "text": "Bad Axe to vote on ending its marijuana ban — The city council unanimously sent a citizen-initiated measure to the Nov. 3 ballot that would repeal its 2019 prohibition and allow up to two marijuana businesses.",
+          "source": "The Marijuana Herald",
+          "url": "https://themarijuanaherald.com/2026/10/marijuana-and-the-2026-election-what-voters-will-decide-on-november-3/"
+        },
+        {
+          "text": "High Profile Cannabis opens new storefront minutes from Toledo — The retailer's latest Michigan location aims to capture Ohio border traffic near the state line.",
           "source": "Cannabis Business Times",
-          "url": "https://www.cannabisbusinesstimes.com/us-states/michigan/news/15819825/michigan-cannabis-prices-remain-down-demand-steady-in-2026-despite-new-tax"
+          "url": "https://www.cannabisbusinesstimes.com/dispensary/news/15818419/high-profile-cannabis-opens-michigan-dispensary-minutes-from-toledo-ohio"
         },
         {
-          "text": "Cannabis real estate now selling at fire-sale prices — At least 50 Michigan cultivation properties are listed for sale or lease, with brokers reporting deals at 20-30 cents on the dollar for operators ready to expand.",
+          "text": "Michigan brands roll out Halloween drops — Armada Cannabis Co.'s fresh-pressed apple cider (20mg THC) and seasonal 'Phillip Noir' blend lead a crop of fall-themed releases from Michigan edibles makers.",
           "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092826/"
-        },
-        {
-          "text": "CRA hands down record $2M fines, tightens enforcement — Regulators revoked 20 grower licenses from a mid-Michigan company for shipping dirt labeled as flower, part of a tougher compliance push that rewards operators playing by the rules.",
-          "source": "MITechNews",
-          "url": "https://mitechnews.com/news/michigan-cra-revokes-20-marijuana-grow-licenses-issues-record-tying-2-million-fine"
+          "url": "https://gandernewsroom.com/news/cannabis/michigan-cannabis-halloween-2026/"
         }
       ],
       "national": [
         {
-          "text": "DEA rescheduling paused, but investor confidence holds firm — A judge stayed the hearing to weigh a GAO report on scheduling gaps, yet the report didn't challenge the science behind Schedule III, and surveyed investors still put 65% odds on rescheduling within six months.",
-          "source": "Marijuana Moment / The Marijuana Herald",
-          "url": "https://www.marijuanamoment.net/dea-judge-pauses-marijuana-rescheduling-hearing-as-opponents-highlight-government-report-detailing-gaps-in-federal-processes/"
-        },
-        {
-          "text": "Trulieve becomes first MSO to uplist to the NYSE — The cannabis giant began trading as TRLV, a move CEO Kim Rivers called a 'historic milestone' tied to the Schedule III shift.",
-          "source": "Yahoo Finance",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/msos-hits-2026-high-cannabis-040610250.html"
-        },
-        {
-          "text": "Vireo Growth snaps up Planet 13 in all-stock deal — The acquisition adds 36 dispensaries across three states, extending one of cannabis's most aggressive consolidation sprees.",
+          "text": "New York cannabis sales on pace to shatter last year's record — Sales have topped $1.41 billion through three quarters of 2026, putting the state ahead of 2025's full-year total of $1.68 billion despite signs of a slowdown.",
           "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/news/cannabis-mso-vireo-growth-to-acquire-planet-13-in-all-stock-deal/617152/"
+          "url": "https://mjbizdaily.com/news/new-york-cannabis-sales-on-pace-to-break-record-but-signs-of-stall-appear/618440"
         },
         {
-          "text": "Cresco Labs lands $50M non-dilutive credit line — Needham Bank's financing gives the MSO fuel for acquisitions and positions it for a future senior-exchange uplisting.",
-          "source": "Yahoo Finance",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/msos-hits-2026-high-cannabis-040610250.html"
+          "text": "Colorado vape recall draws health complaints — Regulators logged adverse-event reports tied to vaporizers from StayCon (dba Craft) after two consumers reported falling ill; the shop has voluntarily shut down.",
+          "source": "MJBizDaily",
+          "url": "https://mjbizdaily.com/news/health-problems-reported-after-colorado-cannabis-vaporizer-recall/618431"
         },
         {
-          "text": "FDA psychedelic framework pushes Compass Pathways forward — The agency's new trial-design guidance arrives as Compass's Phase 3 psilocybin program for depression posts 52-week open-label data, part of a broader federal push that could yield the first psychedelic approval within the year.",
-          "source": "Clinical Trial Vanguard / Houston Public Media",
-          "url": "https://www.clinicaltrialvanguard.com/article/psych-pulse/what-the-fdas-new-psychedelic-framework-actually-means-for-the-clinic/"
+          "text": "MAPS announces psychedelic-therapy training partnership — The nonprofit is teaming with the International Alliance of Psychedelic Therapy Practitioners to expand training standards as the field moves toward FDA approval.",
+          "source": "GlobeNewswire via Manila Times",
+          "url": "https://manilatimes.net/2026/10/05/tmt-newswire/globenewswire/maps-and-international-alliance-of-psychedelic-therapy-practitioners-announce-partnership-to-advance-training-for-psychedelic-assisted-therapy/2439023"
+        },
+        {
+          "text": "Definium's LSD drug posts second straight Phase 3 win — DT120 (lysergide) met its primary endpoint in the 245-patient Panorama trial for generalized anxiety disorder, teeing up a regulatory submission after a prior trial's success.",
+          "source": "Clinical Trials Arena",
+          "url": "https://www.clinicaltrialsarena.com/news/definium-dt120-psychedelic-gad-anxiety-phase-iii/"
+        },
+        {
+          "text": "Analysts flag cannabis stocks as October buys — Despite rescheduling's delay, coverage points to Innovative Industrial Properties and Trulieve as turnaround plays as the sector's long-term catalysts stay intact.",
+          "source": "The Motley Fool",
+          "url": "https://www.fool.com/investing/2026/10/03/2-high-octane-cannabis-stocks-to-buy-in-october"
         }
       ]
     }
