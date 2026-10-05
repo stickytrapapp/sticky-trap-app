@@ -5,60 +5,71 @@
     {
       "date": "2026-10-05",
       "label": "Morning Brief",
-      "title": "Michigan Regulators Crack Down on Bad Actors as November Ballots Could Expand Access",
-      "top": "Michigan's CRA keeps tightening enforcement — pulling Muha Meds Ypsilanti's license over influencer vape giveaways — even as two cities head to the Nov. 3 ballot on allowing more dispensaries and a new storefront opens near the Ohio border. Nationally, New York cannabis sales are on pace for a record year, a Colorado vape recall raises safety flags, and psychedelics keep advancing on two fronts: a fresh MAPS training partnership and a second positive Phase 3 readout for Definium's LSD anxiety drug.",
+      "title": "Michigan Weed Chains Go National While D.C. Hits Pause on Rescheduling",
+      "top": "Michigan operators are finding growth paths — JARS is expanding into Arizona, Ann Arbor's Bloom City Club just opened in Ypsilanti, and a gubernatorial candidate is now courting industry cash to kill the 24% wholesale tax. Nationally, Compass Pathways' psilocybin data keeps the psychedelic pipeline hot even as a DEA judge hits pause on marijuana rescheduling pending an Oct. 13 response deadline.",
       "local": [
         {
-          "text": "CRA pulls Muha Meds Ypsilanti's license, fines it $251,250 — Regulators found the retailer funneled hundreds of vape cartridges to two social-media influencers by splitting orders to dodge oversale limits, among seven rule violations in a final order signed Oct. 1.",
-          "source": "Crain's Detroit Business",
-          "url": "https://www.crainsdetroit.com/cannabis/cdb-muha-meda-ypsilanti-license-20261001/"
-        },
-        {
-          "text": "Menominee voters to decide on more dispensaries Nov. 3 — A judge cleared a ballot measure that would raise the city's marijuana retailer cap from 9 to 13 licenses.",
-          "source": "Upper Michigan's Source",
-          "url": "https://www.uppermichiganssource.com/2026/09/22/november-vote-could-increase-marijuana-dispensaries/"
-        },
-        {
-          "text": "Bad Axe to vote on ending its marijuana ban — The city council unanimously sent a citizen-initiated measure to the Nov. 3 ballot that would repeal its 2019 prohibition and allow up to two marijuana businesses.",
-          "source": "The Marijuana Herald",
-          "url": "https://themarijuanaherald.com/2026/10/marijuana-and-the-2026-election-what-voters-will-decide-on-november-3/"
-        },
-        {
-          "text": "High Profile Cannabis opens new storefront minutes from Toledo — The retailer's latest Michigan location aims to capture Ohio border traffic near the state line.",
-          "source": "Cannabis Business Times",
-          "url": "https://www.cannabisbusinesstimes.com/dispensary/news/15818419/high-profile-cannabis-opens-michigan-dispensary-minutes-from-toledo-ohio"
-        },
-        {
-          "text": "Michigan brands roll out Halloween drops — Armada Cannabis Co.'s fresh-pressed apple cider (20mg THC) and seasonal 'Phillip Noir' blend lead a crop of fall-themed releases from Michigan edibles makers.",
+          "text": "JARS Cannabis buys its way into Arizona's top spot",
+          "detail": "",
           "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/michigan-cannabis-halloween-2026/"
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-083126/",
+          "text_full": "JARS Cannabis buys its way into Arizona's top spot — The Michigan-based chain announced a deal to acquire Sonoran Roots and its eight Ponderosa dispensaries, soon making JARS the largest dispensary chain in Arizona."
+        },
+        {
+          "text": "Bloom City Club expands footprint with Ypsilanti store",
+          "source": "ClickOnDetroit",
+          "url": "https://www.clickondetroit.com/topic/Cannabis/",
+          "text_full": "Bloom City Club expands footprint with Ypsilanti store — Ann Arbor's Bloom City Club opened a new Ypsilanti location and is celebrating with cannabis-themed events throughout October."
+        },
+        {
+          "text": "Michigan brands roll out boozy-strength Halloween drops",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/michigan-cannabis-halloween-2026/",
+          "text_full": "Michigan brands roll out boozy-strength Halloween drops — Armada Cannabis debuted a 50mg THC \"Phillip Noir\" blood orange-cranberry cider and a 50mg live-rosin cider collab with Apex Solventless for the season."
+        },
+        {
+          "text": "Gubernatorial hopeful courts industry cash on tax repeal",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092126/",
+          "text_full": "Gubernatorial hopeful courts industry cash on tax repeal — Republican U.S. Rep. John James has pledged to repeal the state's 24% wholesale tax after cannabis executives wrote roughly $90,000 in checks backing his campaign."
+        },
+        {
+          "text": "Regulators level the field with record $2M fine",
+          "source": "Fox 2 Detroit",
+          "url": "https://www.fox2detroit.com/news/michigan-revokes-20-marijuana-grower-licenses-companys-egregious-conduct",
+          "text_full": "Regulators level the field with record $2M fine — The state revoked 20 grower licenses and fined Clare-based GP Holdings (Millie Montana Industries) $2 million after it shipped dirt and mulch labeled as marijuana flower, clearing a bad actor out of an oversupplied market."
         }
       ],
       "national": [
         {
-          "text": "New York cannabis sales on pace to shatter last year's record — Sales have topped $1.41 billion through three quarters of 2026, putting the state ahead of 2025's full-year total of $1.68 billion despite signs of a slowdown.",
-          "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/news/new-york-cannabis-sales-on-pace-to-break-record-but-signs-of-stall-appear/618440"
+          "text": "DEA rescheduling hits a speed bump, not a dead end",
+          "source": "Vicente LLP",
+          "url": "https://vicentellp.com/insights/dea-judge-pauses-marijuana-rescheduling-gao-report/",
+          "text_full": "DEA rescheduling hits a speed bump, not a dead end — A DEA judge stayed the Schedule III hearing to weigh a GAO report, but the government must respond by Oct. 13 and the pause doesn't affect the April order on state medical and FDA-approved products."
         },
         {
-          "text": "Colorado vape recall draws health complaints — Regulators logged adverse-event reports tied to vaporizers from StayCon (dba Craft) after two consumers reported falling ill; the shop has voluntarily shut down.",
-          "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/news/health-problems-reported-after-colorado-cannabis-vaporizer-recall/618431"
+          "text": "Compass Pathways' psilocybin posts durable 6-month wins",
+          "source": "Compass Pathways",
+          "url": "https://ir.compasspathways.com/News--Events-/news/news-details/2026/Compass-Pathways-Announces-Six-Month-Data-from-Second-Phase-3-Trial-Confirming-Rapid-and-Durable-Profile/default.aspx",
+          "text_full": "Compass Pathways' psilocybin posts durable 6-month wins — The company's second Phase 3 trial in nearly 600 patients confirmed COMP360's rapid onset and durable response, with the company targeting a Q4 2026 FDA submission."
         },
         {
-          "text": "MAPS announces psychedelic-therapy training partnership — The nonprofit is teaming with the International Alliance of Psychedelic Therapy Practitioners to expand training standards as the field moves toward FDA approval.",
-          "source": "GlobeNewswire via Manila Times",
-          "url": "https://manilatimes.net/2026/10/05/tmt-newswire/globenewswire/maps-and-international-alliance-of-psychedelic-therapy-practitioners-announce-partnership-to-advance-training-for-psychedelic-assisted-therapy/2439023"
+          "text": "MDMA therapy heads back to FDA with new delivery model",
+          "source": "Acuity News",
+          "url": "https://acuity.news/regulation/mdma-couples-therapy-dyadic-psychedelic-treatment-models-2026",
+          "text_full": "MDMA therapy heads back to FDA with new delivery model — An MDMA application is back before the FDA alongside Oregon's published psilocybin-services outcomes data, pushing providers toward scalable dyadic and group treatment formats."
         },
         {
-          "text": "Definium's LSD drug posts second straight Phase 3 win — DT120 (lysergide) met its primary endpoint in the 245-patient Panorama trial for generalized anxiety disorder, teeing up a regulatory submission after a prior trial's success.",
-          "source": "Clinical Trials Arena",
-          "url": "https://www.clinicaltrialsarena.com/news/definium-dt120-psychedelic-gad-anxiety-phase-iii/"
+          "text": "Major MSOs post strong growth heading into Q4",
+          "source": "MarijuanaStocks",
+          "url": "https://pluang.com/en/news-feed/3-saham-kannabis-yang-perlu-diperhatikan-menjelang-september",
+          "text_full": "Major MSOs post strong growth heading into Q4 — Cresco Labs closed a $50 million Pennsylvania acquisition on $173 million Q2 revenue, while Trulieve expanded its Florida dispensary network and began trading on the NYSE with $271 million in Q2 revenue."
         },
         {
-          "text": "Analysts flag cannabis stocks as October buys — Despite rescheduling's delay, coverage points to Innovative Industrial Properties and Trulieve as turnaround plays as the sector's long-term catalysts stay intact.",
-          "source": "The Motley Fool",
-          "url": "https://www.fool.com/investing/2026/10/03/2-high-octane-cannabis-stocks-to-buy-in-october"
+          "text": "U.S. vape brand Rove plants a flag in Canada",
+          "source": "StratCann",
+          "url": "https://stratcann.com/news/week-in-weed-october-3-2026",
+          "text_full": "U.S. vape brand Rove plants a flag in Canada — Rove announced its official entry into the Canadian market starting with Ontario, with plans to expand into additional provinces in coming months."
         }
       ]
     }
