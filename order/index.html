@@ -259,6 +259,11 @@ function unlock(){
 function pickCompany(){
   var v = $('company').value, isNew = v === '__new__';
   $('newCust').classList.toggle('hidden', !isNew);
+  // 10/5 Shane: a NEW client's design rates carry the processing fee, rounded up to the next $5 (the builder re-checks)
+  var _fee = isNew && CAT && CAT.menu && CAT.menu['new'], _dr = $('designRate'), _std = [75, 100, 150];
+  if(_dr){ var _keep = _std.indexOf(Number(_dr.value)); if(_keep < 0) _keep = [80, 105, 155].indexOf(Number(_dr.value));
+    _dr.innerHTML = _std.map(function(r){ var x = _fee ? Math.ceil(r / 0.971 / 5 - 1e-9) * 5 : r; return '<option value="' + x + '">$' + x + '</option>'; }).join('');
+    _dr.selectedIndex = _keep < 0 ? 0 : _keep; if(typeof designCalc === 'function') designCalc(); }
   var c = CAT.customers.find(function(x){ return x.name === v; });
   $('contact').value = c ? (c.contact || '') : ''; $('email').value = c ? (c.email || '') : ''; $('phone').value = c ? (c.phone || '') : '';
   $('contact2').value = c ? (c.contact2 || '') : ''; $('email2').value = c ? (c.email2 || '') : ''; $('phone2').value = c ? (c.phone2 || '') : '';   // 9/16 Shane: second contact, prefilled from the client card
