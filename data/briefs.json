@@ -5,60 +5,62 @@
     {
       "date": "2026-10-06",
       "label": "Morning Brief",
-      "title": "Detroit Brands Grow Through the Cracks While DC Clears a Path to Schedule III",
-      "top": "Michigan operators are finding real wins this week — from a scrappy Detroit flower brand going viral to Bay City turning weed tax into homeless shelter beds — even as regulators drop record fines and the 24% wholesale tax fight grinds toward trial. Nationally, the DEA reopened its Schedule III registration portal and Compass Pathways opened a U.S. commercial office for its 2027 psilocybin launch, signaling real momentum even as the broader rescheduling hearing hits another procedural pause.",
+      "title": "Consolidation, Compliance Cleanup & a Clearer Path to Schedule III",
+      "top": "Michigan operators are finding stability nine months into the 24% wholesale tax, with demand holding steady and both gubernatorial campaigns now courting the industry on repeal — while Bay City just put cannabis dollars to visible civic use. Nationally, Curaleaf is sweetening its Aurora bid as consolidation accelerates, and federal rescheduling and psychedelic-medicine reviews keep inching toward the finish line despite a procedural pause.",
       "local": [
         {
-          "text": "Ex-caregivers turn scrappy Zasso into a Detroit cult brand — A small Southwest Detroit grow is selling top-shelf flower for about $100 an ounce under a name that, in Japanese, nods to the weeds that push up through sidewalk cracks.",
-          "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/detroit-weed-brand-100626/"
-        },
-        {
-          "text": "Bay City turns weed tax into warm beds — Commissioners are set to vote on allocating $150,000 a year in marijuana tax revenue to keep the Good Samaritan Rescue Mission drop-in center open, a facility that has served more than 250 people.",
+          "text": "Bay City funds homeless shelter with weed tax dollars",
+          "detail": "",
+          "text_full": "Bay City funds homeless shelter with weed tax dollars — Commissioners are voting to send $150,000 a year in marijuana tax revenue to the Good Samaritan Rescue Mission Drop-In Center, a visible win for cannabis-tax goodwill.",
           "source": "WNEM",
           "url": "https://www.wnem.com/2026/10/05/bay-city-vote-150000-marijuana-tax-funds-shelter-drop-in-center/"
         },
         {
-          "text": "Governor candidate pledges to kill the wholesale tax — GOP hopeful John James, once rated D- by NORML, has pledged to repeal the 24% wholesale tax after industry executives wrote him roughly $90,000 in checks this summer.",
+          "text": "JARS Cannabis goes big in Arizona expansion",
           "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-092126/"
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-083126/"
         },
         {
-          "text": "Michigan brands roll out spooky Croptober drops — Statewide cultivators are releasing Halloween-themed products as harvest season peaks, including novelty funeral-style pre-rolls from Voodoo.",
+          "text": "Demand holds steady despite Michigan's 24% tax",
+          "source": "Cannabis Business Times",
+          "url": "https://www.cannabisbusinesstimes.com/us-states/michigan/news/15819825/michigan-cannabis-prices-remain-down-demand-steady-in-2026-despite-new-tax"
+        },
+        {
+          "text": "GOP nominee James, industry group align on tax repeal",
+          "source": "Postindustrial / MJBizDaily",
+          "url": "https://postindustrial.com/stories/michigan-marijuana-industry-group-endorses-gop-governor-candidate-who-pledged-to-cut-new-wholesale-tax/"
+        },
+        {
+          "text": "State revokes 20 licenses, levies $2M fine",
           "source": "Gander Newsroom",
           "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-100626/"
-        },
-        {
-          "text": "Record fines hit bad actors while tax suit heads to trial — Regulators tied the state's largest-ever cannabis fines in one week, revoking 20 grow licenses from a company caught shipping dirt as flower, even as MiCIA's wholesale-tax lawsuit moves toward a September trial that could still deliver relief.",
-          "source": "MITechNews / WWMT",
-          "url": "https://mitechnews.com/news/michigan-cra-revokes-20-marijuana-grow-licenses-issues-record-tying-2-million-fine"
         }
       ],
       "national": [
         {
-          "text": "DEA reopens Schedule III registration door — The agency's Diversion Control Division launched a new Form 225 application process so medical cannabis manufacturers, distributors and labs that missed the original 60-day window can still register under the Controlled Substances Act.",
-          "source": "Cannabis Business Times",
-          "url": "https://cannabisbusinesstimes.com/cannabis-rescheduling/news/15836687/dea-opens-new-schedule-iii-registration-portal-for-medical-cannabis-manufacturers-distributors-labs"
+          "text": "Curaleaf hikes Aurora bid to $5 a share",
+          "source": "MJBizDaily",
+          "url": "https://mjbizdaily.com/news/curaleaf-increases-price-for-aurora-cannabis-hostile-takeover-bid/618466/"
         },
         {
-          "text": "Rescheduling hits a pause, not a dead end — A DEA judge stayed the adult-use Schedule III hearing over a new GAO report, but medical marijuana rescheduling is already final, and the government must respond by Oct. 13.",
-          "source": "Shanken News Daily",
-          "url": "https://www.shankennewsdaily.com/2026/10/06/41005/cannabis-rescheduling-delayed-as-judge-considers-further-evidence/"
+          "text": "Compass Pathways on track for Q4 psilocybin filing",
+          "source": "Journey Clinical",
+          "url": "https://www.journeyclinical.com/resources/psilocybin-timeline"
         },
         {
-          "text": "Compass Pathways opens U.S. hub for 2027 psilocybin launch — The company celebrated a ribbon-cutting for a new Jersey City office built to staff commercial readiness for COMP360 ahead of an anticipated first-half-2027 launch.",
-          "source": "Compass Pathways",
-          "url": "https://ir.compasspathways.com/News--Events-/news/news-details/2026/Compass-Pathways-Celebrates-Opening-of-New-U-S--Office-in-Jersey-City-New-Jersey-2026-IF7TAw8tpv/default.aspx"
+          "text": "FDA finalizes rules fixing psychedelic trial blind spot",
+          "source": "Tech Times",
+          "url": "https://www.techtimes.com/articles/320454/20260714/fda-finalizes-psychedelic-trial-rules-unblinding-problem-gets-official-answer.htm"
         },
         {
-          "text": "Vireo expands Colorado footprint with $49M deal — Vireo Growth closed its acquisition of 17 PharmaCann Colorado dispensaries, pushing its retail count in the state to 56 locations.",
-          "source": "Business of Cannabis",
-          "url": "https://www.cann.dev/cannabis-ma-august-2026-curaleaf-vireo-consolidation/"
+          "text": "DEA wraps 11-day hearing on full Schedule III move",
+          "source": "Morgan Lewis",
+          "url": "https://www.morganlewis.com/pubs/2026/09/high-time-for-a-change-post-dea-hearing-broader-marijuana-rescheduling-questions-remain"
         },
         {
-          "text": "Institutional capital is flowing back into cannabis — Curaleaf's Boris Jordan told the Cannabis Capital Conference that 'serious capital' is returning to scaled operators, months after Trulieve's historic NYSE uplisting opened the door for major-exchange cannabis stocks.",
-          "source": "PacGarden",
-          "url": "https://www.pacgarden.com/post/cannabis-capital-conference-2026-the-three-trends-shaping-cannabis-growth-m-a-and-investment"
+          "text": "Judge pauses rescheduling call pending GAO review",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/dea-judge-pauses-marijuana-rescheduling-hearing-as-opponents-highlight-government-report-detailing-gaps-in-federal-processes/"
         }
       ]
     }
