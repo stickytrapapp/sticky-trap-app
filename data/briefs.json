@@ -1,66 +1,64 @@
 {
-  "updated": "2026-10-06",
+  "updated": "2026-10-07",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-10-06",
+      "date": "2026-10-07",
       "label": "Morning Brief",
-      "title": "Consolidation, Compliance Cleanup & a Clearer Path to Schedule III",
-      "top": "Michigan operators are finding stability nine months into the 24% wholesale tax, with demand holding steady and both gubernatorial campaigns now courting the industry on repeal — while Bay City just put cannabis dollars to visible civic use. Nationally, Curaleaf is sweetening its Aurora bid as consolidation accelerates, and federal rescheduling and psychedelic-medicine reviews keep inching toward the finish line despite a procedural pause.",
+      "title": "Regulators Crack Down at Home as Washington's Drug Policy Shuffles",
+      "top": "Michigan's Cannabis Regulatory Agency and Attorney General delivered back-to-back enforcement blows this week — revoking Muha Meds' Ypsilanti license over illegal bulk sales and winning a court ruling against Bliss Cannabis for destroying protected wetlands — while both parties' gubernatorial hopefuls now court the industry on the 24% wholesale tax. Nationally, Curaleaf keeps pressing its hostile Aurora takeover, the Senate confirmed Trump's cannabis-friendly drug czar pick, and the DEA's psilocybin review and a GOP push on Chinese-linked grow operations both move forward.",
       "local": [
         {
-          "text": "Bay City funds homeless shelter with weed tax dollars",
-          "detail": "",
-          "text_full": "Bay City funds homeless shelter with weed tax dollars — Commissioners are voting to send $150,000 a year in marijuana tax revenue to the Good Samaritan Rescue Mission Drop-In Center, a visible win for cannabis-tax goodwill.",
-          "source": "WNEM",
-          "url": "https://www.wnem.com/2026/10/05/bay-city-vote-150000-marijuana-tax-funds-shelter-drop-in-center/"
+          "text": "Muha Meds' Ypsilanti license revoked, $251,250 fine",
+          "source": "Michigan LARA",
+          "url": "https://www.michigan.gov/lara/news-releases/2026/10/01/press-release-cannabis-regulatory-agency-orders-license-revocation-$251250-fine-for-muha"
         },
         {
-          "text": "JARS Cannabis goes big in Arizona expansion",
-          "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-083126/"
+          "text": "Court rules Bliss Cannabis destroyed protected wetlands in Iosco County",
+          "source": "Michigan AG",
+          "url": "https://www.michigan.gov/ag/news/press-releases/2026/10/02/court-rules-marijuana-business-violated-wetlands-in-iosco-county"
         },
         {
-          "text": "Demand holds steady despite Michigan's 24% tax",
+          "text": "Democrat Chris Swanson now also pledges to repeal the cannabis wholesale tax",
+          "source": "Michigan Advance",
+          "url": "https://michiganadvance.com/?p=104703"
+        },
+        {
+          "text": "GOP's John James vows to repeal tax, end unregulated hemp sales",
           "source": "Cannabis Business Times",
-          "url": "https://www.cannabisbusinesstimes.com/us-states/michigan/news/15819825/michigan-cannabis-prices-remain-down-demand-steady-in-2026-despite-new-tax"
+          "url": "https://www.cannabisbusinesstimes.com/us-states/michigan/news/15833093/michigan-gop-gubernatorial-nominee-plans-to-repeal-24-cannabis-tax-end-unregulated-hemp-sales"
         },
         {
-          "text": "GOP nominee James, industry group align on tax repeal",
-          "source": "Postindustrial / MJBizDaily",
-          "url": "https://postindustrial.com/stories/michigan-marijuana-industry-group-endorses-gop-governor-candidate-who-pledged-to-cut-new-wholesale-tax/"
-        },
-        {
-          "text": "State revokes 20 licenses, levies $2M fine",
-          "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-100626/"
+          "text": "State revokes 20 cultivation licenses after grower shipped dirt and mulch as flower",
+          "source": "Ganjapreneur",
+          "url": "https://ganjapreneur.com/michigan-revokes-20-medical-cannabis-cultivation-licenses-from-grower"
         }
       ],
       "national": [
         {
-          "text": "Curaleaf hikes Aurora bid to $5 a share",
+          "text": "Curaleaf advances hostile takeover push for Aurora Cannabis",
           "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/news/curaleaf-increases-price-for-aurora-cannabis-hostile-takeover-bid/618466/"
+          "url": "https://mjbizdaily.com/?p=617472"
         },
         {
-          "text": "Compass Pathways on track for Q4 psilocybin filing",
-          "source": "Journey Clinical",
-          "url": "https://www.journeyclinical.com/resources/psilocybin-timeline"
+          "text": "Senate confirms Trump's cannabis-friendly drug czar pick",
+          "source": "Cannabis Business Times",
+          "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15801094/senate-confirms-trumps-cannabisfriendly-drug-adviser-pick"
         },
         {
-          "text": "FDA finalizes rules fixing psychedelic trial blind spot",
-          "source": "Tech Times",
-          "url": "https://www.techtimes.com/articles/320454/20260714/fda-finalizes-psychedelic-trial-rules-unblinding-problem-gets-official-answer.htm"
+          "text": "DEA formally asks HHS to review psilocybin for rescheduling",
+          "source": "Law360",
+          "url": "https://www.law360.com/articles/2378361"
         },
         {
-          "text": "DEA wraps 11-day hearing on full Schedule III move",
-          "source": "Morgan Lewis",
-          "url": "https://www.morganlewis.com/pubs/2026/09/high-time-for-a-change-post-dea-hearing-broader-marijuana-rescheduling-questions-remain"
+          "text": "DOJ seeks $8.3M clawback from TerrAscend in first 280E refund case",
+          "source": "MJBizDaily",
+          "url": "https://mjbizdaily.com/news/irs-wants-marijuana-mso-to-return-erroneous-280e-tax-refund-plus-interest/616104/"
         },
         {
-          "text": "Judge pauses rescheduling call pending GAO review",
-          "source": "Marijuana Moment",
-          "url": "https://www.marijuanamoment.net/dea-judge-pauses-marijuana-rescheduling-hearing-as-opponents-highlight-government-report-detailing-gaps-in-federal-processes/"
+          "text": "GOP senators urge DOJ to probe Chinese-linked grow operations",
+          "source": "Cannabis Business Times",
+          "url": "https://www.cannabisbusinesstimes.com/hemp/news/15836411/4-gop-senators-tell-doj-to-investigate-chinese-criminal-networks-role-in-illicit-cannabis-hemp-activities"
         }
       ]
     }
