@@ -5,60 +5,60 @@
     {
       "date": "2026-10-08",
       "label": "Morning Brief",
-      "title": "Tax-Relief Momentum Builds in Lansing as Psilocybin and M&A Fuel National Cannabis Surge",
-      "top": "Michigan senators and a leading governor candidate are now both pushing to roll back the state's 24% wholesale cannabis tax, while operators show real resilience with steady demand and a new Ypsilanti storefront opening. Nationally, Compass Pathways' psilocybin treatment is racing toward a Q4 FDA filing, Curaleaf is pressing a hostile bid for Aurora Cannabis, and DEA's rescheduling pause leaves the existing medical Schedule III order untouched.",
+      "title": "Michigan Operators Hold the Line on Tax as National Rescheduling and Psychedelics Momentum Build",
+      "top": "Despite the 24% wholesale tax now a year old, Michigan dispensaries are holding steady on price and demand while lawmakers push a repeal and a new Ypsilanti store opens its doors. Nationally, DEA's rescheduling clock got a short pause but the bigger story is forward motion — a new Schedule III registration portal, Compass Pathways' psilocybin NDA on track for Q4, and a mega M&A bid reshaping the MSO landscape.",
       "local": [
         {
-          "text": "Eight state senators now push to repeal 24% tax — Sen. Jonathan Lindsey, who sponsors S.B. 810, called the 24% wholesale tax nonessential to Michigan's pocketbook to the detriment of the state's cannabis industry, and at least one senator who voted in the majority to pass the act last year has changed her mind since.",
-          "source": "Cannabis Business Times",
-          "url": "https://www.cannabisbusinesstimes.com/us-states/michigan/news/15818403/8-michigan-senators-plan-to-repeal-states-24-cannabis-tax"
-        },
-        {
-          "text": "GOP governor hopeful courts industry with tax-cut vow — GOP gubernatorial candidate John James says the cannabis tax 'drives up prices, gives illegal operators a competitive edge, and has already fallen far short of revenue projections,' and pledged 'As Governor, I will work to repeal or sharply reduce it', and the Michigan Cannabis Industry Association has officially endorsed James, citing his commitment to repealing the levy.",
-          "source": "Marijuana Moment / Postindustrial",
-          "url": "https://postindustrial.com/stories/michigan-marijuana-industry-group-endorses-gop-governor-candidate-who-pledged-to-cut-new-wholesale-tax/"
-        },
-        {
-          "text": "Demand holds steady despite the new wholesale tax — while overtaxed markets often see demand suffer, that doesn't seem to be the case so far in 2026, indicating licensed businesses are absorbing the 24% tax in an oversupplied marketplace with 956 cultivation licensees, 275 processors and 835 dispensaries.",
+          "text": "Michigan demand holds steady a year into the tax — Retail prices and consumer demand haven't collapsed under the 24% wholesale tax, with oversupply (not the levy) still the bigger price driver in Michigan's unlimited-license market.",
           "source": "Cannabis Business Times",
           "url": "https://www.cannabisbusinesstimes.com/us-states/michigan/news/15819825/michigan-cannabis-prices-remain-down-demand-steady-in-2026-despite-new-tax"
         },
         {
-          "text": "Bloom City Club opens new Ypsilanti storefront — the Ann Arbor-rooted retailer is celebrating the new Ypsilanti store with several cannabis-themed events in October.",
+          "text": "Bloom City Club opens new Ypsilanti dispensary — The Ann Arbor-based chain is celebrating the launch with a slate of cannabis-themed events throughout October.",
           "source": "ClickOnDetroit",
           "url": "https://www.clickondetroit.com/topic/Marijuana/"
         },
         {
-          "text": "State purges bad actors, clearing field for clean brands — regulators revoked 20 cultivation licenses and fined a company $2 million after it shipped packages labeled as marijuana that actually contained 'dirt and mulch', while Muha Meds lost its Ypsilanti dispensary license and was fined more than $250,000 for using a fake customer profile to illegally sell product.",
-          "source": "Gander Newsroom (MichiGanja Report)",
+          "text": "Senate Bill 810 keeps tax-repeal fight alive in Lansing — Sen. Jeff Irwin is co-sponsoring the repeal push even as he concedes it faces long odds against a $420 million road-funding hole.",
+          "source": "Beard Bros Pharms",
+          "url": "https://beardbrospharms.com/articles/new-lawsuit-challenges-michigan-24-cannabis-wholesale-tax/"
+        },
+        {
+          "text": "Bay City turns cannabis tax dollars into shelter beds — Local officials are directing marijuana revenue toward housing support, a bright spot in an otherwise rough week for the industry.",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-100626/"
+        },
+        {
+          "text": "Regulators clean house on bad actors statewide — State officials revoked 20 cultivation licenses and fined a company $2 million for shipping \"dirt and mulch\" labeled as marijuana, while also pulling Muha Meds' Ypsilanti license over a fake customer profile.",
+          "source": "Gander Newsroom",
           "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-100626/"
         }
       ],
       "national": [
         {
-          "text": "DEA pause doesn't touch the medical Schedule III order — a DEA judge paused the broader cannabis rescheduling proceeding while weighing a new GAO report, adding another procedural step for operators awaiting a decision on whether adult-use joins medical cannabis on Schedule III, but the stay leaves in place the April 2026 order covering FDA-approved marijuana products and state-licensed medical marijuana.",
-          "source": "mg Magazine / Psychedelics Today",
-          "url": "https://mgmagazine.com/cannabis-news/dea-cannabis-rescheduling-review-paused/"
+          "text": "DEA rescheduling paused, not rejected — A judge stayed the Schedule III proceeding to weigh a new GAO report, with the government's response due October 13 and the underlying case still alive.",
+          "source": "Regulatory Oversight",
+          "url": "https://www.regulatoryoversight.com/2026/10/pending-marijuana-rescheduling-put-on-hold/"
         },
         {
-          "text": "Compass Pathways' psilocybin stays on track for Q4 filing — Compass Pathways expects to complete its New Drug Application for COMP360 psilocybin treatment in Q4 2026, with commercial launch anticipated in the first half of 2027, which would make it the first classic psychedelic ever approved by the U.S. Food and Drug Administration.",
-          "source": "Journey Clinical / Psychedelic Beacon",
-          "url": "https://www.journeyclinical.com/resources/psilocybin-timeline"
+          "text": "DEA opens new Schedule III registration portal — State-licensed medical cannabis manufacturers, distributors and labs can now use the Form 225 process to register under the Controlled Substances Act.",
+          "source": "Cannabis Business Times",
+          "url": "https://cannabisbusinesstimes.com/cannabis-rescheduling/news/15836687/dea-opens-new-schedule-iii-registration-portal-for-medical-cannabis-manufacturers-distributors-labs"
         },
         {
-          "text": "Curaleaf raises hostile bid for Aurora Cannabis — Curaleaf raised its unsolicited offer for Aurora Cannabis to $5 per share, pushing for a fair process and arguing shareholders deserve the same diligence access offered to other potential acquirers.",
-          "source": "Cannabis Newsletter Daily Roundup",
-          "url": "https://cannabisinsight420.substack.com/p/cannabis-newsletter-daily-roundup-157"
+          "text": "Compass Pathways' psilocybin NDA stays on track for Q4 — The company holds a National Priority Voucher that could shrink FDA review to just 1-2 months for its treatment-resistant depression therapy COMP360.",
+          "source": "SEC/Compass Pathways 8-K",
+          "url": "https://www.sec.gov/Archives/edgar/data/0001816590/000181659026000059/q22026pressrelease.htm"
         },
         {
-          "text": "Spherex goes vertical with Colorado cultivation buy — Colorado's leading cannabis brand agreed to acquire two cultivation facilities from The Cannabist Company in its first-ever acquisition, with roughly 60 employees joining and growing the company to nearly 100 workers.",
-          "source": "Business Wire via Yahoo Finance",
-          "url": "https://finance.yahoo.com/small-business/articles/spherex-colorado-top-cannabis-brand-114800312.html"
+          "text": "Compass Pathways plants its flag in the U.S. — The psilocybin drugmaker cut the ribbon on its first U.S. office in Jersey City this week with local elected officials in attendance.",
+          "source": "Hudson County View",
+          "url": "https://hudsoncountyview.com/synthetic-psilocybin-company-cuts-the-ribbon-on-jersey-city-office-with-electeds"
         },
         {
-          "text": "New York cannabis sales blow past $4 billion — New York's recreational marijuana dispensaries have now sold more than $4 billion worth of legal cannabis products, state officials announced, a marker of how fast mature adult-use markets can scale.",
-          "source": "StratCann (via Marijuana Moment)",
-          "url": "https://stratcann.com/news/week-in-weed-october-3-2026"
+          "text": "Curaleaf's $4-a-share Aurora bid reshapes MSO landscape — The proposed takeover represents a 45% premium and signals a new scale of cross-border cannabis consolidation.",
+          "source": "cann.dev",
+          "url": "https://www.cann.dev/cannabis-ma-august-2026-curaleaf-vireo-consolidation/"
         }
       ]
     }
