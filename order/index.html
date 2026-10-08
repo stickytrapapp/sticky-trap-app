@@ -415,7 +415,7 @@ function addNewLine(){
               +   '<input placeholder="type the size" class="v vother hidden" onblur="vesselBack(this)">'
               + '</span>'
               + '<select class="cu" title="Cut"><option value="">Cut</option><option>Contour cut</option><option>Die cut</option><option>On sheets</option></select>'   // 9/25 Shane: cut per line, between vessel size and texture
-              + '<select class="t"><option value="">Texture</option><option value="Flat">0 &middot; Flat</option><option value="1">1 &middot; Spot Gloss UV</option><option value="2">2 &middot; Standard</option><option value="3">3 &middot; Pro</option><option value="4">4 &middot; Ridge</option><option value="5">5 &middot; Summit</option><option value="6">6 &middot; Peak</option><option value="7">7 &middot; Apex</option><option value="8">8 &middot; Zenith</option></select>'
+              + '<select class="t"><option value="">Texture</option><option value="Flat">0 &middot; Flat</option><option value="1">1 &middot; Spot Gloss UV</option><option value="2">2 &middot; Standard</option><option value="3">3 &middot; Pro</option><option value="4">4 &middot; Ridge</option><option value="4o">4 &middot; Ridge offer (Pro + half)</option><option value="5">5 &middot; Summit</option><option value="6">6 &middot; Peak</option><option value="7">7 &middot; Apex</option><option value="8">8 &middot; Zenith</option></select>'
               + '<span class="lcell"><span class="lt">Matte</span><select class="mt" title="Matte layers - production sheet only"><option value="">&mdash;</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option></select></span>'   // 9/28 Shane: in-house only
               + '<span class="lcell"><span class="lt">Gloss</span><select class="gl" title="Gloss layers - production sheet only"><option value="">&mdash;</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option></select></span>'
               + '<span class="lcell"><span class="lt">White ink</span><select class="w" title="White ink (under the CMYK)" onchange="whiteCheck(this); totals()"><option value="N">No</option><option value="Y">Yes</option></select></span>'   // 9/25 Shane
@@ -741,10 +741,12 @@ $('delivery').addEventListener('change', function(){ $('shipWrap').classList.tog
 function menuPrice(vessel, material, texture, white){
   var M = CAT && CAT.menu; if(!M || !vessel || !material) return null;
   if(M['new'] && $('company').value === '__new__') M = M['new'];   // 10/5 Shane: a NEW client's menu carries the card fee (the builder re-checks the client list)
-  var lvl = { 'Flat': 0, '1': 1, '2': 2, '3': 3 }[texture]; if(lvl === undefined) lvl = 2;   // builder default = Standard
+  var offer = texture === '4o';   // 10/8 Shane: the Ridge offer = Pro + half the Ridge step (pricing_master.ridge_offer_step)
+  var lvl = offer ? 3 : { 'Flat': 0, '1': 1, '2': 2, '3': 3 }[texture]; if(lvl === undefined) lvl = 2;   // builder default = Standard
   var mat = { 'White Vinyl': 'White', 'Holographic': 'Holo BF', 'Gold': 'Gold' }[material];   // Clear: no menu price
   var table = /lighter/i.test(vessel) ? M.lighter : (M.access || {})[vessel];
   var row = table && mat && table[mat]; if(!(row && row[lvl] != null)) return null;
+  if(offer){ var ro = M.ridge_offer && M.ridge_offer[vessel]; return ro == null || /lighter/i.test(vessel) ? null : Number(row[3]) + Number(ro); }
   // 9/29: 'Lighter + Wrap, applied' = the wrap price + the lighter-and-application add-on (pricing_master LIGHTER lighter_app)
   return Number(row[lvl]) + (/applied/i.test(vessel) && M.lighter_app ? Number(M.lighter_app) : 0)
        + (/blackout/i.test(vessel) && M.blackout_up ? Number(M.blackout_up) : 0)   // 9/29 Shane: Blackout Edition lighter
