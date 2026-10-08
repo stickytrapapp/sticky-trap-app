@@ -5,60 +5,60 @@
     {
       "date": "2026-10-08",
       "label": "Morning Brief",
-      "title": "Michigan Operators Hold the Line on Tax as National Rescheduling and Psychedelics Momentum Build",
-      "top": "Despite the 24% wholesale tax now a year old, Michigan dispensaries are holding steady on price and demand while lawmakers push a repeal and a new Ypsilanti store opens its doors. Nationally, DEA's rescheduling clock got a short pause but the bigger story is forward motion — a new Schedule III registration portal, Compass Pathways' psilocybin NDA on track for Q4, and a mega M&A bid reshaping the MSO landscape.",
+      "title": "Tax Fights, Trials, and Takeovers: Michigan Holds Steady as National Cannabis Momentum Builds",
+      "top": "Michigan operators are proving the 24% wholesale tax hasn't broken the market — new stores are opening in Washtenaw County, licensed demand is holding, and a gubernatorial front-runner is campaigning on repeal. Nationally, the industry kept pushing forward this week with a new DEA Schedule III registration portal, fresh M&A from Curaleaf and Spherex, and Compass Pathways planting its flag with a first U.S. office.",
       "local": [
         {
-          "text": "Michigan demand holds steady a year into the tax — Retail prices and consumer demand haven't collapsed under the 24% wholesale tax, with oversupply (not the levy) still the bigger price driver in Michigan's unlimited-license market.",
+          "text": "Bloom City Club opens Ypsilanti storefront — Ann Arbor's Bloom City Club is celebrating its new Ypsilanti dispensary with cannabis-themed events running through October.",
+          "source": "ClickOnDetroit",
+          "url": "https://www.clickondetroit.com/topic/Cannabis/"
+        },
+        {
+          "text": "Licensed demand holds steady despite new tax — Michigan's feared price spike and demand collapse under the 24% wholesale tax hasn't materialized two months into 2026, with the state's licensed market still far outselling the illicit trade compared to California.",
           "source": "Cannabis Business Times",
           "url": "https://www.cannabisbusinesstimes.com/us-states/michigan/news/15819825/michigan-cannabis-prices-remain-down-demand-steady-in-2026-despite-new-tax"
         },
         {
-          "text": "Bloom City Club opens new Ypsilanti dispensary — The Ann Arbor-based chain is celebrating the launch with a slate of cannabis-themed events throughout October.",
-          "source": "ClickOnDetroit",
-          "url": "https://www.clickondetroit.com/topic/Marijuana/"
+          "text": "GOP nominee John James vows to repeal wholesale tax — James has made repealing or reducing Michigan's 24% cannabis wholesale tax part of his gubernatorial platform heading into the November election.",
+          "source": "MichWomen",
+          "url": "https://michwomen.com/blog/2026-candidates-for-michigan-governor"
         },
         {
-          "text": "Senate Bill 810 keeps tax-repeal fight alive in Lansing — Sen. Jeff Irwin is co-sponsoring the repeal push even as he concedes it faces long odds against a $420 million road-funding hole.",
-          "source": "Beard Bros Pharms",
-          "url": "https://beardbrospharms.com/articles/new-lawsuit-challenges-michigan-24-cannabis-wholesale-tax/"
+          "text": "Second tax lawsuit clears first hurdle, heads to trial — A Court of Claims judge declined to block the wholesale tax at the preliminary stage, but MiCIA's constitutional challenge over 'tax pyramiding' is now headed toward a full trial.",
+          "source": "Law Commentary",
+          "url": "https://www.lawcommentary.com/articles/michigan-cannabis-industry-files-second-lawsuit-challenging-24-marijuana-wholesale-tax"
         },
         {
-          "text": "Bay City turns cannabis tax dollars into shelter beds — Local officials are directing marijuana revenue toward housing support, a bright spot in an otherwise rough week for the industry.",
-          "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-100626/"
-        },
-        {
-          "text": "Regulators clean house on bad actors statewide — State officials revoked 20 cultivation licenses and fined a company $2 million for shipping \"dirt and mulch\" labeled as marijuana, while also pulling Muha Meds' Ypsilanti license over a fake customer profile.",
+          "text": "State regulators clean house, leveling the field — The CRA revoked 20 cultivation licenses and fined a grower $2 million for shipping 'dirt and mulch,' while also pulling Muha Meds' Ypsilanti dispensary license over a fake customer profile scheme.",
           "source": "Gander Newsroom",
           "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-100626/"
         }
       ],
       "national": [
         {
-          "text": "DEA rescheduling paused, not rejected — A judge stayed the Schedule III proceeding to weigh a new GAO report, with the government's response due October 13 and the underlying case still alive.",
-          "source": "Regulatory Oversight",
-          "url": "https://www.regulatoryoversight.com/2026/10/pending-marijuana-rescheduling-put-on-hold/"
-        },
-        {
-          "text": "DEA opens new Schedule III registration portal — State-licensed medical cannabis manufacturers, distributors and labs can now use the Form 225 process to register under the Controlled Substances Act.",
+          "text": "DEA opens new Schedule III registration portal — The agency's Diversion Control Division launched a fresh Form 225 application process so state-licensed medical cannabis manufacturers, distributors and labs can register under the Controlled Substances Act.",
           "source": "Cannabis Business Times",
           "url": "https://cannabisbusinesstimes.com/cannabis-rescheduling/news/15836687/dea-opens-new-schedule-iii-registration-portal-for-medical-cannabis-manufacturers-distributors-labs"
         },
         {
-          "text": "Compass Pathways' psilocybin NDA stays on track for Q4 — The company holds a National Priority Voucher that could shrink FDA review to just 1-2 months for its treatment-resistant depression therapy COMP360.",
-          "source": "SEC/Compass Pathways 8-K",
-          "url": "https://www.sec.gov/Archives/edgar/data/0001816590/000181659026000059/q22026pressrelease.htm"
+          "text": "Curaleaf sweetens Aurora Cannabis takeover bid — Curaleaf raised its offer by 25% to $5 per share, an 86% premium to Aurora's unaffected share price, in its bid for the Canadian cannabis giant.",
+          "source": "Cannabis Business Times",
+          "url": "https://www.cannabisbusinesstimes.com/business-issues-benchmarks/mergers-and-acquisitions/news/15836724/spherex-acquires-2-colorado-cultivation-facilities-from-cannabist-to-become-vertically-integrated"
         },
         {
-          "text": "Compass Pathways plants its flag in the U.S. — The psilocybin drugmaker cut the ribbon on its first U.S. office in Jersey City this week with local elected officials in attendance.",
+          "text": "Spherex buys two Colorado grows, nearly doubles staff — Colorado's top cannabis brand is acquiring cultivation facilities from The Cannabist Company in its first-ever acquisition, adding roughly 60 employees and going vertically integrated.",
+          "source": "Business Wire via FinancialContent",
+          "url": "https://www.financialcontent.com/article/bizwire-2026-10-6-spherex-colorados-top-cannabis-brand-acquires-two-colorado-cultivation-facilities-to-become-vertically-integrated"
+        },
+        {
+          "text": "Compass Pathways opens its first U.S. office — The psilocybin biotech cut the ribbon on a Jersey City office with local elected officials as its COMP360 treatment keeps its FDA Breakthrough Therapy designation.",
           "source": "Hudson County View",
           "url": "https://hudsoncountyview.com/synthetic-psilocybin-company-cuts-the-ribbon-on-jersey-city-office-with-electeds"
         },
         {
-          "text": "Curaleaf's $4-a-share Aurora bid reshapes MSO landscape — The proposed takeover represents a 45% premium and signals a new scale of cross-border cannabis consolidation.",
-          "source": "cann.dev",
-          "url": "https://www.cann.dev/cannabis-ma-august-2026-curaleaf-vireo-consolidation/"
+          "text": "Rescheduling paused, not dead, DEA judge clarifies — A chief administrative law judge stayed the Schedule III marijuana case to weigh a new GAO report, with the government's response due October 13 and the path to Schedule III still open.",
+          "source": "420 Magazine",
+          "url": "https://www.420magazine.com/featured-articles/marijuana-rescheduling-dea-delay-2026/"
         }
       ]
     }
