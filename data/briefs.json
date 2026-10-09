@@ -1,64 +1,64 @@
 {
-  "updated": "2026-10-08",
+  "updated": "2026-10-09",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-10-08",
+      "date": "2026-10-09",
       "label": "Morning Brief",
-      "title": "Tax Fights, Trials, and Takeovers: Michigan Holds Steady as National Cannabis Momentum Builds",
-      "top": "Michigan operators are proving the 24% wholesale tax hasn't broken the market — new stores are opening in Washtenaw County, licensed demand is holding, and a gubernatorial front-runner is campaigning on repeal. Nationally, the industry kept pushing forward this week with a new DEA Schedule III registration portal, fresh M&A from Curaleaf and Spherex, and Compass Pathways planting its flag with a first U.S. office.",
+      "title": "Michigan Regulators Keep Swinging the Hammer as National Cannabis Fights Over Repeal, China Ties, and Psychedelics Heat Up",
+      "top": "Michigan's Cannabis Regulatory Agency kept up its enforcement streak this week, finalizing a six-figure fine against a Ypsilanti retailer and adding to a run of license revocations stretching back through September, while a state court found a cultivator illegally farmed protected wetlands. Nationally, the fight over Massachusetts' marijuana-repeal ballot measure drew star power and lawmaker pushback, Senate Republicans pressed the DOJ on Chinese-linked illicit grows, and the FDA's psychedelics comment docket closed as the industry awaited its next move.",
       "local": [
         {
-          "text": "Bloom City Club opens Ypsilanti storefront — Ann Arbor's Bloom City Club is celebrating its new Ypsilanti dispensary with cannabis-themed events running through October.",
-          "source": "ClickOnDetroit",
-          "url": "https://www.clickondetroit.com/topic/Cannabis/"
+          "text": "CRA revokes Ypsilanti retailer's license, fines it $251,250 — The agency finalized an order against Budbridge LLC, doing business as Muha Meds Ypsilanti, over seven rule violations tied to roughly 900 vape cartridges sold through fake customer profiles built around social media influencers.",
+          "source": "MJBizDaily",
+          "url": "https://mjbizdaily.com/news/michigan-cannabis-regulators-impose-record-fine-revoke-permit-of-popular-product-maker-after-egregious-violations/618180/"
         },
         {
-          "text": "Licensed demand holds steady despite new tax — Michigan's feared price spike and demand collapse under the 24% wholesale tax hasn't materialized two months into 2026, with the state's licensed market still far outselling the illicit trade compared to California.",
-          "source": "Cannabis Business Times",
-          "url": "https://www.cannabisbusinesstimes.com/us-states/michigan/news/15819825/michigan-cannabis-prices-remain-down-demand-steady-in-2026-despite-new-tax"
+          "text": "Court finds cannabis grower illegally farmed protected wetlands — A Michigan court determined a cultivator destroyed protected wetlands to build out its grow operation, based on an announcement from the state Attorney General's office.",
+          "source": "Law360",
+          "url": "https://law360.com/cannabis/articles/2534059"
         },
         {
-          "text": "GOP nominee John James vows to repeal wholesale tax — James has made repealing or reducing Michigan's 24% cannabis wholesale tax part of his gubernatorial platform heading into the November election.",
-          "source": "MichWomen",
-          "url": "https://michwomen.com/blog/2026-candidates-for-michigan-governor"
+          "text": "CRA releases disciplinary action and license-denial report — The agency published its latest roundup of disciplinary actions against licensees alongside a new report on denied applications and non-renewed licenses statewide.",
+          "source": "Michigan.gov (LARA)",
+          "url": "https://www.michigan.gov/lara/news-releases/2026/09/25/press-release-cannabis-regulatory-agency-releases-disciplinary-action-report"
         },
         {
-          "text": "Second tax lawsuit clears first hurdle, heads to trial — A Court of Claims judge declined to block the wholesale tax at the preliminary stage, but MiCIA's constitutional challenge over 'tax pyramiding' is now headed toward a full trial.",
-          "source": "Law Commentary",
-          "url": "https://www.lawcommentary.com/articles/michigan-cannabis-industry-files-second-lawsuit-challenging-24-marijuana-wholesale-tax"
+          "text": "$2 million fine, processor license revoked over hidden camera — The CRA closed and revoked Michigan Investment 10 LLC's processor licenses, with Executive Director Brian Hanna noting the facility's extraction-room camera was pointed at a wall instead of the activity it was supposed to monitor.",
+          "source": "Michigan.gov (LARA)",
+          "url": "https://www.michigan.gov/lara/news-releases/2026/09/16/press-release-cannabis-regulatory-agency-announces-$2-million-fine-and-the-closure-and-revocation"
         },
         {
-          "text": "State regulators clean house, leveling the field — The CRA revoked 20 cultivation licenses and fined a grower $2 million for shipping 'dirt and mulch,' while also pulling Muha Meds' Ypsilanti dispensary license over a fake customer profile scheme.",
-          "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-100626/"
+          "text": "Hemp processor's license suspended statewide — The CRA immediately suspended Loud Labs of Michigan LLC's hemp processor-handler license, part of the agency's broader late-summer enforcement push.",
+          "source": "Michigan.gov (LARA)",
+          "url": "https://www.michigan.gov/lara/news-releases/2026/08/25/press-release-michigans-cannabis-regulatory-agency-suspends-loud-labs-of-michigan-hemp-processor"
         }
       ],
       "national": [
         {
-          "text": "DEA opens new Schedule III registration portal — The agency's Diversion Control Division launched a fresh Form 225 application process so state-licensed medical cannabis manufacturers, distributors and labs can register under the Controlled Substances Act.",
+          "text": "GOP senators press DOJ on Chinese-linked illicit grows — Sens. Tom Cotton, Susan Collins, Pete Ricketts and Ted Budd sent Attorney General Todd Blanche a letter demanding a full investigation into Chinese criminal networks' financing, land use and CCP ties in the illicit U.S. cannabis and hemp trade.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/gop-senators-want-investigation-on-chinese-role-in-u-s-marijuana-and-hemp-industries/"
+        },
+        {
+          "text": "Massachusetts lawmakers urge 'No' vote on marijuana repeal — State legislators publicly came out against Question 8, the November ballot measure that would repeal Massachusetts' adult-use cannabis laws, as the campaign heads into its final weeks.",
+          "source": "NORML",
+          "url": "https://norml.org/blog/2026/10/06/massachusetts-lawmakers-publicly-urge-no-vote-on-marijuana-repeal-initiative-question-8/"
+        },
+        {
+          "text": "FDA's psychedelics public-comment docket closes — The window to submit comments on the agency's hearing covering future therapeutic use of psilocybin, MDMA and other psychedelics shut on October 5, following a September 14 hearing that drew over 1,800 registered attendees.",
+          "source": "Medical Daily",
+          "url": "https://www.medicaldaily.com/fda-psychedelic-therapy-hearing-comments-october-5-478648"
+        },
+        {
+          "text": "Report: missing moisture standards cost states millions — An ATACH-commissioned analysis of nearly 145,000 lab results across 10 states found cannabis flower is routinely over-dried relative to ASTM's recommended water-activity range, stripping terpenes and shrinking the tax base.",
           "source": "Cannabis Business Times",
-          "url": "https://cannabisbusinesstimes.com/cannabis-rescheduling/news/15836687/dea-opens-new-schedule-iii-registration-portal-for-medical-cannabis-manufacturers-distributors-labs"
+          "url": "https://www.cannabisbusinesstimes.com/business-issues-benchmarks/cannabis-post-harvest-operations/news/15836441/missing-cannabis-moisture-standards-cost-states-millions-leaves-consumers-exposed-new-report-finds"
         },
         {
-          "text": "Curaleaf sweetens Aurora Cannabis takeover bid — Curaleaf raised its offer by 25% to $5 per share, an 86% premium to Aurora's unaffected share price, in its bid for the Canadian cannabis giant.",
+          "text": "Rove enters Canada with Ontario launch — The U.S. vape brand's Diamond Series Minibar is now on shelves through the Ontario Cannabis Store, marking Rove's first market outside the United States.",
           "source": "Cannabis Business Times",
-          "url": "https://www.cannabisbusinesstimes.com/business-issues-benchmarks/mergers-and-acquisitions/news/15836724/spherex-acquires-2-colorado-cultivation-facilities-from-cannabist-to-become-vertically-integrated"
-        },
-        {
-          "text": "Spherex buys two Colorado grows, nearly doubles staff — Colorado's top cannabis brand is acquiring cultivation facilities from The Cannabist Company in its first-ever acquisition, adding roughly 60 employees and going vertically integrated.",
-          "source": "Business Wire via FinancialContent",
-          "url": "https://www.financialcontent.com/article/bizwire-2026-10-6-spherex-colorados-top-cannabis-brand-acquires-two-colorado-cultivation-facilities-to-become-vertically-integrated"
-        },
-        {
-          "text": "Compass Pathways opens its first U.S. office — The psilocybin biotech cut the ribbon on a Jersey City office with local elected officials as its COMP360 treatment keeps its FDA Breakthrough Therapy designation.",
-          "source": "Hudson County View",
-          "url": "https://hudsoncountyview.com/synthetic-psilocybin-company-cuts-the-ribbon-on-jersey-city-office-with-electeds"
-        },
-        {
-          "text": "Rescheduling paused, not dead, DEA judge clarifies — A chief administrative law judge stayed the Schedule III marijuana case to weigh a new GAO report, with the government's response due October 13 and the path to Schedule III still open.",
-          "source": "420 Magazine",
-          "url": "https://www.420magazine.com/featured-articles/marijuana-rescheduling-dea-delay-2026/"
+          "url": "https://www.cannabisbusinesstimes.com/business-issues-benchmarks/canadian-cannabis-market/news/15836453/rove-enters-canada-with-ontario-launch"
         }
       ]
     }
