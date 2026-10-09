@@ -8,8 +8,9 @@ on:
   schedule:
     # GitHub's cron is best-effort and sometimes DROPS a run entirely, so we
     # schedule several times through the morning. The generator forces today's
-    # date and only writes when content changes, so extra runs just keep the
-    # brief fresh and self-heal a dropped earlier run.
+    # date and SKIPS the paid API call once today's brief is published, so the
+    # backups cost nothing unless the primary run was dropped (Shane 10/9: one
+    # paid brief a day).
     - cron: '6 12 * * *'    # 12:06 UTC ~= 8:06am ET  (primary)
     - cron: '6 15 * * *'    # 15:06 UTC ~= 11:06am ET (backup 1)
     - cron: '6 18 * * *'    # 18:06 UTC ~= 2:06pm ET  (backup 2)
@@ -37,6 +38,7 @@ jobs:
       - name: Generate brief
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          BRIEF_FORCE: ${{ github.event_name == 'workflow_dispatch' && '1' || '' }}
         run: node scripts/generate-brief.mjs
 
       - name: Commit and push if changed

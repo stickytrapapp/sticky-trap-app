@@ -22,6 +22,18 @@ const CHANNEL = 'https://www.youtube.com/@theflowerroompodcast';
 // Authoritative date = the runner's UTC date.
 const today = new Date().toISOString().slice(0, 10);
 
+// One paid brief per day: the 11am / 2pm crons are only backups for a dropped
+// morning run, so skip the API call when today's brief is already published.
+// BRIEF_FORCE=1 (manual run from the Actions tab) regenerates anyway.
+if (!process.env.BRIEF_FORCE) {
+  try {
+    if (JSON.parse(readFileSync(OUT, 'utf8')).updated === today) {
+      console.log(`Brief for ${today} already published; skipping (set BRIEF_FORCE=1 to regenerate).`);
+      process.exit(0);
+    }
+  } catch {}
+}
+
 const PROMPT = `You are the newsroom for THE STICKY TRAP (a branding / sticker / label / packaging shop in Ann Arbor, Michigan) and its cannabis-culture podcast THE FLOWER ROOM. Today is ${today}.
 
 Research the MOST RECENT news (aim for the last 24-72 hours) using web search, then write today's industry brief. Split coverage into two sections:
