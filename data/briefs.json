@@ -1,64 +1,64 @@
 {
-  "updated": "2026-10-09",
+  "updated": "2026-10-10",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-10-09",
+      "date": "2026-10-10",
       "label": "Morning Brief",
-      "title": "Michigan Growers Find Daylight as D.C. Inches Toward Schedule III",
-      "top": "Michigan operators are finding real paths forward this week — from a homegrown Detroit brand scaling fast to a GOP gubernatorial candidate campaigning on killing the 24% wholesale tax — even as regulators keep cracking down on bad actors. Nationally, the rescheduling clock got a procedural pause, not a setback, while Compass Pathways' psilocybin program and fresh cannabis M&A show the bigger trendlines still point up.",
+      "title": "Michigan Regulators Crack Down on Bad Actors as National Momentum Builds",
+      "top": "Michigan's Cannabis Regulatory Agency kept its crackdown going this week — revoking licenses over fake product and illegal influencer deals, while a court found a marijuana farm illegally filled protected wetlands — even as GOP gubernatorial hopeful John James keeps courting industry cash with a tax-repeal pledge. Nationally, Tilray posted record quarterly revenue, New York topped $4 billion in lifetime legal sales, and the FDA opened the door to ibogaine research while a new study points to psilocybin-related compounds helping treat postpartum depression.",
       "local": [
         {
-          "text": "Detroit's Zasso scales to 90 Michigan shelves — Built by ex-caregivers from a failed Detroit grow, the brand now sells top-shelf flower for about $100 an ounce and most dispensaries are coming to them, not the other way around.",
-          "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/detroit-weed-brand-100626/"
+          "text": "Michigan revokes 20 grower licenses over fake flower — The Cannabis Regulatory Agency pulled 20 Class C licenses from GP Holdings LLC (dba Millie Montana Industries) of Clare and fined it $2 million after packages labeled marijuana flower tested as dirt and mulch with no THC.",
+          "source": "Fox 2 Detroit",
+          "url": "https://www.fox2detroit.com/news/michigan-revokes-20-marijuana-grower-licenses-companys-egregious-conduct"
         },
         {
-          "text": "GOP governor hopeful courts industry with tax-repeal vow — John James is pledging to repeal or sharply reduce the 24% wholesale tax, and cannabis donors including JARS Cannabis executives are funding his campaign in response.",
-          "source": "Ganjapreneur / Bridge Michigan",
-          "url": "https://ganjapreneur.com/michigan-republican-candidate-for-governor-endorses-repealing-wholesale-cannabis-tax/"
+          "text": "State finalizes $251,250 fine over influencer vape cartridges — The CRA issued a final order revoking the retail license of Budbridge LLC (dba Muha Meds Ypsilanti) for seven rule violations, including illegally handing out vape cartridges to social media influencers.",
+          "source": "Michigan.gov / Cannabis Regulatory Agency",
+          "url": "https://www.michigan.gov/lara/news-releases/2026/10/01/press-release-cannabis-regulatory-agency-orders-license-revocation-$251250-fine-for-muha"
         },
         {
-          "text": "Bay City turns cannabis tax dollars into warm beds — A local warming center funded by marijuana tax revenue now offers beds, meals, showers and laundry, and has served more than 250 people since opening.",
-          "source": "Gander Newsroom / The MichiGanja Report",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-100626/"
+          "text": "Court finds marijuana farm illegally filled protected wetlands — A 30th Circuit Court judge ruled Bliss Corporate, Inc. cleared, dredged and filled 15.9 acres of wetlands in Sherman Township to build a cannabis farm, with penalties to be decided next month.",
+          "source": "Michigan Attorney General",
+          "url": "https://www.michigan.gov/ag/news/press-releases/2026/10/02/court-rules-marijuana-business-violated-wetlands-in-iosco-county"
         },
         {
-          "text": "Regulators yank Ypsilanti license over influencer cartridges — Michigan revoked Muha Meds Ypsilanti's retail license and fined it $251,250 after it allegedly handed out 887 vape cartridges to social media influencers in excess of legal limits.",
-          "source": "The Marijuana Herald",
-          "url": "https://themarijuanaherald.com/2026/10/michigan-marijuana-social-media-influencers"
+          "text": "John James leans on cannabis donors for tax-repeal campaign — The GOP governor hopeful has raised roughly $1.2 million since late July, including nearly $90,000 from a fundraiser hosted by JARS Cannabis executives, while pledging to repeal or cut the 24% wholesale tax.",
+          "source": "Bridge Michigan",
+          "url": "https://bridgemi.com/michigan-government/john-james-pitches-marijuana-tax-repeal-courts-industry-donors/"
         },
         {
-          "text": "Industry's second tax lawsuit pushes toward a September trial — MiCIA's renewed challenge against the Treasury argues the 24% wholesale tax creates unconstitutional \"tax pyramiding\" on top of the state's 6% sales cap.",
-          "source": "WWMT",
-          "url": "https://wwmt.com/news/state/michigan-marijuana-industry-lawsuit-stop-wholesale-tax-legal-court-pot-weed-economy-business-wwmt"
+          "text": "Fawn River recalls dab product over banned chemical — The company voluntarily recalled its Hash Melts (Green Crack 1G Live Rosin Dab), produced June 16, 2026, after state testing found a banned chemical in the product.",
+          "source": "Michigan.gov / Cannabis Regulatory Agency",
+          "url": "https://www.michigan.gov/cra/bulletins/public-health-and-safety-advisory-bulletins-recalls/public-health-and-safety-advisory-voluntary-product-recall-fawn-river-cultivation-company-llc"
         }
       ],
       "national": [
         {
-          "text": "DEA rescheduling hits a pause, not a rejection — A chief administrative law judge stayed the Schedule III proceeding to weigh a new GAO report, with the government's response due October 13 and no determination made against the move.",
-          "source": "420 Magazine",
-          "url": "https://www.420magazine.com/featured-articles/marijuana-rescheduling-dea-delay-2026/"
+          "text": "Tilray posts record quarterly revenue — The company reported first-quarter fiscal-2027 net revenue of $257 million, up 23% year-over-year, with gross margin expanding to about 30% and its beverage unit, including BrewDog, turning profitable.",
+          "source": "Tilray Brands SEC filing",
+          "url": "https://www.sec.gov/Archives/edgar/data/0001731348/000117184326006527/exh_991.htm"
         },
         {
-          "text": "DEA opens fresh Schedule III registration portal — State-licensed medical cannabis manufacturers, distributors and labs can now use a new Form 225 process to register under the Controlled Substances Act.",
-          "source": "Cannabis Business Times",
-          "url": "https://www.cannabisbusinesstimes.com/cannabis-rescheduling/news/15836687/dea-opens-new-schedule-iii-registration-portal-for-medical-cannabis-manufacturers-distributors-labs"
+          "text": "FDA opens door to ibogaine research for opioid use disorder — The agency announced a formal Request for Information on designing early-phase ibogaine clinical trials for opioid use disorder and PTSD, accepting public comment through Nov. 20, 2026.",
+          "source": "FDA.gov",
+          "url": "https://www.fda.gov/news-events/press-announcements/fda-seeks-public-input-support-ibogaine-research"
         },
         {
-          "text": "Compass Pathways opens first U.S. office as NDA nears finish line — The psilocybin developer cut the ribbon on a Jersey City office this week while targeting completion of its COMP360 New Drug Application for treatment-resistant depression in Q4 2026.",
-          "source": "Hudson County View",
-          "url": "https://hudsoncountyview.com/synthetic-psilocybin-company-cuts-the-ribbon-on-jersey-city-office-with-electeds"
+          "text": "New York tops $4 billion in lifetime legal cannabis sales — State regulators disclosed licensed dispensaries generated $512.6 million in third-quarter 2026 sales, pushing year-to-date sales to $1.41 billion and lifetime adult-use sales past $4 billion since 2022.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/new-york-dispensaries-have-sold-more-than-4-billion-in-recreational-marijuana-since-the-market-launched-state-officials-announce/"
         },
         {
-          "text": "Spherex doubles down with first-ever acquisition — Colorado's top cannabis brand is buying two Cannabist Co. cultivation facilities, a deal that will nearly double its workforce and make it vertically integrated.",
-          "source": "Yahoo Finance / Business Wire",
-          "url": "https://finance.yahoo.com/small-business/articles/spherex-colorado-top-cannabis-brand-114800312.html"
+          "text": "States press DEA for rescheduling implementation guidance — Regulators including California's Department of Cannabis Control are seeking clarity from the DEA after its chief administrative law judge stayed the broader rescheduling hearing pending a GAO report, with responses due Oct. 13.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/state-officials-push-dea-for-cannabis-rescheduling-guidance-newsletter-october-8-2026/"
         },
         {
-          "text": "Aurora Cannabis finishes German facility expansion — The Canadian producer completed an upgrade to its Leuna, Germany plant, earning an expanded EU-GMP license to meet rising European medical cannabis demand.",
-          "source": "GuruFocus",
-          "url": "https://gurufocus.com/news/9115102/aurora-cannabis-acb-completes-expansion-of-german-production-facility"
+          "text": "Study points to psilocybin-related compound for postpartum depression — New research reported this week found luvesilocin, a mushroom-derived psilocybin-related compound, may hold promise as a treatment for postpartum depression.",
+          "source": "KUNC (NPR member station)",
+          "url": "https://kunc.org/podcast/inthenoco/2026-10-08/new-research-shows-psychedelics-may-hold-promise-as-a-treatment-for-postpartum-depression"
         }
       ]
     }
