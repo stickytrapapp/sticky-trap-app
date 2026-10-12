@@ -1,64 +1,64 @@
 {
-  "updated": "2026-10-11",
+  "updated": "2026-10-12",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-10-11",
+      "date": "2026-10-12",
       "label": "Morning Brief",
-      "title": "Michigan's Enforcement Streak Continues as Hemp and Psychedelics Policy Shift Nationally",
-      "top": "Michigan's Cannabis Regulatory Agency has kept up a run of multimillion-dollar enforcement actions this fall — closing a processor, revoking a grower's licenses over fake flower, fining a retailer over influencer deals, and a court finding a farm illegally filled protected wetlands. Nationally, Congress bought the hemp industry more time before a THC ban takes effect, a DEA judge kept cannabis rescheduling on hold pending a new GAO report, and the FDA held its first public hearing on the future of psychedelic therapy.",
+      "title": "Michigan's Cannabis Industry Buckles Under Tax and Oversupply as National Hemp and Psychedelics Fights Intensify",
+      "top": "Michigan's 24% wholesale cannabis tax and a flower glut are squeezing operators — a Upper Peninsula chain is closing more than half its stores even as the state Supreme Court keeps the tax's legality under review and lawmakers weigh new hemp and psilocybin bills. Nationally, Massachusetts voters head toward a November fight over repealing legal weed, Ohio's hemp market stays split by a narrow federal injunction, and psychedelics drew fresh momentum from Compass Pathways' fast-tracked FDA review and Eli Lilly's multibillion-dollar bet on AtaiBeckley.",
       "local": [
         {
-          "text": "Michigan revokes 20 grower licenses over fake flower — The Cannabis Regulatory Agency pulled 20 Class C licenses from GP Holdings LLC (dba Millie Montana Industries) of Clare and fined it $2 million after packages labeled marijuana flower tested as dirt and mulch with no THC.",
-          "source": "Fox 2 Detroit",
-          "url": "https://www.fox2detroit.com/news/michigan-revokes-20-marijuana-grower-licenses-companys-egregious-conduct"
+          "text": "Higher Love closes five of nine Upper Peninsula dispensaries — The retailer is suspending operations at more than half its Michigan locations, blaming the state's new 24% wholesale cannabis tax and collapsing flower prices for the shutdowns.",
+          "source": "Cannabis Business Times",
+          "url": "https://www.cannabisbusinesstimes.com/us-states/michigan/news/15832095/michigan-cannabis-retailer-closing-5-dispensaries-citing-new-tax-burden"
         },
         {
-          "text": "State finalizes $251,250 fine over influencer vape cartridges — The CRA issued a final order revoking the retail license of Budbridge LLC (dba Muha Meds Ypsilanti) for seven rule violations, including illegally handing out vape cartridges to social media influencers.",
+          "text": "Michigan Supreme Court keeps 24% wholesale tax fight alive — The Court ordered the state Court of Appeals to expedite its review of whether the tax, passed without a supermajority, illegally amends the 2018 legalization ballot initiative.",
+          "source": "CPA Practice Advisor",
+          "url": "https://www.cpapracticeadvisor.com/2026/04/23/michigan-supreme-court-orders-review-of-states-cannabis-tax/182140/"
+        },
+        {
+          "text": "CRA releases latest disciplinary action report — The Cannabis Regulatory Agency published its monthly report on licensee violations along with a new tally of denied applications and non-renewed licenses statewide.",
           "source": "Michigan.gov / Cannabis Regulatory Agency",
-          "url": "https://www.michigan.gov/lara/news-releases/2026/10/01/press-release-cannabis-regulatory-agency-orders-license-revocation-$251250-fine-for-muha"
+          "url": "https://www.michigan.gov/lara/news-releases/2026/09/25/press-release-cannabis-regulatory-agency-releases-disciplinary-action-report"
         },
         {
-          "text": "CRA shuts down processor, levies $2 million fine — Following a contested hearing, the agency revoked Michigan Investment 10 LLC's medical processor license and closed its adult-use processor operation after finding egregious violations of state processing rules.",
-          "source": "Michigan.gov / Cannabis Regulatory Agency",
-          "url": "https://www.michigan.gov/lara/news-releases/2026/09/16/press-release-cannabis-regulatory-agency-announces-$2-million-fine-and-the-closure-and-revocation"
+          "text": "Senate bills would move hemp oversight to the CRA — A package including SB 602 would build a state regulatory framework for consumable hemp products and place supervision under the Cannabis Regulatory Agency, still pending in the Legislature.",
+          "source": "MichiganVotes.org",
+          "url": "https://www.michiganvotes.org/legislation/2025/senate/bill-602"
         },
         {
-          "text": "Fawn River recalls dab product over banned chemical — The company voluntarily recalled its Hash Melts (Green Crack 1G Live Rosin Dab), produced June 16, 2026, after state testing found a banned chemical in the product.",
-          "source": "Michigan.gov / Cannabis Regulatory Agency",
-          "url": "https://www.michigan.gov/cra/bulletins/public-health-and-safety-advisory-bulletins-recalls/public-health-and-safety-advisory-voluntary-product-recall-fawn-river-cultivation-company-llc"
-        },
-        {
-          "text": "Court finds marijuana farm illegally filled protected wetlands — A 30th Circuit Court judge ruled Bliss Corporate, Inc. cleared, dredged and filled 15.9 acres of wetlands in Sherman Township to build a cannabis farm, with penalties to be decided next month.",
-          "source": "Michigan Attorney General",
-          "url": "https://www.michigan.gov/ag/news/press-releases/2026/10/02/court-rules-marijuana-business-violated-wetlands-in-iosco-county"
+          "text": "Psilocybin-for-PTSD bill awaits committee action — State Rep. Mike McFall's bill would shield Michigan adults 18 and older with a PTSD diagnosis from prosecution for possessing up to two ounces of psilocybin, and remains before the House Families and Veterans Committee.",
+          "source": "CBS News Detroit",
+          "url": "https://www.cbsnews.com/amp/detroit/news/mushroom-psilocybin-ptsd-treatment-michigan-bill"
         }
       ],
       "national": [
         {
-          "text": "DEA judge pauses cannabis rescheduling proceeding — Chief Administrative Law Judge Derek Julius stayed the Schedule I-to-III rescheduling case so a new GAO report on DEA and FDA's abuse-potential review process can be considered, with responses to the underlying motion due Oct. 13.",
-          "source": "NORML",
-          "url": "https://norml.org/news/2026/10/01/administrative-law-judge-temporarily-stays-cannabis-rescheduling-proceedings/"
-        },
-        {
-          "text": "Congress delays federal hemp-THC ban to December — A short-term government funding bill signed in early September pushed back the effective date of the 2025 ban on intoxicating hemp-derived THC products, giving the hemp industry three more months to lobby for changes before a 0.4mg-per-container THC cap takes hold.",
-          "source": "Cannabis Business Times",
-          "url": "https://www.cannabisbusinesstimes.com/hemp/news/15831475/us-senate-plans-to-delay-ban-on-intoxicating-hemp-products"
-        },
-        {
-          "text": "FDA holds first public hearing on psychedelic therapy — The agency's four-hour hearing on the future therapeutic use of psychedelic drugs drew more than 1,800 registered attendees; the FDA said it wasn't soliciting views on specific drug applications or rescheduling, and its public comment docket closed Oct. 5.",
-          "source": "Becker's Hospital Review",
-          "url": "https://www.beckershospitalreview.com/pharmacy/fda-holds-hearing-on-psychedelic-drugs-5-things-to-know/"
-        },
-        {
-          "text": "Tilray posts record quarterly revenue — The company reported first-quarter fiscal-2027 net revenue of $257 million, up 23% year-over-year, with gross margin expanding to about 30% and its beverage unit, including BrewDog, turning profitable.",
-          "source": "Tilray Brands SEC filing",
-          "url": "https://www.sec.gov/Archives/edgar/data/0001731348/000117184326006527/exh_991.htm"
-        },
-        {
-          "text": "New York tops $4 billion in lifetime legal cannabis sales — State regulators disclosed licensed dispensaries generated $512.6 million in third-quarter 2026 sales, pushing year-to-date sales to $1.41 billion and lifetime adult-use sales past $4 billion since 2022.",
+          "text": "Warren and Markey oppose Massachusetts repeal measure — Both senators told Marijuana Moment they'll vote no on the November ballot question seeking to roll back the state's 2016 recreational marijuana legalization law.",
           "source": "Marijuana Moment",
-          "url": "https://www.marijuanamoment.net/new-york-dispensaries-have-sold-more-than-4-billion-in-recreational-marijuana-since-the-market-launched-state-officials-announce/"
+          "url": "https://www.marijuanamoment.net/warren-and-markey-oppose-massachusetts-ballot-measure-to-roll-back-marijuana-legalization/"
+        },
+        {
+          "text": "IRS names cannabis tax guidance a 2026-2027 priority — Treasury and the IRS added Section 280E guidance to their Priority Guidance Plan after House Democrats pushed for clarity on how rescheduling affects marijuana businesses' tax treatment, though formal guidance has yet to be issued.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/federal-officials-say-marijuana-industry-tax-guidance-will-be-a-priority-for-the-next-year/"
+        },
+        {
+          "text": "Federal judge keeps Ohio hemp injunction narrow — U.S. District Judge Jeffrey Helmick's preliminary injunction lets just ten named hemp companies keep selling intoxicating hemp products while Ohio's new in-state cultivation requirement is litigated; the state's attorney general is seeking a stay.",
+          "source": "Ohio Capital Journal",
+          "url": "https://ohiocapitaljournal.com/2026/07/20/ohio-federal-judge-issues-preliminary-injunction-allowing-ten-businesses-to-sell-hemp-products/"
+        },
+        {
+          "text": "Compass Pathways gets rolling FDA review for psilocybin — The company's COMP360 program was granted a rolling New Drug Application review and a Commissioner's National Priority Voucher, with full submission still on track for the fourth quarter of 2026.",
+          "source": "Business Wire",
+          "url": "https://www.businesswire.com/news/home/20260805927238/en/"
+        },
+        {
+          "text": "Eli Lilly buys into psychedelics with AtaiBeckley deal — The pharmaceutical giant agreed to acquire the psychedelics biotech for up to $3.8 billion, including $2.8 billion upfront, gaining an intranasal 5-MeO-DMT depression therapy headed into Phase 3 trials.",
+          "source": "Hoodline",
+          "url": "https://hoodline.com/2026/07/indy-pharma-giant-lilly-drops-2-8-billion-on-psychedelic-upstart-ataibeckley/"
         }
       ]
     }
