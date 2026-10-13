@@ -1,64 +1,64 @@
 {
-  "updated": "2026-10-12",
+  "updated": "2026-10-13",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-10-12",
+      "date": "2026-10-13",
       "label": "Morning Brief",
-      "title": "Michigan's Cannabis Industry Buckles Under Tax and Oversupply as National Hemp and Psychedelics Fights Intensify",
-      "top": "Michigan's 24% wholesale cannabis tax and a flower glut are squeezing operators — a Upper Peninsula chain is closing more than half its stores even as the state Supreme Court keeps the tax's legality under review and lawmakers weigh new hemp and psilocybin bills. Nationally, Massachusetts voters head toward a November fight over repealing legal weed, Ohio's hemp market stays split by a narrow federal injunction, and psychedelics drew fresh momentum from Compass Pathways' fast-tracked FDA review and Eli Lilly's multibillion-dollar bet on AtaiBeckley.",
+      "title": "Storefronts Multiply, Wall Street Circles: Momentum Builds From Washtenaw County to the DEA",
+      "top": "Michigan's retail map keeps expanding even as the 24% wholesale tax fight spills into the governor's race, with new Ann Arbor-area storefronts opening and GOP frontrunner John James making repeal a campaign plank. Nationally, institutional capital is lining up for a Schedule III world, Curaleaf just sweetened its Aurora bid, and Compass Pathways is closing in on an FDA filing for its psilocybin drug.",
       "local": [
         {
-          "text": "Higher Love closes five of nine Upper Peninsula dispensaries — The retailer is suspending operations at more than half its Michigan locations, blaming the state's new 24% wholesale cannabis tax and collapsing flower prices for the shutdowns.",
-          "source": "Cannabis Business Times",
-          "url": "https://www.cannabisbusinesstimes.com/us-states/michigan/news/15832095/michigan-cannabis-retailer-closing-5-dispensaries-citing-new-tax-burden"
+          "text": "Cloud Cannabis opens new Ann Arbor storefront Oct. 19 — The Michigan-based chain, co-founded by a former Detroit police officer, is opening at 1760 Plymouth Rd. with curbside service and a 'patients-over-profit' model for both medical and rec customers.",
+          "source": "ClickOnDetroit",
+          "url": "https://www.clickondetroit.com/topic/Cannabis/"
         },
         {
-          "text": "Michigan Supreme Court keeps 24% wholesale tax fight alive — The Court ordered the state Court of Appeals to expedite its review of whether the tax, passed without a supermajority, illegally amends the 2018 legalization ballot initiative.",
-          "source": "CPA Practice Advisor",
-          "url": "https://www.cpapracticeadvisor.com/2026/04/23/michigan-supreme-court-orders-review-of-states-cannabis-tax/182140/"
+          "text": "Bloom City Club expands into Ypsilanti with new store — The Ann Arbor-based retailer is marking the opening with a full slate of cannabis-themed events throughout October.",
+          "source": "ClickOnDetroit",
+          "url": "https://www.clickondetroit.com/topic/Cannabis/"
         },
         {
-          "text": "CRA releases latest disciplinary action report — The Cannabis Regulatory Agency published its monthly report on licensee violations along with a new tally of denied applications and non-renewed licenses statewide.",
-          "source": "Michigan.gov / Cannabis Regulatory Agency",
-          "url": "https://www.michigan.gov/lara/news-releases/2026/09/25/press-release-cannabis-regulatory-agency-releases-disciplinary-action-report"
+          "text": "Menominee could add four more dispensaries via ballot measure — A citizen petition drive would raise the city's store cap from nine to thirteen, and organizers say they gathered more than enough signatures to put it before voters in November.",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-091626/"
         },
         {
-          "text": "Senate bills would move hemp oversight to the CRA — A package including SB 602 would build a state regulatory framework for consumable hemp products and place supervision under the Cannabis Regulatory Agency, still pending in the Legislature.",
-          "source": "MichiganVotes.org",
-          "url": "https://www.michiganvotes.org/legislation/2025/senate/bill-602"
+          "text": "Governor's race gives operators a real shot at tax relief — GOP frontrunner John James has made repealing or reducing the 24% wholesale tax a core campaign plank, after earning the Michigan Cannabis Industry Association's endorsement over his opposition to the levy.",
+          "source": "michwomen.com / postindustrial.com",
+          "url": "https://michwomen.com/blog/2026-candidates-for-michigan-governor"
         },
         {
-          "text": "Psilocybin-for-PTSD bill awaits committee action — State Rep. Mike McFall's bill would shield Michigan adults 18 and older with a PTSD diagnosis from prosecution for possessing up to two ounces of psilocybin, and remains before the House Families and Veterans Committee.",
-          "source": "CBS News Detroit",
-          "url": "https://www.cbsnews.com/amp/detroit/news/mushroom-psilocybin-ptsd-treatment-michigan-bill"
+          "text": "Regulators clear bad actors, clean the path for compliant brands — The state revoked 20 cultivation licenses and fined a company $2 million for shipping 'dirt and mulch' labeled as marijuana, pulled Muha Meds' Ypsilanti license over illegal influencer sales, and Bay City is reinvesting weed tax dollars into a homeless shelter.",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-100626/"
         }
       ],
       "national": [
         {
-          "text": "Warren and Markey oppose Massachusetts repeal measure — Both senators told Marijuana Moment they'll vote no on the November ballot question seeking to roll back the state's 2016 recreational marijuana legalization law.",
+          "text": "Wall Street capital is lining up for Schedule III cannabis — Institutional investors are preparing for an influx of capital once rescheduling lands, a shift that could unlock billions in funding for an industry generating $30 billion in annual sales.",
+          "source": "MunchMakers",
+          "url": "https://munchmakers.com/news/article/institutional-investors-eye-cannabis-as-schedule-iii-move-nears-mv4hm49b"
+        },
+        {
+          "text": "Curaleaf sweetens hostile Aurora Cannabis bid by 25% — The MSO raised its offer to roughly $5 per share in cash-and-stock, bumped its cap price to $6, and extended the takeover window through December 4.",
+          "source": "PacGarden",
+          "url": "https://www.pacgarden.com/post/curaleaf-raises-aurora-cannabis-acquisition-bid-by-25-why-this-could-be-one-of-cannabis-m-a-s-bigg"
+        },
+        {
+          "text": "Compass Pathways nears first-ever psychedelic FDA filing — The company plans to submit its rolling New Drug Application for psilocybin treatment COMP360 between October and December, with fresh Phase 3 data presented this month at the ASCP Annual Meeting showing durable relief for treatment-resistant depression.",
+          "source": "PharmaVoice / Psychiatric Times",
+          "url": "https://www.pharmavoice.com/news/fda-rfk-makary-compass-psilocybin-drug-approval/812697/"
+        },
+        {
+          "text": "DEA rescheduling pause is procedural, not a rejection — A federal judge's stay over a new GAO report hits its key response deadline today, Oct. 13, but the delay only affects broader adult-use rescheduling — FDA-approved and state-medical marijuana products were already moved to Schedule III in April.",
+          "source": "Regulatory Oversight / Shanken News Daily",
+          "url": "https://www.regulatoryoversight.com/2026/10/pending-marijuana-rescheduling-put-on-hold/"
+        },
+        {
+          "text": "States gear up for Schedule III, demand DEA guidance — A growing number of state marijuana regulators are pressing federal officials for clarity on implementing the Trump administration's rescheduling move, signaling states are actively preparing for the shift rather than waiting it out.",
           "source": "Marijuana Moment",
-          "url": "https://www.marijuanamoment.net/warren-and-markey-oppose-massachusetts-ballot-measure-to-roll-back-marijuana-legalization/"
-        },
-        {
-          "text": "IRS names cannabis tax guidance a 2026-2027 priority — Treasury and the IRS added Section 280E guidance to their Priority Guidance Plan after House Democrats pushed for clarity on how rescheduling affects marijuana businesses' tax treatment, though formal guidance has yet to be issued.",
-          "source": "Marijuana Moment",
-          "url": "https://www.marijuanamoment.net/federal-officials-say-marijuana-industry-tax-guidance-will-be-a-priority-for-the-next-year/"
-        },
-        {
-          "text": "Federal judge keeps Ohio hemp injunction narrow — U.S. District Judge Jeffrey Helmick's preliminary injunction lets just ten named hemp companies keep selling intoxicating hemp products while Ohio's new in-state cultivation requirement is litigated; the state's attorney general is seeking a stay.",
-          "source": "Ohio Capital Journal",
-          "url": "https://ohiocapitaljournal.com/2026/07/20/ohio-federal-judge-issues-preliminary-injunction-allowing-ten-businesses-to-sell-hemp-products/"
-        },
-        {
-          "text": "Compass Pathways gets rolling FDA review for psilocybin — The company's COMP360 program was granted a rolling New Drug Application review and a Commissioner's National Priority Voucher, with full submission still on track for the fourth quarter of 2026.",
-          "source": "Business Wire",
-          "url": "https://www.businesswire.com/news/home/20260805927238/en/"
-        },
-        {
-          "text": "Eli Lilly buys into psychedelics with AtaiBeckley deal — The pharmaceutical giant agreed to acquire the psychedelics biotech for up to $3.8 billion, including $2.8 billion upfront, gaining an intranasal 5-MeO-DMT depression therapy headed into Phase 3 trials.",
-          "source": "Hoodline",
-          "url": "https://hoodline.com/2026/07/indy-pharma-giant-lilly-drops-2-8-billion-on-psychedelic-upstart-ataibeckley/"
+          "url": "https://www.marijuanamoment.net/state-officials-push-dea-for-cannabis-rescheduling-guidance-newsletter-october-8-2026"
         }
       ]
     }
