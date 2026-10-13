@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Jar ROI · The Sticky Trap</title>
+<meta name="theme-color" content="#000"><link rel="icon" href="/icons/icon-192.png"><link rel="manifest" href="/manifest.webmanifest">
+<style>
+:root{--ink:#000;--panel:#0e0e0e;--panel-2:#171717;--line:#262626;--paper:#fff;--muted:#9d97b0;--mag:#FF1FA2;--pur:#8A2BE2;--cy:#12C4FF;--good:#25E0A6;--warn:#FFB020;--bad:#ff5c7a;
+  --grad:linear-gradient(100deg,#FF1FA2 0%,#8A2BE2 52%,#12C4FF 100%);--holo:linear-gradient(105deg,#12C4FF,#8A2BE2 40%,#FF1FA2 70%,#EAB84B);--goldg:linear-gradient(105deg,#F6DA8A,#EAB84B 45%,#C9962E)}
+*{box-sizing:border-box}html,body{margin:0;background:var(--ink);color:var(--paper);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--cy)}[hidden]{display:none!important}
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;padding:12px 16px;background:rgba(0,0,0,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top a.back{color:var(--paper);text-decoration:none;font-weight:800;font-size:13px}
+.top .t{flex:1;font-weight:900;font-size:15px;letter-spacing:.02em}
+.wrap{max-width:560px;margin:0 auto;padding:14px 16px 80px}
+.card{background:linear-gradient(180deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:14px}
+.sec{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+h1{margin:0 0 2px;font-size:22px;letter-spacing:-.01em}
+.lede{margin:0;font-size:13px;color:var(--muted)}
+.step{font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:14px 2px 6px}.step b{color:var(--cy)}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.fld{display:grid;gap:4px;font-size:11.5px;font-weight:700;color:var(--muted);min-width:0}
+.fld input{width:100%;min-width:0;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--paper);font:inherit;font-size:16px;font-weight:800;font-variant-numeric:tabular-nums}
+.fld input:focus-visible,.opt:focus-visible{outline:2px solid var(--cy);outline-offset:1px}
+.opts{display:flex;gap:6px;flex-wrap:wrap}
+.opt{flex:1;min-width:0;padding-left:2px!important;padding-right:2px!important;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px;border:1px solid var(--line);border-radius:11px;background:var(--panel);color:var(--paper);font:inherit;font-size:12.5px;font-weight:800;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.opt.on{border-color:var(--cy);box-shadow:0 0 0 1px var(--cy)}
+.opt .sw{width:18px;height:18px;border-radius:6px;border:1px solid rgba(255,255,255,.18)}.sw.white{background:#fff}.sw.holo{background:var(--holo)}.sw.gold{background:var(--goldg)}
+.opt .lv{font-size:11px;color:var(--cy);font-weight:900}
+.tg{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 8px;margin:10px 2px 0;font-size:12.5px;font-weight:800;color:var(--paper);cursor:pointer}.tg input{accent-color:var(--cy);width:16px;height:16px;margin:0;align-self:center}.tg small{font-weight:600;color:var(--muted)}
+.warn{margin:10px 2px 0;font-size:12.5px;font-weight:800;color:var(--bad)}
+.res{margin-top:12px}
+.big{font-size:44px;font-weight:900;letter-spacing:-.02em;line-height:1.05;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-variant-numeric:tabular-nums}
+.big.neg{background:none;color:var(--bad)}
+.cap{margin:4px 0 0;font-size:13px;color:var(--muted)}
+dl.rc{display:grid;grid-template-columns:1fr auto;margin:14px 0 0;font-size:13.5px}
+.rc dt,.rc dd{padding:6px 0;border-top:1px solid var(--line)}.rc dt{color:var(--muted)}
+.rc dd{margin:0;padding-left:12px;text-align:right;font-weight:800;font-variant-numeric:tabular-nums}
+.rc .t{color:var(--paper);font-weight:900}.rc dd.t.pos{color:var(--good)}
+.rc dt small{color:var(--warn);font-weight:800;font-size:10.5px;letter-spacing:.08em;margin-left:6px}
+.fine{margin:12px 2px 0;font-size:11.5px;color:var(--muted);line-height:1.5}
+.draft{margin:10px 0 0;padding:9px 12px;border-radius:10px;background:rgba(255,176,32,.10);border:1px solid rgba(255,176,32,.45);font-size:12px;color:var(--warn);font-weight:700}
+.cta{display:block;width:100%;margin-top:14px;padding:15px;border:0;border-radius:30px;background:var(--grad);color:#000;text-align:center;text-decoration:none;font-size:15px;font-weight:900;letter-spacing:.02em;box-shadow:0 8px 30px rgba(138,43,226,.35)}
+</style></head>
+<body>
+<div class="top"><a class="back" href="/#menu">&larr; Menu</a><div class="t">Jar ROI</div></div>
+<div class="wrap">
+  <div class="card">
+    <p class="sec">Miron 250 ml &middot; 14 g</p>
+    <h1>What a branded jar earns you</h1>
+    <p class="lede">The same 14 g in your labeled Miron jar, against selling it bulk.</p>
+
+    <div class="step"><b>1</b> Your numbers</div>
+    <div class="two">
+      <label class="fld" for="bulk">Bulk price, per pound<input id="bulk" type="number" inputmode="decimal" min="0" step="10" value="900"></label>
+      <label class="fld" for="qty">Jars<input id="qty" type="number" inputmode="numeric" min="50" step="50" value="500"></label>
+    </div>
+    <label class="fld" for="price" style="margin-top:8px">You sell each jar for (lowest $50)<input id="price" type="number" inputmode="decimal" min="50" step="1" value="70"></label>
+
+    <div class="step"><b>2</b> Label material</div>
+    <div class="opts" id="mats"></div>
+    <label class="tg" id="hbrow"><input type="checkbox" id="hb" checked> White ink <small>under the art, keeps colors true on holo and gold</small></label>
+
+    <div class="step"><b>3</b> Texture <span style="font-weight:600;letter-spacing:0;text-transform:none">&middot; number = layers of UV gloss</span></div>
+    <div class="opts" id="fins"></div>
+
+    <label class="tg"><input type="checkbox" id="col"> Add a collar <small>same print as the label, 18% of the lid + wrap price</small></label>
+
+    <div class="step"><b>4</b> Spark Plug <span style="font-weight:600;letter-spacing:0;text-transform:none">&middot; budtender payout per jar sold, 0 for none</span></div>
+    <label class="fld" for="sp">Payout per jar ($)<input id="sp" type="number" inputmode="decimal" min="0" step="0.25" value="4"></label>
+
+    <div class="warn" id="warn" hidden></div>
+    <div class="res">
+      <div class="big" id="gain">$0</div>
+      <p class="cap" id="cap"></p>
+      <dl class="rc">
+        <dt>Each jar sells for</dt><dd id="dPrice"></dd>
+        <dt>Same 14 g sold bulk</dt><dd id="dBulk"></dd>
+        <dt>Label</dt><dd id="dLabel"></dd>
+        <dt id="dColT" hidden>Collar</dt><dd id="dCol" hidden></dd>
+        <dt id="dJarT">Miron jar</dt><dd id="dJar"></dd>
+        <dt id="dSpT" hidden>Spark Plug</dt><dd id="dSp" hidden></dd>
+        <dt class="t">Extra per jar</dt><dd class="t" id="dGain"></dd>
+        <dt>Return on what you spend</dt><dd id="dRoi"></dd>
+      </dl>
+    </div>
+    <div class="draft" id="draft" hidden>DRAFT &middot; jar and lid price is a placeholder until set.</div>
+    <a class="cta" id="cta" href="/configure/?p=miron-250-ml">Price my 250 ml labels &rarr;</a>
+    <p class="fine">Label prices are list, per set (lid + wrap), with volume breaks: 500 pcs 5% off · 750 pcs 7% off · 1,000 pcs 10% off · over 1,000 talk to us. Your bulk price and sell price are yours to change. MI sales tax on the invoice where it applies.</p>
+  </div>
+</div>
+<script>
+(function(){
+  var D={"labels":{"White Vinyl":{"short":"White","std":[2.0,2.9,3.85,4.7,6.25],"hb":null},"Holographic":{"short":"Holographic","std":[3.0,4.05,5.05,6.1,7.65],"hb":[3.85,4.85,5.9,6.95,8.45]}},"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"jar":[4.65,4.65,4.65],"collar":0.18,"draft":false,"g":14,"floor":50,"minj":50,"maxj":1000}, LB=453.592, FIN=['Flat','1 Spot Gloss','2 Standard','3 Pro','4 Ridge'], SW={'White Vinyl':'white','Holographic':'holo'};
+  var S={mat:'Holographic',fin:2};
+  function $(id){return document.getElementById(id);}
+  function money(v,d){d=d==null?2:d;return (v<0?'-':'')+'$'+Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});}
+  function cmult(q){for(var i=0;i<D.bands.length;i++){if(q<=D.bands[i][0])return D.bands[i][1];}return D.bands[D.bands.length-1][1];}
+  function unitAt(pr,q){return Math.floor(pr*cmult(q)*100+0.5)/100;}   // same rounding as the app basket
+  function opts(box,list,on,pick){
+    box.innerHTML='';
+    list.forEach(function(o){var b=document.createElement('button');b.type='button';b.className='opt'+(o.k===on?' on':'');b.innerHTML=o.h;b.setAttribute('aria-pressed',o.k===on);b.onclick=function(){pick(o.k);draw();};box.appendChild(b);});
+  }
+  function draw(){
+    if(!D.labels[S.mat]) S.mat=Object.keys(D.labels)[0];
+    opts($('mats'),Object.keys(D.labels).map(function(k){return {k:k,h:'<span class="sw '+SW[k]+'"></span>'+D.labels[k].short};}),S.mat,function(k){S.mat=k;});
+    opts($('fins'),FIN.map(function(n,i){var w=n.split(' ');return {k:i,h:i?'<span class="lv">'+w[0]+'</span>'+w.slice(1).join(' '):'<span class="lv">&nbsp;</span>Flat'};}),S.fin,function(k){S.fin=k;});
+    calc();
+  }
+  function calc(){
+    var L=D.labels[S.mat], hbOk=!!L.hb;
+    $('hbrow').hidden=!hbOk;
+    var sp=Math.max(0,+$('sp').value||0), colOn=$('col').checked;
+    ['dSpT','dSp'].forEach(function(id){$(id).hidden=!sp;}); ['dColT','dCol'].forEach(function(id){$(id).hidden=!colOn;});
+    var qty=Math.max(0,Math.floor(+$('qty').value||0)), price=+$('price').value||0;
+    var list=(hbOk&&$('hb').checked?L.hb:L.std)[S.fin];
+    var label=unitAt(list,Math.min(qty,D.maxj)), jar=D.jar[qty>=1000?2:qty>=500?1:0];
+    var collar=colOn?Math.round(label*D.collar*100)/100:0;   // pricing_master.collar_price on the per-set price at this qty
+    var bulk=D.g*(+$('bulk').value||0)/LB, cost=label+collar+jar+sp, gain=price-bulk-cost;
+    var blocked=price<D.floor||qty<D.minj;
+    var msg=price<D.floor?'Below the floor. A 14 g jar can\'t sell for less than $'+D.floor+'.':qty<D.minj?'Minimum '+D.minj+' jars.':qty>D.maxj?'Over 1,000: talk to us. Shown at the 1,000 rate.':'';
+    $('warn').hidden=!msg; $('warn').textContent=msg;
+    $('dPrice').textContent=money(price); $('dBulk').textContent='-'+money(bulk);
+    $('dLabel').textContent='-'+money(label); $('dJar').textContent='-'+money(jar); $('dCol').textContent='-'+money(collar); $('dSp').textContent='-'+money(sp);
+    $('dJarT').innerHTML='Miron jar'+(D.draft?'<small>DRAFT</small>':'');
+    $('dGain').textContent=money(gain); $('dGain').classList.toggle('pos',gain>=0);
+    $('dRoi').textContent=cost?Math.round(gain/cost*100)+'%':'–';
+    $('gain').textContent=blocked?'–':money(gain*qty,0); $('gain').classList.toggle('neg',!blocked&&gain<0);
+    cta();
+    $('cap').textContent=blocked?'Fix the item above to see the total.':(gain>=0?'more':'less')+' on '+qty.toLocaleString()+' jars than selling the same '+(qty*D.g/LB).toFixed(1)+' lb bulk';
+  }
+  $('draft').hidden=!D.draft;
+  function cta(){var c=$('cta'), ridge=S.fin===4;   // the configurator stops at 3 Pro, so 4 Ridge is a quote
+    c.href=ridge?'sms:+17344603845?&body='+encodeURIComponent('4 Ridge quote: Miron 250 ml, '+D.labels[S.mat].short+', '+(+$('qty').value||0)+' jars'):'/configure/?p=miron-250-ml';
+    c.innerHTML=ridge?'Text us for a 4 Ridge quote &rarr;':'Price my 250 ml labels &rarr;';}
+  document.querySelectorAll('input').forEach(function(el){el.addEventListener('input',calc);});
+  draw();
+})();
+</script>
+</body></html>
