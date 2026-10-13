@@ -16,6 +16,8 @@ a{color:var(--cy)}[hidden]{display:none!important}
 h1{margin:0 0 2px;font-size:22px;letter-spacing:-.01em}
 .lede{margin:0;font-size:13px;color:var(--muted)}
 .step{font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:14px 2px 6px}.step b{color:var(--cy)}
+.brk{display:flex;gap:6px;margin-top:8px}.brk button{flex:1;min-width:0;padding:8px 4px;border-radius:9px;border:1px solid var(--line);background:var(--panel);color:var(--paper);font:inherit;font-size:13px;font-weight:800;cursor:pointer;line-height:1.2}.brk button small{display:block;font-size:10.5px;font-weight:700;color:var(--good)}.brk button.on{background:var(--grad);color:#000;border-color:transparent}.brk button.on small{color:#000}
+.hint{margin:6px 2px 0;font-size:12px;color:var(--muted);line-height:1.4}.hint b{color:var(--paper)}
 .two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .fld{display:grid;gap:4px;font-size:11.5px;font-weight:700;color:var(--muted);min-width:0}
 .fld input{width:100%;min-width:0;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--paper);font:inherit;font-size:16px;font-weight:800;font-variant-numeric:tabular-nums}
@@ -48,23 +50,26 @@ dl.rc{display:grid;grid-template-columns:1fr auto;margin:14px 0 0;font-size:13.5
     <h1>What a branded jar earns you</h1>
     <p class="lede">The same 14 g in your labeled Miron jar, against selling it bulk.</p>
 
-    <div class="step"><b>1</b> Your numbers</div>
-    <div class="two">
-      <label class="fld" for="bulk">Bulk price, per pound<input id="bulk" type="number" inputmode="decimal" min="0" step="10" value="900"></label>
-      <label class="fld" for="qty">Jars<input id="qty" type="number" inputmode="numeric" min="50" step="50" value="500"></label>
-    </div>
-    <label class="fld" for="price" style="margin-top:8px">You sell each jar for (lowest $50)<input id="price" type="number" inputmode="decimal" min="50" step="1" value="70"></label>
+    <div class="step"><b>1</b> How many jars</div>
+    <label class="fld" for="qty">Jars in this run<input id="qty" type="number" inputmode="numeric" min="50" step="50" value="500"></label>
+    <div class="brk" id="brk"></div>
+    <p class="hint" id="brkTxt"></p>
 
-    <div class="step"><b>2</b> Label material</div>
+    <div class="step"><b>2</b> Your prices</div>
+    <label class="fld" for="bulk">What you get selling bulk, per pound<input id="bulk" type="number" inputmode="decimal" min="0" step="10" value="900"></label>
+    <p class="hint" id="bulkTxt"></p>
+    <label class="fld" for="price" style="margin-top:8px">What you'll sell each 14 g jar for (lowest $50)<input id="price" type="number" inputmode="decimal" min="50" step="1" value="70"></label>
+
+    <div class="step"><b>3</b> Label material</div>
     <div class="opts" id="mats"></div>
-    <label class="tg" id="hbrow"><input type="checkbox" id="hb" checked> White ink <small>under the art, keeps colors true on holo and gold</small></label>
+    <label class="tg" id="hbrow"><input type="checkbox" id="hb" checked> White ink <small>under the art, keeps colors true on holo</small></label>
 
-    <div class="step"><b>3</b> Texture <span style="font-weight:600;letter-spacing:0;text-transform:none">&middot; number = layers of UV gloss</span></div>
+    <div class="step"><b>4</b> Texture <span style="font-weight:600;letter-spacing:0;text-transform:none">&middot; number = layers of UV gloss</span></div>
     <div class="opts" id="fins"></div>
 
     <label class="tg"><input type="checkbox" id="col"> Add a collar <small>same print as the label, 18% of the lid + wrap price</small></label>
 
-    <div class="step"><b>4</b> Spark Plug <span style="font-weight:600;letter-spacing:0;text-transform:none">&middot; budtender payout per jar sold, 0 for none</span></div>
+    <div class="step"><b>5</b> Spark Plug <span style="font-weight:600;letter-spacing:0;text-transform:none">&middot; budtender payout per jar sold, 0 for none</span></div>
     <label class="fld" for="sp">Payout per jar ($)<input id="sp" type="number" inputmode="decimal" min="0" step="0.25" value="4"></label>
 
     <div class="warn" id="warn" hidden></div>
@@ -74,7 +79,7 @@ dl.rc{display:grid;grid-template-columns:1fr auto;margin:14px 0 0;font-size:13.5
       <dl class="rc">
         <dt>Each jar sells for</dt><dd id="dPrice"></dd>
         <dt>Same 14 g sold bulk</dt><dd id="dBulk"></dd>
-        <dt>Label</dt><dd id="dLabel"></dd>
+        <dt id="dLabelT">Label</dt><dd id="dLabel"></dd>
         <dt id="dColT" hidden>Collar</dt><dd id="dCol" hidden></dd>
         <dt id="dJarT">Miron jar</dt><dd id="dJar"></dd>
         <dt id="dSpT" hidden>Spark Plug</dt><dd id="dSp" hidden></dd>
@@ -105,6 +110,9 @@ dl.rc{display:grid;grid-template-columns:1fr auto;margin:14px 0 0;font-size:13.5
     opts($('fins'),FIN.map(function(n,i){var w=n.split(' ');return {k:i,h:i?'<span class="lv">'+w[0]+'</span>'+w.slice(1).join(' '):'<span class="lv">&nbsp;</span>Flat'};}),S.fin,function(k){S.fin=k;});
     calc();
   }
+  var BRK=[100].concat(D.bands.slice(1).map(function(b,i){return D.bands[i][0]+1;}));   // 100, 500, 750, 1000 (Shane 10/13: like the menu's qty chips)
+  function pct(q){return Math.round((1-cmult(q))*100);}
+  BRK.forEach(function(q){var b=document.createElement('button');b.type='button';b.dataset.q=q;b.textContent=q.toLocaleString();b.onclick=function(){$('qty').value=q;calc();};$('brk').appendChild(b);});
   function calc(){
     var L=D.labels[S.mat], hbOk=!!L.hb;
     $('hbrow').hidden=!hbOk;
@@ -115,11 +123,14 @@ dl.rc{display:grid;grid-template-columns:1fr auto;margin:14px 0 0;font-size:13.5
     var label=unitAt(list,Math.min(qty,D.maxj)), jar=D.jar[qty>=1000?2:qty>=500?1:0];
     var collar=colOn?Math.round(label*D.collar*100)/100:0;   // pricing_master.collar_price on the per-set price at this qty
     var bulk=D.g*(+$('bulk').value||0)/LB, cost=label+collar+jar+sp, gain=price-bulk-cost;
-    var blocked=price<D.floor||qty<D.minj;
+    var blocked=price<D.floor||qty<D.minj, off=pct(Math.min(qty,D.maxj)), nxt=BRK.filter(function(q){return q>qty&&pct(q)>off;})[0];
+    [].forEach.call($('brk').children,function(b){b.classList.toggle('on',+b.dataset.q===qty);});
+    $('brkTxt').innerHTML=(off?'Labels are <b>'+off+'% off</b> at '+qty.toLocaleString()+' jars.':'Labels at list price under '+BRK[1].toLocaleString()+' jars (minimum '+D.minj+').')+(nxt?' Order '+nxt.toLocaleString()+' and they drop to '+pct(nxt)+'% off.':'');
+    $('bulkTxt').innerHTML='At '+money(+$('bulk').value||0,0)+' a pound, the 14 g in one jar is worth <b>'+money(bulk)+'</b> sold bulk.';
     var msg=price<D.floor?'Below the floor. A 14 g jar can\'t sell for less than $'+D.floor+'.':qty<D.minj?'Minimum '+D.minj+' jars.':qty>D.maxj?'Over 1,000: talk to us. Shown at the 1,000 rate.':'';
     $('warn').hidden=!msg; $('warn').textContent=msg;
     $('dPrice').textContent=money(price); $('dBulk').textContent='-'+money(bulk);
-    $('dLabel').textContent='-'+money(label); $('dJar').textContent='-'+money(jar); $('dCol').textContent='-'+money(collar); $('dSp').textContent='-'+money(sp);
+    $('dLabel').textContent='-'+money(label); $('dLabelT').textContent='Label'+(off?' ('+off+'% off)':''); $('dJar').textContent='-'+money(jar); $('dCol').textContent='-'+money(collar); $('dSp').textContent='-'+money(sp);
     $('dJarT').innerHTML='Miron jar'+(D.draft?'<small>DRAFT</small>':'');
     $('dGain').textContent=money(gain); $('dGain').classList.toggle('pos',gain>=0);
     $('dRoi').textContent=cost?Math.round(gain/cost*100)+'%':'–';
