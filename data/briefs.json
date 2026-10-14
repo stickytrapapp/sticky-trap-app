@@ -1,64 +1,64 @@
 {
-  "updated": "2026-10-13",
+  "updated": "2026-10-14",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-10-13",
+      "date": "2026-10-14",
       "label": "Morning Brief",
-      "title": "Storefronts Multiply, Wall Street Circles: Momentum Builds From Washtenaw County to the DEA",
-      "top": "Michigan's retail map keeps expanding even as the 24% wholesale tax fight spills into the governor's race, with new Ann Arbor-area storefronts opening and GOP frontrunner John James making repeal a campaign plank. Nationally, institutional capital is lining up for a Schedule III world, Curaleaf just sweetened its Aurora bid, and Compass Pathways is closing in on an FDA filing for its psilocybin drug.",
+      "title": "Ballot Measures and Broken Contracts: Michigan Cannabis Braces for Hemp Crackdown as DEA Rescheduling Fight Resumes",
+      "top": "Michigan voters in Mottville Township and Bad Axe will decide dueling dispensary bans in November, while a federal appeals court ruling that cannabis supply contracts can't be enforced in federal court sends a warning through the industry ahead of December's hemp crackdown. Nationally, the DEA and rescheduling opponents filed dueling briefs as the Schedule III fight resumes, Vireo Growth's pending deals would make it the country's largest cannabis retailer by store count, and a new study shows psilocybin easing chronic suicidal thoughts.",
       "local": [
         {
-          "text": "Cloud Cannabis opens new Ann Arbor storefront Oct. 19 — The Michigan-based chain, co-founded by a former Detroit police officer, is opening at 1760 Plymouth Rd. with curbside service and a 'patients-over-profit' model for both medical and rec customers.",
-          "source": "ClickOnDetroit",
-          "url": "https://www.clickondetroit.com/topic/Cannabis/"
+          "text": "Mottville Township and Bad Axe put dispensaries to a vote — Mottville Township voters decide Nov. 3 whether to ban dispensaries outright, which would shutter the township's two existing pot shops, while Bad Axe voters weigh repealing their city's ordinance banning marijuana retailers.",
+          "source": "The Gander",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-101326/"
         },
         {
-          "text": "Bloom City Club expands into Ypsilanti with new store — The Ann Arbor-based retailer is marking the opening with a full slate of cannabis-themed events throughout October.",
-          "source": "ClickOnDetroit",
-          "url": "https://www.clickondetroit.com/topic/Cannabis/"
+          "text": "Appeals court rules cannabis supply contracts unenforceable in federal court — The 6th Circuit wiped out a roughly $32 million jury verdict Hello Farms had won against Curaleaf subsidiaries, holding that federal courts can't enforce agreements built around a federally illegal drug, a precedent now binding in Michigan, Ohio, Kentucky, and Tennessee.",
+          "source": "The Gander",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-101326/"
         },
         {
-          "text": "Menominee could add four more dispensaries via ballot measure — A citizen petition drive would raise the city's store cap from nine to thirteen, and organizers say they gathered more than enough signatures to put it before voters in November.",
-          "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-091626/"
+          "text": "Federal hemp crackdown looms as untested gas-station THC stays legal until December — New federal rules targeting intoxicating hemp products take effect in December, and Michigan retailers have already begun pulling items from shelves ahead of a deadline regulators hope closes the loophole letting unlicensed shops sell untested hemp.",
+          "source": "The Gander",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-101326/"
         },
         {
-          "text": "Governor's race gives operators a real shot at tax relief — GOP frontrunner John James has made repealing or reducing the 24% wholesale tax a core campaign plank, after earning the Michigan Cannabis Industry Association's endorsement over his opposition to the levy.",
-          "source": "michwomen.com / postindustrial.com",
-          "url": "https://michwomen.com/blog/2026-candidates-for-michigan-governor"
+          "text": "Caregivers-turned-retailer Zasso sells ounces for about $100 — The five-person Michigan outfit, started by former medical caregivers, is one of the small operators surviving the state's price collapse by keeping overhead low and selling direct.",
+          "source": "The Gander",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-101326/"
         },
         {
-          "text": "Regulators clear bad actors, clean the path for compliant brands — The state revoked 20 cultivation licenses and fined a company $2 million for shipping 'dirt and mulch' labeled as marijuana, pulled Muha Meds' Ypsilanti license over illegal influencer sales, and Bay City is reinvesting weed tax dollars into a homeless shelter.",
-          "source": "Gander Newsroom",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-100626/"
+          "text": "Michigan Supreme Court orders expedited review of 24% wholesale tax challenge — The court sent the cannabis industry's lawsuit over the wholesale tax back to the Court of Appeals with instructions to expedite its review, leaving the tax in place while the fight over its constitutionality continues.",
+          "source": "CPA Practice Advisor",
+          "url": "https://www.cpapracticeadvisor.com/2026/04/23/michigan-supreme-court-orders-review-of-states-24-cannabis-tax/182140/"
         }
       ],
       "national": [
         {
-          "text": "Wall Street capital is lining up for Schedule III cannabis — Institutional investors are preparing for an influx of capital once rescheduling lands, a shift that could unlock billions in funding for an industry generating $30 billion in annual sales.",
-          "source": "MunchMakers",
-          "url": "https://munchmakers.com/news/article/institutional-investors-eye-cannabis-as-schedule-iii-move-nears-mv4hm49b"
-        },
-        {
-          "text": "Curaleaf sweetens hostile Aurora Cannabis bid by 25% — The MSO raised its offer to roughly $5 per share in cash-and-stock, bumped its cap price to $6, and extended the takeover window through December 4.",
-          "source": "PacGarden",
-          "url": "https://www.pacgarden.com/post/curaleaf-raises-aurora-cannabis-acquisition-bid-by-25-why-this-could-be-one-of-cannabis-m-a-s-bigg"
-        },
-        {
-          "text": "Compass Pathways nears first-ever psychedelic FDA filing — The company plans to submit its rolling New Drug Application for psilocybin treatment COMP360 between October and December, with fresh Phase 3 data presented this month at the ASCP Annual Meeting showing durable relief for treatment-resistant depression.",
-          "source": "PharmaVoice / Psychiatric Times",
-          "url": "https://www.pharmavoice.com/news/fda-rfk-makary-compass-psilocybin-drug-approval/812697/"
-        },
-        {
-          "text": "DEA rescheduling pause is procedural, not a rejection — A federal judge's stay over a new GAO report hits its key response deadline today, Oct. 13, but the delay only affects broader adult-use rescheduling — FDA-approved and state-medical marijuana products were already moved to Schedule III in April.",
-          "source": "Regulatory Oversight / Shanken News Daily",
-          "url": "https://www.regulatoryoversight.com/2026/10/pending-marijuana-rescheduling-put-on-hold/"
-        },
-        {
-          "text": "States gear up for Schedule III, demand DEA guidance — A growing number of state marijuana regulators are pressing federal officials for clarity on implementing the Trump administration's rescheduling move, signaling states are actively preparing for the shift rather than waiting it out.",
+          "text": "DEA and rescheduling opponents file dueling briefs ahead of key hearing — Both sides submitted new filings in the marijuana rescheduling proceeding, keeping the Schedule III push alive even as the broader process stays paused pending review of a new GAO report.",
           "source": "Marijuana Moment",
-          "url": "https://www.marijuanamoment.net/state-officials-push-dea-for-cannabis-rescheduling-guidance-newsletter-october-8-2026"
+          "url": "https://www.marijuanamoment.net/new-dea-opponent-briefs-in-cannabis-rescheduling-hearing-newsletter-october-14-2026"
+        },
+        {
+          "text": "FDA seeks industry input on ibogaine clinical trial design — The agency issued a request for information on how an early-stage ibogaine study should be structured, a step that could speed the psychedelic's path toward approved treatment despite its known cardiac risks.",
+          "source": "Psychedelic Alpha",
+          "url": "https://psychedelicalpha.com/news/p%CE%B1-psychedelic-bulletin-233-fda-floats-ibogaine-trial-design-compass-talks-pricing-potential-lsd-psilocybin-brand-names/"
+        },
+        {
+          "text": "New study: psilocybin eases chronic suicidal thoughts — Researchers found 70% of participants with longstanding suicidal ideation reported little or none by week 12 after psilocybin-assisted therapy, outlasting the shorter-term relief typically seen with ketamine.",
+          "source": "News Tribune",
+          "url": "https://newstribune.com/news/2026/oct/13/study-psilocybin-may-ease-suicidal-thoughts"
+        },
+        {
+          "text": "Vireo Growth's pending deals would make it the largest U.S. cannabis retailer — Assuming its FLUENT and C21 acquisitions close, Vireo says it will operate roughly 270 dispensaries nationwide, after posting Q2 revenue of $209.3 million, up 335% year-over-year.",
+          "source": "MJBizDaily",
+          "url": "https://mjbizdaily.com/news/cannabis-mso-vireo-bets-on-colorado-with-49-million-acquisition/613512/"
+        },
+        {
+          "text": "Cronos Group pushes CanAdelaar acquisition deadline to Oct. 15 — The cannabis company extended the long-stop date on its pending deal by another month as the transaction works through remaining regulatory approvals.",
+          "source": "StreetInsider",
+          "url": "https://www.streetinsider.com/Corporate+News/Cronos+Group+extends+cannabis+acquisition+deadline+to+October+2026/27053279.html"
         }
       ]
     }
