@@ -1848,3 +1848,139 @@ function selfTest() {
   var r = ask_([{ role: 'user', content: 'Add 100 3" slaps, holographic, Pro finish to my basket please.' }], ctx);
   Logger.log(r.reply + '\n\nactions: ' + JSON.stringify(r.actions) + '\nusage: ' + JSON.stringify(r.usage) + '\nmodel: ' + r.model);
 }
+
+// ============================ CLOUD SYNC (10/15 Shane: 'i need a better option than to just depend on this pc') ============================
+// Square (LIVE account) -> Monday Orders Tracking + the client tracker page, every 5 minutes, on Google's servers - so a Square
+// invoice that is SENT or PAID moves its Monday line (and tags the team) even when the office PC is off. The PC still does
+// everything else when it is on (PDFs, the production sheet, the spec); both sides are idempotent - a status only ever moves UP
+// the ladder, a parked line is left alone, and a tag / 'Square: invoice ... PAID' note is never posted twice (the PC checks
+// the line's notes before posting the same one).
+// Switch: Script Property CLOUD_SYNC = on. Needs SQUARE_PROD_TOKEN (the live Square access token - Shane pastes it) and the
+// existing MONDAY_TOKEN. Run installCloudSync() once from the editor to add the 5-minute trigger.
+var CS_LOC = 'LPAMHTH1C744Q', CS_BOARD = '18432057432', CS_ACTIVE = 'topics';
+var CS_COL = { status: 'color_mm7d8nsf', inv: 'text_mm7eagp2', odate: 'date_mm7ey3mb', due: 'date_mm7e6sx1', total: 'numeric_mm7db5dk', job: 'color_mm7daw9t', notes: 'text_mm7dpvta' };
+var CS_LADDER = ['Order received', 'Invoice sent', 'Paid', 'Art in progress', 'Proof sent', 'Changes requested', 'Proof approved', 'In production', 'Ready for pickup', 'Shipped', 'Completed'];
+var CS_PARKED = ['On hold', 'Need art', 'Waiting on client', 'Cancelled', 'Completed', 'Complete', 'Done'];
+var CS_SENT = ['UNPAID', 'SCHEDULED', 'PARTIALLY_PAID', 'PAYMENT_PENDING', 'PAID'];
+var CS_DESIGN = ['79088220', '98246598'], CS_PRINT = ['117396242'];   // Tanda + Kyle / Payton (tracker-config DESIGN/PRINT_TAG_USERS)
+
+function installCloudSync() {
+  ScriptApp.getProjectTriggers().forEach(function (t) { if (t.getHandlerFunction() === 'cloudSync') ScriptApp.deleteTrigger(t); });
+  ScriptApp.newTrigger('cloudSync').timeBased().everyMinutes(5).create();
+  Logger.log('cloudSync trigger: every 5 minutes. Set Script Property CLOUD_SYNC=on to start it.');
+}
+
+function csSq_(path, method, body) {
+  var r = UrlFetchApp.fetch('https://connect.squareup.com' + path, { method: method || 'get', contentType: 'application/json', muteHttpExceptions: true,
+    headers: { Authorization: 'Bearer ' + PROP.getProperty('SQUARE_PROD_TOKEN'), 'Square-Version': '2024-10-17' }, payload: body ? JSON.stringify(body) : undefined });
+  if (r.getResponseCode() >= 300) throw new Error('Square ' + r.getResponseCode() + ': ' + r.getContentText().slice(0, 200));
+  return JSON.parse(r.getContentText());
+}
+function csMon_(q, v) {   // its own Monday call: not paused by MONDAY_HOLD (that switch is for the chat bot's leads)
+  var r = UrlFetchApp.fetch('https://api.monday.com/v2', { method: 'post', contentType: 'application/json', muteHttpExceptions: true,
+    headers: { Authorization: PROP.getProperty('MONDAY_TOKEN'), 'API-Version': '2024-10' }, payload: JSON.stringify({ query: q, variables: v || {} }) });
+  var j = JSON.parse(r.getContentText()); if (j.errors || j.error_message) throw new Error('Monday: ' + JSON.stringify(j.errors || j.error_message).slice(0, 200));
+  return j;
+}
+function csCode_(iv) {
+  var num = String(iv.invoice_number || iv.title || '').trim().toUpperCase(), m = num.match(/\b(\d{3}-[A-Z0-9]{2,4})\b/);
+  return m ? m[1] : ('SQ-' + num.replace(/[^A-Z0-9]+/g, '').slice(0, 12));
+}
+function csRung_(l) { return CS_LADDER.indexOf(l); }
+function csNotes_(id) {
+  var d = csMon_('{ items(ids:[' + id + ']){ updates(limit:25){ text_body } } }');
+  return ((((d.data || d).items || [])[0] || {}).updates || []).map(function (u) { return u.text_body || ''; }).join('\n');
+}
+function csPost_(id, html, already) {   // never the same note twice (the PC checks the same way)
+  var plain = html.replace(/<[^>]+>/g, '');
+  if (already.indexOf(plain.slice(0, 60)) >= 0) return false;
+  csMon_('mutation ($i: ID!, $b: String!) { create_update(item_id:$i, body:$b){ id } }', { i: String(id), b: html }); return true;
+}
+function csTag_(id, users, text, already) {
+  var names = { '79088220': 'Tanda', '98246598': 'Kyle Scott', '117396242': 'Payton' };
+  var head = text.replace(/<[^>]+>/g, '').split(' - ')[0];
+  if (already.indexOf(head) >= 0) return 'already tagged';
+  var tags = users.map(function (u) { return '<a class="user_mention_editor router" href="https://thestickytraps-team.monday.com/users/' + u + '" data-mention-type="User" data-mention-id="' + u + '">@' + (names[u] || u) + '</a>'; }).join(' ');
+  csMon_('mutation ($i: ID!, $b: String!) { create_update(item_id:$i, body:$b){ id } }', { i: String(id), b: tags + ' ' + text });
+  users.forEach(function (u) { try { csMon_('mutation ($u: ID!, $t: ID!, $x: String!) { create_notification(user_id:$u, target_id:$t, text:$x, target_type: Project){ text } }', { u: u, t: String(id), x: text.replace(/<[^>]+>/g, '').slice(0, 250) }); } catch (e) {} });
+  return 'tagged ' + users.map(function (u) { return names[u] || u; }).join(', ');
+}
+function csJobType_(names) {   // square_spec.job_type_of: no pre-press + no design = Reprint
+  var des = names.some(function (n) { return /design|art\b|artwork|illustrat|vector/i.test(n); });
+  var pre = names.some(function (n) { return /pre.?press|set.?up/i.test(n); });
+  return des ? 'Print and design' : (pre ? 'Print' : 'Reprint');
+}
+
+function cloudSync() {
+  if (!/^on$/i.test(PROP.getProperty('CLOUD_SYNC') || '') || !PROP.getProperty('SQUARE_PROD_TOKEN') || !PROP.getProperty('MONDAY_TOKEN')) return;
+  var lock = LockService.getScriptLock(); if (!lock.tryLock(5000)) return;
+  try {
+    var st = JSON.parse(PROP.getProperty('CS_STATE') || 'null'), first = !st; st = st || {};
+    var invs = (csSq_('/v2/invoices/search', 'post', { query: { filter: { location_ids: [CS_LOC] }, sort: { field: 'INVOICE_SORT_DATE', order: 'DESC' } }, limit: 50 }).invoices) || [];
+    var work = [];
+    invs.forEach(function (iv) {
+      if (CS_SENT.indexOf(iv.status) < 0) return;
+      var want = iv.status === 'PAID' ? 'p' : 's', had = st[iv.id] || '';
+      if (had.indexOf(want) >= 0) return;
+      if (first) { st[iv.id] = 's' + (want === 'p' ? 'p' : ''); return; }   // first run: remember today's state, act on nothing old
+      work.push(iv);
+    });
+    if (work.length) {
+      var items = ((csMon_('{ boards(ids:[' + CS_BOARD + ']){ items_page(limit:500){ items{ id name group{ id title } column_values(ids:["' + CS_COL.status + '","' + CS_COL.inv + '","' + CS_COL.job + '"]){ id text } } } } }').data || {}).boards || [{}])[0].items_page.items;
+      work.forEach(function (iv) {
+        try { csOne_(iv, items); st[iv.id] = 's' + (iv.status === 'PAID' ? 'p' : ''); }
+        catch (e) { Logger.log('cloudSync ' + (iv.invoice_number || iv.id) + ': ' + e); }
+      });
+    }
+    var keys = Object.keys(st); if (keys.length > 120) keys.slice(0, keys.length - 120).forEach(function (k) { delete st[k]; });
+    PROP.setProperty('CS_STATE', JSON.stringify(st)); PROP.setProperty('CS_LAST', new Date().toISOString() + ' ' + work.length + ' change(s)');
+  } finally { lock.releaseLock(); }
+}
+
+function csOne_(iv, items) {
+  var code = csCode_(iv), num = iv.invoice_number || code, paid = iv.status === 'PAID', target = paid ? 'Paid' : 'Invoice sent';
+  var line = null;
+  items.forEach(function (it) {
+    if ((it.group || {}).title === 'Bot proposals') return;
+    var inv = ''; it.column_values.forEach(function (c) { if (c.id === CS_COL.inv) inv = c.text || ''; });
+    var hay = (inv + ' ' + it.name).toUpperCase();
+    if (new RegExp('(^|[^A-Z0-9])' + code.replace(/[-]/g, '\\-') + '([^A-Z0-9]|$)').test(hay) && (!line || (it.group || {}).id === CS_ACTIVE)) line = it;
+  });
+  var due = iv.sale_or_service_date || '';
+  if (!line) {   // made in Square while the PC was off - a basic line now; the PC adds the files + production sheet later
+    var o = iv.order_id ? (csSq_('/v2/orders/' + iv.order_id).order || {}) : {};
+    var names = (o.line_items || []).map(function (l) { return l.name || ''; });
+    var cid = (iv.primary_recipient || {}).customer_id, cu = cid ? (csSq_('/v2/customers/' + cid).customer || {}) : {};
+    var company = (cu.company_name || ((cu.given_name || '') + ' ' + (cu.family_name || ''))).replace(/\s*\([^)]*\)\s*$/, '').trim();
+    var amt = 0; (iv.payment_requests || []).forEach(function (p) { amt += Number(((p.computed_amount_money || {}).amount) || 0); });
+    var cv = {}; cv[CS_COL.status] = { label: target }; cv[CS_COL.inv] = String(num).replace(/\s+R\d+$/, ''); cv[CS_COL.total] = String(amt / 100);
+    cv[CS_COL.job] = { label: csJobType_(names) }; if (due) cv[CS_COL.due] = { date: due }; cv[CS_COL.odate] = { date: String(iv.created_at || '').slice(0, 10) };
+    cv[CS_COL.notes] = 'Made by the cloud sync (office PC was off)';
+    var nm = /^[A-Za-z]/.test(String(num)) ? String(num).replace(/\s+R\d+$/, '') : ((company || 'Square') + ' ' + code);
+    var made = csMon_('mutation ($b: ID!, $g: String!, $n: String!, $c: JSON!) { create_item(board_id:$b, group_id:$g, item_name:$n, column_values:$c, create_labels_if_missing:true){ id } }',
+                      { b: CS_BOARD, g: CS_ACTIVE, n: nm, c: JSON.stringify(cv) });
+    var nid = (((made.data || made).create_item) || {}).id;
+    csPost_(nid, '<b>Made in Square: ' + num + '</b> - the office PC was off, so this line came from the cloud sync. The production sheet and PDFs are added when the PC is back on.' +
+            (names.length ? '<ul>' + names.map(function (n) { return '<li>' + n + '</li>'; }).join('') + '</ul>' : ''), '');
+    line = { id: nid, name: nm, column_values: [{ id: CS_COL.status, text: '' }, { id: CS_COL.job, text: csJobType_(names) }, { id: CS_COL.inv, text: num }] };
+  }
+  var cur = '', job = '';
+  line.column_values.forEach(function (c) { if (c.id === CS_COL.status) cur = c.text || ''; if (c.id === CS_COL.job) job = c.text || ''; });
+  var notes = csNotes_(line.id);
+  var lift = paid && cur === 'Waiting on client';   // 10/14: the payment IS what we were waiting on
+  var moved = false;
+  if ((CS_PARKED.indexOf(cur) < 0 || lift) && csRung_(cur) < csRung_(target)) {
+    csMon_('mutation ($b: ID!, $i: ID!, $c: JSON!) { change_multiple_column_values(board_id:$b, item_id:$i, column_values:$c){ id } }',
+           { b: CS_BOARD, i: String(line.id), c: JSON.stringify((function () { var x = {}; x[CS_COL.status] = { label: target }; return x; })()) });
+    moved = true;
+  }
+  csPost_(line.id, 'Square: invoice ' + num + ' ' + (paid ? 'PAID' : 'sent') + (iv.public_url ? ' - ' + iv.public_url : ''), notes);
+  if (moved && paid) {   // the stage tag (stage_tags.on_stage): reprint -> Payton only, else design
+    var dd = due ? due.slice(5).replace('-', '/') : '?';
+    if (job === 'Reprint') csTag_(line.id, CS_PRINT, '<b>Ready to print: ' + num + '</b> - due ' + dd + '. Reprint, no changes - the production sheet is in Files.', notes);
+    else csTag_(line.id, CS_DESIGN, '<b>Paid: ' + num + '</b> - due ' + dd + '. Start the art' + (/design/i.test(job) ? '' : ' / file check') + '.', notes);
+  }
+  try {   // the client's tracker page - same backend, silent (client mail is off), only forward
+    orderStage_({ pin: consolePin_(), code: code, stage: paid ? 'deposit' : 'quoted', silent: true, only_forward: true, note: 'cloud sync' });
+  } catch (e) {}
+}
