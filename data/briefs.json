@@ -1,64 +1,64 @@
 {
-  "updated": "2026-10-14",
+  "updated": "2026-10-15",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
     {
-      "date": "2026-10-14",
+      "date": "2026-10-15",
       "label": "Morning Brief",
-      "title": "Ballot Measures and Broken Contracts: Michigan Cannabis Braces for Hemp Crackdown as DEA Rescheduling Fight Resumes",
-      "top": "Michigan voters in Mottville Township and Bad Axe will decide dueling dispensary bans in November, while a federal appeals court ruling that cannabis supply contracts can't be enforced in federal court sends a warning through the industry ahead of December's hemp crackdown. Nationally, the DEA and rescheduling opponents filed dueling briefs as the Schedule III fight resumes, Vireo Growth's pending deals would make it the country's largest cannabis retailer by store count, and a new study shows psilocybin easing chronic suicidal thoughts.",
+      "title": "Demand Holds, Deals Heat Up: MI Weed Finds Its Footing as Rescheduling Fight Grinds On",
+      "top": "Michigan operators are leaning into growth — a Detroit-born flower brand just cracked 90 stores and House of Dank keeps opening doors — even as the 24% wholesale tax squeezes margins and fuels a governor's-race promise to roll it back. Nationally, cannabis M&A is accelerating (Cronos just closed a European buy) and Compass Pathways says its psilocybin therapy is on track for an early-2027 launch, even as the DEA rescheduling case stays technically paused, not dead.",
       "local": [
         {
-          "text": "Mottville Township and Bad Axe put dispensaries to a vote — Mottville Township voters decide Nov. 3 whether to ban dispensaries outright, which would shutter the township's two existing pot shops, while Bad Axe voters weigh repealing their city's ordinance banning marijuana retailers.",
-          "source": "The Gander",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-101326/"
+          "text": "Detroit's Zasso scales to 90 Michigan stores — A small Detroit cultivation outfit selling top-shelf flower for about $100 an ounce hit shelves about a year ago and is now stocked in roughly 90 stores statewide, with most retailers reaching out first.",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/detroit-weed-brand-100626/"
         },
         {
-          "text": "Appeals court rules cannabis supply contracts unenforceable in federal court — The 6th Circuit wiped out a roughly $32 million jury verdict Hello Farms had won against Curaleaf subsidiaries, holding that federal courts can't enforce agreements built around a federally illegal drug, a precedent now binding in Michigan, Ohio, Kentucky, and Tennessee.",
-          "source": "The Gander",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-101326/"
+          "text": "House of Dank opens new Berkley storefront — Michigan's leading cannabis retailer kept its statewide expansion rolling with a new Woodward-corridor location in Berkley.",
+          "source": "House of Dank",
+          "url": "https://shophod.com/4969-2/"
         },
         {
-          "text": "Federal hemp crackdown looms as untested gas-station THC stays legal until December — New federal rules targeting intoxicating hemp products take effect in December, and Michigan retailers have already begun pulling items from shelves ahead of a deadline regulators hope closes the loophole letting unlicensed shops sell untested hemp.",
-          "source": "The Gander",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-101326/"
+          "text": "Demand stays near all-time highs despite the tax — Consumer demand for regulated cannabis remains near a record even as low prices and the new wholesale tax push more operators toward consolidation, with dispensaries still on pace to sell over 1.3 million pounds of flower this year.",
+          "source": "Cannabis Business Times",
+          "url": "https://www.cannabisbusinesstimes.com/us-states/michigan/news/15832095/michigan-cannabis-retailer-closing-5-dispensaries-citing-new-tax-burden"
         },
         {
-          "text": "Caregivers-turned-retailer Zasso sells ounces for about $100 — The five-person Michigan outfit, started by former medical caregivers, is one of the small operators surviving the state's price collapse by keeping overhead low and selling direct.",
-          "source": "The Gander",
-          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-michigan-101326/"
+          "text": "GOP governor nominee vows to gut the 24% tax — John James has pledged to repeal or sharply cut the wholesale tax, calling it a driver of higher prices and a boost to illegal operators, and industry executives have backed his campaign with real money this cycle.",
+          "source": "Gander Newsroom / Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/michigan-gop-governor-candidate-pledges-huge-tax-cut-for-marijuana-industry-along-with-crackdown-on-hemp-products"
         },
         {
-          "text": "Michigan Supreme Court orders expedited review of 24% wholesale tax challenge — The court sent the cannabis industry's lawsuit over the wholesale tax back to the Court of Appeals with instructions to expedite its review, leaving the tax in place while the fight over its constitutionality continues.",
-          "source": "CPA Practice Advisor",
-          "url": "https://www.cpapracticeadvisor.com/2026/04/23/michigan-supreme-court-orders-review-of-states-24-cannabis-tax/182140/"
+          "text": "Lansing lawmakers push bipartisan repeal bills — Legislators in both chambers have introduced bills to kill the controversial 24% wholesale tax as sales dip and businesses close, giving operators a legislative path forward alongside the pending court appeal.",
+          "source": "Detroit Metro Times",
+          "url": "https://www.metrotimes.com/weed-2/michigan-lawmakers-want-to-repeal-the-24-cannabis-tax-but-dont-hold-your-breath/"
         }
       ],
       "national": [
         {
-          "text": "DEA and rescheduling opponents file dueling briefs ahead of key hearing — Both sides submitted new filings in the marijuana rescheduling proceeding, keeping the Schedule III push alive even as the broader process stays paused pending review of a new GAO report.",
-          "source": "Marijuana Moment",
-          "url": "https://www.marijuanamoment.net/new-dea-opponent-briefs-in-cannabis-rescheduling-hearing-newsletter-october-14-2026"
+          "text": "Cronos closes European cannabis buy today — Cronos Group completed its acquisition of CanAdelaar, the largest adult-use cannabis company in the Netherlands' pilot program, establishing the top market share in Europe's largest legal cannabis market.",
+          "source": "GlobeNewswire via Stockhouse",
+          "url": "https://stockhouse.com/news/press-releases/2026/10/15/cronos-completes-acquisition-of-canadelaar-europe-s-largest-adult-use-cannabis"
         },
         {
-          "text": "FDA seeks industry input on ibogaine clinical trial design — The agency issued a request for information on how an early-stage ibogaine study should be structured, a step that could speed the psychedelic's path toward approved treatment despite its known cardiac risks.",
-          "source": "Psychedelic Alpha",
-          "url": "https://psychedelicalpha.com/news/p%CE%B1-psychedelic-bulletin-233-fda-floats-ibogaine-trial-design-compass-talks-pricing-potential-lsd-psilocybin-brand-names/"
+          "text": "Compass Pathways says psilocybin launch still on for early 2027 — CEO Kabir Nath said the company is finishing its rolling FDA submission for COMP360 this quarter and plans a deliberately cautious rollout once approved.",
+          "source": "STAT News",
+          "url": "https://www.statnews.com/2026/10/14/compass-pathways-psychedelics-stat-summit/"
         },
         {
-          "text": "New study: psilocybin eases chronic suicidal thoughts — Researchers found 70% of participants with longstanding suicidal ideation reported little or none by week 12 after psilocybin-assisted therapy, outlasting the shorter-term relief typically seen with ketamine.",
-          "source": "News Tribune",
-          "url": "https://newstribune.com/news/2026/oct/13/study-psilocybin-may-ease-suicidal-thoughts"
-        },
-        {
-          "text": "Vireo Growth's pending deals would make it the largest U.S. cannabis retailer — Assuming its FLUENT and C21 acquisitions close, Vireo says it will operate roughly 270 dispensaries nationwide, after posting Q2 revenue of $209.3 million, up 335% year-over-year.",
+          "text": "Cannabis M&A wave keeps building post-rescheduling push — Operators like Colorado's Spherex are closing new acquisitions and investing early in integration planning as deal activity accelerates across the industry.",
           "source": "MJBizDaily",
-          "url": "https://mjbizdaily.com/news/cannabis-mso-vireo-bets-on-colorado-with-49-million-acquisition/613512/"
+          "url": "https://mjbizdaily.com/news/as-rescheduling-fuels-cannabis-deals-integration-decides-who-wins/618587"
         },
         {
-          "text": "Cronos Group pushes CanAdelaar acquisition deadline to Oct. 15 — The cannabis company extended the long-stop date on its pending deal by another month as the transaction works through remaining regulatory approvals.",
-          "source": "StreetInsider",
-          "url": "https://www.streetinsider.com/Corporate+News/Cronos+Group+extends+cannabis+acquisition+deadline+to+October+2026/27053279.html"
+          "text": "DEA rescheduling case paused, not dead — A DEA judge ordered the agency to respond to opponents' bid to reopen testimony, with the case formally stayed while the tribunal weighs the pending motions.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/dea-ordered-to-reply-to-cannabis-opponents-push-for-more-rescheduling-testimony-newsletter-october-15-2026"
+        },
+        {
+          "text": "Federally funded study backs cannabis as an opioid-sparing tool — New research shows medical marijuana improves cancer-related symptoms and helps reduce opioid use, adding fresh clinical ammunition for reform advocates.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/dea-ordered-to-reply-to-cannabis-opponents-push-for-more-rescheduling-testimony-newsletter-october-15-2026"
         }
       ]
     }
