@@ -1897,6 +1897,7 @@ function csPost_(id, html, already) {   // never the same note twice (the PC che
   csMon_('mutation ($i: ID!, $b: String!) { create_update(item_id:$i, body:$b){ id } }', { i: String(id), b: html }); return true;
 }
 function csTag_(id, users, text, already) {
+  if (!/^on$/i.test(PROP.getProperty('AUTO_TAGS') || '')) return 'auto tags off';   // 10/16 Tanda: her Monday automations tag the team (Script Property AUTO_TAGS=on restores ours)
   var names = { '79088220': 'Tanda', '98246598': 'Kyle Scott', '117396242': 'Payton' };
   var head = text.replace(/<[^>]+>/g, '').split(' - ')[0];
   if (already.indexOf(head) >= 0) return 'already tagged';
