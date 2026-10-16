@@ -1,7 +1,67 @@
 {
-  "updated": "2026-10-15",
+  "updated": "2026-10-16",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
+    {
+      "date": "2026-10-16",
+      "label": "Morning Brief",
+      "title": "Industry Doubles Down on James as Tax Fight Drags On; DEA Stands Firm on Rescheduling Science",
+      "top": "Michigan's cannabis trade group formally endorsed GOP governor nominee John James over his pledge to gut the 24% wholesale tax and crack down on unregulated hemp, while a Democratic state senator warned the industry not to trust him — and hemp-reform bills remain stuck in the GOP-led House even as a Macomb County operator faces discipline over illegal hemp-derived THC concentrate. Nationally, the DEA told its administrative law judge a new GAO report has \"no bearing\" on the scientific case for marijuana rescheduling and is pushing back against further delay, while the psychedelics pipeline keeps moving with FDA-fast-tracked psilocybin and MDMA-like therapies from Compass Pathways, Usona and Transcend Therapeutics.",
+      "local": [
+        {
+          "text": "Michigan Cannabis Industry Association endorses John James for governor — The trade group backed the GOP nominee and put money behind his campaign, citing his pledge to repeal or sharply roll back the 24% wholesale marijuana tax that funds road repairs.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/michigan-marijuana-industry-group-endorses-gop-governor-candidate-who-pledged-to-cut-new-wholesale-tax/"
+        },
+        {
+          "text": "James's cannabis platform also targets unregulated hemp sales — Beyond the tax repeal, the Republican nominee says Delta-8, THCA and synthetic cannabinoids should face the same age limits, testing and labeling rules as licensed cannabis instead of selling freely at gas stations and smoke shops.",
+          "source": "Cannabis Business Times",
+          "url": "https://www.cannabisbusinesstimes.com/us-states/michigan/news/15833093/michigan-gop-gubernatorial-nominee-plans-to-repeal-24-cannabis-tax-end-unregulated-hemp-sales"
+        },
+        {
+          "text": "Democratic senator: don't trust James's tax-cut pledge — A Michigan Democratic state senator argued the GOP nominee's record of opposing cannabis reform means the industry shouldn't count on him to follow through on cutting the wholesale tax.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/michigan-marijuana-industry-shouldnt-trust-gop-governor-candidates-pledge-to-cut-taxes-democratic-senator-says/"
+        },
+        {
+          "text": "Hemp and license-cap bills still stuck in the GOP-led House — Packages setting up a regulatory framework for consumable hemp products and capping retail/wholesale licenses at one per 10,000 residents cleared the Democratic-controlled Senate last year but remain unresolved in the House.",
+          "source": "Michigan Advance",
+          "url": "https://michiganadvance.com/2026/06/17/proposed-changes-to-marijuana-license-cap-legislation-include-new-rules-on-outstanding-tax-debt/"
+        },
+        {
+          "text": "Macomb County operator accused of illegal hemp-derived THC concentrate — Regulators say Harrison Township's Pure Roots/Forte Cannabis bought THCA isolate from a hemp-licensed supplier and sold concentrate that independently tested as high as 87% THC, far above the 0.3% hemp threshold, with thousands of units reaching licensed dispensaries.",
+          "source": "Detroit Metro Times",
+          "url": "https://www.metrotimes.com/weed-2/macomb-county-cannabis-business-accused-of-illegally-using-hemp-derived-thc-concentrate-39265270/"
+        }
+      ],
+      "national": [
+        {
+          "text": "DEA tells judge GAO report has 'no bearing' on rescheduling science — Responding ahead of an Oct. 13 deadline, the DEA said a new Government Accountability Office report on scheduling procedures doesn't undercut the case for moving marijuana to Schedule III, and it opposed further briefing that would delay the administrative law judge's recommendation.",
+          "source": "The Marijuana Herald / Cannabis News",
+          "url": "https://themarijuanaherald.com/2026/10/dea-gao-no-bearing/"
+        },
+        {
+          "text": "Rescheduling case stays paused while judge weighs GAO motion — The DEA's chief administrative law judge has not yet ruled on admitting the GAO report or allowing more briefing, extending a stay that began Sept. 29 and pushing any recommendation on Schedule III further into the fourth quarter.",
+          "source": "Vicente LLP",
+          "url": "https://vicentellp.com/insights/dea-judge-pauses-marijuana-rescheduling-gao-report/"
+        },
+        {
+          "text": "FDA fast-tracks psilocybin and MDMA-like PTSD therapies — Compass Pathways (psilocybin for treatment-resistant depression), Usona Institute (psilocybin for major depressive disorder) and Transcend Therapeutics (methylone for PTSD) each hold National Priority Vouchers that can shrink FDA review to one to two months, following an April 2026 executive order directing agencies to speed psychedelic approvals.",
+          "source": "Inkl",
+          "url": "https://www.inkl.com/news/the-fda-just-put-psilocybin-and-an-mdma-like-drug-on-a-1-to-2-month-approval-track-a-historic-mental-health-decision-is-coming"
+        },
+        {
+          "text": "Compass Pathways eyes Q4 rolling NDA submission for COMP360 — After positive Phase 3 results, CEO Kabir Nath said the company is finishing a rolling New Drug Application this quarter, with a deliberately cautious rollout planned once approved.",
+          "source": "STAT News",
+          "url": "https://www.statnews.com/2026/10/14/compass-pathways-psychedelics-stat-summit/"
+        },
+        {
+          "text": "Federal hemp THC deadline keeps states scrambling — With a late-2025 funding-deal provision putting most hemp-derived THC products on a roughly one-year federal clock, states are moving on their own: Ohio lawmakers reached a deal to ban most intoxicating hemp products including THC drinks, while Texas's push to restrict hemp-derived products keeps drawing industry pushback.",
+          "source": "News 5 Cleveland",
+          "url": "https://www.news5cleveland.com/news/politics/ohio-politics/ohio-lawmakers-set-to-ban-all-intoxicating-hemp-products-including-thc-drinks"
+        }
+      ]
+    },
     {
       "date": "2026-10-15",
       "label": "Morning Brief",
