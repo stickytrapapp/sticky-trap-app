@@ -1860,7 +1860,7 @@ function selfTest() {
 var CS_LOC = 'LPAMHTH1C744Q', CS_BOARD = '18432057432', CS_ACTIVE = 'topics';
 var CS_COL = { status: 'color_mm7d8nsf', inv: 'text_mm7eagp2', odate: 'date_mm7ey3mb', due: 'date_mm7e6sx1', total: 'numeric_mm7db5dk', job: 'color_mm7daw9t', notes: 'text_mm7dpvta' };
 var CS_LADDER = ['Order received', 'Invoice sent', 'Paid', 'Art in progress', 'Proof sent', 'Changes requested', 'Proof approved', 'In production', 'Ready for pickup', 'Shipped', 'Completed'];
-var CS_PARKED = ['On hold', 'Need art', 'Waiting on client', 'Cancelled', 'Completed', 'Complete', 'Done'];
+var CS_PARKED = ['On hold', 'Need art', 'Waiting on client', 'Cancelled', 'Completed', 'Complete', 'Done', 'In Progress', 'Pending', 'Test printed'];   // 10/19 Shane: never overwrite the team's own labels
 var CS_SENT = ['UNPAID', 'SCHEDULED', 'PARTIALLY_PAID', 'PAYMENT_PENDING', 'PAID'];
 var CS_DESIGN = ['79088220', '98246598'], CS_PRINT = ['117396242'];   // Tanda + Kyle / Payton (tracker-config DESIGN/PRINT_TAG_USERS)
 
