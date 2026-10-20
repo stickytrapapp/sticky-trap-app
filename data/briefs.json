@@ -1,7 +1,57 @@
 {
-  "updated": "2026-10-16",
+  "updated": "2026-10-20",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
+    {
+      "date": "2026-10-20",
+      "label": "Morning Brief",
+      "title": "NFL Clears Lions Star Over Pot Celebration as Michigan Cannabis Hits the Blotter; Veterans Poll and Mass. Ballot Fight Lead National News",
+      "top": "Michigan's cannabis news this cycle skewed toward law-and-order: the NFL rescinded a fine against Lions receiver Jameson Williams for miming a smoke during a touchdown celebration after his camp noted the drug is legal in Michigan, while prosecutors charged six Detroit-area residents with armed robbery over an alleged 200-pound weed heist in Warren and an Illinois man was hit with a felony in Indiana over cannabis bought at a New Buffalo dispensary. Nationally, a new Iraq and Afghanistan Veterans of America survey found 61% of military veterans back federal legalization, Massachusetts lawmakers kept up their campaign against the Question 8 repeal measure on next month's ballot, Houston opened early voting on a measure to deprioritize marijuana enforcement, and hemp beverage makers urged customers to lobby Congress against the looming THC ban.",
+      "local": [
+        {
+          "text": "NFL rescinds fine against Lions WR Jameson Williams — The league reversed a fine over a touchdown celebration in which Williams mimed smoking, after his camp noted cannabis is legal in both Michigan and New York.",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-101926/"
+        },
+        {
+          "text": "Illinois man charged with felony in Indiana over Michigan-bought weed — A traffic stop turned up more than an ounce of cannabis and a bag from a New Buffalo dispensary, leading to a felony charge despite the purchase being legal just across the Michigan border.",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-101926/"
+        },
+        {
+          "text": "Six Detroit-area residents charged with armed robbery in Warren — Prosecutors allege the group tried to drive off with more than 200 pounds of cannabis from a Warren cannabis facility; each defendant faces a $500,000 bond.",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-101926/"
+        },
+        {
+          "text": "Two Upper Peninsula operators quit Michigan for lower-tax Minnesota — A pair of U.P. cannabis businessmen left the state's industry to open a new dispensary in St. Cloud, Minnesota, citing Michigan's steeper tax burden.",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-101926/"
+        }
+      ],
+      "national": [
+        {
+          "text": "Veterans poll shows majority back federal legalization — A new Iraq and Afghanistan Veterans of America survey found 61% of military veterans support legalizing recreational marijuana.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/military-veterans-support-legalizing-cannabis-poll-shows-newsletter-october-20-2026"
+        },
+        {
+          "text": "Hemp beverage makers rally customers to lobby Congress — With federal restrictions on hemp-derived THC drinks approaching, a hemp company is letting customers send cannabis beverages directly to their members of Congress to press for a fix.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/military-veterans-support-legalizing-cannabis-poll-shows-newsletter-october-20-2026"
+        },
+        {
+          "text": "Massachusetts lawmakers keep up fight against Question 8 — More than 60 state legislators, including the House Speaker and Senate President, are publicly urging voters to reject the November ballot measure that would repeal the state's adult-use marijuana law.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/massachusetts-lawmakers-urge-voters-to-keep-cannabis-sales-legal-newsletter-october-19-2026"
+        },
+        {
+          "text": "Houston opens early voting on marijuana deprioritization measure — Early voting began Oct. 19 on Proposition A, which would make low-level marijuana enforcement the Houston Police Department's lowest priority and ban no-knock warrants.",
+          "source": "Fox 26 Houston",
+          "url": "https://www.fox26houston.com/news/houston-proposition-a-what-marijuana-enforcement-no-knock-warrant-measure-would-do"
+        }
+      ]
+    },
     {
       "date": "2026-10-16",
       "label": "Morning Brief",
