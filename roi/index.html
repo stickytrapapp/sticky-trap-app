@@ -115,7 +115,6 @@ dl.rc{display:grid;grid-template-columns:1fr auto;margin:14px 0 0;font-size:13.5
     <div class="step">Per jar</div>
     <dl class="rc">
       <dt>You sell it for</dt><dd id="dPrice"></dd>
-      <dt id="dTaxT">Michigan wholesale tax (24%) <small>you pay it selling to a dispensary</small></dt><dd id="dTax"></dd>
       <dt>Packaging <small id="dPackS"></small></dt><dd id="dPack"></dd>
       <dt id="dSpT">Budtender tip</dt><dd id="dSp"></dd>
       <dt class="t">You keep, per jar</dt><dd class="t" id="dKeep"></dd>
@@ -131,22 +130,20 @@ dl.rc{display:grid;grid-template-columns:1fr auto;margin:14px 0 0;font-size:13.5
         <div class="step">Texture <span class="nt">&middot; number = layers of raised gloss</span></div>
         <div class="opts" id="fins"></div>
         <label class="tg"><input type="checkbox" id="col"> Add a collar <small>same print as the label, 18% of the label price</small></label>
-        <div class="step">Tax</div>
-        <label class="tg"><input type="checkbox" id="tax" checked> Michigan 24% wholesale tax <small>on the jar price when you sell to a dispensary; bulk is shown untaxed, as a sale to a processor</small></label>
         <div class="step">Budtender tip</div>
-        <label class="fld" for="sp">Paid to the budtender per jar sold <span>(0 for none)</span><input id="sp" type="number" inputmode="decimal" min="0" step="0.25" value="4"></label>
+        <label class="fld" for="sp">Paid to the budtender per jar sold <span>(0 for none)</span><input id="sp" type="number" inputmode="decimal" min="0" step="0.25" value="0"></label>
       </div>
     </div>
 
     <div class="draft" id="draft" hidden>DRAFT &middot; jar price is a placeholder until set.</div>
     <a class="cta" id="cta" href="/configure/?p=miron-250-ml">Price my 250 ml labels &rarr;</a>
     <button class="printbtn" type="button" onclick="window.print()">Print / Save as PDF</button>
-    <p class="fine">Label prices are list, per lid + wrap set, with volume breaks: 500 pcs 5% off · 750 pcs 7% off · 1,000 pcs 10% off · over 1,000 talk to us. Default bulk price = Michigan Treasury average wholesale flower, Q3 2026 ($641.41/lb). Michigan's 24% wholesale tax (since 1/1/26) is charged on the first sale to a dispensary; bulk is shown untaxed, as a sale to a processor. MI sales tax on our invoice where it applies.</p>
+    <p class="fine">Label prices are list, per lid + wrap set, with volume breaks: 500 pcs 5% off · 750 pcs 7% off · 1,000 pcs 10% off · over 1,000 talk to us. Default bulk price = Michigan Treasury average wholesale flower, Q3 2026 ($641.41/lb). MI sales tax on our invoice where it applies.</p>
   </div>
 </div>
 <script>
 (function(){
-  var D={"labels":{"White Vinyl":{"short":"White","std":[2.0,2.9,3.85,4.7],"hb":null},"Holographic":{"short":"Holographic","std":[3.0,4.05,5.05,6.1],"hb":[3.85,4.85,5.9,6.95]}},"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"jar":[4.65,4.65,4.65],"collar":0.18,"tax":0.24,"bulkcap":1400,"draft":false,"g":14,"floor":50,"minj":50,"maxj":1000}, LB=453.592, FIN=['0 Flat','1 Spot Gloss','2 Standard','3 Pro'], SW={'White Vinyl':'white','Holographic':'holo'};
+  var D={"labels":{"White Vinyl":{"short":"White","std":[2.0,2.9,3.85,4.7],"hb":null},"Holographic":{"short":"Holographic","std":[3.0,4.05,5.05,6.1],"hb":[3.85,4.85,5.9,6.95]}},"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"jar":[4.5,4.5,4.5],"collar":0.18,"tax":0.24,"bulkcap":1400,"draft":false,"g":14,"floor":50,"minj":50,"maxj":1000}, LB=453.592, FIN=['0 Flat','1 Spot Gloss','2 Standard','3 Pro'], SW={'White Vinyl':'white','Holographic':'holo'};
   var S={mat:'Holographic',fin:2};
   function $(id){return document.getElementById(id);}
   function money(v,d){d=d==null?2:d;return (v<0?'-':'')+'$'+Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});}
@@ -173,7 +170,7 @@ dl.rc{display:grid;grid-template-columns:1fr auto;margin:14px 0 0;font-size:13.5
     var sp=Math.max(0,+$('sp').value||0), colOn=$('col').checked;
     var label=unitAt((hb?L.hb:L.std)[S.fin],Math.min(qty,D.maxj)), jar=D.jar[qty>=1000?2:qty>=500?1:0];
     var collar=colOn?Math.round(label*D.collar*100)/100:0;   // pricing_master.collar_price on the per-set price at this qty
-    var taxOn=$('tax').checked, tax=taxOn?Math.round(price*D.tax*100)/100:0;   // MI wholesale tax on the jar sale
+    var taxOn=false, tax=0;   // Shane 10/20: tax line removed to keep it simple
     var pack=Math.round((label+collar+jar)*100)/100, bulk=D.g*perLb/LB, keep=price-tax-pack-sp, gain=keep-bulk;
     var off=pct(Math.min(qty,D.maxj)), nxt=BRK.filter(function(q){return q>qty&&pct(q)>off;})[0];
     var blocked=price<D.floor||qty<D.minj;
@@ -193,7 +190,6 @@ dl.rc{display:grid;grid-template-columns:1fr auto;margin:14px 0 0;font-size:13.5
     // per jar
     $('dPrice').textContent=money(price); $('dBulk').textContent=money(bulk); $('dKeep').textContent=money(keep);
     $('dPack').textContent='-'+money(pack); $('dPackS').textContent='jar '+money(jar)+' + label '+money(label)+(colOn?' + collar '+money(collar):'');
-    $('dTaxT').hidden=$('dTax').hidden=!taxOn; $('dTax').textContent='-'+money(tax);
     $('dSpT').hidden=$('dSp').hidden=!sp; $('dSp').textContent='-'+money(sp);
     $('dGain').textContent=(gain>=0?'+':'')+money(gain); $('dGain').classList.toggle('pos',gain>=0); $('dGain').classList.toggle('neg',gain<0);
     if($('foldS')) $('foldS').textContent=L.short+(hb?' + white ink':'')+' · '+FIN[S.fin]+(colOn?' · collar':'')+' · '+(taxOn?'24% tax':'no tax')+' · '+(sp?money(sp)+' tip':'no tip');
