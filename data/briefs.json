@@ -1,7 +1,57 @@
 {
-  "updated": "2026-10-20",
+  "updated": "2026-10-21",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
+    {
+      "date": "2026-10-21",
+      "label": "Morning Brief",
+      "title": "Massachusetts Voters Crush Question 8 Repeal as Curaleaf-Aurora Feud Escalates; Delaware's THC Drink Law Kicks In",
+      "top": "Massachusetts' push to repeal legal marijuana sales is cratering at the ballot box: a new Suffolk University/Boston Globe poll found voters opposing the Question 8 repeal by a 71%-21% margin, and the Globe's own editorial board joined the \"No\" campaign, while a new Marijuana Moment/NuggMD quarterly poll found cannabis consumers souring further on the Trump administration as federal rescheduling remains stalled. In the business world, Curaleaf is publicly sparring with Aurora Cannabis's board after it unilaterally rejected Curaleaf's sweetened hostile-takeover bid, and Delaware's new hemp-THC beverage law takes effect today, letting liquor stores and dispensaries sell THC drinks ahead of the looming federal hemp deadline. Michigan's cannabis headlines this week are still dominated by the NFL rescinding Lions receiver Jameson Williams's celebration fine, six Detroit-area defendants charged in an armed, 200-pound cannabis heist in Warren, and two Upper Peninsula operators ditching the state's 24% wholesale tax for lower-tax Minnesota.",
+      "local": [
+        {
+          "text": "NFL rescinds fine against Lions WR Jameson Williams — The league reversed a fine over a touchdown celebration in which Williams mimed smoking, after his camp noted cannabis is legal in both Michigan and New York.",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-101926/"
+        },
+        {
+          "text": "Six Detroit-area residents charged with armed robbery in Warren — Police say the group arrived at a commercial cannabis facility on Lorna Avenue in a U-Haul and Camaro, held a security guard at gunpoint and tried to drive off with more than 200 pounds of weed; each defendant was arraigned on a $500,000 bond and must wear a GPS tether if released.",
+          "source": "Gander Newsroom / ClickOnDetroit",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-101926/"
+        },
+        {
+          "text": "Two Upper Peninsula operators quit Michigan for lower-tax Minnesota — A pair of U.P. cannabis businessmen left the state's industry to open a new dispensary, Dankz, in St. Cloud, Minnesota, citing Michigan's steeper tax burden under the 24% wholesale tax.",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/cannabis-news-101926/"
+        }
+      ],
+      "national": [
+        {
+          "text": "Poll: Massachusetts voters crush Question 8 repeal effort — A Suffolk University/Boston Globe poll of 500 likely voters found 71.4% opposed to the November ballot measure that would repeal legal recreational marijuana sales, versus just 21.4% in support.",
+          "source": "The Boston Globe",
+          "url": "https://www.bostonglobe.com/2026/10/20/metro/massachusetts-ballot-questions-suffolk-globe-poll/"
+        },
+        {
+          "text": "Boston Globe editorial board urges 'No' vote on Question 8 — The board cited more than $10 billion in legal marijuana sales since legalization and warned that repeal could push Massachusetts consumers to buy across state lines.",
+          "source": "The Boston Globe",
+          "url": "https://www.bostonglobe.com/2026/10/20/opinion/legal-marijuana-sales-repeal/"
+        },
+        {
+          "text": "Poll: cannabis consumers' support for Trump administration drops further as rescheduling stalls — The latest Marijuana Moment/NuggMD quarterly tracking poll found consumer approval of the administration's handling of marijuana policy has fallen sharply as the federal rescheduling process remains stalled.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/trumps-support-from-cannabis-consumers-dips-as-rescheduling-stalls-newsletter-october-21-2026"
+        },
+        {
+          "text": "Curaleaf challenges Aurora's rejection of its enhanced buyout bid — Curaleaf publicly criticized Aurora Cannabis's board for unilaterally rejecting its sweetened offer, which it says represents a 217% premium on an ex-cash basis; Aurora's board has unanimously urged shareholders not to tender their shares.",
+          "source": "Cannabis Business Times",
+          "url": "https://www.cannabisbusinesstimes.com/business-issues-benchmarks/mergers-and-acquisitions/news/15837873/curaleaf-challenges-auroras-unilateral-rejection-of-its-enhanced-proposal"
+        },
+        {
+          "text": "Delaware's hemp-THC beverage law takes effect today — House Bill 373 allows THC drinks to be sold to adults 21+ at licensed liquor stores and marijuana dispensaries, with potency caps by container size and tax provisions following in February 2027.",
+          "source": "The Marijuana Herald",
+          "url": "https://themarijuanaherald.com/2026/10/delaware-thc-beverage-law-takes-effect-tomorrow-october-21-allowing-sales-at-liquor-stores-and-marijuana-dispensaries"
+        }
+      ]
+    },
     {
       "date": "2026-10-20",
       "label": "Morning Brief",
