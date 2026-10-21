@@ -43,6 +43,8 @@ dl.rc{display:grid;grid-template-columns:1fr auto;margin:14px 0 0;font-size:13.5
 .cta{display:block;width:100%;margin-top:14px;padding:15px;border:0;border-radius:30px;background:var(--grad);color:#000;text-align:center;text-decoration:none;font-size:15px;font-weight:900;letter-spacing:.02em;box-shadow:0 8px 24px rgba(138,43,226,.22)}
 .printbtn{display:block;width:100%;margin-top:8px;padding:12px;border:1px solid var(--line);border-radius:30px;background:#fff;color:var(--paper);font:inherit;font-size:14px;font-weight:800;cursor:pointer}
 .phead{display:none}
+.sizes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.sizes button{padding:10px 6px;border-radius:12px;border:1px solid var(--line);background:#fff;color:var(--paper);font:inherit;font-size:15px;font-weight:900;cursor:pointer;line-height:1.2}.sizes button small{display:block;font-size:11.5px;font-weight:600;color:var(--muted)}.sizes button.on{border-color:var(--cy);box-shadow:0 0 0 1px var(--cy)}
+.fld input::placeholder{color:#B9AE98;font-weight:500;font-size:14px}
 .ans{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
 .tile{display:grid;gap:2px;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff}
 .tile span{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
@@ -50,7 +52,7 @@ dl.rc{display:grid;grid-template-columns:1fr auto;margin:14px 0 0;font-size:13.5
 .tile small{font-size:11.5px;color:var(--muted);line-height:1.35}
 .tile.jar{border-color:var(--cy);box-shadow:0 0 0 1px var(--cy)}
 .more{margin:12px 2px 0;font-size:19px;font-weight:800;line-height:1.25}.more b{font-size:26px;background:var(--gradtext);-webkit-background-clip:text;background-clip:text;color:transparent}
-.be{margin:8px 2px 0;padding:10px 12px;border-radius:10px;background:#fff;border:1px dashed var(--line);font-size:14px;font-weight:700;line-height:1.35}.be b{color:var(--cy)}
+.be{margin:4px 2px 0;font-size:13.5px;font-weight:600;color:var(--muted);line-height:1.35}.be b{color:var(--paper)}
 .more.neg b{background:none;color:var(--bad);-webkit-text-fill-color:var(--bad)}
 .fld{margin-top:10px;display:flex;flex-wrap:wrap;column-gap:4px;row-gap:4px}.fld span{font-weight:600}.fld input{flex:1 0 100%}
 .step{font-size:11px;margin:20px 2px 2px}.nt{font-weight:600;letter-spacing:0;text-transform:none}
@@ -94,57 +96,56 @@ dl.rc{display:grid;grid-template-columns:1fr auto;margin:14px 0 0;font-size:13.5
 <div class="wrap">
   <div class="card">
     <div class="phead"><b>The Sticky Trap &middot; Jar ROI</b><span>thestickytrap.app/roi &middot; <span id="pdate"></span></span></div>
-    <p class="sec">Miron 250 ml &middot; 14 g a jar</p>
     <h1>Is a branded jar worth it?</h1>
+    <div class="sizes" id="sizes"></div>   <!-- Shane 10/20: 150 ml + 250 ml, the two most popular -->
 
+    <div class="step">Your numbers</div>
+    <label class="fld" for="qty">How many jars<input id="qty" type="number" inputmode="numeric" min="50" step="50" value="500"></label>
+    <div class="brk" id="brk"></div>
+    <p class="hint" id="brkTxt"></p>
+    <label class="fld" for="bulk">Your bulk price, per pound<input id="bulk" type="number" inputmode="decimal" min="0" max="1400" step="10" value="" placeholder="Michigan average &asymp; $640"></label>
+    <label class="fld" for="price">You sell a jar for<input id="price" type="number" inputmode="decimal" min="25" step="1" value="55"></label>
+
+    <div class="step">Your label</div>
+    <div class="opts" id="mats"></div>
+    <label class="tg" id="hbrow"><input type="checkbox" id="hb" checked> White ink</label>
+    <div class="step">Texture</div>
+    <div class="opts" id="fins"></div>
+    <label class="tg"><input type="checkbox" id="col"> Add a collar</label>
+    <label class="fld" for="sp">Budtender tip per jar<input id="sp" type="number" inputmode="decimal" min="0" step="0.25" value="0"></label>
+
+    <div class="step">Your answer</div>   <!-- Shane 10/20: answer at the bottom, after the inputs -->
+    <div class="warn" id="warn" hidden></div>
     <div class="ans">
       <div class="tile"><span>Sell it bulk</span><b id="aBulk"></b><small id="aBulkS"></small></div>
       <div class="tile jar"><span>Sell it in jars</span><b id="aJar"></b><small id="aJarS"></small></div>
     </div>
     <div class="more" id="more"></div>
     <div class="be" id="be"></div>
-    <div class="warn" id="warn" hidden></div>
 
-    <div class="step">Your numbers</div>
-    <label class="fld" for="qty">How many jars<input id="qty" type="number" inputmode="numeric" min="50" step="50" value="500"></label>
-    <div class="brk" id="brk"></div>
-    <p class="hint" id="brkTxt"></p>
-    <label class="fld" for="bulk">Your bulk price, per pound<input id="bulk" type="number" inputmode="decimal" min="0" max="1400" step="10" value="640"></label>
-    <label class="fld" for="price">You sell a jar for <span>(lowest $50)</span><input id="price" type="number" inputmode="decimal" min="50" step="1" value="55"></label>
-
-    <div class="step">Per jar</div>
     <dl class="rc">
       <dt>You sell it for</dt><dd id="dPrice"></dd>
       <dt>Packaging <small id="dPackS"></small></dt><dd id="dPack"></dd>
       <dt id="dSpT">Budtender tip</dt><dd id="dSp"></dd>
       <dt class="t">You keep, per jar</dt><dd class="t" id="dKeep"></dd>
-      <dt>Same 14 g sold bulk</dt><dd id="dBulk"></dd>
-      <dt class="t">More than bulk, per jar</dt><dd class="t" id="dGain"></dd>   <!-- Shane 10/14: split keep vs over-bulk -->
     </dl>
 
-    <div class="fold" id="fold">   <!-- Shane 10/14: no fold header, options always shown -->
-      <div class="foldin">
-        <div class="step">Label</div>
-        <div class="opts" id="mats"></div>
-        <label class="tg" id="hbrow"><input type="checkbox" id="hb" checked> White ink <small>under the art, keeps colors true on holo</small></label>
-        <div class="step">Texture <span class="nt">&middot; number = layers of raised gloss</span></div>
-        <div class="opts" id="fins"></div>
-        <label class="tg"><input type="checkbox" id="col"> Add a collar <small>same print as the label, 18% of the label price</small></label>
-        <div class="step">Budtender tip</div>
-        <label class="fld" for="sp">Paid to the budtender per jar sold <span>(0 for none)</span><input id="sp" type="number" inputmode="decimal" min="0" step="0.25" value="0"></label>
-      </div>
-    </div>
-
     <div class="draft" id="draft" hidden>DRAFT &middot; jar price is a placeholder until set.</div>
-    <a class="cta" id="cta" href="/configure/?p=miron-250-ml">Price my 250 ml labels &rarr;</a>
-    <button class="printbtn" type="button" onclick="window.print()">Print / Save as PDF</button>
-    <p class="fine">Label prices are list, per lid + wrap set, with volume breaks: 500 pcs 5% off · 750 pcs 7% off · 1,000 pcs 10% off · over 1,000 talk to us. Default bulk price = Michigan Treasury average wholesale flower, Q3 2026 ($641.41/lb). MI sales tax on our invoice where it applies.</p>
+    <a class="cta" id="cta" href="/configure/?p=miron-250-ml">Price my labels &rarr;</a>
+    <button class="printbtn" type="button" onclick="window.print()">Print</button>
+    <p class="fine">List prices. MI sales tax where it applies.</p>
   </div>
 </div>
 <script>
 (function(){
-  var D={"labels":{"White Vinyl":{"short":"White","std":[2.0,2.9,3.85,4.7],"hb":null},"Holographic":{"short":"Holographic","std":[3.0,4.05,5.05,6.1],"hb":[3.85,4.85,5.9,6.95]}},"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"jar":[4.5,4.5,4.5],"collar":0.18,"tax":0.24,"bulkcap":1400,"draft":false,"g":14,"floor":50,"minj":50,"maxj":1000}, LB=453.592, FIN=['0 Flat','1 Spot Gloss','2 Standard','3 Pro'], SW={'White Vinyl':'white','Holographic':'holo'};
+  var D={"sizes":{"150":{"product":"Miron 150 ml","ml":150,"g":7,"floor":25,"jar":3.0,"price":29,"labels":{"White Vinyl":{"short":"White","std":[1.65,2.35,3.0,3.75],"hb":null},"Holographic":{"short":"Holographic","std":[2.2,2.75,3.3,3.9],"hb":[2.75,3.3,3.9,4.45]}},"slug":"miron-150-ml"},"250":{"product":"Miron 250 ml","ml":250,"g":14,"floor":50,"jar":4.5,"price":55,"labels":{"White Vinyl":{"short":"White","std":[2.0,2.9,3.85,4.7],"hb":null},"Holographic":{"short":"Holographic","std":[3.0,4.05,5.05,6.1],"hb":[3.85,4.85,5.9,6.95]}},"slug":"miron-250-ml"}},"size":"250","bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"collar":0.18,"tax":0.24,"bulkcap":1400,"draft":false,"minj":50,"maxj":1000}, LB=453.592, FIN=['0 Flat','1 Spot Gloss','2 Standard','3 Pro'], SW={'White Vinyl':'white','Holographic':'holo'};
   var S={mat:'Holographic',fin:2};
+  // size switch: copy the chosen size's numbers onto D so the math below stays one code path
+  function setSize(k,keepPrice){var z=D.sizes[k]; if(!z) return; S.size=k; D.labels=z.labels; D.g=z.g; D.floor=z.floor; D.jar=[z.jar,z.jar,z.jar];
+    if(!keepPrice) document.getElementById('price').value=z.price; document.getElementById('price').min=z.floor;
+    var c=document.getElementById('cta'); c.href='/configure/?p='+z.slug; c.innerHTML='Price my '+z.ml+' ml labels &rarr;';
+    try{history.replaceState(null,'','?s='+k);}catch(e){}
+    [].forEach.call(document.getElementById('sizes').children,function(b){b.classList.toggle('on',b.dataset.s===k);});}
   function $(id){return document.getElementById(id);}
   function money(v,d){d=d==null?2:d;return (v<0?'-':'')+'$'+Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});}
   function cmult(q){for(var i=0;i<D.bands.length;i++){if(q<=D.bands[i][0])return D.bands[i][1];}return D.bands[D.bands.length-1][1];}
@@ -160,6 +161,7 @@ dl.rc{display:grid;grid-template-columns:1fr auto;margin:14px 0 0;font-size:13.5
     opts($('fins'),FIN.map(function(n,i){var w=n.split(' ');return {k:i,h:'<span class="lv">'+w[0]+'</span>'+w.slice(1).join(' ')};}),S.fin,function(k){S.fin=k;});
     calc();
   }
+  Object.keys(D.sizes).forEach(function(k){var z=D.sizes[k], b=document.createElement('button');b.type='button';b.dataset.s=k;b.innerHTML=z.ml+' ml<small>'+z.g+' g a jar</small>';b.onclick=function(){setSize(k);draw();};$('sizes').appendChild(b);});
   var BRK=[100].concat(D.bands.slice(1).map(function(b,i){return D.bands[i][0]+1;}));   // break points for the hint
   var CHIPS=[500,750,1000];   // Shane 10/14: 500 / 750 / 1k pricing
   CHIPS.forEach(function(q){var b=document.createElement('button');b.type='button';b.dataset.q=q;b.textContent=q>=1000?(q/1000)+'k':q;b.onclick=function(){$('qty').value=q;calc();};$('brk').appendChild(b);});
@@ -173,25 +175,25 @@ dl.rc{display:grid;grid-template-columns:1fr auto;margin:14px 0 0;font-size:13.5
     var taxOn=false, tax=0;   // Shane 10/20: tax line removed to keep it simple
     var pack=Math.round((label+collar+jar)*100)/100, bulk=D.g*perLb/LB, keep=price-tax-pack-sp, gain=keep-bulk;
     var off=pct(Math.min(qty,D.maxj)), nxt=BRK.filter(function(q){return q>qty&&pct(q)>off;})[0];
-    var blocked=price<D.floor||qty<D.minj;
-    var msg=perLbIn>D.bulkcap?'Bulk price tops out at $'+D.bulkcap.toLocaleString()+' a pound. Shown at $'+D.bulkcap.toLocaleString()+'.':price<D.floor?"A 14 g jar can't sell for less than $"+D.floor+'.':qty<D.minj?'Minimum '+D.minj+' jars.':qty>D.maxj?'Over 1,000 jars: talk to us. Shown at the 1,000 price.':'';
+    var noBulk=$('bulk').value.trim()==='';   // Shane 10/20: bulk starts blank
+    var blocked=noBulk||price<D.floor||qty<D.minj;
+    var msg=perLbIn>D.bulkcap?'Bulk price tops out at $'+D.bulkcap.toLocaleString()+' a pound. Shown at $'+D.bulkcap.toLocaleString()+'.':price<D.floor?'A '+D.g+" g jar can't sell for less than $"+D.floor+'.':qty<D.minj?'Minimum '+D.minj+' jars.':qty>D.maxj?'Over 1,000 jars: talk to us. Shown at the 1,000 price.':'';
     $('warn').hidden=!msg; $('warn').textContent=msg;
     // the answer: two plain numbers, then the difference
-    $('aBulk').textContent=blocked?'–':money(bulk*qty,0); $('aBulkS').textContent=(qty*D.g/LB).toFixed(1)+' lb at '+money(perLb,0)+'/lb';
-    $('aJar').textContent=blocked?'–':money(keep*qty,0); $('aJarS').textContent=qty.toLocaleString()+' jars at '+money(price,0)+', after '+(taxOn?'tax, ':'')+'packaging'+(sp?' and tips':'');
-    $('more').className='more'+(gain<0?' neg':''); $('more').innerHTML=blocked?'Fix the number below to see your answer.':'You make <b>'+money(Math.abs(gain*qty),0)+'</b> '+(gain>=0?'more':'less')+' in jars.';
+    $('aBulk').textContent=blocked?'–':money(bulk*qty,0); $('aBulkS').textContent=(qty*D.g/LB).toFixed(1)+' lb';
+    $('aJar').textContent=(blocked&&!(noBulk&&price>=D.floor&&qty>=D.minj))?'–':money(keep*qty,0); /* jars side needs no bulk price */ $('aJarS').textContent='after packaging'+(sp?' and tips':'');
+    $('more').className='more'+(gain<0?' neg':''); $('more').innerHTML=noBulk?'Add your bulk price above to see your answer.':blocked?'Fix the number above to see your answer.':'You make <b>'+money(Math.abs(gain*qty),0)+'</b> '+(gain>=0?'more':'less')+' in jars.';
     // break-even: the jar price where jars and bulk pay the same (Shane 10/14: get to the point)
     var be=Math.ceil((bulk+pack+sp)/(1-(taxOn?D.tax:0))*100)/100;
-    $('be').hidden=qty<D.minj;
-    $('be').innerHTML='Break-even: <b>'+money(be)+' a jar</b>. '+(be<D.floor?'That&rsquo;s under the $'+D.floor+' floor, so jars always win.':'Sell above it and jars win.');
+    $('be').hidden=blocked;
+    $('be').innerHTML='Break-even: <b>'+money(be)+' a jar</b>.';
     // quantity break
     [].forEach.call($('brk').children,function(b){b.classList.toggle('on',+b.dataset.q===qty);});
-    $('brkTxt').innerHTML=off?'Labels are <b>'+off+'% off</b> at this many.'+(nxt?' At '+(nxt>=1000?(nxt/1000)+'k':nxt)+' they drop to '+pct(nxt)+'% off.':''):'Labels at full price under 500. At 500 they drop to 5% off.';
+    $('brkTxt').innerHTML=off?'Labels <b>'+off+'% off</b>.':'Labels at full price under 500.';
     // per jar
-    $('dPrice').textContent=money(price); $('dBulk').textContent=money(bulk); $('dKeep').textContent=money(keep);
+    $('dPrice').textContent=money(price); $('dKeep').textContent=money(keep);
     $('dPack').textContent='-'+money(pack); $('dPackS').textContent='jar '+money(jar)+' + label '+money(label)+(colOn?' + collar '+money(collar):'');
     $('dSpT').hidden=$('dSp').hidden=!sp; $('dSp').textContent='-'+money(sp);
-    $('dGain').textContent=(gain>=0?'+':'')+money(gain); $('dGain').classList.toggle('pos',gain>=0); $('dGain').classList.toggle('neg',gain<0);
     if($('foldS')) $('foldS').textContent=L.short+(hb?' + white ink':'')+' · '+FIN[S.fin]+(colOn?' · collar':'')+' · '+(taxOn?'24% tax':'no tax')+' · '+(sp?money(sp)+' tip':'no tip');
     cta();
   }
@@ -199,6 +201,8 @@ dl.rc{display:grid;grid-template-columns:1fr auto;margin:14px 0 0;font-size:13.5
   $('pdate').textContent=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
   function cta(){}   // textures stop at 3 Pro, same as the configurator
   document.querySelectorAll('input').forEach(function(el){el.addEventListener('input',calc);});
+  var q=(location.search.match(/[?&]s=(\d+)/)||[])[1];
+  setSize(D.sizes[q]?q:D.size);
   draw();
 })();
 </script>
