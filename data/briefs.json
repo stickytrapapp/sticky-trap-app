@@ -1,7 +1,57 @@
 {
-  "updated": "2026-10-21",
+  "updated": "2026-10-22",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
+    {
+      "date": "2026-10-22",
+      "label": "Morning Brief",
+      "title": "DEA Rebuffs Bid to Reopen Rescheduling Hearing as Curaleaf-Aurora Fight Drags On; Michigan's Ballot Guide Previews Nov. 3 Stakes for Weed",
+      "top": "Michigan's cannabis industry is bracing for a Nov. 3 election that could reshape dispensary caps and the governor's race fight over the 24% wholesale tax: a new voter guide lays out the stakes, Niles voters will decide whether to cap the city at five marijuana retailers, and NORML is urging the Sixth Circuit to reconsider a ruling that voided a $31.8 million verdict for Michigan grower Hello Farms against Curaleaf subsidiaries. Nationally, the DEA told its administrative law judge it won't support rescheduling opponents' bid to reopen the hearing for new testimony, Curaleaf is pressing its hostile takeover bid for Aurora Cannabis after Aurora's board urged shareholders to reject it again, a new UMass Amherst/WCVB poll found Massachusetts' marijuana-repeal measure trailing 61%-31%, and the Massachusetts House advanced a bill letting veterans get medical marijuana without a doctor's recommendation.",
+      "local": [
+        {
+          "text": "Michigan stoner's guide to voting in 2026 — With early voting opening Oct. 24, a new voter guide walks through how the governor's race, all 148 Legislature seats and a wave of local ballot questions on dispensary caps and bans could reshape the state's cannabis market.",
+          "source": "Gander Newsroom",
+          "url": "https://gandernewsroom.com/news/cannabis/michigan-stoner-election-guide/"
+        },
+        {
+          "text": "Niles ballot measure would cap the city at five marijuana retailers — A citizen-petitioned amendment on the Nov. 3 ballot would limit the city to five provisioning centers, the number already licensed, after a resident-led group gathered enough signatures to force the vote.",
+          "source": "WNDU",
+          "url": "https://www.wndu.com/2026/10/21/niles-ballot-measure-proposes-limit-big-marijuana-dispensaries/"
+        },
+        {
+          "text": "NORML urges Sixth Circuit to reconsider ruling against Michigan grower Hello Farms — NORML's legal committee, led by Detroit attorney William Swor, filed a brief backing Hello Farms' bid for a rehearing after a panel voided its $31.8 million verdict against Curaleaf subsidiaries, ruling federal courts can't enforce cannabis contracts.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/norml-says-federal-prohibition-shouldnt-make-marijuana-industry-contracts-unenforceable"
+        }
+      ],
+      "national": [
+        {
+          "text": "DEA opposes rescheduling opponents' bid to reopen hearing — The DEA told its chief administrative law judge it won't support prohibitionist groups' request for new testimony and document discovery in the marijuana rescheduling case, even as it doesn't object to adding a GAO report critical of the scheduling process to the record.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/dea-opposes-cannabis-rescheduling-opponents-move-to-delay-hearing-newsletter-october-22-2026"
+        },
+        {
+          "text": "Curaleaf presses hostile bid for Aurora Cannabis as board urges shareholders to reject it again — Aurora's special committee says it's weighing other strategic alternatives, reportedly including interest from Canadian producer Organigram, after rebuffing Curaleaf's sweetened $5-per-share offer for a second time.",
+          "source": "MJBizDaily",
+          "url": "https://mjbizdaily.com/news/aurora-cannabis-board-rebuffs-curaleaf-takeover-again-welcomes-other-bids/618657/"
+        },
+        {
+          "text": "New poll shows Massachusetts cannabis-repeal measure trailing badly — A UMass Amherst/WCVB poll of 800 registered voters found 61% opposed to Question 8's repeal of retail marijuana sales and just 31% in favor, with Question 8 polling as the least popular of the nine ballot questions surveyed.",
+          "source": "WBUR",
+          "url": "https://www.wbur.org/news/2026/10/19/massachusetts-governors-race-ballot-question-poll"
+        },
+        {
+          "text": "Massachusetts House advances bill letting veterans get medical marijuana without a doctor's recommendation — The chamber gave second-reading approval to Gov. Maura Healey's proposal, which would also add PTSD, opioid use disorder and chronic pain as qualifying conditions; it still needs a third reading and Senate passage.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/massachusetts-bill-to-let-military-veterans-get-medical-marijuana-without-a-doctors-recommendation-advances/"
+        },
+        {
+          "text": "Two Utica firefighters sue over medical marijuana discipline — In an op-ed, one of two New York firefighters suspended after testing positive for cannabis metabolites argues both were certified medical patients never accused of being impaired on duty, and describes their suit against the city and department.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/why-two-new-york-firefighters-are-suing-the-government-over-the-right-to-use-medical-marijuana-op-ed"
+        }
+      ]
+    },
     {
       "date": "2026-10-21",
       "label": "Morning Brief",
