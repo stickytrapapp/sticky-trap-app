@@ -77,14 +77,14 @@ input,textarea{width:100%;padding:11px;border-radius:10px;border:1px solid var(-
   </div>
 </div>
 <script>
-var D={"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"breaks":[[500,5],[750,7],[1000,10]],"minq":5,"maxq":1000,"step":5,"minorder":50,"api":"https://script.google.com/macros/s/AKfycbzgctrnkyWjVnhzioE_B4x8J2pyi4WzRSJG2e00Y_Y5cz0vQx-q5jhvOhMWg2x-K9ciFw/exec","hub":"https://script.google.com/macros/s/AKfycbyNQSfrtPhEgLtNt8IPIQ4z0vF265j3AC-udRJOyF7MLcS4MhLTAL4SESs_AGj0JS8RdQ/exec","maxmb":20};
+var D={"bands":[[499,1.0],[749,0.95],[999,0.93],[1000,0.9]],"breaks":[[500,5],[750,7],[1000,10]],"slaps":["3\" Slap","4\" Slap"],"sbands":[[249,1.0],[499,0.93],[749,0.9],[999,0.88],[1000,0.85]],"sbreaks":[[250,7],[500,10],[750,12],[1000,15]],"minq":5,"maxq":1000,"step":5,"minorder":50,"api":"https://script.google.com/macros/s/AKfycbzgctrnkyWjVnhzioE_B4x8J2pyi4WzRSJG2e00Y_Y5cz0vQx-q5jhvOhMWg2x-K9ciFw/exec","hub":"https://script.google.com/macros/s/AKfycbyNQSfrtPhEgLtNt8IPIQ4z0vF265j3AC-udRJOyF7MLcS4MhLTAL4SESs_AGj0JS8RdQ/exec","maxmb":20};
 (function(){
   var $=function(id){return document.getElementById(id);};
   var money=function(v){var f=v.toFixed(2).split('.');return '$'+(+f[0]).toLocaleString()+'.'+f[1];}, fmt=function(n){return (+n).toLocaleString();};
   var esc=function(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
   var SHORT={'White Vinyl':'White','Holographic':'Holo','Gold':'Gold','Clear':'Clear','Spot Gloss UV':'Spot Gloss','Standard Embossing':'Standard','Flat':'Flat','Pro':'Pro'};   // 2026-09-21: the basket shows the Menu's names, not the pricing keys;
-  function cmult(q){for(var i=0;i<D.bands.length;i++){if(q<=D.bands[i][0])return D.bands[i][1];}return D.bands[D.bands.length-1][1];}
-  function unit(l){ var u=Math.floor((+l.pr||0)*cmult(l.qty)*100+0.5)/100; if(l.deal&&l.qty>=(l.deal.fromQty||0)) u=Math.ceil(u*(1-l.deal.off)*100)/100; return u; }
+  function cmult(q,p){var B=(D.slaps||[]).indexOf(p)>=0?D.sbands:D.bands;for(var i=0;i<B.length;i++){if(q<=B[i][0])return B[i][1];}return B[B.length-1][1];}   // 10/23: slaps have their own breaks
+  function unit(l){ var u=Math.floor((+l.pr||0)*cmult(l.qty,l.p)*100+0.5)/100; if(l.deal&&l.qty>=(l.deal.fromQty||0)) u=Math.ceil(u*(1-l.deal.off)*100)/100; return u; }
   function clampQ(q){ q=Math.round((+q||D.minq)/D.step)*D.step; return Math.max(D.minq,Math.min(D.maxq,q)); }
   var cart=[]; try{ cart=JSON.parse(localStorage.getItem('st_cart')||'[]')||[]; }catch(e){}
   function save(){ try{ localStorage.setItem('st_cart',JSON.stringify(cart)); }catch(e){} }

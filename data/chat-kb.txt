@@ -1,4 +1,4 @@
-THE STICKY TRAP -- CHAT KNOWLEDGE BASE (auto-generated 2026-10-20 from the live app by Price Engine/make_chat_kb.py; do not hand-edit -- house facts live in Price Engine/chat-facts.txt)
+THE STICKY TRAP -- CHAT KNOWLEDGE BASE (auto-generated 2026-10-23 from the live app by Price Engine/make_chat_kb.py; do not hand-edit -- house facts live in Price Engine/chat-facts.txt)
 
 == About The Sticky Trap ==
 The Sticky Trap is a design house and in-house print shop in Ann Arbor, Michigan: branding, custom art, stickers, labels, promotionals and merch. Motto: "Let's Stick Together."
@@ -10,8 +10,8 @@ Shipping and rush ARE covered in the house facts below (flat-rate shipping added
 Menu tab: open a product, set the quantity, tap a price to add it to the basket. The basket can Email my order, Text order, Copy text, or "Upload art & get your quote" (name, email, phone, art files up to ~20 MB, deadline). Bigger files: email them.
 Quotes cost nothing: the "Start a project -- get a quote" button on the Connect tab and the basket's "Upload art & get your quote" both just send us the job, and a quote is never a charge. A CARD ORDER is different: when a customer pays by card in the basket, the card is charged when the order is placed, not when the proof is approved. The proof still comes before anything prints and two rounds of changes are free. If they cancel before we print, we refund what they paid less any design, pre-press or proofing already done; once it is on the press it cannot be cancelled.
 Minimum order: $50 per order. Quantities step by 5 in the app, from 5 up to 1,000; more than 1,000 is a custom quote (call us).
-Volume price breaks on the per-piece menu price: 500+ pcs 5% off, 750+ pcs 7% off, 1,000+ pcs 10% off. Under 500 pcs pays the menu price.
-Example: 3" Slap, White Vinyl, Flat is $0.45 each -> 100 pcs = $45.00; 500 pcs = 500 x $0.45 x 0.95 = $213.75.
+Volume price breaks on the per-piece menu price. SLAPS (3" Slap, 4" Slap) have their own: 250+ pcs 7% off, 500+ pcs 10% off, 750+ pcs 12% off, 1,000+ pcs 15% off; under 250 pcs pays the menu price. EVERYTHING ELSE: 500+ pcs 5% off, 750+ pcs 7% off, 1,000+ pcs 10% off; under 500 pcs pays the menu price.
+Example: 3" Slap, White Vinyl, Flat is $0.50 each -> 100 pcs = $50.00; 500 pcs = 500 x $0.50 x 0.90 = $225.00.
 
 == Texture levels (every product, every material) ==
 The menu calls the finish tiers "textures"; the number is the layers of UV gloss.
@@ -125,7 +125,7 @@ Do you price match?
 Found a better price? Send us the quote and we’ll see what we can do.
 <section class="view connectbanner"
 
-== Price list: per piece, USD, at the menu quantity (5-499 pcs); apply the volume breaks above for 500+ ==
+== Price list: per piece, USD, at the menu quantity (slaps 5-249 pcs, everything else 5-499 pcs); apply the volume breaks above past that ==
 Format: material: finish $price (HoloBrite $price where offered).
 
 [Slaps] Die-cut stickers. Pick either cut for the same price: Square Backer (on a square sheet) or Contour Cut (trimmed to the art's outline).

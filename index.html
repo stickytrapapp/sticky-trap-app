@@ -665,7 +665,8 @@
 #stmenu .qi2:focus{border-color:var(--cy)}
 #stmenu .qi2::-webkit-outer-spin-button, #stmenu .qi2::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 #stmenu .volnudge{display:block;width:100%;margin:9px 0 0;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.4);color:#4ade80;font-weight:800;font-size:12.5px;padding:9px 12px;border-radius:10px;cursor:pointer;font-family:inherit;text-align:center;transition:.15s}
-#stmenu .volnudge:hover{background:rgba(34,197,94,.2)}
+#stmenu .volnudge[hidden]{display:none}   /* 10/23: display:block was beating [hidden], so the nudge never went away */
+.volnudge:hover{background:rgba(34,197,94,.2)}
 #stmenu .volnudge:active{transform:translateY(1px)}
 #stmenu .volnudge b{color:#4ade80}
 #stmenu .qquick{display:flex;gap:6px;flex-wrap:wrap;padding:2px 6px 0}
@@ -985,7 +986,7 @@
   <div class="dfoot">
     <div class="sub-row"><span class="sl">Subtotal</span><span class="sv" id="subtotal">$0.00</span></div>
     <div class="dmin" id="dmin" hidden></div>
-    <p class="fine">$50 minimum order &middot; Price breaks &mdash; 500 pcs 5% off &middot; 750 pcs 7% off &middot; 1,000 pcs 10% off &middot; over 1,000 custom quote &middot; Pre-press set-up is assessed per design once we see your art.</p>
+    <p class="fine">$50 minimum order &middot; Price breaks &mdash; slaps: 250 pcs 7% off &middot; 500 pcs 10% off &middot; 750 pcs 12% off &middot; 1,000 pcs 15% off &middot; over 1,000 custom quote; everything else: 500 pcs 5% off &middot; 750 pcs 7% off &middot; 1,000 pcs 10% off &middot; over 1,000 custom quote &middot; Pre-press set-up is assessed per design once we see your art.</p>
     <button class="cta" id="emailbtn">Email my order</button>
     <div class="cta-row"><button class="cta cta2" id="smsbtn">Text order</button><button class="cta cta2" id="copybtn">Copy text</button></div>
     <button class="clearbtn" id="clearbtn">Clear basket</button>
@@ -999,15 +1000,13 @@
   var MINQ=5, MAXQ=1000, STEP=5, SHOPVOL=100, MINORDER=50;   // $50 minimum ORDER; qty floor 5 in steps of 5
   // qty bands by upper bound (from pricing_master.VOL_BANDS): list price to the first break, then the curve; >1000 = custom quote
   var BANDS=[[499,1.00],[749,0.95],[999,0.93],[1000,0.90]];
-  function cmult(q){for(var i=0;i<BANDS.length;i++){if(q<=BANDS[i][0])return BANDS[i][1];}return BANDS[BANDS.length-1][1];}
-  // next volume break just above q: bump 5 past a band edge to unlock the better rate on the whole order
-  function nextBreak(q){
-    if(q<500) return {add:500-q, pct:5, target:500};
-    if(q<750) return {add:750-q, pct:7, target:750};
-    if(q<1000) return {add:1000-q, pct:10, target:1000};
-    return null;
-  }
-  function unit(it){return Math.floor(it.pr*cmult(it.qty)*100+0.5)/100;}
+  // 10/23: Slaps have their OWN breaks (pricing_master.SLAP_VOL_BANDS: 250/500/750/1,000 = 7/10/12/15%); everything else keeps BANDS
+  var SBANDS=[[249,1.00],[499,0.93],[749,0.90],[999,0.88],[1000,0.85]], SLAPS=["3\" Slap", "4\" Slap"];
+  function bandsFor(p){return SLAPS.indexOf(p)>=0?SBANDS:BANDS;}
+  function cmult(q,p){var B=bandsFor(p);for(var i=0;i<B.length;i++){if(q<=B[i][0])return B[i][1];}return B[B.length-1][1];}
+  // next volume break just above q: bump past a band edge to unlock the better rate on the whole order
+  function nextBreak(q,p){var B=bandsFor(p);for(var i=0;i<B.length-1;i++){if(q<=B[i][0]){var t=B[i][0]+1;return {add:t-q,pct:Math.round((1-B[i+1][1])*100),target:t};}}return null;}
+  function unit(it){return Math.floor(it.pr*cmult(it.qty,it.p)*100+0.5)/100;}
   var CART=[]; try{CART=JSON.parse(localStorage.getItem('st_cart')||'[]')||[];}catch(e){CART=[];}
   var $=function(id){return ROOT.querySelector('#'+id);};
   function save(){try{localStorage.setItem('st_cart',JSON.stringify(CART));}catch(e){}}
@@ -1074,12 +1073,12 @@
   // open the first product by default so the layout reads at a glance
   /* products start collapsed for a cleaner overview */
   // per-product quantity + tap-a-material-to-select + Add-per-row
-  function fmtVol(base,v){return money(Math.floor(base*cmult(v)*100+0.5)/100);}
-  function discLabel(v){var m=cmult(v);return m>=1?'':('-'+Math.round((1-m)*100)+'% off');}
+  function fmtVol(base,v,p){return money(Math.floor(base*cmult(v,p)*100+0.5)/100);}
+  function discLabel(v,p){var m=cmult(v,p);return m>=1?'':('-'+Math.round((1-m)*100)+'% off');}
   function snapQ(x){return Math.max(MINQ,Math.min(MAXQ,Math.round((x||MINQ)/5)*5));}
   var MATPANELS=[];   // one setter per product panel, so a material pick syncs everywhere
   ROOT.querySelectorAll('.accpanel').forEach(function(panel){
-    var qi=panel.querySelector('.qi2'), qd=panel.querySelector('.qdisc');
+    var qi=panel.querySelector('.qi2'), qd=panel.querySelector('.qdisc'), _pb=panel.querySelector('.pbuy'), PP=_pb?_pb.getAttribute('data-p'):'';
     function pq(){return snapQ(parseInt(qi.value,10));}
     function actPr(b){
       var box=b.closest('.matbox'), chk=box?box.querySelector('.hbchk'):null, hb=b.getAttribute('data-hb');
@@ -1088,9 +1087,9 @@
     function refresh(){
       var q=pq();
       if(document.activeElement!==qi) qi.value=q;
-      if(qd) qd.textContent=discLabel(q);
-      panel.querySelectorAll('.pbuy').forEach(function(b){var pr=b.querySelector('.pmpr'); if(pr) pr.textContent=fmtVol(actPr(b),q);});
-      var nb=nextBreak(q), nudge=panel.querySelector('.volnudge');
+      if(qd) qd.textContent=discLabel(q,PP);
+      panel.querySelectorAll('.pbuy').forEach(function(b){var pr=b.querySelector('.pmpr'); if(pr) pr.textContent=fmtVol(actPr(b),q,PP);});
+      var nb=nextBreak(q,PP), nudge=panel.querySelector('.volnudge');
       if(nb && nb.add<=55){
         if(!nudge){ nudge=document.createElement('button'); nudge.type='button'; nudge.className='volnudge';
           var qbar=panel.querySelector('.qbar');
