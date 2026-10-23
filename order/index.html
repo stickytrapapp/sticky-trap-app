@@ -184,7 +184,7 @@
   </div>
 
   <div id="result" class="card hidden"></div>
-  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-09-29k</div>
+  <div class="hint" style="text-align:center;margin:14px 0 0;opacity:.6">Order Pad build 2026-10-23a</div>
 </div>
 
 <div class="bar hidden" id="bar">
@@ -384,14 +384,21 @@ document.addEventListener('change', function(e){ var b = e.target.closest && e.t
 // 9/22 Shane: "for vessel size add what is on the menu ... with a new plus add on" - the menu's own vessels,
 // spelled the way pricing_master spells them so the builder can price a new item straight off the menu.
 var VESSEL_LIST = ['3" Slap', '4" Slap', '5" Slap', '6" Slap', '4x5 Deli', 'o2 Standard', 'o2 Bucket', 'Pop Top', 'Tube 95 mm', 'Tube 65 mm',
-                   'Miron 5 ml (Puck)', 'Miron 100 ml', 'Miron 150 ml', 'Miron 250 ml', 'Miron 500 ml',
+                   'Miron 5 ml (Puck)', 'Bottom label (5 ml jar)', 'Miron 100 ml', 'Miron 150 ml', 'Miron 250 ml', 'Miron 500 ml',
                    'Tip Band', 'Lighter Wrap (Bic)', 'Lighter + Wrap, applied', 'Lighter + Wrap, applied (Blackout)'];   // 9/29 Shane: wrap only / we supply the lighter + apply
 var VESSELS = '<option value="">Vessel / size</option>'
             + VESSEL_LIST.map(function(v){ return '<option>' + v + '</option>'; }).join('')
             + '<option value="__size__">Custom size slap (W x H)…</option><option value="__sheet__">Sheet (W x H)…</option>'   // 10/14: size grid
             + '<option value="__other__">+ something else…</option>';
+function flatLock(row, vessel){   // 10/23 Pricing: a 5 ml jar bottom label is Flat only - texture locked
+  var t = row && row.querySelector('.t'); if(!t) return;
+  var on = /bottom/i.test(vessel || '');
+  if(on) t.value = 'Flat';
+  t.disabled = on; t.title = on ? 'Bottom labels are Flat only' : '';
+}
 function vesselPick(sel){
   var cell = sel.parentNode, inp = cell.querySelector('.vother');
+  flatLock(sel.closest('.newline'), sel.value);
   var _nl = sel.closest('.newline'); if(_nl && /applied/i.test(sel.value)) _nl.querySelector('.ap').value = 'Y';   // 9/29: we apply the wrap
   if(sel.value === '__other__' || sel.value === '__size__' || sel.value === '__sheet__'){   // 10/14: sizes are typed '4x2' / 'Sheet 4x4'
     var _pre = sel.value === '__sheet__' ? 'Sheet ' : '';
@@ -492,6 +499,7 @@ function openPast(inv){   // 9/28 Shane: 'yes make the change' - a past order is
       if(sel.value !== r.vessel){ sel.classList.add('hidden'); inp.classList.remove('hidden'); }
       inp.value = r.vessel;
     }
+    flatLock(d, r.vessel);
   });
   while(added < 4){ addNewLine(); added++; }
   $('due').value = '';   // a new order needs its own due date
@@ -549,7 +557,7 @@ function editLive(lo, silent){
     d.querySelector('.cu').value = set.cu; d.querySelector('.w').value = set.w; d.querySelector('.ap').value = set.ap; d.querySelector('.mt').value = set.mt; d.querySelector('.gl').value = set.gl;
     finSet(d.querySelector('.fin'), { pi: set.pi, fn: set.fn });
     var cell = d.querySelector('.vcell'), sel = cell.querySelector('.vsel'), inp = cell.querySelector('.vother');
-    if(r.vessel){ sel.value = r.vessel; if(sel.value !== r.vessel){ sel.classList.add('hidden'); inp.classList.remove('hidden'); } inp.value = r.vessel; }
+    if(r.vessel){ sel.value = r.vessel; if(sel.value !== r.vessel){ sel.classList.add('hidden'); inp.classList.remove('hidden'); } inp.value = r.vessel; } flatLock(d, r.vessel);
     whiteCheck(d.querySelector('.m'));
   });
   while(added < 4){ addNewLine(); added++; }
@@ -753,6 +761,7 @@ function menuPrice(vessel, material, texture, white){
     var _w = Math.ceil(Number(_sz[1]) - 1e-9), _h = Math.ceil(Number(_sz[2]) - 1e-9), _k = (/sheet/i.test(vessel) ? 'sheet ' : 'slap ') + _w + 'x' + _h + ' ' + mat + (white && mat !== 'White' ? ' HB' : '');
     if(offer) return null;   // the Ridge offer is not on the size grid - quote it
     var _g = M.grid[_k]; return _g && _g[lvl] != null ? Number(_g[lvl]) : null; }
+  if(/bottom/i.test(vessel)) return M.bottom && mat && M.bottom[mat] != null ? Number(M.bottom[mat]) : null;   // 10/23: Flat only, one price
   var table = /lighter/i.test(vessel) ? M.lighter : (M.access || {})[vessel];
   var row = table && mat && table[mat]; if(!(row && row[lvl] != null)) return null;
   if(offer){ var ro = M.ridge_offer && M.ridge_offer[vessel]; return ro == null || /lighter/i.test(vessel) ? null : Number(row[3]) + Number(ro); }
