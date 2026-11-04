@@ -1,7 +1,62 @@
 {
-  "updated": "2026-10-22",
+  "updated": "2026-11-04",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
+    {
+      "date": "2026-11-04",
+      "label": "Morning Brief",
+      "title": "Benson Beats James as Niles, Mottville and Menominee Settle Dispensary Fights; Massachusetts and Houston Deliver Cannabis Wins Nationally",
+      "top": "Michigan's Nov. 3 election reshaped the state's cannabis landscape: Democrat Jocelyn Benson defeated Republican John James — who had the Michigan Cannabis Industry Association's backing for his pledge to repeal the 24% wholesale tax — in the governor's race, while voters in three border communities split on dispensary rules: Niles capped retailers at five and its township kept a ban on expansion, Mottville Township voters rejected shutting down its two existing shops, and Menominee raised its licensing cap from nine to 13. Nationally, cannabis had a banner election night as Massachusetts voters crushed a repeal of recreational sales roughly 76%-24% and Houston approved deprioritizing marijuana enforcement, while in the business world Organigram topped Curaleaf's hostile bid to acquire Aurora Cannabis and Usona Institute filed its psilocybin NDA with the FDA.",
+      "local": [
+        {
+          "text": "Niles voters cap marijuana retailers citywide while neighboring township keeps its ban — City of Niles voters approved limiting marijuana retailers to five and microbusinesses to four, 61%-39%, while Niles Charter Township voters narrowly rejected, 52%-48%, a measure that would have allowed up to four recreational retailers there.",
+          "source": "WNDU",
+          "url": "https://www.wndu.com/2026/11/04/niles-voters-approve-caps-marijuana-retailers/"
+        },
+        {
+          "text": "Mottville Township voters reject ban on its two dispensaries — A proposed ordinance that would have shut down the border township's only two marijuana retailers failed at the polls, 379 votes against to 215 in favor, so both shops continue operating.",
+          "source": "WLKM",
+          "url": "https://wlkm.com/2026/11/mottville-township-marijuana-shops-will-continue/"
+        },
+        {
+          "text": "Menominee voters raise dispensary cap from nine to 13 — City voters approved a referendum expanding the number of marijuana retail licenses allowed in Menominee, 1,812 to 1,212, clearing the way for up to four more shops in the Wisconsin-border city.",
+          "source": "Radio Results Network",
+          "url": "https://www.radioresultsnetwork.com/2026/11/04/menominee-county-marijuana-referendum-district-judge-race/"
+        },
+        {
+          "text": "Jocelyn Benson defeats John James for governor, clouding the 24% wholesale tax's future — Democrat Benson won the race to succeed term-limited Gov. Gretchen Whitmer, beating Republican John James, who had the Michigan Cannabis Industry Association's backing for his pledge to repeal or sharply cut the state's 24% wholesale marijuana tax; Benson has called the tax a 'new and emerging issue' and her running mate voted for it.",
+          "source": "The Washington Post",
+          "url": "https://www.washingtonpost.com/elections/results/2026/11/03/michigan-governor-benson-james-live-updates/"
+        }
+      ],
+      "national": [
+        {
+          "text": "Massachusetts voters crush Question 8, keeping recreational marijuana legal — Roughly 76% of voters rejected the SAM Action-backed measure that would have repealed the state's adult-use cannabis law and ended licensed retail sales by 2028, a decade after Massachusetts first legalized.",
+          "source": "NORML",
+          "url": "https://norml.org/blog/2026/11/04/massachusetts-voters-overwhelmingly-reject-ballot-proposal-seeking-to-repeal-marijuana-legalization"
+        },
+        {
+          "text": "Houston voters approve Proposition A, deprioritizing marijuana enforcement — The charter amendment makes low-level marijuana possession the Houston Police Department's lowest enforcement priority and bans no-knock warrants; it doesn't legalize cannabis, which remains illegal under Texas law.",
+          "source": "Click2Houston",
+          "url": "https://www.click2houston.com/decision-2026/2026/11/04/houston-voters-approve-proposition-a-changing-marijuana-enforcement-and-no-knock-warrant-policies/"
+        },
+        {
+          "text": "Federal hemp-THC ban deadline slips to Dec. 11, but synthetic cannabinoid ban still hits Nov. 12 — A bipartisan Senate push delayed the new total-THC standard and per-container potency cap by a month via H.R. 6500, which Trump signed Sept. 2, but the ban on synthetic cannabinoids in hemp products remains on track for Nov. 12.",
+          "source": "CNN",
+          "url": "https://www.cnn.com/2026/11/03/health/federal-hemp-thc-product-ban-wellness"
+        },
+        {
+          "text": "Organigram tops Curaleaf's hostile bid, agrees to buy Aurora Cannabis — Organigram will acquire all of Aurora's outstanding shares for C$7.80 apiece, valuing the Canadian producer at roughly C$561 million; both boards approved the friendly deal, which offers a 21% premium over Curaleaf's competing offer, and Curaleaf says its hostile bid remains active.",
+          "source": "MJBizDaily",
+          "url": "https://mjbizdaily.com/news/organigram-to-acquire-aurora-cannabis-in-400-million-deal-topping-curaleaf-bid/619023/"
+        },
+        {
+          "text": "Usona Institute files psilocybin NDA with FDA for major depressive disorder — The nonprofit psychedelics research group completed its new drug application for psilocybin as a treatment for major depressive disorder, intensifying its race with Compass Pathways, which is finishing its own rolling NDA for COMP360 this quarter.",
+          "source": "Psychedelic Alpha",
+          "url": "https://psychedelicalpha.com/news/usona-files-psilocybin-for-depression-nda-as-race-with-compass-tightens/"
+        }
+      ]
+    },
     {
       "date": "2026-10-22",
       "label": "Morning Brief",
