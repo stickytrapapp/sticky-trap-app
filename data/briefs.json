@@ -1,7 +1,52 @@
 {
-  "updated": "2026-11-04",
+  "updated": "2026-11-06",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
+    {
+      "date": "2026-11-06",
+      "label": "Morning Brief",
+      "title": "Michigan Cannabis Industry Eyes Dem Trifecta for Tax Relief as Bad Axe Ends Pot Ban; Idaho Rejects Drug-Ballot Power Grab as Q3 Earnings Beat Estimates Nationally",
+      "top": "Fresh off Tuesday's election, Michigan cannabis operators who largely backed Republican John James over his pledge to cut the 24% wholesale tax are now looking to the state's new Democratic trifecta for relief, even as Crain's Detroit Business warns the industry's core problems — the tax, falling prices and oversupply — need a legislative fix regardless of who's in charge; separately, Huron County's Bad Axe ended a seven-year local ban on marijuana businesses. Nationally, Idaho voters crushed a legislatively referred constitutional amendment that would have stripped citizens of the right to put marijuana and other drug policy on the ballot, rejecting it roughly two-to-one, while cannabis earnings season rolled on: Curaleaf posted record $353 million in Q3 revenue, Green Thumb Industries grew revenue 11.3% to $324.4 million, and Trulieve beat Wall Street estimates with $230 million despite a year-over-year decline.",
+      "local": [
+        {
+          "text": "Michigan cannabis operators hope Democratic trifecta brings tax relief — Operators who backed Republican John James for his pledge to cut the 24% wholesale tax are now looking to Lansing's new Democratic-controlled government for relief, even as the state's $3.17 billion cannabis market keeps shrinking.",
+          "source": "MJBizDaily",
+          "url": "https://mjbizdaily.com/news/michigan-cannabis-industry-hopeful-democratic-takeover-will-mean-tax-repeal/619108"
+        },
+        {
+          "text": "Crain's: Democratic control raises stakes for Michigan's 'floundering' weed companies — With Democrats holding the governor's office and both legislative chambers for only the second time since 1982, the piece argues the industry's core problems — the 24% wholesale tax, falling prices and oversupply — still need a legislative fix regardless of which party is in charge.",
+          "source": "Crain's Detroit Business",
+          "url": "https://www.crainsdetroit.com/cannabis/cdb-election-weed-industry-expectations-20261104/"
+        },
+        {
+          "text": "Bad Axe voters end seven-year ban on marijuana businesses — The Huron County city's Nov. 3 ballot measure overturned a longstanding prohibition on cannabis establishments, part of the same election that also raised Menominee's dispensary cap from nine to 13.",
+          "source": "The Marijuana Herald",
+          "url": "https://themarijuanaherald.com/2026/11/michigan-voters-approve-marijuana-business-expansion-in-two-cities-ending-one-ban-and-raising-retail-cap-in-another/"
+        }
+      ],
+      "national": [
+        {
+          "text": "Idaho voters crush HJR 4, preserving citizens' right to put drug policy on the ballot — About two-thirds of voters rejected the legislatively referred amendment that would have stripped Idahoans of the ability to use citizen initiatives to legalize marijuana, narcotics or other psychoactive substances.",
+          "source": "Idaho Capital Sun",
+          "url": "https://idahocapitalsun.com/2026/11/03/idaho-amendment-giving-state-legislature-sole-power-to-regulate-drugs-fails/"
+        },
+        {
+          "text": "Curaleaf posts record $353 million in Q3 revenue, beating estimates — The multistate operator's third-quarter net revenue rose 11% year-over-year, with international sales up 28%, and adjusted EBITDA reached $78 million on a 49% adjusted gross margin.",
+          "source": "SEC EDGAR filing",
+          "url": "https://www.sec.gov/Archives/edgar/data/0001756770/000162828026069455/q326-exx99xxearningsrelease.htm"
+        },
+        {
+          "text": "Green Thumb Industries posts $324.4 million in Q3 revenue, up 11.3% — The Chicago-based operator added six Rise dispensaries across three states during the quarter and reported normalized EBITDA of $89.4 million, or 27.6% of revenue.",
+          "source": "SEC EDGAR filing",
+          "url": "https://www.sec.gov/Archives/edgar/data/0001795139/000119312526447207/gtbif-ex99_1.htm"
+        },
+        {
+          "text": "Trulieve beats Q3 estimates with $230 million in revenue despite year-over-year decline — The Florida-based operator topped Wall Street's roughly $221.7 million consensus with a 64% gross margin and $89 million in adjusted EBITDA, and guided to low-single-digit revenue growth in Q4.",
+          "source": "Mugglehead",
+          "url": "https://mugglehead.com/trulieve-shows-up-northern-competitors-with-q3-revenue-beat/"
+        }
+      ]
+    },
     {
       "date": "2026-11-04",
       "label": "Morning Brief",
