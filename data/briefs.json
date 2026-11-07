@@ -1,7 +1,52 @@
 {
-  "updated": "2026-11-06",
+  "updated": "2026-11-07",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
+    {
+      "date": "2026-11-07",
+      "label": "Morning Brief",
+      "title": "Michigan Marijuana Tax Portal Set to Reopen Nov. 12 as Big Prairie Township, Boyne Falls Join Post-Election Cannabis Wave; Democrats' Midterm Wins Fuel Federal Reform Hopes Nationally",
+      "top": "Michigan marijuana retailers are bracing for the Nov. 12 reopening of the state's MiTreasury eServices tax portal after a planned two-week migration outage, even as Big Prairie Township and Boyne Falls became the latest Michigan communities to embrace cannabis businesses in the wake of the Nov. 3 election, joining Bad Axe, Menominee and Mottville Township. Nationally, Democrats' retaking of the House and Senate majorities has advocates and even a former Trump adviser touting new bipartisan momentum for federal cannabis reform, Marijuana Moment's newsletters report, while the DEA rejected a Washington, D.C. medical dispensary's federal registration bid over the district's lack of a written-certification requirement — a sign the agency may deny Schedule III status broadly to adult-use-state operators. Missouri's attorney general sued four retailers for allegedly selling marijuana as hemp and beat back a court challenge to the state's intoxicating-cannabinoid law, and Aurora Cannabis posted record C$61.4 million in international medical revenue in its fiscal Q2.",
+      "local": [
+        {
+          "text": "Michigan's marijuana retail excise-tax system set to reopen Nov. 12 — The MiTreasury eServices portal has been offline since Oct. 30 for a planned migration, with the marijuana tax call center closed Nov. 4-6; existing account connections won't carry over, though MiLogin for Business credentials still work.",
+          "source": "mg Magazine",
+          "url": "https://mgmagazine.com/cannabis-news/operator-bulletin-november-6-2026/"
+        },
+        {
+          "text": "Big Prairie Township and Boyne Falls join Michigan's post-election wave of cannabis-friendly votes — Big Prairie Township voters approved allowing one state-licensed adult-use consumption lounge, while Boyne Falls voters rejected an ordinance banning marijuana establishments, adding to Nov. 3 results that also saw Bad Axe and Menominee lift restrictions and Mottville Township keep its two dispensaries open.",
+          "source": "Bridge Michigan",
+          "url": "https://bridgemi.com/michigan-politics/ems-jails-cannabis-and-more-how-michigan-voted-on-local-ballot-issues/"
+        }
+      ],
+      "national": [
+        {
+          "text": "Lawmakers and strategists see bipartisan opening for federal cannabis reform — Rep. Dina Titus (D-NV) and longtime Trump adviser Roger Stone both told Marijuana Moment the midterm results could create new momentum for reform, as top Wisconsin lawmakers said the state is positioned to legalize marijuana under incoming Democratic control.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/bipartisan-cooperation-could-boost-federal-cannabis-reform-newsletter-november-6-2026"
+        },
+        {
+          "text": "Democrats' midterm wins raise hopes for federal marijuana reform — With Democrats retaking House and Senate majorities, Congressional Cannabis Caucus co-chair Dina Titus pledged to keep pushing for banking access and rescheduling, and the National Cannabis Industry Association's board chair called it a new opening for comprehensive federal reform.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/federal-cannabis-reform-gets-democratic-boost-newsletter-november-5-2026/"
+        },
+        {
+          "text": "DEA rejects a Washington, D.C. dispensary's federal registration bid — The agency's Order to Show Cause said it can't register any dispensary under D.C.'s program because the district allows dispensing without a written medical certification, echoing a similar denial to a Minneapolis dual-use retailer and raising concern the DEA may deny Schedule III registration broadly to adult-use-state operators.",
+          "source": "MJBizDaily",
+          "url": "https://mjbizdaily.com/news/medical-cannabis-dispensary-rejected-for-dea-registration-as-more-federal-marijuana-rescheduling-details-emerge/619130"
+        },
+        {
+          "text": "Missouri AG sues four retailers over alleged marijuana-as-hemp sales — Attorney General Catherine Hanaway's office accused Puffers Choice, CBD Kratom Cannabis Dispensary, Herb Depot and Token THC Dispensary of selling products that tested above hemp's THC limit while posing as licensed dispensaries, and a federal court the same day dismissed a challenge to the state's intoxicating-cannabinoid law.",
+          "source": "MJBizDaily",
+          "url": "https://mjbizdaily.com/news/missouri-ag-sues-retailers-over-alleged-marijuana-as-hemp-sales/619102/"
+        },
+        {
+          "text": "Aurora Cannabis posts record international medical revenue in fiscal Q2 — Net revenue rose 9% to C$86.0 million, driven by record international medical cannabis revenue of C$61.4 million (up 44%) on higher demand in Germany and Poland, even as adjusted EBITDA slipped to C$14.0 million from C$15.4 million a year earlier.",
+          "source": "SEC EDGAR filing",
+          "url": "https://www.sec.gov/Archives/edgar/data/0001683541/000110465926123048/tm2629080d1_ex99-1.htm"
+        }
+      ]
+    },
     {
       "date": "2026-11-06",
       "label": "Morning Brief",
