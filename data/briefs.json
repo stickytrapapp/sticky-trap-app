@@ -1,7 +1,47 @@
 {
-  "updated": "2026-11-07",
+  "updated": "2026-11-08",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
+    {
+      "date": "2026-11-08",
+      "label": "Morning Brief",
+      "title": "Michigan's Tax Portal Reopening Nears as Industry Eyes Lansing's Democratic Trifecta; Canopy Growth Posts Strong Earnings as Organigram-Curaleaf Fight for Aurora Continues Nationally",
+      "top": "With Michigan's marijuana retail excise-tax e-services portal still offline ahead of its planned Nov. 12 return on a new platform, cannabis operators continue looking to the state's incoming Democratic trifecta for relief from the 24% wholesale tax that backers of defeated GOP nominee John James had promised to repeal, while Big Prairie Township's and Boyne Falls' post-election votes to welcome cannabis businesses add to a wave of local ballot wins. Nationally, Canopy Growth reported fiscal second-quarter net revenue growth of 22%, led by a 141% jump in international cannabis sales, as Curaleaf's hostile bid for Aurora Cannabis continues to compete with Organigram's agreed C$561 million friendly deal and Tilray moves to consolidate Redecan production in Canada, while the DEA's rejection of a Washington, D.C. medical dispensary's federal registration bid continues to raise questions about how broadly the agency will deny Schedule III status to adult-use-state operators.",
+      "local": [
+        {
+          "text": "Michigan's marijuana retail excise-tax portal remains offline ahead of planned Nov. 12 return — The state took the system down Oct. 30 to migrate reporting to the new MiTreasury eServices Business Portal; the Wholesale Marijuana Tax stays unavailable through Nov. 11, and existing account connections won't carry over when both systems resume Nov. 12.",
+          "source": "mg Magazine",
+          "url": "https://mgmagazine.com/cannabis-news/operator-bulletin-november-6-2026/"
+        },
+        {
+          "text": "Big Prairie Township and Boyne Falls add to Michigan's post-election wave of cannabis-friendly votes — Big Prairie Township voters approved a state-licensed adult-use consumption lounge, while Boyne Falls voters rejected a ban on marijuana establishments, joining Bad Axe, Menominee and Mottville Township in loosening local restrictions after the Nov. 3 election.",
+          "source": "Bridge Michigan",
+          "url": "https://bridgemi.com/michigan-politics/ems-jails-cannabis-and-more-how-michigan-voted-on-local-ballot-issues/"
+        },
+        {
+          "text": "Michigan cannabis operators still hope a Democratic trifecta brings 24% wholesale-tax relief — Operators who backed Republican John James for his pledge to repeal the tax are now looking to Lansing's new Democratic-controlled government for relief, as the state's shrinking cannabis market continues to feel the tax's impact.",
+          "source": "MJBizDaily",
+          "url": "https://mjbizdaily.com/news/michigan-cannabis-industry-hopeful-democratic-takeover-will-mean-tax-repeal/619108"
+        }
+      ],
+      "national": [
+        {
+          "text": "Canopy Growth posts 22% net revenue growth in fiscal Q2, led by international cannabis surge — The Canadian producer's net revenue growth was driven by a 141% increase in international markets cannabis sales for the quarter ended Sept. 30, 2026, the company reported Nov. 6.",
+          "source": "Cannabis Business Times",
+          "url": "https://www.cannabisbusinesstimes.com/industry-headlines/news/16424519/canopy-growth-reports-second-quarter-fiscal-year-2027-financial-results-net-revenue-growth-of-22-led-by-a-141-increase-in-international-markets-cannabis"
+        },
+        {
+          "text": "Organigram-Aurora deal and Curaleaf's rival bid headline a busy week in Canadian cannabis business — Curaleaf's hostile bid for Aurora Cannabis remains outstanding even after Aurora's board backed Organigram's friendly acquisition, while Tilray announced it will close its Fenwick, Ontario facility and shift Redecan production to other sites.",
+          "source": "StratCann",
+          "url": "https://stratcann.com/news/week-in-weed-november-7-2026/"
+        },
+        {
+          "text": "DEA rejects a Washington, D.C. dispensary's federal registration bid — The agency's Order to Show Cause said it can't register any dispensary under D.C.'s program because the district allows dispensing without a written medical certification, raising concern the DEA may deny Schedule III registration broadly to adult-use-state operators.",
+          "source": "MJBizDaily",
+          "url": "https://mjbizdaily.com/news/medical-cannabis-dispensary-rejected-for-dea-registration-as-more-federal-marijuana-rescheduling-details-emerge/619130"
+        }
+      ]
+    },
     {
       "date": "2026-11-07",
       "label": "Morning Brief",
