@@ -1,7 +1,47 @@
 {
-  "updated": "2026-11-08",
+  "updated": "2026-11-09",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
+    {
+      "date": "2026-11-09",
+      "label": "Morning Brief",
+      "title": "Michigan Recalls THC Gummies as Tax Portal Reopening Nears; Compass Pathways Completes Psilocybin NDA as Hemp Fights Escalate in Illinois, Texas Nationally",
+      "top": "Michigan regulators and manufacturer The Gummie Joint issued a public health advisory and voluntary recall of Naked Hippie Lucky Berry gummies after consumers reported an unpleasant high and digestive distress, even as the state's marijuana retail excise-tax portal counts down to its planned Nov. 12 reopening on the new MiTreasury eServices platform following an outage that began Oct. 30. Nationally, Compass Pathways completed its COMP360 psilocybin New Drug Application to the FDA for treatment-resistant depression, targeting a first-half-2027 launch under the agency's expedited National Priority Voucher review and intensifying its race with fellow NDA-filer Usona Institute. Hemp retailers kept fighting state THC crackdowns ahead of the federal ban: an Illinois trade group sued to block the state's Nov. 12 Hemp Act ban on most hemp-derived THC products outside licensed dispensaries, while Texas's hemp industry voiced fresh optimism after the midterms installed friendlier state leadership. In cannabis business news, multistate operator Cresco Labs posted $173 million in third-quarter revenue, up 5% year-over-year, with a 20.2% adjusted EBITDA margin despite a $15 million net loss.",
+      "local": [
+        {
+          "text": "Michigan regulators and The Gummie Joint issue a voluntary recall of Naked Hippie Lucky Berry gummies — The Cannabis Regulatory Agency's public health and safety advisory followed complaints that the 5-mg-per-piece edibles, sold in 40-count packs, caused an unpleasant high and digestive distress.",
+          "source": "Fox 2 Detroit",
+          "url": "https://www.fox2detroit.com/news/marijuana-manufacturer-recalls-edible-unpleasant-high-digestive-distress"
+        },
+        {
+          "text": "Michigan's marijuana retail excise-tax portal counts down to its planned Nov. 12 return — The system has been offline since Oct. 30 for the state's migration to the new MiTreasury eServices Business Portal, and existing account connections won't carry over when the Wholesale Marijuana Tax and retail excise-tax services both resume.",
+          "source": "mg Magazine",
+          "url": "https://mgmagazine.com/cannabis-news/operator-bulletin-november-6-2026/"
+        }
+      ],
+      "national": [
+        {
+          "text": "Compass Pathways completes its COMP360 psilocybin NDA submission to the FDA — The company finished filing its New Drug Application for the treatment-resistant-depression therapy, backed by two statistically significant Phase 3 trials and a Phase 2b study, and is targeting a launch in the first half of 2027 under the FDA's National Priority Voucher review track.",
+          "source": "Compass Pathways",
+          "url": "https://stockhouse.com/news/press-releases/2026/11/09/compass-pathways-completes-comp360-psilocybin-new-drug-application-to-u-s-fda"
+        },
+        {
+          "text": "Illinois hemp industry sues to block the state's sweeping THC ban before it takes effect Nov. 12 — A trade group filed an emergency motion seeking to pause the new Hemp Act, which would ban most hemp-derived THC beverages and cannabinoid products from sale outside licensed dispensaries.",
+          "source": "Block Club Chicago",
+          "url": "https://blockclubchicago.org/2026/11/06/illinois-hemp-industry-advocates-sue-state-ahead-of-sweeping-hemp-derived-thc-ban/"
+        },
+        {
+          "text": "Texas hemp industry voices new optimism after the midterms reshape state leadership — Advocates point to incoming lawmakers seen as friendlier to THC products, even as a San Antonio councilman separately pushes to advance cannabis legalization locally.",
+          "source": "KSAT",
+          "url": "https://ksat.com/news/local/2026/11/07/texas-hemp-industry-optimistic-following-election-shakeup-san-antonio-councilman-looks-to-cannabis-legalization"
+        },
+        {
+          "text": "Cresco Labs posts $173 million in Q3 revenue, up 5% year-over-year — The multistate operator reported a 20.2% adjusted EBITDA margin and converted more than 60% of adjusted EBITDA into free cash flow, even as it booked a $15 million net loss tied partly to one-time M&A and uplisting costs.",
+          "source": "Cresco Labs",
+          "url": "https://investingnews.com/cresco-labs-reports-third-quarter-2026-financial-results/"
+        }
+      ]
+    },
     {
       "date": "2026-11-08",
       "label": "Morning Brief",
