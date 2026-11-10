@@ -1,7 +1,42 @@
 {
-  "updated": "2026-11-09",
+  "updated": "2026-11-10",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
+    {
+      "date": "2026-11-10",
+      "label": "Morning Brief",
+      "title": "Michigan Cannabis Industry Bets on Democratic Tax Repeal as SCOTUS Spurns Pontiac Case; DEA Moves to Boost Psychedelics Quotas Nationally",
+      "top": "Michigan cannabis operators who backed Republican John James's pledge to kill the state's 24% wholesale marijuana tax say they're now \"thrilled\" that Democrats swept Lansing instead, with a bipartisan group of state senators already signed onto bills to repeal the levy outright. Separately, the U.S. Supreme Court declined to hear a Pontiac-based developer's bid to revive its suit against the city over delayed cannabis-business approvals, leaving a Sixth Circuit dismissal in place. Nationally, the DEA proposed sharply higher 2027 production quotas for psychedelics like psilocybin and MDMA under President Trump's April executive order on psychedelics research and access, while previewing a separate approach to marijuana quotas once full Schedule III rescheduling is finalized. Massachusetts lawmakers approved bills expanding medical marijuana access and shielding cannabis users from employment discrimination, and the National Congress of American Indians pressed the Justice Department to rewrite its marijuana rescheduling rule to explicitly cover tribally regulated cannabis.",
+      "local": [
+        {
+          "text": "Michigan cannabis operators who backed GOP governor candidate John James over his pledge to cut the state's 24% wholesale marijuana tax say they're now \"thrilled\" a Democratic trifecta took Lansing instead — a bipartisan group of state senators has signed onto bills to repeal the tax outright.",
+          "source": "MJBizDaily",
+          "url": "https://mjbizdaily.com/news/michigan-cannabis-industry-hopeful-democratic-takeover-will-mean-tax-repeal/619108/"
+        },
+        {
+          "text": "The U.S. Supreme Court declined to hear Rubicon Real Estate Holdings' appeal in its fight with the city of Pontiac, leaving in place a Sixth Circuit ruling that the city's delays in approving a proposed cannabis redevelopment were bureaucratic rather than a constitutional violation.",
+          "source": "Law360",
+          "url": "https://www.law360.com/cannabis/articles/2547030"
+        }
+      ],
+      "national": [
+        {
+          "text": "The DEA proposed sharply higher 2027 production quotas for psychedelics like psilocybin and MDMA, citing President Trump's April executive order expanding psychedelics research and access, while previewing a separate approach to marijuana quotas once full Schedule III rescheduling is finalized.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/dea-boosts-psychedelic-production-quotas-for-2027-while-previewing-separate-marijuana-proposal-under-rescheduling/"
+        },
+        {
+          "text": "Massachusetts lawmakers approved bills expanding the state's medical marijuana program and protecting cannabis users from employment discrimination.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/massachusetts-lawmakers-approve-bills-to-protect-marijuana-users-from-employment-discrimination-and-expand-medical-cannabis-program"
+        },
+        {
+          "text": "The National Congress of American Indians called on the Justice Department to rewrite or supplement its marijuana rescheduling order, arguing the administration failed to consult tribes and that tribally regulated cannabis needs to be explicitly covered.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/trump-administration-should-rewrite-marijuana-rescheduling-rule-to-include-tribes-american-indian-group-says/"
+        }
+      ]
+    },
     {
       "date": "2026-11-09",
       "label": "Morning Brief",
