@@ -1,7 +1,42 @@
 {
-  "updated": "2026-11-10",
+  "updated": "2026-11-13",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
+    {
+      "date": "2026-11-13",
+      "label": "Morning Brief",
+      "title": "Federal Hemp Ban's First Phase Takes Hold Nationally as Illinois Fights Back; Michigan's Tax Portal Finally Reopens",
+      "top": "The first phase of the renewed federal hemp product ban took effect Nov. 12, outlawing fully synthetic cannabinoids like THC-O and K2/Spice-style analogs nationwide, even as the broader total-THC standard and 0.4-milligram-per-container cap stay delayed to Dec. 11 under a deal Congress struck earlier this year. Hemp trade groups split on the rollout, with the Hemp Roundtable welcoming the synthetic-cannabinoid ban while pushing Congress to replace the December rule with FDA regulation instead, and litigation over Illinois's own parallel Nov. 12 hemp-THC ban produced a narrow court lifeline for THC beverage makers even as the law otherwise took hold. In Michigan, the state's wholesale and retail marijuana tax e-services finally came back online Nov. 12 on the new MiTreasury eServices Business Portal, ending a more than week-long migration outage and restoring the system operators use to file and pay the 24% wholesale tax.",
+      "local": [
+        {
+          "text": "Michigan's wholesale and retail marijuana excise-tax filing systems came back online Nov. 12 on the new MiTreasury eServices Business Portal, ending a more than week-long migration outage that began Oct. 30; MiLogin for Business credentials still work, but connections between individual user profiles and tax accounts from the old system don't carry over and must be re-established.",
+          "source": "Michigan Department of Treasury",
+          "url": "https://www.michigan.gov/taxes/mitreasuryeservices/enews/impacts/web-platform-impacts"
+        }
+      ],
+      "national": [
+        {
+          "text": "The first phase of the renewed federal hemp product ban took effect Nov. 12, outlawing fully synthetic cannabinoids such as THC-O and K2/Spice-style analogs nationwide, even as the broader total-THC standard and 0.4-milligram-per-container cap stay delayed to Dec. 11; the Hemp Roundtable welcomed the synthetic-cannabinoid ban while urging Congress to replace the December rule with FDA regulation of hemp-derived products instead.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/first-phase-of-renewed-federal-hemp-product-ban-takes-effect-as-industry-pushes-congress-for-regulatory-alternative/"
+        },
+        {
+          "text": "NPR reported that a growing number of states are moving ahead of Washington's hemp-derived THC crackdown, enacting their own potency caps and dispensary-only sales rules as the first phase of the federal ban took hold this week.",
+          "source": "NPR",
+          "url": "https://www.npr.org/2026/11/12/nx-s1-6035839/some-states-get-a-head-start-on-upcoming-federal-hemp-ban"
+        },
+        {
+          "text": "A federal court fight over Illinois's own Nov. 12 hemp-THC ban produced a narrow lifeline for THC beverage makers even as the broader federal hemp restrictions took partial effect nationwide, with litigation over the state law continuing.",
+          "source": "MJBizDaily",
+          "url": "https://mjbizdaily.com/news/partial-federal-hemp-ban-in-effect-court-oflifeline-to-illinois-thc-beverage-makers/619178"
+        },
+        {
+          "text": "Forbes detailed what the Dec. 11 federal deadline for hemp's new total-THC standard and per-container potency cap will mean for products still on store shelves, as retailers navigate the gap between this week's synthetic-cannabinoid ban and the broader restriction still to come.",
+          "source": "Forbes",
+          "url": "https://www.forbes.com/sites/petersu/2026/11/12/what-dec-11-means-for-the-hemp-products-on-your-store-shelves/"
+        }
+      ]
+    },
     {
       "date": "2026-11-10",
       "label": "Morning Brief",
