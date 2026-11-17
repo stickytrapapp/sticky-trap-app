@@ -1,7 +1,42 @@
 {
-  "updated": "2026-11-13",
+  "updated": "2026-11-17",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
+    {
+      "date": "2026-11-17",
+      "label": "Morning Brief",
+      "title": "Michigan Hits Four Macomb Processors with Formal Complaints as Missouri's Hemp Ban Clears Shelves Nationally; DEA Rescheduling Ruling Slides Into 2027",
+      "top": "Michigan's Cannabis Regulatory Agency filed formal complaints against four licensed marijuana processors in Warren and Center Line, alleging Metrc-tracking and transfer-rule violations tied to a Michigan State Police raid on an unlicensed hemp handler, with fines and other license sanctions still to come. Nationally, Missouri hemp retailers cleared shelves and slashed prices as the state's new hemp-derived THC restriction took hold alongside the broader federal crackdown, while coverage of the DEA's marijuana rescheduling docket shows the agency still rejecting medical-marijuana businesses' federal registration bids and an administrative law judge's Schedule III recommendation now expected to slip into the first half of 2027. In Washington, Marijuana Moment contrasted Senate Democratic leadership rivals Chuck Schumer and Chris Van Hollen on cannabis reform, and in Texas, Democratic statehouse gains are already reshaping the 2027 cannabis and hemp policy debate with newly filed legalization bills.",
+      "local": [
+        {
+          "text": "Michigan's Cannabis Regulatory Agency filed formal complaints against four licensed adult-use marijuana processors in Warren and Center Line after Michigan State Police, executing a search warrant at an unlicensed hemp handler's facility, found marijuana products bearing Metrc seed-to-sale tracking tags; the CRA alleges Metrc-reporting and transfer-rule violations and says it intends to seek fines and other sanctions against each processor's license.",
+          "source": "Michigan Dept. of Licensing and Regulatory Affairs (CRA)",
+          "url": "https://www.michigan.gov/lara/news-releases/2026/11/16/press-release-cra-files-formal-complaints-against-four-macomb-county-marijuana-processors"
+        }
+      ],
+      "national": [
+        {
+          "text": "Missouri hemp retailers slashed prices, cleared shelves and in some cases gave away product as the state's new restriction on hemp-derived THC took effect Nov. 12, pulling intoxicating hemp items — including THC seltzers sold in bars and grocery stores — from outside licensed marijuana dispensaries; Attorney General Catherine Hanaway said enforcement will target selling businesses rather than consumers, and hemp beverages got a temporary exemption ahead of the Dec. 11 federal deadline.",
+          "source": "Jefferson City News Tribune",
+          "url": "https://www.newstribune.com/news/2026/nov/15/missouri-hemp-businesses-clear-shelves-close/"
+        },
+        {
+          "text": "Coverage of the stalled federal marijuana rescheduling process details the DEA's rejection of federal registration applications from medical-marijuana businesses in at least six states and Washington, D.C., an approaching Nov. 29 deadline for 'Timely Applicants' to establish compliant supply chains, and an administrative law judge's expected ruling on moving marijuana to Schedule III now sliding to the first half of 2027 rather than late 2026.",
+          "source": "The Hype Magazine",
+          "url": "https://www.thehypemagazine.com/2026/11/16/dea-marijuana-rescheduling-regulators-patients-limbo/"
+        },
+        {
+          "text": "With Chuck Schumer and Chris Van Hollen both running for Senate Democratic leadership, Marijuana Moment compared their records on federal marijuana reform: Schumer has proactively championed legalization and banking bills, while Van Hollen has consistently voted for cannabis-reform measures other lawmakers introduced without leading his own.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/schumer-vs-van-hollen-on-cannabis-newsletter-november-17-2026"
+        },
+        {
+          "text": "With Democrats having flipped seats in the Texas House in the November election, KUT outlines four ways state cannabis policy could shift in the 2027 legislative session, including newly filed adult-use legalization bills from Reps. Joe Moody and John Bucy III and a pivot among some Republicans from banning hemp-derived THC toward regulating it.",
+          "source": "KUT (Austin)",
+          "url": "https://www.kut.org/politics/2026-11-17/texas-election-hemp-marijuana-democrats-cannabis-bills-filed"
+        }
+      ]
+    },
     {
       "date": "2026-11-13",
       "label": "Morning Brief",
