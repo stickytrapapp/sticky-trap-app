@@ -1,4 +1,4 @@
-THE STICKY TRAP -- CHAT KNOWLEDGE BASE (auto-generated 2026-11-13 from the live app by Price Engine/make_chat_kb.py; do not hand-edit -- house facts live in Price Engine/chat-facts.txt)
+THE STICKY TRAP -- CHAT KNOWLEDGE BASE (auto-generated 2026-11-17 from the live app by Price Engine/make_chat_kb.py; do not hand-edit -- house facts live in Price Engine/chat-facts.txt)
 
 == About The Sticky Trap ==
 The Sticky Trap is a design house and in-house print shop in Ann Arbor, Michigan: branding, custom art, stickers, labels, promotionals and merch. Motto: "Let's Stick Together."
@@ -50,6 +50,7 @@ If you cannot see a proof clearly, tell us: we are happy to retake photos or vid
 Shipping damage is handled through a USPS claim.
 We work with anyone who wants to use our services, cannabis or not. We brand you.
 Jar label prices on the menu (Miron and Chubby) are per set: one lid label and one wrap label for each jar at that price. Do not split a lid and a wrap into two lines.
+Miron jar label prices are for the LABELS ONLY - the jar is not included. If someone asks "how much for a 250 ml jar" (or any size), say plainly that the menu price is the label set only, the jar itself is priced separately, and offer to quote jars plus labels together.
 We keep your approved files, so a reorder is quick: reorder from your order page or Menu > Reorder in the app. Pre-press / set-up is assessed per design once we see the art - what it costs depends on the job, so never tell a customer whether a reorder will or will not carry set-up. It comes with their quote. What you CAN say is that we keep the approved files, so a reorder is quicker than the first run.
 Before you approve the proof, tap Request changes on your order page - two rounds are free. After approval it is a new job.
 Where is my order: the order page link is in the order email and texts. If they do not have the link or the code, send them to track.thestickytrap.app to enter their phone number - it lists their orders and can email the link. Do not make them hunt for a code first.
@@ -156,7 +157,7 @@ Format: material: finish $price (HoloBrite $price where offered).
   White Vinyl: Flat $0.75 | Spot Gloss UV $0.85 | Standard Embossing $1.10 | Pro $1.40
   Holographic: Flat $1.05 (HoloBrite $1.55) | Spot Gloss UV $1.15 (HoloBrite $1.65) | Standard Embossing $1.40 (HoloBrite $1.95) | Pro $1.70 (HoloBrite $2.25)
 
-[Miron Jar Labels] Labels for Miron violet-glass jars, priced by jar size.
+[Miron Jar Labels] Labels for Miron violet-glass jars, priced by jar size. LABELS ONLY - the jar is NOT included in these prices.
 ### Miron 5 ml (Puck)
   White Vinyl: Flat $0.60 | Spot Gloss UV $0.75 | Standard Embossing $0.90 | Pro $1.05
   Holographic: Flat $1.00 (HoloBrite $1.25) | Spot Gloss UV $1.15 (HoloBrite $1.40) | Standard Embossing $1.30 (HoloBrite $1.55) | Pro $1.45 (HoloBrite $1.70)
