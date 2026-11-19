@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>How'd we do? - The Sticky Trap</title>
+<!-- Post-order survey (Shane 11/18, team spec 11/16): ?r=<stars 1-5>&o=<invoice>. Internal only, not a public review.
+     Collector = Chat.gs action 'survey' (Monday Assistant). Source design: Downloads\Client Survey\survey v2.html -->
+<link rel="icon" href="/icons/icon-192.png">
+<style>
+  :root{--bg:#0A0A0F;--card:#14141c;--line:#26263a;--text:#F5F3FA;--dim:#9c98ad;--star:#FFD34D;--grad:linear-gradient(100deg,#FF1FA2 0%,#8A2BE2 52%,#12C4FF 100%)}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 Arial,Helvetica,sans-serif;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:32px 16px}
+  .card{width:100%;max-width:440px;background:var(--bg);border-radius:18px;overflow:hidden;border:2px solid transparent;background:linear-gradient(var(--bg),var(--bg)) padding-box,var(--grad) border-box}
+  .bar{display:none}
+  .in{padding:28px 24px}
+  .logo{display:block;width:96px;height:96px;margin:0 auto 8px}
+  .brand{text-align:center;font:900 12px 'Arial Black',Arial,sans-serif;letter-spacing:.32em;color:#12C4FF;margin:0 0 20px}
+  h1{margin:0 0 26px;text-align:center;font:900 33px/1.05 'Arial Black',Impact,Arial,sans-serif;text-transform:uppercase;text-shadow:-2px 0 #FF1FA2,2px 0 #12C4FF;white-space:nowrap}
+  .q{margin:0 0 10px;font-weight:bold}
+  .block{margin-bottom:24px}
+  .yn{display:flex;gap:10px}
+  .yn button{flex:1;padding:14px;border-radius:12px;border:2px solid var(--line);background:transparent;color:var(--text);font:inherit;font-weight:bold;cursor:pointer}
+  .yn button.on{border-color:transparent;background:var(--grad)}
+  .stars{display:flex;justify-content:center;gap:6px}
+  .stars button{background:none;border:0;padding:2px;font-size:40px;line-height:1;color:#3a3850;cursor:pointer}
+  .stars button.on:nth-child(1){color:#FF1FA2}.stars button.on:nth-child(2){color:#C42AD0}.stars button.on:nth-child(3){color:#8A2BE2}.stars button.on:nth-child(4){color:#4E78F0}.stars button.on:nth-child(5){color:#12C4FF}
+  textarea{width:100%;min-height:110px;padding:12px;border-radius:12px;border:2px solid var(--line);background:#0f0f16;color:var(--text);font:inherit;resize:vertical}
+  textarea:focus{outline:none;border-color:#8A2BE2}
+  .send{width:100%;padding:16px;border:0;border-radius:12px;background:var(--grad);color:#fff;font:inherit;font-weight:bold;font-size:17px;cursor:pointer}
+  .send:disabled{opacity:.4;cursor:default}
+  .note{margin:12px 0 0;text-align:center;color:var(--dim);font-size:13px}
+  .err{margin:12px 0 0;text-align:center;color:#FF6B8B;font-size:14px;font-weight:bold}
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+  .done{display:none;text-align:center}
+  .done h1{margin-bottom:10px}
+  .foot{margin:0 24px;padding:16px 0 20px;border-top:2px solid transparent;border-image:var(--grad) 1;text-align:center;font:900 14px 'Arial Black',Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#FF1FA2}
+  .foot small{display:block;margin-top:6px;font:10px/1.7 Arial,sans-serif;letter-spacing:.12em;color:#6f6b80}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="bar"></div>
+  <div class="in">
+    <img class="logo" src="/img/emblem.png" alt="The Sticky Trap">
+    <p class="brand">THE STICKY TRAP</p>
+    <form id="f">
+      <h1>How'd we do?</h1>
+      <div class="block">
+        <p class="q">Were you happy with your order?</p>
+        <div class="yn">
+          <button type="button" data-v="yes">Yes</button>
+          <button type="button" data-v="no">No</button>
+        </div>
+      </div>
+      <div class="block">
+        <p class="q">Rate us</p>
+        <div class="stars" id="stars"></div>
+      </div>
+      <div class="block">
+        <p class="q">Anything you want us to know?</p>
+        <textarea id="msg" maxlength="2000" placeholder="Good or bad, tell us."></textarea>
+      </div>
+      <label class="hp" aria-hidden="true">Leave this empty <input id="hp" tabindex="-1" autocomplete="off"></label>
+      <button class="send" id="send" type="submit" disabled>Send</button>
+      <p class="err" id="err" hidden>That didn't go through. Check your connection and tap Send again.</p>
+      <p class="note">This goes straight to us, not a public review.</p>
+    </form>
+    <div class="done" id="done">
+      <h1>Got it. Thank you.</h1>
+      <p>We read every one of these.</p>
+    </div>
+  </div>
+  <div class="foot">Let's Stick Together.<small>Design House &middot; Branding Specialists &middot; Custom Art &middot; Stickers &middot; Promotionals &middot; Merch</small></div>
+</div>
+<script>
+  const qs = new URLSearchParams(location.search);
+  const API = 'https://script.google.com/macros/s/AKfycbzgctrnkyWjVnhzioE_B4x8J2pyi4WzRSJG2e00Y_Y5cz0vQx-q5jhvOhMWg2x-K9ciFw/exec';   // Chat.gs (same backend as /track/)
+  const r0 = Math.round(Number(qs.get('r')));
+  const o0 = (qs.get('o') || '').trim();
+  const state = { happy: null, stars: (r0 >= 1 && r0 <= 5) ? r0 : 0, msg: '', order: /^[A-Za-z0-9-]{1,24}$/.test(o0) ? o0 : '' };
+  const t0 = Date.now();   // bot check: real people take more than 2 s
+  const starsEl = document.getElementById('stars');
+  for (let i = 1; i <= 5; i++) {
+    const b = document.createElement('button');
+    b.type = 'button'; b.innerHTML = '&#9733;'; b.setAttribute('aria-label', i + ' star' + (i > 1 ? 's' : ''));
+    b.onclick = () => { state.stars = i; paint(); };
+    starsEl.appendChild(b);
+  }
+  document.querySelectorAll('.yn button').forEach(b => b.onclick = () => { state.happy = b.dataset.v; paint(); });
+  function paint() {
+    [...starsEl.children].forEach((b, i) => b.classList.toggle('on', i < state.stars));
+    document.querySelectorAll('.yn button').forEach(b => b.classList.toggle('on', b.dataset.v === state.happy));
+    document.getElementById('send').disabled = !(state.happy && state.stars);
+  }
+  paint();
+  function done() {
+    document.getElementById('f').style.display = 'none';
+    document.getElementById('done').style.display = 'block';
+  }
+  document.getElementById('f').onsubmit = e => {
+    e.preventDefault();
+    const send = document.getElementById('send'), err = document.getElementById('err');
+    state.msg = document.getElementById('msg').value.trim().slice(0, 2000);
+    if (document.getElementById('hp').value || Date.now() - t0 < 2000) { done(); return; }   // bot: look sent, store nothing
+    send.disabled = true; send.textContent = 'Sending...'; err.hidden = true;
+    const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 15000);
+    // the client's answer only: invoice from the email link, yes/no, stars, comment
+    fetch(API, { method: 'POST', redirect: 'follow', signal: ctl.signal, headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'survey', o: state.order, happy: state.happy, stars: state.stars, msg: state.msg }) })
+      .then(r => r.json())
+      .then(j => { clearTimeout(to); if (j && j.ok) done(); else throw new Error((j && j.error) || 'not_ok'); })
+      .catch(() => { clearTimeout(to); err.hidden = false; send.textContent = 'Send'; paint(); });
+  };
+</script>
+</body>
+</html>
