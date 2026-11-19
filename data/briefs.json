@@ -1,7 +1,37 @@
 {
-  "updated": "2026-11-17",
+  "updated": "2026-11-19",
   "channel": "https://www.youtube.com/@theflowerroompodcast",
   "briefs": [
+    {
+      "date": "2026-11-19",
+      "label": "Morning Brief",
+      "title": "Macomb Complaints Widen as CRA Can't Account for 171,000 Grams of Distillate; Hemp-Bill Senators Threaten Funding Fight, Senate Panel Extends Medical Cannabis Shield Nationally",
+      "top": "Michigan's Cannabis Regulatory Agency's case against four Macomb County marijuana processors widened this week: follow-up inspections found CRA agents couldn't account for roughly 171,000 grams of distillate tied to one inventory tag, with the formal complaints also alleging violations involving written operating procedures and video surveillance on top of the Metrc-tracking issues disclosed Nov. 16. Nationally, Republican Sens. Ted Budd and Pete Ricketts said they'll oppose any government funding bill that keeps hemp-derived THC products legal, sharpening the fight ahead of the Dec. 11 deadline for the broader federal hemp-THC restrictions, which lands the same day government funding is next due to lapse. The Senate Appropriations Committee proposed extending the rider shielding state medical marijuana programs from federal interference while leaving out a House-passed anti-rescheduling provision, and directed the VA to study medical cannabis as an opioid alternative for veterans. Hemp CBD company Charlotte's Web reported third-quarter revenue of $9.4 million and a $3.5 million net loss, saying it has yet to see any revenue from a planned federal Medicare hemp-CBD coverage program.",
+      "local": [
+        {
+          "text": "Michigan's Cannabis Regulatory Agency said that during a follow-up site visit to the four Macomb County processors it filed formal complaints against Nov. 16 — Warren and Center Line facilities accused of possessing marijuana products tied to an unlicensed hemp handler — agents were unable to account for roughly 171,000 grams of distillate associated with one inventory tag; the complaints also allege violations involving written operating procedures and video surveillance, beyond the Metrc-tracking issues first disclosed.",
+          "source": "Cannabis Business Times",
+          "url": "https://www.cannabisbusinesstimes.com/us-states/michigan/news/16541742/michigan-cannabis-regulators-file-complaints-against-4-macomb-county-processors-following-state-police-search"
+        }
+      ],
+      "national": [
+        {
+          "text": "Republican Sens. Ted Budd and Pete Ricketts said they will oppose any government funding bill that keeps hemp-derived THC products legal, escalating the fight in Congress over the Dec. 11 deadline for the broader federal hemp-THC restrictions — the same date government funding is next due to run out.",
+          "source": "The Hype Magazine",
+          "url": "https://www.thehypemagazine.com/2026/11/18/senators-block-funding-bill-hemp-thc-products/"
+        },
+        {
+          "text": "The Senate Appropriations Committee proposed extending the federal rider shielding state medical marijuana programs from Justice Department interference but left out a House-passed provision that would have blocked federal officials from advancing marijuana rescheduling; the committee's fiscal 2027 Military Construction-VA report separately directs the VA to study whether state medical cannabis laws are linked to reduced opioid use among veterans.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/senate-panel-pushes-to-extend-federal-medical-cannabis-protections-newsletter-november-16-2026/"
+        },
+        {
+          "text": "Hemp CBD company Charlotte's Web Holdings reported third-quarter revenue of $9.4 million and a net loss of $3.5 million, and said it has generated no revenue yet from a planned federal Medicare hemp-CBD coverage program, per Marijuana Moment's Nov. 17 newsletter, which also compared Senate Democratic leadership rivals Chuck Schumer and Chris Van Hollen on cannabis reform.",
+          "source": "Marijuana Moment",
+          "url": "https://www.marijuanamoment.net/schumer-vs-van-hollen-on-cannabis-newsletter-november-17-2026/"
+        }
+      ]
+    },
     {
       "date": "2026-11-17",
       "label": "Morning Brief",
